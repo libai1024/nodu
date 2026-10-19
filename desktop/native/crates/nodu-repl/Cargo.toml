@@ -1,0 +1,17 @@
+[package]
+name = "nodu-repl"
+version = "0.1.3"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+nodu-serial.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+nodu-mockboard.workspace = true
+proptest.workspace = true
+
+[lints]
+workspace = true

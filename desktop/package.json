@@ -13,14 +13,16 @@
   ],
   "scripts": {
     "compile": "npm run compile --workspace @scope/studio-extension",
-    "build:browser": "npm run compile && npm run build --workspace @scope/browser-app",
-    "build:electron": "npm run compile && npm run build --workspace @scope/electron-app",
+    "build:browser": "npm run build:native && npm run compile && npm run build --workspace @scope/browser-app",
+    "build:electron": "npm run build:native && npm run compile && npm run build --workspace @scope/electron-app",
     "start:browser": "npm run start --workspace @scope/browser-app",
     "start:electron": "npm run start --workspace @scope/electron-app",
     "rebuild:browser": "npm run rebuild --workspace @scope/browser-app",
     "rebuild:electron": "npm run rebuild --workspace @scope/electron-app",
     "postinstall": "theia-patch",
-    "setup:device": "node scripts/setup-device.cjs"
+    "setup:device": "node scripts/setup-device.cjs",
+    "build:native": "node scripts/build-native.cjs",
+    "check:licenses": "node scripts/check-licenses.cjs"
   },
   "devDependencies": {
     "@theia/cli": "1.76.0",

@@ -20,7 +20,7 @@ export class NoduDeviceModel implements DeviceClient {
     private readonly toDispose = new DisposableCollection();
     state: DeviceState = {
         phase: 'disconnected', busy: false, running: false, preview: false,
-        capabilities: { repl: false, files: false, framebuffer: false, script: false }
+        capabilities: { repl: false, files: false, framebuffer: false, script: false, firmware: false }
     };
     ports: SerialPortInfo[] = [];
     entries: RemoteFile[] = [];

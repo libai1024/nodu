@@ -93,7 +93,7 @@ Nodu 0.1.1 / 0.1.2 有意使用 **raw REPL**。原因：固件进入 IDE 模式�
 | # | MaixPy IDE 0.2.5 | 证据 | Nodu 0.1.2 | 建议 |
 | --- | --- | --- | --- | --- |
 | F1 | 把当前脚本保存到板子的 `boot.py`（`FILE_SAVE`），可选“去掉注释、空格转 Tab” | 字符串、协议 | ✗ 0.1.1 起禁止写 boot.py / main.py | **需要决定**：涉及写启动文件 |
-| F3 | 发送文件到开发板（工具菜单；Sipeed 自有的分块 + `hash:` 校验传输） | 菜单实测、二进制字符串 | ◐ Nodu 有自己的上传 | 必做，按原版协议 |
+| F3 | 发送文件到开发板（工具菜单；选本地文件，用 IDE 协议 `FILE_SAVE` 发送，带 SHA-256 头） | 菜单实测、[反汇编](evidence/original-private-params.md#5-保存文件--bootpyopenmvpluginiofilesave0x5fa80) | ◐ Nodu 有自己的上传 | 必做，按原版协议 |
 | F2 | 通用上传、下载、列目录 | — | ✅ Nodu 自有 | 保留（原版没有，是 Nodu 新增） |
 
 ### G 终端

@@ -1,0 +1,13 @@
+[package]
+name = "nodu-mockboard"
+version = "0.1.3"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+nodu-serial.workspace = true
+nodu-repl.workspace = true
+
+[lints]
+workspace = true

@@ -11,3 +11,5 @@ node_modules/
 !examples/green-tracker/.theia/settings.json
 *.log
 .DS_Store
+native/target/
+scope-extension/resources/bin/

@@ -62,7 +62,8 @@ export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, comp
             {(model.connected || state.firmware) && <details className="nodu-device-details"><summary>设备详情</summary><dl className="scope-device-details nodu-firmware"><div><dt>串口</dt><dd className="scope-mono">{state.port || '—'}</dd></div><div><dt>固件</dt><dd>{state.firmware || '—'}</dd></div><div><dt>架构</dt><dd>{state.architecture || '—'}</dd></div><div><dt>REPL / 文件 / 脚本 / 图像</dt><dd className="nodu-capabilities">{[state.capabilities.repl, state.capabilities.files, state.capabilities.script, state.capabilities.framebuffer].map((supported, index) => <span key={index} className={supported ? 'nodu-capability-yes' : ''} title={['REPL', '文件', 'RAM 脚本', '图像'][index]}>{supported ? '支持' : '不支持'}</span>)}</dd></div></dl></details>}
         </section>
         {/* Keep mounted while hidden so a flash in progress survives mode switches. */}
-        <div hidden={compact && !model.flashing}><NoduFirmwarePanel model={model} blocked={blocked} showLogs={compact ? undefined : showLogs} /></div>
+        {state.capabilities.firmware &&
+            <div hidden={compact && !model.flashing}><NoduFirmwarePanel model={model} blocked={blocked} showLogs={compact ? undefined : showLogs} /></div>}
         <section aria-label="REPL 控制台" hidden={compact}>
             <div className="scope-section-heading"><h2>REPL</h2><button className="scope-text-button" onClick={showLogs}>设备日志</button></div>
             <label className="scope-visually-hidden" htmlFor="nodu-repl-code">REPL Python 代码</label>

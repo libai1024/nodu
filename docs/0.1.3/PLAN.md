@@ -1,6 +1,6 @@
 # Nodu 0.1.3 实施计划 — MaixPy IDE 0.2.5 功能 1:1 复刻
 
-日期：2026-10-19。状态：**计划已定，待开工**。功能对照见 [maixpy-ide-parity.md](maixpy-ide-parity.md)。
+日期：2026-10-19。状态：**实施中**：阶段 0 证据与阶段 1 Rust 开发检查点已落地，阶段门禁尚未全部通过。功能对照见 [maixpy-ide-parity.md](maixpy-ide-parity.md)，阶段 1 验证见 [evidence/phase-1-validation.md](evidence/phase-1-validation.md)。
 
 ## 0. 已确认的决定
 
@@ -13,9 +13,9 @@
 | 原版行为照做 | 连接时进入 IDE 模式（会写 `/flash/ide_mode.conf`）；阈值编辑器关闭时写回编辑器；保存 boot.py（执行前确认）；内置 ffmpeg 的视频工具；CNN 网络库照搬原版；QR / DataMatrix / 条码生成器按原版打开搜索网页 |
 | 不复刻 | 原版菜单里看不到的 OpenMV 残留：注册、Board Key、DFU / bootloader、OpenMV 相机设置 / WiFi、数据集编辑器、Edge Impulse |
 | 平台 | macOS 15+（arm64、x64），Windows 10（x64） |
-| 兼容 | 开发阶段**不保留旧实现**：Python worker、`~/.nodu/python`、raw REPL 相机 helper、只复制阈值的规则全部移除 |
+| 兼容 | 最终不保留旧兼容架构；迁移期间暂存 Python 对照实现，删除门禁见阶段 1 与阶段 6。 |
 
-参考仓库已克隆到 `/Users/wangwei/Model/nodu-refs/`（仓库外，只读）：`openmv-qt-creator`（af179e4，只取插件目录）、`MaixPy-v1`（d8901fd，只取 omv / boards / builtin_py）、`MaixPy-v1_scripts`、`MaixPy_Doc_Zh_Cn_Backup`、`kflash.py`（550828c）。原版的菜单和主窗口控件已导出到 [evidence/](evidence/)。
+参考仓库已克隆到 `/Users/wangwei/Model/nodu-refs/`（仓库外，只读）：`openmv-qt-creator`（af179e4，只取插件目录）、`MaixPy-v1`（d8901fd，稀疏路径见 [references.md](references.md)）、`MaixPy-v1_scripts`、`MaixPy_Doc_Zh_Cn_Backup`、`kflash.py`（550828c）。原版的菜单和主窗口控件已导出到 [evidence/](evidence/)。
 
 ## 1. 目标架构
 
@@ -34,7 +34,7 @@ Theia 前端 (TS/React)  ──RPC──  Node 后端 (TS, 只做进程管理)  
 | `nodu-serial` | 枚举端口（含 USB VID/PID）、独占打开、波特率、按板型执行 DTR / RTS 复位时序 | `kflash.py` 板型复位、`serialport` crate |
 | `nodu-maix-ide` | IDE 二进制协议主机端：版本、架构串、帧尺寸 / 帧数据、脚本执行 / 停止 / 状态、TX 缓冲、保存文件、复位、帧缓冲开关、传感器属性；定时轮询调度 | `ide_dbg.c/h`，`openmvpluginio.cpp`，`openmvpluginserialport.cpp` |
 | `nodu-maix-connect` | 连接握手：等待 `[MaixPy] init end` / `>>>` → 发送 `repl.init(%d, 8, None, 1, read_buf_len=%d, ide=True)` → 等待 IDE 模式稳定 → 读版本；处理取消、30 s 超时、无应答和校验失败重试 | 0.2.5 二进制字符串，`machine_uart.c`，`openmvplugin.cpp` 连接流程 |
-| `nodu-repl` | raw REPL，Sipeed 的“发送文件到开发板”（带 `hash:` / `cancel:` 的分块传输与校验），boot.py 保存 | 二进制字符串、行为、`ide_dbg.c` FILE_SAVE |
+| `nodu-repl` | raw REPL、板端文件管理（Nodu 增强）。原版的“发送文件到开发板”和“保存 boot.py”都走 `nodu-maix-ide` 的 FILE_SAVE | `ide_dbg.c` |
 | `nodu-imaging` | RGB565→LAB / YUV 查表（`lab_tab.c` / `yuv_tab.c`，和固件同一张表，终结“PC LAB 近似”）、四种色彩空间直方图与 8 项统计、阈值二值预览、`OMV IMG STR V1.0` 录像格式、AprilTag 码族渲染；同时编译为原生库和 WASM | `histogram/*`，`tools/thresholdeditor.cpp`，`tools/tag*.c`，`openmvpluginfb.cpp` |
 | `nodu-kflash` | K210 ISP（SLIP、ROM、stub、dan 等复位），镜像校验，备份、身份读取、容量门禁、烧写、回读；现有安全门禁一条不少 | `kflash.py`，现有 Python `nodu_firmware.py` / `nodu_flash_protocol.py` / `nodu_flash_probe.py` |
 | `nodu-media` | 编排 ffmpeg / ffplay：转换视频、播放视频、录像转码；查询输入格式 | `tools/videotools.cpp` |
@@ -51,10 +51,10 @@ Rust 工程规范：`rust-toolchain.toml` 固定稳定版；`#![forbid(unsafe_co
 
 1. **参考源清单**：`docs/0.1.3/references.md` 记录每个参考仓库的固定提交、许可、取用范围；新增 `tools/refs/fetch-refs.sh`，可以重新拉取并校验 SHA。
 2. **许可落地**：`THIRD-PARTY-NOTICES` 加入 OpenMV 插件 MIT 原文（“(C) 2016 OpenMV, LLC”）、AprilTag BSD-2、kflash MIT、MaixPy-v1 MIT / Apache-2.0、MaixPy-v1_scripts MIT。每个从参考源移植来的 Rust / TS 文件，文件头写明来源路径和提交。CI 加一步扫描：出现“personal benefit / monetary gain”就失败。
-3. **补齐原版私有参数**（Sipeed 改动、源码里没有的部分），对本机 0.2.5 做静态和动态观察，结果写入 `evidence/`：
+3. **补齐原版私有参数**（Sipeed 改动、源码里没有的部分），对本机 0.2.5 做静态和动态观察，结果写入 `evidence/`。**已完成主体**：见 [original-private-params.md](evidence/original-private-params.md)（1.5 Mbps / `read_buf_len=2048`、9 板型 ID 与复位时序、FILE_SAVE 格式与状态码、URL）。剩余项在阶段 2 补齐：
    - `repl.init` 的两个 `%d`（波特率、`read_buf_len`）：用 `otool` 反汇编找格式串的调用点；连接期间用 `stty -f` / `ioreg` 读实际速率交叉验证。
    - 9 个板型各自对应的 DTR / RTS 复位时序，和 `kflash.py` 的 dan / bit / bit_mic / goE / goD / kd233 / trainer 逐个对表（Maixduino 按官方说明走 goE；M5StickV、T-Watch 要单独确认）。
-   - “发送文件到开发板”的传输协议（分块大小、`hash:` 校验、`cancel:`）和 boot.py 保存流程（含“去注释、空格转 Tab”）。
+   - “发送文件到开发板”的传输协议和 boot.py 保存流程（含“去注释、空格转 Tab”）。FILE_SAVE 的分块、状态码和 boot.py 格式化流程需真板对照；不把 `hash:`/`cancel:` 字符串当作已验证的独立协议。
    - 帧缓冲轮询节奏、TX 缓冲轮询节奏、30 s / 5 s 两种超时出现的场景。
    - 资源更新、版本检查的 URL（已取得：`dl.sipeed.com/MAIX/MaixPy/ide/...`），对话框文字和按钮。
    - 原版每个对话框的截图：阈值编辑器、关键点编辑器、AprilTag 生成器、视频工具、终端、保存 boot.py、关于。
@@ -63,8 +63,8 @@ Rust 工程规范：`rust-toolchain.toml` 固定稳定版；`#![forbid(unsafe_co
 ### 阶段 1 — Rust 侧车与工程骨架
 
 1. 建 `desktop/native` workspace 和上表的 crate 空壳；`nodu-protocol` 生成 TS 类型并接入扩展。
-2. `nodu-device` 实现现有全部 RPC（端口、连接、REPL、运行 / 停止、文件、状态事件）。Node 端 `nodu-device-server.ts` 改为拉起 Rust 二进制。删除 `nodu_device_worker.py`、`setup:device` 和 `~/.nodu/python` 依赖。
-3. 构建与打包：`scripts/build-native.cjs` 产出 `aarch64-apple-darwin`、`x86_64-apple-darwin`（合成 universal）、`x86_64-pc-windows-msvc`；electron-app 把它们打进 `resources/bin/<platform>/`；browser 开发目标用本机构建。
+2. `nodu-device` 实现现有全部 RPC（端口、连接、REPL、运行 / 停止、文件、状态事件）。Node 端 `nodu-device-server.ts` 改为拉起 Rust 二进制。Python worker、`setup:device` 和现有 Python 测试暂时保留为迁移对照；当前 Node 后端默认使用 Rust。相机在阶段 3、固件操作在阶段 6 接入 Rust；阶段 1 两项能力均关闭。非烧写路径完成差分与真板验收、烧写路径完成阶段 6 差分与复核后，才删除对应 Python 实现。保留源码并不代表运行时自动回退。
+3. 构建与打包：`scripts/build-native.cjs` 产出 `aarch64-apple-darwin`、`x86_64-apple-darwin`（合成 universal）、`x86_64-pc-windows-msvc`；electron-app 把它们打进 `resources/bin/<platform>/`；browser 开发目标用本机构建。当前仅实现宿主平台构建；universal、Windows 及安装器分发仍待验收。
 4. `nodu-mockboard` 和集成测试：Node 后端 ↔ 侧车 ↔ 模拟板端到端跑通。
 5. 文件传输和运行 / 停止回归，结果要和 0.1.2 真板行为一致后再进入阶段 2。
 
@@ -95,7 +95,7 @@ Rust 工程规范：`rust-toolchain.toml` 固定稳定版；`#![forbid(unsafe_co
 
 ### 阶段 5 — 文件、终端、视频、编辑器（F、G、H、I）
 
-1. 工具菜单：“将打开的脚本保存到开发板的 boot.py”（FILE_SAVE 协议，可选去注释 / 空格转 Tab，执行前确认）、“发送文件到开发板”（Sipeed 协议）。Nodu 现有的板端文件管理保留为增强，但改走 Rust 实现，并解除 boot.py / main.py 的写入禁令（写前确认）。
+1. 工具菜单：“将打开的脚本保存到开发板的 boot.py”（FILE_SAVE 协议，可选去注释 / 空格转 Tab，执行前确认）、“发送文件到开发板”（IDE 协议 FILE_SAVE，`[SHA-256][文件名\0 补齐 4][内容]`，见 [私有参数](evidence/original-private-params.md)）。Nodu 现有的板端文件管理保留为增强，但改走 Rust 实现，并解除 boot.py / main.py 的写入禁令（写前确认）。
 2. 终端：“打开终端 → 新终端”，可选串口（填波特率）、TCP 客户端 / 服务端、UDP 客户端 / 服务端；独立窗口，Ctrl+R 行为照原版；命令行参数 `-open_serial_terminal`、`-open_tcp_client_terminal`、`-open_tcp_server_terminal`、`-open_udp_client_terminal`、`-open_udp_server_terminal`、`-override_read_timeout`、`-override_read_stall_timeout`、`-update_resources`。网络 I/O 也放进 Rust。
 3. 视频工具：转换视频文件、播放视频文件（ffplay），支持原版的输入 / 输出扩展名（`.mjpeg`、`.bin`、`.jpg` 序列等）。ffmpeg / ffplay 选用 **LGPL 构建**（不带 `--enable-gpl` / `--enable-nonfree`），每个平台固定版本和 SHA，源码获取方式写进 NOTICE。
 4. 文件菜单：新建文件（原版模板 `# Untitled - By: 用户 - 日期` 加 hello world 相机循环）、打开、文档文件夹（`~/Documents/MaixPy`）、示例（内置 `MaixPy-v1_scripts`，结构和原版菜单相同）、更多示例（GitHub 仓库）、最近文件、保存 / 另存为 / 关闭、打印。

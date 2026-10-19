@@ -74,3 +74,68 @@ test('losing the last UI client defers cleanup until the firmware critical secti
     assert.equal(disconnected, 1);
     await server.onStop();
 });
+
+// End-to-end against the Rust sidecar's --mock transport (no hardware).
+// Requires `npm run build:native` to have produced the dev release binary.
+test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnect', async t => {
+    const { existsSync } = require('node:fs');
+    const { join } = require('node:path');
+    const binary = join(__dirname, '..', '..', 'native', 'target', 'release',
+        process.platform === 'win32' ? 'nodu-device.exe' : 'nodu-device');
+    if (!existsSync(binary)) { t.skip('nodu-device release binary missing; run npm run build:native'); return; }
+    const savedBin = process.env.NODU_DEVICE_BIN;
+    const savedMock = process.env.NODU_DEVICE_MOCK;
+    process.env.NODU_DEVICE_BIN = binary;
+    process.env.NODU_DEVICE_MOCK = '1';
+    const server = new NoduDeviceServer();
+    try {
+        const ports = await server.listPorts();
+        assert.ok(ports.some(port => port.path === 'mock'), 'mock port listed');
+        const state = await server.connect({ port: 'mock', boardProfile: 'generic-k210' });
+        assert.equal(state.phase, 'connected');
+        assert.equal(state.capabilities.repl, true);
+        assert.equal(state.capabilities.firmware, false);
+        assert.equal(await server.execute('print(42)'), '42\n');
+        const payload = Buffer.alloc(4096, 0x5a);
+        await server.writeFile('/flash/nodu_e2e.bin', payload.toString('base64'), false);
+        const back = await server.readFile('/flash/nodu_e2e.bin');
+        assert.equal(Buffer.from(back.data, 'base64').equals(payload), true);
+        const files = await server.listFiles('/flash');
+        assert.ok(files.some(file => file.name === 'nodu_e2e.bin'));
+        await server.disconnect();
+        assert.equal((await server.getState()).phase, 'disconnected');
+    } finally {
+        await server.onStop();
+        if (savedBin === undefined) { delete process.env.NODU_DEVICE_BIN; } else { process.env.NODU_DEVICE_BIN = savedBin; }
+        if (savedMock === undefined) { delete process.env.NODU_DEVICE_MOCK; } else { process.env.NODU_DEVICE_MOCK = savedMock; }
+    }
+});
+
+// deviceBinary() resolution: dev fallback when the packaged sidecar is absent.
+// Renames the staged binary inside try/finally; no port or spawn involved.
+test('deviceBinary falls back to the dev release build', async t => {
+    const { existsSync, renameSync } = require('node:fs');
+    const { join } = require('node:path');
+    const server = new NoduDeviceServer();
+    const savedBin = process.env.NODU_DEVICE_BIN;
+    delete process.env.NODU_DEVICE_BIN;
+    try {
+        const staged = join(__dirname, '..', 'resources', 'bin',
+            `${process.platform}-${process.arch}`,
+            process.platform === 'win32' ? 'nodu-device.exe' : 'nodu-device');
+        const dev = join(__dirname, '..', '..', 'native', 'target', 'release',
+            process.platform === 'win32' ? 'nodu-device.exe' : 'nodu-device');
+        if (!existsSync(dev)) { t.skip('dev release binary missing; run npm run build:native'); return; }
+        const aside = `${staged}.aside`;
+        const hadStaged = existsSync(staged);
+        try {
+            if (hadStaged) { renameSync(staged, aside); }
+            assert.equal(server.deviceBinary(), dev, 'must fall back to desktop/native dev build');
+        } finally {
+            if (hadStaged && existsSync(aside)) { renameSync(aside, staged); }
+        }
+        if (hadStaged) { assert.equal(server.deviceBinary(), staged); }
+    } finally {
+        if (savedBin === undefined) { delete process.env.NODU_DEVICE_BIN; } else { process.env.NODU_DEVICE_BIN = savedBin; }
+    }
+});

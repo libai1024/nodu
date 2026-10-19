@@ -1,37 +1,19 @@
 // SPDX-License-Identifier: MIT
+// Wire types are generated from desktop/native/crates/nodu-protocol (ts-rs).
+// The service surface stays hand-written.
 export const NoduDeviceService = Symbol('NoduDeviceService');
 export const NODU_DEVICE_PATH = '/services/nodu-device';
-export interface SerialPortInfo { path: string; description: string; vid?: number; pid?: number; serialNumber?: string; }
-export interface DeviceState {
-    phase: 'disconnected' | 'connecting' | 'connected' | 'running' | 'error';
-    port?: string;
-    boardProfile?: string;
-    firmware?: string;
-    architecture?: string;
-    busy: boolean;
-    operation?: string;
-    running: boolean;
-    preview: boolean;
-    capabilities: { repl: boolean; files: boolean; framebuffer: boolean; script: boolean };
-    lastError?: string;
-    progress?: { stage: string; completed: number; total: number; percent: number };
-}
-export interface DeviceLog { text: string; stream: 'stdout' | 'stderr' | 'system'; time: number; }
-export interface DeviceFrame { mime: 'image/jpeg'; data: string; width: number; height: number; sequence: number; time: number; }
-export interface RemoteFile { name: string; path: string; size: number; directory: boolean; }
+export type {
+    ConnectArgs, DeviceBackup, DeviceCapabilities, DeviceFileData, DeviceFrame, DeviceLog,
+    DevicePhase, DeviceState, FirmwarePlan, FirmwareResult, LogStream, ProgressInfo,
+    RemoteFile, RequestId, SerialPortInfo
+} from './generated';
+import type {
+    ConnectArgs, DeviceBackup, DeviceFileData, DeviceFrame, DeviceLog, DeviceState,
+    FirmwarePlan, FirmwareResult, RemoteFile, SerialPortInfo
+} from './generated';
+export type ConnectOptions = ConnectArgs & { boardProfile: 'embedfire-cam-gc2145' | 'generic-k210' };
 export interface DeviceClient { onState(state: DeviceState): void; onLog(log: DeviceLog): void; onFrame(frame: DeviceFrame): void; }
-export interface ConnectOptions { port: string; boardProfile: 'embedfire-cam-gc2145' | 'generic-k210'; baud?: number; }
-export interface DeviceFileData { data: string; size: number; }
-export interface FirmwarePlan {
-    version: string; url: string; sha256: string; address: number; size: number;
-    writeBytes: number; sectorEnd: number; ready: boolean;
-}
-export interface DeviceBackup {
-    directory: string; flashSha256: string; flashBytes: number; verified: boolean;
-    createdAt: number; files: number;
-    flashCapacityVerified: boolean; flashJedecId?: string; physicalBoardEvidence?: string;
-}
-export interface FirmwareResult { verified: boolean; firmware: string; backupDirectory: string; sha256: string; }
 export interface NoduDeviceService {
     getState(): Promise<DeviceState>;
     listPorts(): Promise<SerialPortInfo[]>;

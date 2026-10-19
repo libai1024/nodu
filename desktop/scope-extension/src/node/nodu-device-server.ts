@@ -11,7 +11,7 @@ import { randomUUID } from 'crypto';
 import { createRequire } from 'module';
 
 const initialState = (): DeviceState => ({ phase: 'disconnected', busy: false, running: false, preview: false,
-    capabilities: { repl: false, files: false, framebuffer: false, script: false } });
+    capabilities: { repl: false, files: false, framebuffer: false, script: false, firmware: false } });
 const MAX_BYTES = 2 * 1024 * 1024;
 
 /** One worker and serial session per backend; the worker also locks the OS port across backends. */
@@ -55,20 +55,20 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
             try { Promise.resolve((client[method] as (arg: typeof value) => unknown)(value)).catch(() => this.clients.delete(client)); } catch { this.clients.delete(client); }
         }
     }
-    private python(): string {
-        if (process.env.NODU_PYTHON) { return process.env.NODU_PYTHON; }
-        const candidates = [
-            join(homedir(), '.nodu', 'python', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python'),
-            '/opt/homebrew/share/maixpy-k210/venv/bin/python'
-        ];
-        return candidates.find(existsSync) || (process.platform === 'win32' ? 'python' : 'python3');
+    private deviceBinary(): string {
+        // 1. explicit override, 2. packaged sidecar, 3. dev build.
+        if (process.env.NODU_DEVICE_BIN) { return process.env.NODU_DEVICE_BIN; }
+        const extensionDir = dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json'));
+        const exe = process.platform === 'win32' ? 'nodu-device.exe' : 'nodu-device';
+        const packaged = join(extensionDir, 'resources', 'bin', `${process.platform}-${process.arch}`, exe);
+        if (existsSync(packaged)) { return packaged; }
+        return join(extensionDir, '..', 'native', 'target', 'release', exe);
     }
     private ensureWorker(): ChildProcessWithoutNullStreams {
         if (this.worker) { return this.worker; }
-        const resources = join(dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json')), 'resources');
-        const worker = spawn(this.python(), ['-u', join(resources, 'nodu_device_worker.py')], {
-            stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true,
-            env: { ...process.env, PYTHONUNBUFFERED: '1', PYTHONIOENCODING: 'utf-8' }
+        const mock = process.env.NODU_DEVICE_MOCK === '1';
+        const worker = spawn(this.deviceBinary(), mock ? ['--mock'] : [], {
+            stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true
         });
         this.worker = worker;
         const reader = createInterface({ input: worker.stdout });
@@ -93,10 +93,10 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
             }
         });
         worker.stderr.on('data', data => this.publish('onLog', { text: String(data).slice(0, 8000), stream: 'stderr', time: Date.now() }));
-        worker.on('error', error => this.failWorker(new Error(`设备环境启动失败：${error.message}。请运行 npm run setup:device。`), worker));
+        worker.on('error', error => this.failWorker(new Error(`设备服务启动失败：${error.message}。开发者请运行 npm run build:native。`), worker));
         worker.on('exit', (code, signal) => {
             reader.close();
-            if (this.worker === worker) { this.failWorker(new Error(`设备服务已退出（${signal || code}）。请检查 Python 环境；npm run setup:device。`), worker); }
+            if (this.worker === worker) { this.failWorker(new Error(`设备服务已退出（${signal || code}）。开发者请运行 npm run build:native 重新构建设备服务。`), worker); }
         });
         return worker;
     }

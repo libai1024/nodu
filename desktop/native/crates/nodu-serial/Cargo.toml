@@ -1,0 +1,13 @@
+[package]
+name = "nodu-serial"
+version = "0.1.3"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+nodu-protocol.workspace = true
+serialport.workspace = true
+
+[lints]
+workspace = true
