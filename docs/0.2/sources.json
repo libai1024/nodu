@@ -1,0 +1,185 @@
+{
+  "repository": "https://github.com/eclipse-theia/theia",
+  "tag": "v1.76.0",
+  "tagObject": "12f62a6bdafe275e87507d6b4984dd5e99fc61a0",
+  "resolvedCommit": "d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649",
+  "checkedAt": "2026-10-19T06:48:19.245135+00:00",
+  "files": [
+    {
+      "path": "packages/ai-core/package.json",
+      "bytes": 1526,
+      "sha256": "52175e78cbe285a7dde037bfacce728c325e311f3a81e1ebdea7f563f68c7323",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-core/package.json"
+    },
+    {
+      "path": "packages/ai-chat/package.json",
+      "bytes": 1429,
+      "sha256": "74bcea2e8effb7e9c0cdcbc2695074a3293ea87731725d9128772bc6c349c92c",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-chat/package.json"
+    },
+    {
+      "path": "packages/ai-chat-ui/package.json",
+      "bytes": 1528,
+      "sha256": "1751342b4d4b1f16d2c9d7731a8d24b78fd48e92de97d42b181b61bcd6977791",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-chat-ui/package.json"
+    },
+    {
+      "path": "packages/ai-code-completion/package.json",
+      "bytes": 1360,
+      "sha256": "68fe22527c1f80196d5e62c0d6b96410c8324723538669185c92ac0eca56b9a4",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-code-completion/package.json"
+    },
+    {
+      "path": "packages/ai-openai/package.json",
+      "bytes": 1262,
+      "sha256": "efa1930caa731c42507c46002913fe47dc6eab029c6389772bf99fa81d44f307",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-openai/package.json"
+    },
+    {
+      "path": "packages/ai-ide/package.json",
+      "bytes": 2009,
+      "sha256": "8ad82a3a78a0e04fecf36e018a0fb19011cb1c942ad7395fa3d6367f67bba551",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-ide/package.json"
+    },
+    {
+      "path": "packages/ai-core/src/common/agent.ts",
+      "bytes": 4611,
+      "sha256": "b0962a865ae451335b3d70be16001a3618f5bff6af7362b531a3b0f61dc83ae9",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-core/src/common/agent.ts"
+    },
+    {
+      "path": "packages/ai-core/src/common/variable-service.ts",
+      "bytes": 18945,
+      "sha256": "e01275fee6713c6111d1a5cfdd96ce7fb7ea9344915e69a6658c3ba000996a65",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-core/src/common/variable-service.ts"
+    },
+    {
+      "path": "packages/ai-core/src/common/language-model.ts",
+      "bytes": 36170,
+      "sha256": "a587a9af0a7d2bc13dd4e35504131b50529634a259681b417cb4a2341c99ef91",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-core/src/common/language-model.ts"
+    },
+    {
+      "path": "packages/ai-core/src/common/tool-invocation-registry.ts",
+      "bytes": 5621,
+      "sha256": "bc8d3d585b4c9d4ca194f8bb19cf0dff4b4a0195e5500040bbfef9b4fd120b93",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-core/src/common/tool-invocation-registry.ts"
+    },
+    {
+      "path": "packages/ai-chat/src/common/chat-agents.ts",
+      "bytes": 38143,
+      "sha256": "df27d75f65bf99321feb6c5b1fb63794cb2a0310de213022f4d9a55267f11aa5",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-chat/src/common/chat-agents.ts"
+    },
+    {
+      "path": "packages/ai-ide/src/browser/workspace-functions.ts",
+      "bytes": 66298,
+      "sha256": "3a3d117039d0a1471fba8a51f8cbf1945912196012398f27c290172b80f9ab5c",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-ide/src/browser/workspace-functions.ts"
+    },
+    {
+      "path": "packages/ai-ide/src/browser/frontend-module.ts",
+      "bytes": 24281,
+      "sha256": "f42b3868ecdcf0851b4b3cde971aed86c06be17ec3b610828bf29b701c740def",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-ide/src/browser/frontend-module.ts"
+    },
+    {
+      "path": "packages/ai-chat/src/browser/chat-tool-request-service.ts",
+      "bytes": 8487,
+      "sha256": "72370adca0c2ae545cdb33607e2c76a46210393b3c99827f607a609001113143",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-chat/src/browser/chat-tool-request-service.ts"
+    },
+    {
+      "path": "packages/ai-chat/src/browser/change-set-file-element.ts",
+      "bytes": 21307,
+      "sha256": "b7db0e66e62364492c8929e6e704ee34a0723e1f2f85e842ecb04c0ee930c323",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-chat/src/browser/change-set-file-element.ts"
+    },
+    {
+      "path": "packages/ai-chat-ui/src/browser/ai-chat-ui-frontend-module.ts",
+      "bytes": 13897,
+      "sha256": "5ec9a764a431927068f743df1f17304f894548468dbce3ef88825846f0baf0da",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-chat-ui/src/browser/ai-chat-ui-frontend-module.ts"
+    },
+    {
+      "path": "packages/ai-code-completion/src/browser/code-completion-agent.ts",
+      "bytes": 7740,
+      "sha256": "d75195500accc5aa35e6b73e25c5ed1e931b5c8c17039e1cb3902801ece76b88",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-code-completion/src/browser/code-completion-agent.ts"
+    },
+    {
+      "path": "packages/ai-code-completion/src/common/ai-code-completion-preference.ts",
+      "bytes": 5031,
+      "sha256": "02b88315a331907cb63df39d5cc2c22ceda96b58cb6d41bfb95cd8100aa9ba30",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-code-completion/src/common/ai-code-completion-preference.ts"
+    },
+    {
+      "path": "packages/ai-code-completion/src/browser/ai-code-frontend-application-contribution.ts",
+      "bytes": 7134,
+      "sha256": "8a501d0fafde95c50c9c0608fa3691050497c467fbafe580a33a76e151115d36",
+      "tagMatchesCommit": true,
+      "url": "https://github.com/eclipse-theia/theia/blob/d8106d7ffa62b3413ff1ca5b63a0e6c2fe0b0649/packages/ai-code-completion/src/browser/ai-code-frontend-application-contribution.ts"
+    }
+  ],
+  "purpose": "Nodu 0.2 research only: project-aware teaching guidance; no implementation or package install",
+  "applicationVersion": "0.1.1",
+  "sourceEvidenceBoundary": "Verified raw tag/commit equality for these files; not an installed npm package equivalence or runtime/teaching evaluation.",
+  "githubStars": {
+    "repository": "eclipse-theia/theia",
+    "approximately": 21700,
+    "display": "21.7k",
+    "checkedDate": "2026-10-19",
+    "source": "https://github.com/eclipse-theia/theia",
+    "scope": "main repository; not a separate Theia AI repository"
+  },
+  "localBaselineFiles": [
+    {
+      "path": "VERSION",
+      "sha256": "80447316529fc62014fbaa047fb67c51ac30e32830cda370405349d8d66d196c"
+    },
+    {
+      "path": "desktop/browser-app/package.json",
+      "sha256": "97b21c8fc9052819d9dc3976318536ed6a9c8a5d3393a02ac4ae1d0374130628"
+    },
+    {
+      "path": "desktop/electron-app/package.json",
+      "sha256": "40d1a7e54119cf3560ca3c27ea7036da9623aa736928791c6c31f176b28c15ea"
+    },
+    {
+      "path": "desktop/scope-extension/package.json",
+      "sha256": "1168c9b35e63515991e42ef6e4cf57d1bda925d152723029aae2387cccf6dc78"
+    },
+    {
+      "path": "desktop/scope-extension/src/common/nodu-device-protocol.ts",
+      "sha256": "b9d934489681915f884df21443697929981150cb88ce75cdc9ed067fda319197"
+    },
+    {
+      "path": "desktop/scope-extension/src/browser/scope-languages.ts",
+      "sha256": "2e3a57577da61aac2aaef69d564cd8bee6d5b7972a87536dc6718761f1141307"
+    }
+  ],
+  "documentReview": {
+    "scope": "research only, no application changes or fixed future requirements",
+    "independentReview": "passed",
+    "localMarkdownLinks": "passed",
+    "baselineHashes": "passed"
+  }
+}
