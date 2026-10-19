@@ -1,0 +1,78 @@
+AXButton | 新建文件(N) | 新建文件(N) <span style="color: gray; font-size: small">⌘N</span> | missing value | 
+AXButton | 打开文件(O) | 打开文件(O) <span style="color: gray; font-size: small">⌘O</span> | missing value | 
+AXButton | 保存(S) | 保存"helloworld_1.py"(S) <span style="color: gray; font-size: small">⌘S</span> | missing value | 
+AXButton | 撤销(U) | 撤销(U) <span style="color: gray; font-size: small">⌘Z</span> | missing value | 
+AXButton | 重做(R) | 重做(R) <span style="color: gray; font-size: small">⇧⌘Z</span> | missing value | 
+AXButton | 剪切(T) | 剪切(T) <span style="color: gray; font-size: small">⌘X</span> | missing value | 
+AXButton | 复制(C) | 复制(C) <span style="color: gray; font-size: small">⌘C</span> | missing value | 
+AXButton | 粘贴(P) | 粘贴(P) <span style="color: gray; font-size: small">⌘V</span> | missing value | 
+AXButton | 连接 | 连接 | missing value | 
+AXButton | 开始(运行脚本) | 开始(运行脚本) <span style="color: gray; font-size: small">⌘R</span> | missing value | 
+AXSplitGroup |  |  | missing value | 
+  AXSplitGroup |  |  | missing value | 
+    AXStaticText | missing value |  | missing value | 直方图
+    AXPopUpButton | RGB色彩空间 | 使用灰度/LAB进行颜色跟踪 | missing value | 
+      AXList |  |  | missing value | 
+        AXStaticText | RGB色彩空间 |  | missing value | 
+        AXStaticText | 灰度色彩空间 |  | missing value | 
+        AXStaticText | LAB色彩空间 |  | missing value | 
+        AXStaticText | YUV色彩空间 |  | missing value | 
+    AXStaticText | missing value |  | missing value | Res - 没有图像
+    AXStaticText | missing value |  | missing value | 最大
+    AXStaticText | missing value |  | missing value | 中位数
+    AXStaticText | missing value |  | missing value | 众数
+    AXStaticText | missing value |  | missing value | LQ
+    AXStaticText | missing value |  | missing value | UQ
+    AXStaticText | missing value |  | missing value | StDev
+    AXStaticText | missing value |  | missing value | 最小
+    AXStaticText | missing value |  | missing value | 平均数
+    AXStaticText | missing value |  | missing value | 最大
+    AXStaticText | missing value |  | missing value | 中位数
+    AXStaticText | missing value |  | missing value | 众数
+    AXStaticText | missing value |  | missing value | LQ
+    AXStaticText | missing value |  | missing value | UQ
+    AXStaticText | missing value |  | missing value | StDev
+    AXStaticText | missing value |  | missing value | 最小
+    AXStaticText | missing value |  | missing value | 平均数
+    AXStaticText | missing value |  | missing value | 最大
+    AXStaticText | missing value |  | missing value | 中位数
+    AXStaticText | missing value |  | missing value | 众数
+    AXStaticText | missing value |  | missing value | LQ
+    AXStaticText | missing value |  | missing value | UQ
+    AXStaticText | missing value |  | missing value | StDev
+    AXStaticText | missing value |  | missing value | 最小
+    AXStaticText | missing value |  | missing value | 平均数
+    AXStaticText | missing value |  | missing value | 帧缓冲区
+    AXButton | 录制 | 录制帧缓冲区 | missing value | 
+    AXCheckBox | 缩放 | 缩放到合适大小 | missing value | 
+    AXCheckBox | 禁用 | 禁用帧缓冲区以获得最佳性能 | missing value | 
+    AXGrowArea |  |  | missing value | 
+  AXSplitGroup |  |  | missing value | 
+    AXSplitGroup |  |  | missing value | 
+      AXSplitGroup |  |  | missing value | 
+        AXPopUpButton | helloworld_1.py | helloworld_1.py | missing value | 
+          AXList |  |  | missing value | 
+            AXStaticText | <无文件> |  | missing value | 
+            AXStaticText | helloworld_1.py |  | missing value | 
+        AXButton |  | 关闭文档 <span style="color: gray; font-size: small">⌘W</span> | missing value | 
+        AXStaticText | missing value |  | missing value | Line: 25, Col: 1
+        AXGroup |  |  | missing value | 
+          AXTextArea |  |  | missing value | 
+            AXScrollBar |  |  | missing value | 0
+  AXGrowArea |  |  | missing value | 
+  AXGrowArea |  |  | missing value | 
+  AXCheckBox |  | 搜索结果 | missing value | 
+  AXCheckBox |  | 串行终端 | missing value | 
+  AXButton | 固件版本： | 点击查看最新的固件版本及说明 | missing value | 
+  AXStaticText | missing value |  | missing value | 
+  AXStaticText | missing value | 开发板串口 | missing value | 串行端口：
+  AXStaticText | missing value |  | missing value | 
+  AXStaticText | missing value | 可能与摄像头帧率(FPS)不同 | missing value | FPS：
+AXButton | missing value | 关闭按钮 | missing value | 
+AXButton | missing value | 全屏幕按钮 | 此按钮也可以执行缩放窗口的操作 | 
+  AXGroup | missing value | 组 | missing value | 
+    AXGroup | missing value | 组 | missing value | 
+AXButton | missing value | 最小化按钮 | missing value | 
+AXImage | Macintosh HD | 图像 | missing value | 
+AXStaticText | missing value | 文本 | missing value | helloworld_1.py - MaixPy IDE
+

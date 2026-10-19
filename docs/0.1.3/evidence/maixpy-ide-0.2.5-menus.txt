@@ -1,0 +1,125 @@
+# 文件
+  新建文件...  [0:N]
+  打开文件...  [0:O]
+  ---- (disabled)
+  文档文件夹
+      将一些代码添加到"/Users/wangwei/Documents/MaixPy" (disabled)
+  示例
+      01-Basics
+          helloworld.py
+  更多示例
+      托管在github上的例程仓库
+  最近的文件
+      /opt/homebrew/share/maixpy-k210/demos/02_camera.py
+      ---- (disabled)
+      清除菜单
+  ---- (disabled)
+  保存"helloworld_1.py"  [0:S] (disabled)
+  另存为"helloworld_1.py"...  [1:S]
+  关闭"helloworld_1.py"  [0:W]
+  ---- (disabled)
+  打印...  [0:P]
+# 编辑
+  撤销  [0:Z] (disabled)
+  重做  [1:Z] (disabled)
+  ---- (disabled)
+  剪切  [0:X] (disabled)
+  复制  [0:C] (disabled)
+  粘贴  [0:V]
+  从剪贴板历史记录粘贴  [1:V]
+  ---- (disabled)
+  全选  [0:A]
+  ---- (disabled)
+  高级
+      使空格可见 (⌃E, ⌃V)
+      清除空格
+      启用文本环绕 (⌃E, ⌃W)
+      切换注释选择  [0:/]
+      ---- (disabled)
+      剪切行  [9:]
+      复制行  [0:]
+      大写选择  [13:U]
+      小写选择  [12:U]
+      ---- (disabled)
+      折叠  [0:<]
+      展开  [0:>]
+      切换折叠全部
+      ---- (disabled)
+      增加字体大小  [0:+]
+      减小字体大小  [0:-]
+      重置字体大小  [12:0]
+  ---- (disabled)
+  查找/替换
+      查找/替换  [0:F]
+      高级查找
+          打开高级查找...  [1:F]
+              当前文件 (disabled)
+              打开文档
+              文件系统中的文件
+      ---- (disabled)
+      区分大小写 (disabled)
+      仅整个词 (disabled)
+      使用正则表达式 (disabled)
+      替换时保留大小写 (disabled)
+      ---- (disabled)
+      输入查找字符串  [0:E] (disabled)
+      查找下一个  [0:G] (disabled)
+      查找上一个  [1:G] (disabled)
+      查找下一个(所选)  [0:] (disabled)
+      查找上一个(所选)  [1:] (disabled)
+      替换 (disabled)
+      替换并查找  [0:=] (disabled)
+      替换并查找上一个 (disabled)
+      全部替换 (disabled)
+  转到行...  [0:L]
+  ---- (disabled)
+  自动填充
+      通讯录… (disabled)
+      密码… (disabled)
+      信用卡… (disabled)
+  开始听写…  [24:D]
+  表情与符号  [24:E]
+# 工具
+  选择开发板
+      Sipeed Maix Dock
+      Sipeed Maix Bit( with Mic )
+      Sipeed Maix Bit( old )
+      Sipeed Maixduino
+      Sipeed Maix Go( open-ec  new CMSIS_DAP )
+      Sipeed Maix Go( Old CMSIS-DAP )
+      M5StickV
+      T-Watch
+      Kendryte KD233
+  ---- (disabled)
+  将打开的脚本保存到开发板的 boot.py (disabled)
+  发送文件到开发板 (disabled)
+  ---- (disabled)
+  打开终端
+      新终端
+  机器视觉
+      阈值编辑器
+      关键点编辑器
+      ---- (disabled)
+      AprilTag生成器
+          TAG16H5家族(30标签)
+          TAG25H7家族(242标签)
+          TAG25H9家族(35标签)
+          TAG36H10家族(2320标签)
+          TAG36H11家族(587标签 - 推荐)
+          ARKTOOLKIT家族(512标签)
+      二维码生成器
+      DataMatrix码生成器
+      条码生成器
+      ---- (disabled)
+      CNN网络库
+  视频工具
+      转换视频文件
+      播放视频文件
+# 窗口
+  最小化  [0:M]
+  缩放
+  进入全屏  [4:F]
+# 帮助
+  MaixPy文档
+  MaixPy论坛
+
