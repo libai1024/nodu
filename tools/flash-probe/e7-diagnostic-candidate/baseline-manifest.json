@@ -1,0 +1,90 @@
+{
+  "status": "isolated offline diagnostic candidate; no activation/hardware execution",
+  "baselineBin": {
+    "path": "../build/probe.bin",
+    "sha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "bytes": 8672
+  },
+  "baselineFiles": [
+    {
+      "path": "src/boot.c",
+      "sha256": "264212e2c38353d3c5ae763f1d9662c8b877c9f4ac67917ac2f60ac1f7320a40",
+      "bytes": 1124
+    },
+    {
+      "path": "src/platform.c",
+      "sha256": "95d9b29746e84b8a6cf68b20edd29fb48194aee1ee746737f48ba6f015a0ffae",
+      "bytes": 6533
+    },
+    {
+      "path": "src/probe.h",
+      "sha256": "f223a0a390f56ffc049260cfb8ac3eef254fbdc59458f83b6fbbe19f44972e97",
+      "bytes": 1588
+    },
+    {
+      "path": "src/protocol.c",
+      "sha256": "c6eac4ccfa593f5f303a63dd975404f20cd03feddda96d090b4c0c2b522580f3",
+      "bytes": 3743
+    },
+    {
+      "path": "src/slip.c",
+      "sha256": "fd20c354b7606edd8a6932367222b727720e80223189ddacd2cd30ad1dda6894",
+      "bytes": 1988
+    },
+    {
+      "path": "licenses/SDK-Apache-2.0.txt",
+      "sha256": "b5376baf5dadbd8c782ca1026385553ea1d5ff7dde80c8ea0a1eb013b6d67884",
+      "bytes": 11342
+    },
+    {
+      "path": "licenses/THIRD-PARTY-NOTICES.md",
+      "sha256": "39633e69c237afe86f04165a1f6a31d84cc5c23ea2e785d77a81bbe0d79b0ef5",
+      "bytes": 72205
+    },
+    {
+      "path": "licenses/gcc-COPYING.LIB",
+      "sha256": "a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861",
+      "bytes": 26527
+    },
+    {
+      "path": "licenses/gcc-COPYING.RUNTIME",
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74",
+      "bytes": 3324
+    },
+    {
+      "path": "licenses/gcc-COPYING3",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "bytes": 35147
+    },
+    {
+      "path": "licenses/kflash-MIT.txt",
+      "sha256": "c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9",
+      "bytes": 1064
+    },
+    {
+      "path": "licenses/newlib-COPYING.NEWLIB",
+      "sha256": "6df0331179a05fe96f35a2d3f46679910930fcde415c8639fcc9c508bac54aae",
+      "bytes": 57749
+    },
+    {
+      "path": "build.py",
+      "sha256": "366ed5dfc4ca18a1cf21616a87709957eb49dc70cf0ad7a83b38b1168072dd4a",
+      "bytes": 9846
+    },
+    {
+      "path": "ram.ld",
+      "sha256": "66b5788874aebdfc02107a5037cad927f216ce5459f856b0be7c93aa9be83b76",
+      "bytes": 885
+    },
+    {
+      "path": "test_protocol.c",
+      "sha256": "79c98dd652e56e598136bd3b18c3f06b21f482aaf84b50eb4c465dfcc2aa9689",
+      "bytes": 6027
+    },
+    {
+      "path": "reuse-manifest.json",
+      "sha256": "b82bffca23fd214db79884a250a401303407b7df0cdc1cb13b9edff6df86c47c",
+      "bytes": 1800
+    }
+  ]
+}

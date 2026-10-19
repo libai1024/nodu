@@ -1,0 +1,12 @@
+{
+  "executionLayer": "independent local file-copy verification; not hardware-ID or App full backup",
+  "directory": "/Users/wangwei/.nodu/backups/state-preservation-20261019-094438.pre-probe",
+  "files": 21,
+  "bytes": 16812721,
+  "allSizesAndSha256Match": true,
+  "fileModes": "0600",
+  "directoryMode": "0o700",
+  "fileIndexSha256": "ba873b67b0e4dedca078159de852bc4fbaaf5bf83f1d82ce002302da101e583a",
+  "completeFlashBackup": false,
+  "flashCapacityVerified": false
+}

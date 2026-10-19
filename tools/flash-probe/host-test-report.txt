@@ -1,0 +1,6 @@
+2026-10-19 reliability delta: Apple system cc, -std=c11 -Wall -Wextra -Werror -fsanitize=address,undefined -g.
+Compiled only src/protocol.c + src/slip.c + test_protocol.c into /tmp.
+PASS: known CRC32 vector; exhaustive 253 forbidden opcodes; 63 non-16 request lengths; malformed header/CRC fields; pre-init DE; failed/idempotent D7; fixed27B DE header/body CRC; partial identity rejects and clears all 25 non-status output bytes.
+PASS new diagnostic negative cases: -1,1,E0,E4,E5,E6,E7,E8,E9,256: only E5..E8 pass through; all others E4; response length2 and opDE; output[2:27] all zero despite callback writing partial identity.
+PASS: JEDEC/90 one-bit mutations plus EF4018/EF7018 success; SLIP escape roundtrip, overflow, invalid/trailing escape and TX failures.
+No RISC-V output, MMIO or serial functions were executed by these tests.

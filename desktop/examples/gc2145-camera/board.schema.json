@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Nodu GC2145 相机示例项目描述",
+  "type": "object",
+  "required": ["project", "runtime", "chip", "entry", "boardProfile"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "project": { "const": "gc2145-camera" },
+    "displayName": { "type": "string" },
+    "runtime": { "const": "MaixPy-v1" },
+    "chip": { "const": "K210" },
+    "firmwareSourceCommit": { "type": "string" },
+    "entry": { "const": "camera_preview.py" },
+    "files": { "type": "array", "items": { "type": "string" } },
+    "boardProfile": { "const": "embedfire-cam-gc2145" },
+    "serialPort": { "type": ["string", "null"] },
+    "requiresDeviceFiles": { "type": "array", "items": { "type": "string" } },
+    "camera": { "type": "object" },
+    "note": { "type": "string" }
+  }
+}

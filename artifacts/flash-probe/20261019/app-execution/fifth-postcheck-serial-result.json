@@ -1,0 +1,16 @@
+{
+  "allUnchanged": true,
+  "filesMatched": 21,
+  "filesExpected": 21,
+  "failedFileIndices": [],
+  "inventoryBefore": true,
+  "inventoryAfter": true,
+  "prefixMatch": true,
+  "bootMatch": true,
+  "capacityVerified": false,
+  "elapsedMs": 13127,
+  "prefixSha256": "c2945a0e2a3e1f26a2e31ed3c55202d88a0c07b8d010e392a78818bbc5b53d11",
+  "bootSha256": "bd55469971151a2df1ae4bc262dce1305bfcafa53acb5fcd1583ab585a5f1014",
+  "evidence": "fifth-postcheck-serial-result.jpg",
+  "captureMethod": "Observed native App Output screenshot; serial hash script and expected manifest independently reviewed"
+}

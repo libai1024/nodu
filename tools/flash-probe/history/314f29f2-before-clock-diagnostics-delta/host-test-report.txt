@@ -1,0 +1,4 @@
+2026-10-19: Apple system cc, -std=c11 -Wall -Wextra -Werror -fsanitize=address,undefined -g.
+Compiled only src/protocol.c + src/slip.c + test_protocol.c into /tmp.
+PASS: known CRC32 vector; exhaustive 253 forbidden opcodes; 63 non-16 request lengths; 15 malformed header/CRC fields; pre-init DE; failed/idempotent D7; fixed 27B DE body/header CRC; failed identity clears all extra bytes; 40 JEDEC/90 one-bit invalid mutations plus EF4018/EF7018 success; SLIP escape roundtrip, overflow, invalid/trailing escape and TX failures.
+No RISC-V output, MMIO or serial functions were executed.

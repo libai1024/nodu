@@ -1,0 +1,23 @@
+{
+  "stage": "state preservation and frozen execution plan",
+  "verifiedAt": "2026-10-19T01:56:18.141963+00:00",
+  "executionLayer": "existing Python worker service; not App complete-backup/flash acceptance",
+  "directory": "/Users/wangwei/.nodu/backups/state-preservation-20261019-094438.pre-probe",
+  "manifestSha256": "5d2f5c711d1f5d494c1572e7b94b4bf648c5e270b5d8f3761ac84ae213260e01",
+  "files": 21,
+  "userBytes": 16812721,
+  "candidateFlashBytes": 16777216,
+  "candidateFlashSha256": "a142e003b0d1fbfb62e2e11bd6702538b9502362b65e4cd512bb9dc0c019ab4f",
+  "bootBytes": 2116325,
+  "bootSha256": "bd55469971151a2df1ae4bc262dce1305bfcafa53acb5fcd1583ab585a5f1014",
+  "firmwarePayloadSha256": "6dde2d59adc344ee0c7f96300528b4feff5e36c160f5cc0066016389394f15fa",
+  "stateSaved": true,
+  "completeFlashBackup": false,
+  "flashCapacityVerified": false,
+  "loadedRamReader": false,
+  "flashedFirmware": false,
+  "portOwnerReleased": true,
+  "localCopiesRehashed": true,
+  "fileMode": "0600",
+  "directoryMode": "0700"
+}

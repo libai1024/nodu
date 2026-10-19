@@ -1,0 +1,22 @@
+{
+  "stateSaved": true,
+  "completeFlashBackup": false,
+  "flashCapacityVerified": false,
+  "sourceSession": "f0f1a486656443bf94577686e02ead7d",
+  "manifestSha256": "22f9db486017dba35649944f53c0a1bc9c4f0460265deaf47a8f290b337452f9",
+  "directory": "/Users/wangwei/.nodu/backups/2026-10-19T02-22-49-845Z-3b33adf6.pre-probe",
+  "fileCount": 21,
+  "localFilesAllMatch": true,
+  "candidateBytes": 16777216,
+  "candidateSha256": "c2945a0e2a3e1f26a2e31ed3c55202d88a0c07b8d010e392a78818bbc5b53d11",
+  "candidateMatches": true,
+  "bootBytes": 2116325,
+  "bootSha256": "bd55469971151a2df1ae4bc262dce1305bfcafa53acb5fcd1583ab585a5f1014",
+  "bootMatchesCandidate": true,
+  "ramReaderExecuted": true,
+  "romAndD2D7Acknowledged": true,
+  "idResult": "strict non-27-byte response rejection; raw length/status not yet observed",
+  "capacityAccepted": false,
+  "firmwareWritten": false,
+  "restoredOrdinaryRepl": true
+}

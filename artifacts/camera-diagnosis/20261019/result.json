@@ -1,0 +1,43 @@
+{
+  "observedAt": "2026-10-19T10:19:12.410314+08:00",
+  "application": "MaixPy IDE 0.2.5",
+  "port": "/dev/cu.usbserial-3120",
+  "firmware": "MaixPy 0.6.3, d8901fd22",
+  "defaultHelloWorld": "Sensor Timeout at skip_frames, line 16",
+  "defaultWithoutLcd": "Sensor Timeout at skip_frames, line 8",
+  "existingGc2145Helper": "live color image, 320x240; CAMERA_OK count reached 810 before operator stop",
+  "clockFps": "approximately 12.8-13.2 for measured running average; IDE instantaneous display varied",
+  "diagnosticScriptWritesFiles": false,
+  "firmwareFlashed": false,
+  "ramProbeLoaded": false,
+  "finalState": "script stopped and IDE disconnected; window, code and last framebuffer preserved",
+  "conclusion": "Camera can acquire real images. Generic sensor initialization is incompatible with this board/firmware; existing bounded GC2145 setup works.",
+  "scope": "Not proof that all camera modes or hardware performance are correct; no claim that the prior face-down black view was caused by this initialization failure.",
+  "files": [
+    {
+      "name": "gc2145-camera-check.py",
+      "bytes": 509,
+      "sha256": "71dfa7bf747649640610e164fc134f9d0d8424084effd1e0008d1359b510ac10"
+    },
+    {
+      "name": "maixpy-default-sensor-timeout.jpg",
+      "bytes": 19128,
+      "sha256": "2bef76d9e5ab8fb3d5ac534ee0f09b5bd10397435b8f243a9c86377565d4b463"
+    },
+    {
+      "name": "maixpy-gc2145-live.jpg",
+      "bytes": 405005,
+      "sha256": "0f956e39ce9da5dcf71b6f9c0b2dc624b3119c6a41377c6b9e2ea269c35e19aa"
+    },
+    {
+      "name": "maixpy-live-state.txt",
+      "bytes": 20040,
+      "sha256": "75755605367a801d6918e1196454f1945b72626c14c9defaa80996d4bee079f3"
+    },
+    {
+      "name": "maixpy-live-with-log.jpg",
+      "bytes": 553494,
+      "sha256": "a1486ad90eda53a5e0871f3d47bd23096df770dc388405b761d0a95745910f13"
+    }
+  ]
+}

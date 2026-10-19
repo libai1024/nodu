@@ -1,0 +1,26 @@
+Host-native unit tests only; no serial/MMIO/RISC-V output execution.
+
+$ clang -std=c11 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -g test_protocol.c src/protocol.c src/slip.c -o build/test_protocol
+exit=0
+
+$ ./build/test_protocol
+PASS: CRC, forbidden opcodes, malformed requests, initialization gate, unchanged success27/other2 responses, exact E7-11/CRC/ID-only/tail clearing/guards, unchanged whitelist, bounded SLIP/escapes/TX failures
+exit=0
+
+$ python3 -m unittest -v test_host_diagnostic.py
+test_accepts_only_exact_bytes_type (test_host_diagnostic.E7DiagnosticTests.test_accepts_only_exact_bytes_type) ... ok
+test_any_ids_in_an_e7_frame_never_authenticate (test_host_diagnostic.E7DiagnosticTests.test_any_ids_in_an_e7_frame_never_authenticate) ... ok
+test_crc_must_be_little_endian (test_host_diagnostic.E7DiagnosticTests.test_crc_must_be_little_endian) ... ok
+test_does_not_decode_slip (test_host_diagnostic.E7DiagnosticTests.test_does_not_decode_slip) ... ok
+test_fixed_independent_crc_vector_and_fields (test_host_diagnostic.E7DiagnosticTests.test_fixed_independent_crc_vector_and_fields) ... ok
+test_rejects_corrupt_payload_and_each_crc_byte (test_host_diagnostic.E7DiagnosticTests.test_rejects_corrupt_payload_and_each_crc_byte) ... ok
+test_rejects_other_opcode_even_with_valid_crc (test_host_diagnostic.E7DiagnosticTests.test_rejects_other_opcode_even_with_valid_crc) ... ok
+test_rejects_other_status_even_with_valid_crc (test_host_diagnostic.E7DiagnosticTests.test_rejects_other_status_even_with_valid_crc) ... ok
+test_rejects_success_frame_and_legacy_two_byte_e7 (test_host_diagnostic.E7DiagnosticTests.test_rejects_success_frame_and_legacy_two_byte_e7) ... ok
+test_requires_exact_length (test_host_diagnostic.E7DiagnosticTests.test_requires_exact_length) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.000s
+
+OK
+exit=0

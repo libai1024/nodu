@@ -1,0 +1,16 @@
+{
+  "directory": "/Users/wangwei/.nodu/backups/2026-10-19T05-50-25-349Z-52b946ca.pre-probe",
+  "sourceSession": "9996e8e6ef0641829d343944ecff5ab1",
+  "stateSaved": false,
+  "verifiedFiles": 21,
+  "revalidatedCopies": 20,
+  "reuseSource": {
+    "directory": "/Users/wangwei/.nodu/backups/2026-10-19T03-53-18-323Z-7f8fd806.pre-probe",
+    "manifestSha256": "7ce7669e0bab97d58503f723af99b1d9ead0b643683070aec5ebe9dba9920699",
+    "session": "9996e8e6ef0641829d343944ecff5ab1",
+    "capacityEvidence": false
+  },
+  "prefixCopySource": null,
+  "preflightVerified": true,
+  "error": null
+}

@@ -1,0 +1,85 @@
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           RISC-V
+  Version:                           0x1
+  Entry point address:               0x80000000
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          148256 (bytes into file)
+  Flags:                             0x3, RVC, single-float ABI
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         3
+  Size of section headers:           64 (bytes)
+  Number of section headers:         20
+  Section header string table index: 19
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 0]                   NULL             0000000000000000  00000000
+       0000000000000000  0000000000000000           0     0     0
+  [ 1] .text             PROGBITS         0000000080000000  00001000
+       0000000000001ac8  0000000000000000  AX       0     0     8
+  [ 2] .rodata           PROGBITS         0000000080001ac8  00002ac8
+       0000000000000790  0000000000000000   A       0     0     8
+  [ 3] .data             PROGBITS         0000000080002258  00003258
+       0000000000000000  0000000000000000  WA       0     0     1
+  [ 4] .bss              NOBITS           0000000080002258  00000000
+       0000000000000000  0000000000000000  WA       0     0     1
+  [ 5] .riscv.attributes RISCV_ATTRIBUTE  0000000000000000  00003258
+       0000000000000057  0000000000000000           0     0     1
+  [ 6] .debug_line       PROGBITS         0000000000000000  000032af
+       00000000000071d6  0000000000000000           0     0     1
+  [ 7] .debug_line_str   PROGBITS         0000000000000000  0000a485
+       00000000000007d7  0000000000000001  MS       0     0     1
+  [ 8] .debug_info       PROGBITS         0000000000000000  0000ac5c
+       000000000000a54d  0000000000000000           0     0     1
+  [ 9] .debug_abbrev     PROGBITS         0000000000000000  000151a9
+       0000000000001d5b  0000000000000000           0     0     1
+  [10] .debug_aranges    PROGBITS         0000000000000000  00016f10
+       00000000000006c0  0000000000000000           0     0     16
+  [11] .debug_str        PROGBITS         0000000000000000  000175d0
+       0000000000004e88  0000000000000001  MS       0     0     1
+  [12] .debug_loclists   PROGBITS         0000000000000000  0001c458
+       0000000000003375  0000000000000000           0     0     1
+  [13] .debug_rnglists   PROGBITS         0000000000000000  0001f7cd
+       00000000000005aa  0000000000000000           0     0     1
+  [14] .debug_frame      PROGBITS         0000000000000000  0001fd78
+       0000000000000b40  0000000000000000           0     0     8
+  [15] .debug_loc        PROGBITS         0000000000000000  000208b8
+       00000000000026c3  0000000000000000           0     0     1
+  [16] .debug_ranges     PROGBITS         0000000000000000  00022f7b
+       0000000000000450  0000000000000000           0     0     1
+  [17] .symtab           SYMTAB           0000000000000000  000233d0
+       0000000000000ab0  0000000000000018          18    77     8
+  [18] .strtab           STRTAB           0000000000000000  00023e80
+       00000000000003c0  0000000000000000           0     0     1
+  [19] .shstrtab         STRTAB           0000000000000000  00024240
+       00000000000000dc  0000000000000000           0     0     1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), p (processor specific)
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  RISCV_ATTRIBUT 0x0000000000003258 0x0000000000000000 0x0000000000000000
+                 0x0000000000000057 0x0000000000000000  R      0x1
+  LOAD           0x0000000000001000 0x0000000080000000 0x0000000080000000
+                 0x0000000000002258 0x0000000000002258  R E    0x1000
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     0x10
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .riscv.attributes 
+   01     .text .rodata 
+   02     

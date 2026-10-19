@@ -1,0 +1,50 @@
+[
+  {
+    "id": "01",
+    "name": "起点",
+    "type": "字形与圆点",
+    "rationale": "开放的小写 n 代表入门的入口，分离圆点代表第一次点亮的结果。两部分在小尺寸下仍清晰。",
+    "file": "exploration-01.svg",
+    "recommended": true
+  },
+  {
+    "id": "02",
+    "name": "台阶",
+    "type": "实心几何",
+    "rationale": "两级向上的台阶，把先完成一个小项目、再逐步进阶的过程压缩为一个轮廓。",
+    "file": "exploration-02.svg",
+    "recommended": false
+  },
+  {
+    "id": "03",
+    "name": "积木",
+    "type": "模块点阵",
+    "rationale": "六个等尺寸模块组成向上的构建节奏；适合教学与组件库的辅助图案。",
+    "file": "exploration-03.svg",
+    "recommended": false
+  },
+  {
+    "id": "04",
+    "name": "路径",
+    "type": "连续线形",
+    "rationale": "一条路径经过两个转折，表达编写、构建与运行的连续动作。",
+    "file": "exploration-04.svg",
+    "recommended": false
+  },
+  {
+    "id": "05",
+    "name": "起跑门",
+    "type": "几何与线形",
+    "rationale": "开启的门框与向前的短横，表达低门槛入口和第一个可见的进展。",
+    "file": "exploration-05.svg",
+    "recommended": false
+  },
+  {
+    "id": "06",
+    "name": "汇合",
+    "type": "节点网络",
+    "rationale": "两个输入连向一个结果，表示不同开发板共享熟悉的开发流程。",
+    "file": "exploration-06.svg",
+    "recommended": false
+  }
+]

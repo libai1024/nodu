@@ -1,0 +1,90 @@
+/* SPDX-License-Identifier: MIT */
+.scope-device-panel { width: 100%; }
+.scope-device-panel > section { padding: 0 16px 16px; border-bottom: 1px solid var(--theia-panel-border); }
+.scope-device-panel > section:last-child { border-bottom: 0; }
+.scope-widget select, .scope-widget textarea, .scope-widget input:not([type='checkbox']):not([type='radio']):not([type='range']) {
+    box-sizing: border-box; min-width: 0; width: 100%; color: var(--theia-input-foreground); background: var(--theia-input-background); border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 3px; padding: 5px 7px; font: inherit; line-height: 1.5; caret-color: var(--theia-input-foreground);
+}
+.scope-widget select { cursor: pointer; }
+.scope-widget select:disabled, .scope-widget textarea:disabled, .scope-widget input:disabled { opacity: .55; cursor: default; }
+.scope-widget textarea::placeholder, .scope-widget input::placeholder { color: var(--theia-input-placeholderForeground); opacity: 1; }
+.scope-widget select:focus-visible, .scope-widget textarea:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
+.nodu-device-field { display: flex; flex-direction: column; gap: 5px; margin: 0 0 12px; font-size: 12px; }
+.nodu-device-field > label { color: var(--theia-descriptionForeground); }
+.nodu-input-action { display: flex; gap: 7px; align-items: stretch; min-width: 0; }
+.nodu-input-action > input, .nodu-input-action > select { flex: 1; width: 0; min-width: 0; }
+.nodu-input-action > button { flex-shrink: 0; }
+.nodu-device-empty { margin: 12px 0 0; }
+.nodu-device-error { color: var(--theia-errorForeground); margin-top: 12px; font-size: 12px; overflow-wrap: anywhere; }
+.nodu-device-error p { margin: 0 0 4px; white-space: pre-wrap; }
+.nodu-firmware { margin-top: 12px; margin-bottom: 0; }
+.nodu-firmware > div { flex-wrap: wrap; gap: 4px 10px; }
+.nodu-firmware dd { overflow-wrap: anywhere; max-width: 100%; }
+.nodu-device-details { margin-top: 8px; font-size: 12px; }
+.nodu-device-details > summary { cursor: pointer; color: var(--theia-descriptionForeground); padding: 4px 0; }
+.nodu-device-details > summary:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
+.nodu-firmware dt { flex-shrink: 0; }
+.nodu-firmware .nodu-capabilities { display: flex; gap: 7px; font-size: 11px; }
+.nodu-capability-yes { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.scope-widget .nodu-code-input { font-family: var(--theia-code-font-family, monospace); font-size: 12px; resize: vertical; min-height: 64px; max-height: 300px; }
+.nodu-repl-output { white-space: pre-wrap; overflow-wrap: anywhere; overflow-y: auto; max-height: 220px; min-height: 64px; margin: 10px 0 0; padding: 8px; border-radius: 3px; background: var(--theia-editor-background); color: var(--theia-editor-foreground); font-family: var(--theia-code-font-family, monospace); font-size: 11px; line-height: 1.6; scrollbar-color: var(--theia-scrollbarSlider-background) transparent; }
+.nodu-repl-output:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
+.nodu-file-list { list-style: none; padding: 0; margin: 10px 0; max-height: 200px; overflow-y: auto; }
+.nodu-file-list li { margin: 0; }
+.nodu-file-list button { width: 100%; min-height: 28px; display: flex; align-items: center; gap: 7px; padding: 3px 4px; border: 0; color: var(--theia-foreground); background: transparent; border-radius: 2px; text-align: left; }
+.nodu-file-list button:hover { background: var(--theia-list-hoverBackground); }
+.nodu-file-list button > span:first-of-type { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.nodu-file-list button > span:last-child { flex-shrink: 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+.nodu-overwrite { font-size: 12px; margin: 2px 0 8px; }
+.nodu-preview-source { display: flex; gap: 4px; padding: 10px 16px 0; }
+.nodu-preview-source button { flex: 1; border: 1px solid var(--theia-panel-border); border-radius: 3px; color: var(--theia-descriptionForeground); background: transparent; min-height: 28px; padding: 4px 6px; font-size: 12px; }
+.nodu-preview-source button:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-preview-source .nodu-source-selected { color: var(--theia-button-foreground); background: var(--theia-button-background); border-color: var(--theia-button-background); }
+.nodu-preview-source .nodu-source-selected:hover { color: var(--theia-button-foreground); background: var(--theia-button-hoverBackground); }
+.nodu-camera-stage { background: var(--theia-editor-background); }
+.nodu-camera-stage img { display: block; width: 100%; height: auto; max-height: 55vh; object-fit: contain; }
+.nodu-preview-empty { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px; min-height: 210px; padding: 20px 12px; color: var(--theia-descriptionForeground); font-size: 12px; }
+.nodu-preview-empty > .codicon { font-size: 24px; margin-bottom: 2px; }
+.nodu-preview-empty strong { font-size: 13px; font-weight: 500; color: var(--theia-foreground); }
+.nodu-preview-empty .theia-button { margin-top: 5px; }
+.scope-vision-widget .scope-device-actions { align-items: center; gap: 12px; padding-top: 10px; }
+.scope-vision-widget .nodu-device-field { gap: 6px; margin: 12px 0 0; }
+.nodu-toolbar-device .scope-status-dot { background: var(--theia-descriptionForeground); }
+.nodu-toolbar-device.nodu-is-connected .scope-status-dot { background: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.nodu-toolbar-device.nodu-is-connected { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.scope-action.nodu-toolbar-stop { gap: 5px; }
+@media (max-width: 1000px) {
+    .nodu-toolbar-device { max-width: 90px; font-size: 11px; }
+    .scope-toolbar-logs { width: 28px; padding: 4px; font-size: 0; gap: 0; }
+    .scope-toolbar-logs .codicon { font-size: 14px; }
+}
+@media (max-width: 750px) {
+    .nodu-toolbar-stop > span { display: none; }
+    .scope-workspace-bar { gap: 6px; }
+    .nodu-toolbar-device { display: none; }
+}
+
+.scope-device-widget .scope-state-active, .scope-vision-widget .scope-state-active { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.nodu-firmware-disclosure { font-size: 12px; }
+.nodu-firmware-disclosure > summary { display: list-item; cursor: pointer; min-height: 44px; padding: 12px 0; font-weight: 600; }
+.nodu-firmware-disclosure > summary:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
+.nodu-firmware-disclosure > .scope-helper { margin-top: 0; }
+.nodu-firmware-step { margin: 16px 0 0; }
+.nodu-firmware-step h3, .nodu-firmware-log-heading h3 { font-size: 12px; line-height: 1.5; margin: 0 0 8px; font-weight: 600; }
+.nodu-firmware-step > .scope-helper { margin: 0 0 8px; }
+.nodu-firmware-metadata { margin: 10px 0; font-size: 11px; }
+.nodu-firmware-metadata > div { flex-wrap: wrap; gap: 3px 8px; }
+.nodu-firmware-metadata dd { max-width: 100%; overflow-wrap: anywhere; }
+.nodu-firmware-metadata .nodu-metadata-full { display: block; }
+.nodu-metadata-full dd { text-align: left; margin-top: 4px; }
+.nodu-metadata-full code { font-family: var(--theia-code-font-family, monospace); font-size: 11px; }
+.nodu-metadata-full a { color: var(--theia-textLink-foreground); text-underline-offset: 3px; }
+.nodu-backup-path { margin: 6px 0 0; color: var(--theia-descriptionForeground); font-size: 11px; overflow-wrap: anywhere; user-select: text; }
+.nodu-flash-acknowledgement { align-items: flex-start; margin: 0 0 10px; line-height: 1.6; }
+.nodu-flash-acknowledgement > input { margin-top: 3px !important; }
+.nodu-firmware-progress { margin-top: 12px; color: var(--theia-descriptionForeground); font-size: 11px; overflow-wrap: anywhere; }
+.nodu-firmware-progress p { margin: 6px 0; }
+.nodu-firmware-progress progress { display: block; width: 100%; height: 6px; accent-color: var(--theia-button-background); }
+.nodu-firmware-log-heading { min-height: 34px !important; margin-top: 12px; }
+.nodu-firmware-log-heading h3 { margin: 0; }
+.nodu-firmware-log { margin-top: 0; }

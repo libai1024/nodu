@@ -1,0 +1,20 @@
+{
+  "status": "offline new candidate; no hardware execution by this lane",
+  "old_candidate_preserved": "../history/314f29f2-before-clock-diagnostics-delta",
+  "reason": "Remove unguaranteed PLL0 dependency and extra SDK-absent receive-completion condition; add non-payload failure diagnostics. These changes do not establish the cause of the first non-27-byte response.",
+  "changes": [
+    "SPI3 fixed IN0 clock source 0; threshold and conservative divider unchanged",
+    "Remove extra SR&5 wait after exact requested receive count; every transfer/FIFO deadline and SER/SSI cleanup remains",
+    "E5=9F transfer, E6=90 transfer, E7=unsupported cross-check, E8=UID transfer; protocol permits only these explicit results, all others map to E4, all non-response bytes cleared",
+    "Success fixed27B/CRC and whitelist unchanged; no extra SPI opcode"
+  ],
+  "repeat_builds": 2,
+  "repeat_hashes_equal": {
+    "probe.bin": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "probe.elf": "bba12baa71f0fc030b0a73ebc5bb52734c4f470c798dc843f10f5e32d999881f"
+  },
+  "undefined_symbols": "",
+  "uart_tx_store": "0x800010B4 sw a0,0(a5)",
+  "runtime_closure": "same six libgcc members; independent audit requested",
+  "hardware_result": "No claim; root owns serial and App acceptance"
+}

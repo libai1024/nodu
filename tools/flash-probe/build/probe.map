@@ -1,0 +1,708 @@
+Archive member included to satisfy reference by file (symbol)
+
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__divdf3)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__gedf2)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__ltdf2)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__muldf3)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__subdf3)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__fixdfsi)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__fixunsdfsi)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__floatsidf)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__floatunsidf)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+                              /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o (__floatdidf)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+                              /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o) (__clzdi2)
+/private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+                              /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o) (__clz_tab)
+
+Merging object attributes
+
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .tdata.begin   0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .tdata.end     0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .tbss.end      0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_reset_ctl
+                0x0000000000000000      0x136 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_reset_ctl
+                0x0000000000000000       0x74 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_is_lock.part.0
+                0x0000000000000000       0x2e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_clear_slip.isra.0
+                0x0000000000000000       0x3a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_get_git_id
+                0x0000000000000000        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_get_freq
+                0x0000000000000000        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_reset
+                0x0000000000000000       0x2e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_clock_disable
+                0x0000000000000000       0x22 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_clock_get_threshold
+                0x0000000000000000       0xca /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_clock_get_threshold
+                0x0000000000000000       0x6c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_clock_get_clock_select
+                0x0000000000000000       0x64 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_clock_get_clock_select
+                0x0000000000000000       0x28 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_enable
+                0x0000000000000000       0xb6 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_disable
+                0x0000000000000000       0x5a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_get_freq
+                0x0000000000000000       0x12 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_source_set_freq.part.0
+                0x0000000000000000      0x4cc /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_dma_select
+                0x0000000000000000       0xac /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_dma_select
+                0x0000000000000000       0x18 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_fast_enable_pll
+                0x0000000000000000       0xd2 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_set_spi0_dvp_data
+                0x0000000000000000       0x18 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_set_power_mode
+                0x0000000000000000       0x20 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_pll_set_freq
+                0x0000000000000000      0x106 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_cpu_get_freq
+                0x0000000000000000        0xa /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_cpu_set_freq
+                0x0000000000000000       0x38 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_enable_irq
+                0x0000000000000000       0x10 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_disable_irq
+                0x0000000000000000       0x10 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_get_time_us
+                0x0000000000000000       0x30 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_get_reset_status
+                0x0000000000000000       0x54 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .sbss.s_reset_status.0
+                0x0000000000000000        0x4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .sdata.cpu_freq
+                0x0000000000000000        0x4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .srodata.sysctl
+                0x0000000000000000        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .srodata.get_source_aclk
+                0x0000000000000000        0x2 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .srodata.get_select_aclk
+                0x0000000000000000        0x2 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .srodata.get_select_pll2
+                0x0000000000000000        0x3 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .srodata.cst8  0x0000000000000000       0x48 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_init
+                0x0000000000000000       0x9e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_get_io
+                0x0000000000000000       0x1e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_io
+                0x0000000000000000       0x1e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_io_pull
+                0x0000000000000000       0x5a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_get_io_pull
+                0x0000000000000000       0x30 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_io_driving
+                0x0000000000000000       0x30 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_sl
+                0x0000000000000000       0x2a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_st
+                0x0000000000000000       0x2a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_oe_inv
+                0x0000000000000000       0x28 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_get_io_driving
+                0x0000000000000000       0x1e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_tie_enable
+                0x0000000000000000       0x3e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_set_tie_value
+                0x0000000000000000       0x3e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text.fpioa_get_io_by_function
+                0x0000000000000000       0x26 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .srodata.fpioa
+                0x0000000000000000        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_irq_callback
+                0x0000000000000000       0x18 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_get_interrupt_mode
+                0x0000000000000000       0x10 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_set_interrupt_cnt
+                0x0000000000000000       0x50 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_set_irq
+                0x0000000000000000       0x8a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_putchar
+                0x0000000000000000       0x18 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_getchar
+                0x0000000000000000       0x12 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_receive_data
+                0x0000000000000000       0x20 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_send_data
+                0x0000000000000000       0x32 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_puts
+                0x0000000000000000       0x26 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text.uarths_config
+                0x0000000000000000       0x44 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .bss.g_uarths_instance
+                0x0000000000000000       0x18 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .text          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .data          0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .bss           0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .comment       0x0000000000000000       0x13 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .text.__gedf2  0x0000000000000000       0x88 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_info    0x0000000000000000      0x268 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_abbrev  0x0000000000000000      0x177 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_loc     0x0000000000000000      0x134 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_aranges
+                0x0000000000000000       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_ranges  0x0000000000000000       0xd0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_line    0x0000000000000000      0x2c5 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_str     0x0000000000000000      0x26e /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .debug_frame   0x0000000000000000       0x28 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(gedf2.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .text.__ledf2  0x0000000000000000       0x88 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_info    0x0000000000000000      0x268 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_abbrev  0x0000000000000000      0x177 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_loc     0x0000000000000000      0x134 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_aranges
+                0x0000000000000000       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_ranges  0x0000000000000000       0xd0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_line    0x0000000000000000      0x2c5 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_str     0x0000000000000000      0x26e /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .debug_frame   0x0000000000000000       0x28 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(ledf2.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .text.__subdf3
+                0x0000000000000000      0x57a /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_info    0x0000000000000000      0x393 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_abbrev  0x0000000000000000      0x184 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_loc     0x0000000000000000     0x16f3 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_aranges
+                0x0000000000000000       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_ranges  0x0000000000000000      0x430 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_line    0x0000000000000000      0xd56 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_str     0x0000000000000000      0x30f /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .debug_frame   0x0000000000000000       0x48 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(subdf3.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .text.__fixdfsi
+                0x0000000000000000       0x84 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_info    0x0000000000000000      0x216 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_abbrev  0x0000000000000000      0x172 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_loc     0x0000000000000000      0x2aa /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_aranges
+                0x0000000000000000       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_ranges  0x0000000000000000       0x80 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_line    0x0000000000000000      0x281 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_str     0x0000000000000000      0x251 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .debug_frame   0x0000000000000000       0x28 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixdfsi.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .text.__floatsidf
+                0x0000000000000000       0x62 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_info    0x0000000000000000      0x257 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_abbrev  0x0000000000000000      0x185 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_loc     0x0000000000000000      0x14b /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_aranges
+                0x0000000000000000       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_ranges  0x0000000000000000       0x90 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_line    0x0000000000000000      0x1fd /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_str     0x0000000000000000      0x2d0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .debug_frame   0x0000000000000000       0x40 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatsidf.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .text.__floatdidf
+                0x0000000000000000      0x108 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_info    0x0000000000000000      0x287 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_abbrev  0x0000000000000000      0x187 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_loc     0x0000000000000000      0x331 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_aranges
+                0x0000000000000000       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_ranges  0x0000000000000000       0xe0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_line    0x0000000000000000      0x373 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_str     0x0000000000000000      0x2da /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .debug_frame   0x0000000000000000       0x48 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatdidf.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .text          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+ .data          0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+ .bss           0x0000000000000000        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+ .comment       0x0000000000000000       0x12 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x0000000080000000 0x0000000000020000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+.text           0x0000000080000000     0x1a4e
+ *(.text.start)
+ .text.start    0x0000000080000000      0x2ca /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+                0x0000000080000000                _start
+                0x0000000080000008                g_wake_up
+                0x0000000080000120                trap_entry
+ *(.text .text.*)
+ .text.sysctl_clock_device_en.isra.0
+                0x00000000800002ca      0x1a6 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_clock_enable
+                0x0000000080000470       0x6c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                0x0000000080000470                sysctl_clock_enable
+ .text.sysctl_clock_set_threshold
+                0x00000000800004dc      0x1d6 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                0x00000000800004dc                sysctl_clock_set_threshold
+ .text.sysctl_clock_set_clock_select
+                0x00000000800006b2       0xb2 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                0x00000000800006b2                sysctl_clock_set_clock_select
+ .text.sysctl_clock_get_freq
+                0x0000000080000764      0x25a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                0x0000000080000764                sysctl_clock_get_freq
+ .text.sysctl_clock_source_get_freq
+                0x00000000800009be       0x36 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                0x00000000800009be                sysctl_clock_source_get_freq
+ .text.sysctl_pll_get_freq.part.0
+                0x00000000800009f4       0xee /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.sysctl_clock_source_get_freq.part.0
+                0x0000000080000ae2        0x4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .text.fpioa_set_function_raw
+                0x0000000080000ae6       0x38 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+                0x0000000080000ae6                fpioa_set_function_raw
+ .text.fpioa_set_function
+                0x0000000080000b1e       0x7a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+                0x0000000080000b1e                fpioa_set_function
+ .text.uarths_init
+                0x0000000080000b98       0x6e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+                0x0000000080000b98                uarths_init
+ .text.park     0x0000000080000c06        0xe /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .text._init_bsp
+                0x0000000080000c14       0x36 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+                0x0000000080000c14                _init_bsp
+ .text.handle_irq
+                0x0000000080000c4a        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+                0x0000000080000c4a                handle_irq
+ .text.handle_syscall
+                0x0000000080000c52        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+                0x0000000080000c52                handle_syscall
+ .text.get_u32  0x0000000080000c5a       0x20 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .text.probe_crc32
+                0x0000000080000c7a       0x36 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+                0x0000000080000c7a                probe_crc32
+ .text.probe_identity_allowed
+                0x0000000080000cb0       0x42 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+                0x0000000080000cb0                probe_identity_allowed
+ .text.probe_process
+                0x0000000080000cf2      0x13c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+                0x0000000080000cf2                probe_process
+ .text.probe_slip_clear
+                0x0000000080000e2e        0xe /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+                0x0000000080000e2e                probe_slip_clear
+ .text.probe_slip_feed
+                0x0000000080000e3c       0x94 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+                0x0000000080000e3c                probe_slip_feed
+ .text.probe_slip_send
+                0x0000000080000ed0       0x7e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+                0x0000000080000ed0                probe_slip_send
+ .text.receive_identity_command
+                0x0000000080000f4e      0x146 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .text.uart_put_byte
+                0x0000000080001094       0x34 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .text.probe_spi_init
+                0x00000000800010c8       0x50 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+                0x00000000800010c8                probe_spi_init
+ .text.probe_flash_identity
+                0x0000000080001118       0x70 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+                0x0000000080001118                probe_flash_identity
+ .text.probe_main
+                0x0000000080001188       0xd4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+                0x0000000080001188                probe_main
+ .text.__divdf3
+                0x000000008000125c      0x3a6 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+                0x000000008000125c                __divdf3
+ .text.__muldf3
+                0x0000000080001602      0x374 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+                0x0000000080001602                __muldf3
+ .text.__fixunsdfsi
+                0x0000000080001976       0x66 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+                0x0000000080001976                __fixunsdfsi
+ .text.__floatunsidf
+                0x00000000800019dc       0x42 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+                0x00000000800019dc                __floatunsidf
+ .text.__clzdi2
+                0x0000000080001a1e       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+                0x0000000080001a1e                __clzdi2
+
+.rodata         0x0000000080001a50      0x790
+ *(.rodata .rodata.* .srodata .srodata.*)
+ .rodata.sysctl_clock_device_en.isra.0
+                0x0000000080001a50       0x98 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_clock_set_threshold
+                0x0000000080001ae8       0x6c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_clock_set_clock_select
+                0x0000000080001b54       0x28 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_clock_get_freq
+                0x0000000080001b7c       0xac /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .rodata.sysctl_clock_source_get_freq
+                0x0000000080001c28       0x14 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ *fill*         0x0000000080001c3c        0x4 
+ .srodata.get_source_pll2
+                0x0000000080001c40        0x3 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                0x0000000080001c40                get_source_pll2
+ *fill*         0x0000000080001c43        0x5 
+ .rodata.function_config
+                0x0000000080001c48      0x400 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .srodata.uarths
+                0x0000000080002048        0x8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+                0x0000000080002048                uarths
+ .srodata.uid_command.0
+                0x0000000080002050        0x5 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ *fill*         0x0000000080002055        0x3 
+ .srodata.legacy_command.1
+                0x0000000080002058        0x4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ *fill*         0x000000008000205c        0x4 
+ .srodata.jedec_command.2
+                0x0000000080002060        0x1 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ *fill*         0x0000000080002061        0x3 
+ .rodata.__divdf3
+                0x0000000080002064       0x3c /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .rodata.__muldf3
+                0x00000000800020a0       0x3c /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ *fill*         0x00000000800020dc        0x4 
+ .rodata.__clz_tab
+                0x00000000800020e0      0x100 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+                0x00000000800020e0                __clz_tab
+
+.rela.dyn       0x00000000800021e0        0x0
+ .rela.text.start
+                0x00000000800021e0        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .rela.text._init_bsp
+                0x00000000800021e0        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+
+.data           0x00000000800021e0        0x0
+                0x00000000800021e0                . = ALIGN (0x8)
+ *(.data .data.*)
+                0x00000000800029e0                __global_pointer$ = (. + 0x800)
+ *(.sdata .sdata.*)
+
+.bss            0x00000000800021e0        0x0
+                0x00000000800021e0                . = ALIGN (0x8)
+                0x00000000800021e0                _bss = .
+ *(.bss .bss.* .sbss .sbss.* COMMON)
+                0x00000000800021e0                . = ALIGN (0x8)
+                0x00000000800021e0                _ebss = .
+                0x0000000080002200                . = ALIGN (0x40)
+                0x0000000080002200                _end = .
+                0x000000008000a200                _hart0_stack_top = (_end + 0x8000)
+                0x0000000080012200                _hart1_stack_top = (_end + 0x10000)
+                0x0000000000000001                ASSERT ((_hart1_stack_top <= (ORIGIN (ram) + LENGTH (ram))), probe stacks exceed RAM allocation)
+
+/DISCARD/
+ *(.comment .note.* .eh_frame .eh_frame_hdr)
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+LOAD /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+LOAD /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a
+OUTPUT(/Users/wangwei/Model/k210-studio/tools/flash-probe/build/probe.elf elf64-littleriscv)
+
+.riscv.attributes
+                0x0000000000000000       0x57
+ .riscv.attributes
+                0x0000000000000000       0x55 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .riscv.attributes
+                0x0000000000000055       0x57 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .riscv.attributes
+                0x00000000000000ac       0x53 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .riscv.attributes
+                0x00000000000000ff       0x53 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .riscv.attributes
+                0x0000000000000152       0x57 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .riscv.attributes
+                0x00000000000001a9       0x53 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .riscv.attributes
+                0x00000000000001fc       0x53 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .riscv.attributes
+                0x000000000000024f       0x57 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+
+.debug_line     0x0000000000000000     0x703a
+ .debug_line    0x0000000000000000      0x56a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .debug_line    0x000000000000056a     0x2faf /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_line    0x0000000000003519      0x89a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_line    0x0000000000003db3      0x575 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_line    0x0000000000004328      0x152 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_line    0x000000000000447a      0x4c4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_line    0x000000000000493e      0x389 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_line    0x0000000000004cc7      0x869 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .debug_line    0x0000000000005530      0x9bc /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_line    0x0000000000005eec      0x8b1 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_line    0x000000000000679d      0x214 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_line    0x00000000000069b1      0x1e3 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_line    0x0000000000006b94      0x292 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .debug_line    0x0000000000006e26      0x214 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+
+.debug_line_str
+                0x0000000000000000      0x747
+ .debug_line_str
+                0x0000000000000000      0x747 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+                                         0xb5 (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                                        0x404 (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+                                        0x2f8 (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+                                        0x34f (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+                                        0x1c8 (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+                                        0x228 (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+                                        0x220 (size before relaxing)
+ .debug_line_str
+                0x0000000000000747        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+                                        0x2d0 (size before relaxing)
+
+.debug_info     0x0000000000000000     0xa495
+ .debug_info    0x0000000000000000       0x29 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .debug_info    0x0000000000000029     0x456d /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_info    0x0000000000004596     0x108d /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_info    0x0000000000005623      0xb1e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_info    0x0000000000006141      0x21c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_info    0x000000000000635d      0x45a /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_info    0x00000000000067b7      0x28e /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_info    0x0000000000006a45     0x16f6 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .debug_info    0x000000000000813b      0x3e9 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_info    0x0000000000008524      0x3ef /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_info    0x0000000000008913      0x201 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_info    0x0000000000008b14      0x256 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_info    0x0000000000008d6a      0xbd0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .debug_info    0x000000000000993a      0xb5b /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+
+.debug_abbrev   0x0000000000000000     0x1d2d
+ .debug_abbrev  0x0000000000000000       0x14 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .debug_abbrev  0x0000000000000014      0x506 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_abbrev  0x000000000000051a      0x2ae /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_abbrev  0x00000000000007c8      0x2c7 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_abbrev  0x0000000000000a8f      0x156 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_abbrev  0x0000000000000be5      0x1ff /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_abbrev  0x0000000000000de4      0x17b /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_abbrev  0x0000000000000f5f      0x3d2 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .debug_abbrev  0x0000000000001331      0x159 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_abbrev  0x000000000000148a      0x164 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_abbrev  0x00000000000015ee      0x179 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_abbrev  0x0000000000001767      0x17e /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_abbrev  0x00000000000018e5      0x251 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .debug_abbrev  0x0000000000001b36      0x1f7 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+
+.debug_aranges  0x0000000000000000      0x6c0
+ .debug_aranges
+                0x0000000000000000       0x30 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+ .debug_aranges
+                0x0000000000000030      0x220 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_aranges
+                0x0000000000000250      0x110 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_aranges
+                0x0000000000000360       0xd0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_aranges
+                0x0000000000000430       0x60 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_aranges
+                0x0000000000000490       0x60 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_aranges
+                0x00000000000004f0       0x50 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_aranges
+                0x0000000000000540       0x70 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .debug_aranges
+                0x00000000000005b0       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_aranges
+                0x00000000000005e0       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_aranges
+                0x0000000000000610       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_aranges
+                0x0000000000000640       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_aranges
+                0x0000000000000670       0x30 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+ .debug_aranges
+                0x00000000000006a0       0x20 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+
+.debug_str      0x0000000000000000     0x4e70
+ .debug_str     0x0000000000000000     0x4e70 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/0-crt.o
+                                         0xc1 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+                                       0x2d48 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+                                       0x1741 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+                                        0xe70 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+                                        0x1d2 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+                                        0x257 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+                                        0x1fd (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+                                       0x1bf3 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+                                        0x379 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+                                        0x33c (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+                                        0x250 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+                                        0x2cd (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+                                        0x7b3 (size before relaxing)
+ .debug_str     0x0000000000004e70        0x0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clz.o)
+                                        0x796 (size before relaxing)
+
+.debug_loclists
+                0x0000000000000000     0x32b6
+ .debug_loclists
+                0x0000000000000000     0x23e4 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_loclists
+                0x00000000000023e4      0x4e5 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_loclists
+                0x00000000000028c9      0x268 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_loclists
+                0x0000000000002b31       0xba /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_loclists
+                0x0000000000002beb      0x223 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_loclists
+                0x0000000000002e0e      0x168 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_loclists
+                0x0000000000002f76      0x340 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+
+.debug_rnglists
+                0x0000000000000000      0x588
+ .debug_rnglists
+                0x0000000000000000      0x2d5 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_rnglists
+                0x00000000000002d5       0xa5 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_rnglists
+                0x000000000000037a       0x8c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_rnglists
+                0x0000000000000406       0x35 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_rnglists
+                0x000000000000043b       0x62 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_rnglists
+                0x000000000000049d       0x3c /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_rnglists
+                0x00000000000004d9       0xaf /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+
+.debug_frame    0x0000000000000000      0xb38
+ .debug_frame   0x0000000000000000      0x450 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/1-sysctl.o
+ .debug_frame   0x0000000000000450      0x1b8 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/2-fpioa.o
+ .debug_frame   0x0000000000000608      0x188 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/3-uarths.o
+ .debug_frame   0x0000000000000790       0x88 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/4-boot.o
+ .debug_frame   0x0000000000000818       0x98 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/5-protocol.o
+ .debug_frame   0x00000000000008b0       0x88 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/6-slip.o
+ .debug_frame   0x0000000000000938       0xc0 /Users/wangwei/Model/k210-studio/tools/flash-probe/build/7-platform.o
+ .debug_frame   0x00000000000009f8       0x58 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_frame   0x0000000000000a50       0x58 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_frame   0x0000000000000aa8       0x28 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_frame   0x0000000000000ad0       0x40 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_frame   0x0000000000000b10       0x28 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+
+.debug_loc      0x0000000000000000     0x26c3
+ .debug_loc     0x0000000000000000     0x11e0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_loc     0x00000000000011e0     0x10a1 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_loc     0x0000000000002281      0x249 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_loc     0x00000000000024ca      0x14f /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_loc     0x0000000000002619       0xaa /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)
+
+.debug_ranges   0x0000000000000000      0x450
+ .debug_ranges  0x0000000000000000      0x1c0 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(divdf3.o)
+ .debug_ranges  0x00000000000001c0      0x190 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(muldf3.o)
+ .debug_ranges  0x0000000000000350       0x50 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(fixunsdfsi.o)
+ .debug_ranges  0x00000000000003a0       0x60 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(floatunsidf.o)
+ .debug_ranges  0x0000000000000400       0x50 /private/tmp/nodu-readonly-probe-research-20261019/official-toolchain/kendryte-toolchain/lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a(_clzsi2.o)

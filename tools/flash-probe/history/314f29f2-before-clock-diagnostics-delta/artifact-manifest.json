@@ -1,0 +1,225 @@
+{
+  "status": "offline candidate, no hardware execution",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 8006,
+      "sha256": "348153c73382e9c9d062f7a5af2291bde64a3943f0dc2bbfd2ef17881de7c676"
+    },
+    {
+      "path": "build/0-crt.d",
+      "bytes": 345,
+      "sha256": "f1ed241a46502b265ea265f9e651f35001b63b8d66038f1f2f34c60579a1246e"
+    },
+    {
+      "path": "build/0-crt.o",
+      "bytes": 22256,
+      "sha256": "04367c0aa77fcc1df04e140bd937e4bf419f48c620e0a97aafa082af9da5c095"
+    },
+    {
+      "path": "build/1-sysctl.d",
+      "bytes": 7724,
+      "sha256": "72d57a865c7ad60626a4ef44b6bca4f7221af9906f80bb50f5507286cc5f81f8"
+    },
+    {
+      "path": "build/1-sysctl.o",
+      "bytes": 445592,
+      "sha256": "21c27de2ed3f26dd454810849ff9b2cbaa3e51e67010235543d82dc6d59b8bd0"
+    },
+    {
+      "path": "build/2-fpioa.d",
+      "bytes": 1554,
+      "sha256": "52618250ca9baf4fd518a00e928d3ab4aa7f2b691ab104e319a2d666e406cb97"
+    },
+    {
+      "path": "build/2-fpioa.o",
+      "bytes": 95344,
+      "sha256": "1fc262fa0346efebe715fe27de1d1e86ae33db3ae66947fff2c1375c29350c1d"
+    },
+    {
+      "path": "build/3-uarths.d",
+      "bytes": 5008,
+      "sha256": "d5c276e9f9d3c2f2dfa6d6b97d924834b66e6f5972591db9188e8b98ebaaf1db"
+    },
+    {
+      "path": "build/3-uarths.o",
+      "bytes": 60520,
+      "sha256": "b480b8b8bf5d09d9b2fcc905afa8ed12cec7614370218fdbed80f680b75709ca"
+    },
+    {
+      "path": "build/4-boot.d",
+      "bytes": 1104,
+      "sha256": "c8fc33bf3415b2a760a865082341799d3cbc76d9dd2dceedce92c74f9c85b277"
+    },
+    {
+      "path": "build/4-boot.o",
+      "bytes": 15368,
+      "sha256": "b5d4709416ce660f2fd4476ea002e8426ffd1e2e4504d36c4991ee9e9009500e"
+    },
+    {
+      "path": "build/5-protocol.d",
+      "bytes": 1112,
+      "sha256": "5f0fb0b30b422e4c1af56292134c2bfd0e58e470c08718a6f4cf4d4ab86c8365"
+    },
+    {
+      "path": "build/5-protocol.o",
+      "bytes": 34944,
+      "sha256": "4ebb4e21ae535c934ecafc9263d170f0ac68f7be25feb5ff8eb4531a1f15871e"
+    },
+    {
+      "path": "build/6-slip.d",
+      "bytes": 1104,
+      "sha256": "26b08d7a696fa7776be20e960fb1cf7820278a64cb109c67895cf76aa92bf188"
+    },
+    {
+      "path": "build/6-slip.o",
+      "bytes": 26704,
+      "sha256": "f88c24151e63ca80f94682505d24c95b340cbbdbd7f4efd643e79eb35153165f"
+    },
+    {
+      "path": "build/7-platform.d",
+      "bytes": 2520,
+      "sha256": "d926c919a787ee668aa0698db935fe5456d29aa72699a59ab02338ea96915088"
+    },
+    {
+      "path": "build/7-platform.o",
+      "bytes": 102280,
+      "sha256": "249e82a485a9403133e81dc0aec969549920aba6f7ec776cba5e8e76fa1d13d3"
+    },
+    {
+      "path": "build/build.log",
+      "bytes": 188892,
+      "sha256": "0bfd2ff11b4eab579a5832dafc64079068ce0ba133df347502e7f0b31fdaebb4"
+    },
+    {
+      "path": "build/probe.bin",
+      "bytes": 8672,
+      "sha256": "314f29f2a775607e59659ddf44c50f560bb3f98d3e0df24fad393efe4ddb113d"
+    },
+    {
+      "path": "build/probe.disassembly.txt",
+      "bytes": 168980,
+      "sha256": "f003638e2751c3c3be28012fee5a73cf3746c2b7680efcda3386e5061eeb153f"
+    },
+    {
+      "path": "build/probe.elf",
+      "bytes": 148432,
+      "sha256": "8ceb8eef08b9c1da94bd52135a2620ce7cf4cdb1737654c8086841f7a810fc8f"
+    },
+    {
+      "path": "build/probe.map",
+      "bytes": 68079,
+      "sha256": "88906f743600898b12a73137c2059736211625ac5537b93692a2ee70f4617afe"
+    },
+    {
+      "path": "build/probe.sections.txt",
+      "bytes": 4765,
+      "sha256": "2ff1929e58e6f5b5e793bb538e8b681b672e1975fc4a36b88f87ea25d41b9755"
+    },
+    {
+      "path": "build/probe.size.txt",
+      "bytes": 156,
+      "sha256": "e576ab25d031528427a21e51ee59d4d047faa927e32c0c626fc4314a3c8e28e2"
+    },
+    {
+      "path": "build/probe.symbols.txt",
+      "bytes": 1760,
+      "sha256": "d1b465495314eef1b72afce55aa95a79b1d130cc698a39870035a3b20702ed38"
+    },
+    {
+      "path": "build-report.json",
+      "bytes": 14826,
+      "sha256": "1ea52ddd3038e8fe29c70534e6a628ab672107c84060c253f8b0c1ea75df01b1"
+    },
+    {
+      "path": "build.py",
+      "bytes": 9846,
+      "sha256": "366ed5dfc4ca18a1cf21616a87709957eb49dc70cf0ad7a83b38b1168072dd4a"
+    },
+    {
+      "path": "host-test-report.txt",
+      "bytes": 586,
+      "sha256": "dcf7dcdce68a524ebc3980183fed8ddca555a1b4220c936fb86315fae7abdbfc"
+    },
+    {
+      "path": "licenses/SDK-Apache-2.0.txt",
+      "bytes": 11342,
+      "sha256": "b5376baf5dadbd8c782ca1026385553ea1d5ff7dde80c8ea0a1eb013b6d67884"
+    },
+    {
+      "path": "licenses/THIRD-PARTY-NOTICES.md",
+      "bytes": 72205,
+      "sha256": "39633e69c237afe86f04165a1f6a31d84cc5c23ea2e785d77a81bbe0d79b0ef5"
+    },
+    {
+      "path": "licenses/gcc-COPYING.LIB",
+      "bytes": 26527,
+      "sha256": "a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861"
+    },
+    {
+      "path": "licenses/gcc-COPYING.RUNTIME",
+      "bytes": 3324,
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74"
+    },
+    {
+      "path": "licenses/gcc-COPYING3",
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    {
+      "path": "licenses/kflash-MIT.txt",
+      "bytes": 1064,
+      "sha256": "c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9"
+    },
+    {
+      "path": "licenses/newlib-COPYING.NEWLIB",
+      "bytes": 57749,
+      "sha256": "6df0331179a05fe96f35a2d3f46679910930fcde415c8639fcc9c508bac54aae"
+    },
+    {
+      "path": "ram.ld",
+      "bytes": 885,
+      "sha256": "66b5788874aebdfc02107a5037cad927f216ce5459f856b0be7c93aa9be83b76"
+    },
+    {
+      "path": "reuse-manifest.json",
+      "bytes": 1800,
+      "sha256": "b82bffca23fd214db79884a250a401303407b7df0cdc1cb13b9edff6df86c47c"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 19036,
+      "sha256": "7676a68e66c75cb406336aacc7347935b1c3819227455fc53d5767ec2db3d865"
+    },
+    {
+      "path": "src/boot.c",
+      "bytes": 1124,
+      "sha256": "264212e2c38353d3c5ae763f1d9662c8b877c9f4ac67917ac2f60ac1f7320a40"
+    },
+    {
+      "path": "src/platform.c",
+      "bytes": 6236,
+      "sha256": "491ec4b40ad6b61e336d25ece072ecd3ca5633d5e687711087bb9beab5c33fe1"
+    },
+    {
+      "path": "src/probe.h",
+      "bytes": 1428,
+      "sha256": "5537e82fe4aea2d78e6b56c7eeeb41a517e7a6d8d4f3b8118af62fbd7bb64d52"
+    },
+    {
+      "path": "src/protocol.c",
+      "bytes": 3468,
+      "sha256": "3c31d9c7bc63a6df9157ece9976bb94116b4dfb455496a741439dcba8ef3eafb"
+    },
+    {
+      "path": "src/slip.c",
+      "bytes": 1988,
+      "sha256": "fd20c354b7606edd8a6932367222b727720e80223189ddacd2cd30ad1dda6894"
+    },
+    {
+      "path": "test_protocol.c",
+      "bytes": 5453,
+      "sha256": "3735b6ae65535c251fffb5def21203cbace230eb42c8b4cb2887d2c8b90e43dc"
+    }
+  ]
+}

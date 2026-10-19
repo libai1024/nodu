@@ -1,0 +1,42 @@
+[
+  {
+    "project": "Kendryte SDK",
+    "commit": "45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/spi.c",
+    "license": "Apache-2.0",
+    "sha256": "ab31efe22388196328adc0eec20245fcbfe6979655a2550e84ac56020f53361e",
+    "reuse_and_changes": "spi_init, spi_clk_init, spi_receive_data_standard; narrowed SPI3/single-byte/fixed identity commands, cycle deadlines and cleanup"
+  },
+  {
+    "project": "LoBo ktool",
+    "commit": "0345aa90d9b3830641373fb4e3ce4edf45d0a46f",
+    "path": "src/isp/main.c",
+    "license": "Apache-2.0",
+    "sha256": "2c26983b92c1cf2b4ef32b1b5a145479d9609ba118ce3b32a4eeed71f5425913",
+    "reuse_and_changes": "block_crc32 and D2/D7/DE formats; remove all writes/erase/reset/execute/read-array, strict16B requests/CRC/fields"
+  },
+  {
+    "project": "LoBo ktool",
+    "commit": "0345aa90d9b3830641373fb4e3ce4edf45d0a46f",
+    "path": "src/isp/isp.h",
+    "license": "Apache-2.0",
+    "sha256": "489ced9811ed2fe2742c40da8cc4e6b1ae21e5adc78390eddfe90c9d4e1aea1c",
+    "reuse_and_changes": "operation/status numeric constants only; no slip.h include or GPL code"
+  },
+  {
+    "project": "LoBo ktool",
+    "commit": "0345aa90d9b3830641373fb4e3ce4edf45d0a46f",
+    "path": "src/isp/flash.c",
+    "license": "Apache-2.0",
+    "sha256": "867a692ec998f58abafc0ea8c80c73e8a375d1dc003aebac5195e009a3d17319",
+    "reuse_and_changes": "fixed 9F/90/4B command layouts only; all initialization/write/quad paths excluded"
+  },
+  {
+    "project": "Sipeed kflash.py",
+    "commit": "550828c768b16ef329695d3f5eace3f6bcf14af2",
+    "path": "kflash.py",
+    "license": "MIT",
+    "sha256": "26e13e5f753b86f59c0b6da561871f2b732e36453723ed9b8176f851b7af8367",
+    "reuse_and_changes": "SLIP public encoding format; new bounded state machine, no ktool GPL slip copied"
+  }
+]

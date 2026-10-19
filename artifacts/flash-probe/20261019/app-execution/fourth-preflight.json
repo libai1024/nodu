@@ -1,0 +1,20 @@
+{
+  "preflight": {
+    "path": "/sd/canmv-full-backup-20261018-224235.bin",
+    "sourceBytes": 16777216,
+    "offset": 2030592,
+    "length": 65536,
+    "sourceFailureManifest": "/Users/wangwei/.nodu/backups/2026-10-19T02-54-16-404Z-fa205bb4.pre-probe/manifest.json",
+    "sourceFailureManifestSha256": "220f2e0824c4eb735baf3a737f599a557ab6c6d6b21f1fd9fe8edb2b264a58fe",
+    "verified": true,
+    "hintOnly": true,
+    "session": "ed85bafa00a042c79490d124a98d1a34",
+    "rangeSha256": "366eff43bf560cbf67f83ebb66b246cc158d690dedd9ff0e1cece25c346c550d",
+    "file": "transfer-preflight.raw.bin",
+    "verifiedAt": 1792382002388,
+    "capacityEvidence": false,
+    "completeBackup": false
+  },
+  "hostIndependentRehash": true,
+  "scope": "range-only; no capacity or full-backup certification"
+}

@@ -1,0 +1,37 @@
+UART full-word store
+
+tools/flash-probe/build/probe.elf:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000080001094 <uart_put_byte>:
+    80001094:	c0002673          	rdcycle	a2
+    80001098:	00001697          	auipc	a3,0x1
+    8000109c:	fb06b683          	ld	a3,-80(a3) # 80002048 <uarths>
+    800010a0:	018cc737          	lui	a4,0x18cc
+    800010a4:	a7f70713          	addi	a4,a4,-1409 # 18cba7f <_start-0x7e734581>
+    800010a8:	429c                	lw	a5,0(a3)
+    800010aa:	01f7d79b          	srliw	a5,a5,0x1f
+    800010ae:	e791                	bnez	a5,800010ba <uart_put_byte+0x26>
+    800010b0:	380007b7          	lui	a5,0x38000
+    800010b4:	c388                	sw	a0,0(a5)
+    800010b6:	4501                	li	a0,0
+    800010b8:	8082                	ret
+    800010ba:	c00027f3          	rdcycle	a5
+    800010be:	8f91                	sub	a5,a5,a2
+    800010c0:	fef774e3          	bgeu	a4,a5,800010a8 <uart_put_byte+0x14>
+    800010c4:	557d                	li	a0,-1
+    800010c6:	8082                	ret
+
+
+ISA attributes
+Attribute Section: riscv
+File Attributes
+  Tag_RISCV_stack_align: 16-bytes
+  Tag_RISCV_arch: "rv64i2p0_m2p0_a2p0_f2p0_c2p0_zmmul1p0_zaamo1p0_zalrsc1p0_zca1p0"
+  Tag_RISCV_priv_spec: 1
+  Tag_RISCV_priv_spec_minor: 11
+
+
+Undefined symbols (expected empty)

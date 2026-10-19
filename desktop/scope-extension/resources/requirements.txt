@@ -1,0 +1,3 @@
+mpremote==1.25.0
+pyserial==3.5
+kflash==1.1.6

@@ -1,0 +1,6 @@
+{
+  "path": "/Users/wangwei/Model/k210-studio-snapshots/20261019-102726-activated-probe-before-hardware/source-and-review.tar.gz",
+  "bytes": 588612,
+  "sha256": "9f29ff88afc10bc0554e33a7f85f5cba6fdba9b05375776f8fc20623d81eb4da",
+  "scope": "source, fixed built reader, reviews and test source only; no private board backups"
+}

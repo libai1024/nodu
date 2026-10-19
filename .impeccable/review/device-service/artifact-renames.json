@@ -1,0 +1,41 @@
+{
+  "renamed": [
+    [
+      "native-camera-simple.png",
+      "native-camera-simple.jpg"
+    ],
+    [
+      "native-file-fixed.png",
+      "native-file-fixed.jpg"
+    ],
+    [
+      "native-firmware-blocked.png",
+      "native-firmware-blocked.jpg"
+    ],
+    [
+      "native-firmware-prepared-fixed.png",
+      "native-firmware-prepared-fixed.jpg"
+    ],
+    [
+      "native-image-mask-pro.png",
+      "native-image-mask-pro.jpg"
+    ],
+    [
+      "native-image-roi-simple.png",
+      "native-image-roi-simple.jpg"
+    ],
+    [
+      "native-image-threshold-copy.png",
+      "native-image-threshold-copy.jpg"
+    ],
+    [
+      "native-reconnect.png",
+      "native-reconnect.jpg"
+    ],
+    [
+      "native-running-pro.png",
+      "native-running-pro.jpg"
+    ]
+  ],
+  "pixelEdits": false
+}

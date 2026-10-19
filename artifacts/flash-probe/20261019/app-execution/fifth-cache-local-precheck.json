@@ -1,0 +1,141 @@
+{
+  "cacheDirectory": "/Users/wangwei/.nodu/backups/2026-10-19T03-53-18-323Z-7f8fd806.pre-probe",
+  "manifestSha256": "7ce7669e0bab97d58503f723af99b1d9ead0b643683070aec5ebe9dba9920699",
+  "portHint": "/dev/cu.usbserial-3120",
+  "firmwareHint": "MaixPy 0.6.3 (v0.6.2-89-gd8901fd22 on 2024-06-17)",
+  "stateSaved": true,
+  "completeFlashBackup": false,
+  "flashCapacityVerified": false,
+  "localRehashedFiles": [
+    {
+      "path": "/flash/config.json",
+      "bytes": 766,
+      "sha256": "c1c9542727d1331a14153592ede6ec681a6e8a9f8e55fd4051858106340d7799",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/demo_cam.py",
+      "bytes": 1421,
+      "sha256": "8e26ca312643e6d36b98e535a35e33dd20c8d6c05c830832bdec4ee4a234c0e3",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/demo_green.py",
+      "bytes": 1612,
+      "sha256": "ed9f0a4059d51ec52f8bdd14e12fa8b9794941e66fb21f501228cd3981b4d78e",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/demo_lcd.py",
+      "bytes": 920,
+      "sha256": "970c8c9c7703dfcb0d0696c2da0552ea9d723a1af39e10e9841c195ff6cc30a1",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/demo_qr.py",
+      "bytes": 1704,
+      "sha256": "cb7bde40caef80df4a455b5469ff35a0f6e855882c7cde6e649850ec9607dd2d",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/demo_test.py",
+      "bytes": 2581,
+      "sha256": "0c4581b2257c278a2871724e32b11c553a9f9e0c12c15b9923279eed6e03a214",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/freq.conf",
+      "bytes": 16,
+      "sha256": "e9608cb36f208d509ce910f02c64feee137af6a8b9b68ed99199a143e7cbf2ab",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/gc2145_board.py",
+      "bytes": 7338,
+      "sha256": "aa99ea97d1fa355483fa4d50cabcaaacbc8694a1e0f384785fad32f9adf8f9dd",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/main.py",
+      "bytes": 516,
+      "sha256": "6b9ee4426fee24b0265dd24222735df93552b1b5de52bf7b83e8c630f3ee0290",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/nodu-acceptance-1792345884045.txt",
+      "bytes": 1579,
+      "sha256": "5ce8c37a770ac1a1c5b74b64e49aa5c6d87d146eeae616eeacadd16f62329d27",
+      "mode": "0o600"
+    },
+    {
+      "path": "/flash/nodu-ui-roundtrip-20261019.bin",
+      "bytes": 4124,
+      "sha256": "f019cbe2e09ff7d9fa2f4f4cfedb129bbd67cf1a26c8dd870dbeea3eb1571002",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/System Volume Information/IndexerVolumeGuid",
+      "bytes": 76,
+      "sha256": "421c4ad04a42f5e8ff4924217599060300ea07641fd77fc8dfee218a32ad9d6d",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/System Volume Information/WPSettings.dat",
+      "bytes": 12,
+      "sha256": "e2419175509a4a7f046e75c382ba701cf1fd77eb5ba77960a327dcd9e955ac68",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/maixpy_demos/01_lcd.py",
+      "bytes": 920,
+      "sha256": "970c8c9c7703dfcb0d0696c2da0552ea9d723a1af39e10e9841c195ff6cc30a1",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/maixpy_demos/02_camera.py",
+      "bytes": 1421,
+      "sha256": "8e26ca312643e6d36b98e535a35e33dd20c8d6c05c830832bdec4ee4a234c0e3",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/maixpy_demos/03_green_blobs.py",
+      "bytes": 1612,
+      "sha256": "ed9f0a4059d51ec52f8bdd14e12fa8b9794941e66fb21f501228cd3981b4d78e",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/maixpy_demos/04_qrcode.py",
+      "bytes": 1704,
+      "sha256": "cb7bde40caef80df4a455b5469ff35a0f6e855882c7cde6e649850ec9607dd2d",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/maixpy_demos/05_vision_selftest.py",
+      "bytes": 2581,
+      "sha256": "0c4581b2257c278a2871724e32b11c553a9f9e0c12c15b9923279eed6e03a214",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/canmv-full-backup-20261018-224235.bin",
+      "bytes": 16777216,
+      "sha256": "9e4a4658aaa3ff33718583102d24dddb37f70e259273c97d50ae79bc941663a6",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/main.py",
+      "bytes": 516,
+      "sha256": "6b9ee4426fee24b0265dd24222735df93552b1b5de52bf7b83e8c630f3ee0290",
+      "mode": "0o600"
+    },
+    {
+      "path": "/sd/maixpy_demo_camera.jpg",
+      "bytes": 4161,
+      "sha256": "500e248d00db22eef8fc2b094f6679c4c9980c9a239eecbba61f5f7b09179a3e",
+      "mode": "0o600"
+    }
+  ],
+  "prefixBytes": 16777216,
+  "prefixSha256": "c2945a0e2a3e1f26a2e31ed3c55202d88a0c07b8d010e392a78818bbc5b53d11",
+  "currentRemoteContentRevalidation": "pending new App operation",
+  "uniquePhysicalBoardIdentityBound": false
+}

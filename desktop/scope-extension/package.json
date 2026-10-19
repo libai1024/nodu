@@ -1,0 +1,35 @@
+{
+  "name": "@scope/studio-extension",
+  "version": "0.1.1",
+  "private": true,
+  "license": "MIT",
+  "description": "见微 SCOPE vision workspace for Eclipse Theia",
+  "keywords": [
+    "theia-extension"
+  ],
+  "files": [
+    "lib",
+    "style",
+    "resources"
+  ],
+  "dependencies": {
+    "color-convert": "2.0.1",
+    "@theia/core": "1.76.0",
+    "@theia/editor": "1.76.0",
+    "@theia/filesystem": "1.76.0",
+    "@theia/monaco": "1.76.0",
+    "@theia/navigator": "1.76.0",
+    "@theia/output": "1.76.0",
+    "@theia/terminal": "1.76.0",
+    "@theia/workspace": "1.76.0"
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json"
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "lib/browser/scope-frontend-module",
+      "backend": "lib/node/nodu-backend-module"
+    }
+  ]
+}

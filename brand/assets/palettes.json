@@ -1,0 +1,30 @@
+[
+  {
+    "id": "blue",
+    "name": "蓝色",
+    "label": "BLUE",
+    "brand": "#4F7CFF",
+    "onDark": "#8EACFF",
+    "deep": "#244BB0",
+    "soft": "#E8EEFF",
+    "primary": true
+  },
+  {
+    "id": "orange",
+    "name": "暖橙",
+    "label": "ORANGE",
+    "brand": "#E98A42",
+    "onDark": "#FFB477",
+    "deep": "#9C4B1F",
+    "soft": "#F8E9DC"
+  },
+  {
+    "id": "violet",
+    "name": "紫色",
+    "label": "VIOLET",
+    "brand": "#8B78E6",
+    "onDark": "#B6A8FF",
+    "deep": "#5C43A8",
+    "soft": "#EEE9FB"
+  }
+]

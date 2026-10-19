@@ -1,0 +1,13 @@
+node_modules/
+.tools/
+**/lib/
+**/src-gen/
+**/gen-webpack.config.js
+**/esbuild.mjs
+.browser_modules/
+.electron_modules/
+.theia/
+!examples/green-tracker/.theia/
+!examples/green-tracker/.theia/settings.json
+*.log
+.DS_Store

@@ -1,0 +1,83 @@
+.scope-widget {
+    color: var(--theia-foreground);
+    background: var(--theia-sideBar-background);
+    font-size: var(--theia-ui-font-size1, 13px);
+    overflow-y: auto;
+    min-width: 280px;
+    line-height: 1.5;
+    scrollbar-color: var(--theia-scrollbarSlider-background) transparent;
+}
+.scope-widget:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.scope-widget *, .scope-widget *::before, .scope-widget *::after { box-sizing: border-box; }
+.scope-widget ::selection { background: var(--theia-editor-selectionBackground); }
+.scope-widget button, .scope-widget input { font: inherit; }
+.scope-widget button:focus-visible, .scope-widget input:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 3px; }
+.scope-widget input { accent-color: var(--theia-button-background); caret-color: var(--theia-foreground); }
+.scope-widget input[type='range'] { display: block; width: 100%; min-width: 0; cursor: pointer; height: 16px; margin: 0; }
+.scope-widget input[type='checkbox'], .scope-widget input[type='radio'] { width: 13px; height: 13px; margin: 0; flex-shrink: 0; }
+.scope-widget button { cursor: pointer; }
+.scope-widget button:disabled { cursor: default; opacity: .5; }
+.scope-widget .theia-button { min-height: 28px; margin: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 3px; padding: 4px 10px; line-height: 1.4; font-size: 12px; }
+.scope-panel-content { width: 100%; }
+.scope-panel-content > section { padding: 0 16px 16px; border-bottom: 1px solid var(--theia-panel-border); }
+.scope-panel-content > section:last-child { border-bottom: 0; }
+.scope-widget .scope-section-heading { display: flex; gap: 12px; align-items: center; justify-content: space-between; min-height: 44px; }
+.scope-section-heading h2 { display: flex; align-items: center; gap: 7px; font-size: 12px; line-height: 1.5; margin: 0; font-weight: 600; white-space: nowrap; }
+.scope-widget-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.scope-muted, .scope-helper, .scope-caption { color: var(--theia-descriptionForeground); }
+.scope-helper { font-size: 12px; margin: -2px 0 12px; }
+.scope-caption { font-size: 11px; line-height: 1.6; margin: 8px 0 0; }
+.scope-mono, .scope-channel code, .scope-range-row output, .scope-frame-counter { font-family: var(--theia-code-font-family, monospace); font-variant-numeric: tabular-nums; }
+.scope-state { display: inline-flex; align-items: center; gap: 6px; color: var(--theia-descriptionForeground); font-size: 11px; white-space: nowrap; }
+.scope-state i { display: inline-block; height: 5px; width: 5px; border-radius: 50%; background: currentColor; }
+.scope-state-active { color: var(--theia-gitDecoration-addedResourceForeground, var(--theia-foreground)); }
+.scope-frame-stage { position: relative; background: #d9dfd4; overflow: hidden; border-radius: 3px; }
+.scope-frame-stage canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; }
+.scope-frame-badge { position: absolute; top: 10px; left: 10px; color: #edf8ef; background: #263c30; font-size: 10px; line-height: 1.5; padding: 2px 6px; border-radius: 2px; }
+.scope-frame-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0 8px; font-size: 11px; }
+.scope-check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.scope-frame-tools > .scope-mono { color: var(--theia-descriptionForeground); }
+.scope-frame-tools strong { font-weight: 500; white-space: nowrap; }
+.scope-playback { display: grid; grid-template-columns: 28px minmax(40px, 1fr) auto; align-items: center; gap: 10px; }
+.scope-widget .scope-icon-button { min-width: 28px; width: 28px; padding: 4px; }
+.scope-frame-counter { font-size: 11px; white-space: nowrap; }
+.scope-frame-counter span { color: var(--theia-descriptionForeground); }
+.scope-text-button { background: transparent; color: var(--theia-textLink-foreground); border: 0; padding: 3px 0; font-size: 11px !important; border-radius: 2px; }
+.scope-text-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.scope-channel { border: 0; padding: 0; margin: 0 0 12px; min-width: 0; }
+.scope-channel legend { display: flex; width: 100%; align-items: baseline; gap: 8px; padding: 0; margin-bottom: 5px; font-size: 11px; }
+.scope-channel legend strong { font-family: var(--theia-code-font-family, monospace); font-size: 12px; width: 10px; }
+.scope-channel legend > span { color: var(--theia-descriptionForeground); }
+.scope-channel legend code { margin-left: auto; font-size: 11px; color: var(--theia-foreground); }
+.scope-range-row { display: grid; grid-template-columns: 25px minmax(30px, 1fr) 27px; align-items: center; gap: 8px; min-height: 24px; }
+.scope-range-row > span { font-size: 10px; color: var(--theia-descriptionForeground); }
+.scope-range-row output { font-size: 11px; text-align: right; }
+.scope-widget .scope-apply-button { width: 100%; margin-top: 1px; }
+.scope-error { color: var(--theia-errorForeground); font-size: 12px; line-height: 1.5; margin-bottom: 0; overflow-wrap: anywhere; }
+.scope-results-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
+.scope-results-table th { color: var(--theia-descriptionForeground); font-weight: 400; border-bottom: 1px solid var(--theia-panel-border); padding: 0 0 8px; }
+.scope-results-table td { padding: 8px 0; white-space: nowrap; }
+.scope-results-table th:last-child, .scope-results-table td:last-child { text-align: right; }
+.scope-results-table td + td { padding-left: 7px; }
+.scope-result-dot { display: inline-block; width: 5px; height: 5px; background: var(--theia-gitDecoration-addedResourceForeground, var(--theia-foreground)); border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.scope-empty-result { display: flex; flex-direction: column; gap: 4px; padding: 8px 0 12px; }
+.scope-empty-result strong { font-size: 12px; font-weight: 500; }
+.scope-empty-result span { font-size: 11px; color: var(--theia-descriptionForeground); }
+.scope-device-intro { color: var(--theia-descriptionForeground); font-size: 12px; line-height: 1.7; margin: 0 0 16px; }
+.scope-device-details { margin: 0 0 12px; }
+.scope-device-details > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0; padding: 5px 0; font-size: 12px; }
+.scope-device-details dt { color: var(--theia-descriptionForeground); }
+.scope-device-details dd { margin: 0; text-align: right; }
+.scope-device-actions { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px; }
+.scope-target-list { display: grid; gap: 4px; }
+.scope-target { display: flex; gap: 10px; align-items: flex-start; padding: 11px 10px; border-radius: 3px; cursor: pointer; border: 1px solid transparent; }
+.scope-target input { margin-top: 3px !important; }
+.scope-target > span { display: flex; flex-direction: column; gap: 3px; }
+.scope-target strong { font-size: 12px; font-weight: 500; }
+.scope-target > span > span { font-size: 11px; color: var(--theia-descriptionForeground); line-height: 1.6; }
+.scope-target:hover { background: var(--theia-list-hoverBackground); }
+.scope-target-selected { background: var(--theia-list-inactiveSelectionBackground); border-color: var(--theia-panel-border); }
+.scope-target:focus-within { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.scope-widget .scope-demo-run { margin-top: 16px; }
+.scope-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (prefers-reduced-motion: reduce) { .scope-widget * { scroll-behavior: auto; } }

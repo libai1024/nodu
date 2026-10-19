@@ -1,0 +1,48 @@
+{
+  "name": "scope-studio",
+  "private": true,
+  "version": "0.1.1",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "workspaces": [
+    "scope-extension",
+    "browser-app",
+    "electron-app"
+  ],
+  "scripts": {
+    "compile": "npm run compile --workspace @scope/studio-extension",
+    "build:browser": "npm run compile && npm run build --workspace @scope/browser-app",
+    "build:electron": "npm run compile && npm run build --workspace @scope/electron-app",
+    "start:browser": "npm run start --workspace @scope/browser-app",
+    "start:electron": "npm run start --workspace @scope/electron-app",
+    "rebuild:browser": "npm run rebuild --workspace @scope/browser-app",
+    "rebuild:electron": "npm run rebuild --workspace @scope/electron-app",
+    "postinstall": "theia-patch",
+    "setup:device": "node scripts/setup-device.cjs"
+  },
+  "devDependencies": {
+    "@theia/cli": "1.76.0",
+    "typescript": "~5.9.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "allowScripts": {
+    "@theia/ffmpeg": true,
+    "esbuild": true,
+    "@parcel/watcher": true,
+    "drivelist": true,
+    "keytar": true,
+    "native-keymap": true,
+    "node-pty": true,
+    "msgpackr-extract": true,
+    "electron": true,
+    "puppeteer": false
+  }
+}

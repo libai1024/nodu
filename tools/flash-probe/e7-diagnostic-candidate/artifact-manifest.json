@@ -1,0 +1,274 @@
+{
+  "status": "FROZEN offline diagnostic candidate; not activated or executed on hardware",
+  "excludedGeneratedHostFiles": [
+    "__pycache__/",
+    "build/test_protocol"
+  ],
+  "files": [
+    {
+      "path": "PROVENANCE.md",
+      "bytes": 2860,
+      "sha256": "0cd57081c155dfa2e7f2c9a47f2c4d9f6b96f22b0d583f7531ea591d4e0ee38e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4180,
+      "sha256": "daa45a841a67eb8f2a58969a81f9254e5c8392779ceda6f648b1c5677c6e41d2"
+    },
+    {
+      "path": "baseline-manifest.json",
+      "bytes": 2728,
+      "sha256": "8847870ad1f03bb6fc5101fd7d0b63c540b3c05eed4c57987370553955559894"
+    },
+    {
+      "path": "build/0-crt.d",
+      "bytes": 369,
+      "sha256": "985c08e5341f3c5062838aaddcf49353759b30e72e7fd55a0cb297953b0bdeda"
+    },
+    {
+      "path": "build/0-crt.o",
+      "bytes": 22304,
+      "sha256": "4fd86efb7497744bdd4455b747f5fc00598829a328d0fd8221024b2727bf9571"
+    },
+    {
+      "path": "build/1-sysctl.d",
+      "bytes": 7748,
+      "sha256": "dcb3fc7d226ebbd2dea2e31311bdd03b59a25ad8e71c0e39658f0ae7d781a889"
+    },
+    {
+      "path": "build/1-sysctl.o",
+      "bytes": 445616,
+      "sha256": "0964c56fac010ef25455aeffeb68a5506c7e6a2fcef3c60837bc1be3dec0ae8e"
+    },
+    {
+      "path": "build/2-fpioa.d",
+      "bytes": 1578,
+      "sha256": "1ad83ad79e3873fd10f8dcf15d6727cbd515aeffaedba3ebd04da25e48c69a65"
+    },
+    {
+      "path": "build/2-fpioa.o",
+      "bytes": 95368,
+      "sha256": "709f0686796a43fd42d108d8ae943e9ec194a00f0da43a8789e5e5ed4eca28d1"
+    },
+    {
+      "path": "build/3-uarths.d",
+      "bytes": 5032,
+      "sha256": "d89c54a01ff59dda8b55c96e55f3abb7e20d4a17d6251b363922ad8f87703a19"
+    },
+    {
+      "path": "build/3-uarths.o",
+      "bytes": 60544,
+      "sha256": "45eb734403357275a04000270a4ab51541f9f24a8a22d7a4231456ee77c95736"
+    },
+    {
+      "path": "build/4-boot.d",
+      "bytes": 1176,
+      "sha256": "9aad6714b53ad703ffe3daab2b1ad5ba81e81c362e151a8963fc49df93760a20"
+    },
+    {
+      "path": "build/4-boot.o",
+      "bytes": 15440,
+      "sha256": "a95be8134bac1bdf653ab88ed835b8a64e7b1759cc06be22f6f6c01cc883ede4"
+    },
+    {
+      "path": "build/5-protocol.d",
+      "bytes": 1184,
+      "sha256": "a4843e7f50522af077275cccf1ba8d2c46483a5729812de0e84984d480418fcf"
+    },
+    {
+      "path": "build/5-protocol.o",
+      "bytes": 44696,
+      "sha256": "1885af8bb7d125f704a369394e39b51172306eefbdf25b257ba515442840999e"
+    },
+    {
+      "path": "build/6-slip.d",
+      "bytes": 1176,
+      "sha256": "a2c2d556f52c46566c777187c5ca4f5d0eb52a913fe36efd4c33cc72917a48ba"
+    },
+    {
+      "path": "build/6-slip.o",
+      "bytes": 26776,
+      "sha256": "4ea792a8fcb845723fb06d8b75385e271f759edb4bf60ef278c62c1afdcbb66e"
+    },
+    {
+      "path": "build/7-platform.d",
+      "bytes": 2592,
+      "sha256": "8a4238a7a24428efeb3c66c05b4e32dfb19459d2908ced91768f70ffeb9cd260"
+    },
+    {
+      "path": "build/7-platform.o",
+      "bytes": 100104,
+      "sha256": "6452a4ad9ab4b50fd2d913a9e49249084ee168ea865e533166236d9c70700e3f"
+    },
+    {
+      "path": "build/build.log",
+      "bytes": 192761,
+      "sha256": "2b84bae8f41c9e9dd4164ba19dfa8ec5c29d1408bed7d850e71ac9bf81327a7e"
+    },
+    {
+      "path": "build/probe.bin",
+      "bytes": 8792,
+      "sha256": "f9dbf480f1f2bca6e6fd8393306058093c377217afe2059c5874ac5f20b9d874"
+    },
+    {
+      "path": "build/probe.disassembly.txt",
+      "bytes": 171721,
+      "sha256": "05909bfd4ae20d158ef9876dfd0e3f07150163211c6bf585db8a0d627e115ae0"
+    },
+    {
+      "path": "build/probe.elf",
+      "bytes": 149536,
+      "sha256": "cf4ef2afdc4309bae84f286fa7a37a10775e9ede487d38db78f6d637c93e723c"
+    },
+    {
+      "path": "build/probe.map",
+      "bytes": 73791,
+      "sha256": "8221bd6b509e67e303ed1da01d96d51a4f3838339392b84041a61ee4dfbeb645"
+    },
+    {
+      "path": "build/probe.sections.txt",
+      "bytes": 4765,
+      "sha256": "aa46e77ffab210594ae09820ac2bc91352f6c3442c97058ca26e3c70067e9874"
+    },
+    {
+      "path": "build/probe.size.txt",
+      "bytes": 180,
+      "sha256": "4202ccbc6009dbd86b4e4e6e9ae511fadd0e430ba8cca8d7eae291ea760c7845"
+    },
+    {
+      "path": "build/probe.symbols.txt",
+      "bytes": 1760,
+      "sha256": "d1b495d5316786d5f34e48373211ca5208018b7601a56714bb229e46f1bf2da1"
+    },
+    {
+      "path": "build/test_protocol.dSYM/Contents/Info.plist",
+      "bytes": 642,
+      "sha256": "05a6078ad1872558e0e9dc6ffad1c7ab93f8e676b6287c170132a4ff45add03f"
+    },
+    {
+      "path": "build/test_protocol.dSYM/Contents/Resources/DWARF/test_protocol",
+      "bytes": 37232,
+      "sha256": "5acd02a3e9b563a9c5f0b446e7110f626e2a93cd535a212c71bbeed348456a39"
+    },
+    {
+      "path": "build/test_protocol.dSYM/Contents/Resources/Relocations/aarch64/test_protocol.yml",
+      "bytes": 105,
+      "sha256": "cb1eeda386903c547b1e04c035034e9e27eab311a725e0dc62b57ed7b04a17d8"
+    },
+    {
+      "path": "build-report.json",
+      "bytes": 15930,
+      "sha256": "aafd37404b1666623f5e42855e27cb8d9f6f96a93188d98278125a7b6ba6f5c9"
+    },
+    {
+      "path": "build.py",
+      "bytes": 9846,
+      "sha256": "366ed5dfc4ca18a1cf21616a87709957eb49dc70cf0ad7a83b38b1168072dd4a"
+    },
+    {
+      "path": "candidate-diff.patch",
+      "bytes": 7926,
+      "sha256": "1bf5ec08daad626e35428109bc68d0c9587db733e4884c85d6ded431755dd0e0"
+    },
+    {
+      "path": "host_diagnostic.py",
+      "bytes": 1601,
+      "sha256": "fa57f02afa6241e3f7363d0263c54f704f9ccd4a238bcc0cc464da23790aa7fa"
+    },
+    {
+      "path": "licenses/SDK-Apache-2.0.txt",
+      "bytes": 11342,
+      "sha256": "b5376baf5dadbd8c782ca1026385553ea1d5ff7dde80c8ea0a1eb013b6d67884"
+    },
+    {
+      "path": "licenses/THIRD-PARTY-NOTICES.md",
+      "bytes": 72205,
+      "sha256": "39633e69c237afe86f04165a1f6a31d84cc5c23ea2e785d77a81bbe0d79b0ef5"
+    },
+    {
+      "path": "licenses/gcc-COPYING.LIB",
+      "bytes": 26527,
+      "sha256": "a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861"
+    },
+    {
+      "path": "licenses/gcc-COPYING.RUNTIME",
+      "bytes": 3324,
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74"
+    },
+    {
+      "path": "licenses/gcc-COPYING3",
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    {
+      "path": "licenses/kflash-MIT.txt",
+      "bytes": 1064,
+      "sha256": "c48133d7a08d743c2c01c6190fc1860f7d73777afa2199ed8d0a035b754d8bf9"
+    },
+    {
+      "path": "licenses/newlib-COPYING.NEWLIB",
+      "bytes": 57749,
+      "sha256": "6df0331179a05fe96f35a2d3f46679910930fcde415c8639fcc9c508bac54aae"
+    },
+    {
+      "path": "offline-test-report.txt",
+      "bytes": 1914,
+      "sha256": "5fe6d6075d29139cc78e25e2cf19ea1eec6e2bbe6d142a0f4b44ee8c2ef5ae73"
+    },
+    {
+      "path": "ram.ld",
+      "bytes": 885,
+      "sha256": "66b5788874aebdfc02107a5037cad927f216ce5459f856b0be7c93aa9be83b76"
+    },
+    {
+      "path": "reuse-manifest.json",
+      "bytes": 1800,
+      "sha256": "b82bffca23fd214db79884a250a401303407b7df0cdc1cb13b9edff6df86c47c"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 19036,
+      "sha256": "ce9d199c2d4d55e71df4fc262f1210349db2cb993a6bc37c9658a2829cca52a4"
+    },
+    {
+      "path": "src/boot.c",
+      "bytes": 1124,
+      "sha256": "264212e2c38353d3c5ae763f1d9662c8b877c9f4ac67917ac2f60ac1f7320a40"
+    },
+    {
+      "path": "src/platform.c",
+      "bytes": 6529,
+      "sha256": "5ad48677a1a658b22970edfac16297d4f505f44f5e658e81c2825e2817b6964e"
+    },
+    {
+      "path": "src/probe.h",
+      "bytes": 1661,
+      "sha256": "fd3270f52e4133bd9654235955341cdf07f20457536eaba718186045b9cc4a4b"
+    },
+    {
+      "path": "src/protocol.c",
+      "bytes": 4563,
+      "sha256": "03af211bab361bae72392ce7b761d4a1803e5ddd44039dce324219cb2ed5cd35"
+    },
+    {
+      "path": "src/slip.c",
+      "bytes": 1988,
+      "sha256": "fd20c354b7606edd8a6932367222b727720e80223189ddacd2cd30ad1dda6894"
+    },
+    {
+      "path": "test_host_diagnostic.py",
+      "bytes": 4582,
+      "sha256": "e6416d2867283064f800eaa41bec5d6c939597122a7f2ddd451a6ddbc9a0bd6c"
+    },
+    {
+      "path": "test_protocol.c",
+      "bytes": 9140,
+      "sha256": "9342d8508e6fd193dbc29839e90fbd8281cc0a35abe46c3336ca1abbd975694e"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 2268,
+      "sha256": "a8bcd3f28b26f76b9745d2180f0a928fa1bf736516f0e8872196846d8761d087"
+    }
+  ]
+}

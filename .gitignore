@@ -1,0 +1,40 @@
+# Dependencies and reproducible desktop build output.
+node_modules/
+desktop/.tools/
+desktop/.browser_modules/
+desktop/.electron_modules/
+desktop/**/lib/
+desktop/**/src-gen/
+desktop/**/gen-webpack.config.js
+desktop/**/gen-esbuild.*.mjs
+desktop/**/esbuild.mjs
+__pycache__/
+*.py[cod]
+.DS_Store
+*.log
+
+# Private runtime state; reviewed resource BINs are retained.
+.nodu/
+backups/
+*.kfpkg
+.env
+.env.*
+!.env.example
+
+# Existing design prototype keeps its independent Git history.
+/preview/
+
+# Raw UI text can contain human editor buffers; retained locally only.
+/artifacts/**/*.txt
+/artifacts/**/*.jsonl
+/.impeccable/review/**/*.txt
+/.impeccable/review/**/*.jsonl
+
+# Host executable is not a frozen RISC-V artifact.
+/tools/flash-probe/**/build/test_protocol
+
+# Public image prompts remain portable.
+!/artifacts/**/*.prompt.txt
+
+# Frozen tool manifests include these build logs.
+!/tools/flash-probe/**/build/build.log

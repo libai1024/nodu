@@ -1,0 +1,163 @@
+--- DCC/src/probe.h
++++ E7-diagnostic/src/probe.h
+@@ -8,6 +8,7 @@
+ 
+ #define PROBE_REQUEST_SIZE 16u
+ #define PROBE_RESPONSE_SIZE 27u
++#define PROBE_E7_RESPONSE_SIZE 11u
+ #define PROBE_NOP 0xd2u
+ #define PROBE_INIT 0xd7u
+ #define PROBE_ID 0xdeu
+@@ -24,7 +25,7 @@
+ typedef struct {
+     int initialized;
+     int (*init)(void);
+-    int (*read_identity)(uint8_t jedec[3], uint8_t uid[8]);
++    int (*read_identity)(uint8_t jedec[3], uint8_t uid[8], uint8_t legacy[2]);
+ } probe_context;
+ 
+ uint32_t probe_crc32(const uint8_t *message, size_t size);
+@@ -46,6 +47,6 @@
+                     int (*put_byte)(uint8_t byte));
+ 
+ int probe_spi_init(void);
+-int probe_flash_identity(uint8_t jedec[3], uint8_t uid[8]);
++int probe_flash_identity(uint8_t jedec[3], uint8_t uid[8], uint8_t legacy[2]);
+ void probe_main(void) __attribute__((noreturn));
+ #endif
+--- DCC/src/platform.c
++++ E7-diagnostic/src/platform.c
+@@ -111,12 +111,11 @@
+     return status;
+ }
+ 
+-int probe_flash_identity(uint8_t jedec[3], uint8_t uid[8])
++int probe_flash_identity(uint8_t jedec[3], uint8_t uid[8], uint8_t legacy[2])
+ {
+     static const uint8_t jedec_command[1] = {0x9f};
+     static const uint8_t legacy_command[4] = {0x90, 0, 0, 0};
+     static const uint8_t uid_command[5] = {0x4b, 0, 0, 0, 0};
+-    uint8_t legacy[2];
+     if (receive_identity_command(jedec_command, 1, jedec, 3))
+         return PROBE_JEDEC_TRANSFER_FAILED;
+     if (receive_identity_command(legacy_command, 4, legacy, 2))
+--- DCC/src/protocol.c
++++ E7-diagnostic/src/protocol.c
+@@ -87,8 +87,24 @@
+         for (size_t i = 0; i < PROBE_RESPONSE_SIZE; ++i)
+             response[i] = 0;
+         response[0] = PROBE_ID;
+-        int result = context->read_identity(response + 16, response + 19);
++        uint8_t legacy[2] = {0, 0};
++        int result = context->read_identity(response + 16, response + 19, legacy);
+         if (result != 0) {
++            if (result == (int)PROBE_UNSUPPORTED_ID) {
++                /* Diagnostic rejection only: both existing reads completed;
++                 * the platform returns E7 before attempting the UID read.
++                 * No UID or uninitialized response byte is copied out. */
++                response[1] = PROBE_UNSUPPORTED_ID;
++                response[2] = response[16];
++                response[3] = response[17];
++                response[4] = response[18];
++                response[5] = legacy[0];
++                response[6] = legacy[1];
++                for (size_t i = 7; i < PROBE_RESPONSE_SIZE; ++i)
++                    response[i] = 0;
++                put_u32(response + 7, probe_crc32(response, 7));
++                return PROBE_E7_RESPONSE_SIZE;
++            }
+             /* Never emit a partially populated identity after a failure. */
+             for (size_t i = 2; i < PROBE_RESPONSE_SIZE; ++i)
+                 response[i] = 0;
+--- DCC/test_protocol.c
++++ E7-diagnostic/test_protocol.c
+@@ -9,11 +9,14 @@
+ 
+ static unsigned int init_calls, read_calls;
+ static int init_fail, read_fail;
++static uint8_t fake_jedec[3] = {0xef, 0x40, 0x18};
++static uint8_t fake_legacy[2] = {0xef, 0x17};
+ static int init_fake(void) { ++init_calls; return init_fail; }
+-static int read_fake(uint8_t id[3], uint8_t uid[8])
++static int read_fake(uint8_t id[3], uint8_t uid[8], uint8_t legacy[2])
+ {
+     ++read_calls;
+-    id[0] = 0xef; id[1] = 0x40; id[2] = 0x18;
++    memcpy(id, fake_jedec, sizeof(fake_jedec));
++    memcpy(legacy, fake_legacy, sizeof(fake_legacy));
+     for (unsigned int i = 0; i < 8; ++i) uid[i] = (uint8_t)i;
+     return read_fail;
+ }
+@@ -94,12 +97,62 @@
+     for (size_t f = 0; f < sizeof(failures) / sizeof(failures[0]); ++f) {
+         read_fail = failures[f];
+         memset(out, 0xa5, sizeof(out));
+-        assert(probe_process(&context, req, 16, out) == 2);
++        size_t length = probe_process(&context, req, 16, out);
++        assert(length == (read_fail == PROBE_UNSUPPORTED_ID ? PROBE_E7_RESPONSE_SIZE : 2));
+         unsigned int expected = (read_fail >= 0xe5 && read_fail <= 0xe8)
+                                     ? (unsigned int)read_fail : PROBE_BAD_INIT;
+         assert(out[0] == PROBE_ID && out[1] == expected);
+-        for (unsigned int i = 2; i < 27; ++i) assert(out[i] == 0);
++        if (read_fail == PROBE_UNSUPPORTED_ID) {
++            const uint8_t expected_data[7] = {0xde, 0xe7, 0xef, 0x40, 0x18, 0xef, 0x17};
++            assert(memcmp(out, expected_data, sizeof(expected_data)) == 0);
++            /* Independent fixture: Python stdlib zlib.crc32 over the 7 bytes. */
++            assert(get32(out + 7) == 0x14411c43u);
++            for (unsigned int i = PROBE_E7_RESPONSE_SIZE; i < 27; ++i) assert(out[i] == 0);
++        } else {
++            for (unsigned int i = 2; i < 27; ++i) assert(out[i] == 0);
++        }
+     }
++
++    /* E7 forwards exactly the same five completed ID bytes, never UID bytes.
++     * Guard bytes detect writes outside the 27-byte response allocation. */
++    uint8_t guarded[PROBE_RESPONSE_SIZE + 2];
++    const uint8_t diagnostic_data[][5] = {
++        {0, 0, 0, 0, 0}, {0xff, 0xff, 0xff, 0xff, 0xff},
++        {0xc0, 0xdb, 1, 0xdb, 0}, {0xef, 0x70, 0x18, 0xef, 0},
++    };
++    read_fail = PROBE_UNSUPPORTED_ID;
++    for (size_t f = 0; f < sizeof(diagnostic_data) / sizeof(diagnostic_data[0]); ++f) {
++        memcpy(fake_jedec, diagnostic_data[f], 3);
++        memcpy(fake_legacy, diagnostic_data[f] + 3, 2);
++        memset(guarded, 0xa5, sizeof(guarded));
++        unsigned int reads_before = read_calls;
++        assert(probe_process(&context, req, 16, guarded + 1) == PROBE_E7_RESPONSE_SIZE);
++        assert(read_calls == reads_before + 1);
++        assert(guarded[0] == 0xa5 && guarded[sizeof(guarded) - 1] == 0xa5);
++        assert(guarded[1] == PROBE_ID && guarded[2] == PROBE_UNSUPPORTED_ID);
++        assert(memcmp(guarded + 3, diagnostic_data[f], 5) == 0);
++        assert(get32(guarded + 8) == probe_crc32(guarded + 1, 7));
++        for (unsigned int i = PROBE_E7_RESPONSE_SIZE; i < PROBE_RESPONSE_SIZE; ++i)
++            assert(guarded[1 + i] == 0);
++        probe_slip diagnostic_parser;
++        probe_slip_clear(&diagnostic_parser);
++        encoded_size = 0;
++        assert(probe_slip_send(guarded + 1, PROBE_E7_RESPONSE_SIZE, put_byte) == 0);
++        for (size_t i = 0; i + 1 < encoded_size; ++i)
++            assert(probe_slip_feed(&diagnostic_parser, encoded[i]) == 0);
++        assert(probe_slip_feed(&diagnostic_parser, encoded[encoded_size - 1]) == 1);
++        assert(diagnostic_parser.size == PROBE_E7_RESPONSE_SIZE);
++        assert(memcmp(diagnostic_parser.frame, guarded + 1, PROBE_E7_RESPONSE_SIZE) == 0);
++    }
++    /* A prior rejection cannot leave diagnostic bytes in a later success. */
++    fake_jedec[0] = 0xef; fake_jedec[1] = 0x40; fake_jedec[2] = 0x18;
++    fake_legacy[0] = 0xef; fake_legacy[1] = 0x17;
++    read_fail = 0;
++    assert(probe_process(&context, req, 16, out) == PROBE_RESPONSE_SIZE);
++    assert(out[1] == 0 && get32(out + 8) == 0 && get32(out + 12) == 0);
++    assert(get32(out + 4) == probe_crc32(out + 8, 19));
++    assert(memcmp(out + 16, fake_jedec, 3) == 0);
++    for (unsigned int i = 0; i < 8; ++i) assert(out[19 + i] == i);
+ 
+     uint8_t id[] = {0xef, 0x40, 0x18}, old[] = {0xef, 0x17};
+     assert(probe_identity_allowed(id, old));
+@@ -140,6 +193,6 @@
+     assert(probe_slip_feed(&parser, 0xc0) == -1);
+     assert(probe_slip_send(payload, 28, put_byte) == -1);
+     assert(probe_slip_send(payload, 16, reject_byte) == -1);
+-    puts("PASS: CRC, exhaustive forbidden opcodes, malformed/short requests, initialization gate, fixed DE response, partial identity rejection, whitelist mutations, bounded SLIP/escapes/TX failures");
++    puts("PASS: CRC, forbidden opcodes, malformed requests, initialization gate, unchanged success27/other2 responses, exact E7-11/CRC/ID-only/tail clearing/guards, unchanged whitelist, bounded SLIP/escapes/TX failures");
+     return 0;
+ }

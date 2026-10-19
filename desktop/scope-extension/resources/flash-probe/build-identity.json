@@ -1,0 +1,36 @@
+{
+  "worker": {
+    "path": "desktop/scope-extension/resources/nodu_device_worker.py",
+    "bytes": 94361,
+    "sha256": "69a37c3508caaf7746e35d8bc4dd68d9fe4e7199aaaf205aabdce4ce0bc52ec4"
+  },
+  "firmware": {
+    "path": "desktop/scope-extension/resources/nodu_firmware.py",
+    "bytes": 26213,
+    "sha256": "0baf7ca66256792423f36e66896d32924effe3f6b1ea1703163f19a252aaf736"
+  },
+  "codec": {
+    "path": "desktop/scope-extension/resources/nodu_flash_protocol.py",
+    "bytes": 7555,
+    "sha256": "caa90b2e1192c5ac30191435898643394fb20b4d22f1ad306af9943f6289c929"
+  },
+  "candidate": {
+    "path": "desktop/scope-extension/resources/nodu_flash_probe_candidate.py",
+    "bytes": 10182,
+    "sha256": "2dfdacb7648efacaac1ba47d465ea06d498c809de5a9dc68e9cb787364133c9a"
+  },
+  "bin": {
+    "path": "desktop/scope-extension/resources/flash-probe/probe.bin",
+    "bytes": 8672,
+    "sha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05"
+  },
+  "activation": {
+    "host": "desktop/scope-extension/resources/nodu_flash_probe.py",
+    "binary": "desktop/scope-extension/resources/flash-probe/probe.bin",
+    "byteIdentical": true,
+    "hardwareExecuted": true,
+    "state": "Fifth native attempt: current-content cache revalidation passed; first DE returned short [DE,E7]. REPL recovered and serial released; 21 files, inventory, boot and unverified 16MiB prefix rechecked unchanged. No accepted JEDEC or firmware write.",
+    "hardwareAttempted": true,
+    "currentCapacityVerified": false
+  }
+}

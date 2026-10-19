@@ -1,0 +1,7 @@
+{
+  "path": "/Users/wangwei/Model/k210-studio-snapshots/20261019-141812-minimal-ui-e7-diagnostic-reviewed/source-and-review.tar.gz",
+  "bytes": 5599372,
+  "sha256": "b66f3b8ae6779acc56a3ce23fd325f116d16fab4543bd78299de1c62924bdba6",
+  "files": 223,
+  "scope": "Minimal UI/current active sources/tests; fifth E7 rejection/postcheck evidence; isolated reviewed diagnostic candidate. No private board backup payloads. Candidate NOT activated or hardware executed."
+}

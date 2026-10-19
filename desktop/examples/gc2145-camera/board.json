@@ -1,0 +1,22 @@
+{
+  "$schema": "./board.schema.json",
+  "project": "gc2145-camera",
+  "displayName": "GC2145 相机采集检查",
+  "runtime": "MaixPy-v1",
+  "chip": "K210",
+  "firmwareSourceCommit": "d8901fd2272f000226f1c1037c1eb7c412b88e66",
+  "camera": {
+    "sensor": "GC2145",
+    "initialization": "board-helper",
+    "pixelFormat": "RGB565",
+    "frameSize": "QVGA",
+    "width": 320,
+    "height": 240
+  },
+  "entry": "camera_preview.py",
+  "files": ["camera_preview.py"],
+  "boardProfile": "embedfire-cam-gc2145",
+  "serialPort": null,
+  "requiresDeviceFiles": ["/flash/config.json", "/flash/gc2145_board.py"],
+  "note": "仅适配已配置的野火 CAM GC2145；RAM 采集 30 帧后返回，不部署文件或设置开机运行。本次示例源仅本机语法检查；初始化方案已有独立真机证据。"
+}

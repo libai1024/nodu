@@ -1,0 +1,60 @@
+{
+  "name": "@scope/browser-app",
+  "private": true,
+  "version": "0.1.1",
+  "productName": "见微 Nodu",
+  "license": "MIT",
+  "theia": {
+    "target": "browser",
+    "frontend": {
+      "config": {
+        "applicationName": "见微 · Nodu",
+        "defaultTheme": "scope-dark",
+        "defaultIconTheme": "theia-file-icons",
+        "preferences": {
+          "editor.fontFamily": "'Plex Mono', 'SFMono-Regular', Consolas, monospace",
+          "editor.fontSize": 13,
+          "editor.lineHeight": 22,
+          "editor.minimap.enabled": false,
+          "editor.scrollBeyondLastLine": false,
+          "editor.wordWrap": "on",
+          "window.title": "${activeEditorShort}${separator}${rootName}${separator}见微 · Nodu",
+          "workbench.colorTheme": "scope-dark",
+          "security.workspace.trust.enabled": false
+        },
+        "reloadOnReconnect": true
+      }
+    },
+    "backend": {
+      "config": {
+        "frontendConnectionTimeout": -1
+      }
+    }
+  },
+  "dependencies": {
+    "@theia/core": "1.76.0",
+    "@theia/editor": "1.76.0",
+    "@theia/filesystem": "1.76.0",
+    "@theia/file-search": "1.76.0",
+    "@theia/keymaps": "1.76.0",
+    "@theia/markers": "1.76.0",
+    "@theia/messages": "1.76.0",
+    "@theia/monaco": "1.76.0",
+    "@theia/navigator": "1.76.0",
+    "@theia/output": "1.76.0",
+    "@theia/preferences": "1.76.0",
+    "@theia/process": "1.76.0",
+    "@theia/search-in-workspace": "1.76.0",
+    "@theia/terminal": "1.76.0",
+    "@theia/userstorage": "1.76.0",
+    "@theia/variable-resolver": "1.76.0",
+    "@theia/workspace": "1.76.0",
+    "@theia/bulk-edit": "1.76.0",
+    "@scope/studio-extension": "0.1.1"
+  },
+  "scripts": {
+    "build": "npm run rebuild && theia build --mode development",
+    "rebuild": "theia rebuild:browser --cacheRoot ..",
+    "start": "node ../scripts/launch.cjs browser"
+  }
+}

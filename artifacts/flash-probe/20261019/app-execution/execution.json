@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-19",
+  "app": "Nodu isolated native Electron / Theia",
+  "backendPort": 4192,
+  "workspace": "/tmp/nodu-native-validation",
+  "serialPort": "/dev/cu.usbserial-3120",
+  "vid": 6790,
+  "pid": 29987,
+  "operation": "native UI backupDevice",
+  "backupDirectory": "/Users/wangwei/.nodu/backups/2026-10-19T02-22-49-845Z-3b33adf6",
+  "sourceSession": "f0f1a486656443bf94577686e02ead7d",
+  "stage": "id-response-rejected-repl-restored",
+  "hardwareIdentityVerified": false,
+  "firmwareWritten": false,
+  "originalBuffersPreserved": true,
+  "frozenResources": {
+    "nodu_device_worker.py": {
+      "bytes": 74376,
+      "sha256": "20b3442d564f22a47d328fa9709dadf0ad03618a4cf6f5acc8b1d66844754681"
+    },
+    "nodu_firmware.py": {
+      "bytes": 25285,
+      "sha256": "083165dcf328c3846d160d7718c935c05ae71479c9ecf774788092032df53920"
+    },
+    "nodu_flash_protocol.py": {
+      "bytes": 6989,
+      "sha256": "ae8e4920b722dfef82407a443a3ec97efa631bc195411d90250d813687b44f00"
+    },
+    "nodu_flash_probe.py": {
+      "bytes": 7723,
+      "sha256": "1e7ee3cc4d2f59baf64ec58a6def84172397b85c317252ae141b47f0de5d7e93"
+    },
+    "flash-probe/probe.bin": {
+      "bytes": 8672,
+      "sha256": "314f29f2a775607e59659ddf44c50f560bb3f98d3e0df24fad393efe4ddb113d"
+    }
+  },
+  "firstAttempt": "first-id-attempt.json",
+  "secondAttempt": {
+    "directory": "/Users/wangwei/.nodu/backups/2026-10-19T02-44-19-110Z-d6b0e527.pre-probe",
+    "sourceSession": "f92417880ce04aa989e1bdc30c0b09f2",
+    "stubSha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "stage": "cancelled-before-ram-load",
+    "ramReaderExecuted": false,
+    "reason": "Stop to correct K210-specific paired Ctrl-C recovery before another boot transaction; partial copies retained."
+  },
+  "thirdAttempt": {
+    "directory": "/Users/wangwei/.nodu/backups/2026-10-19T02-54-16-404Z-fa205bb4.pre-probe",
+    "sourceSession": "172795185f1e46e9a14ae3309ff912ad",
+    "stubSha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "workerSha256": "6088862b3028997247fed3fd54731232ed32c79cd0050cf83749d6f3a3b20ced",
+    "stage": "preservation-failed-malformed-chunk-repl-restored",
+    "stateSaved": false,
+    "verifiedFiles": 18,
+    "ramReaderExecuted": false,
+    "firmwareWritten": false,
+    "error": "Malformed backup chunk.",
+    "evidence": "third-attempt-malformed-chunk.txt"
+  },
+  "validation": {
+    "pythonTests": 100,
+    "nodeTests": 14,
+    "typeScript": "passed",
+    "electronBuild": "passed"
+  },
+  "segmentedTransfer": {
+    "rangeBytes": 65536,
+    "attemptsPerRange": 3,
+    "maxFailuresPerSnapshot": 12,
+    "workerSha256": "b55d1ecb52a9efad1d2bbced4809444eb31c48f079d0101ab3970d8bd3c3deaa",
+    "firmwareSha256": "0baf7ca66256792423f36e66896d32924effe3f6b1ea1703163f19a252aaf736",
+    "hardwareTested": false
+  },
+  "transferDiagnostics": {
+    "workerSha256": "5b98247c6c3f7bc11f832acc25c05a80a0079dfcac965f7e1f0d9ced367f2e04",
+    "metadataOnly": true,
+    "preflightMaxBytes": 65536,
+    "preflightRetries": 0,
+    "sourceFailureOffset": 2030592,
+    "hardwareTested": true,
+    "tests": {
+      "path": "desktop/scope-extension/test/worker_transfer_diagnostics_test.py",
+      "bytes": 24234,
+      "sha256": "aa4de0155994808de52cdc9beb6d4c466ada46166a17c4fece09afe123034ae8",
+      "newCases": 17,
+      "totalCases": 87
+    }
+  },
+  "fourthAttempt": {
+    "directory": "/Users/wangwei/.nodu/backups/2026-10-19T03-53-18-323Z-7f8fd806.pre-probe",
+    "sourceSession": "ed85bafa00a042c79490d124a98d1a34",
+    "backendPort": 4193,
+    "stage": "preservation-verified-probe-transport-timeout",
+    "ramReaderExecuted": null,
+    "workerSha256": "5b98247c6c3f7bc11f832acc25c05a80a0079dfcac965f7e1f0d9ced367f2e04",
+    "stubSha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "preflightEvidence": "fourth-preflight.json",
+    "workerPid": 75246,
+    "singleSerialOwnerVerified": true,
+    "stateSaved": true,
+    "probeAttempted": true,
+    "probeStageKnown": false,
+    "hardwareIdentityVerified": false,
+    "firmwareWritten": false,
+    "error": "RAM identity transport timed out; capacity remains unverified."
+  },
+  "latestAttempt": "fifth-attempt.json",
+  "fifthAttempt": {
+    "directory": "/Users/wangwei/.nodu/backups/2026-10-19T05-50-25-349Z-52b946ca.pre-probe",
+    "sourceSession": "9996e8e6ef0641829d343944ecff5ab1",
+    "stage": "identity-rejected-e7-repl-restored-content-unchanged",
+    "backendPort": 4193,
+    "workerPid": 20402,
+    "workerSha256": "69a37c3508caaf7746e35d8bc4dd68d9fe4e7199aaaf205aabdce4ce0bc52ec4",
+    "hostSha256": "2dfdacb7648efacaac1ba47d465ea06d498c809de5a9dc68e9cb787364133c9a",
+    "stubSha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "stateSaved": true,
+    "verifiedFiles": 21,
+    "revalidatedFiles": 20,
+    "newFilesRead": 1,
+    "ramReaderExecuted": true,
+    "replRestored": true,
+    "serialReleased": true,
+    "capacityVerified": false,
+    "firmwareWritten": false,
+    "evidence": "fifth-attempt.json",
+    "postRebootContentUnchanged": true
+  }
+}

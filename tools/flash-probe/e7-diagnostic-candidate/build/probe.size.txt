@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   8792	      0	      0	   8792	   2258	/Users/wangwei/Model/k210-studio/tools/flash-probe/e7-diagnostic-candidate/build/probe.elf

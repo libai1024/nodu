@@ -1,0 +1,416 @@
+[
+  {
+    "origin": "Nodu candidate",
+    "path": "build.py",
+    "sha256": "366ed5dfc4ca18a1cf21616a87709957eb49dc70cf0ad7a83b38b1168072dd4a",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "Nodu candidate",
+    "path": "ram.ld",
+    "sha256": "66b5788874aebdfc02107a5037cad927f216ce5459f856b0be7c93aa9be83b76",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "Nodu candidate",
+    "path": "src/boot.c",
+    "sha256": "264212e2c38353d3c5ae763f1d9662c8b877c9f4ac67917ac2f60ac1f7320a40",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "Nodu candidate",
+    "path": "src/platform.c",
+    "sha256": "491ec4b40ad6b61e336d25ece072ecd3ca5633d5e687711087bb9beab5c33fe1",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "Nodu candidate",
+    "path": "src/probe.h",
+    "sha256": "5537e82fe4aea2d78e6b56c7eeeb41a517e7a6d8d4f3b8118af62fbd7bb64d52",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "Nodu candidate",
+    "path": "src/protocol.c",
+    "sha256": "3c31d9c7bc63a6df9157ece9976bb94116b4dfb455496a741439dcba8ef3eafb",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "Nodu candidate",
+    "path": "src/slip.c",
+    "sha256": "fd20c354b7606edd8a6932367222b727720e80223189ddacd2cd30ad1dda6894",
+    "license_observed": "MIT, explicit file header"
+  },
+  {
+    "origin": "Homebrew GNU GCC 16.2.0 builtin headers",
+    "path": "lib/gcc/riscv64-elf/16.2.0/include/stdarg.h",
+    "sha256": "173a81bfbe88a2da5ed5d238e14e0eaca61b090ee6d7b12b5f9614daeea21600",
+    "license_observed": "GNU notice present; toolchain exception requires separate review"
+  },
+  {
+    "origin": "Homebrew GNU GCC 16.2.0 builtin headers",
+    "path": "lib/gcc/riscv64-elf/16.2.0/include/stdbool.h",
+    "sha256": "f2a112e8b2128fb1d76e7c0b625cec8760955ebeae5cdf6b419ccf0c6d62768f",
+    "license_observed": "GNU notice present; toolchain exception requires separate review"
+  },
+  {
+    "origin": "Homebrew GNU GCC 16.2.0 builtin headers",
+    "path": "lib/gcc/riscv64-elf/16.2.0/include/stddef.h",
+    "sha256": "868352506950054491b9c76a4e2814f4f3601d227d3dea62a3e75875f327f2c1",
+    "license_observed": "GNU notice present; toolchain exception requires separate review"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/crt.S",
+    "sha256": "df3405e87a52c9449dfd2e56f0793258f26725f102d08a780480b78c02f170df",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/atomic.h",
+    "sha256": "d3867f898060ca3b7fde472b4dce2cd362bd46edf183994ba0f9bd9ba09b6f9a",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/bsp.h",
+    "sha256": "cee9e4e9ad6f9a7a203811fd9123477ad271cf83542f246bb864275cffa29e70",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/encoding.h",
+    "sha256": "26d9e3b2e3deec96cd01dc423b91cfd78bd048fd6b9a34fd2f9c67a55509356c",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/entry.h",
+    "sha256": "1ae6f5a2726771d8a660c03005dce041c2f9f5af83cd3a212371599cd6e0b97b",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/platform.h",
+    "sha256": "560b28265f31ad73e853826a16f1d1082a1b2125d0e1bb2d428696799654e075",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/printf.h",
+    "sha256": "1906d32f609db6b74591ec0f0e957765c2cf47f443561f61d5d52e8a7b60ac69",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/sleep.h",
+    "sha256": "4608e1624a153d9142fd170168e6989233081b6ccac36928afc1fef7c9cb30b3",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/bsp/include/syscalls.h",
+    "sha256": "2c6c486d42bf3e4855eb0b6b066e3decbe0abfa30685ac45c679f6fb2822c48a",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/fpioa.c",
+    "sha256": "f3d24ebe61f3b1b4e4658968c348498531a48009d816ff203448415a835d5856",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/clint.h",
+    "sha256": "fc3687b749b2927cf7d5b5db166ed756a23a9faae770018deb3ee414a8b40a23",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/dmac.h",
+    "sha256": "8d74f3cc1489f9d6ccd2ecd6e0156bc231005acaa2539fd2ce9195effdb0c089",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/fpioa.h",
+    "sha256": "2abc9d8744f32f51a96e1c2e68a616c0dc7219c78b8a8dd2564bf7cc56123518",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/io.h",
+    "sha256": "83006d8844f6e2af04f0b03b84e7e952845fef2724f39824805ceb39c4eee262",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/plic.h",
+    "sha256": "3a8edb49d0f83abdf29b4375c2533239be1333c2c970b1b1874fc266c298b441",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/spi.h",
+    "sha256": "5105d5380895f5af18f0ace0e8fcfa7f9fe3351a201ba065efc581d41b7900fb",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/sysctl.h",
+    "sha256": "0c209febc35c040c6756b429953c5f63292b1d5491e967384dda32747f3e3485",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/uart.h",
+    "sha256": "174cd5f096e3acd2f2ad561a9f2af3f75e20cc7543f15d4fc76848334773cb95",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/include/uarths.h",
+    "sha256": "1e3436ecd91a6e715ccf6363f0b8d144f0a0fcd4e448490bfe7b58f1372ccf36",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/sysctl.c",
+    "sha256": "afce807b424e03e4fdd22dc058a5148a5a2d89729050c9f8c742649aefc02c01",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "SDK 45642af98f15c24d64703ff57c97360794ca6f55",
+    "path": "lib/drivers/uarths.c",
+    "sha256": "94e9961a539a5b673e3301e9ccb43fd6ae22e60950c79dc16091cbd026e817e2",
+    "license_observed": "Apache-2.0, explicit file header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "lib/gcc/riscv64-unknown-elf/8.2.0/libgcc.a",
+    "sha256": "966235fc4bd270d2a5abcd0f42886549ad02a54cf21c785a99e1ae60608ade66",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/_ansi.h",
+    "sha256": "5c6403b471ee897c9a6c12e00a58617247804eb3ee72d7baeb7c08616090dd1d",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/_newlib_version.h",
+    "sha256": "8c97f2eae1449c9b7871828d1b331e9468650c8cfbfd1590f6b1943fc84aef46",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/alloca.h",
+    "sha256": "fdebd60de65105d933b55dcde1650f6c9b3cf6142c225397c5f956638208d4de",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/_default_types.h",
+    "sha256": "5d8f9f7ead7927e4b8b7ed00172e84f2ae82ea7f5f6ba3240ff813a9236771b3",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/_endian.h",
+    "sha256": "6a2878de2ce76eed443de3891e5dd49c67e3f41eea7054b47f9bd7ec27a144d0",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/_types.h",
+    "sha256": "44544ecbbc10c8aa58ca2da6d0617ffeee5af847af24515ab108c8218d6d92c8",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/endian.h",
+    "sha256": "c9cb16333e537785dde867ed059915ef2d09661dbab7cc8b4519b646735eace4",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/ieeefp.h",
+    "sha256": "ba301ecf2f7263c5b8be86dc64a4875802d5d09f92a0c8ccb79ee6b8673ae9cf",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/stdlib.h",
+    "sha256": "43552e520d412993325ba62cb496839cd03fd46b0df67149a5ccbe1b95c45fdd",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/syscall.h",
+    "sha256": "765fd8cc8ec45e62ce79ad4502730440d2cab97f14ee2693ca4f0e7acc888b88",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/machine/types.h",
+    "sha256": "2979fad7fe3ef1fc01bd06640841114f0a0f3b5d33ada20e35a2bd38c27a4931",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/math.h",
+    "sha256": "720fe02afd2adea43562ece16035eadcab5d79aa6af7b3155f42bb4fc45d2656",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/newlib.h",
+    "sha256": "916cc28baa514acd5fa3e4798a4113706a9a28e77c1aa194cad434887324c17b",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/stdint.h",
+    "sha256": "99fe201684856075ccd92704f63b702f6fa882b9dab61bd7a9bcce2588275861",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/stdio.h",
+    "sha256": "24cb51aa9f62bade0ba30a41c139d3acba00d1f346d6915b65d901eae2021634",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/stdlib.h",
+    "sha256": "b599e3fd2ac0cef9fca383c569a34cb64e2aa8799f3aa523bd089c7731c48b7b",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/string.h",
+    "sha256": "e70780479f4b1b1badbcbd34f403eea99e98e147704cbf690f5f1231ed62157a",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/strings.h",
+    "sha256": "2a057e90dc6b5ed81774660b35a667fba51452601067b36408d91bd0acd2637d",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_intsup.h",
+    "sha256": "bafd67248df6ebffd5455a8c8f9aa9fcb572e84ffb88d89824115705764b3198",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_pthreadtypes.h",
+    "sha256": "e0924bdccdc1b9983c51436971b690cd58024aa7c56b83f3e076bfc4f51091b6",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_sigset.h",
+    "sha256": "16e78626ff97ef85ec70ba9898082fccf70b741b0c6586c57e4421fc60b9a07d",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_stdint.h",
+    "sha256": "49f8328943afa2a83ed4a35fcb808ed08b8c9fcb55373c786fb1b1d3a21952d7",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_timespec.h",
+    "sha256": "5441000af785218d81879835ed0531582fb9723e01f478533e13a174389763bf",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_timeval.h",
+    "sha256": "7ce0f145b07ef9fbf8e23af8691eeaeae055a67e1ce5b04bdc7d4962a1a8f6d8",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/_types.h",
+    "sha256": "9a0a8ea26b7306579294e2245416023343a631901d285f11c1c3786a4cbe4fa6",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/cdefs.h",
+    "sha256": "d8db73988994274b0d28d8abddb8bc555a9687db55d1f54f680e0842e959d296",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/config.h",
+    "sha256": "8c41585c4d6f2e504ea8f7deb6df8ae91a0e81d4b6df4260d0ab540e24ba6291",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/features.h",
+    "sha256": "e9af0ce5e56dd9a07f64c5a4a27721d4178e796e3a1162e2a0015962287aa751",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/lock.h",
+    "sha256": "3e99f56b816ef7d676765b2c0f289d6686832d60a9645196df94ce0679ffe519",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/reent.h",
+    "sha256": "869f2baadb176cf9f115462ab4137cd017fa8f46733147b781705aae2976ea1a",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/sched.h",
+    "sha256": "a905a789e215093f6207948dc700e0ce9789cba8b491a6f1b58888a79b466526",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/select.h",
+    "sha256": "c7a8995e47c133c28b7e976aa5cc6877b4a439b9064e8f555f4aed673a786c60",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/stdio.h",
+    "sha256": "bd987ea6fed5d31d8a4e7d183a7d988e981ecca3cffce76ee482fcb0bf65594b",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/string.h",
+    "sha256": "d63f8a6c30f864eb6864e61262ebe6268b6f871d97dcc220be8b4a3f51e433a7",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/timespec.h",
+    "sha256": "c2c2dfdcf9deacccb8919ff633f212afa455e4779a2d12c47b9afa0eff7d73c1",
+    "license_observed": "BSD-style text present; inspect exact header"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/sys/types.h",
+    "sha256": "1949651d2e8fa7c60874fea8bea0531e380fcf60208961c2f904c5d92d0b22ea",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  },
+  {
+    "origin": "official GNU toolchain 8.2.0 target headers/runtime",
+    "path": "riscv64-unknown-elf/include/xlocale.h",
+    "sha256": "0497f21fb59dae453769fd40e174adba47faa877a5a5f072c6348d6a00c6845b",
+    "license_observed": "no explicit license in first 100 lines; see notices review"
+  }
+]

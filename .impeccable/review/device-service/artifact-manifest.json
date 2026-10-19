@@ -1,0 +1,176 @@
+{
+  "localLinksChecked": 107,
+  "missingLinks": [],
+  "artifacts": [
+    {
+      "file": "app-camera.jpg",
+      "bytes": 77358,
+      "sha256": "8bf592609f7ff6cead4f9a7e43102897c660846d6f7f6cbb4ce5a67e1158d7e9"
+    },
+    {
+      "file": "artifact-renames.json",
+      "bytes": 795,
+      "sha256": "9444be0929c31582193be1ad5a17e54eff83df39a923fc6a6ebe7a778f3c6dee"
+    },
+    {
+      "file": "camera-diagnosis.txt",
+      "bytes": 1712,
+      "sha256": "94fead5a838327676cfea89e9240f110cefea5240e65e77e676117f6bfc752b1"
+    },
+    {
+      "file": "camera-real.jpg",
+      "bytes": 1810,
+      "sha256": "eed3f81773b8dcc421d74218573e85f7ee65edee8bb342138bc4ea650e4e5a49"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z-1.jpg",
+      "bytes": 3331,
+      "sha256": "2c5b4f9155b486f6d375da7e4ecb7ba224d4aed13dc4a89f2a334fd82eb8b1c6"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z-2.jpg",
+      "bytes": 3402,
+      "sha256": "ad8cc61b728e383d130b48ffc6e4749f546985f3d54d7847f460718e44b1565b"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z-3.jpg",
+      "bytes": 3356,
+      "sha256": "dc211cc94c4b36c49594a210539892f98f80a51dea0d96e0163d64f381986831"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z-4.jpg",
+      "bytes": 3341,
+      "sha256": "ee13c302054e53ee234b13c4d3128485621a7a2b3b36af870b881b5e787c5425"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z-5.jpg",
+      "bytes": 3348,
+      "sha256": "532364a4edd01b79f97824698d0a0e7234eac711456c8060a181a178812acda9"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z-6.jpg",
+      "bytes": 3339,
+      "sha256": "5259cef016745f4456397505d64b30150633c5806962b707fe704d2de854b5df"
+    },
+    {
+      "file": "camera-recheck-2026-10-18T18-35-09-333Z.txt",
+      "bytes": 2884,
+      "sha256": "94ccf31bbbcae81bde26992d3edcddf4be9c4a94d816d1b03259521c2994bd53"
+    },
+    {
+      "file": "camera-recheck.md",
+      "bytes": 1712,
+      "sha256": "a7686ac32ee3ed3df965a4a254a17759e33257365ade23975f2ca203ecc32475"
+    },
+    {
+      "file": "code-review.md",
+      "bytes": 5826,
+      "sha256": "ec37932f071ac37ba775e17cc1090dcf12359b080530f7f2d1d91801fdfc2caf"
+    },
+    {
+      "file": "design-consistency.md",
+      "bytes": 8704,
+      "sha256": "650da8d9e55b25a945666cd3bbbc587377bc8bd5eee8f417a47d810c8a116dd0"
+    },
+    {
+      "file": "detector.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "finish-review.md",
+      "bytes": 8419,
+      "sha256": "342aeab253d239c72b3976cf416e325caa252abd9f37a145714e6d265d048d5d"
+    },
+    {
+      "file": "hardware-smoke.jsonl",
+      "bytes": 12900,
+      "sha256": "7b2482a6776837422b84ea53b1e758daa42fb495e49aa3c31f3a00133ee0066c"
+    },
+    {
+      "file": "image-tools-code-review.md",
+      "bytes": 5415,
+      "sha256": "51e6af11459800053fc1f0a92ce08a517731a607ed744201886a335682055b18"
+    },
+    {
+      "file": "native-camera-simple.jpg",
+      "bytes": 348281,
+      "sha256": "2c6de173e5ca23b1bd2dd2e45efc7e20a17d2f9a296e108352ce8e4de521f487"
+    },
+    {
+      "file": "native-export-frame-43.jpg",
+      "bytes": 3397,
+      "sha256": "57f63451654ebc4d5a32758089744dae78b68f160559f213d1105d7975d12db4"
+    },
+    {
+      "file": "native-export-frame-43.png",
+      "bytes": 39661,
+      "sha256": "61727b644b92f5574dbd4438fb3f52e2562207abe17968cfbf800d2ecb68dabb"
+    },
+    {
+      "file": "native-export-hash.txt",
+      "bytes": 6444,
+      "sha256": "07573aa0f535660b4dafb73d1260b63af54a39168a0a81983881b8356cbb23ce"
+    },
+    {
+      "file": "native-file-fixed.jpg",
+      "bytes": 534816,
+      "sha256": "53635c7cbdac2dffd03cbab86a4c7228fe6870c50aaecf6573ff31da53c17070"
+    },
+    {
+      "file": "native-file-roundtrip-fixed.json",
+      "bytes": 117,
+      "sha256": "c4e407f2b20bc43c0f72a96bd147982929fe4f4be96c89e0e6e3cb86c46c5379"
+    },
+    {
+      "file": "native-file-roundtrip.json",
+      "bytes": 219,
+      "sha256": "1f5f5dbe1e0e5a56b01c9416d1e96a94df1d3cbedefbc9819dfee82d5233bfd9"
+    },
+    {
+      "file": "native-firmware-blocked.jpg",
+      "bytes": 526936,
+      "sha256": "801682935dae8f0898341065cef4499f6f4c5dddc6cb0295e0d9a9f2341ac47a"
+    },
+    {
+      "file": "native-firmware-prepared-fixed.jpg",
+      "bytes": 544354,
+      "sha256": "753bd1fbe6c4033dd1abad8705c5b80bcdd1667e9184775b4da48062d996a404"
+    },
+    {
+      "file": "native-image-mask-pro.jpg",
+      "bytes": 453480,
+      "sha256": "621a612820e3bc5d07b136006cc3692868ddc20628a593e45cd5e6361f0d34ce"
+    },
+    {
+      "file": "native-image-roi-simple.jpg",
+      "bytes": 363529,
+      "sha256": "ccd537e396fd82f93d415035916282f6651cad4f416e25aa1ca342aa3122e4ad"
+    },
+    {
+      "file": "native-image-threshold-copy.jpg",
+      "bytes": 346146,
+      "sha256": "127405be71b333a30214285a27dd66cd29c82d98ac10f2aaccbfdb0ea1aeb5f1"
+    },
+    {
+      "file": "native-reconnect.jpg",
+      "bytes": 483809,
+      "sha256": "4eeceb5eaf38329c18aca10a0225c294dfe65170bf08c55d394289776454d67a"
+    },
+    {
+      "file": "native-running-pro.jpg",
+      "bytes": 340542,
+      "sha256": "5c67645781b3b15fd46b36ee7ec124b5b5318ad7cfafcdad90837a91d237ea20"
+    },
+    {
+      "file": "spec-check.json",
+      "bytes": 327,
+      "sha256": "f07fa7b20eb1fddd8cd627d99c2aa715fa167d665b8307d641a00ea603bd8d62"
+    },
+    {
+      "file": "verification.md",
+      "bytes": 10215,
+      "sha256": "d8472911e7dbb694f1d212c48cdcbda06aa1311ee0bbaf049ce1834a86619df7"
+    }
+  ]
+}

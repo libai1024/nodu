@@ -1,0 +1,68 @@
+{
+  "status": "offline diagnostic candidate only; NOT activated or executed on hardware",
+  "candidateBin": {
+    "bytes": 8792,
+    "sha256": "f9dbf480f1f2bca6e6fd8393306058093c377217afe2059c5874ac5f20b9d874"
+  },
+  "baselineBin": {
+    "path": "../build/probe.bin",
+    "sha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05",
+    "bytes": 8672
+  },
+  "targetDeltaPaths": [
+    "src/platform.c",
+    "src/probe.h",
+    "src/protocol.c",
+    "test_protocol.c"
+  ],
+  "targetCOnlySyntaxChange": "platform signature accepts legacy[2] output instead of local array; all SPI MMIO/commands/clocks/pins/retries unchanged",
+  "diagnosticProtocol": {
+    "opcode": "DE",
+    "status": "E7 (failure)",
+    "bytes": 11,
+    "data": "already-read JEDEC3 + legacy90x2; no UID",
+    "crc": "CRC32 little-endian over bytes[0:7]",
+    "authenticated": false,
+    "capacityVerified": false
+  },
+  "checks": {
+    "cASanUBSan": "PASS",
+    "hostPythonTests": 10,
+    "hostPythonTestsPassed": true,
+    "baselineFilesUnchanged": true,
+    "baselineBinUnchanged": true,
+    "undefinedSymbols": ""
+  },
+  "activeFilesObserved": [
+    {
+      "path": "desktop/scope-extension/resources/nodu_device_worker.py",
+      "bytes": 94361,
+      "sha256": "69a37c3508caaf7746e35d8bc4dd68d9fe4e7199aaaf205aabdce4ce0bc52ec4"
+    },
+    {
+      "path": "desktop/scope-extension/resources/nodu_flash_protocol.py",
+      "bytes": 7555,
+      "sha256": "caa90b2e1192c5ac30191435898643394fb20b4d22f1ad306af9943f6289c929"
+    },
+    {
+      "path": "desktop/scope-extension/resources/nodu_flash_probe.py",
+      "bytes": 10182,
+      "sha256": "2dfdacb7648efacaac1ba47d465ea06d498c809de5a9dc68e9cb787364133c9a"
+    },
+    {
+      "path": "desktop/scope-extension/resources/flash-probe/probe.bin",
+      "bytes": 8672,
+      "sha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05"
+    }
+  ],
+  "scope": "Only this candidate directory was written; no App resource activation, serial, UI or RISC-V execution",
+  "memory": {
+    "entry": "0x80000000",
+    "bss": "0x80002258",
+    "ebss": "0x80002258",
+    "end": "0x80002280",
+    "hart0StackTop": "0x8000A280",
+    "hart1StackTop": "0x80012280",
+    "linkerAllocation": "128 KiB; unchanged linker assertion"
+  }
+}

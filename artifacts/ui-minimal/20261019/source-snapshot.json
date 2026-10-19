@@ -1,0 +1,6 @@
+{
+  "path": "/Users/wangwei/Model/k210-studio-snapshots/20261019-122639-minimal-ui-and-reviewed-worker/source-and-review.tar.gz",
+  "bytes": 2318799,
+  "sha256": "16bbd9f39868a8ccff1d41c983d580948e9edbb47c9d6391736c5f079abb415d",
+  "scope": "New simple UI, current reviewed worker/host sources and tests; no private board backup payloads"
+}

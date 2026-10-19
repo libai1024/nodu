@@ -1,0 +1,53 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-image-tools { min-width: 0; font-size: 11px; }
+.scope-vision-widget .nodu-camera-actions { padding-top: 0; padding-bottom: 12px; }
+.nodu-image-toolbar, .nodu-image-frame-meta, .nodu-image-roi-heading, .nodu-image-tool-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.nodu-image-toolbar { margin-bottom: 8px; }
+.nodu-image-toolbar > span { min-width: 0; overflow-wrap: anywhere; }
+.nodu-image-toolbar > label { flex-shrink: 0; width: 100px; }
+.scope-widget .nodu-image-tools select { width: auto; max-width: 100%; font-size: 11px; min-height: 28px; padding-top: 3px; padding-bottom: 3px; }
+.nodu-image-toolbar select { width: 100% !important; }
+.nodu-image-viewport { max-height: 380px; overflow: auto; background: var(--theia-editor-background); border-radius: 3px; scrollbar-color: var(--theia-scrollbarSlider-background) transparent; }
+.nodu-image-raster { position: relative; line-height: 0; }
+.nodu-image-raster canvas { display: block; cursor: crosshair; touch-action: none; image-rendering: pixelated; aspect-ratio: auto; }
+.nodu-image-raster canvas:focus-visible { outline: 1px solid #4f7cff; outline-offset: -1px; }
+.nodu-image-roi-overlay { pointer-events: none; position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+.nodu-image-roi-overlay rect { fill: #4f7cff14; stroke: #fff; stroke-width: 1.5; stroke-dasharray: 4 3; filter: drop-shadow(0 1px 1px #101729); }
+.nodu-image-frame-meta { padding: 7px 0; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-image-pixel { display: flex; gap: 8px; align-items: center; padding: 7px 0 11px; min-height: 54px; }
+.nodu-image-swatch { width: 24px; height: 24px; border: 1px solid var(--theia-panel-border); border-radius: 3px; flex-shrink: 0; }
+.nodu-image-pixel > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.nodu-image-roi { min-width: 0; padding: 0 0 14px; margin: 0; border: 0; }
+.nodu-image-roi legend { font-size: 11px; font-weight: 600; padding: 0; }
+.nodu-image-roi-heading { margin: 3px 0 6px; min-height: 24px; color: var(--theia-descriptionForeground); }
+.nodu-image-roi-inputs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+.nodu-image-roi-inputs label { display: flex; flex-direction: column; gap: 3px; color: var(--theia-descriptionForeground); }
+.scope-widget .nodu-image-roi-inputs input { padding: 3px 4px !important; font-size: 11px !important; font-variant-numeric: tabular-nums; }
+.nodu-image-tool-section { border-top: 1px solid var(--theia-panel-border); padding: 12px 0; }
+.nodu-image-tool-heading { margin-bottom: 9px; min-height: 26px; }
+.nodu-image-tool-heading h3 { font-size: 12px; font-weight: 600; margin: 0; }
+.nodu-image-histogram { width: 100%; height: 78px; display: block; background: var(--theia-editor-background); border-radius: 2px; }
+.nodu-image-histogram path { stroke-width: 1.1; }
+.nodu-image-histogram-axis { stroke: var(--theia-panel-border); fill: none; }
+.nodu-image-histogram-red { color: #f87979; stroke: #f87979; }
+.nodu-image-histogram-green { color: #83c17e; stroke: #83c17e; }
+.nodu-image-histogram-blue { color: #7aa7ff; stroke: #7aa7ff; }
+.nodu-image-histogram-gray { color: var(--theia-foreground); stroke: var(--theia-foreground); }
+.nodu-image-histogram-axis-labels { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; color: var(--theia-descriptionForeground); font-size: 10px; font-variant-numeric: tabular-nums; }
+.nodu-image-histogram-legend { display: flex; align-items: center; gap: 10px; }
+.nodu-image-mask-toggle { margin-bottom: 12px; }
+.nodu-image-mask-count { margin: 0 0 9px; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-image-copy { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nodu-image-copy code { min-width: 0; overflow-wrap: anywhere; user-select: text; font-family: var(--theia-code-font-family, monospace); font-size: 11px; flex: 1; line-height: 1.6; }
+.nodu-image-copy .theia-button { flex-shrink: 0; }
+.nodu-image-export { display: flex; gap: 8px; align-items: center; padding-top: 3px; }
+.nodu-image-feedback { font-size: 11px; line-height: 1.6; color: var(--theia-foreground); overflow-wrap: anywhere; margin: 10px 0 0; }
+.nodu-image-tools button:hover:not(:disabled) { filter: brightness(1.06); }
+.nodu-image-tools code:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 3px; }
+.nodu-image-export { padding: 0 0 10px; }
+.nodu-analysis-details { border-top: 1px solid var(--theia-panel-border); }
+.nodu-analysis-details > summary { min-height: 30px; display: list-item; padding: 8px 0; box-sizing: border-box; cursor: pointer; font-weight: 600; }
+.nodu-analysis-details > summary:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
+.nodu-analysis-details .nodu-image-tool-section { border-top: 0; padding-top: 4px; }
+.nodu-analysis-details .nodu-image-roi > legend { display: none; }
+.nodu-simple .nodu-image-viewport { max-height: 55vh; }

@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-19",
+  "type": "actual-app-screenshots",
+  "generator": "cua_repl",
+  "nativePort": 4193,
+  "browserPort": 4194,
+  "nativeLogicalSize": [
+    1520,
+    960
+  ],
+  "nativePixelSize": [
+    3040,
+    1920
+  ],
+  "browserPixelSize": [
+    1280,
+    720
+  ],
+  "sourceSha256": {
+    "desktop/scope-extension/src/browser/scope-layout-state.ts": "25a32679eaf4328ba9de1969b76a724dc4239eb15253c1e79e880ee2980322fc",
+    "desktop/scope-extension/src/browser/nodu-console-widget.tsx": "101e21faa4fe121b7492eeab53ac3ecb38e3e68874746d6b2687fad49de58a27",
+    "desktop/scope-extension/src/browser/scope-workbench.tsx": "c0e8128b5d5fffee0c30d19460dc3b82f1a5c0c02fb0184c3d25c332aaaecfd1",
+    "desktop/scope-extension/src/browser/scope-frontend-module.ts": "39b0ea1d88c054bbd5fcdfbecd53a5cb6d5d53341de200f0ea1880a64fbf8582",
+    "desktop/scope-extension/src/browser/scope-widgets.tsx": "6be3d4c3cdc8edc3206bf405096743f444c6b34ce546cded3bcfab29559685c7",
+    "desktop/scope-extension/src/browser/nodu-device-panel.tsx": "5af502283b85f3ce64fa87e51bdec4cce02c2520ca5fee5b5c2dd8a9acd3ef17",
+    "desktop/scope-extension/src/browser/nodu-firmware-panel.tsx": "2078b35a5295826de49731e4dd24589c564df913cac3bd8d4acd36ce22e24c60",
+    "desktop/scope-extension/src/browser/nodu-image-tools.tsx": "9eb6dbbebedb2b8d09397c6b66f83bfdbd46cd11c537e3796c05c39986ff7a5b",
+    "desktop/scope-extension/style/layout.css": "ac5a7df60c90e6b767e2f7cfa3e2bd10fd15ce3009b61e1cc582f3d939bd082e",
+    "desktop/scope-extension/style/image-tools.css": "1c4c7ffc5aa059b1d3e7ec9190005d4fc3a57a0c5fc30e1b37e089be10e9eb8d"
+  },
+  "screenshotSha256": {
+    "simple-default.jpg": "4d9071c896dcb8fce90c729b311f635f7cb100293207be9b6ee9d3a620694b9f",
+    "device-popover.jpg": "8e4136c88ca84fea3af706dd75947a75f964319a79c3a245ab6cc647305885b5",
+    "simple-console.jpg": "f94b5eff2dca489e59d329ed877514e41935c8a3a784dfc4a69a52c8173e2b65",
+    "browser-default.png": "7abc76339df3af6bf21179adfdc2b5f0d334f41a8eaf7d6b9bd55e8cbac90bf5",
+    "simple-vision.jpg": "db936e0450b26ec8539475dbea889971ba7bdb9be774e65287846630c84ebf27"
+  },
+  "aiGenerated": false
+}

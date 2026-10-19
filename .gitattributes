@@ -1,0 +1,19 @@
+# Keep ordinary source consistent on Windows and macOS.
+* text=auto eol=lf
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.ico -text
+*.icns -text
+*.woff2 -text
+*.zip -text
+*.gz -text
+*.bin -text
+*.elf -text
+*.o -text
+
+# Reviewed inputs, licenses and frozen artifacts are hashed as original bytes.
+# Their upstream whitespace must remain intact.
+/tools/flash-probe/** -text -whitespace
+/desktop/scope-extension/resources/** -text -whitespace
+/desktop/scope-extension/style/fonts/FONT-LICENSE.txt -text -whitespace

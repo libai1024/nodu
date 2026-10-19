@@ -1,0 +1,79 @@
+{
+  "version": "0.1.1",
+  "date": "2026-10-19",
+  "scope": "handoff, version metadata, documentation and local Git baseline; no UI reload or hardware operation",
+  "versionConsistency": {
+    "versionFile": "0.1.1",
+    "workspacePackages": 4,
+    "workspaceVersionsAndLockfileAligned": true
+  },
+  "checks": [
+    {
+      "command": "npm run compile",
+      "cwd": "desktop",
+      "node": "24",
+      "exitCode": 0
+    },
+    {
+      "command": "node --test scope-extension/test/backend-validation.cjs scope-extension/test/image-analysis.cjs",
+      "cwd": "desktop",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "~/.nodu/python/bin/python -m unittest discover -s scope-extension/test -p 'worker*_test.py'",
+      "cwd": "desktop",
+      "passed": 100,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0
+    }
+  ],
+  "pythonEnvironment": {
+    "python": "3.15.0",
+    "mpremote": "1.25.0",
+    "pyserial": "3.5",
+    "kflash": "1.1.6"
+  },
+  "frozenE7Candidate": {
+    "filesVerified": 53,
+    "hashesMatch": true,
+    "activated": false,
+    "hardwareExecuted": false
+  },
+  "priorEvidence": {
+    "browserAndElectronBuild": "passed before handoff; not rerun because this change only edits metadata/docs",
+    "nativeUI": "macOS passed; Windows not tested",
+    "hardware": "DE/E7 rejected; REPL recovered; preserved contents unchanged; serial released; no firmware write"
+  },
+  "reviewCorrections": [
+    "Handoff links use ../../ from docs/0.1.1",
+    "Frozen build logs explicitly retained by Git",
+    "Current DESIGN dimensions updated; historical details preserved",
+    "Machine-only sources and ignored raw evidence labeled local; fixed firmware sources linked by commit"
+  ],
+  "git": {
+    "branch": "main",
+    "tag": "v0.1.1",
+    "remoteConfigured": false,
+    "previewNestedRepository": "excluded and preserved",
+    "privateDeviceBackups": "not included",
+    "stagingVerification": {
+      "frozenCandidateFilesTracked": 53,
+      "missingFrozenFiles": 0,
+      "forbiddenPaths": 0,
+      "resourceBinTracked": true,
+      "secretPatternScanMatches": 0,
+      "frozenCandidateStagedBlobsMatch": 53,
+      "diffCheck": "passed; immutable upstream licenses/tool artifacts preserve original whitespace and bytes",
+      "rawExportTranscriptExcluded": true
+    }
+  },
+  "documentationLinks": {
+    "documentsChecked": 52,
+    "missingTargets": 0,
+    "ignoredLinkedTargets": 0
+  }
+}

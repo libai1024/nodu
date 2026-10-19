@@ -1,0 +1,10 @@
+{
+  "scope": "Portable summary of the historical native image export verification",
+  "jpegBytes": 3397,
+  "jpegSha256": "57f63451654ebc4d5a32758089744dae78b68f160559f213d1105d7975d12db4",
+  "matchesBoardLastFrame": true,
+  "pngFullResolutionExportChecked": true,
+  "jpegEvidence": "native-export-frame-43.jpg",
+  "pngEvidence": "native-export-frame-43.png",
+  "rawUITranscript": "Retained locally as native-export-hash.txt; excluded from Git because it contains raw UI text"
+}

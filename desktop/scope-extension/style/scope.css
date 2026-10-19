@@ -1,0 +1,86 @@
+/* SPDX-License-Identifier: MIT */
+@font-face {
+    font-family: 'Scope Plex';
+    src: url('./fonts/plex-sans.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Scope Plex Mono';
+    src: url('./fonts/plex-mono.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* Theia retains its shell geometry and platform UI font. Brand type stays local. */
+.scope-workspace-bar {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0 14px;
+    background: var(--theia-titleBar-activeBackground);
+    color: var(--theia-titleBar-activeForeground);
+    border-bottom: 1px solid var(--theia-panel-border);
+    font-family: 'Scope Plex', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: var(--theia-ui-font-size1, 13px);
+}
+
+.scope-brand,
+.scope-project,
+.scope-demo-target,
+.scope-action {
+    display: inline-flex;
+    align-items: center;
+}
+
+.scope-brand { flex-shrink: 0; gap: 8px; }
+.scope-brand-mark { color: var(--theia-scope-accent); width: 24px; height: 24px; }
+.scope-brand-name { width: 55px; height: 21px; }
+.scope-brand-subtitle { color: var(--theia-scope-mutedForeground); font-size: 11px; letter-spacing: .08em; }
+.scope-project { min-width: 0; flex: 1; gap: 10px; }
+.scope-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scope-project-caption { color: var(--theia-scope-mutedForeground); font-size: 11px; white-space: nowrap; }
+.scope-demo-target { gap: 7px; color: var(--theia-scope-mutedForeground); white-space: nowrap; font-size: 12px; }
+.scope-status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+
+.scope-action {
+    box-sizing: border-box;
+    justify-content: center;
+    gap: 7px;
+    min-height: 28px;
+    padding: 3px 10px;
+    border: 1px solid var(--theia-input-border);
+    border-radius: 4px;
+    background: var(--theia-button-secondaryBackground);
+    color: var(--theia-button-secondaryForeground);
+    font: inherit;
+    line-height: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.scope-action:hover { background: var(--theia-button-secondaryHoverBackground); }
+.scope-action-primary,
+.scope-action.primary { background: var(--theia-button-background); color: var(--theia-button-foreground); border-color: transparent; }
+.scope-action-primary:hover,
+.scope-action.primary:hover { background: var(--theia-button-hoverBackground); }
+.scope-action:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 2px; }
+.scope-action:disabled { color: var(--theia-disabledForeground); background: var(--theia-button-secondaryBackground); cursor: default; }
+.scope-action-icon { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; font-size: 14px; }
+.scope-workspace-bar ::selection { background: var(--theia-editor-selectionBackground); color: var(--theia-editor-foreground); }
+
+@media (max-width: 1100px) {
+    .scope-workspace-bar { gap: 12px; }
+    .scope-project-caption { display: none; }
+}
+
+@media (max-width: 850px) {
+    .scope-brand-subtitle { display: none; }
+    .scope-demo-target { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+}

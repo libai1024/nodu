@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+import { injectable } from '@theia/core/shared/inversify';
+import { Emitter } from '@theia/core/lib/common';
+
+@injectable()
+export class ScopeLayoutState {
+    private readonly changed = new Emitter<void>();
+    readonly onDidChange = this.changed.event;
+    mode: 'simple' | 'pro' = localStorage.getItem('scope.layout-mode') === 'pro' ? 'pro' : 'simple';
+    project = '打开项目';
+    filesVisible = false;
+    consoleVisible = false;
+    visionVisible = false;
+    deviceOpen = false;
+
+    setMode(mode: 'simple' | 'pro'): void {
+        if (this.mode === mode) { return; }
+        this.mode = mode;
+        localStorage.setItem('scope.layout-mode', mode);
+        this.changed.fire();
+    }
+    setProject(project: string): void { if (this.project !== project) { this.project = project; this.changed.fire(); } }
+    setDeviceOpen(open: boolean): void { if (this.deviceOpen !== open) { this.deviceOpen = open; this.changed.fire(); } }
+    setPanels(filesVisible: boolean, consoleVisible: boolean, visionVisible: boolean): void {
+        if (this.filesVisible === filesVisible && this.consoleVisible === consoleVisible && this.visionVisible === visionVisible) { return; }
+        Object.assign(this, { filesVisible, consoleVisible, visionVisible });
+        this.changed.fire();
+    }
+}
