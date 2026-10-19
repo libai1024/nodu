@@ -1,6 +1,6 @@
-# Nodu 0.1.1 开发入口
+# Nodu 0.1.2 开发入口
 
-完整说明已按版本归入 [开发与启动](../docs/0.1.1/GETTING_STARTED.md)。接手先读 [0.1.1 交接](../docs/0.1.1/HANDOFF.md)。
+完整说明已按版本归入 [开发与启动](../docs/0.1.1/GETTING_STARTED.md)。接手先读 [0.1.2 交接](../docs/0.1.2/HANDOFF.md)。
 
 使用 Node.js 24，在当前目录执行：
 

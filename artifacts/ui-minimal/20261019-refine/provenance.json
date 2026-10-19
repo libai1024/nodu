@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-19",
+  "type": "actual-app-screenshots",
+  "generator": "cdp Page.captureScreenshot (screencapture TCC-blocked; web-contents render, no native titlebar)",
+  "nativePort": 4195,
+  "remoteDebugPort": 4196,
+  "workspace": "/tmp/nodu-refine-ws (copy of desktop/examples/gc2145-camera)",
+  "electronUserData": "/tmp/nodu-refine-user",
+  "serial": "/dev/cu.usbserial-3120 (connected for run/camera/console checks, disconnected at end)",
+  "logicalSizes": {
+    "standard": [1520, 960],
+    "compact": [980, 680]
+  },
+  "sourceSha256": {
+    "desktop/scope-extension/src/browser/scope-workbench.tsx": "57f4efa2d9d776c771118d206c45b9786c30ab7d0a287cf8cd238e284cca13aa",
+    "desktop/scope-extension/src/browser/scope-widgets.tsx": "b858d39fc8d02544925802885e6eae7037e597769d13f5d9015d1b56790c2ee8",
+    "desktop/scope-extension/src/browser/nodu-device-client.ts": "c17832c82b5602130dcbcd0e374a77df45190e774b864f653f7706f8ec335fc8",
+    "desktop/scope-extension/src/browser/nodu-device-panel.tsx": "e9b8ede45a50083c8e0ee65eae5f3f5568603d399005208ec675de254852eed1",
+    "desktop/scope-extension/src/browser/nodu-console-widget.tsx": "84f7474b037d120d73da06d2d99cf29fb8b46c91e6f14851dd6f69829215cf3c",
+    "desktop/scope-extension/src/browser/nodu-image-tools.tsx": "0b6cedfb2ffb621a8c13b5b26770d52924bfc45c91766b2960205c01b6d23595",
+    "desktop/scope-extension/style/layout.css": "c54d7945a59ff055833fbe233cd8f01224b8d7aa2de9b6a2cc05a43d66f6b7a9",
+    "desktop/scope-extension/style/device.css": "2382e2f95f6c79a3df1a065b0ad677093da766c96590db158a4aeed8fff88938",
+    "desktop/scope-extension/style/image-tools.css": "e4ed898616759498eca1c7fe71b7cb575993c84f3ddeab50f1def66cfe95a8d7"
+  },
+  "screenshotSha256": {
+    "simple-default.jpg": "ada90914d91f862f3489eea7e430b40bdc273bdcf7b2d372f2ca5928416ad8cf",
+    "simple-default-980.jpg": "8a2b513ed12b122fa4a2ed79a26bcf149ab683ee5ab49fcfff890c35aa8915b5",
+    "popover-disconnected.jpg": "94bf84d48f06066d81dcc96fe0bfc1964413be1e6285864e83ef939f4a80d6b2",
+    "popover-connected.jpg": "f0e38f811f08dcd959c47e02eaf81a03f373927c4144343907153050b274eea6",
+    "popover-980.jpg": "78ee0a5d9c81ca35f2520050bbbf3d4fa18aad253e505fa504ec2dd3f408063d",
+    "console-stderr.jpg": "7350dd848f76ecc5afdc87f1bf3719854e9faea4c6deacc8889f6e5d5ec2490e",
+    "vision-frame.jpg": "f98c5de006d6462133713e60bf34fc910ae0b184790c282866af12469c4b396a",
+    "running-toolbar.jpg": "928848145a6e9e12a7c372b689525c2ed3b8f23ead4699d0f0496fc46c06582b",
+    "pro-mode.jpg": "9482cbb6820b6ebe41a935fd84543b8947de116688ec12f967a287d00e770ce8"
+  },
+  "removed": {
+    "vision-frame2.jpg": "redundant second capture of the same vision state from the earlier pass"
+  },
+  "aiGenerated": false
+}

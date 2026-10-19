@@ -1,10 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 .scope-toolbar-widget { min-height: 44px; max-height: 44px; overflow: visible !important; z-index: 30; }
-.scope-layout-icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 28px; flex-shrink: 0; padding: 5px; margin-left: -8px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
-.scope-layout-icon svg { width: 18px; height: 18px; }
-.scope-layout-icon:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
-.scope-layout-icon:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 1px; }
-@media (max-width: 1000px) { .scope-brand-subtitle { display: none; } .scope-workspace-bar { gap: 8px; } .scope-project { min-width: 70px; } .scope-action { padding-inline: 7px; } .scope-layout-icon { margin-left: 0; } }
+@media (max-width: 1000px) { .scope-brand-subtitle { display: none; } .scope-workspace-bar { gap: 8px; } .scope-project { min-width: 70px; } .scope-action { padding-inline: 7px; } }
 
 .scope-workspace-bar { position: relative; display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(102px, 1fr); gap: 12px; height: 44px; min-height: 44px; padding: 0 12px; }
 .scope-toolbar-start, .scope-toolbar-end { display: flex; align-items: center; gap: 6px; min-width: 0; }
@@ -12,24 +8,42 @@
 .scope-toolbar-start > .scope-brand { gap: 0; margin-right: 4px; }
 .scope-toolbar-start .scope-brand-mark { width: 23px; height: 23px; }
 .scope-toolbar-start .scope-brand-name, .scope-toolbar-start .scope-brand-subtitle { display: none; }
-.scope-toolbar-project { min-width: 0; max-width: 240px; text-align: center; color: var(--theia-descriptionForeground); font-size: 12px; overflow: hidden; }
-.scope-toolbar-project .scope-project-name { display: block; }
+.scope-toolbar-center { display: flex; justify-content: center; min-width: 0; }
+.nodu-toolbar-alert { display: inline-flex; align-items: center; gap: 5px; max-width: 280px; height: 26px; padding: 0 8px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-errorForeground); font: inherit; font-size: 12px; cursor: pointer; }
+.nodu-toolbar-alert:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-toolbar-alert:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 1px; }
+.nodu-toolbar-alert > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .scope-toolbar-icon { width: 30px; min-width: 30px; height: 30px; padding: 0; border-color: transparent; background: transparent; }
 .scope-toolbar-icon[aria-pressed='true'] { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
 .scope-toolbar-run { height: 30px; min-height: 30px; padding: 0 12px; }
+.scope-toolbar-run.nodu-is-running:disabled { background: var(--theia-button-background); color: var(--theia-button-foreground); border-color: transparent; opacity: .7; }
 .scope-toolbar-files { height: 30px; min-height: 30px; padding: 0 9px; border-color: transparent; background: transparent; }
 .scope-toolbar-files[aria-pressed='true'] { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
-.scope-toolbar-end .scope-layout-icon { width: 30px; height: 30px; margin: 0; }
+.scope-toolbar-divider { width: 1px; height: 18px; margin: 0 4px; flex-shrink: 0; background: var(--theia-panel-border); }
+.scope-layout-switch { display: inline-flex; align-items: center; height: 26px; padding: 2px; gap: 1px; flex-shrink: 0; border: 1px solid var(--theia-panel-border); border-radius: 13px; }
+.scope-layout-switch > button { height: 22px; min-width: 30px; padding: 0 7px; border: 0; border-radius: 11px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 12px; cursor: pointer; }
+.scope-layout-switch > button:hover { color: var(--theia-foreground); }
+.scope-layout-switch > button[aria-pressed='true'] { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
+.scope-layout-switch > button:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 1px; }
+.nodu-toolbar-stop.nodu-stop-active { color: var(--theia-errorForeground); }
+.nodu-toolbar-stop:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-toolbar-stop:disabled { background: transparent; border-color: transparent; }
+.nodu-toolbar-stop:disabled > .codicon { opacity: .35; }
 .scope-device-picker { position: relative; min-width: 0; }
 .scope-device-chip { max-width: 310px; height: 30px; min-height: 30px; gap: 7px; padding: 0 9px; }
 .scope-device-chip-board, .scope-device-chip-port { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .scope-device-chip-port { max-width: 140px; color: var(--theia-descriptionForeground); font-size: 11px; }
-.scope-device-chip.nodu-is-connected > .codicon-circuit-board { color: var(--theia-terminal-ansiBrightGreen); }
+.scope-device-chip .scope-status-dot { background: var(--theia-descriptionForeground); }
+.scope-device-chip.nodu-chip-connecting .scope-status-dot { background: var(--theia-editorWarning-foreground); }
+.scope-device-chip.nodu-chip-connected .scope-status-dot { background: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.scope-device-chip.nodu-chip-error .scope-status-dot { background: var(--theia-errorForeground); }
+.scope-device-chip.nodu-chip-disconnected { border-style: dashed; border-color: var(--theia-input-border); }
 .scope-device-chip.nodu-has-error, .scope-toolbar-console.nodu-has-error { color: var(--theia-errorForeground); }
 .scope-device-popover { position: absolute; top: calc(100% + 8px); left: 0; width: min(410px, calc(100vw - 40px)); max-height: min(720px, calc(100vh - 110px)); overflow: auto; background: var(--theia-panel-background); border: 1px solid var(--theia-panel-border); border-radius: 5px; box-shadow: 0 8px 24px #0004; color: var(--theia-foreground); }
 .scope-device-popover[hidden], .scope-device-popover [hidden] { display: none !important; }
 .scope-device-popover .scope-section-heading { min-height: 36px; }
-.scope-device-popover .scope-device-panel > section { padding: 0 14px 12px; }
+.scope-device-popover .scope-device-panel > section,
+.scope-device-popover .scope-device-panel > div > section { padding: 0 14px 12px; }
 
 /* Hide only navigation rails, never the expanded content dock or split handles. */
 .nodu-simple #theia-left-content-panel > .theia-app-sidebar-container,
@@ -44,15 +58,20 @@
 .nodu-simple #theia-statusBar #status-bar-theia-notification-center,
 .nodu-simple #theia-statusBar [id='status-bar-scope:device'],
 .nodu-simple #theia-statusBar [id='status-bar-scope:demo'] { display: none !important; }
+/* Simple mode drops the breadcrumbs row; the multirow TabBar min-height reads
+   --theia-breadcrumbs-height at use time, so zeroing it removes the gap. */
+.nodu-simple .theia-breadcrumbs { display: none !important; }
+.nodu-simple #theia-main-content-panel { --theia-breadcrumbs-height: 0px; --theia-private-horizontal-tab-height: 30px; --theia-horizontal-toolbar-height: 30px; }
 
 .nodu-console-content { display: flex; flex-direction: column; height: 100%; min-height: 0; padding: 8px 14px; box-sizing: border-box; }
 .nodu-console-output { flex: 1; min-height: 0; margin: 0 0 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--theia-editor-foreground); font-family: var(--theia-code-font-family, monospace); font-size: 12px; line-height: 1.5; }
 .nodu-console-input { display: flex; align-items: center; gap: 8px; margin-top: auto; }
 .nodu-console-input > span { color: var(--theia-descriptionForeground); font-family: var(--theia-code-font-family, monospace); }
-.scope-widget .nodu-console-input textarea { flex: 1; width: 0; min-height: 30px; max-height: 100px; resize: vertical; font-family: var(--theia-code-font-family, monospace); font-size: 12px; }
+.scope-widget .nodu-console-input textarea { flex: 1; width: 0; min-height: 30px; max-height: 100px; resize: none; font-family: var(--theia-code-font-family, monospace); font-size: 12px; }
 .nodu-console-input > button { flex-shrink: 0; }
+.nodu-console-stderr { color: var(--theia-errorForeground); }
 .nodu-console-content .scope-error { margin: 0 0 8px; }
 
-@media (max-width: 1100px) { .scope-device-chip-port { display: none; } .scope-toolbar-project { max-width: 160px; } }
-@media (max-width: 760px) { .scope-device-chip-board { max-width: 85px; } .scope-toolbar-project { max-width: 100px; } .scope-workspace-bar { padding-inline: 7px; gap: 7px; } }
-@media (max-width: 600px) { .scope-workspace-bar { grid-template-columns: minmax(0, 1fr) auto; } .scope-toolbar-project { display: none; } }
+@media (max-width: 1100px) { .scope-device-chip-port { display: none; } }
+@media (max-width: 760px) { .scope-device-chip-board { max-width: 85px; } .nodu-toolbar-alert { display: none; } .scope-workspace-bar { padding-inline: 7px; gap: 7px; } }
+@media (max-width: 600px) { .scope-workspace-bar { grid-template-columns: minmax(0, 1fr) auto; } .scope-toolbar-center { display: none; } }

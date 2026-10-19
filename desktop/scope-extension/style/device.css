@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MIT */
 .scope-device-panel { width: 100%; }
-.scope-device-panel > section { padding: 0 16px 16px; border-bottom: 1px solid var(--theia-panel-border); }
-.scope-device-panel > section:last-child { border-bottom: 0; }
+.scope-device-panel > section, .scope-device-panel > div > section { padding: 0 16px 16px; border-bottom: 1px solid var(--theia-panel-border); }
+.scope-device-panel > section:last-child, .scope-device-panel > div:last-child > section { border-bottom: 0; }
 .scope-widget select, .scope-widget textarea, .scope-widget input:not([type='checkbox']):not([type='radio']):not([type='range']) {
     box-sizing: border-box; min-width: 0; width: 100%; color: var(--theia-input-foreground); background: var(--theia-input-background); border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 3px; padding: 5px 7px; font: inherit; line-height: 1.5; caret-color: var(--theia-input-foreground);
 }

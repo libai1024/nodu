@@ -1,0 +1,78 @@
+{
+  "version": "0.1.2",
+  "date": "2026-10-19",
+  "scope": "simple-mode UI refinement, error-source attribution, version metadata and documentation",
+  "versionConsistency": {
+    "versionFile": "0.1.2",
+    "workspacePackages": 4,
+    "workspaceVersionsAndLockfileAligned": true
+  },
+  "checks": [
+    {
+      "command": "npm run compile",
+      "cwd": "desktop",
+      "node": "24",
+      "exitCode": 0
+    },
+    {
+      "command": "node --test scope-extension/test/backend-validation.cjs scope-extension/test/image-analysis.cjs",
+      "cwd": "desktop",
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "note": "6 backend-validation + 14 image-analysis"
+    },
+    {
+      "command": "~/.nodu/python/bin/python -m unittest discover -s scope-extension/test -p 'worker*_test.py'",
+      "cwd": "desktop",
+      "passed": 100,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build:electron",
+      "cwd": "desktop",
+      "targets": ["browser", "node", "electron"],
+      "errors": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "impeccable detect --json <changed tsx/css files>",
+      "findings": 0,
+      "exitCode": 0
+    }
+  ],
+  "pythonEnvironment": {
+    "python": "3.15.0",
+    "mpremote": "1.25.0",
+    "pyserial": "3.5",
+    "kflash": "1.1.6"
+  },
+  "isolatedInstance": {
+    "port": 4195,
+    "remoteDebugPort": 4196,
+    "workspace": "/tmp/nodu-refine-ws",
+    "electronUserData": "/tmp/nodu-refine-user",
+    "serial": "/dev/cu.usbserial-3120",
+    "hardwareExercised": ["connect", "RAM run camera_preview.py", "camera preview frames", "REPL execute", "file listing error path", "disconnect"],
+    "noFirmwareWrite": true
+  },
+  "knownLimits": [
+    "REPL/script failures log the traceback twice in console output (pre-existing reportError logging)",
+    "real macOS Pinyin IME Enter not tested; synthetic isComposing event verified",
+    "refitMainTabBars reads Lumino private _root/sizers; recheck on Theia upgrades",
+    "top-left purple pill in captures is Theia/Electron title chrome, not extension UI",
+    "all 0.1.1 limits apply (Flash DE/E7, no installer/signature/auto-update, Windows untested)"
+  ],
+  "priorEvidence": {
+    "deviceAndImageTools": ".impeccable/review/device-service/verification.md (0.1.1)",
+    "hardware": "DE/E7 rejected; preserved contents unchanged; serial released; no firmware write"
+  },
+  "git": {
+    "branch": "main",
+    "tag": "v0.1.2 (to be created at commit)",
+    "remoteConfigured": false
+  }
+}

@@ -58,6 +58,8 @@ export class ScopeConsoleContribution extends AbstractViewContribution<NoduConso
 
 @injectable()
 export class ScopeToolbar extends ReactWidget {
+    // Operations whose failure means the user's Python raised, not a device fault.
+    private static readonly USER_CODE_OPS = new Set(['执行 REPL', '发送脚本', '运行脚本']);
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
     @inject(ScopeLayoutState) protected readonly layoutState!: ScopeLayoutState;
     @inject(CommandService) protected readonly commands!: CommandService;
@@ -90,29 +92,35 @@ export class ScopeToolbar extends ReactWidget {
 
     protected render(): React.ReactNode {
         const simple = this.layoutState.mode === 'simple';
+        const { phase } = this.device.state;
+        // Beginner code faults (REPL/RAM script) are not device failures; they stay in the console.
+        const deviceError = !!this.device.error && !ScopeToolbar.USER_CODE_OPS.has(this.device.errorOperation);
+        const chipState = deviceError || phase === 'error' ? 'error' : phase === 'connecting' ? 'connecting' : this.device.connected ? 'connected' : 'disconnected';
         const board = this.device.boardProfile === 'embedfire-cam-gc2145' ? '野火 K210 CAM' : 'K210';
         const port = (this.device.state.port || this.device.selectedPort).split('/').pop() || '选择端口';
         return <header className="scope-workspace-bar" aria-label="Nodu 工具栏">
             <div className="scope-toolbar-start">
                 <NoduBrand />
                 <button className="scope-action scope-toolbar-files" aria-label="文件" aria-pressed={this.layoutState.filesVisible} onClick={() => void this.commands.executeCommand('scope.toggle-files')} title="文件"><i className="codicon codicon-files" aria-hidden="true"/>文件</button>
-                <button className="scope-action scope-action-primary scope-toolbar-run" disabled={this.device.busy || this.device.state.running} onClick={() => void this.commands.executeCommand('scope.run-current')} title="运行 · Ctrl / ⌘ Enter"><i className="codicon codicon-play" aria-hidden="true"/>运行</button>
-                <button className="scope-action scope-toolbar-icon nodu-toolbar-stop" aria-label="停止" disabled={!this.device.canStop} onClick={() => void this.commands.executeCommand('scope.stop-device')} title="停止"><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
+                <button className={`scope-action scope-action-primary scope-toolbar-run${this.device.state.running ? ' nodu-is-running' : ''}`} disabled={this.device.busy || this.device.state.running} aria-busy={this.device.state.running || undefined} onClick={() => void this.commands.executeCommand('scope.run-current')} title="运行 · Ctrl / ⌘ Enter"><i className={`codicon ${this.device.state.running ? 'codicon-loading codicon-modifier-spin' : 'codicon-play'}`} aria-hidden="true"/>{this.device.state.running ? '运行中' : '运行'}</button>
+                <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${this.device.state.running || this.device.busy ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!this.device.canStop} onClick={() => void this.commands.executeCommand('scope.stop-device')} title="停止"><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                 <div className="scope-device-picker">
-                    <button className={`scope-action scope-device-chip ${this.device.connected ? 'nodu-is-connected' : ''} ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || '设备与端口'}><i className="codicon codicon-circuit-board" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || '设备与端口'}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
                     {/* One permanently mounted form owns drafts/confirmations across popover and mode changes. */}
                     <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="设备设置" hidden={!this.layoutState.deviceOpen}>
                         <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors} compact={simple} showLogs={() => void this.commands.executeCommand('scope.show-logs')} />
                     </div>
                 </div>
             </div>
-            <div className="scope-toolbar-project"><span className="scope-project-name">{this.layoutState.project}</span></div>
+            <div className="scope-toolbar-center">{deviceError ? <button className="nodu-toolbar-alert" onClick={() => void this.commands.executeCommand('scope.show-logs')} title={this.device.error}><i className="codicon codicon-error" aria-hidden="true"/><span>{this.device.error}</span></button> : null}</div>
             <div className="scope-toolbar-end">
             <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="控制台" aria-pressed={this.layoutState.consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title="控制台"><i className="codicon codicon-terminal" aria-hidden="true"/></button>
-            <button className="scope-layout-icon" aria-label={this.layoutState.mode === 'simple' ? '切换到专业模式' : '切换到简洁模式'} aria-pressed={this.layoutState.mode === 'pro'} title={this.layoutState.mode === 'simple' ? '切换到专业模式' : '切换到简洁模式'} onClick={() => void this.commands.executeCommand(this.layoutState.mode === 'simple' ? 'scope.layout.pro' : 'scope.layout.simple')}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/>{this.layoutState.mode === 'pro' && <path d="M7 4v16M7 15h8"/>}</svg>
-            </button>
             <button className="scope-action scope-toolbar-icon scope-toolbar-vision" aria-label="视觉" aria-pressed={this.layoutState.visionVisible} onClick={() => void this.commands.executeCommand('scope.toggle-vision')} title="视觉"><i className="codicon codicon-device-camera" aria-hidden="true"/></button>
+            <span className="scope-toolbar-divider" aria-hidden="true"/>
+            <div className="scope-layout-switch" role="group" aria-label="布局模式">
+                <button aria-label="简洁模式" title="简洁模式" aria-pressed={simple} onClick={() => { if (!simple) { void this.commands.executeCommand('scope.layout.simple'); } }}>简</button>
+                <button aria-label="专业模式" title="专业模式" aria-pressed={!simple} onClick={() => { if (simple) { void this.commands.executeCommand('scope.layout.pro'); } }}>专</button>
+            </div>
             </div>
         </header>;
     }
@@ -170,8 +178,28 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         const geometry = `${this.layoutState.mode}:${left.dockPanel.isHidden}:${right.dockPanel.isHidden}`;
         if (geometry !== this.geometry) {
             this.geometry = geometry;
-            left.container.fit(); right.container.fit(); this.shell.fit(); this.shell.update();
+            left.container.fit(); right.container.fit(); this.shell.mainPanel.fit(); this.refitMainTabBars(); this.shell.fit(); this.shell.update();
         }
+    }
+
+    private refitMainTabBars(): void {
+        // Lumino clamps each tab-area's allocated height to the sizeHint captured at
+        // attach time. Mode-scoped CSS changes the natural height (breadcrumbs row,
+        // tab height), so re-seat the hints from live measurement before relayout.
+        const layout = (this.shell.mainPanel as unknown as { layout?: { _root?: unknown } }).layout;
+        const visit = (node: unknown): void => {
+            const n = node as { tabBar?: { node: HTMLElement }; sizers?: { sizeHint: number; size: number }[]; children?: ReadonlyArray<unknown> } | undefined;
+            if (!n || typeof n !== 'object') { return; }
+            if (n.tabBar?.node && n.sizers?.length === 2) {
+                const bar = n.tabBar.node;
+                bar.style.height = '';
+                // Hidden tab areas measure 0; keep their old hint so re-showing them does not collapse.
+                const hint = bar.offsetHeight;
+                if (hint > 0) { n.sizers[0].sizeHint = hint; n.sizers[0].size = hint; }
+            }
+            if (n.children) { for (const child of n.children) { visit(child); } }
+        };
+        if (layout?._root) { visit(layout._root); this.shell.mainPanel.update(); }
     }
 
     private async settlePanels(): Promise<void> {
@@ -180,7 +208,13 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.syncPanels();
     }
 
-    initialize(): void { registerScopeLanguages(); }
+    initialize(): void {
+        registerScopeLanguages();
+        // Apply the mode class before widgets attach: Lumino only measures
+        // dock-panel tab-bar height once, at attach/structural change.
+        document.body.classList.toggle('nodu-simple', this.layoutState.mode === 'simple');
+        document.body.classList.toggle('nodu-pro', this.layoutState.mode === 'pro');
+    }
 
     async onStart(): Promise<void> {
         // The shell's vertical BoxLayout places the product toolbar below the native menu/title area.

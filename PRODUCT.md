@@ -1,4 +1,4 @@
-# Nodu · 见微 0.1.1
+# Nodu · 见微 0.1.2
 
 <!-- impeccable:product-schema 1 -->
 
@@ -28,4 +28,4 @@ Nodu · 见微，蓝色 #4F7CFF，原创小写 n 与独立圆点主标。
 
 ## Evidence on Hand
 
-本文件为工具兼容入口，版本正文和完整证据索引见 [0.1.1 产品说明](docs/0.1.1/PRODUCT.md)及[交接](docs/0.1.1/HANDOFF.md)。
+本文件为工具兼容入口，版本正文和完整证据索引见 [0.1.2 交接](docs/0.1.2/HANDOFF.md)及 [0.1.1 产品说明](docs/0.1.1/PRODUCT.md)（产品范围未变）。

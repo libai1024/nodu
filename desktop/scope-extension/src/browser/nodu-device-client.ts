@@ -30,6 +30,8 @@ export class NoduDeviceModel implements DeviceClient {
     frame: DeviceFrame | undefined;
     logs: DeviceLog[] = [];
     error = '';
+    // Operation label that produced `error`; '' = backend/device-level fault.
+    errorOperation = '';
     pending = '';
     plan: FirmwarePlan | undefined;
     backup: DeviceBackup | undefined;
@@ -78,7 +80,9 @@ export class NoduDeviceModel implements DeviceClient {
         if (!this.connected) { this.frame = undefined; this.entries = []; }
         if (state.port) { this.selectedPort = state.port; }
         if (state.boardProfile === 'embedfire-cam-gc2145' || state.boardProfile === 'generic-k210') { this.boardProfile = state.boardProfile; }
-        if (state.lastError) { this.error = state.lastError; }
+        // The worker also mirrors a failed operation's message into lastError;
+        // when it repeats the error just recorded by fail(), keep its operation label.
+        if (state.lastError && !this.error.endsWith(state.lastError)) { this.error = state.lastError; this.errorOperation = ''; }
         this.changed.fire();
     }
 
@@ -99,7 +103,7 @@ export class NoduDeviceModel implements DeviceClient {
         this.changed.fire();
     }
 
-    clearError(): void { this.error = ''; this.changed.fire(); }
+    clearError(): void { this.error = ''; this.errorOperation = ''; this.changed.fire(); }
     selectPort(port: string): void { if (this.selectedPort !== port) { this.backupCurrent = false; } this.selectedPort = port; this.changed.fire(); }
     selectProfile(profile: ConnectOptions['boardProfile']): void { if (this.boardProfile !== profile) { this.backupCurrent = false; } this.boardProfile = profile; this.changed.fire(); }
     reportError(action: string, error: unknown): void { this.fail(action, error); }
@@ -221,6 +225,7 @@ export class NoduDeviceModel implements DeviceClient {
         this.pendingCount++;
         this.pending = label;
         this.error = '';
+        this.errorOperation = '';
         this.changed.fire();
         try { return await task(); }
         catch (error) { this.fail(label, error); return undefined; }
@@ -229,6 +234,7 @@ export class NoduDeviceModel implements DeviceClient {
 
     private fail(action: string, error: unknown): void {
         this.error = `${action}失败：${error instanceof Error ? error.message : String(error)}`;
+        this.errorOperation = action;
         this.onLog({ text: `${this.error}\n`, stream: 'stderr', time: Date.now() });
     }
 

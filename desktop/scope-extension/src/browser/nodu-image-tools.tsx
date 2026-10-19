@@ -14,7 +14,7 @@ import { NoduImageToolState } from './nodu-image-state';
 import { copyImageParameters } from './nodu-image-clipboard';
 import '../../style/image-tools.css';
 
-interface Props { frame: DeviceFrame; tools: NoduImageToolState; files: FileService; dialogs: FileDialogService; clipboard: ClipboardService; compact?: boolean; }
+interface Props { frame: DeviceFrame; tools: NoduImageToolState; files: FileService; dialogs: FileDialogService; clipboard: ClipboardService; compact?: boolean; leading?: React.ReactNode; }
 interface DecodedFrame {
     frame: DeviceFrame;
     original: HTMLCanvasElement;
@@ -44,7 +44,7 @@ function Histogram({ values, mode }: { values: ImageHistogram; mode: 'rgb' | 'gr
 }
 
 /** All operations use decoded device JPEGs; no detection or board-side LAB claim. */
-export function NoduImageTools({ frame, tools, files, dialogs, clipboard, compact = false }: Props): React.ReactElement {
+export function NoduImageTools({ frame, tools, files, dialogs, clipboard, compact = false, leading }: Props): React.ReactElement {
     const [, update] = React.useReducer(value => value + 1, 0);
     const [image, setImage] = React.useState<DecodedFrame>();
     const [decoding, setDecoding] = React.useState(false);
@@ -171,9 +171,9 @@ export function NoduImageTools({ frame, tools, files, dialogs, clipboard, compac
     const zoom = tools.zoom === 'fit' ? undefined : Number(tools.zoom) / 100;
     const channels = [{ name: 'L', description: '亮度', min: 0, max: 100 }, { name: 'A', description: '绿 / 红', min: -128, max: 127 }, { name: 'B', description: '蓝 / 黄', min: -128, max: 127 }];
     return <div className="nodu-image-tools">
-        <div className="nodu-image-toolbar"><span className="scope-muted">图像{image ? ` #${image.frame.sequence}` : ''}</span><label><span className="scope-visually-hidden">图像缩放</span><select aria-label="图像缩放" value={tools.zoom} onChange={event => { tools.zoom = event.currentTarget.value as typeof tools.zoom; update(); }}><option value="fit">适配</option><option value="100">100%</option><option value="200">200%</option></select></label></div>
+        <div className="nodu-image-toolbar">{leading && <div className="nodu-image-toolbar-leading">{leading}</div>}<div className="nodu-image-toolbar-controls"><select aria-label="图像缩放" value={tools.zoom} onChange={event => { tools.zoom = event.currentTarget.value as typeof tools.zoom; update(); }}><option value="fit">适配</option><option value="100">100%</option><option value="200">200%</option></select><select aria-label="原图导出格式" value={tools.exportFormat} onChange={event => { tools.exportFormat = event.currentTarget.value as typeof tools.exportFormat; update(); }}><option value="png">PNG</option><option value="jpeg">JPEG</option></select><button className="theia-button secondary scope-icon-button" aria-label="截图" title="截图…" disabled={!image || exporting} aria-busy={exporting} onClick={() => void exportImage()}><i className="codicon codicon-device-camera" aria-hidden="true" /></button></div></div>
         {/* Capture saves the displayed complete source frame, without the analysis overlays. */}
-        <div className="nodu-image-export"><select aria-label="原图导出格式" value={tools.exportFormat} onChange={event => { tools.exportFormat = event.currentTarget.value as typeof tools.exportFormat; update(); }}><option value="png">PNG</option><option value="jpeg">JPEG</option></select><button className="theia-button secondary" disabled={!image || exporting} aria-busy={exporting} onClick={() => void exportImage()}><i className="codicon codicon-device-camera" aria-hidden="true" />截图…</button></div>
+        <div className="nodu-image-frame">
         <div className="nodu-image-viewport" aria-busy={decoding}>
             {image ? <div className="nodu-image-raster" style={{ width: zoom ? image.width * zoom : '100%' }}>
                 <canvas ref={canvas} role="img" tabIndex={0} aria-label={`设备帧 ${image.frame.sequence}。拖拽选择 ROI，也可通过下方坐标输入选区；Escape 清除选区。像素查看始终使用原图。`} style={{ width: '100%', height: 'auto' }}
@@ -184,7 +184,8 @@ export function NoduImageTools({ frame, tools, files, dialogs, clipboard, compac
                 {tools.roi && roi && <svg className="nodu-image-roi-overlay" viewBox={`0 0 ${image.width} ${image.height}`} preserveAspectRatio="none" aria-hidden="true"><rect x={roi.x} y={roi.y} width={roi.width} height={roi.height} vectorEffect="non-scaling-stroke" /></svg>}
             </div> : <div className="nodu-preview-empty" aria-label={decodeError ? '图像不可用' : '加载图像'}><i className="codicon codicon-loading codicon-modifier-spin" aria-hidden="true" /></div>}
         </div>
-        <div className="nodu-image-frame-meta"><span className="scope-mono">{image ? `${image.width} × ${image.height}` : `${frame.width} × ${frame.height}`}</span><span>{tools.mask ? 'LAB' : '原图'}</span></div>
+        {image && <span className="nodu-image-badge" aria-hidden="true">#{image.frame.sequence} · {image.width} × {image.height}{tools.mask ? ' · LAB' : ''}</span>}
+        </div>
         {decodeError && <p className="scope-error" role="alert">{decodeError}{image ? '（保留上一帧）' : ''}</p>}
         <details className="nodu-analysis-details" open={compact ? undefined : true}><summary>ROI</summary>
         <div className="nodu-image-pixel" aria-label="原图像素值"><span className="nodu-image-swatch" style={{ backgroundColor: pixel ? `rgb(${pixel.rgb.join(',')})` : 'transparent' }} aria-hidden="true" /><div>{pixel ? <><span className="scope-mono">({pixel.x}, {pixel.y}) · RGB {pixel.rgb.join(', ')}</span><span className="scope-mono">PC LAB ≈ {pixel.lab.map(value => value.toFixed(1)).join(', ')}</span></> : <span>RGB / PC LAB —</span>}</div></div>

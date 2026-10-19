@@ -76,6 +76,8 @@ function SyntheticFrame({ snapshot }: { snapshot: ScopeSnapshot }): React.ReactE
 export class ScopeVisionWidget extends ReactWidget {
     static readonly ID = 'scope:vision';
     static readonly LABEL = '视觉调试';
+    // Only camera/preview faults surface here; REPL/script errors stay in the console.
+    private static readonly CAMERA_OPS = new Set(['启动相机', '开启预览', '暂停预览']);
     @inject(ScopeSession) protected readonly session!: ScopeSession;
     @inject(CommandService) protected readonly commands!: CommandService;
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
@@ -166,13 +168,22 @@ export class ScopeVisionWidget extends ReactWidget {
         const model = this.device;
         const { frame, state } = model;
         const compact = this.layoutState.mode === 'simple';
+        // One camera toggle: preview on → freeze, a frame exists → resume, otherwise start the helper.
+        const cameraControls = <>
+            {state.preview
+                ? <button className="theia-button secondary" disabled={model.busy || state.running || !state.capabilities.framebuffer} onClick={() => void model.setPreview(false)}><i className="codicon codicon-debug-pause" aria-hidden="true" />冻结</button>
+                : frame
+                    ? <button className="theia-button secondary" disabled={model.busy || state.running || !state.capabilities.framebuffer} onClick={() => void model.setPreview(true)}><i className="codicon codicon-play" aria-hidden="true" />继续</button>
+                    : <button className="theia-button secondary" disabled={model.busy || state.running || !state.capabilities.framebuffer || !state.capabilities.script} onClick={() => void model.startCamera()}><i className="codicon codicon-play" aria-hidden="true" />启动相机</button>}
+            {frame && <button className="theia-button secondary scope-icon-button" aria-label="重新启动相机" title="重新启动相机" disabled={model.busy || state.running || !state.capabilities.framebuffer || !state.capabilities.script} onClick={() => void model.startCamera()}><i className="codicon codicon-refresh" aria-hidden="true" /></button>}
+            {state.running && !compact && <button className="theia-button secondary" onClick={() => void model.stop()}>停止脚本</button>}
+        </>;
         return <section className="scope-preview-section" aria-label="设备相机预览">
-            <div className="scope-section-heading"><h2><Icon name="camera" />设备相机</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`}><i aria-hidden="true" />{state.running ? '预览暂停' : state.preview ? '预览中' : model.statusLabel}</span></div>
+            {!compact && <div className="scope-section-heading"><h2><Icon name="camera" />设备相机</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`}><i aria-hidden="true" />{state.running ? '预览暂停' : state.preview ? '预览中' : model.statusLabel}</span></div>}
             {model.connected ? <>
-                <div className="scope-device-actions nodu-camera-actions"><button className="theia-button secondary" disabled={model.busy || state.running || !state.capabilities.framebuffer || !state.capabilities.script} onClick={() => void model.startCamera()}>启动相机</button><button className="theia-button secondary" aria-pressed={!state.preview} disabled={model.busy || state.running || !state.capabilities.framebuffer} onClick={() => void model.setPreview(!state.preview)}>{state.preview ? '冻结' : '继续'}</button>{state.running && !compact && <button className="theia-button secondary" onClick={() => void model.stop()}>停止脚本</button>}</div>
-                {frame ? <NoduImageTools frame={frame} tools={this.imageTools} files={this.files} dialogs={this.dialogs} clipboard={this.clipboard} compact={compact} /> : <div className="scope-frame-stage nodu-camera-stage"><div className="nodu-preview-empty"><i className="codicon codicon-device-camera" aria-hidden="true" /><strong>{state.capabilities.framebuffer ? '等待图像' : '相机未启用'}</strong></div></div>}
+                {frame ? <NoduImageTools frame={frame} tools={this.imageTools} files={this.files} dialogs={this.dialogs} clipboard={this.clipboard} compact={compact} leading={cameraControls} /> : <><div className="scope-device-actions nodu-camera-actions">{cameraControls}</div><div className="scope-frame-stage nodu-camera-stage"><div className="nodu-preview-empty"><i className="codicon codicon-device-camera" aria-hidden="true" /><strong>{state.capabilities.framebuffer ? '等待图像' : '相机未启用'}</strong></div></div></>}
                 {/* Device preview uses the existing RAM helper/raw-REPL JPEG path and pauses during scripts. */}
-                {model.error && <p className="scope-error" role="alert">{model.error}</p>}
+                {model.error && ScopeVisionWidget.CAMERA_OPS.has(model.errorOperation) && <p className="scope-error" role="alert">{model.error}</p>}
             </> : <div className="nodu-preview-empty"><i className="codicon codicon-plug" aria-hidden="true" /><strong>未连接设备</strong>{!compact && <button className="theia-button" onClick={() => void this.commands.executeCommand('scope.show-devices')}>设备与连接</button>}</div>}
         </section>;
     }
