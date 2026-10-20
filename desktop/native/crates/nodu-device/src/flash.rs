@@ -351,27 +351,12 @@ impl Worker {
         progress: &mut dyn FnMut(u64, u64),
     ) -> Result<()> {
         if self.mode == ConnMode::Ide {
-            // IDE exec returns the whole stdout in one transaction; the
-            // line-by-line framing/verification contract is unchanged.
-            self.check()?;
-            let out = match self.exec(code, false, Duration::from_secs(120)) {
-                Ok(out) => out,
-                // Python propagates cancellation and transport/protocol
-                // failures unchanged; only device-side errors become
-                // FirmwareError so desync still tears down the port.
-                Err(e) if e.is_cancelled() || e.is_protocol() => return Err(e),
-                Err(e) => return Err(fw_err(format!("Device backup failed: {e}"))),
-            };
-            for line in out.split('\n') {
-                self.check()?;
-                let stripped = line.strip_suffix('\r').unwrap_or(line);
-                if stripped.is_empty() {
-                    continue;
-                }
-                self.backup_line(receiver, ctx, stripped.as_bytes(), size, progress)?;
-            }
-            ctx.stage = "stderr";
-            return Ok(());
+            // Unreachable: callers leave IDE mode first. The firmware's IDE
+            // stdout buffer drops bytes under sustained output, so a framed
+            // exec cannot carry NODU_* bulk lines faithfully.
+            return Err(err_device(
+                "Backup requires raw REPL; leave IDE mode first.",
+            ));
         }
         self.check()?;
         self.start_raw(code)?;
@@ -478,32 +463,6 @@ impl Worker {
                 rest = after;
             }
         }
-    }
-
-    /// One stripped backup line through metadata + receiver (IDE path).
-    fn backup_line(
-        &mut self,
-        receiver: &mut BackupReceiver,
-        ctx: &mut PumpCtx,
-        line: &[u8],
-        size: u64,
-        progress: &mut dyn FnMut(u64, u64),
-    ) -> Result<()> {
-        let meta = backup::frame_metadata(
-            line,
-            (CHUNK_BYTES as u64).min(size.saturating_sub(receiver.received())) as usize,
-        );
-        ctx.last_line = Some(meta.clone());
-        ctx.trace_push(json!({
-            "kind": "line",
-            "bytes": line.len(),
-            "frameKind": meta.get("kind").cloned().unwrap_or(Value::Null),
-            "offset": meta.get("offset").cloned().unwrap_or(Value::Null),
-        }));
-        receiver.line(line, progress).map_err(|e| {
-            ctx.mark_error(&e);
-            fw_into(e)
-        })
     }
 
     /// `_fast_backup_serial` — keep the established REPL rate, then always
@@ -1567,6 +1526,7 @@ impl Worker {
     /// `_ensure_flash_capacity(backup_directory)` — prove physical JEDEC
     /// capacity via the reviewed RAM reader, with preservation first.
     fn ensure_flash_capacity(&mut self, backup_directory: Option<&str>) -> Result<()> {
+        self.ide_to_raw()?;
         if self.state.flash_capacity_verified
             && self
                 .flash_capacity_proof
@@ -1697,6 +1657,61 @@ impl Worker {
             LogStream::Stdout,
         );
         Ok(())
+    }
+
+    /// Leave UART IDE mode before any bulk transfer. IDE mode is sticky on
+    /// this firmware (ide_mode.conf) and SYS_RESET returns the board to a
+    /// normal REPL — the same teardown as disconnect, minus the close.
+    /// Python's data plane is raw-REPL-only; the IDE stdout buffer drops
+    /// bytes under sustained output, so NODU_* lines can silently merge.
+    fn ide_to_raw(&mut self) -> Result<()> {
+        if self.mode != ConnMode::Ide {
+            return Ok(());
+        }
+        let port = self.state.port.clone().unwrap_or_default();
+        let old_deadline = self.deadline;
+        self.deadline = Some(Instant::now() + Duration::from_secs(25));
+        self.restoring_io = true;
+        let result = (|this: &mut Self| -> Result<()> {
+            {
+                let mut ide = this.ide_session();
+                let _ = ide.stop();
+                let _ = ide.framebuffer(false);
+                let _ = ide.reset();
+            }
+            // Let the board leave IDE mode and reach the REPL banner.
+            std::thread::sleep(Duration::from_millis(800));
+            // Release the exclusive port handle before reopening (macOS
+            // TIOCEXCL would otherwise return EBUSY).
+            drop(this.transport.take());
+            this.transport = Some((this.transport_factory)(&port, 115200)?);
+            this.baud = 115200;
+            this.mode = ConnMode::Raw;
+            this.raw_stage = None;
+            this.session().enter_raw_repl(Duration::from_secs(10))?;
+            this.session_id = Some(new_token());
+            this.last_frame_at = None;
+            this.update(|s| {
+                s.phase = DevicePhase::Connected;
+                s.protocol = Some("raw".to_string());
+                s.running = false;
+                s.preview = false;
+                s.fps = None;
+                s.capabilities.framebuffer = false;
+                s.flash_capacity_verified = false;
+            });
+            Ok(())
+        })(self);
+        self.restoring_io = false;
+        self.deadline = old_deadline;
+        if result.is_err() {
+            self.update(|s| {
+                s.phase = DevicePhase::Error;
+                s.running = false;
+                s.flash_capacity_verified = false;
+            });
+        }
+        result
     }
 
     /// Post-probe/flash reconnect at 115200 raw REPL (Python
@@ -2321,5 +2336,40 @@ mod tests {
         assert_eq!(worker.state.protocol.as_deref(), Some("raw"));
         assert!(!worker.state.preview);
         assert!(!worker.state.capabilities.framebuffer);
+    }
+
+    #[test]
+    fn firmware_ops_leave_ide_mode_before_bulk_transfer() {
+        let shared = Arc::new(SubmitState::new(Box::new(std::io::sink())));
+        let board = MockBoard::new();
+        let initial = board.clone();
+        let factory: crate::TransportFactory =
+            Arc::new(move |_, _| Ok(Box::new(board.clone()) as Box<dyn Transport>));
+        let mut worker = Worker::new(shared, factory);
+        worker.state.port = Some("mock-ide-to-raw".to_string());
+        worker.state.phase = DevicePhase::Connected;
+        worker.state.protocol = Some("ide".to_string());
+        worker.state.preview = true;
+        worker.state.capabilities = DeviceCapabilities {
+            repl: true,
+            files: true,
+            framebuffer: true,
+            script: true,
+            firmware: true,
+        };
+        worker.mode = ConnMode::Ide;
+        worker.baud = nodu_maix_ide::BAUD;
+        worker.transport = Some(Box::new(initial));
+        let stale_session = worker.session_id.clone();
+
+        worker.ide_to_raw().unwrap();
+
+        assert_eq!(worker.mode, ConnMode::Raw);
+        assert_eq!(worker.baud, 115200);
+        assert_eq!(worker.state.phase, DevicePhase::Connected);
+        assert_eq!(worker.state.protocol.as_deref(), Some("raw"));
+        assert!(!worker.state.preview);
+        assert!(!worker.state.capabilities.framebuffer);
+        assert_ne!(worker.session_id, stale_session);
     }
 }

@@ -111,10 +111,21 @@ with the Python command semantics preserved:
 - Real-board same-version `flashFirmware` passed end to end (preserve →
   probe → verified backup → 1.5 Mbaud write with zero retries → read-back
   verification); see [realboard-flash-20261020.md](realboard-flash-20261020.md).
-- IDE-mode backup path (our extension; Python worker is raw-only) fails
-  closed on real hardware: merged/corrupted exec output at ~2 KiB
-  boundaries. Raw-mode backup is unaffected; fix tracked as a separate
-  issue.
+- IDE-mode backup path: the firmware's `USBDBG_TX_BUF` stdout channel
+  drops bytes under sustained output (merged NODU_* lines at ~2 KiB
+  boundaries on real hardware), so bulk transfer now leaves IDE mode
+  first — the same stop/framebuffer-disable/reset teardown the original
+  MaixPy IDE 0.2.5 runs before firmware operations, and the raw-REPL
+  data plane the Python worker uses exclusively. `ensure_flash_capacity`
+  calls `ide_to_raw()` before preservation/probe; `receive_backup_body`
+  fails closed if IDE mode is ever still active. Verified on the real
+  board: connect(protocol=ide) → backupDevice transitioned to raw@115200,
+  pumped preserve-before-probe past the prior failure point (358 KB vs
+  the ~2 KiB loss signature), and `stop` cancelled cleanly leaving
+  phase=connected, protocol=raw (transcript
+  `artifacts/flash-write/20261020/run-ide-transition.txt`). The macOS
+  TIOCEXCL EBUSY on reopening while the IDE handle was still held is
+  fixed by dropping the old transport before reopen.
 - `tools/diff/flash_sessions.py` drives Python's probe/flash but has no
   Rust-side `do_backupDevice` transcript yet (needs a smarter mock board
   serving `Maix.utils.flash_read`/`uhashlib`).
