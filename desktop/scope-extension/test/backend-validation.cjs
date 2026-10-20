@@ -658,3 +658,82 @@ test('buildExampleTree orders Nodu first, sorts numerically, caps depth and coun
     const capped = buildExampleTree(Array.from({ length: 1200 }, (_, i) => `d/f${i}.py`));
     assert.equal(capped.files.length, 1000, 'file cap');
 });
+
+// --- Phase 3: File/Edit menu parity pure modules -----------------------------
+
+test('clipboard history ring keeps last 10 distinct texts, newest first', () => {
+    const m = require('../lib/common/nodu-editor-menu');
+    const ring = new m.ClipboardHistory();
+    ring.push('');
+    assert.equal(ring.list.length, 0, 'empty copy ignored');
+    for (let i = 0; i < 12; i++) { ring.push(`text${i}`); }
+    assert.equal(ring.list.length, 10, 'capped at 10');
+    assert.equal(ring.list[0], 'text11');
+    ring.push('text5');
+    assert.equal(ring.list[0], 'text5', 're-copy moves to front');
+    assert.equal(ring.list.filter(x => x === 'text5').length, 1, 'deduped');
+    const d = m.clipboardItemDisplay('a\n'.repeat(3) + 'tail');
+    assert.equal(d.detail, '4 行');
+    const long = 'x'.repeat(100);
+    assert.equal(m.clipboardItemDisplay(long).label.length, 81, 'first line clipped + ellipsis');
+});
+
+test('recent files list dedupes, caps at 10, removes missing entries', () => {
+    const m = require('../lib/common/nodu-editor-menu');
+    let list = [];
+    for (let i = 0; i < 12; i++) { list = m.pushRecentFile(list, `/f${i}.py`); }
+    assert.equal(list.length, 10);
+    assert.equal(list[0], '/f11.py');
+    list = m.pushRecentFile(list, '/f7.py');
+    assert.equal(list[0], '/f7.py');
+    assert.equal(list.filter(x => x === '/f7.py').length, 1);
+    list = m.removeRecentFile(list, '/f7.py');
+    assert.ok(!list.includes('/f7.py'));
+    assert.equal(list.length, 9);
+});
+
+test('print HTML escapes markup and keeps the file name as title', () => {
+    const m = require('../lib/common/nodu-editor-menu');
+    const html = m.printDocumentHtml('<img src=x onerror=alert(1)> & "q"', 'evil</title><script>');
+    assert.ok(!html.includes('<img'), 'text escaped');
+    assert.ok(!html.includes('</title><script>'), 'title escaped');
+    assert.ok(html.includes('&lt;img'), 'entities present');
+    assert.ok(html.includes('font-size:10pt') && html.includes('monospace'));
+    assert.equal(m.escapeHtml('<a b="c">&'), '&lt;a b=&quot;c&quot;&gt;&amp;');
+});
+
+test('font size clamps to [6,72] and reset is 13', () => {
+    const m = require('../lib/common/nodu-editor-menu');
+    assert.equal(m.clampFontSize(4), 6);
+    assert.equal(m.clampFontSize(6), 6);
+    assert.equal(m.clampFontSize(72), 72);
+    assert.equal(m.clampFontSize(80), 72);
+    assert.equal(m.clampFontSize(13.6), 14);
+    assert.equal(m.FONT_SIZE_DEFAULT, 13);
+});
+
+test('original File/Edit menu labels and keybindings match the evidence table', () => {
+    const { ADVANCED_MENU, FIND_REPLACE_MENU } = require('../lib/common/nodu-editor-menu');
+    assert.deepEqual(ADVANCED_MENU.map(i => i.label), [
+        '使空格可见', '清除空格', '启用文本环绕', '切换注释选择', '-',
+        '剪切行', '复制行', '大写选择', '小写选择', '-',
+        '折叠', '展开', '切换折叠全部', '-',
+        '增加字体大小', '减小字体大小', '重置字体大小',
+    ]);
+    const keys = Object.fromEntries(ADVANCED_MENU.filter(i => i.keybinding).map(i => [i.id, `${i.keybinding}|${i.when ?? ''}`]));
+    assert.equal(keys['scope.edit.cut-line'], 'shift+delete|editorTextFocus');
+    assert.equal(keys['editor.action.transformToUppercase'], 'ctrl+shift+u|editorTextFocus');
+    assert.equal(keys['editor.action.transformToLowercase'], 'ctrl+u|editorTextFocus');
+    assert.equal(keys['editor.fold'], 'ctrlcmd+shift+,|editorTextFocus');
+    assert.equal(keys['editor.unfold'], 'ctrlcmd+shift+.|editorTextFocus');
+    assert.equal(keys['scope.edit.increase-font'], 'ctrlcmd+=|editorTextFocus && !findWidgetVisible');
+    assert.equal(keys['scope.edit.decrease-font'], 'ctrlcmd+-|editorTextFocus');
+    assert.equal(keys['scope.edit.reset-font'], 'ctrl+0|editorTextFocus');
+    assert.deepEqual(FIND_REPLACE_MENU.map(i => i.label), [
+        '查找/替换', '打开高级查找...', '-', '查找下一个', '查找上一个', '替换并查找', '全部替换',
+    ]);
+    const findKeys = Object.fromEntries(FIND_REPLACE_MENU.filter(i => i.keybinding).map(i => [i.id, `${i.keybinding}|${i.when ?? ''}`]));
+    assert.equal(findKeys['editor.action.replaceOne'], 'ctrlcmd+=|findWidgetVisible');
+    assert.equal(findKeys['editor.action.nextMatchFindAction'], 'ctrlcmd+g|editorTextFocus');
+    assert.equal(findKeys['editor.action.previousMatchFindAction'], 'ctrlcmd+shift+g|editorTextFocus');
+});

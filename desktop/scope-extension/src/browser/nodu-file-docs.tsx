@@ -21,6 +21,9 @@ import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
 import * as monaco from '@theia/monaco-editor-core';
 import { NoduResources } from './nodu-resources-client';
 import { buildExampleTree, MAX_EXAMPLE_DEPTH, MAX_EXAMPLE_FILES } from '../common/nodu-examples';
+import { pushRecentFile, removeRecentFile, RECENT_FILES_MAX } from '../common/nodu-editor-menu';
+import { LocalStorageService } from '@theia/core/lib/browser/storage-service';
+import { isOSX } from '@theia/core/lib/common/os';
 
 const MAIXPY_DOCS_URL = 'https://maixpy.sipeed.com/';
 const MAIXPY_FORUM_URL = 'https://bbs.sipeed.com/';
@@ -86,9 +89,14 @@ export class NoduFileDocsContribution implements CommandContribution, MenuContri
     @inject(MenuModelRegistry) protected readonly menus!: MenuModelRegistry;
     private examplesSubmenu?: Disposable;
     private readonly exampleDisposables = new DisposableCollection();
+    private documentsDisposables = new DisposableCollection();
+    private recentDisposables = new DisposableCollection();
+    private readonly lifecycleDisposables = new DisposableCollection();
+    private recentFiles: string[] = [];
+    @inject(LocalStorageService) protected readonly storage!: LocalStorageService;
 
     registerCommands(registry: CommandRegistry): void {
-        registry.registerCommand({ id: 'scope.new-script', label: '新建脚本', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.new-script', label: '新建文件...', category: '见微 Nodu' }, {
             execute: () => this.newScript().catch(error => this.messages.error(`新建脚本：${error instanceof Error ? error.message : String(error)}`)),
         });
         registry.registerCommand({ id: 'scope.documents-folder', label: '文档文件夹', category: '见微 Nodu' }, {
@@ -106,14 +114,24 @@ export class NoduFileDocsContribution implements CommandContribution, MenuContri
         registry.registerCommand({ id: 'scope.about', label: '关于 Nodu', category: '见微 Nodu' }, {
             execute: () => this.about().catch(error => this.messages.error(`关于：${error instanceof Error ? error.message : String(error)}`)),
         });
+        // Placeholder row for an empty/missing documents folder (original
+        // disables the item instead of hiding the submenu).
+        registry.registerCommand({ id: 'scope.documents-folder.empty' }, {
+            isEnabled: () => false,
+            execute: () => undefined,
+        });
+        registry.registerCommand({ id: 'scope.recent-files.clear', label: '清除菜单', category: '见微 Nodu' }, {
+            execute: () => this.clearRecentFiles().catch(error => this.messages.error(`最近的文件：${error instanceof Error ? error.message : String(error)}`)),
+        });
     }
 
     registerMenus(menus: MenuModelRegistry): void {
-        menus.registerMenuAction(CommonMenus.FILE_NEW_TEXT, { commandId: 'scope.new-script', order: 'a2' });
+        menus.registerMenuAction(CommonMenus.FILE_NEW_TEXT, { commandId: 'scope.new-script', order: '0' });
         const group = [...CommonMenus.FILE, '2z_nodu'];
-        menus.registerMenuAction(group, { commandId: 'scope.documents-folder', order: '0' });
+        menus.registerSubmenu([...group, 'documents'], '文档文件夹', { sortString: '0' });
         this.examplesSubmenu = menus.registerSubmenu([...group, 'examples'], '示例', { sortString: '1' });
         menus.registerMenuAction(group, { commandId: 'scope.more-examples', order: '2' });
+        menus.registerSubmenu([...group, 'recent'], '最近的文件', { sortString: '3' });
         menus.registerMenuAction(CommonMenus.HELP, { commandId: 'scope.help-docs', order: '0' });
         menus.registerMenuAction(CommonMenus.HELP, { commandId: 'scope.help-forum', order: '1' });
         menus.registerMenuAction(CommonMenus.HELP, { commandId: 'scope.about', order: '9' });
@@ -122,7 +140,117 @@ export class NoduFileDocsContribution implements CommandContribution, MenuContri
     async onStart(): Promise<void> {
         // The stock Theia About slot becomes the Nodu product dialog.
         this.menus.unregisterMenuAction(CommonCommands.ABOUT_COMMAND.id, CommonMenus.HELP);
+        void this.initRecentFiles();
+        void this.initDocumentsMenu();
         await this.registerExamples().catch(() => { this.examplesSubmenu?.dispose(); this.examplesSubmenu = undefined; });
+    }
+
+    /** 文档文件夹 submenu content: .py under ~/Documents/Nodu (rules shared
+     * with the examples tree), rebuilt on file-system changes underneath. */
+    private async initDocumentsMenu(): Promise<void> {
+        const home = await this.env.getHomeDirUri();
+        const folder = new URI(home).resolve('Documents/Nodu');
+        this.lifecycleDisposables.push(this.files.watch(folder, { recursive: true, excludes: [] }));
+        this.lifecycleDisposables.push(this.files.onDidFilesChange(event => {
+            if (event.contains(folder)) {
+                void this.refreshDocumentsMenu().catch(() => undefined);
+            }
+        }));
+        await this.refreshDocumentsMenu();
+    }
+
+    private async refreshDocumentsMenu(): Promise<void> {
+        this.documentsDisposables.dispose();
+        this.documentsDisposables = new DisposableCollection();
+        const home = await this.env.getHomeDirUri();
+        const folder = new URI(home).resolve('Documents/Nodu');
+        const base = [...CommonMenus.FILE, '2z_nodu', 'documents'];
+        const found = await this.collectExamples(folder).catch(() => [] as ExampleEntry[]);
+        if (!found.length) {
+            this.documentsDisposables.push(this.menus.registerMenuAction([...base, '0_empty'], {
+                commandId: 'scope.documents-folder.empty',
+                label: `将一些代码添加到“${FileUri.fsPath(folder)}”`,
+            }));
+        } else {
+            const uriByRel = new Map(found.map(entry => [entry.rel, entry.uri]));
+            const tree = buildExampleTree(found.map(entry => entry.rel));
+            for (const submenu of tree.submenus) {
+                this.documentsDisposables.push(this.menus.registerSubmenu(
+                    [...base, ...submenu.segments],
+                    submenu.segments[submenu.segments.length - 1],
+                    { sortString: submenu.order }));
+            }
+            tree.files.forEach((file, index) => {
+                const rel = [...file.dir, file.name].join('/');
+                const uri = uriByRel.get(rel);
+                if (!uri) { return; }
+                const id = `scope.documents-file.${index}`;
+                this.documentsDisposables.push(this.commands.registerCommand(
+                    { id, label: `打开 ${rel}`, category: '见微 Nodu' },
+                    { execute: () => open(this.opener, uri).catch(error => this.messages.error(`文档文件夹：${error instanceof Error ? error.message : String(error)}`)) }));
+                this.documentsDisposables.push(this.menus.registerMenuAction(
+                    file.dir.length ? [...base, ...file.dir] : [...base, '0_files'],
+                    { commandId: id, label: file.name, order: file.order }));
+            });
+        }
+        this.documentsDisposables.push(this.menus.registerMenuAction([...base, '9_open'], {
+            commandId: 'scope.documents-folder',
+            label: isOSX ? '在访达中打开' : '在文件管理器中打开',
+        }));
+    }
+
+    /** 最近的文件: last 10 file:// editors, user-global via LocalStorage. */
+    private async initRecentFiles(): Promise<void> {
+        this.recentFiles = (await this.storage.getData<string[]>('nodu.recent-files', []) ?? [])
+            .filter((item): item is string => typeof item === 'string')
+            .slice(0, RECENT_FILES_MAX);
+        this.lifecycleDisposables.push(this.editors.onCurrentEditorChanged(widget => {
+            const uri = widget?.editor.uri;
+            if (uri?.scheme === 'file') { void this.recordRecentFile(FileUri.fsPath(uri)); }
+        }));
+        const current = this.editors.currentEditor?.editor.uri;
+        if (current?.scheme === 'file') { void this.recordRecentFile(FileUri.fsPath(current)); }
+        await this.refreshRecentMenu();
+    }
+
+    private async recordRecentFile(path: string): Promise<void> {
+        this.recentFiles = pushRecentFile(this.recentFiles, path);
+        await this.storage.setData('nodu.recent-files', this.recentFiles);
+        await this.refreshRecentMenu();
+    }
+
+    private async openRecentFile(path: string): Promise<void> {
+        const uri = FileUri.create(path);
+        if (!await this.files.exists(uri)) {
+            await this.messages.info(`文件不存在：${path}`);
+            this.recentFiles = removeRecentFile(this.recentFiles, path);
+            await this.storage.setData('nodu.recent-files', this.recentFiles);
+            await this.refreshRecentMenu();
+            return;
+        }
+        await open(this.opener, uri);
+    }
+
+    private async clearRecentFiles(): Promise<void> {
+        this.recentFiles = [];
+        await this.storage.setData('nodu.recent-files', []);
+        await this.refreshRecentMenu();
+    }
+
+    private async refreshRecentMenu(): Promise<void> {
+        this.recentDisposables.dispose();
+        this.recentDisposables = new DisposableCollection();
+        const base = [...CommonMenus.FILE, '2z_nodu', 'recent'];
+        this.recentFiles.forEach((path, index) => {
+            const id = `scope.recent-file.${index}`;
+            this.recentDisposables.push(this.commands.registerCommand(
+                { id, label: `打开最近的文件 ${path}` },
+                { execute: () => this.openRecentFile(path).catch(error => this.messages.error(`最近的文件：${error instanceof Error ? error.message : String(error)}`)) }));
+            this.recentDisposables.push(this.menus.registerMenuAction(
+                [...base, '0_items'], { commandId: id, label: path, order: index.toString().padStart(4, '0') }));
+        });
+        this.recentDisposables.push(this.menus.registerMenuAction(
+            [...base, '1_clear'], { commandId: 'scope.recent-files.clear' }));
     }
 
     /** Examples come from the user resource dir (~/.nodu/resources) once the
