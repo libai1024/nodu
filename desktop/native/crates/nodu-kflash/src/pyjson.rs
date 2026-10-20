@@ -212,7 +212,7 @@ struct Parser<'a> {
     pos: usize,
 }
 
-impl<'a> Parser<'a> {
+impl Parser<'_> {
     fn fail<T>(&self) -> std::result::Result<T, StrictError> {
         Err(StrictError {
             cause: "JSONDecodeError",

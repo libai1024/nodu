@@ -12,7 +12,7 @@
 //! stream-poisoned recovery path in `handle()` still applies.
 
 use std::collections::VecDeque;
-use std::io::Read;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Child, ChildStdout, Command, Stdio};
 use std::sync::Arc;
@@ -111,11 +111,10 @@ struct ProgressSink {
 
 impl ProgressSink {
     fn report(&mut self, stage: &str, completed: u64, total: u64) {
-        let percent = if total != 0 {
-            (completed.saturating_mul(100) / total).min(100) as u32
-        } else {
-            100
-        };
+        let percent = completed
+            .saturating_mul(100)
+            .checked_div(total)
+            .map_or(100, |p| p.min(100)) as u32;
         let info = ProgressInfo {
             stage: stage.to_string(),
             completed,
@@ -175,11 +174,10 @@ impl PumpCtx {
 impl Worker {
     /// `_progress(stage, completed, total)` direct-call variant.
     fn fw_progress(&mut self, stage: &str, completed: u64, total: u64) {
-        let percent = if total != 0 {
-            (completed.saturating_mul(100) / total).min(100) as u32
-        } else {
-            100
-        };
+        let percent = completed
+            .saturating_mul(100)
+            .checked_div(total)
+            .map_or(100, |p| p.min(100)) as u32;
         self.update(|s| {
             s.progress = Some(ProgressInfo {
                 stage: stage.to_string(),
@@ -386,7 +384,7 @@ impl Worker {
                     .as_mut()
                     .ok_or_else(|| err_device("Connect a K210 first."))?;
                 let waiting = serial.in_waiting().map_err(|e| err_device(e.to_string()))?;
-                let mut buf = vec![0u8; waiting.max(1).min(65536)];
+                let mut buf = vec![0u8; waiting.clamp(1, 65536)];
                 let n = serial
                     .read(&mut buf)
                     .map_err(|e| err_device(e.to_string()))?;
@@ -405,10 +403,10 @@ impl Worker {
             ctx.trace_push(json!({
                 "kind": "read",
                 "bytes": data.len(),
-                "lf": data.iter().filter(|&&b| b == b'\n').count(),
-                "cr": data.iter().filter(|&&b| b == b'\r').count(),
-                "eof": data.iter().filter(|&&b| b == 0x04).count(),
-                "interrupt": data.iter().filter(|&&b| b == 0x03).count(),
+                "lf": data.iter().fold(0usize, |n, &b| n + usize::from(b == b'\n')),
+                "cr": data.iter().fold(0usize, |n, &b| n + usize::from(b == b'\r')),
+                "eof": data.iter().fold(0usize, |n, &b| n + usize::from(b == 0x04)),
+                "interrupt": data.iter().fold(0usize, |n, &b| n + usize::from(b == 0x03)),
             }));
             let mut rest: &[u8] = &data;
             while !rest.is_empty() {
@@ -640,7 +638,6 @@ impl Worker {
                     "Verified snapshot range changed locally; flashing is blocked.",
                 ));
             }
-            use std::io::Write;
             assembled
                 .write_all(&data)
                 .map_err(|e| err_device(e.to_string()))?;
@@ -649,7 +646,6 @@ impl Worker {
             progress(offset + length, size);
         }
         {
-            use std::io::Write;
             assembled
                 .flush()
                 .and_then(|()| assembled.sync_all())
@@ -1099,7 +1095,7 @@ impl Worker {
                 || old.get("scope").and_then(Value::as_str)
                     != Some("user-files-current-boot-and-unverified-flash-prefix")
                 || old.get("port").and_then(Value::as_str) != self.state.port.as_deref()
-                || old.get("firmware") != Some(&firmware_state_json(&self.state.firmware))
+                || old.get("firmware") != Some(&firmware_state_json(self.state.firmware.as_ref()))
                 || old.get("candidateFlashBytes").and_then(Value::as_u64) != Some(FLASH_BYTES)
                 || old.get("completeFlashBackup") != Some(&Value::Bool(false))
                 || old.get("flashCapacityVerified") != Some(&Value::Bool(false))
@@ -1181,7 +1177,6 @@ impl Worker {
         let mut remaining = size;
         let mut original = std::fs::File::open(source).map_err(|e| err_device(e.to_string()))?;
         let mut copied = firmware::private_file(destination, true).map_err(fw_into)?;
-        use std::io::Write;
         while remaining > 0 {
             self.check()?;
             let mut buf = vec![0u8; (1024 * 1024usize).min(remaining as usize)];
@@ -1267,7 +1262,7 @@ impl Worker {
                     "Current boot header is unsupported; RAM probing is blocked.",
                 ));
             }
-            let payload_size = u32::from_le_bytes(header[1..5].try_into().unwrap()) as u64;
+            let payload_size = u64::from(u32::from_le_bytes(header[1..5].try_into().unwrap()));
             if payload_size == 0 || payload_size > 8 * 1024 * 1024 {
                 return Err(err_device(
                     "Current boot length exceeds the preservation bound; RAM probing is blocked.",
@@ -1320,11 +1315,10 @@ impl Worker {
             let last_percent = std::cell::Cell::new(-1i64);
             let mut sink = this.progress_sink();
             let mut progress = |received: u64, _expected: u64| {
-                let percent = if total != 0 {
-                    ((completed.get() + received) * 100 / total) as i64
-                } else {
-                    100
-                };
+                let percent = (completed.get() + received)
+                    .saturating_mul(100)
+                    .checked_div(total)
+                    .map_or(100, |p| p as i64);
                 if percent != last_percent.get() {
                     last_percent.set(percent);
                     sink.report("preserve-before-probe", completed.get() + received, total);
@@ -1351,7 +1345,7 @@ impl Worker {
                     firmware::write_json(&manifest_path, &Value::Object(manifest.clone()))
                         .map_err(fw_into)?;
                 }
-                for entry in pending.iter() {
+                for entry in &pending {
                     this.check()?;
                     let remote = remote_path(entry.get("path"), false)?;
                     let local = directory.join("files").join(remote.trim_start_matches('/'));
@@ -1488,7 +1482,6 @@ impl Worker {
                 {
                     let mut stream =
                         firmware::private_file(&boot_path, true).map_err(fw_into)?;
-                    use std::io::Write;
                     stream
                         .write_all(&original_boot)
                         .and_then(|()| stream.sync_all())
@@ -1501,7 +1494,7 @@ impl Worker {
                     "candidateFlashFile".to_string(),
                     json!(candidate_path.file_name().map(|n| n.to_string_lossy().into_owned())),
                 );
-                for (k, v) in metadata.iter() {
+                for (k, v) in &metadata {
                     manifest.insert(k.clone(), v.clone());
                 }
                 if this.remote_flash_hash(FLASH_BYTES, 0)?
@@ -1720,9 +1713,14 @@ impl Worker {
             this.session().enter_raw_repl(Duration::from_secs(10))?;
             this.raw_stage = None;
             this.session_id = Some(new_token());
+            this.last_frame_at = None;
             this.update(|s| {
                 s.phase = DevicePhase::Connected;
+                s.protocol = Some("raw".to_string());
                 s.running = false;
+                s.preview = false;
+                s.fps = None;
+                s.capabilities.framebuffer = false;
                 s.flash_capacity_verified = false;
             });
             Ok(())
@@ -1808,11 +1806,10 @@ impl Worker {
             let last_percent = std::cell::Cell::new(-1i64);
             let mut sink = this.progress_sink();
             let mut progress = |received: u64, _expected: u64| {
-                let percent = if total != 0 {
-                    ((completed.get() + received) * 100 / total) as i64
-                } else {
-                    100
-                };
+                let percent = (completed.get() + received)
+                    .saturating_mul(100)
+                    .checked_div(total)
+                    .map_or(100, |p| p as i64);
                 if percent != last_percent.get() {
                     last_percent.set(percent);
                     sink.report("backup", completed.get() + received, total);
@@ -1832,7 +1829,7 @@ impl Worker {
                     "Full flash SHA256 and original K210 boot header verified.",
                     LogStream::Stdout,
                 );
-                for entry in pending.iter() {
+                for entry in &pending {
                     this.check()?;
                     let remote = remote_path(entry.get("path"), false)?;
                     let local = directory.join("files").join(remote.trim_start_matches('/'));
@@ -2097,6 +2094,9 @@ impl Worker {
         let profile = self.state.board_profile.clone();
         let original_baud = if self.baud > 0 { self.baud } else { 115200 };
         self.check()?;
+        let deadline = self
+            .deadline
+            .ok_or_else(|| err_device("Firmware operation deadline is unavailable."))?;
         self.shared.flash_in_progress.store(true, Ordering::SeqCst);
         self.update(|s| {
             s.preview = false;
@@ -2116,9 +2116,14 @@ impl Worker {
             };
             let mut sink = this.progress_sink();
             let mut log = this.fw_log();
-            firmware::flash_image(&prepared, &port, open, &mut log, &mut |stage, c, t| {
-                sink.report(stage, c, t)
-            })
+            firmware::flash_image(
+                &prepared,
+                &port,
+                open,
+                &mut log,
+                &mut |stage, c, t| sink.report(stage, c, t),
+                deadline,
+            )
             .map_err(fw_into)?;
             this.fw_progress("reconnect", 0, 1);
             this.transport = Some((this.transport_factory)(&port, original_baud)?);
@@ -2144,10 +2149,15 @@ impl Worker {
             };
             let identity = format!("{} {} ({})", str_at(0), str_at(2), str_at(3));
             let architecture = str_at(4);
+            this.last_frame_at = None;
             this.update(|s| {
                 s.phase = DevicePhase::Connected;
                 s.port = Some(port.clone());
-                s.board_profile = profile.clone();
+                s.board_profile = profile;
+                s.protocol = Some("raw".to_string());
+                s.preview = false;
+                s.fps = None;
+                s.capabilities.framebuffer = false;
                 s.firmware = Some(identity.clone());
                 s.architecture = Some(architecture);
             });
@@ -2159,7 +2169,8 @@ impl Worker {
             };
             let header_len_ok = header.len() == 5
                 && matches!(header[0], 0 | 2)
-                && u32::from_le_bytes(header[1..5].try_into().unwrap()) as u64 == firmware::SIZE;
+                && u64::from(u32::from_le_bytes(header[1..5].try_into().unwrap()))
+                    == firmware::SIZE;
             if !header_len_ok {
                 return Err(err_device(
                     "Written firmware boot header does not match the pinned image.",
@@ -2253,8 +2264,8 @@ impl Worker {
     }
 }
 
-fn firmware_state_json(firmware: &Option<String>) -> Value {
-    firmware.as_ref().map_or(Value::Null, |f| json!(f))
+fn firmware_state_json(firmware: Option<&String>) -> Value {
+    firmware.map_or(Value::Null, |f| json!(f))
 }
 
 fn repl_type_name(e: &ReplError) -> &'static str {
@@ -2272,4 +2283,43 @@ fn pyrepr_parse(text: &str) -> Result<PyValue> {
 
 fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nodu_mockboard::MockBoard;
+    use nodu_protocol::DeviceCapabilities;
+    use nodu_serial::Transport;
+
+    #[test]
+    fn probe_reconnect_reports_raw_after_ide_connection() {
+        let shared = Arc::new(SubmitState::new(Box::new(std::io::sink())));
+        let board = MockBoard::new();
+        let factory: crate::TransportFactory =
+            Arc::new(move |_, _| Ok(Box::new(board.clone()) as Box<dyn Transport>));
+        let mut worker = Worker::new(shared, factory);
+        worker.state.port = Some("mock-probe-reconnect".to_string());
+        worker.state.phase = DevicePhase::Connected;
+        worker.state.protocol = Some("ide".to_string());
+        worker.state.preview = true;
+        worker.state.capabilities = DeviceCapabilities {
+            repl: true,
+            files: true,
+            framebuffer: true,
+            script: true,
+            firmware: true,
+        };
+        worker.mode = ConnMode::Ide;
+        worker.baud = nodu_maix_ide::BAUD;
+
+        worker.probe_reconnect().unwrap();
+
+        assert_eq!(worker.mode, ConnMode::Raw);
+        assert_eq!(worker.baud, 115200);
+        assert_eq!(worker.state.phase, DevicePhase::Connected);
+        assert_eq!(worker.state.protocol.as_deref(), Some("raw"));
+        assert!(!worker.state.preview);
+        assert!(!worker.state.capabilities.framebuffer);
+    }
 }

@@ -230,11 +230,11 @@ impl<'p> Link<'p> {
                 self.count("receiveChunks", 1);
                 self.count(
                     "slipDelimiters",
-                    data.iter().filter(|&&b| b == 0xC0).count() as u64,
+                    data.iter().fold(0u64, |n, &b| n + u64::from(b == 0xC0)),
                 );
                 self.count(
                     "slipEscapeMarkers",
-                    data.iter().filter(|&&b| b == 0xDB).count() as u64,
+                    data.iter().fold(0u64, |n, &b| n + u64::from(b == 0xDB)),
                 );
                 match self.decoder.feed(data) {
                     Ok(frames) => {
@@ -425,7 +425,7 @@ pub fn probe(
     if port.is_empty() || port.contains("://") {
         return Err(probe_err("A local worker-owned serial port is required."));
     }
-    if !nonce.is_some_and(|n| n.len() == 32) || !session.is_some_and(|s| !s.is_empty()) {
+    if nonce.is_none_or(|n| n.len() != 32) || session.is_none_or(|s| s.is_empty()) {
         return Err(probe_err(
             "A fresh worker request and source session are required.",
         ));

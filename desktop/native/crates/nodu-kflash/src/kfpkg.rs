@@ -28,7 +28,7 @@ fn dos_datetime(unix_seconds: i64) -> Option<(u16, u16)> {
     let utc = time::OffsetDateTime::from_unix_timestamp(unix_seconds).ok()?;
     let offset = time::UtcOffset::current_local_offset().ok()?;
     let dt = utc.to_offset(offset);
-    let year = i32::from(dt.year());
+    let year = dt.year();
     // Python strict_timestamps: ValueError for pre-1980; clamp post-2107.
     if year < 1980 {
         return None;
@@ -45,8 +45,8 @@ fn dos_datetime(unix_seconds: i64) -> Option<(u16, u16)> {
             dt.second(),
         )
     };
-    let dostime = ((hour as u16) << 11) | ((min as u16) << 5) | ((sec as u16) / 2);
-    let dosdate = (((year - 1980) as u16) << 9) | ((mon as u16) << 5) | day as u16;
+    let dostime = (u16::from(hour) << 11) | (u16::from(min) << 5) | (u16::from(sec) / 2);
+    let dosdate = (((year - 1980) as u16) << 9) | (u16::from(mon) << 5) | u16::from(day);
     Some((dostime, dosdate))
 }
 
@@ -155,7 +155,7 @@ pub fn write_package(mut out: impl Write, members: &[Member]) -> Result<()> {
     let mut central_bytes = Vec::new();
     for c in &central {
         central_bytes.extend_from_slice(b"PK\x01\x02");
-        central_bytes.extend_from_slice(&(20u16 | (3 << 8)).to_le_bytes()); // made by zipfile/POSIX
+        central_bytes.extend_from_slice(&(0x14u16 | (3 << 8)).to_le_bytes()); // made by zipfile/POSIX
         central_bytes.extend_from_slice(&20u16.to_le_bytes()); // needed
         central_bytes.extend_from_slice(&0u16.to_le_bytes()); // flags
         central_bytes.extend_from_slice(&8u16.to_le_bytes()); // deflate
@@ -264,7 +264,7 @@ fn inner(
     let disk_count = u16::from_le_bytes([end[8], end[9]]);
     let count = u16::from_le_bytes([end[10], end[11]]);
     let central_size = u32::from_le_bytes([end[12], end[13], end[14], end[15]]);
-    let central_offset = u32::from_le_bytes([end[16], end[17], end[18], end[19]]) as u64;
+    let central_offset = u64::from(u32::from_le_bytes([end[16], end[17], end[18], end[19]]));
     let comment_size = u16::from_le_bytes([end[20], end[21]]);
     if signature != b"PK\x05\x06"
         || disk != 0
@@ -473,7 +473,7 @@ fn inner(
         let mut digest = sha2::Sha256::new();
         let mut received = 0u64;
         for chunk in data.chunks(65536) {
-            check().map_err(|e| InnerFail::Direct(e))?;
+            check().map_err(InnerFail::Direct)?;
             received += chunk.len() as u64;
             if received > expected_size {
                 return direct(fw(

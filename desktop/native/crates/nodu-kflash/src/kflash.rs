@@ -5,14 +5,10 @@
 // noansi=True, io_mode='dio')` from nodu_firmware.flash_image (MIT).
 // Source: sipeed/kflash.py 550828c768b16ef329695d3f5eace3f6bcf14af2 kflash.py
 //
-// Faithful ports, including upstream quirks: the legacy `recv_one_return`
-// SLIP reader appends the post-escape byte a second time (unlike the
-// corrected `codec::SlipDecoder` the identity probe uses), and
-// `dump_to_flash` treats an `ISP_RET_BAD_DATA_CHECKSUM` reply as success
-// after logging "Data checksum error, retrying...". Erase, ELF, kfpkg
-// extraction, SRAM boot and manual board selection are never exercised by
-// the worker (it always flashes the pinned .bin at address 0) and error out
-// rather than widening the reviewed surface.
+// The legacy `recv_one_return` SLIP reader retains the upstream post-escape
+// byte quirk. Safety exceptions: D4 checksum errors fail closed, and the
+// worker's deadline bounds otherwise unlimited busy/retry loops. Erase, ELF,
+// kfpkg extraction, SRAM boot and manual board selection are not exposed.
 
 use std::io;
 use std::path::Path;
@@ -30,6 +26,7 @@ const ISP_RECEIVE_TIMEOUT_POST_GREETING: f64 = 3.0;
 const MAX_RETRY_TIMES: u32 = 10;
 const ISP_FLASH_SECTOR_SIZE: usize = 4096;
 const ISP_FLASH_DATA_FRAME_SIZE: usize = ISP_FLASH_SECTOR_SIZE * 16;
+const DEADLINE_ERROR: &str = "Firmware writer deadline exceeded; recovery backup must be retained.";
 /// `terminal_size=(50, 1)` — non-terminal, no auto-size → fixed columns.
 const TERMINAL_COLUMNS: usize = 50;
 const PROGRESS_BAR_LENGTH: usize = TERMINAL_COLUMNS - 35;
@@ -171,15 +168,17 @@ pub struct Loader<'k> {
     kill: &'k AtomicBool,
     closed: bool,
     receive_timeout: Duration,
+    deadline: Option<Instant>,
 }
 
 impl<'k> Loader<'k> {
-    pub fn new(port: Box<dyn Transport>, kill: &'k AtomicBool) -> Self {
+    pub fn new(port: Box<dyn Transport>, kill: &'k AtomicBool, deadline: Option<Instant>) -> Self {
         Self {
             port,
             kill,
             closed: false,
             receive_timeout: Duration::from_secs_f64(ISP_RECEIVE_TIMEOUT),
+            deadline,
         }
     }
 
@@ -204,11 +203,15 @@ impl<'k> Loader<'k> {
             self.closed = true;
             return Err(dev("Cancel"));
         }
+        if self.deadline.is_some_and(|d| Instant::now() >= d) {
+            return self.raise_exception(dev(DEADLINE_ERROR));
+        }
         Ok(())
     }
 
     /// `write(packet)` — SLIP escape + frame; `port.write` semantics.
     fn write(&mut self, packet: &[u8]) -> Result<()> {
+        self.check_kill()?;
         if self.closed {
             return Err(dev("write to closed port"));
         }
@@ -227,6 +230,7 @@ impl<'k> Loader<'k> {
 
     /// `self._port.write(literal)` — pre-framed bytes (greeting/reboot).
     fn raw_write(&mut self, data: &[u8]) -> Result<()> {
+        self.check_kill()?;
         if self.closed {
             return Err(dev("write to closed port"));
         }
@@ -242,6 +246,7 @@ impl<'k> Loader<'k> {
         let mut data = Vec::new();
         // find start border — non-C0 bytes are skipped silently upstream
         loop {
+            self.check_kill()?;
             if start.elapsed() > timeout {
                 return self.raise_exception(FlashError::timeout());
             }
@@ -256,6 +261,7 @@ impl<'k> Loader<'k> {
         }
         let mut in_escape = false;
         loop {
+            self.check_kill()?;
             if start.elapsed() > timeout {
                 return self.raise_exception(FlashError::timeout());
             }
@@ -713,10 +719,9 @@ impl<'k> Loader<'k> {
         Ok(())
     }
 
-    /// `dump_to_flash(data, address, size)` — D4 frames. Upstream retries
-    /// ANY reply exception unboundedly (`continue` before the retry counter
-    /// is dead code kept faithful), resets the counter on E7 busy and
-    /// — upstream bug kept byte-for-byte — breaks on E2 checksum error.
+    /// `dump_to_flash(data, address, size)` — D4 frames. The operation
+    /// deadline bounds upstream's otherwise unbounded retries and E7 busy.
+    /// E2 checksum errors stop immediately rather than accepting bad data.
     fn dump_to_flash(
         &mut self,
         data: &[u8],
@@ -741,10 +746,7 @@ impl<'k> Loader<'k> {
                 self.write(&out)?;
                 retry_count += 1;
                 let parsed = match self.recv_one_return(Some(Duration::from_secs(90))) {
-                    Ok(data) => match flash_parse(&data) {
-                        Ok(p) => Some(p),
-                        Err(_) => None,
-                    },
+                    Ok(data) => flash_parse(&data).ok(),
                     Err(_) => None,
                 };
                 let Some((op, reason, _text)) = parsed else {
@@ -764,15 +766,10 @@ impl<'k> Loader<'k> {
                     let _ = self.port.flush();
                     retry_count = 0;
                     std::thread::sleep(Duration::from_millis(500));
-                    continue;
                 } else if op == 0xD4 && reason == 0xE2 {
-                    // Faithful upstream bug: logs 'retrying' but falls
-                    // through to `break` — the frame is not retried.
-                    let _ = self.port.reset_input_buffer();
-                    let _ = self.port.flush();
-                    klog(&["[WARN]", "Data checksum error, retrying..."], log);
-                    std::thread::sleep(Duration::from_millis(100));
-                    break;
+                    return self.raise_exception(dev(
+                        "Flash data checksum error; writing stopped before the next block.",
+                    ));
                 } else {
                     if retry_count > MAX_RETRY_TIMES {
                         return self.raise_exception(dev(error_tuple(&[
@@ -781,7 +778,6 @@ impl<'k> Loader<'k> {
                     }
                     klog(&["[WARN]", "Unexcepted Return recevied, retrying..."], log);
                     std::thread::sleep(Duration::from_millis(100));
-                    continue;
                 }
             }
             address += chunk.len() as u32;
@@ -811,7 +807,6 @@ impl<'k> Loader<'k> {
                     }
                     klog(&["[WARN]", which], log);
                     std::thread::sleep(Duration::from_millis(100));
-                    continue;
                 }
                 Ok(data) => match flash_parse(&data) {
                     Err(ParseFail::Index) => {
@@ -821,7 +816,6 @@ impl<'k> Loader<'k> {
                         }
                         klog(&["[WARN]", "Index Error, retrying..."], log);
                         std::thread::sleep(Duration::from_millis(100));
-                        continue;
                     }
                     Err(ParseFail::Other) => {
                         if retry_count > MAX_RETRY_TIMES {
@@ -830,7 +824,6 @@ impl<'k> Loader<'k> {
                         }
                         klog(&["[WARN]", "Unexcepted Error, retrying..."], log);
                         std::thread::sleep(Duration::from_millis(100));
-                        continue;
                     }
                     Ok((0xD5, 0xE0, _)) => {
                         klog(
@@ -853,7 +846,6 @@ impl<'k> Loader<'k> {
                         let _ = self.port.reset_input_buffer();
                         let _ = self.port.flush();
                         std::thread::sleep(Duration::from_secs(5));
-                        continue;
                     }
                     Ok(_) => {
                         if retry_count > MAX_RETRY_TIMES {
@@ -861,7 +853,6 @@ impl<'k> Loader<'k> {
                         }
                         klog(&["[WARN]", "Unexcepted Return recevied, retrying..."], log);
                         std::thread::sleep(Duration::from_millis(100));
-                        continue;
                     }
                 },
             }
@@ -937,7 +928,8 @@ impl<'k> Loader<'k> {
 /// `open_port` creates the 115200/100ms serial transport (worker injects the
 /// real opener; tests inject `MemoryTransport`). `kill` mirrors
 /// `KFlash.killProcess`/`loader._kill_process` — the worker never sets it
-/// today (flash_in_progress already blocks stop/disconnect).
+/// today (flash_in_progress already blocks stop/disconnect). The worker
+/// supplies its operation deadline; each read/write and retry observes it.
 pub fn process(
     open_port: impl FnOnce(&str) -> io::Result<Box<dyn Transport>>,
     port: &str,
@@ -945,13 +937,17 @@ pub fn process(
     progress: &mut dyn FnMut(&str, u64, u64, &str),
     log: &mut dyn FnMut(&str),
     kill: &AtomicBool,
+    deadline: Option<Instant>,
 ) -> Result<()> {
+    if deadline.is_some_and(|d| Instant::now() >= d) {
+        return Err(dev(DEADLINE_ERROR));
+    }
     // args.noansi → BASH_TIPS emptied; INFO/WARN/ERROR are plain tags.
     klog(&["[INFO]", "ANSI colors not used"], log);
     // args.port != 'DEFAULT' → manual path.
     klog(&["[INFO]", "COM Port Selected Manually: ", port], log);
     let transport = open_port(port).map_err(|e| FlashError::device(e.to_string()))?;
-    let mut loader = Loader::new(transport, kill);
+    let mut loader = Loader::new(transport, kill, deadline);
     klog(
         &[
             "[INFO]",
@@ -963,6 +959,7 @@ pub fn process(
     );
 
     let process_result = (|loader: &mut Loader| -> Result<()> {
+        use std::io::Read;
         // 0. Check firmware (FMT_BINARY path only; worker pins .bin).
         if !file.exists() {
             return Err(dev(error_tuple(&[
@@ -972,7 +969,6 @@ pub fn process(
         }
         let mut header = [0u8; 4];
         let mut f = std::fs::File::open(file).map_err(FlashError::from)?;
-        use std::io::Read;
         let n = f.read(&mut header).map_err(FlashError::from)?;
         let header = &header[..n];
         if header.starts_with(b"PK") {
@@ -1058,7 +1054,6 @@ pub fn process(
                 break;
             }
         }
-        let _detected_board = board;
 
         // ISP_RECEIVE_TIMEOUT = 3 — 'dinosaur infested' line kept faithful.
         loader.receive_timeout = Duration::from_secs_f64(ISP_RECEIVE_TIMEOUT_POST_GREETING);
@@ -1116,4 +1111,81 @@ pub fn process(
     // `self.loader._port.close()` in every path (drop order).
     drop(loader);
     process_result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nodu_serial::MemoryTransport;
+
+    #[test]
+    fn expired_writer_deadline_never_sends_flash_data() {
+        let transport = MemoryTransport::new();
+        let kill = AtomicBool::new(false);
+        let mut loader = Loader::new(Box::new(transport.clone()), &kill, Some(Instant::now()));
+        let failure = loader
+            .dump_to_flash(&[1, 2, 3], 0, 3, &mut |_| {})
+            .unwrap_err();
+        assert!(failure.message().contains("deadline"), "{failure}");
+        assert!(transport.written().is_empty());
+    }
+
+    #[test]
+    fn writer_deadline_bounds_an_unresponsive_serial_reply() {
+        let transport = MemoryTransport::new();
+        let kill = AtomicBool::new(false);
+        let mut loader = Loader::new(
+            Box::new(transport),
+            &kill,
+            Some(Instant::now() + Duration::from_millis(10)),
+        );
+        let failure = loader
+            .recv_one_return(Some(Duration::from_secs(90)))
+            .unwrap_err();
+        assert!(failure.message().contains("deadline"), "{failure}");
+    }
+
+    #[test]
+    fn flash_checksum_error_stops_before_next_block() {
+        let transport = MemoryTransport::new();
+        transport.feed(&[0xC0, 0xD4, 0xE2, 0xC0]);
+        let kill = AtomicBool::new(false);
+        let mut loader = Loader::new(
+            Box::new(transport.clone()),
+            &kill,
+            Some(Instant::now() + Duration::from_secs(1)),
+        );
+        let failure = loader
+            .dump_to_flash(&[0x11, 0x22, 0x33, 0x44], 0, 2, &mut |_| {})
+            .unwrap_err();
+        assert!(failure.message().contains("checksum"), "{failure}");
+        let written = transport.written();
+        assert!(
+            written.starts_with(&[0xC0, 0xD4])
+                && written.ends_with(&[0xC0])
+                && !written.windows(2).any(|pair| pair == [0xC0, 0xC0])
+        );
+    }
+
+    #[test]
+    fn flash_busy_reply_cannot_retry_past_deadline() {
+        let transport = MemoryTransport::new();
+        transport.feed(&[0xC0, 0xD4, 0xE7, 0xC0]);
+        let kill = AtomicBool::new(false);
+        let mut loader = Loader::new(
+            Box::new(transport.clone()),
+            &kill,
+            Some(Instant::now() + Duration::from_millis(250)),
+        );
+        let failure = loader
+            .dump_to_flash(&[0x11, 0x22], 0, 2, &mut |_| {})
+            .unwrap_err();
+        assert!(failure.message().contains("deadline"), "{failure}");
+        let written = transport.written();
+        assert!(
+            written.starts_with(&[0xC0, 0xD4])
+                && written.ends_with(&[0xC0])
+                && !written.windows(2).any(|pair| pair == [0xC0, 0xC0])
+        );
+    }
 }

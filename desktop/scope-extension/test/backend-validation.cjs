@@ -123,6 +123,29 @@ test('another client cannot queue a short-timeout request behind an active firmw
     await server.onStop();
 });
 
+test('firmware write never kills the sidecar at the Node request deadline', async t => {
+    t.mock.timers.enable({ apis: ['setTimeout'] });
+    const server = new NoduDeviceServer();
+    let killed = 0;
+    const worker = { stdin: { write() {}, end() {} }, kill() { killed++; } };
+    server.worker = worker;
+    server.ensureWorker = () => worker;
+    server.backupDirectory = '/backups/verified';
+    const task = server.flashFirmware('/backups/verified');
+    const settled = task.catch(() => undefined);
+    try {
+        t.mock.timers.tick(900001);
+        assert.equal(killed, 0, 'Node must not terminate a writer during flash');
+        assert.equal(server.pending.size, 1, 'the worker owns the deadline and recovery');
+    } finally {
+        const pending = server.pending.get(1);
+        if (pending) { server.pending.delete(1); pending.resolve({ verified: true }); }
+        await settled;
+        server.flashTask = undefined;
+        server.shutdown();
+    }
+});
+
 test('losing the last UI client defers cleanup until the firmware critical section ends', async t => {
     t.mock.timers.enable({ apis: ['setTimeout'] });
     const server = new NoduDeviceServer();

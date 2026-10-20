@@ -25,7 +25,7 @@ pub fn fast_backup_serial(
     baud: u32,
     check: &mut dyn FnMut() -> Result<()>,
 ) -> Result<()> {
-    let _ = serial.unread(b"\x03\x04");
+    let () = serial.unread(b"\x03\x04");
     let deadline = Instant::now() + Duration::from_secs(1);
     while serial.in_waiting().unwrap_or(0) > 0 && Instant::now() < deadline {
         check()?;
@@ -118,7 +118,11 @@ pub fn frame_metadata(line: &[u8], expected_bytes: usize) -> Value {
         result.insert("base64Remainder".to_string(), json!(encoded.len() % 4));
         result.insert(
             "paddingBytes".to_string(),
-            json!(encoded.iter().filter(|&&c| c == b'=').count()),
+            json!(
+                encoded
+                    .iter()
+                    .fold(0usize, |n, &c| n + usize::from(c == b'='))
+            ),
         );
         result.insert("invalidCount".to_string(), json!(count));
         result.insert("invalid".to_string(), Value::Array(invalid));

@@ -78,6 +78,7 @@ impl FlashError {
         Self::new(ErrorKind::Timeout, "TimeoutError")
     }
     /// Firmware errors Python wraps `from exc` keep the inner class name.
+    #[must_use]
     pub fn with_cause(mut self, cause: &'static str) -> Self {
         self.cause = Some(cause);
         self

@@ -43,9 +43,10 @@ write, DTR/RTS edge, and baud-rate change:
 - `crc32` unit vector hardcoded a wrong constant (`0x96FB369C`; the real
   `binascii.crc32(8 zero bytes)` is `0x6522DF69`).
 - `crates/nodu-kflash/assets/isp_prog.bin` at crate root was the 16,512-byte
-  kflash ISP programmer, not the reviewed 8,672-byte probe stub
-  (`probe.bin`, `dcc96436…`). `probe::stub_image()` now embeds the correct
-  `src/assets/probe.bin` and fails the session test before this fix.
+  kflash ISP programmer, not the reviewed probe stub. `probe::stub_image()`
+  embeds `src/assets/probe.bin`; after the EF6018 allowlist fix, the
+  reviewed image is 8,688 bytes (`6e9843b2…`). See
+  [realboard-readonly-20261020.md](realboard-readonly-20261020.md).
 
 ## Worker integration (`flash.rs`)
 
@@ -63,7 +64,8 @@ with the Python command semantics preserved:
 - Probe: `probe::probe` owns the port while `PortLock` stays held; the
   installed firmware is always re-entered afterwards (25 s bounded,
   `restoring_io` bypasses cancellation) and the proof is bound to port,
-  session and nonce before `flash_capacity_verified` is set.
+  session and nonce before `flash_capacity_verified` is set. Reconnection
+  switches to raw REPL and reports raw/no-framebuffer state to the UI.
 - Backup: `with_fast_backup_serial` keeps the established REPL baud and
   always restores it + re-enters raw REPL (bounded, uncancellable); the
   backup pump is the Python line state machine (stdout/stderr framing,
@@ -76,6 +78,12 @@ with the Python command semantics preserved:
   Python); writes manifest `flashVerification` on both paths; post-flash
   reconnect at the *original* baud, `os.uname` identity refresh, boot-header
   + payload SHA256 + boot-region SHA256 (header + image + prefix) checks.
+- Flash safety hardening: Node has no flash-request kill timer; the worker
+  enforces its operation deadline through kflash serial reads, writes and
+  busy retries, leaving recovery files available on error. D4/E2 data
+  checksum responses now fail closed instead of being silently accepted
+  as success by upstream kflash. This is an intentional safety difference
+  from the Python oracle; the successful byte-level session still matches.
 - `backup_record` invalidation matches Python: cleared by `execute`,
   `runScript`, `writeFile`, `_close`, reconnect, and failed flash checks.
 - `FirmwareError`/`ProbeError` surface as device errors; `ProtocolError`
@@ -87,18 +95,20 @@ with the Python command semantics preserved:
 
 ## Test results
 
-- `cargo test --workspace`: all suites pass (nodu-device 27 lib + 30
+- `cargo test --workspace`: all suites pass (nodu-device 28 lib + 30
   integration incl. `flash_gates_block_before_any_write`, nodu-kflash 18
-  diff + 2 session + 9 unit).
-- `node test/backend-validation.cjs`: 21/21.
+  diff + 2 session + 13 unit).
+- `node test/backend-validation.cjs`: 22/22.
 - `tsc -p tsconfig.json`: clean (generated `DeviceState.flashCapacityVerified`
   propagated to the frontend types).
 - `node scripts/check-licenses.cjs`: 212 files clean.
 
-## Not done (needs real hardware)
+## Remaining validation
 
-- No real flash write or probe run against a K210 board — E7/JEDEC gating
-  and post-flash verification are implemented but unproven on silicon.
+- Real-board read-only probe and complete 16 MiB backup passed after the
+  EF6018 allowlist fix; see
+  [realboard-readonly-20261020.md](realboard-readonly-20261020.md).
+  No real flash write or post-flash verification has been run.
 - IDE-mode backup path (our extension; Python worker is raw-only) is
   compile-checked but untested against a board.
 - `tools/diff/flash_sessions.py` drives Python's probe/flash but has no

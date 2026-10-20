@@ -1,6 +1,6 @@
 # 真板只读验证：E7 定位、白名单修复、完整备份（2026-10-20）
 
-硬件：野火 CAM K210 / GC2145，`/dev/cu.usbserial-3120`（FTDI 0403:60?），MaixPy 0.6.3 `d8901fd22`，flash Winbond W25Q128JW。驱动方式：直接驱动 release `nodu-device` JSON-lines（无 Node 超时层），脚本与完整转录在 `artifacts/flash-probe/20261020/`。
+硬件：野火 CAM K210 / GC2145，`/dev/cu.usbserial-3120`（CH340 1A86:7523），MaixPy 0.6.3 `d8901fd22`，flash Winbond W25Q128JW。驱动方式：直接驱动 release `nodu-device` JSON-lines（无 Node 超时层），脚本与完整转录在 `artifacts/flash-probe/20261020/`。
 
 ## 结论
 
@@ -44,5 +44,5 @@
 
 ## 遗留
 
-- 900 s Node 层超时杀进程（P1，UI 路径）；`line_timeout` 死代码；Windows `std::os::unix` 编译缺口；媒体打包非 macOS 未做——与此前审查一致，未变。
+- 900 s Node 层超时杀进程（P1，UI 路径）在此只读验证时尚未修复；后续安全修正见 [phase-6-flash-migration.md](phase-6-flash-migration.md)。`line_timeout` 死代码、Windows `std::os::unix` 编译缺口及媒体打包问题仍待处理。
 - 真机 `flashFirmware` 未执行；E7 已解，是否做同版本回写验证是独立决策。

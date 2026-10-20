@@ -26,7 +26,7 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
     private sequence = 0;
     private state = initialState();
     private readonly clients = new Set<DeviceClient>();
-    private readonly pending = new Map<number, { resolve: (value: unknown) => void; reject: (error: Error) => void; timer: ReturnType<typeof setTimeout> }>();
+    private readonly pending = new Map<number, { resolve: (value: unknown) => void; reject: (error: Error) => void; timer?: ReturnType<typeof setTimeout> }>();
     private idleTimer?: ReturnType<typeof setTimeout>;
     private backupDirectory?: string;
     private connectionEpoch = 0;
@@ -174,7 +174,9 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
         const worker = this.ensureWorker();
         const id = ++this.sequence;
         return new Promise<T>((resolve, reject) => {
-            const timer = setTimeout(() => {
+            // The Rust worker bounds the entire flash operation. A Node
+            // deadline must not kill it between programming and read-back.
+            const timer = method === 'flashFirmware' ? undefined : setTimeout(() => {
                 this.pending.delete(id); reject(new Error(`设备操作超时：${method}。连接已释放，请重新连接。`));
                 this.failWorker(new Error(`设备操作超时：${method}；会话已释放。`));
             }, timeout);
@@ -330,7 +332,7 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
         if (this.flashTask) { return Promise.reject(new Error('固件烧写与验证正在进行，请保持连接。')); }
         if (!this.backupDirectory) { return Promise.reject(new Error('请先完成当前设备的备份与校验。')); }
         if (confirmedBackupDirectory !== this.backupDirectory) { return Promise.reject(new Error('当前备份已变更，请重新读取并确认当前设备的备份。')); }
-        const task = this.request<FirmwareResult>('flashFirmware', { backupDir: this.backupDirectory }, 900000);
+        const task = this.request<FirmwareResult>('flashFirmware', { backupDir: this.backupDirectory });
         this.flashTask = task;
         void task.finally(() => { this.flashTask = undefined; }).catch(() => undefined);
         return task;

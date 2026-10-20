@@ -20,7 +20,7 @@ fn unhex(s: &str) -> Vec<u8> {
 }
 
 fn check_result(result: &Value, f: impl FnOnce() -> nodu_kflash::Result<Value>) {
-    check_result_tagged(result, "", f)
+    check_result_tagged(result, "", f);
 }
 
 fn check_result_tagged(result: &Value, tag: &str, f: impl FnOnce() -> nodu_kflash::Result<Value>) {

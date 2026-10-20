@@ -9,6 +9,7 @@ use std::fs;
 use std::io::{Read, Write};
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
+use std::time::Instant;
 
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
@@ -136,7 +137,7 @@ pub fn validate_image(path: &Path) -> Result<PathBuf> {
     } else {
         path.metadata().ok().filter(|m| m.is_file())
     };
-    if meta.map_or(true, |m| m.len() != SIZE) {
+    if meta.is_none_or(|m| m.len() != SIZE) {
         return Err(fw(
             "Official firmware image size is not the pinned 2116288 bytes.",
         ));
@@ -863,6 +864,7 @@ pub fn flash_image(
     open_port: impl FnOnce(&str) -> std::io::Result<Box<dyn nodu_serial::Transport>>,
     log: &mut dyn FnMut(&str),
     report_progress: &mut dyn FnMut(&str, u64, u64),
+    deadline: Instant,
 ) -> Result<()> {
     validate_image(path)?;
     // kflash==1.1.6 pinned in Python — this crate IS the reviewed port.
@@ -872,11 +874,10 @@ pub fn flash_image(
     let mut last_progress: std::collections::HashMap<String, u64> =
         std::collections::HashMap::new();
     let mut progress = |kind: &str, iteration: u64, total: u64, _suffix: &str| {
-        let percent = if total != 0 {
-            iteration * 100 / total
-        } else {
-            0
-        };
+        let percent = iteration
+            .saturating_mul(100)
+            .checked_div(total)
+            .unwrap_or(0);
         if last_progress.get(kind).copied() != Some(percent) {
             last_progress.insert(kind.to_string(), percent);
             report_progress(&format!("flash-{kind}"), iteration, total);
@@ -894,6 +895,7 @@ pub fn flash_image(
         &mut progress,
         &mut log_adapter,
         &kill,
+        Some(deadline),
     )
 }
 

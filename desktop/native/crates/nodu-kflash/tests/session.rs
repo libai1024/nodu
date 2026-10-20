@@ -7,6 +7,7 @@
 use std::collections::VecDeque;
 use std::io;
 use std::sync::{Arc, Mutex};
+use std::time::{Duration, Instant};
 
 use nodu_kflash::{codec, crc32::crc32, kflash, probe};
 use nodu_serial::Transport;
@@ -242,6 +243,7 @@ fn flash_happy() {
         &mut |kind, i, t, _suffix| progress.push((kind.to_string(), i, t)),
         &mut |s| logs.push(s.to_string()),
         &kill,
+        Some(Instant::now() + Duration::from_secs(60)),
     );
 
     match result {
