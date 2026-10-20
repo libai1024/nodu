@@ -1,0 +1,27 @@
+{
+  "started": "2026-10-19T17:00:28.044Z",
+  "steps": [
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T17:00:28.079Z"
+    },
+    {
+      "k": "connected",
+      "v": "2026-10-19T17:00:31.927Z"
+    },
+    {
+      "k": "diag-return",
+      "v": {
+        "ok": "NODU_TOP:<class 'dict'> isdict=True\r\nNODU_EXEC:<class 'dict'> isdict=True items=[('USER_LED', 17), ('BOOT_KEY', 16)]\r\n"
+      }
+    },
+    {
+      "k": "diag-logs",
+      "v": "[{\"s\":\"stdout\",\"t\":\"NODU_TOP:<class 'dict'> isdict=True\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_EXEC:<class 'dict'> isdict=True items=[('USER_LED', 17), ('BOOT_KEY', 16)]\\r\\n\"}]"
+    },
+    {
+      "k": "done",
+      "v": "2026-10-19T17:00:33.958Z"
+    }
+  ]
+}

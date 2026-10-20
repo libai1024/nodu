@@ -19,6 +19,7 @@ use std::sync::{Arc, Mutex};
 
 use nodu_repl::pyrepr::{self, PyValue};
 use nodu_serial::Transport;
+use sha2::{Digest, Sha256};
 
 const VERSION_REPR: &str = "'3.4.0; MaixPy with F481GC support\\n[MaixPy] v0.6.3'";
 const UNAME_REPR: &str = "('MaixPy', 'K210', '0.6.3', 'v0.6.3-0', 'k210')";
@@ -36,6 +37,8 @@ enum Mode {
     /// Raw mode with an uploaded program still "running"; output is produced
     /// on read calls until a `\x03` interrupts it.
     Running,
+    /// IDE binary protocol (`repl.init(..., ide=True)` executed).
+    Ide,
 }
 
 #[derive(Debug)]
@@ -48,6 +51,25 @@ struct Board {
     vfs: HashMap<String, Entry>,
     open_file: Option<(String, Vec<u8>, usize, bool)>, // path, data, pos, writable
     tick: u64,
+    /// IDE-protocol inbound command accumulator.
+    ide_in: Vec<u8>,
+    /// IDE TX buffer: script stdout the host polls via TX_LEN/TX_BUF.
+    tx_buf: VecDeque<u8>,
+    /// A script is running under the IDE protocol.
+    ide_running: bool,
+    fb_enabled: bool,
+    /// Firmware keeps one framebuffer pending until FRAME_DUMP.
+    frame_pending: bool,
+    /// FILE_SAVE status reported through 0x88.
+    fs_status: u32,
+    /// Test hook: mid-read truncation — an IDE seek>0 chunk returns b''.
+    truncate_reads: bool,
+    /// Test hook: write counter; Some(n) fails host writes >= n.
+    write_fail_at: Option<usize>,
+    write_count: usize,
+    /// Test hook: flip one stored byte of each written file while preserving
+    /// the reported write count and stored size.
+    corrupt_writes: bool,
 }
 
 impl Board {
@@ -67,7 +89,28 @@ impl Board {
             vfs,
             open_file: None,
             tick: 0,
+            ide_in: Vec::new(),
+            tx_buf: VecDeque::new(),
+            ide_running: false,
+            fb_enabled: false,
+            frame_pending: false,
+            fs_status: 0,
+            truncate_reads: false,
+            write_fail_at: None,
+            write_count: 0,
+            corrupt_writes: false,
         }
+    }
+
+    /// Reboot into normal mode and print the boot banner (DTR/RTS reset).
+    fn reboot(&mut self) {
+        self.mode = Mode::Normal;
+        self.code.clear();
+        self.ide_in.clear();
+        self.tx_buf.clear();
+        self.ide_running = false;
+        self.frame_pending = false;
+        self.out(b"\r\n[MaixPy] init end\r\n>>> ");
     }
 
     fn out(&mut self, data: &[u8]) {
@@ -88,6 +131,13 @@ impl Board {
         let mut stdout = Vec::new();
         let stderr = Vec::new();
 
+        // `repl.init(..., ide=True)` switches the board to the IDE binary
+        // protocol the moment the command completes (firmware-side).
+        if trimmed.contains("ide=True") {
+            self.mode = Mode::Ide;
+            return (stdout, stderr, false);
+        }
+
         // --- commands the device service issues ---
         if trimmed.contains("tuple(os.uname())") {
             stdout.extend_from_slice(format!("{VERSION_REPR}\n{UNAME_REPR}\n").as_bytes());
@@ -103,9 +153,10 @@ impl Board {
             }
             return (stdout, stderr, false);
         }
-        if trimmed.starts_with("print(repr([(n, tuple(os.stat(") {
+        let listdir_probe = trimmed.strip_prefix("import os\n").unwrap_or(trimmed);
+        if listdir_probe.starts_with("print(repr([(n, tuple(os.stat(") {
             #[allow(clippy::collapsible_if)]
-            if let Some(dir) = between(trimmed, "for n in os.listdir(", ")")
+            if let Some(dir) = between(listdir_probe, "for n in os.listdir(", ")")
                 && let Some(PyValue::Str(dir)) = parse_py_arg(dir.trim_end())
             {
                 if matches!(self.vfs.get(&dir), Some(Entry::Dir)) {
@@ -132,6 +183,58 @@ impl Board {
                 }
                 return (stdout, stderr, false);
             }
+        }
+        // --- IDE self-contained file scripts (fresh <stdin> scope) ---
+        if let Some(rest) = trimmed.strip_prefix("import os\n_nodu_file=open(")
+            && let Some(path_lit) = between(rest, "", ",")
+            && let Some(PyValue::Str(path)) = parse_py_arg(path_lit)
+        {
+            if rest.contains("\"wb\"") {
+                self.vfs.insert(path, Entry::File(Vec::new()));
+                return (stdout, stderr, false);
+            }
+            if rest.contains("\"ab\"") {
+                // `try: print(_nodu_file.write(LIT)) finally: _nodu_file.close()`
+                let Some(lit) = between(trimmed, "_nodu_file.write(", "))\nfinally") else {
+                    return (stdout, traceback("SyntaxError", "invalid syntax"), false);
+                };
+                let Ok(PyValue::Bytes(chunk)) = pyrepr::parse(lit) else {
+                    return (stdout, traceback("SyntaxError", "invalid syntax"), false);
+                };
+                if let Some(Entry::File(d)) = self.vfs.get_mut(&path) {
+                    let first = d.is_empty();
+                    d.extend_from_slice(&chunk);
+                    if self.corrupt_writes && first && !chunk.is_empty() {
+                        d[0] ^= 0xFF;
+                    }
+                    let count = chunk.len();
+                    stdout.extend_from_slice(format!("{count}\n").as_bytes());
+                } else {
+                    return (stdout, traceback("OSError", "no such file"), false);
+                }
+                return (stdout, stderr, false);
+            }
+            if rest.contains("\"rb\"") {
+                // `_nodu_file.seek(N); print(repr(_nodu_file.read(512))); close`
+                let off: usize = between(trimmed, "_nodu_file.seek(", ")")
+                    .and_then(|v| v.trim().parse().ok())
+                    .unwrap_or(0);
+                match self.vfs.get(&path) {
+                    Some(Entry::File(d)) => {
+                        let bytes = if self.truncate_reads && off > 0 {
+                            // Simulate a device file shrinking mid-transfer.
+                            Vec::new()
+                        } else {
+                            d[off.min(d.len())..(off + 512).min(d.len())].to_vec()
+                        };
+                        stdout.extend_from_slice(bytes_repr(&bytes).as_bytes());
+                        stdout.push(b'\n');
+                    }
+                    _ => return (stdout, traceback("OSError", "no such file"), false),
+                }
+                return (stdout, stderr, false);
+            }
+            return (stdout, traceback("OSError", "bad mode"), false);
         }
         if let Some(rest) = trimmed.strip_prefix("_nodu_file=open(") {
             // `_nodu_file=open('P',"rb")` or `"wb"`
@@ -179,14 +282,21 @@ impl Board {
                 let count = chunk.len();
                 if let Some((_, data, pos, true)) = &mut self.open_file {
                     data.truncate(*pos);
+                    let first = data.is_empty();
                     data.extend_from_slice(&chunk);
+                    if self.corrupt_writes && first && !chunk.is_empty() {
+                        data[0] ^= 0xFF;
+                    }
                     *pos += count;
                 }
                 stdout.extend_from_slice(format!("{count}\n").as_bytes());
                 return (stdout, stderr, false);
             }
         }
-        if let Some(rest) = trimmed.strip_prefix("os.rename(") {
+        if let Some(rest) = trimmed
+            .strip_prefix("os.rename(")
+            .or_else(|| trimmed.strip_prefix("import os\nos.rename("))
+        {
             let inner = rest.trim_end_matches(')');
             if let Some((a, b)) = inner.split_once(',')
                 && let Some(PyValue::Str(from)) = parse_py_arg(a.trim())
@@ -225,6 +335,16 @@ impl Board {
         if trimmed.starts_with("while True:") || trimmed.contains("while True:") {
             // Runs until the host interrupts with \x03.
             return (stdout, stderr, true);
+        }
+        if let Some(expr) = trimmed
+            .strip_prefix("import sys\nsys.stdout.write(")
+            .and_then(|s| s.strip_suffix(')'))
+        {
+            match eval_print_arg(expr.trim()) {
+                Ok(line) => stdout.extend_from_slice(line.as_bytes()), // no newline
+                Err(msg) => return (stdout, traceback("SyntaxError", &msg), false),
+            }
+            return (stdout, stderr, false);
         }
         if let Some(expr) = trimmed
             .strip_prefix("print(")
@@ -357,6 +477,35 @@ impl MockBoard {
         }
     }
 
+    /// Test hook: push raw bytes into the IDE TX buffer (split-decoder tests).
+    pub fn push_tx(&self, data: &[u8]) {
+        if let Ok(mut b) = self.inner.lock() {
+            b.tx_buf.extend(data.iter().copied());
+        }
+    }
+
+    /// Test hook: fail the Nth and later host->board writes (desync test).
+    pub fn fail_writes_after(&self, n: usize) {
+        if let Ok(mut b) = self.inner.lock() {
+            b.write_fail_at = Some(b.write_count.saturating_add(n));
+        }
+    }
+
+    /// Test hook: corrupt exactly one stored byte per file write while the
+    /// acknowledged write count and stored size stay correct.
+    pub fn set_corrupt_writes(&self, on: bool) {
+        if let Ok(mut b) = self.inner.lock() {
+            b.corrupt_writes = on;
+        }
+    }
+
+    /// Test hook: an IDE read chunk at offset >0 returns empty once enabled.
+    pub fn set_truncate_reads(&self, on: bool) {
+        if let Ok(mut b) = self.inner.lock() {
+            b.truncate_reads = on;
+        }
+    }
+
     /// Test hook: plant a file in the fake VFS.
     pub fn plant(&self, path: &str, data: &[u8]) {
         if let Ok(mut b) = self.inner.lock() {
@@ -373,6 +522,14 @@ impl Transport for MockBoard {
             b.tick += 1;
             let line = format!("tick{}\n", b.tick);
             b.rx.extend(line.as_bytes().iter().copied());
+        }
+        if b.mode == Mode::Ide && b.ide_running {
+            b.tick += 1;
+            let line = format!("tick{}\n", b.tick);
+            b.tx_buf.extend(line.as_bytes().iter().copied());
+            if b.fb_enabled {
+                b.frame_pending = true;
+            }
         }
         Ok(b.pushback.len() + b.rx.len())
     }
@@ -393,6 +550,13 @@ impl Transport for MockBoard {
 
     fn write_all(&mut self, buf: &[u8]) -> io::Result<()> {
         let mut b = self.inner.lock().expect("mock board poisoned");
+        b.write_count += 1;
+        if b.write_fail_at.is_some_and(|n| b.write_count >= n) {
+            return Err(io::Error::new(
+                io::ErrorKind::BrokenPipe,
+                "mock write failure",
+            ));
+        }
         for &c in buf {
             match b.mode {
                 Mode::Normal => match c {
@@ -434,6 +598,10 @@ impl Transport for MockBoard {
                         b.out(b"\x04>");
                     }
                 }
+                Mode::Ide => {
+                    b.ide_in.push(c);
+                    b.dispatch_ide();
+                }
             }
         }
         Ok(())
@@ -462,11 +630,192 @@ impl Transport for MockBoard {
         }
     }
 
-    fn set_dtr(&mut self, _level: bool) -> io::Result<()> {
+    fn set_dtr(&mut self, level: bool) -> io::Result<()> {
+        // Original reset sequences start from (0,0): model that as a reboot.
+        if !level && let Ok(mut b) = self.inner.lock() {
+            b.reboot();
+        }
         Ok(())
     }
 
     fn set_rts(&mut self, _level: bool) -> io::Result<()> {
         Ok(())
+    }
+}
+
+/// Deterministic real 320x240 JPEG fixture (gradient render, sips-encoded);
+/// the host validates SOF dimensions against the frame header.
+fn jpeg_fixture() -> Vec<u8> {
+    include_bytes!("../tests/fixtures/frame-320x240.jpg").to_vec()
+}
+
+impl Board {
+    /// Firmware-side IDE command dispatch: consume `ide_in`, emit replies on
+    /// `rx`. Header is 6 bytes `[0x30, cmd, len:u32 LE]`; write commands then
+    /// carry payload (`FB_ENABLE` reads a bare i16 outside its zero length).
+    fn dispatch_ide(&mut self) {
+        loop {
+            // Resync to the command marker.
+            while !self.ide_in.is_empty() && self.ide_in[0] != 0x30 {
+                self.ide_in.remove(0);
+            }
+            if self.ide_in.len() < 6 {
+                return;
+            }
+            let cmd = self.ide_in[1];
+            let len = u32::from_le_bytes([
+                self.ide_in[2],
+                self.ide_in[3],
+                self.ide_in[4],
+                self.ide_in[5],
+            ]) as usize;
+            let payload_len = match cmd {
+                0x05 | 0x07 => len,
+                0x0d => 2, // i16 outside the declared length
+                _ => 0,
+            };
+            if self.ide_in.len() < 6 + payload_len {
+                return;
+            }
+            let payload: Vec<u8> = self.ide_in.drain(6..6 + payload_len).collect();
+            self.ide_in.drain(..6);
+            match cmd {
+                // USBDBG_QUERY_STATUS
+                0x8d => self.out(&[0xAA, 0xBB, 0xEE, 0xFF]),
+                // USBDBG_FW_VERSION → 0.6.3
+                0x80 => {
+                    let mut r = Vec::with_capacity(12);
+                    for v in [0u32, 6, 3] {
+                        r.extend_from_slice(&v.to_le_bytes());
+                    }
+                    self.out(&r);
+                }
+                // USBDBG_ARCH_STR → 64-byte padded
+                0x83 => {
+                    let mut r = b"Sipeed_M1 with kendryte-k210".to_vec();
+                    r.resize(64, 0);
+                    self.out(&r);
+                }
+                // USBDBG_SCRIPT_RUNNING
+                0x87 => {
+                    let v = u32::from(self.ide_running);
+                    self.out(&v.to_le_bytes());
+                }
+                // USBDBG_TX_BUF_LEN — a running script keeps producing output.
+                0x8e => {
+                    if self.ide_running {
+                        self.tick += 1;
+                        let line = format!("tick{}\n", self.tick);
+                        self.tx_buf.extend(line.as_bytes().iter().copied());
+                        if self.fb_enabled {
+                            self.frame_pending = true;
+                        }
+                    }
+                    let v = self.tx_buf.len() as u32;
+                    self.out(&v.to_le_bytes());
+                }
+                // USBDBG_TX_BUF
+                0x8f => {
+                    let n = len.min(self.tx_buf.len());
+                    let data: Vec<u8> = self.tx_buf.drain(..n).collect();
+                    self.rx.extend(data.iter().copied());
+                    self.rx.extend(std::iter::repeat_n(0, len - n));
+                }
+                // USBDBG_FRAME_SIZE → w,h,jpegBytes (w=0 when nothing pending)
+                0x81 => {
+                    let mut r = Vec::with_capacity(12);
+                    if self.frame_pending {
+                        for v in [320u32, 240, jpeg_fixture().len() as u32] {
+                            r.extend_from_slice(&v.to_le_bytes());
+                        }
+                    } else {
+                        for v in [0u32, 240, 12345] {
+                            r.extend_from_slice(&v.to_le_bytes());
+                        }
+                    }
+                    self.out(&r);
+                }
+                // USBDBG_FRAME_DUMP
+                0x82 => {
+                    self.frame_pending = false;
+                    let mut data = jpeg_fixture();
+                    data.truncate(len);
+                    self.out(&data);
+                }
+                // USBDBG_SCRIPT_EXEC
+                0x05 => {
+                    let (stdout, stderr, running) = self.execute(&payload);
+                    self.tx_buf.extend(stdout.iter().copied());
+                    self.tx_buf.extend(stderr.iter().copied());
+                    self.ide_running = running;
+                    if !running {
+                        // Real firmware re-enters the raw REPL after each
+                        // script and emits this tail over TX.
+                        self.tx_buf.extend(
+                            b"raw REPL; CTRL-B to exit
+>"
+                            .iter()
+                            .copied(),
+                        );
+                    }
+                }
+                // USBDBG_SCRIPT_STOP
+                0x06 => {
+                    if self.ide_running {
+                        self.ide_running = false;
+                        self.tx_buf.extend(
+                            b"Traceback (most recent call last):\r\nException: IDE interrupt\r\n"
+                                .iter()
+                                .copied(),
+                        );
+                    }
+                }
+                // USBDBG_FB_ENABLE (i16 payload past a zero length header)
+                0x0d => {
+                    self.fb_enabled = payload.first().copied().unwrap_or(0) != 0;
+                    if self.fb_enabled && self.ide_running {
+                        self.frame_pending = true;
+                    }
+                }
+                // USBDBG_SYS_RESET → back to normal REPL with boot banner
+                0x0c => self.reboot(),
+                // USBDBG_FILE_SAVE
+                0x07 => {
+                    self.fs_status = self.file_save(&payload);
+                }
+                // USBDBG_FILE_SAVE_STATUS
+                0x88 => {
+                    let v = self.fs_status;
+                    self.out(&v.to_le_bytes());
+                }
+                _ => {}
+            }
+        }
+    }
+
+    /// Verify `[sha256][name NUL pad4][data]` and write into the VFS.
+    fn file_save(&mut self, payload: &[u8]) -> u32 {
+        if payload.len() < 36 {
+            return 6; // checksum parse failure
+        }
+        let (hash, rest) = payload.split_at(32);
+        if Sha256::digest(rest).as_slice() != hash {
+            return 6;
+        }
+        let nul = rest.iter().position(|b| *b == 0);
+        let Some(nul) = nul.filter(|n| *n < rest.len()) else {
+            return 3;
+        };
+        let name_len = (nul + 4) & !3;
+        let Ok(name) = std::str::from_utf8(&rest[..nul]) else {
+            return 3;
+        };
+        let data = &rest[name_len.min(rest.len())..];
+        let mut stored = data.to_vec();
+        if self.corrupt_writes && !stored.is_empty() {
+            stored[0] ^= 0xFF;
+        }
+        self.vfs.insert(name.to_string(), Entry::File(stored));
+        0
     }
 }

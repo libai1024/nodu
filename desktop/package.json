@@ -12,7 +12,7 @@
     "electron-app"
   ],
   "scripts": {
-    "compile": "npm run compile --workspace @scope/studio-extension",
+    "compile": "npm run build:imaging && npm run compile --workspace @scope/studio-extension",
     "build:browser": "npm run build:native && npm run compile && npm run build --workspace @scope/browser-app",
     "build:electron": "npm run build:native && npm run compile && npm run build --workspace @scope/electron-app",
     "start:browser": "npm run start --workspace @scope/browser-app",
@@ -22,6 +22,10 @@
     "postinstall": "theia-patch",
     "setup:device": "node scripts/setup-device.cjs",
     "build:native": "node scripts/build-native.cjs",
+    "build:imaging": "node scripts/build-imaging.cjs",
+    "build:media": "node scripts/build-media.cjs",
+    "fetch:models": "node scripts/fetch-models.cjs",
+    "build:models": "node scripts/build-models.cjs",
     "check:licenses": "node scripts/check-licenses.cjs"
   },
   "devDependencies": {

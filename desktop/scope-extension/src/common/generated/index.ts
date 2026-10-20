@@ -13,6 +13,7 @@ export type { FirmwarePlan } from './FirmwarePlan';
 export type { FirmwareResult } from './FirmwareResult';
 export type { LogStream } from './LogStream';
 export type { ProgressInfo } from './ProgressInfo';
+export type { RecordingStatus } from './RecordingStatus';
 export type { RemoteFile } from './RemoteFile';
 export type { RequestId } from './RequestId';
 export type { SerialPortInfo } from './SerialPortInfo';

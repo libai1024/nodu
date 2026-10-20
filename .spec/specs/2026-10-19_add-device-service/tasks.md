@@ -1,4 +1,13 @@
 # 实施任务
+- [x] 12. 认识开发板：来源核查、配置识别、引脚资料和 Blender 模型
+  - id: task-board-guide
+  - depends-on: task-backend, task-frontend
+  - boundary: common/nodu-board*、设备读取与状态、独立资料页、tools/boards、板端只读 helper、证据文档；保留全部用户改动，不写板端配置
+  - verify: 解析与状态竞态测试、helper 测试、编译构建、双主题/980px UI、Blender 渲染和模型存在性，原始引脚表由主线程核对
+  - ownership: 主线程核查源码、冻结引脚事实与设计、审查成品；实施与验证交付实现执行者
+  - status: 已完成（主线程终审通过，条件检查全部达标）；解析 11/11、后端检查 7/7、helper 11/11、编译与 electron 构建 0 errors；隔离 Electron（NODU_DEVICE_MOCK=1）实测 missing/declared 端到端、待决读取竞态丢弃、目录自动跟随声明与手动选择独立；注入态 UI 双主题与 980×680 截图见 artifacts/board-guide/20261019 与 docs/0.1.3/evidence/board-guide-validation.md；冻结引脚事实已由主线程核对通过
+  - review-round-1: 主线程审查发现 8 项并已修复——畸形标识符/外设并入 invalid、生成代码段改为只读与统一 helper（新增 common/boardPinSample）、pin('D0') 经 pins() 校验、移除 __noduDevice 生产句柄（测试改走 window.theia.container）、浮层遮挡改由 contribution 关闭、标记常显+图例、触点表 4 列、后端 base64/size 严格校验、Blender 按键/卡座/母座几何修正并禁用 .blend1；测试快照改读本地源码 fixture test/fixtures/board-config-embedfire.json（尚未提交）
+  - review-round-2: 终审遗留 5 项已修复——helper 移除 re/ure 正则依赖（字符级 _valid_name，新增阻断 re/ure 导入测试与名字边界用例）；解析器 pins/peripherals 改为全部校验通过后一次赋值（早退 invalid 必为空表）；触点电源标签改语义色高对比；footer 修正 p>details 非法嵌套为 div；目录改为 catalogManuallySelected+lastInspection 语义（未手动选择时跟随最新声明，手动后永不覆盖）
 - [x] 1. 保存基线与核查来源
   - id: task-baseline
   - boundary: 外部快照、docs来源与许可

@@ -31,6 +31,10 @@ pub enum ReplError {
     Device(String),
     Cancelled(String),
     Protocol(String),
+    /// A caller-supplied deadline or cancellation fired before any bytes
+    /// were written for this operation. It is not evidence that the device
+    /// is merely busy; the safe response is to close and reconnect.
+    Timeout(String),
 }
 
 impl ReplError {
@@ -49,12 +53,20 @@ impl ReplError {
     pub fn is_cancelled(&self) -> bool {
         matches!(self, Self::Cancelled(_))
     }
+    pub fn is_timeout(&self) -> bool {
+        matches!(self, Self::Timeout(_))
+    }
+    pub fn timeout(message: impl Into<String>) -> Self {
+        Self::Timeout(message.into())
+    }
 }
 
 impl fmt::Display for ReplError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Device(m) | Self::Cancelled(m) | Self::Protocol(m) => f.write_str(m),
+            Self::Device(m) | Self::Cancelled(m) | Self::Protocol(m) | Self::Timeout(m) => {
+                f.write_str(m)
+            }
         }
     }
 }
@@ -73,11 +85,11 @@ impl From<io::Error> for ReplError {
 
 /// Periodic cancellation/deadline probe supplied by the caller; returns
 /// `Err(ReplError::Cancelled)` or a timeout `Device` error to abort.
-pub type Check = Box<dyn Fn() -> Result<(), ReplError> + Send>;
+pub type Check = std::sync::Arc<dyn Fn() -> Result<(), ReplError> + Send + Sync>;
 
 /// `check()` callback usable when cancellation is impossible.
 pub fn never_cancel() -> Check {
-    Box::new(|| Ok(()))
+    std::sync::Arc::new(|| Ok(()))
 }
 
 /// A raw-REPL session bound to one transport.

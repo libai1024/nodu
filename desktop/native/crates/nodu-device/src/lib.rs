@@ -11,6 +11,9 @@
 //! `busy/operation/lastError/progress` updates; 4 MiB JSON-line limit;
 //! duplicate pending-id rejection.
 
+pub mod script;
+pub mod terminal;
+
 use std::collections::{BinaryHeap, HashSet};
 use std::io::{BufRead, Write};
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
@@ -19,12 +22,14 @@ use std::time::{Duration, Instant};
 
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD as B64;
+use nodu_maix_ide::IdeSession;
+use nodu_media::Recorder;
 use nodu_protocol::{
     DeviceCapabilities, DevicePhase, DeviceState, Event, LogStream, MAX_LINE_BYTES, METHODS,
-    RequestId, UNIMPLEMENTED_MESSAGE,
+    RecordingStatus, RequestId, UNIMPLEMENTED_MESSAGE,
 };
 use nodu_repl::pyrepr::{self, PyValue};
-use nodu_repl::{MAX_FILE_BYTES, OPERATION_TIMEOUT, ReplError, Session};
+use nodu_repl::{Check, MAX_FILE_BYTES, OPERATION_TIMEOUT, ReplError, Session};
 use nodu_serial::Transport;
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
@@ -395,6 +400,15 @@ pub type TransportFactory =
 
 type Result<T, E = ReplError> = std::result::Result<T, E>;
 
+/// Connection protocol selected at `connect` time.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ConnMode {
+    /// Original raw-REPL path, kept as the differential-test oracle.
+    Raw,
+    /// MaixPy IDE binary protocol at 1.5 Mbps.
+    Ide,
+}
+
 /// The worker: one JSON-lines stdio protocol engine.
 #[allow(missing_debug_implementations)]
 pub struct Worker {
@@ -413,6 +427,36 @@ pub struct Worker {
     connecting_started: bool,
     /// `--mock`: listPorts advertises a virtual `mock` port.
     pub mock: bool,
+    /// Connection protocol: raw REPL (test oracle) or the IDE binary protocol.
+    mode: ConnMode,
+    /// Original board id 0–8 selecting the reset sequence.
+    board_id: u8,
+    /// IDE stdout/stderr line classifier state.
+    ide_line_buf: String,
+    /// Buffered traceback text awaiting its terminal exception line.
+    ide_tb: String,
+    ide_in_traceback: bool,
+    ide_stderr_seen: bool,
+    /// Aggregate IDE TX bytes classified during the current execution.
+    ide_out_bytes: usize,
+    /// Trailing IDE text held back un-emitted (the last complete line plus
+    /// any partial line) so the firmware's terminal banner/prompt can still
+    /// be stripped at end-of-stream.
+    ide_holdback: String,
+    /// When the current IDE script was sent; `running` polls that report
+    /// `false` inside a short grace window are the firmware's flag lag,
+    /// not a finished script.
+    ide_run_started: Option<Instant>,
+    frame_sequence: u64,
+    last_frame_at: Option<Instant>,
+    /// Active `.bin` ImageWriter recorder; frames append in `poll_ide`.
+    recorder: Option<Recorder>,
+    /// `-override_read_timeout`: per-reply wait for IDE protocol reads;
+    /// `None` keeps each call site's default.
+    read_timeout: Option<Duration>,
+    /// `-override_read_stall_timeout`: bounds progress stalls inside a
+    /// partially received IDE reply (fail-closed, never a mid-reply ping).
+    read_stall_timeout: Option<Duration>,
 }
 
 impl Worker {
@@ -432,7 +476,35 @@ impl Worker {
             restoring_io: false,
             connecting_started: false,
             mock: false,
+            mode: ConnMode::Raw,
+            board_id: 2,
+            ide_line_buf: String::new(),
+            ide_tb: String::new(),
+            ide_in_traceback: false,
+            ide_stderr_seen: false,
+            ide_out_bytes: 0,
+            ide_holdback: String::new(),
+            ide_run_started: None,
+            frame_sequence: 0,
+            last_frame_at: None,
+            recorder: None,
+            read_timeout: None,
+            read_stall_timeout: None,
         }
+    }
+
+    /// `-override_read_timeout` / `-override_read_stall_timeout` launch
+    /// flags: apply to every IDE session built from now on; `None` preserves
+    /// the historical per-site timeouts. Set before `main_loop`.
+    pub fn set_read_timeouts(&mut self, read: Option<Duration>, stall: Option<Duration>) {
+        self.read_timeout = read;
+        self.read_stall_timeout = stall;
+    }
+
+    /// Per-reply read wait for IDE sessions: the configured override wins,
+    /// otherwise the call site's own bound.
+    fn ide_read_timeout(&self, default: Duration) -> Duration {
+        self.read_timeout.unwrap_or(default)
     }
 
     /// Factory that opens real serial ports.
@@ -507,8 +579,37 @@ impl Worker {
         };
         Session::new(
             self.transport.as_mut().expect("transport").as_mut(),
-            Box::new(check),
+            std::sync::Arc::new(check),
         )
+    }
+
+    /// IDE-protocol session on the same transport, sharing the worker's
+    /// generation/deadline cancellation check.
+    fn ide_session(&mut self) -> IdeSession<'_> {
+        let active = self.active_generation;
+        let deadline = self.deadline;
+        let shared = Arc::clone(&self.shared);
+        let check: Check = std::sync::Arc::new(move || {
+            if active != shared.generation.load(Ordering::SeqCst)
+                || shared.input_closed.load(Ordering::SeqCst)
+            {
+                return Err(ReplError::cancelled());
+            }
+            if let Some(d) = deadline
+                && Instant::now() > d
+            {
+                return Err(err_device("Device operation timed out."));
+            }
+            Ok(())
+        });
+        let read = self.read_timeout.unwrap_or(OPERATION_TIMEOUT);
+        let stall = self.read_stall_timeout;
+        IdeSession::new(
+            self.transport.as_mut().expect("transport").as_mut(),
+            check,
+            read,
+        )
+        .with_stall_timeout(stall)
     }
 
     /// Worker loop (Python `serve`): pop requests, poll streamed output.
@@ -526,7 +627,7 @@ impl Worker {
                 Some(item) => self.handle(item),
                 None => {
                     self.active_generation = self.shared.generation.load(Ordering::SeqCst);
-                    self.deadline = Some(Instant::now() + Duration::from_secs(5));
+                    self.deadline = Some(Instant::now() + OPERATION_TIMEOUT);
                     match self.poll() {
                         Ok(()) | Err(ReplError::Cancelled(_)) => {}
                         Err(e) => self.lost(&e),
@@ -540,7 +641,14 @@ impl Worker {
         if self.state.running
             && let Some(t) = self.transport.as_mut()
         {
-            let _ = t.write_all(b"\x03");
+            // Raw mode interrupts with Ctrl-C; in IDE mode only a complete
+            // stop command may go on the wire — and only on a stream that
+            // has not desynced (a desynced one was already closed).
+            if self.mode == ConnMode::Ide {
+                let _ = t.write_all(&[0x30, 0x06, 0, 0, 0, 0]);
+            } else {
+                let _ = t.write_all(b"\x03");
+            }
         }
         self.close_transport();
     }
@@ -555,7 +663,7 @@ impl Worker {
             }
             None => {
                 self.active_generation = self.shared.generation.load(Ordering::SeqCst);
-                self.deadline = Some(Instant::now() + Duration::from_secs(5));
+                self.deadline = Some(Instant::now() + OPERATION_TIMEOUT);
                 match self.poll() {
                     Ok(()) | Err(ReplError::Cancelled(_)) => {}
                     Err(e) => self.lost(&e),
@@ -575,6 +683,9 @@ impl Worker {
             "prepareFirmware" => 180,
             "backupDevice" => 3600,
             "flashFirmware" => 900,
+            "saveFile" => 600,
+            "startCamera" => 60,
+            "convertVideo" | "playVideo" => 900,
             "execute" | "runScript" => {
                 let secs = item
                     .args
@@ -587,7 +698,11 @@ impl Worker {
             _ => OPERATION_TIMEOUT.as_secs(),
         };
         self.deadline = Some(Instant::now() + Duration::from_secs(timeout));
-        let active = !matches!(item.method.as_str(), "getState" | "listPorts");
+        // formatScript is pure local work; it never marks the device busy.
+        let active = !matches!(
+            item.method.as_str(),
+            "getState" | "listPorts" | "formatScript"
+        );
         let mut finished = false;
         self.connecting_started = false;
         let result = (|this: &mut Self| -> Result<Value> {
@@ -641,6 +756,17 @@ impl Worker {
                     {
                         self.update(|s| s.phase = DevicePhase::Error);
                     }
+                    // IDE desync: the byte stream position is unknown, so the
+                    // port is poisoned — close it so a queued stop can never
+                    // write into the middle of a partial payload.
+                    if self.mode == ConnMode::Ide && e.is_protocol() {
+                        self.close_transport();
+                        self.update(|s| {
+                            s.running = false;
+                            s.preview = false;
+                            s.capabilities = DeviceCapabilities::default();
+                        });
+                    }
                 }
             }
         }
@@ -666,7 +792,16 @@ impl Worker {
             "listFiles" => self.do_list_files(args),
             "readFile" => self.do_read_file(args),
             "writeFile" => self.do_write_file(args),
-            "setPreview" | "startCamera" | "prepareFirmware" | "backupDevice" | "flashFirmware" => {
+            "setPreview" => self.do_set_preview(args),
+            "startCamera" => self.do_start_camera(),
+            "saveFile" => self.do_save_file(args),
+            "formatScript" => do_format_script(args),
+            "resetDevice" => self.do_reset_device(),
+            "startRecording" => self.do_start_recording(args),
+            "stopRecording" => self.do_stop_recording(),
+            "convertVideo" => self.do_convert_video(args),
+            "playVideo" => self.do_play_video(args),
+            "prepareFirmware" | "backupDevice" | "flashFirmware" => {
                 Err(err_device(UNIMPLEMENTED_MESSAGE))
             }
             _ => Err(err_device("Unknown device method.")),
@@ -712,6 +847,10 @@ impl Worker {
 
     /// `_exec`: run code to completion, returning decoded stdout.
     fn exec(&mut self, code: &str, log: bool, timeout: Duration) -> Result<String> {
+        if self.mode == ConnMode::Ide {
+            let _ = timeout;
+            return self.exec_ide(code.as_bytes(), log);
+        }
         self.check()?;
         let (output, error) = {
             let mut session = self.session();
@@ -723,7 +862,7 @@ impl Worker {
                 self.update(|s| s.phase = DevicePhase::Error);
                 e
             }
-            ReplError::Device(m) => {
+            ReplError::Device(m) | ReplError::Timeout(m) => {
                 self.update(|s| s.phase = DevicePhase::Error);
                 ReplError::protocol(if m.is_empty() {
                     "Serial transaction failed.".into()
@@ -747,12 +886,24 @@ impl Worker {
 
     /// `_eval`: `print(repr(expr))` parsed through the repr subset.
     fn eval(&mut self, expression: &str) -> Result<PyValue> {
+        // IDE firmware runs each EXEC_SCRIPT in a fresh `<stdin>` scope, so a
+        // self-contained script needs its own `import os`.
+        let prelude = if self.mode == ConnMode::Ide && expression.contains("os.") {
+            "import os
+"
+        } else {
+            ""
+        };
         let text = self.exec(
-            &format!("print(repr({expression}))"),
+            &format!("{prelude}print(repr({expression}))"),
             false,
             OPERATION_TIMEOUT,
         )?;
-        pyrepr::parse(text.trim()).map_err(|e| err_device(format!("device response: {e}")))
+        // `>`/0x04 prompt residue can prefix the first TX bytes after the
+        // raw REPL hands over; never valid at the start of a repr.
+        let cleaned =
+            Self::ide_strip_tail(&text).trim_start_matches(['\x04', '>', ' ', '\r', '\n']);
+        pyrepr::parse(cleaned.trim()).map_err(|e| err_device(format!("device response: {e}")))
     }
 
     /// `_stat`: `os.stat` result tuple or `None` on ENOENT.
@@ -771,7 +922,11 @@ impl Worker {
             }
             return Err(err_device(format!("Device stat failed: {text}")));
         }
-        match pyrepr::parse(&text) {
+        match pyrepr::parse(
+            Self::ide_strip_tail(&text)
+                .trim_start_matches(['\x04', '>', ' ', '\r', '\n'])
+                .trim(),
+        ) {
             Ok(PyValue::Tuple(t)) => Ok(Some(t)),
             Ok(PyValue::List(t)) => Ok(Some(t)),
             _ => Err(err_device("Device stat returned malformed data.")),
@@ -828,6 +983,23 @@ impl Worker {
         if !matches!(profile, "embedfire-cam-gc2145" | "generic-k210") {
             return Err(err_device("Unknown physical board profile."));
         }
+        let protocol = match args.get("protocol") {
+            None | Some(Value::Null) => "ide",
+            Some(Value::String(p)) => match p.as_str() {
+                "ide" | "raw" => p.as_str(),
+                _ => return Err(err_device("Protocol must be 'ide' or 'raw'.")),
+            },
+            Some(_) => return Err(err_device("Protocol must be 'ide' or 'raw'.")),
+        };
+        let board_id = match args.get("boardId") {
+            None | Some(Value::Null) => 2u8,
+            Some(Value::Number(n)) => n
+                .as_u64()
+                .and_then(|v| u8::try_from(v).ok())
+                .filter(|v| *v <= 8)
+                .ok_or_else(|| err_device("boardId must be an integer from 0 to 8."))?,
+            _ => return Err(err_device("boardId must be an integer from 0 to 8.")),
+        };
         let baud = match args.get("baud") {
             None | Some(Value::Null) => 115200u32,
             Some(Value::Number(n)) if n.as_u64().is_some() => {
@@ -839,10 +1011,19 @@ impl Worker {
             }
             _ => return Err(err_device("Baud must be an integer from 9600 to 3000000.")),
         };
+        // IDE mode negotiates its own 1.5 M link; compare the effective baud
+        // so a repeated identical connect is a no-op, not a port reset.
+        let effective_baud = if protocol == "ide" {
+            nodu_maix_ide::BAUD
+        } else {
+            baud
+        };
         if self.transport.is_some()
             && self.state.port.as_deref() == Some(port)
             && self.state.board_profile.as_deref() == Some(profile)
-            && self.baud == baud
+            && self.baud == effective_baud
+            && self.state.protocol.as_deref() == Some(protocol)
+            && self.state.board_id == Some(board_id)
             && self.state.phase != DevicePhase::Error
         {
             return Ok(self.snapshot());
@@ -853,12 +1034,22 @@ impl Worker {
             s.phase = DevicePhase::Connecting;
             s.port = Some(port.to_string());
             s.board_profile = Some(profile.to_string());
+            s.board_id = Some(board_id);
+            s.protocol = Some(protocol.to_string());
             s.running = false;
             s.preview = false;
             s.firmware = None;
             s.architecture = None;
         });
         self.port_lock = Some(PortLock::acquire(port)?);
+        self.board_id = board_id;
+        if protocol == "ide" {
+            // IDE flow opens at 115200 and reconfigures the link itself.
+            let transport = (self.transport_factory)(port, 115200)?;
+            self.transport = Some(transport);
+            self.baud = nodu_maix_ide::BAUD;
+            return self.connect_ide(board_id);
+        }
         let transport = (self.transport_factory)(port, baud)?;
         self.transport = Some(transport);
         self.baud = baud;
@@ -916,16 +1107,415 @@ impl Worker {
     }
 
     fn close_transport(&mut self) {
+        // Finalize any active recording so a disconnect/shutdown never
+        // leaves truncated buffers behind; the file stays for recovery.
+        if let Some(recorder) = self.recorder.take() {
+            if let Err(e) = recorder.finish() {
+                self.log(&format!("录像收尾失败：{e}"), LogStream::Stderr);
+            }
+        }
+        self.state.recording = None;
         self.transport = None;
         self.port_lock = None;
         self.raw_stage = None;
         self.baud = 115200;
+        self.mode = ConnMode::Raw;
+        self.last_frame_at = None;
+        self.ide_run_started = None;
+        self.ide_line_buf.clear();
+        self.ide_tb.clear();
+        self.ide_in_traceback = false;
+        self.ide_stderr_seen = false;
+        self.ide_out_bytes = 0;
+        self.ide_holdback.clear();
+    }
+
+    /// Reset the IDE line classifier + UTF-8 decoder before each execution.
+    fn ide_reset_classifier(&mut self) {
+        self.ide_line_buf.clear();
+        self.ide_tb.clear();
+        self.ide_in_traceback = false;
+        self.ide_stderr_seen = false;
+        self.ide_out_bytes = 0;
+        self.ide_holdback.clear();
+        self.stdout_decoder = Utf8Incremental::default();
+    }
+
+    /// IDE connect: reset sequence -> raw REPL -> `repl.init(ide=True)` ->
+    /// 1.5 Mbps query handshake -> version/arch -> framebuffer on.
+    fn connect_ide(&mut self, board_id: u8) -> Result<Value> {
+        let check = self.connect_check();
+        {
+            let t = self.transport.as_mut().expect("transport");
+            nodu_maix_connect::connect(
+                t.as_mut(),
+                &check,
+                board_id,
+                Duration::from_secs(40),
+                self.read_timeout,
+                self.read_stall_timeout,
+            )?;
+        }
+        let (version, architecture) = {
+            let mut ide = self.ide_session();
+            // FW_VERSION also makes the firmware delete /flash/ide_mode.conf.
+            (ide.version()?, ide.architecture()?)
+        };
+        {
+            let mut ide = self.ide_session();
+            ide.framebuffer(true)?;
+        }
+        self.mode = ConnMode::Ide;
+        self.ide_reset_classifier();
+        self.last_frame_at = None;
+        self.update(|s| {
+            s.phase = DevicePhase::Connected;
+            // Firmware framebuffer is enabled, so preview is live; frames
+            // arrive whenever the running script calls sensor.snapshot().
+            s.preview = true;
+            s.fps = None;
+            s.firmware = Some(format!(
+                "MaixPy {}.{}.{}",
+                version[0], version[1], version[2]
+            ));
+            s.architecture = Some(architecture);
+            s.capabilities = DeviceCapabilities {
+                repl: true,
+                files: true,
+                framebuffer: true,
+                script: true,
+                firmware: false,
+            };
+        });
+        Ok(self.snapshot())
+    }
+
+    /// Build the cancellation check shared by IDE sessions.
+    fn connect_check(&self) -> Check {
+        let active = self.active_generation;
+        let deadline = self.deadline;
+        let shared = Arc::clone(&self.shared);
+        std::sync::Arc::new(move || {
+            if active != shared.generation.load(Ordering::SeqCst)
+                || shared.input_closed.load(Ordering::SeqCst)
+            {
+                return Err(ReplError::cancelled());
+            }
+            if let Some(d) = deadline
+                && Instant::now() > d
+            {
+                return Err(ReplError::timeout("Device operation timed out."));
+            }
+            Ok(())
+        })
+    }
+
+    /// Feed decoded IDE TX text through the line classifier. Stderr
+    /// classification is a heuristic on a single-byte TX channel: a line
+    /// starting with `Traceback` buffers the whole block until its terminal
+    /// (non-indented) exception line, so a host stop can drop its own
+    /// `Exception: IDE interrupt` traceback atomically — a user
+    /// `print('IDE interrupt')` outside a traceback survives untouched.
+    fn ide_feed(&mut self, text: &str, log: bool, collect: &mut String) -> Result<()> {
+        self.ide_out_bytes = self.ide_out_bytes.saturating_add(text.len());
+        if self.ide_out_bytes > 4 * 1024 * 1024 {
+            return Err(err_device("IDE output exceeded the 4 MiB limit."));
+        }
+        self.ide_line_buf.push_str(text);
+        while let Some(nl) = self.ide_line_buf.find('\n') {
+            let line = self.ide_line_buf[..=nl].to_string();
+            self.ide_line_buf.drain(..=nl);
+            self.ide_line(line, log, collect);
+        }
+        // Bound pending output: flush over-long lines incrementally at a
+        // 32 KiB stride (and never let a buffered traceback grow past it).
+        while self.ide_line_buf.len() > 32 * 1024 {
+            let cut = self.ide_line_buf.floor_char_boundary(32 * 1024);
+            let chunk: String = self.ide_line_buf.drain(..cut).collect();
+            if self.ide_in_traceback {
+                self.ide_tb.push_str(&chunk);
+            } else {
+                collect.push_str(&chunk);
+                if log {
+                    self.log(&chunk, LogStream::Stdout);
+                }
+            }
+        }
+        if self.ide_tb.len() > 32 * 1024 {
+            let cut = self.ide_tb.floor_char_boundary(32 * 1024);
+            let chunk: String = self.ide_tb.drain(..cut).collect();
+            self.ide_stderr_seen = true;
+            if log {
+                self.log(&chunk, LogStream::Stderr);
+            }
+        }
+        Ok(())
+    }
+
+    /// Classify one completed line (`\n` included).
+    fn ide_line(&mut self, line: String, log: bool, collect: &mut String) {
+        let body = line.trim_end_matches(['\r', '\n']);
+        if self.ide_in_traceback {
+            if body == "Exception: IDE interrupt" {
+                // Firmware's own stop artifact: drop the whole buffered
+                // traceback without marking stderr.
+                self.ide_tb.clear();
+                self.ide_in_traceback = false;
+                return;
+            }
+            self.ide_tb.push_str(&line);
+            if !body.starts_with(' ') && !body.starts_with('\t') {
+                // Terminal exception line reached: emit the buffered block.
+                self.ide_stderr_seen = true;
+                if log {
+                    self.log(&self.ide_tb.clone(), LogStream::Stderr);
+                }
+                self.ide_tb.clear();
+                self.ide_in_traceback = false;
+            }
+            return;
+        }
+        if body.starts_with("Traceback") {
+            self.ide_in_traceback = true;
+            self.ide_tb.push_str(&line);
+            return;
+        }
+        collect.push_str(&line);
+        if log {
+            self.log(&line, LogStream::Stdout);
+        }
+    }
+
+    /// Strip the firmware's known terminal noise from the *final* decoded
+    /// text of an execution: the `raw REPL; CTRL-B to exit` banner and the
+    /// bare `>` prompt. Only applied to stream tails — mid-run occurrences
+    /// of identical text are user output and pass through untouched.
+    fn ide_strip_tail(text: &str) -> &str {
+        text.strip_suffix("raw REPL; CTRL-B to exit\r\n>")
+            .or_else(|| text.strip_suffix("raw REPL; CTRL-B to exit\n>"))
+            .unwrap_or(text)
+    }
+
+    /// Emit decoded IDE text holding back the last two lines (complete or
+    /// partial): the firmware tail is the `raw REPL; CTRL-B to exit` line
+    /// followed by a `>` prompt line, so keeping both lets
+    /// `ide_finalize`'s `ide_strip_tail` strip them without stalling
+    /// normal lines.
+    fn ide_emit(&mut self, text: &str, log: bool, collect: &mut String) -> Result<()> {
+        if text.is_empty() {
+            return self.ide_idle(log, collect);
+        }
+        self.ide_holdback.push_str(text);
+        // The firmware tail is the `raw REPL; CTRL-B to exit` line plus a
+        // `>` prompt line, so keep the last two lines held: emit through
+        // the third-to-last newline.
+        let buf = &self.ide_holdback;
+        let mut boundary = buf.len();
+        for _ in 0..2 {
+            let Some(i) = buf[..boundary].rfind('\n') else {
+                boundary = 0;
+                break;
+            };
+            boundary = i;
+        }
+        let emit_len = if boundary == 0 { 0 } else { boundary + 1 };
+        let out: String = self.ide_holdback.drain(..emit_len).collect();
+        self.ide_feed(&out, log, collect)?;
+        // A never-ending line without newlines must not grow the holdback
+        // without bound: feed prefixes so only the tail stays buffered.
+        while self.ide_holdback.len() > 64 * 1024 {
+            let cut = self
+                .ide_holdback
+                .floor_char_boundary(self.ide_holdback.len() - 32 * 1024);
+            let prefix: String = self.ide_holdback.drain(..cut).collect();
+            self.ide_feed(&prefix, log, collect)?;
+        }
+        Ok(())
+    }
+
+    /// A poll/loop cycle that produced no new text: flush the held-back
+    /// line immediately unless it could still grow into the firmware's
+    /// terminal banner/prompt — only text that is a prefix of the known
+    /// tail ever waits.
+    fn ide_idle(&mut self, log: bool, collect: &mut String) -> Result<()> {
+        if self.ide_holdback.is_empty() || Self::could_be_fw_tail(&self.ide_holdback) {
+            return Ok(());
+        }
+        let out = std::mem::take(&mut self.ide_holdback);
+        self.ide_feed(&out, log, collect)
+    }
+
+    /// True when `held`'s last line is a prefix of the firmware tail
+    /// (`raw REPL; CTRL-B to exit` then `>`): holding it longer may still
+    /// let `ide_strip_tail` strip it at end-of-stream. Any other last line
+    /// is certainly user output and must not stall.
+    fn could_be_fw_tail(held: &str) -> bool {
+        const BANNER: &str = "raw REPL; CTRL-B to exit";
+        let last = held.trim_end_matches(['\r', '\n']);
+        let last_line = last.rsplit('\n').next().unwrap_or(last);
+        // `>` alone, or a prefix/exact banner line — possibly still growing.
+        last_line == ">" || BANNER.starts_with(last_line.trim_end_matches('\r'))
+    }
+
+    /// End-of-execution flush: emit the incomplete trailing line minus the
+    /// known firmware banner/prompt the board emits after a script ends
+    /// (`raw REPL; CTRL-B to exit` and the bare `>` prompt). Filtering only
+    /// happens here — never mid-stream, so identical user output survives.
+    fn ide_finalize(&mut self, log: bool, collect: &mut String) -> Result<()> {
+        let held = std::mem::take(&mut self.ide_holdback);
+        self.ide_feed(Self::ide_strip_tail(&held), log, collect)?;
+        let rest = std::mem::take(&mut self.ide_line_buf);
+        let mut rest = rest.as_str();
+        while !rest.is_empty() {
+            let (line, remain) = match rest.find('\n') {
+                Some(i) => (&rest[..=i], &rest[i + 1..]),
+                None => (rest, ""),
+            };
+            self.ide_line(line.to_string(), log, collect);
+            rest = remain;
+        }
+        // An unterminated buffered traceback still counts as stderr.
+        if !self.ide_tb.is_empty() {
+            self.ide_stderr_seen = true;
+            if log {
+                self.log(&self.ide_tb.clone(), LogStream::Stderr);
+            }
+            self.ide_tb.clear();
+        }
+        self.ide_in_traceback = false;
+        Ok(())
+    }
+
+    /// Run `f` with the serial transport temporarily taken out of `self`,
+    /// so the IDE session can coexist with worker state/logging. The
+    /// transport is always put back, even on error.
+    fn with_transport<R>(
+        &mut self,
+        f: impl FnOnce(&mut Self, &mut dyn Transport) -> Result<R>,
+    ) -> Result<R> {
+        let mut t = self
+            .transport
+            .take()
+            .ok_or_else(|| err_device("Connect a K210 first."))?;
+        let r = f(self, t.as_mut());
+        self.transport = Some(t);
+        r
+    }
+
+    /// Wait until the firmware has re-entered the REPL after a script:
+    /// `ide_dbg_init` flushes the RX buffer, so a command sent while the
+    /// board is still unwinding is silently dropped. Drain TX until the
+    /// `>` prompt appears in the held tail, output goes quiet for
+    /// ~300 ms, or the bound expires.
+    fn ide_wait_ready(&mut self, ide: &mut IdeSession<'_>) -> Result<()> {
+        let until = Instant::now() + Duration::from_secs(3);
+        let mut quiet = 0u32;
+        let mut sink = String::new();
+        while Instant::now() < until {
+            if self.ide_holdback.trim_end().ends_with('>') {
+                return Ok(());
+            }
+            let chunk = ide.output()?;
+            let text = self.stdout_decoder.decode(&chunk, false);
+            if text.is_empty() {
+                quiet += 1;
+                if quiet >= 15 {
+                    return Ok(());
+                }
+            } else {
+                quiet = 0;
+            }
+            self.ide_emit(&text, true, &mut sink)?;
+            std::thread::sleep(Duration::from_millis(20));
+        }
+        Ok(())
+    }
+
+    /// `execute` over the IDE protocol: drain stale TX, send the script,
+    /// stream TX output until `running` goes false, then a final drain.
+    /// Returns the stdout-classified text; Traceback output is an error.
+    fn exec_ide(&mut self, code: &[u8], log: bool) -> Result<String> {
+        self.check()?;
+        let mut stdout = String::new();
+        self.ide_reset_classifier();
+        let check = self.connect_check();
+        self.with_transport(|this, t| {
+            let mut ide =
+                IdeSession::new(t, check.clone(), this.ide_read_timeout(OPERATION_TIMEOUT))
+                    .with_stall_timeout(this.read_stall_timeout);
+            this.ide_wait_ready(&mut ide)?;
+            ide.execute(code)?;
+            // The firmware's running flag lags EXEC_SCRIPT: an early
+            // `false` does not yet prove the script finished.
+            let started = Instant::now();
+            let mut saw_running = false;
+            let mut out_seen = false;
+            let mut quiet = 0u32;
+            let mut idle_spins = 0u32;
+            loop {
+                this.check()?;
+                let chunk = ide.output()?;
+                if chunk.is_empty() {
+                    quiet = quiet.saturating_add(1);
+                } else {
+                    quiet = 0;
+                    out_seen = true;
+                }
+                let text = this.stdout_decoder.decode(&chunk, false);
+                let mut sink = String::new();
+                this.ide_emit(&text, log, &mut sink)?;
+                stdout.push_str(&sink);
+                let running = ide.running()?;
+                if running {
+                    saw_running = true;
+                }
+                // `false` is conclusive once the flag was seen true, once
+                // the `>` prompt appeared, once output arrived and went
+                // quiet, or once the flag-lag grace expired.
+                let finished = !running
+                    && (saw_running
+                        || this.ide_holdback.trim_end().ends_with('>')
+                        || (out_seen && quiet >= 10)
+                        || started.elapsed() > Duration::from_secs(3));
+                if finished {
+                    let tail = ide.output()?;
+                    let text = this.stdout_decoder.decode(&tail, true);
+                    let mut sink = String::new();
+                    this.ide_emit(&text, log, &mut sink)?;
+                    this.ide_finalize(log, &mut sink)?;
+                    stdout.push_str(&sink);
+                    break;
+                }
+                idle_spins = idle_spins.saturating_add(1);
+                if chunk.is_empty() {
+                    std::thread::sleep(Duration::from_millis(if idle_spins < 40 { 5 } else { 20 }));
+                }
+            }
+            Ok(())
+        })?;
+        if self.ide_stderr_seen {
+            return Err(err_device(
+                "执行失败：脚本产生了 Traceback（详情见控制台 stderr）。",
+            ));
+        }
+        Ok(stdout)
     }
 
     fn do_disconnect(&mut self) -> Result<Value> {
         self.active_generation = self.shared.generation.load(Ordering::SeqCst);
         if self.transport.is_some() {
-            if let Err(e) = self.do_stop() {
+            if self.mode == ConnMode::Ide {
+                // Firmware FW_VERSION handling removes ide_mode.conf, so a
+                // SYS_RESET here leaves the board in normal REPL on reboot.
+                self.restoring_io = true;
+                {
+                    let mut ide = self.ide_session();
+                    let _ = ide.stop();
+                    let _ = ide.framebuffer(false);
+                    let _ = ide.reset();
+                }
+                self.restoring_io = false;
+            } else if let Err(e) = self.do_stop() {
                 self.log(&format!("Disconnect recovery: {e}"), LogStream::System);
             }
         }
@@ -935,6 +1525,7 @@ impl Worker {
             s.port = None;
             s.running = false;
             s.preview = false;
+            s.fps = None;
             s.capabilities = DeviceCapabilities::default();
         });
         Ok(Value::Null)
@@ -951,6 +1542,22 @@ impl Worker {
         self.require(true)?;
         let code = self.valid_code(args)?.to_string();
         self.check()?;
+        if self.mode == ConnMode::Ide {
+            let check = self.connect_check();
+            self.with_transport(|this, t| {
+                let mut ide = IdeSession::new(t, check, this.ide_read_timeout(OPERATION_TIMEOUT))
+                    .with_stall_timeout(this.read_stall_timeout);
+                this.ide_wait_ready(&mut ide)?;
+                ide.execute(code.as_bytes())
+            })?;
+            self.ide_reset_classifier();
+            self.ide_run_started = Some(Instant::now());
+            self.update(|s| {
+                s.phase = DevicePhase::Running;
+                s.running = true;
+            });
+            return Ok(Value::Null);
+        }
         {
             let mut session = self.session();
             session
@@ -961,7 +1568,7 @@ impl Worker {
                         self.update(|s| s.phase = DevicePhase::Error);
                         e
                     }
-                    ReplError::Device(m) => {
+                    ReplError::Device(m) | ReplError::Timeout(m) => {
                         self.update(|s| s.phase = DevicePhase::Error);
                         ReplError::protocol(if m.is_empty() {
                             "Serial code upload failed.".into()
@@ -988,15 +1595,305 @@ impl Worker {
         }
         self.deadline = Some(Instant::now() + Duration::from_secs(8));
         self.raw_stage = None;
+        if self.mode == ConnMode::Ide {
+            let check = self.connect_check();
+            self.with_transport(|this, t| {
+                let mut ide = IdeSession::new(t, check, this.ide_read_timeout(OPERATION_TIMEOUT))
+                    .with_stall_timeout(this.read_stall_timeout);
+                ide.stop()?;
+                // Drain TX while the script unwinds; preview stays enabled.
+                let deadline = Instant::now() + Duration::from_secs(8);
+                let mut stopped = false;
+                while Instant::now() < deadline {
+                    let chunk = ide.output()?;
+                    let text = this.stdout_decoder.decode(&chunk, false);
+                    let mut sink = String::new();
+                    this.ide_emit(&text, true, &mut sink)?;
+                    if !ide.running()? {
+                        this.ide_wait_ready(&mut ide)?;
+                        let mut sink = String::new();
+                        this.ide_finalize(true, &mut sink)?;
+                        stopped = true;
+                        break;
+                    }
+                    std::thread::sleep(Duration::from_millis(20));
+                }
+                if !stopped {
+                    return Err(err_device(
+                        "Board did not stop the running script within the deadline.",
+                    ));
+                }
+                Ok(())
+            })?;
+            self.last_frame_at = None;
+            self.update(|s| {
+                s.phase = DevicePhase::Connected;
+                s.running = false;
+                s.fps = None;
+            });
+            return Ok(Value::Null);
+        }
         {
             let mut session = self.session();
             session.enter_raw_repl(Duration::from_secs(5))?;
         }
+        self.last_frame_at = None;
         self.update(|s| {
             s.phase = DevicePhase::Connected;
             s.running = false;
             s.preview = false;
+            s.fps = None;
         });
+        Ok(Value::Null)
+    }
+
+    /// `setPreview` (IDE only): toggle the firmware framebuffer channel.
+    fn do_set_preview(&mut self, args: &Map<String, Value>) -> Result<Value> {
+        if self.mode != ConnMode::Ide {
+            return Err(err_device(UNIMPLEMENTED_MESSAGE));
+        }
+        let enabled = match args.get("enabled") {
+            Some(Value::Bool(b)) => *b,
+            _ => return Err(err_device("enabled must be a boolean.")),
+        };
+        self.require(false)?;
+        let check = self.connect_check();
+        self.with_transport(|this, t| {
+            IdeSession::new(t, check, this.ide_read_timeout(OPERATION_TIMEOUT))
+                .with_stall_timeout(this.read_stall_timeout)
+                .framebuffer(enabled)
+        })?;
+        // Restart fps measurement so pausing/resuming does not report a
+        // stale frame interval.
+        self.last_frame_at = None;
+        self.update(|s| {
+            s.preview = enabled;
+            s.fps = None;
+        });
+        Ok(Value::Null)
+    }
+
+    /// `startCamera` (IDE only): stop any running script, then start the
+    /// profile's capture loop; frames arrive over the firmware framebuffer.
+    fn do_start_camera(&mut self) -> Result<Value> {
+        if self.mode != ConnMode::Ide {
+            return Err(err_device(UNIMPLEMENTED_MESSAGE));
+        }
+        self.require(false)?;
+        if self.state.running {
+            self.do_stop()?;
+        }
+        let script = match self.state.board_profile.as_deref() {
+            Some("embedfire-cam-gc2145") => {
+                // Same contract as the Python worker: a preinstalled
+                // /flash/gc2145_board.py (<=64 KiB) must define init_camera().
+                let stat = self.stat_remote("/flash/gc2145_board.py")?;
+                match stat {
+                    Some(st)
+                        if self.stat_field(&st, 6) <= 65536
+                            && (self.stat_field(&st, 0) & 0x4000) == 0 => {}
+                    Some(_) => {
+                        return Err(err_device(
+                            "Existing /flash/gc2145_board.py has an invalid size (maximum 64 KiB).",
+                        ));
+                    }
+                    None => {
+                        return Err(err_device(
+                            "Required /flash/gc2145_board.py is missing; install the board helper explicitly first.",
+                        ));
+                    }
+                }
+                concat!(
+                    "import sensor\n",
+                    "_nodu_camera_ns={'__name__':'gc2145_board'}\n",
+                    "_nodu_helper_file=open('/flash/gc2145_board.py','r')\n",
+                    "try:\n _nodu_helper_source=_nodu_helper_file.read(65537)\n",
+                    "finally:\n _nodu_helper_file.close()\n",
+                    "if len(_nodu_helper_source)>65536: raise Exception('Board helper grew beyond 64 KiB')\n",
+                    "exec(_nodu_helper_source,_nodu_camera_ns)\n",
+                    "del _nodu_helper_source\n",
+                    "_nodu_camera_ns['init_camera']()\n",
+                    "sensor.skip_frames(time=1000)\n",
+                    "while True:\n sensor.snapshot()\n"
+                )
+                .to_string()
+            }
+            _ => concat!(
+                "import sensor\n",
+                "sensor.reset()\n",
+                "sensor.set_pixformat(sensor.RGB565)\n",
+                "sensor.set_framesize(sensor.QVGA)\n",
+                "sensor.skip_frames(30)\n",
+                "while True:\n sensor.snapshot()\n"
+            )
+            .to_string(),
+        };
+        // Re-enable the framebuffer channel even when the user paused
+        // preview, then go through the common runScript path so readiness
+        // waiting, classifier reset, and the run-start timestamp all match.
+        let mut pv = Map::new();
+        pv.insert("enabled".to_string(), Value::Bool(true));
+        self.do_set_preview(&pv)?;
+        let mut run_args = Map::new();
+        run_args.insert("code".to_string(), Value::String(script));
+        self.do_run_script(&run_args)
+    }
+
+    /// `saveFile`: IDE FILE_SAVE (SHA-256 verified firmware write path).
+    /// `boot.py`/`main.py` additionally require `confirmedStartup: true`.
+    fn do_save_file(&mut self, args: &Map<String, Value>) -> Result<Value> {
+        if self.mode != ConnMode::Ide {
+            return Err(err_device(UNIMPLEMENTED_MESSAGE));
+        }
+        self.require(false)?;
+        let name = args
+            .get("name")
+            .and_then(Value::as_str)
+            .unwrap_or("")
+            .to_string();
+        let base = name.rsplit('/').next().unwrap_or(&name);
+        if base.eq_ignore_ascii_case("boot.py") || base.eq_ignore_ascii_case("main.py") {
+            let confirmed = args.get("confirmedStartup") == Some(&Value::Bool(true));
+            if !confirmed {
+                return Err(err_device(
+                    "Refusing to write boot.py/main.py without confirmedStartup.",
+                ));
+            }
+        }
+        let data = decode_file(args.get("data"))?;
+        let check = self.connect_check();
+        let result = self.with_transport(|this, t| {
+            IdeSession::new(t, check, this.ide_read_timeout(Duration::from_secs(60)))
+                .with_stall_timeout(this.read_stall_timeout)
+                .save_file(&name, &data)
+        });
+        // FILE_SAVE stops the running script first; reflect that regardless
+        // of the save outcome so no phantom `running` state survives.
+        self.ide_line_buf.clear();
+        self.ide_tb.clear();
+        self.ide_in_traceback = false;
+        self.ide_stderr_seen = false;
+        if self.transport.is_some() {
+            self.update(|s| {
+                s.running = false;
+                if s.phase == DevicePhase::Running {
+                    s.phase = DevicePhase::Connected;
+                }
+            });
+        }
+        result?;
+        Ok(Value::Null)
+    }
+
+    /// `resetDevice`: SYS_RESET then release the port (post-FW_VERSION the
+    /// board boots back into normal REPL since ide_mode.conf was removed).
+    fn do_reset_device(&mut self) -> Result<Value> {
+        if self.mode != ConnMode::Ide {
+            return Err(err_device(UNIMPLEMENTED_MESSAGE));
+        }
+        if self.transport.is_none() {
+            return Ok(Value::Null);
+        }
+        let check = self.connect_check();
+        if let Err(e) = self.with_transport(|this, t| {
+            IdeSession::new(t, check, this.ide_read_timeout(Duration::from_secs(5)))
+                .with_stall_timeout(this.read_stall_timeout)
+                .reset()
+        }) {
+            // A reset that never reached the wire leaves a broken stream;
+            // surface the failure and drop the transport so the next connect
+            // performs the hardware reset sequence.
+            self.close_transport();
+            self.update(|s| {
+                s.phase = DevicePhase::Error;
+                s.running = false;
+                s.preview = false;
+                s.capabilities = DeviceCapabilities::default();
+            });
+            return Err(e);
+        }
+        self.close_transport();
+        self.update(|s| {
+            s.phase = DevicePhase::Disconnected;
+            s.port = None;
+            s.running = false;
+            s.preview = false;
+            s.fps = None;
+            s.capabilities = DeviceCapabilities::default();
+        });
+        Ok(Value::Null)
+    }
+
+    /// `startRecording`: begin an ImageWriter `.bin` recording. Requires an
+    /// IDE connection with framebuffer preview capability; frames captured
+    /// in `poll_ide` are appended before each frame event goes out.
+    fn do_start_recording(&mut self, args: &Map<String, Value>) -> Result<Value> {
+        if self.mode != ConnMode::Ide || self.transport.is_none() {
+            return Err(err_device("请先以 IDE 协议连接 K210，再开始录像。"));
+        }
+        if !self.state.capabilities.framebuffer {
+            return Err(err_device("录像需要设备帧缓冲能力。"));
+        }
+        if !self.state.preview {
+            return Err(err_device("请先开启帧缓冲预览，再开始录像。"));
+        }
+        if self.recorder.is_some() {
+            return Err(err_device("已有进行中的录像。"));
+        }
+        let path = media_path(args.get("path"))?;
+        let recorder = Recorder::create(&path)?;
+        let status = recording_status(&recorder.summary(), true);
+        self.recorder = Some(recorder);
+        let status_value = serde_json::to_value(&status).unwrap_or_default();
+        self.update(|s| s.recording = Some(status));
+        Ok(status_value)
+    }
+
+    /// `stopRecording`: finalize the `.bin` (flush + fsync) and return the
+    /// final counters; the raw file is kept for conversion or recovery.
+    fn do_stop_recording(&mut self) -> Result<Value> {
+        let Some(recorder) = self.recorder.take() else {
+            return Err(err_device("没有进行中的录像。"));
+        };
+        // Clear the UI flag before finalizing: a failed flush must never
+        // leave a phantom "recording" badge behind. The raw file remains.
+        self.update(|s| s.recording = None);
+        let summary = recorder.finish().map_err(|e| {
+            self.log(
+                &format!("录像文件收尾失败（原始文件仍保留）：{e}"),
+                LogStream::Stderr,
+            );
+            e
+        })?;
+        Ok(serde_json::to_value(recording_status(&summary, false)).unwrap_or_default())
+    }
+
+    /// Media conversion/playback is local host work: it is only refused
+    /// while a recording or a script is in flight. The board may stay
+    /// connected; no serial command is issued by these operations.
+    fn require_media_idle(&self) -> Result<()> {
+        if self.recorder.is_some() || self.state.running {
+            return Err(err_device("请先结束录像或停止脚本，再进行媒体操作。"));
+        }
+        Ok(())
+    }
+
+    fn do_convert_video(&mut self, args: &Map<String, Value>) -> Result<Value> {
+        self.require_media_idle()?;
+        let input = media_path(args.get("input"))?;
+        let output = media_path(args.get("output"))?;
+        let tools = media_tools_dir()?;
+        let check = self.connect_check();
+        nodu_media::convert(&input, &output, &tools, &check)?;
+        Ok(Value::Null)
+    }
+
+    fn do_play_video(&mut self, args: &Map<String, Value>) -> Result<Value> {
+        self.require_media_idle()?;
+        let input = media_path(args.get("input"))?;
+        let tools = media_tools_dir()?;
+        let check = self.connect_check();
+        nodu_media::play(&input, &tools, &check)?;
         Ok(Value::Null)
     }
 
@@ -1067,30 +1964,75 @@ impl Worker {
         }
         let mut result = Vec::new();
         let p = py_quote_str(&path);
-        self.exec(
-            &format!("_nodu_file=open({p},\"rb\")"),
-            false,
-            OPERATION_TIMEOUT,
-        )?;
-        let read_result = (|this: &mut Self| -> Result<()> {
-            loop {
-                this.check()?;
-                let chunk = this.eval("_nodu_file.read(512)")?;
+        if self.mode == ConnMode::Ide {
+            // Fresh `<stdin>` scope per EXEC_SCRIPT: open/seek/read/close in
+            // one self-contained script per chunk.
+            let size = self.stat_field(&stat, 6).max(0) as usize;
+            while result.len() < size {
+                self.check()?;
+                let text = self.exec(
+                    &format!(
+                        "import os\n_nodu_file=open({p},\"rb\")\n_nodu_file.seek({})\nprint(repr(_nodu_file.read(512)))\n_nodu_file.close()",
+                        result.len()
+                    ),
+                    false,
+                    OPERATION_TIMEOUT,
+                )?;
+                let chunk = pyrepr::parse(
+                    Self::ide_strip_tail(&text)
+                        .trim_start_matches(['\x04', '>', ' ', '\r', '\n'])
+                        .trim(),
+                )
+                .map_err(|e| err_device(format!("device response: {e}")))?;
                 let PyValue::Bytes(chunk) = chunk else {
                     return Err(err_device("Invalid file response from device."));
                 };
                 if chunk.is_empty() {
-                    break;
+                    // An early EOF means the device file shrank mid-read;
+                    // returning a prefix would be a silent truncation.
+                    return Err(err_device(
+                        "Device file returned fewer bytes than its size.",
+                    ));
                 }
                 result.extend_from_slice(&chunk);
-                if result.len() > MAX_FILE_BYTES {
-                    return Err(err_device("File grew beyond the 2 MiB transfer limit."));
+                if result.len() > MAX_FILE_BYTES || result.len() > size {
+                    return Err(err_device("Device file returned more bytes than its size."));
                 }
             }
-            Ok(())
-        })(self);
-        let close_result = self.close_remote_file();
-        read_result.and(close_result)?;
+            // The file must not have changed size during the transfer.
+            let after = self.stat_remote(&path)?;
+            match after {
+                Some(s) if self.stat_field(&s, 6) == size as i64 => {}
+                _ => {
+                    return Err(err_device("Device file size changed during transfer."));
+                }
+            }
+        } else {
+            self.exec(
+                &format!("_nodu_file=open({p},\"rb\")"),
+                false,
+                OPERATION_TIMEOUT,
+            )?;
+            let read_result = (|this: &mut Self| -> Result<()> {
+                loop {
+                    this.check()?;
+                    let chunk = this.eval("_nodu_file.read(512)")?;
+                    let PyValue::Bytes(chunk) = chunk else {
+                        return Err(err_device("Invalid file response from device."));
+                    };
+                    if chunk.is_empty() {
+                        break;
+                    }
+                    result.extend_from_slice(&chunk);
+                    if result.len() > MAX_FILE_BYTES {
+                        return Err(err_device("File grew beyond the 2 MiB transfer limit."));
+                    }
+                }
+                Ok(())
+            })(self);
+            let close_result = self.close_remote_file();
+            read_result.and(close_result)?;
+        }
         Ok(json!({
             "data": B64.encode(&result),
             "size": result.len(),
@@ -1098,6 +2040,9 @@ impl Worker {
     }
 
     fn close_remote_file(&mut self) -> Result<()> {
+        if self.mode == ConnMode::Ide {
+            return Ok(());
+        }
         if self.active_generation == self.shared.generation.load(Ordering::SeqCst)
             && !self.shared.input_closed.load(Ordering::SeqCst)
             && self.state.phase != DevicePhase::Error
@@ -1113,7 +2058,26 @@ impl Worker {
 
     fn do_write_file(&mut self, args: &Map<String, Value>) -> Result<Value> {
         self.require(true)?;
-        let path = remote_path(args.get("path"), true)?;
+        // Normalize only: the startup gate below consults confirmedStartup,
+        // so remote_path's unconditional writing rejection is not used here.
+        let path = remote_path(args.get("path"), false)?;
+        if !(path.starts_with("/flash/") || path.starts_with("/sd/")) {
+            return Err(err_device("Expected a file path under /flash or /sd."));
+        }
+        let base = path.rsplit('/').next().unwrap_or("");
+        if base.eq_ignore_ascii_case("boot.py") || base.eq_ignore_ascii_case("main.py") {
+            match args.get("confirmedStartup") {
+                Some(Value::Bool(true)) => {}
+                Some(Value::Bool(false) | Value::Null) | None => {
+                    return Err(err_device(
+                        "保护：写入 boot.py/main.py 启动文件需要显式确认。",
+                    ));
+                }
+                Some(_) => {
+                    return Err(err_device("confirmedStartup must be a boolean."));
+                }
+            }
+        }
         let data = decode_file(args.get("data"))?;
         let overwrite = match args.get("overwrite") {
             None | Some(Value::Null) => false,
@@ -1140,27 +2104,71 @@ impl Worker {
             ));
         }
         let tp = py_quote_str(&temporary);
+        let ide = self.mode == ConnMode::Ide;
         let mut opened = false;
         let result = (|this: &mut Self| -> Result<()> {
-            this.exec(
-                &format!("_nodu_file=open({tp},\"wb\")"),
-                false,
-                OPERATION_TIMEOUT,
-            )?;
-            opened = true;
-            for chunk in data.chunks(512) {
-                let lit = py_quote_bytes(chunk);
-                let count = this.eval(&format!("_nodu_file.write({lit})"))?;
-                if count.as_int() != Some(chunk.len() as i64) {
-                    return Err(err_device("Device reported a short file write."));
+            if ide {
+                // Fresh `<stdin>` scope per EXEC_SCRIPT: create the file in
+                // "wb" first so empty data still produces a real file, then
+                // append each chunk with the device-verified write count.
+                this.exec(
+                    &format!("import os\n_nodu_file=open({tp},\"wb\")\n_nodu_file.close()"),
+                    false,
+                    OPERATION_TIMEOUT,
+                )?;
+                for chunk in data.chunks(512) {
+                    let lit = py_quote_bytes(chunk);
+                    let text = this.exec(
+                        &format!(
+                            "import os\n_nodu_file=open({tp},\"ab\")\ntry:\n print(_nodu_file.write({lit}))\nfinally:\n _nodu_file.close()"
+                        ),
+                        false,
+                        OPERATION_TIMEOUT,
+                    )?;
+                    let cleaned = Self::ide_strip_tail(&text)
+                        .trim_start_matches(['\x04', '>', ' ', '\r', '\n']);
+                    let count = cleaned
+                        .lines()
+                        .next()
+                        .and_then(|l| l.trim().parse::<i64>().ok())
+                        .ok_or_else(|| err_device("Device write returned malformed data."))?;
+                    if count != chunk.len() as i64 {
+                        return Err(err_device("Device reported a short file write."));
+                    }
                 }
+            } else {
+                this.exec(
+                    &format!("_nodu_file=open({tp},\"wb\")"),
+                    false,
+                    OPERATION_TIMEOUT,
+                )?;
+                opened = true;
+                for chunk in data.chunks(512) {
+                    let lit = py_quote_bytes(chunk);
+                    let count = this.eval(&format!("_nodu_file.write({lit})"))?;
+                    if count.as_int() != Some(chunk.len() as i64) {
+                        return Err(err_device("Device reported a short file write."));
+                    }
+                }
+                this.close_remote_file()?;
+                opened = false;
             }
-            this.close_remote_file()?;
-            opened = false;
             let written = this.stat_remote(&temporary)?;
             match written {
                 Some(s) if this.stat_field(&s, 6) == data.len() as i64 => {}
                 _ => return Err(err_device("Device transfer size verification failed.")),
+            }
+            // Content verification: read the temporary back through the same
+            // device path and compare digests before anything is renamed onto
+            // the real target.
+            let mut read_args = Map::new();
+            read_args.insert("path".to_string(), json!(temporary));
+            let read = this.do_read_file(&read_args)?;
+            let read_back = decode_file(read.get("data"))?;
+            if Sha256::digest(&read_back) != Sha256::digest(&data) {
+                return Err(err_device(
+                    "Device file integrity checksum mismatch after transfer.",
+                ));
             }
             if !overwrite && this.stat_remote(&path)?.is_some() {
                 return Err(err_device(
@@ -1168,7 +2176,16 @@ impl Worker {
                 ));
             }
             let pp = py_quote_str(&path);
-            this.exec(&format!("os.rename({tp},{pp})"), false, OPERATION_TIMEOUT)?;
+            let prelude = if this.mode == ConnMode::Ide {
+                "import os\n"
+            } else {
+                ""
+            };
+            this.exec(
+                &format!("{prelude}os.rename({tp},{pp})"),
+                false,
+                OPERATION_TIMEOUT,
+            )?;
             Ok(())
         })(self);
         if let Err(e) = result {
@@ -1187,7 +2204,7 @@ impl Worker {
                 ReplError::Cancelled(m) => ReplError::Cancelled(format!(
                     "{m} Transfer may remain at {temporary}; no user file was deleted."
                 )),
-                ReplError::Device(m) => err_device(format!(
+                ReplError::Device(m) | ReplError::Timeout(m) => err_device(format!(
                     "{m} Transfer may remain at {temporary}; no user file was deleted."
                 )),
             });
@@ -1199,6 +2216,9 @@ impl Worker {
     fn poll(&mut self) -> Result<()> {
         if self.transport.is_none() || self.state.phase == DevicePhase::Error {
             return Ok(());
+        }
+        if self.mode == ConnMode::Ide {
+            return self.poll_ide();
         }
         let Some(stage) = self.raw_stage else {
             return Ok(());
@@ -1247,6 +2267,101 @@ impl Worker {
         Ok(())
     }
 
+    /// Idle-time poll for IDE connections: drain TX, track `running`, and
+    /// pull a framebuffer frame whenever preview is on — including frames a
+    /// user's own `sensor.snapshot()` produces while no script runs.
+    fn poll_ide(&mut self) -> Result<()> {
+        let preview = self.state.preview;
+        let check = self.connect_check();
+        self.with_transport(|this, t| {
+            // IDE replies have no transaction framing, so any timeout or
+            // read error is a desync: propagate and let the caller close
+            // the transport instead of skipping a cycle.
+            let mut ide = IdeSession::new(t, check, this.ide_read_timeout(OPERATION_TIMEOUT))
+                .with_stall_timeout(this.read_stall_timeout);
+            let chunk = ide.output()?;
+            let text = this.stdout_decoder.decode(&chunk, false);
+            let mut sink = String::new();
+            this.ide_emit(&text, true, &mut sink)?;
+            if this.state.running {
+                // The firmware's running flag lags script start: only treat
+                // an early `false` as conclusive once the `>` prompt or a
+                // grace window proves the script really ended.
+                let grace = this
+                    .ide_run_started
+                    .is_some_and(|t| t.elapsed() < Duration::from_secs(3))
+                    && !this.ide_holdback.trim_end().ends_with('>');
+                if !ide.running()? && !grace {
+                    // Script finished: flush the decoder and emit the
+                    // trailing chunk minus firmware noise.
+                    let tail = ide.output()?;
+                    let text = this.stdout_decoder.decode(&tail, true);
+                    let mut sink = String::new();
+                    this.ide_emit(&text, true, &mut sink)?;
+                    this.ide_finalize(true, &mut sink)?;
+                    this.last_frame_at = None;
+                    this.update(|s| {
+                        s.phase = DevicePhase::Connected;
+                        s.running = false;
+                        s.fps = None;
+                    });
+                }
+            }
+            if preview {
+                match ide.frame() {
+                    Ok(Some(frame)) => {
+                        // Append to the active recording before the frame
+                        // event leaves; a write failure ends recording but
+                        // never tears down the camera stream.
+                        if let Some(recorder) = this.recorder.as_mut() {
+                            match recorder.append(frame.width, frame.height, &frame.jpeg) {
+                                Ok(_) => {
+                                    let status = recording_status(&recorder.summary(), true);
+                                    this.update(|s| s.recording = Some(status));
+                                }
+                                Err(e) => {
+                                    let recorder = this.recorder.take().expect("recorder");
+                                    let summary = recorder
+                                        .finish()
+                                        .unwrap_or_else(|_| recorder_summary_lost());
+                                    let text = e.to_string();
+                                    this.update(|s| {
+                                        s.recording = Some(recording_status(&summary, false));
+                                    });
+                                    this.log(
+                                        &format!("录像写入失败，已停止录像：{text}"),
+                                        LogStream::Stderr,
+                                    );
+                                }
+                            }
+                        }
+                        this.frame_sequence += 1;
+                        let now = Instant::now();
+                        let fps = this
+                            .last_frame_at
+                            .replace(now)
+                            .map(|prev| 1.0 / (now - prev).as_secs_f64())
+                            .filter(|f| f.is_finite() && *f > 0.0);
+                        if fps.is_some() && this.state.fps != fps {
+                            this.update(|s| s.fps = fps);
+                        }
+                        this.emit_event(&nodu_protocol::Event::Frame(nodu_protocol::DeviceFrame {
+                            mime: "image/jpeg".into(),
+                            data: B64.encode(&frame.jpeg),
+                            width: frame.width,
+                            height: frame.height,
+                            sequence: this.frame_sequence,
+                            time: now_millis(),
+                        }));
+                    }
+                    Ok(None) => {}
+                    Err(e) => return Err(e),
+                }
+            }
+            Ok(())
+        })
+    }
+
     /// Serial-read failure outside a request: mark error and close (Python `_lost`).
     fn lost(&mut self, exc: &ReplError) {
         let text = exc.to_string();
@@ -1255,10 +2370,59 @@ impl Worker {
             s.phase = DevicePhase::Error;
             s.running = false;
             s.preview = false;
+            s.capabilities = DeviceCapabilities::default();
             s.last_error = Some(text.clone());
         });
         self.log(&text, LogStream::Stderr);
     }
+}
+
+/// Status view of an in-flight or finished `Recorder` summary.
+fn recording_status(summary: &nodu_media::RecordingSummary, active: bool) -> RecordingStatus {
+    RecordingStatus {
+        active,
+        path: summary.path.clone(),
+        frames: summary.frames,
+        bytes: summary.bytes,
+        elapsed_ms: summary.elapsed_ms,
+    }
+}
+
+/// Placeholder counters when a failed recording cannot even be finalized.
+fn recorder_summary_lost() -> nodu_media::RecordingSummary {
+    nodu_media::RecordingSummary {
+        path: String::new(),
+        frames: 0,
+        bytes: 0,
+        elapsed_ms: 0,
+    }
+}
+
+/// Absolute local media path argument: 1..4096 bytes, no NUL.
+fn media_path(value: Option<&Value>) -> Result<std::path::PathBuf> {
+    let raw = value.and_then(Value::as_str).unwrap_or("");
+    if raw.is_empty() || raw.len() > 4096 || raw.contains('\0') {
+        return Err(err_device("Expected a valid absolute local file path."));
+    }
+    let path = std::path::PathBuf::from(raw);
+    if !path.is_absolute() {
+        return Err(err_device("Expected an absolute local file path."));
+    }
+    Ok(path)
+}
+
+/// Bundled ffmpeg/ffplay directory: the sidecar's own directory, or the
+/// dev-only `NODU_MEDIA_DIR` override (never a request parameter).
+fn media_tools_dir() -> Result<std::path::PathBuf> {
+    if let Ok(dir) = std::env::var("NODU_MEDIA_DIR")
+        && !dir.is_empty()
+    {
+        return Ok(std::path::PathBuf::from(dir));
+    }
+    std::env::current_exe()
+        .ok()
+        .and_then(|exe| exe.parent().map(std::path::Path::to_path_buf))
+        .ok_or_else(|| err_device("Cannot locate the bundled media tools."))
 }
 
 fn temp_name() -> String {
@@ -1336,6 +2500,24 @@ fn validate_request(value: &Value) -> Result<(RequestId, String, Map<String, Val
         _ => return Err(err_device("Request args must be an object.")),
     };
     Ok((id, method, args))
+}
+
+/// `formatScript`: device-free comment stripping / indentation conversion.
+fn do_format_script(args: &Map<String, Value>) -> Result<Value> {
+    let Some(code) = args.get("code").and_then(Value::as_str) else {
+        return Err(err_device("formatScript requires a string code argument."));
+    };
+    let strip = match args.get("stripComments") {
+        Some(Value::Bool(b)) => *b,
+        _ => return Err(err_device("stripComments must be a boolean.")),
+    };
+    let tabs = match args.get("spacesToTabs") {
+        Some(Value::Bool(b)) => *b,
+        _ => return Err(err_device("spacesToTabs must be a boolean.")),
+    };
+    script::format(code, strip, tabs)
+        .map(Value::String)
+        .map_err(err_device)
 }
 
 fn request_id_of(value: &Value) -> Option<Value> {

@@ -16,6 +16,9 @@ export default new ContainerModule(bind => {
         // a runtime boundary. Export only the service API, with no prototype.
         const names: (keyof NoduDeviceService)[] = ['getState', 'listPorts', 'connect', 'disconnect', 'execute',
             'runScript', 'stop', 'listFiles', 'readFile', 'writeFile', 'setPreview', 'startCamera',
+            'saveFile', 'formatScript', 'resetDevice', 'inspectBoard',
+            'startRecording', 'stopRecording', 'convertVideo', 'playVideo',
+            'getTerminalExecutable', 'takeStartupTerminals',
             'prepareFirmware', 'backupDevice', 'flashFirmware'];
         const facade = Object.create(null);
         for (const name of names) { facade[name] = server[name].bind(server); }

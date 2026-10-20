@@ -1,0 +1,27 @@
+{
+  "started": "2026-10-19T17:04:04.515Z",
+  "steps": [
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T17:04:04.569Z"
+    },
+    {
+      "k": "connected",
+      "v": "2026-10-19T17:04:08.553Z"
+    },
+    {
+      "k": "diag-return",
+      "v": {
+        "ok": "NODU_A:embedfire\r\nNODU_B:embedfire\r\nNODU_C:embedfire\r\nNODU_D:{\"same_obj\": true, \"ctype\": \"<class 'type'>\", \"bi\": {\"USER_LED\": 17, \"BOOT_KEY\": 16}}\r\n"
+      }
+    },
+    {
+      "k": "diag-logs",
+      "v": "[{\"s\":\"stdout\",\"t\":\"NODU_A:embedfire\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_B:embedfire\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_C:embedfire\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_D:{\\\"same_obj\\\": true, \\\"ctype\\\": \\\"<class 'type'>\\\", \\\"bi\\\": {\\\"USER_LED\\\": 17, \\\"BOOT_KEY\\\": 16}}\\r\\n\"}]"
+    },
+    {
+      "k": "done",
+      "v": "2026-10-19T17:04:10.832Z"
+    }
+  ]
+}

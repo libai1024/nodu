@@ -84,3 +84,6 @@
     .scope-brand-subtitle { display: none; }
     .scope-demo-target { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
 }
+
+/* Whole-line highlight for the source line a device traceback points at. */
+.nodu-traceback-line { background: color-mix(in srgb, var(--theia-errorForeground) 15%, transparent); }

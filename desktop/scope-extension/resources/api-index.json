@@ -1,0 +1,2663 @@
+{
+  "repository": "sipeed/MaixPy-v1",
+  "revision": "d8901fd2272f000226f1c1037c1eb7c412b88e66",
+  "conditionalExports": true,
+  "signaturesInferred": false,
+  "groups": {
+    "sensor": {
+      "source": "components/micropython/port/src/omv/py/py_sensor.c",
+      "entries": [
+        {
+          "name": "BAYER",
+          "kind": "constant",
+          "line": 647
+        },
+        {
+          "name": "RGB565",
+          "kind": "constant",
+          "line": 648
+        },
+        {
+          "name": "YUV422",
+          "kind": "constant",
+          "line": 649
+        },
+        {
+          "name": "GRAYSCALE",
+          "kind": "constant",
+          "line": 650
+        },
+        {
+          "name": "JPEG",
+          "kind": "constant",
+          "line": 651
+        },
+        {
+          "name": "OV9650",
+          "kind": "constant",
+          "line": 652
+        },
+        {
+          "name": "OV2640",
+          "kind": "constant",
+          "line": 653
+        },
+        {
+          "name": "OV7725",
+          "kind": "constant",
+          "line": 654
+        },
+        {
+          "name": "MT9V034",
+          "kind": "constant",
+          "line": 655
+        },
+        {
+          "name": "LEPTON",
+          "kind": "constant",
+          "line": 656
+        },
+        {
+          "name": "NORMAL",
+          "kind": "constant",
+          "line": 659
+        },
+        {
+          "name": "NEGATIVE",
+          "kind": "constant",
+          "line": 660
+        },
+        {
+          "name": "QQCIF",
+          "kind": "constant",
+          "line": 663
+        },
+        {
+          "name": "QCIF",
+          "kind": "constant",
+          "line": 664
+        },
+        {
+          "name": "CIF",
+          "kind": "constant",
+          "line": 665
+        },
+        {
+          "name": "QQSIF",
+          "kind": "constant",
+          "line": 666
+        },
+        {
+          "name": "QSIF",
+          "kind": "constant",
+          "line": 667
+        },
+        {
+          "name": "SIF",
+          "kind": "constant",
+          "line": 668
+        },
+        {
+          "name": "QQQQVGA",
+          "kind": "constant",
+          "line": 670
+        },
+        {
+          "name": "QQQVGA",
+          "kind": "constant",
+          "line": 671
+        },
+        {
+          "name": "QQVGA",
+          "kind": "constant",
+          "line": 672
+        },
+        {
+          "name": "QVGA",
+          "kind": "constant",
+          "line": 673
+        },
+        {
+          "name": "VGA",
+          "kind": "constant",
+          "line": 674
+        },
+        {
+          "name": "HQQQVGA",
+          "kind": "constant",
+          "line": 675
+        },
+        {
+          "name": "HQQVGA",
+          "kind": "constant",
+          "line": 676
+        },
+        {
+          "name": "HQVGA",
+          "kind": "constant",
+          "line": 677
+        },
+        {
+          "name": "B64X32",
+          "kind": "constant",
+          "line": 679
+        },
+        {
+          "name": "B64X64",
+          "kind": "constant",
+          "line": 680
+        },
+        {
+          "name": "B128X64",
+          "kind": "constant",
+          "line": 681
+        },
+        {
+          "name": "B128X128",
+          "kind": "constant",
+          "line": 682
+        },
+        {
+          "name": "B240X240",
+          "kind": "constant",
+          "line": 683
+        },
+        {
+          "name": "LCD",
+          "kind": "constant",
+          "line": 685
+        },
+        {
+          "name": "QQVGA2",
+          "kind": "constant",
+          "line": 686
+        },
+        {
+          "name": "WVGA",
+          "kind": "constant",
+          "line": 687
+        },
+        {
+          "name": "WVGA2",
+          "kind": "constant",
+          "line": 688
+        },
+        {
+          "name": "SVGA",
+          "kind": "constant",
+          "line": 689
+        },
+        {
+          "name": "SXGA",
+          "kind": "constant",
+          "line": 690
+        },
+        {
+          "name": "UXGA",
+          "kind": "constant",
+          "line": 691
+        },
+        {
+          "name": "binocular_reset",
+          "kind": "callable",
+          "line": 695
+        },
+        {
+          "name": "reset",
+          "kind": "callable",
+          "line": 696
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 697
+        },
+        {
+          "name": "sleep",
+          "kind": "callable",
+          "line": 698
+        },
+        {
+          "name": "shutdown",
+          "kind": "callable",
+          "line": 699
+        },
+        {
+          "name": "flush",
+          "kind": "callable",
+          "line": 700
+        },
+        {
+          "name": "snapshot",
+          "kind": "callable",
+          "line": 701
+        },
+        {
+          "name": "skip_frames",
+          "kind": "callable",
+          "line": 702
+        },
+        {
+          "name": "width",
+          "kind": "callable",
+          "line": 703
+        },
+        {
+          "name": "height",
+          "kind": "callable",
+          "line": 704
+        },
+        {
+          "name": "get_fb",
+          "kind": "callable",
+          "line": 705
+        },
+        {
+          "name": "get_id",
+          "kind": "callable",
+          "line": 706
+        },
+        {
+          "name": "set_pixformat",
+          "kind": "callable",
+          "line": 709
+        },
+        {
+          "name": "set_framerate",
+          "kind": "callable",
+          "line": 710
+        },
+        {
+          "name": "set_framesize",
+          "kind": "callable",
+          "line": 711
+        },
+        {
+          "name": "set_windowing",
+          "kind": "callable",
+          "line": 712
+        },
+        {
+          "name": "set_gainceiling",
+          "kind": "callable",
+          "line": 713
+        },
+        {
+          "name": "set_contrast",
+          "kind": "callable",
+          "line": 714
+        },
+        {
+          "name": "set_brightness",
+          "kind": "callable",
+          "line": 715
+        },
+        {
+          "name": "set_saturation",
+          "kind": "callable",
+          "line": 716
+        },
+        {
+          "name": "set_colorbar",
+          "kind": "callable",
+          "line": 718
+        },
+        {
+          "name": "set_auto_gain",
+          "kind": "callable",
+          "line": 719
+        },
+        {
+          "name": "get_gain_db",
+          "kind": "callable",
+          "line": 720
+        },
+        {
+          "name": "set_auto_exposure",
+          "kind": "callable",
+          "line": 721
+        },
+        {
+          "name": "get_exposure_us",
+          "kind": "callable",
+          "line": 722
+        },
+        {
+          "name": "set_auto_whitebal",
+          "kind": "callable",
+          "line": 723
+        },
+        {
+          "name": "get_rgb_gain_db",
+          "kind": "callable",
+          "line": 724
+        },
+        {
+          "name": "set_hmirror",
+          "kind": "callable",
+          "line": 725
+        },
+        {
+          "name": "set_vflip",
+          "kind": "callable",
+          "line": 726
+        },
+        {
+          "name": "set_special_effect",
+          "kind": "callable",
+          "line": 727
+        },
+        {
+          "name": "set_lens_correction",
+          "kind": "callable",
+          "line": 728
+        },
+        {
+          "name": "run",
+          "kind": "callable",
+          "line": 729
+        },
+        {
+          "name": "__write_reg",
+          "kind": "callable",
+          "line": 731
+        },
+        {
+          "name": "__read_reg",
+          "kind": "callable",
+          "line": 732
+        },
+        {
+          "name": "set_jb_quality",
+          "kind": "callable",
+          "line": 734
+        }
+      ]
+    },
+    "image": {
+      "source": "components/micropython/port/src/omv/py/py_image.c",
+      "entries": [
+        {
+          "name": "SEARCH_EX",
+          "kind": "constant",
+          "line": 7167
+        },
+        {
+          "name": "SEARCH_DS",
+          "kind": "constant",
+          "line": 7168
+        },
+        {
+          "name": "EDGE_CANNY",
+          "kind": "constant",
+          "line": 7169
+        },
+        {
+          "name": "EDGE_SIMPLE",
+          "kind": "constant",
+          "line": 7170
+        },
+        {
+          "name": "CORNER_FAST",
+          "kind": "constant",
+          "line": 7171
+        },
+        {
+          "name": "CORNER_AGAST",
+          "kind": "constant",
+          "line": 7172
+        },
+        {
+          "name": "TAG16H5",
+          "kind": "constant",
+          "line": 7175
+        },
+        {
+          "name": "TAG25H7",
+          "kind": "constant",
+          "line": 7176
+        },
+        {
+          "name": "TAG25H9",
+          "kind": "constant",
+          "line": 7177
+        },
+        {
+          "name": "TAG36H10",
+          "kind": "constant",
+          "line": 7178
+        },
+        {
+          "name": "TAG36H11",
+          "kind": "constant",
+          "line": 7179
+        },
+        {
+          "name": "ARTOOLKIT",
+          "kind": "constant",
+          "line": 7180
+        },
+        {
+          "name": "EAN2",
+          "kind": "constant",
+          "line": 7183
+        },
+        {
+          "name": "EAN5",
+          "kind": "constant",
+          "line": 7184
+        },
+        {
+          "name": "EAN8",
+          "kind": "constant",
+          "line": 7185
+        },
+        {
+          "name": "UPCE",
+          "kind": "constant",
+          "line": 7186
+        },
+        {
+          "name": "ISBN10",
+          "kind": "constant",
+          "line": 7187
+        },
+        {
+          "name": "UPCA",
+          "kind": "constant",
+          "line": 7188
+        },
+        {
+          "name": "EAN13",
+          "kind": "constant",
+          "line": 7189
+        },
+        {
+          "name": "ISBN13",
+          "kind": "constant",
+          "line": 7190
+        },
+        {
+          "name": "I25",
+          "kind": "constant",
+          "line": 7191
+        },
+        {
+          "name": "DATABAR",
+          "kind": "constant",
+          "line": 7192
+        },
+        {
+          "name": "DATABAR_EXP",
+          "kind": "constant",
+          "line": 7193
+        },
+        {
+          "name": "CODABAR",
+          "kind": "constant",
+          "line": 7194
+        },
+        {
+          "name": "CODE39",
+          "kind": "constant",
+          "line": 7195
+        },
+        {
+          "name": "PDF417",
+          "kind": "constant",
+          "line": 7196
+        },
+        {
+          "name": "CODE93",
+          "kind": "constant",
+          "line": 7197
+        },
+        {
+          "name": "CODE128",
+          "kind": "constant",
+          "line": 7198
+        },
+        {
+          "name": "ASCII",
+          "kind": "constant",
+          "line": 7200
+        },
+        {
+          "name": "UTF8",
+          "kind": "constant",
+          "line": 7201
+        },
+        {
+          "name": "font_load",
+          "kind": "callable",
+          "line": 7202
+        },
+        {
+          "name": "font_free",
+          "kind": "callable",
+          "line": 7203
+        },
+        {
+          "name": "ImageWriter",
+          "kind": "callable",
+          "line": 7204
+        },
+        {
+          "name": "Image",
+          "kind": "callable",
+          "line": 7205
+        },
+        {
+          "name": "ImageReader",
+          "kind": "callable",
+          "line": 7207
+        },
+        {
+          "name": "rgb_to_lab",
+          "kind": "callable",
+          "line": 7208
+        },
+        {
+          "name": "lab_to_rgb",
+          "kind": "callable",
+          "line": 7209
+        },
+        {
+          "name": "rgb_to_grayscale",
+          "kind": "callable",
+          "line": 7210
+        },
+        {
+          "name": "grayscale_to_rgb",
+          "kind": "callable",
+          "line": 7211
+        },
+        {
+          "name": "get_affine_transform",
+          "kind": "callable",
+          "line": 7212
+        },
+        {
+          "name": "warp_affine_ai",
+          "kind": "callable",
+          "line": 7213
+        },
+        {
+          "name": "HaarCascade",
+          "kind": "callable",
+          "line": 7215
+        },
+        {
+          "name": "load_descriptor",
+          "kind": "callable",
+          "line": 7216
+        },
+        {
+          "name": "save_descriptor",
+          "kind": "callable",
+          "line": 7217
+        },
+        {
+          "name": "match_descriptor",
+          "kind": "callable",
+          "line": 7218
+        }
+      ]
+    },
+    "image.Image": {
+      "source": "components/micropython/port/src/omv/py/py_image.c",
+      "entries": [
+        {
+          "name": "__del__",
+          "kind": "callable",
+          "line": 6201
+        },
+        {
+          "name": "width",
+          "kind": "callable",
+          "line": 6202
+        },
+        {
+          "name": "height",
+          "kind": "callable",
+          "line": 6203
+        },
+        {
+          "name": "format",
+          "kind": "callable",
+          "line": 6204
+        },
+        {
+          "name": "size",
+          "kind": "callable",
+          "line": 6205
+        },
+        {
+          "name": "get_pixel",
+          "kind": "callable",
+          "line": 6206
+        },
+        {
+          "name": "set_pixel",
+          "kind": "callable",
+          "line": 6207
+        },
+        {
+          "name": "mean_pool",
+          "kind": "callable",
+          "line": 6208
+        },
+        {
+          "name": "mean_pooled",
+          "kind": "callable",
+          "line": 6209
+        },
+        {
+          "name": "midpoint_pool",
+          "kind": "callable",
+          "line": 6210
+        },
+        {
+          "name": "midpoint_pooled",
+          "kind": "callable",
+          "line": 6211
+        },
+        {
+          "name": "to_bitmap",
+          "kind": "callable",
+          "line": 6212
+        },
+        {
+          "name": "to_grayscale",
+          "kind": "callable",
+          "line": 6213
+        },
+        {
+          "name": "to_rgb565",
+          "kind": "callable",
+          "line": 6214
+        },
+        {
+          "name": "to_rainbow",
+          "kind": "callable",
+          "line": 6215
+        },
+        {
+          "name": "compress",
+          "kind": "callable",
+          "line": 6216
+        },
+        {
+          "name": "compress_for_ide",
+          "kind": "callable",
+          "line": 6217
+        },
+        {
+          "name": "compressed",
+          "kind": "callable",
+          "line": 6218
+        },
+        {
+          "name": "compressed_for_ide",
+          "kind": "callable",
+          "line": 6219
+        },
+        {
+          "name": "copy",
+          "kind": "callable",
+          "line": 6220
+        },
+        {
+          "name": "crop",
+          "kind": "callable",
+          "line": 6221
+        },
+        {
+          "name": "save",
+          "kind": "callable",
+          "line": 6222
+        },
+        {
+          "name": "to_bytes",
+          "kind": "callable",
+          "line": 6223
+        },
+        {
+          "name": "clear",
+          "kind": "callable",
+          "line": 6225
+        },
+        {
+          "name": "draw_line",
+          "kind": "callable",
+          "line": 6226
+        },
+        {
+          "name": "draw_rectangle",
+          "kind": "callable",
+          "line": 6227
+        },
+        {
+          "name": "draw_circle",
+          "kind": "callable",
+          "line": 6228
+        },
+        {
+          "name": "draw_ellipse",
+          "kind": "callable",
+          "line": 6229
+        },
+        {
+          "name": "draw_font",
+          "kind": "callable",
+          "line": 6230
+        },
+        {
+          "name": "draw_string",
+          "kind": "callable",
+          "line": 6231
+        },
+        {
+          "name": "draw_cross",
+          "kind": "callable",
+          "line": 6232
+        },
+        {
+          "name": "draw_arrow",
+          "kind": "callable",
+          "line": 6233
+        },
+        {
+          "name": "draw_image",
+          "kind": "callable",
+          "line": 6234
+        },
+        {
+          "name": "flood_fill",
+          "kind": "callable",
+          "line": 6236
+        },
+        {
+          "name": "draw_keypoints",
+          "kind": "callable",
+          "line": 6239
+        },
+        {
+          "name": "binary",
+          "kind": "callable",
+          "line": 6243
+        },
+        {
+          "name": "invert",
+          "kind": "callable",
+          "line": 6244
+        },
+        {
+          "name": "and",
+          "kind": "callable",
+          "line": 6245
+        },
+        {
+          "name": "b_and",
+          "kind": "callable",
+          "line": 6246
+        },
+        {
+          "name": "nand",
+          "kind": "callable",
+          "line": 6247
+        },
+        {
+          "name": "b_nand",
+          "kind": "callable",
+          "line": 6248
+        },
+        {
+          "name": "or",
+          "kind": "callable",
+          "line": 6249
+        },
+        {
+          "name": "b_or",
+          "kind": "callable",
+          "line": 6250
+        },
+        {
+          "name": "nor",
+          "kind": "callable",
+          "line": 6251
+        },
+        {
+          "name": "b_nor",
+          "kind": "callable",
+          "line": 6252
+        },
+        {
+          "name": "xor",
+          "kind": "callable",
+          "line": 6253
+        },
+        {
+          "name": "b_xor",
+          "kind": "callable",
+          "line": 6254
+        },
+        {
+          "name": "xnor",
+          "kind": "callable",
+          "line": 6255
+        },
+        {
+          "name": "b_xnor",
+          "kind": "callable",
+          "line": 6256
+        },
+        {
+          "name": "erode",
+          "kind": "callable",
+          "line": 6257
+        },
+        {
+          "name": "dilate",
+          "kind": "callable",
+          "line": 6258
+        },
+        {
+          "name": "open",
+          "kind": "callable",
+          "line": 6259
+        },
+        {
+          "name": "close",
+          "kind": "callable",
+          "line": 6260
+        },
+        {
+          "name": "top_hat",
+          "kind": "callable",
+          "line": 6263
+        },
+        {
+          "name": "black_hat",
+          "kind": "callable",
+          "line": 6264
+        },
+        {
+          "name": "gamma_corr",
+          "kind": "callable",
+          "line": 6266
+        },
+        {
+          "name": "negate",
+          "kind": "callable",
+          "line": 6267
+        },
+        {
+          "name": "assign",
+          "kind": "callable",
+          "line": 6268
+        },
+        {
+          "name": "replace",
+          "kind": "callable",
+          "line": 6269
+        },
+        {
+          "name": "set",
+          "kind": "callable",
+          "line": 6270
+        },
+        {
+          "name": "add",
+          "kind": "callable",
+          "line": 6271
+        },
+        {
+          "name": "sub",
+          "kind": "callable",
+          "line": 6272
+        },
+        {
+          "name": "mul",
+          "kind": "callable",
+          "line": 6273
+        },
+        {
+          "name": "div",
+          "kind": "callable",
+          "line": 6274
+        },
+        {
+          "name": "min",
+          "kind": "callable",
+          "line": 6275
+        },
+        {
+          "name": "max",
+          "kind": "callable",
+          "line": 6276
+        },
+        {
+          "name": "difference",
+          "kind": "callable",
+          "line": 6277
+        },
+        {
+          "name": "blend",
+          "kind": "callable",
+          "line": 6278
+        },
+        {
+          "name": "histeq",
+          "kind": "callable",
+          "line": 6282
+        },
+        {
+          "name": "mean",
+          "kind": "callable",
+          "line": 6285
+        },
+        {
+          "name": "median",
+          "kind": "callable",
+          "line": 6288
+        },
+        {
+          "name": "mode",
+          "kind": "callable",
+          "line": 6291
+        },
+        {
+          "name": "midpoint",
+          "kind": "callable",
+          "line": 6294
+        },
+        {
+          "name": "morph",
+          "kind": "callable",
+          "line": 6297
+        },
+        {
+          "name": "blur",
+          "kind": "callable",
+          "line": 6300
+        },
+        {
+          "name": "gaussian",
+          "kind": "callable",
+          "line": 6301
+        },
+        {
+          "name": "gaussian_blur",
+          "kind": "callable",
+          "line": 6302
+        },
+        {
+          "name": "laplacian",
+          "kind": "callable",
+          "line": 6305
+        },
+        {
+          "name": "bilateral",
+          "kind": "callable",
+          "line": 6308
+        },
+        {
+          "name": "cartoon",
+          "kind": "callable",
+          "line": 6311
+        },
+        {
+          "name": "remove_shadows",
+          "kind": "callable",
+          "line": 6315
+        },
+        {
+          "name": "chrominvar",
+          "kind": "callable",
+          "line": 6318
+        },
+        {
+          "name": "illuminvar",
+          "kind": "callable",
+          "line": 6321
+        },
+        {
+          "name": "linpolar",
+          "kind": "callable",
+          "line": 6325
+        },
+        {
+          "name": "logpolar",
+          "kind": "callable",
+          "line": 6328
+        },
+        {
+          "name": "lens_corr",
+          "kind": "callable",
+          "line": 6330
+        },
+        {
+          "name": "rotation_corr",
+          "kind": "callable",
+          "line": 6332
+        },
+        {
+          "name": "get_similarity",
+          "kind": "callable",
+          "line": 6336
+        },
+        {
+          "name": "get_hist",
+          "kind": "callable",
+          "line": 6339
+        },
+        {
+          "name": "get_histogram",
+          "kind": "callable",
+          "line": 6340
+        },
+        {
+          "name": "histogram",
+          "kind": "callable",
+          "line": 6341
+        },
+        {
+          "name": "get_stats",
+          "kind": "callable",
+          "line": 6342
+        },
+        {
+          "name": "get_statistics",
+          "kind": "callable",
+          "line": 6343
+        },
+        {
+          "name": "statistics",
+          "kind": "callable",
+          "line": 6344
+        },
+        {
+          "name": "get_regression",
+          "kind": "callable",
+          "line": 6345
+        },
+        {
+          "name": "find_blobs",
+          "kind": "callable",
+          "line": 6347
+        },
+        {
+          "name": "find_lines",
+          "kind": "callable",
+          "line": 6350
+        },
+        {
+          "name": "find_line_segments",
+          "kind": "callable",
+          "line": 6353
+        },
+        {
+          "name": "find_circles",
+          "kind": "callable",
+          "line": 6356
+        },
+        {
+          "name": "find_rects",
+          "kind": "callable",
+          "line": 6359
+        },
+        {
+          "name": "find_qrcodes",
+          "kind": "callable",
+          "line": 6362
+        },
+        {
+          "name": "find_apriltags",
+          "kind": "callable",
+          "line": 6365
+        },
+        {
+          "name": "find_datamatrices",
+          "kind": "callable",
+          "line": 6368
+        },
+        {
+          "name": "find_barcodes",
+          "kind": "callable",
+          "line": 6371
+        },
+        {
+          "name": "find_displacement",
+          "kind": "callable",
+          "line": 6374
+        },
+        {
+          "name": "find_template",
+          "kind": "callable",
+          "line": 6377
+        },
+        {
+          "name": "find_features",
+          "kind": "callable",
+          "line": 6378
+        },
+        {
+          "name": "find_eye",
+          "kind": "callable",
+          "line": 6379
+        },
+        {
+          "name": "find_lbp",
+          "kind": "callable",
+          "line": 6380
+        },
+        {
+          "name": "find_keypoints",
+          "kind": "callable",
+          "line": 6381
+        },
+        {
+          "name": "find_domain",
+          "kind": "callable",
+          "line": 6382
+        },
+        {
+          "name": "find_edges",
+          "kind": "callable",
+          "line": 6385
+        },
+        {
+          "name": "find_hog",
+          "kind": "callable",
+          "line": 6388
+        },
+        {
+          "name": "selective_search",
+          "kind": "callable",
+          "line": 6391
+        },
+        {
+          "name": "dump_roi",
+          "kind": "callable",
+          "line": 6393
+        },
+        {
+          "name": "conv3",
+          "kind": "callable",
+          "line": 6394
+        },
+        {
+          "name": "resize",
+          "kind": "callable",
+          "line": 6395
+        },
+        {
+          "name": "ai_to_pix",
+          "kind": "callable",
+          "line": 6396
+        },
+        {
+          "name": "pix_to_ai",
+          "kind": "callable",
+          "line": 6397
+        },
+        {
+          "name": "strech_char",
+          "kind": "callable",
+          "line": 6398
+        },
+        {
+          "name": "stretch",
+          "kind": "callable",
+          "line": 6399
+        },
+        {
+          "name": "cut",
+          "kind": "callable",
+          "line": 6400
+        }
+      ]
+    },
+    "lcd": {
+      "source": "components/micropython/port/src/omv/py/py_lcd.c",
+      "entries": [
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 766
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 767
+        },
+        {
+          "name": "width",
+          "kind": "callable",
+          "line": 768
+        },
+        {
+          "name": "height",
+          "kind": "callable",
+          "line": 769
+        },
+        {
+          "name": "type",
+          "kind": "callable",
+          "line": 770
+        },
+        {
+          "name": "freq",
+          "kind": "callable",
+          "line": 771
+        },
+        {
+          "name": "set_backlight",
+          "kind": "callable",
+          "line": 772
+        },
+        {
+          "name": "get_backlight",
+          "kind": "callable",
+          "line": 773
+        },
+        {
+          "name": "display",
+          "kind": "callable",
+          "line": 774
+        },
+        {
+          "name": "clear",
+          "kind": "callable",
+          "line": 775
+        },
+        {
+          "name": "direction",
+          "kind": "callable",
+          "line": 776
+        },
+        {
+          "name": "rotation",
+          "kind": "callable",
+          "line": 777
+        },
+        {
+          "name": "mirror",
+          "kind": "callable",
+          "line": 778
+        },
+        {
+          "name": "bgr_to_rgb",
+          "kind": "callable",
+          "line": 779
+        },
+        {
+          "name": "draw_string",
+          "kind": "callable",
+          "line": 780
+        },
+        {
+          "name": "fill_rectangle",
+          "kind": "callable",
+          "line": 781
+        },
+        {
+          "name": "register",
+          "kind": "callable",
+          "line": 782
+        },
+        {
+          "name": "XY_RLUD",
+          "kind": "constant",
+          "line": 783
+        },
+        {
+          "name": "YX_RLUD",
+          "kind": "constant",
+          "line": 784
+        },
+        {
+          "name": "XY_LRUD",
+          "kind": "constant",
+          "line": 785
+        },
+        {
+          "name": "YX_LRUD",
+          "kind": "constant",
+          "line": 786
+        },
+        {
+          "name": "XY_RLDU",
+          "kind": "constant",
+          "line": 787
+        },
+        {
+          "name": "YX_RLDU",
+          "kind": "constant",
+          "line": 788
+        },
+        {
+          "name": "XY_LRDU",
+          "kind": "constant",
+          "line": 789
+        },
+        {
+          "name": "YX_LRDU",
+          "kind": "constant",
+          "line": 790
+        },
+        {
+          "name": "BLACK",
+          "kind": "constant",
+          "line": 791
+        },
+        {
+          "name": "NAVY",
+          "kind": "constant",
+          "line": 792
+        },
+        {
+          "name": "DARKGREEN",
+          "kind": "constant",
+          "line": 793
+        },
+        {
+          "name": "DARKCYAN",
+          "kind": "constant",
+          "line": 794
+        },
+        {
+          "name": "MAROON",
+          "kind": "constant",
+          "line": 795
+        },
+        {
+          "name": "PURPLE",
+          "kind": "constant",
+          "line": 796
+        },
+        {
+          "name": "OLIVE",
+          "kind": "constant",
+          "line": 797
+        },
+        {
+          "name": "LIGHTGREY",
+          "kind": "constant",
+          "line": 798
+        },
+        {
+          "name": "DARKGREY",
+          "kind": "constant",
+          "line": 799
+        },
+        {
+          "name": "BLUE",
+          "kind": "constant",
+          "line": 800
+        },
+        {
+          "name": "GREEN",
+          "kind": "constant",
+          "line": 801
+        },
+        {
+          "name": "CYAN",
+          "kind": "constant",
+          "line": 802
+        },
+        {
+          "name": "RED",
+          "kind": "constant",
+          "line": 803
+        },
+        {
+          "name": "MAGENTA",
+          "kind": "constant",
+          "line": 804
+        },
+        {
+          "name": "YELLOW",
+          "kind": "constant",
+          "line": 805
+        },
+        {
+          "name": "WHITE",
+          "kind": "constant",
+          "line": 806
+        },
+        {
+          "name": "ORANGE",
+          "kind": "constant",
+          "line": 807
+        },
+        {
+          "name": "GREENYELLOW",
+          "kind": "constant",
+          "line": 808
+        },
+        {
+          "name": "PINK",
+          "kind": "constant",
+          "line": 809
+        }
+      ]
+    },
+    "machine": {
+      "source": "components/micropython/port/src/standard_lib/machine/modmachine.c",
+      "entries": [
+        {
+          "name": "UART",
+          "kind": "callable",
+          "line": 45
+        },
+        {
+          "name": "Timer",
+          "kind": "callable",
+          "line": 46
+        },
+        {
+          "name": "PWM",
+          "kind": "callable",
+          "line": 47
+        },
+        {
+          "name": "I2C",
+          "kind": "callable",
+          "line": 48
+        },
+        {
+          "name": "SPI",
+          "kind": "callable",
+          "line": 49
+        },
+        {
+          "name": "reset",
+          "kind": "callable",
+          "line": 50
+        },
+        {
+          "name": "WDT",
+          "kind": "callable",
+          "line": 51
+        },
+        {
+          "name": "reset_cause",
+          "kind": "callable",
+          "line": 52
+        },
+        {
+          "name": "unique_id",
+          "kind": "callable",
+          "line": 53
+        },
+        {
+          "name": "PWRON_RESET",
+          "kind": "constant",
+          "line": 54
+        },
+        {
+          "name": "HARD_RESET",
+          "kind": "constant",
+          "line": 55
+        },
+        {
+          "name": "WDT_RESET",
+          "kind": "constant",
+          "line": 56
+        },
+        {
+          "name": "WDT1_RESET",
+          "kind": "constant",
+          "line": 57
+        },
+        {
+          "name": "SOFT_RESET",
+          "kind": "constant",
+          "line": 58
+        },
+        {
+          "name": "SDCard",
+          "kind": "callable",
+          "line": 59
+        }
+      ]
+    },
+    "machine.UART": {
+      "source": "components/micropython/port/src/standard_lib/machine/machine_uart.c",
+      "entries": [
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 598
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 599
+        },
+        {
+          "name": "readchar",
+          "kind": "callable",
+          "line": 601
+        },
+        {
+          "name": "any",
+          "kind": "callable",
+          "line": 602
+        },
+        {
+          "name": "readline",
+          "kind": "callable",
+          "line": 603
+        },
+        {
+          "name": "readinto",
+          "kind": "callable",
+          "line": 604
+        },
+        {
+          "name": "write",
+          "kind": "callable",
+          "line": 605
+        },
+        {
+          "name": "read",
+          "kind": "callable",
+          "line": 606
+        },
+        {
+          "name": "UART1",
+          "kind": "constant",
+          "line": 608
+        },
+        {
+          "name": "UART2",
+          "kind": "constant",
+          "line": 609
+        },
+        {
+          "name": "UART3",
+          "kind": "constant",
+          "line": 610
+        },
+        {
+          "name": "UARTHS",
+          "kind": "constant",
+          "line": 611
+        },
+        {
+          "name": "PARITY_ODD",
+          "kind": "constant",
+          "line": 613
+        },
+        {
+          "name": "PARITY_EVEN",
+          "kind": "constant",
+          "line": 614
+        },
+        {
+          "name": "repl_uart",
+          "kind": "callable",
+          "line": 616
+        },
+        {
+          "name": "set_repl_uart",
+          "kind": "callable",
+          "line": 617
+        }
+      ]
+    },
+    "machine.Timer": {
+      "source": "components/micropython/port/src/standard_lib/machine/machine_timer.c",
+      "entries": [
+        {
+          "name": "__del__",
+          "kind": "callable",
+          "line": 416
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 417
+        },
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 418
+        },
+        {
+          "name": "callback",
+          "kind": "callable",
+          "line": 419
+        },
+        {
+          "name": "period",
+          "kind": "callable",
+          "line": 420
+        },
+        {
+          "name": "start",
+          "kind": "callable",
+          "line": 421
+        },
+        {
+          "name": "stop",
+          "kind": "callable",
+          "line": 422
+        },
+        {
+          "name": "restart",
+          "kind": "callable",
+          "line": 423
+        },
+        {
+          "name": "callback_arg",
+          "kind": "callable",
+          "line": 424
+        },
+        {
+          "name": "TIMER0",
+          "kind": "constant",
+          "line": 431
+        },
+        {
+          "name": "TIMER1",
+          "kind": "constant",
+          "line": 432
+        },
+        {
+          "name": "TIMER2",
+          "kind": "constant",
+          "line": 433
+        },
+        {
+          "name": "CHANNEL0",
+          "kind": "constant",
+          "line": 434
+        },
+        {
+          "name": "CHANNEL1",
+          "kind": "constant",
+          "line": 435
+        },
+        {
+          "name": "CHANNEL2",
+          "kind": "constant",
+          "line": 436
+        },
+        {
+          "name": "CHANNEL3",
+          "kind": "constant",
+          "line": 437
+        },
+        {
+          "name": "MODE_ONE_SHOT",
+          "kind": "constant",
+          "line": 438
+        },
+        {
+          "name": "MODE_PERIODIC",
+          "kind": "constant",
+          "line": 439
+        },
+        {
+          "name": "MODE_PWM",
+          "kind": "constant",
+          "line": 440
+        },
+        {
+          "name": "UNIT_S",
+          "kind": "constant",
+          "line": 441
+        },
+        {
+          "name": "UNIT_MS",
+          "kind": "constant",
+          "line": 442
+        },
+        {
+          "name": "UNIT_US",
+          "kind": "constant",
+          "line": 443
+        },
+        {
+          "name": "UNIT_NS",
+          "kind": "constant",
+          "line": 444
+        }
+      ]
+    },
+    "machine.PWM": {
+      "source": "components/micropython/port/src/standard_lib/machine/machine_pwm.c",
+      "entries": [
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 209
+        },
+        {
+          "name": "__del__",
+          "kind": "callable",
+          "line": 210
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 211
+        },
+        {
+          "name": "freq",
+          "kind": "callable",
+          "line": 212
+        },
+        {
+          "name": "duty",
+          "kind": "callable",
+          "line": 213
+        },
+        {
+          "name": "enable",
+          "kind": "callable",
+          "line": 214
+        },
+        {
+          "name": "disable",
+          "kind": "callable",
+          "line": 215
+        }
+      ]
+    },
+    "machine.I2C": {
+      "source": "components/micropython/port/src/standard_lib/machine/machine_i2c.c",
+      "entries": [
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 966
+        },
+        {
+          "name": "__del__",
+          "kind": "callable",
+          "line": 967
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 968
+        },
+        {
+          "name": "scan",
+          "kind": "callable",
+          "line": 969
+        },
+        {
+          "name": "readfrom",
+          "kind": "callable",
+          "line": 979
+        },
+        {
+          "name": "readfrom_into",
+          "kind": "callable",
+          "line": 980
+        },
+        {
+          "name": "writeto",
+          "kind": "callable",
+          "line": 981
+        },
+        {
+          "name": "readfrom_mem",
+          "kind": "callable",
+          "line": 984
+        },
+        {
+          "name": "readfrom_mem_into",
+          "kind": "callable",
+          "line": 985
+        },
+        {
+          "name": "writeto_mem",
+          "kind": "callable",
+          "line": 986
+        },
+        {
+          "name": "MODE_MASTER",
+          "kind": "constant",
+          "line": 989
+        },
+        {
+          "name": "MODE_SLAVE",
+          "kind": "constant",
+          "line": 990
+        },
+        {
+          "name": "MODE_MASTER_SOFT",
+          "kind": "constant",
+          "line": 992
+        },
+        {
+          "name": "I2C0",
+          "kind": "constant",
+          "line": 996
+        },
+        {
+          "name": "I2C1",
+          "kind": "constant",
+          "line": 997
+        },
+        {
+          "name": "I2C2",
+          "kind": "constant",
+          "line": 998
+        },
+        {
+          "name": "I2C3",
+          "kind": "constant",
+          "line": 1000
+        },
+        {
+          "name": "I2C4",
+          "kind": "constant",
+          "line": 1001
+        },
+        {
+          "name": "I2C5",
+          "kind": "constant",
+          "line": 1002
+        },
+        {
+          "name": "I2C_SOFT",
+          "kind": "constant",
+          "line": 1003
+        },
+        {
+          "name": "I2C_EV_START",
+          "kind": "constant",
+          "line": 1007
+        },
+        {
+          "name": "I2C_EV_RESTART",
+          "kind": "constant",
+          "line": 1008
+        },
+        {
+          "name": "I2C_EV_STOP",
+          "kind": "constant",
+          "line": 1009
+        }
+      ]
+    },
+    "machine.SPI": {
+      "source": "components/micropython/port/src/standard_lib/machine/machine_spi.c",
+      "entries": [
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 676
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 677
+        },
+        {
+          "name": "read",
+          "kind": "callable",
+          "line": 678
+        },
+        {
+          "name": "readinto",
+          "kind": "callable",
+          "line": 679
+        },
+        {
+          "name": "write",
+          "kind": "callable",
+          "line": 680
+        },
+        {
+          "name": "write_readinto",
+          "kind": "callable",
+          "line": 681
+        },
+        {
+          "name": "SPI0",
+          "kind": "constant",
+          "line": 684
+        },
+        {
+          "name": "SPI1",
+          "kind": "constant",
+          "line": 685
+        },
+        {
+          "name": "SPI2",
+          "kind": "constant",
+          "line": 686
+        },
+        {
+          "name": "SPI_SOFT",
+          "kind": "constant",
+          "line": 688
+        },
+        {
+          "name": "MSB",
+          "kind": "constant",
+          "line": 693
+        },
+        {
+          "name": "LSB",
+          "kind": "constant",
+          "line": 694
+        },
+        {
+          "name": "MODE_MASTER",
+          "kind": "constant",
+          "line": 696
+        },
+        {
+          "name": "MODE_MASTER_2",
+          "kind": "constant",
+          "line": 697
+        },
+        {
+          "name": "MODE_MASTER_4",
+          "kind": "constant",
+          "line": 698
+        },
+        {
+          "name": "MODE_MASTER_8",
+          "kind": "constant",
+          "line": 699
+        },
+        {
+          "name": "MODE_SLAVE",
+          "kind": "constant",
+          "line": 700
+        },
+        {
+          "name": "CS0",
+          "kind": "constant",
+          "line": 702
+        },
+        {
+          "name": "CS1",
+          "kind": "constant",
+          "line": 703
+        },
+        {
+          "name": "CS2",
+          "kind": "constant",
+          "line": 704
+        },
+        {
+          "name": "CS3",
+          "kind": "constant",
+          "line": 705
+        }
+      ]
+    },
+    "Maix": {
+      "source": "components/micropython/port/src/Maix/modMaix.c",
+      "entries": [
+        {
+          "name": "FPIOA",
+          "kind": "callable",
+          "line": 24
+        },
+        {
+          "name": "GPIO",
+          "kind": "callable",
+          "line": 25
+        },
+        {
+          "name": "I2S",
+          "kind": "callable",
+          "line": 26
+        },
+        {
+          "name": "Audio",
+          "kind": "callable",
+          "line": 27
+        },
+        {
+          "name": "FFT",
+          "kind": "callable",
+          "line": 28
+        },
+        {
+          "name": "MIC_ARRAY",
+          "kind": "callable",
+          "line": 30
+        },
+        {
+          "name": "freq",
+          "kind": "callable",
+          "line": 32
+        },
+        {
+          "name": "utils",
+          "kind": "callable",
+          "line": 33
+        },
+        {
+          "name": "config",
+          "kind": "callable",
+          "line": 34
+        }
+      ]
+    },
+    "Maix.GPIO": {
+      "source": "components/micropython/port/src/Maix/Maix_gpio.c",
+      "entries": [
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 415
+        },
+        {
+          "name": "value",
+          "kind": "callable",
+          "line": 416
+        },
+        {
+          "name": "irq",
+          "kind": "callable",
+          "line": 417
+        },
+        {
+          "name": "disirq",
+          "kind": "callable",
+          "line": 418
+        },
+        {
+          "name": "mode",
+          "kind": "callable",
+          "line": 419
+        },
+        {
+          "name": "IN",
+          "kind": "constant",
+          "line": 421
+        },
+        {
+          "name": "OUT",
+          "kind": "constant",
+          "line": 422
+        },
+        {
+          "name": "PULL_NONE",
+          "kind": "constant",
+          "line": 423
+        },
+        {
+          "name": "PULL_UP",
+          "kind": "constant",
+          "line": 424
+        },
+        {
+          "name": "PULL_DOWN",
+          "kind": "constant",
+          "line": 425
+        },
+        {
+          "name": "IRQ_NONE",
+          "kind": "constant",
+          "line": 426
+        },
+        {
+          "name": "IRQ_RISING",
+          "kind": "constant",
+          "line": 427
+        },
+        {
+          "name": "IRQ_FALLING",
+          "kind": "constant",
+          "line": 428
+        },
+        {
+          "name": "IRQ_BOTH",
+          "kind": "constant",
+          "line": 429
+        },
+        {
+          "name": "GPIOHS0",
+          "kind": "constant",
+          "line": 432
+        },
+        {
+          "name": "GPIOHS1",
+          "kind": "constant",
+          "line": 433
+        },
+        {
+          "name": "GPIOHS2",
+          "kind": "constant",
+          "line": 434
+        },
+        {
+          "name": "GPIOHS3",
+          "kind": "constant",
+          "line": 435
+        },
+        {
+          "name": "GPIOHS4",
+          "kind": "constant",
+          "line": 436
+        },
+        {
+          "name": "GPIOHS5",
+          "kind": "constant",
+          "line": 437
+        },
+        {
+          "name": "GPIOHS6",
+          "kind": "constant",
+          "line": 438
+        },
+        {
+          "name": "GPIOHS7",
+          "kind": "constant",
+          "line": 439
+        },
+        {
+          "name": "GPIOHS8",
+          "kind": "constant",
+          "line": 440
+        },
+        {
+          "name": "GPIOHS9",
+          "kind": "constant",
+          "line": 441
+        },
+        {
+          "name": "GPIOHS10",
+          "kind": "constant",
+          "line": 442
+        },
+        {
+          "name": "GPIOHS11",
+          "kind": "constant",
+          "line": 443
+        },
+        {
+          "name": "GPIOHS12",
+          "kind": "constant",
+          "line": 444
+        },
+        {
+          "name": "GPIOHS13",
+          "kind": "constant",
+          "line": 445
+        },
+        {
+          "name": "GPIOHS14",
+          "kind": "constant",
+          "line": 446
+        },
+        {
+          "name": "GPIOHS15",
+          "kind": "constant",
+          "line": 447
+        },
+        {
+          "name": "GPIOHS16",
+          "kind": "constant",
+          "line": 448
+        },
+        {
+          "name": "GPIOHS17",
+          "kind": "constant",
+          "line": 449
+        },
+        {
+          "name": "GPIOHS18",
+          "kind": "constant",
+          "line": 450
+        },
+        {
+          "name": "GPIOHS19",
+          "kind": "constant",
+          "line": 451
+        },
+        {
+          "name": "GPIOHS20",
+          "kind": "constant",
+          "line": 452
+        },
+        {
+          "name": "GPIOHS21",
+          "kind": "constant",
+          "line": 453
+        },
+        {
+          "name": "GPIOHS22",
+          "kind": "constant",
+          "line": 454
+        },
+        {
+          "name": "GPIOHS23",
+          "kind": "constant",
+          "line": 455
+        },
+        {
+          "name": "GPIOHS24",
+          "kind": "constant",
+          "line": 456
+        },
+        {
+          "name": "GPIOHS25",
+          "kind": "constant",
+          "line": 457
+        },
+        {
+          "name": "GPIOHS26",
+          "kind": "constant",
+          "line": 458
+        },
+        {
+          "name": "GPIOHS27",
+          "kind": "constant",
+          "line": 459
+        },
+        {
+          "name": "GPIOHS28",
+          "kind": "constant",
+          "line": 460
+        },
+        {
+          "name": "GPIOHS29",
+          "kind": "constant",
+          "line": 461
+        },
+        {
+          "name": "GPIOHS30",
+          "kind": "constant",
+          "line": 462
+        },
+        {
+          "name": "GPIOHS31",
+          "kind": "constant",
+          "line": 463
+        },
+        {
+          "name": "GPIO0",
+          "kind": "constant",
+          "line": 464
+        },
+        {
+          "name": "GPIO1",
+          "kind": "constant",
+          "line": 465
+        },
+        {
+          "name": "GPIO2",
+          "kind": "constant",
+          "line": 466
+        },
+        {
+          "name": "GPIO3",
+          "kind": "constant",
+          "line": 467
+        },
+        {
+          "name": "GPIO4",
+          "kind": "constant",
+          "line": 468
+        },
+        {
+          "name": "GPIO5",
+          "kind": "constant",
+          "line": 469
+        },
+        {
+          "name": "GPIO6",
+          "kind": "constant",
+          "line": 470
+        },
+        {
+          "name": "GPIO7",
+          "kind": "constant",
+          "line": 471
+        },
+        {
+          "name": "WAKEUP_NOT_SUPPORT",
+          "kind": "constant",
+          "line": 474
+        }
+      ]
+    },
+    "Maix.FPIOA": {
+      "source": "components/micropython/port/src/Maix/Maix_fpioa.c",
+      "entries": [
+        {
+          "name": "set_function",
+          "kind": "callable",
+          "line": 178
+        },
+        {
+          "name": "help",
+          "kind": "callable",
+          "line": 179
+        },
+        {
+          "name": "get_Pin_num",
+          "kind": "callable",
+          "line": 180
+        },
+        {
+          "name": "SPI_SLAVE_SCLK",
+          "kind": "constant",
+          "line": 267
+        },
+        {
+          "name": "UART1_RS485_EN",
+          "kind": "constant",
+          "line": 342
+        },
+        {
+          "name": "UART2_RS485_EN",
+          "kind": "constant",
+          "line": 356
+        },
+        {
+          "name": "UART3_RS485_EN",
+          "kind": "constant",
+          "line": 370
+        },
+        {
+          "name": "TIMER0_TOGGLE1",
+          "kind": "constant",
+          "line": 371
+        },
+        {
+          "name": "TIMER0_TOGGLE2",
+          "kind": "constant",
+          "line": 372
+        },
+        {
+          "name": "TIMER0_TOGGLE3",
+          "kind": "constant",
+          "line": 373
+        },
+        {
+          "name": "TIMER0_TOGGLE4",
+          "kind": "constant",
+          "line": 374
+        },
+        {
+          "name": "TIMER1_TOGGLE1",
+          "kind": "constant",
+          "line": 375
+        },
+        {
+          "name": "TIMER1_TOGGLE2",
+          "kind": "constant",
+          "line": 376
+        },
+        {
+          "name": "TIMER1_TOGGLE3",
+          "kind": "constant",
+          "line": 377
+        },
+        {
+          "name": "TIMER1_TOGGLE4",
+          "kind": "constant",
+          "line": 378
+        },
+        {
+          "name": "TIMER2_TOGGLE1",
+          "kind": "constant",
+          "line": 379
+        },
+        {
+          "name": "TIMER2_TOGGLE2",
+          "kind": "constant",
+          "line": 380
+        },
+        {
+          "name": "TIMER2_TOGGLE3",
+          "kind": "constant",
+          "line": 381
+        },
+        {
+          "name": "TIMER2_TOGGLE4",
+          "kind": "constant",
+          "line": 382
+        }
+      ]
+    },
+    "Maix.I2S": {
+      "source": "components/micropython/port/src/Maix/Maix_i2s.c",
+      "entries": [
+        {
+          "name": "__deinit__",
+          "kind": "callable",
+          "line": 324
+        },
+        {
+          "name": "init",
+          "kind": "callable",
+          "line": 325
+        },
+        {
+          "name": "channel_config",
+          "kind": "callable",
+          "line": 326
+        },
+        {
+          "name": "set_sample_rate",
+          "kind": "callable",
+          "line": 327
+        },
+        {
+          "name": "record",
+          "kind": "callable",
+          "line": 328
+        },
+        {
+          "name": "wait_record",
+          "kind": "callable",
+          "line": 329
+        },
+        {
+          "name": "play",
+          "kind": "callable",
+          "line": 330
+        },
+        {
+          "name": "DEVICE_0",
+          "kind": "constant",
+          "line": 334
+        },
+        {
+          "name": "DEVICE_1",
+          "kind": "constant",
+          "line": 335
+        },
+        {
+          "name": "DEVICE_2",
+          "kind": "constant",
+          "line": 336
+        },
+        {
+          "name": "CHANNEL_0",
+          "kind": "constant",
+          "line": 338
+        },
+        {
+          "name": "CHANNEL_1",
+          "kind": "constant",
+          "line": 339
+        },
+        {
+          "name": "CHANNEL_2",
+          "kind": "constant",
+          "line": 340
+        },
+        {
+          "name": "CHANNEL_3",
+          "kind": "constant",
+          "line": 341
+        },
+        {
+          "name": "IGNORE_WORD_LENGTH",
+          "kind": "constant",
+          "line": 343
+        },
+        {
+          "name": "RESOLUTION_12_BIT",
+          "kind": "constant",
+          "line": 344
+        },
+        {
+          "name": "RESOLUTION_16_BIT",
+          "kind": "constant",
+          "line": 345
+        },
+        {
+          "name": "RESOLUTION_20_BIT",
+          "kind": "constant",
+          "line": 346
+        },
+        {
+          "name": "RESOLUTION_24_BIT",
+          "kind": "constant",
+          "line": 347
+        },
+        {
+          "name": "RESOLUTION_32_BIT",
+          "kind": "constant",
+          "line": 348
+        },
+        {
+          "name": "SCLK_CYCLES_16",
+          "kind": "constant",
+          "line": 350
+        },
+        {
+          "name": "SCLK_CYCLES_24",
+          "kind": "constant",
+          "line": 351
+        },
+        {
+          "name": "SCLK_CYCLES_32",
+          "kind": "constant",
+          "line": 352
+        },
+        {
+          "name": "TRANSMITTER",
+          "kind": "constant",
+          "line": 354
+        },
+        {
+          "name": "RECEIVER",
+          "kind": "constant",
+          "line": 355
+        },
+        {
+          "name": "STANDARD_MODE",
+          "kind": "constant",
+          "line": 357
+        },
+        {
+          "name": "RIGHT_JUSTIFYING_MODE",
+          "kind": "constant",
+          "line": 358
+        },
+        {
+          "name": "LEFT_JUSTIFYING_MODE",
+          "kind": "constant",
+          "line": 359
+        }
+      ]
+    },
+    "KPU": {
+      "source": "components/micropython/port/src/Maix/Maix_kpu.c",
+      "entries": [
+        {
+          "name": "load",
+          "kind": "callable",
+          "line": 1817
+        },
+        {
+          "name": "load_flash",
+          "kind": "callable",
+          "line": 1818
+        },
+        {
+          "name": "set_outputs",
+          "kind": "callable",
+          "line": 1819
+        },
+        {
+          "name": "init_yolo2",
+          "kind": "callable",
+          "line": 1820
+        },
+        {
+          "name": "run_yolo2",
+          "kind": "callable",
+          "line": 1821
+        },
+        {
+          "name": "deinit",
+          "kind": "callable",
+          "line": 1822
+        },
+        {
+          "name": "set_layers",
+          "kind": "callable",
+          "line": 1823
+        },
+        {
+          "name": "forward",
+          "kind": "callable",
+          "line": 1824
+        },
+        {
+          "name": "get_output",
+          "kind": "callable",
+          "line": 1825
+        },
+        {
+          "name": "fmap",
+          "kind": "callable",
+          "line": 1826
+        },
+        {
+          "name": "fmap_free",
+          "kind": "callable",
+          "line": 1827
+        },
+        {
+          "name": "netinfo",
+          "kind": "callable",
+          "line": 1828
+        },
+        {
+          "name": "memtest",
+          "kind": "callable",
+          "line": 1829
+        },
+        {
+          "name": "face_encode",
+          "kind": "callable",
+          "line": 1830
+        },
+        {
+          "name": "face_compare",
+          "kind": "callable",
+          "line": 1831
+        },
+        {
+          "name": "classifier",
+          "kind": "callable",
+          "line": 1832
+        }
+      ]
+    }
+  }
+}

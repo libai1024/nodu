@@ -1,0 +1,27 @@
+{
+  "started": "2026-10-19T17:02:12.760Z",
+  "steps": [
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T17:02:12.797Z"
+    },
+    {
+      "k": "connected",
+      "v": "2026-10-19T17:02:16.727Z"
+    },
+    {
+      "k": "diag-return",
+      "v": {
+        "ok": "NODU_BI:{}\r\nNODU_PINS:{}\r\nNODU_LED_ERR:board does not declare pin 'LED'\r\nNODU_INFO:{\"read_via\": \"Maix.config runtime cache\", \"declaration\": \"the runtime cache backs onto /flash/config.json; file edits only take effect after reboot\", \"type\": null, \"config_name\": null, \"source\": \"/flash/config.json\"}\r\n"
+      }
+    },
+    {
+      "k": "diag-logs",
+      "v": "[{\"s\":\"stdout\",\"t\":\"NODU_BI:{}\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_PINS:{}\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_LED_ERR:board does not declare pin 'LED'\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_INFO:{\\\"read_via\\\": \\\"Maix.config runtime cache\\\", \\\"declaration\\\": \\\"the runtime cache backs onto /flash/config.json; file edits only take effect after reboot\\\", \\\"type\\\": null, \\\"config_name\\\": null, \\\"source\\\": \\\"/flash/config.json\\\"}\\r\\n\"}]"
+    },
+    {
+      "k": "done",
+      "v": "2026-10-19T17:02:18.824Z"
+    }
+  ]
+}

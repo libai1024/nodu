@@ -1,6 +1,6 @@
 # Nodu 0.1.3 实施计划 — MaixPy IDE 0.2.5 功能 1:1 复刻
 
-日期：2026-10-19。状态：**实施中**：阶段 0 证据与阶段 1 Rust 开发检查点已落地，阶段门禁尚未全部通过。功能对照见 [maixpy-ide-parity.md](maixpy-ide-parity.md)，阶段 1 验证见 [evidence/phase-1-validation.md](evidence/phase-1-validation.md)。
+日期：2026-10-19。状态：**实施中**：阶段 0 证据与阶段 1 Rust 开发检查点已落地，阶段门禁尚未全部通过。功能对照见 [maixpy-ide-parity.md](maixpy-ide-parity.md)，阶段 1 验证见 [evidence/phase-1-validation.md](evidence/phase-1-validation.md)。「认识开发板」实现与验证见 [evidence/board-guide-validation.md](evidence/board-guide-validation.md)（引脚事实核查见 [evidence/board-source-audit.md](evidence/board-source-audit.md)）。
 
 ## 0. 已确认的决定
 

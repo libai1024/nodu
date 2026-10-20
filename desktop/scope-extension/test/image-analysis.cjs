@@ -77,6 +77,40 @@ test('chunked LAB conversion can cancel stale frames before publishing results',
     assert.equal(await buildLabRaster(rgba([1, 2, 3]), 1, 1, () => false, async () => {}), undefined);
 });
 
+const { parseThresholdTuple, thresholdWritebackAllowed } = require('../lib/browser/nodu-threshold-edit');
+
+test('threshold tuple parsing accepts exactly 2 or 6 integers in domain', () => {
+    assert.deepEqual(parseThresholdTuple('(0, 100, -128, 127, -128, 127)'), [0, 100, -128, 127, -128, 127]);
+    assert.deepEqual(parseThresholdTuple('(20,40,-20,20,-30,30)'), [20, 40, -20, 20, -30, 30]);
+    assert.deepEqual(parseThresholdTuple(' ( 0 , 255 ) '), [0, 255]);
+    assert.equal(parseThresholdTuple('(0, 101, 0, 0, 0, 0)'), undefined); // L domain 0..100
+    assert.equal(parseThresholdTuple('(0, 0, -129, 0, 0, 0)'), undefined); // A/B domain -128..127
+    assert.equal(parseThresholdTuple('(0, 0, 0, 0, 0, 128)'), undefined);
+    assert.equal(parseThresholdTuple('(256, 300)'), undefined); // gray domain 0..255
+    assert.equal(parseThresholdTuple('(-1, 5)'), undefined);
+    assert.equal(parseThresholdTuple('(1, 2, 3)'), undefined); // wrong arity
+    assert.equal(parseThresholdTuple('(1, 2, 3, 4, 5)'), undefined);
+    assert.equal(parseThresholdTuple('(1.5, 2)'), undefined); // integers only
+    assert.equal(parseThresholdTuple('[0, 255]'), undefined); // must be parentheses
+    assert.equal(parseThresholdTuple('(0, 255); x = 1'), undefined);
+    assert.equal(parseThresholdTuple('foo'), undefined);
+    assert.equal(parseThresholdTuple(''), undefined);
+});
+
+test('threshold writeback guard requires a valid unchanged captured tuple', () => {
+    const captured = { version: 7, rangeText: '(0, 100, -128, 127, -128, 127)' };
+    const fresh = { version: 7, rangeText: '(0, 100, -128, 127, -128, 127)', disposed: false, readOnly: false };
+    assert.equal(thresholdWritebackAllowed(captured, fresh), true);
+    assert.equal(thresholdWritebackAllowed(captured, { ...fresh, version: 8 }), false); // document edited
+    assert.equal(thresholdWritebackAllowed(captured, { ...fresh, rangeText: '(1, 2)' }), false); // range text changed
+    assert.equal(thresholdWritebackAllowed(captured, { ...fresh, disposed: true }), false); // editor closed
+    assert.equal(thresholdWritebackAllowed(captured, { ...fresh, readOnly: true }), false);
+    // Empty selection and non-tuple selection must never trigger a write.
+    assert.equal(thresholdWritebackAllowed({ version: 7, rangeText: '' }, { ...fresh, rangeText: '' }), false);
+    assert.equal(thresholdWritebackAllowed({ version: 7, rangeText: 'x = 1' }, { ...fresh, rangeText: 'x = 1' }), false);
+    assert.equal(thresholdWritebackAllowed({ version: 7, rangeText: '(0, 255)' }, { ...fresh, rangeText: '(0, 255)' }), true); // gray tuple writes too
+});
+
 test('clipboard success requires a write acknowledgement; silent permission denial is reported', async () => {
     let listener, disposed = 0;
     const clipboard = { onDidWriteText: callback => { listener = callback; return { dispose: () => { disposed++; } }; }, writeText: async text => listener(text) };
@@ -88,4 +122,22 @@ test('clipboard success requires a write acknowledgement; silent permission deni
     clipboard.writeText = async () => { throw new Error('denied'); };
     await assert.rejects(copyImageParameters(clipboard, 'test'), /denied/);
     assert.equal(disposed, 3);
+});
+
+test('encoded frame gate accepts an 8 MiB image and rejects beyond, without decoding', () => {
+    const { MAX_IMAGE_FILE_BYTES, frameDataWithinLimit } = require('../lib/browser/nodu-imaging');
+    assert.equal(MAX_IMAGE_FILE_BYTES, 8 * 1024 * 1024);
+    const encodedAtLimit = Math.ceil(MAX_IMAGE_FILE_BYTES / 3) * 4;
+    assert.ok(frameDataWithinLimit(encodedAtLimit), 'exact 8 MiB encoding accepted');
+    assert.ok(frameDataWithinLimit(encodedAtLimit - 4));
+    assert.ok(!frameDataWithinLimit(encodedAtLimit + 1), 'one byte over 8 MiB rejected');
+    assert.ok(!frameDataWithinLimit(0) === false, 'empty payload still passes the size gate (decode rejects it)');
+});
+
+test('dead captured editor target is detected before any model read', () => {
+    const { thresholdTargetDead } = require('../lib/browser/nodu-threshold-edit');
+    assert.equal(thresholdTargetDead({ widgetDisposed: false, modelDisposed: false, modelChanged: false }), false);
+    assert.equal(thresholdTargetDead({ widgetDisposed: true, modelDisposed: false, modelChanged: false }), true);
+    assert.equal(thresholdTargetDead({ widgetDisposed: false, modelDisposed: true, modelChanged: false }), true);
+    assert.equal(thresholdTargetDead({ widgetDisposed: false, modelDisposed: false, modelChanged: true }), true);
 });

@@ -64,7 +64,11 @@
 .nodu-simple #theia-main-content-panel { --theia-breadcrumbs-height: 0px; --theia-private-horizontal-tab-height: 30px; --theia-horizontal-toolbar-height: 30px; }
 
 .nodu-console-content { display: flex; flex-direction: column; height: 100%; min-height: 0; padding: 8px 14px; box-sizing: border-box; }
-.nodu-console-output { flex: 1; min-height: 0; margin: 0 0 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--theia-editor-foreground); font-family: var(--theia-code-font-family, monospace); font-size: 12px; line-height: 1.5; }
+.nodu-console-bar { display: flex; align-items: center; gap: 6px; min-height: 26px; margin-bottom: 6px; }
+.nodu-console-title { color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-console-actions { margin-left: auto; display: inline-flex; align-items: center; gap: 2px; }
+.nodu-console-actions .scope-action { width: 24px; min-width: 24px; height: 24px; min-height: 24px; padding: 0; }
+.nodu-console-output { flex: 1; min-height: 0; margin: 0 0 8px; padding: 6px 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--theia-input-background); border: 1px solid var(--theia-panel-border); border-radius: 4px; color: var(--theia-editor-foreground); font-family: var(--theia-code-font-family, monospace); font-size: 12px; line-height: 1.5; }
 .nodu-console-input { display: flex; align-items: center; gap: 8px; margin-top: auto; }
 .nodu-console-input > span { color: var(--theia-descriptionForeground); font-family: var(--theia-code-font-family, monospace); }
 .scope-widget .nodu-console-input textarea { flex: 1; width: 0; min-height: 30px; max-height: 100px; resize: none; font-family: var(--theia-code-font-family, monospace); font-size: 12px; }
@@ -75,3 +79,10 @@
 @media (max-width: 1100px) { .scope-device-chip-port { display: none; } }
 @media (max-width: 760px) { .scope-device-chip-board { max-width: 85px; } .nodu-toolbar-alert { display: none; } .scope-workspace-bar { padding-inline: 7px; gap: 7px; } }
 @media (max-width: 600px) { .scope-workspace-bar { grid-template-columns: minmax(0, 1fr) auto; } .scope-toolbar-center { display: none; } }
+
+/* Simple mode keeps language/position but hides encoding/EOL/indent chrome. */
+body.nodu-simple #editor-status-encoding,
+body.nodu-simple #editor-status-eol,
+body.nodu-simple #editor-status-tabbing-config {
+    display: none;
+}

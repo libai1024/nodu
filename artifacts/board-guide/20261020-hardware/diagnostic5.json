@@ -1,0 +1,27 @@
+{
+  "started": "2026-10-19T17:06:03.812Z",
+  "steps": [
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T17:06:03.851Z"
+    },
+    {
+      "k": "connected",
+      "v": "2026-10-19T17:06:07.788Z"
+    },
+    {
+      "k": "diag-return",
+      "v": {
+        "ok": "NODU_E:embedfire\r\nNODU_F:{\"direct\": \"embedfire\", \"pins\": {\"USER_LED\": 17, \"BOOT_KEY\": 16}, \"bi\": {\"USER_LED\": 17, \"BOOT_KEY\": 16}, \"same\": true}\r\n"
+      }
+    },
+    {
+      "k": "diag-logs",
+      "v": "[{\"s\":\"stdout\",\"t\":\"NODU_E:embedfire\\r\\n\"},{\"s\":\"stdout\",\"t\":\"NODU_F:{\\\"direct\\\": \\\"embedfire\\\", \\\"pins\\\": {\\\"USER_LED\\\": 17, \\\"BOOT_KEY\\\": 16}, \\\"bi\\\": {\\\"USER_LED\\\": 17, \\\"BOOT_KEY\\\": 16}, \\\"same\\\": true}\\r\\n\"}]"
+    },
+    {
+      "k": "done",
+      "v": "2026-10-19T17:06:10.095Z"
+    }
+  ]
+}

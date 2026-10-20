@@ -4,7 +4,8 @@ import { DisposableCollection } from '@theia/core/lib/common/disposable';
 import { RpcProxy } from '@theia/core/lib/common/messaging/proxy-factory';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
-import { ConnectOptions, DeviceBackup, DeviceClient, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NODU_DEVICE_PATH, NoduDeviceService, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
+import { BoardInspection, ConnectOptions, DeviceBackup, DeviceClient, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NODU_DEVICE_PATH, NoduDeviceService, RecordingStatus, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
+import { BOARD_DEFINITIONS } from '../common/nodu-board-data';
 
 export const NODU_FILE_LIMIT = 2 * 1024 * 1024;
 
@@ -27,6 +28,8 @@ export class NoduDeviceModel implements DeviceClient {
     directory = '/flash';
     selectedPort = '';
     boardProfile: ConnectOptions['boardProfile'] = 'embedfire-cam-gc2145';
+    /** Original MaixPy IDE board id 0–8 (reset sequence); persisted locally. */
+    boardId = 2;
     frame: DeviceFrame | undefined;
     logs: DeviceLog[] = [];
     error = '';
@@ -36,6 +39,11 @@ export class NoduDeviceModel implements DeviceClient {
     plan: FirmwarePlan | undefined;
     backup: DeviceBackup | undefined;
     flashResult: FirmwareResult | undefined;
+    /** Board-side config declaration; never a measured hardware identity. */
+    boardInspection: BoardInspection | undefined;
+    boardInspecting = false;
+    private boardInspectionPort = '';
+    private boardInspectionGeneration = 0;
     private backupPort = '';
     private backupProfile = '';
     private backupCurrent = false;
@@ -52,8 +60,14 @@ export class NoduDeviceModel implements DeviceClient {
             this.state = { ...this.state, phase: 'error', running: false, busy: false, preview: false };
             this.frame = undefined;
             this.entries = [];
+            this.clearBoardInspection();
             this.fail('设备服务连接', new Error('连接已中断，正在等待服务重新连接。'));
         }));
+        try {
+            const raw = localStorage.getItem('nodu.board-id');
+            const saved = raw === null ? undefined : Number(raw);
+            if (saved !== undefined && Number.isInteger(saved) && saved >= 0 && saved <= 8) { this.boardId = saved; }
+        } catch { /* private mode */ }
         void this.init();
     }
 
@@ -67,6 +81,15 @@ export class NoduDeviceModel implements DeviceClient {
         if (this.pending || this.state.busy) { return this.pending || this.state.operation || '设备忙'; }
         return { disconnected: '未连接', connecting: '连接中', connected: '已连接', running: '脚本运行中', error: '连接异常' }[this.state.phase];
     }
+    /** Toolbar caption: catalog label only for a declared match; never a measured identity. */
+    get boardLabel(): string {
+        if (!this.connected) { return '选择开发板'; }
+        if (this.boardInspection?.status === 'declared' && this.boardInspection.boardId) {
+            const board = BOARD_DEFINITIONS.find(entry => entry.id === this.boardInspection!.boardId);
+            if (board) { return board.label; }
+        }
+        return 'K210 · 未识别';
+    }
 
     init(): Promise<void> {
         return this.opening ??= this.service.getState().then(state => this.onState(state)).catch(error => {
@@ -76,10 +99,15 @@ export class NoduDeviceModel implements DeviceClient {
 
     onState(state: DeviceState): void {
         if (this.disposed) { return; }
+        const previousPort = this.state.port;
         this.state = state;
-        if (!this.connected) { this.frame = undefined; this.entries = []; }
+        if (!this.connected) { this.frame = undefined; this.entries = []; this.clearBoardInspection(); }
+        // Any port change invalidates the declaration — including one that
+        // arrives while the first inspection is still in flight.
+        else if (state.port !== previousPort || (this.boardInspectionPort && state.port !== this.boardInspectionPort)) { this.clearBoardInspection(); }
         if (state.port) { this.selectedPort = state.port; }
         if (state.boardProfile === 'embedfire-cam-gc2145' || state.boardProfile === 'generic-k210') { this.boardProfile = state.boardProfile; }
+        if (typeof state.boardId === 'number') { this.boardId = state.boardId; }
         // The worker also mirrors a failed operation's message into lastError;
         // when it repeats the error just recorded by fail(), keep its operation label.
         if (state.lastError && !this.error.endsWith(state.lastError)) { this.error = state.lastError; this.errorOperation = ''; }
@@ -104,8 +132,23 @@ export class NoduDeviceModel implements DeviceClient {
     }
 
     clearError(): void { this.error = ''; this.errorOperation = ''; this.changed.fire(); }
-    selectPort(port: string): void { if (this.selectedPort !== port) { this.backupCurrent = false; } this.selectedPort = port; this.changed.fire(); }
+    private clearBoardInspection(): void {
+        this.boardInspectionGeneration++;
+        this.boardInspection = undefined;
+        this.boardInspecting = false;
+        this.boardInspectionPort = '';
+    }
+    selectPort(port: string): void {
+        if (this.selectedPort !== port) { this.backupCurrent = false; this.clearBoardInspection(); }
+        this.selectedPort = port; this.changed.fire();
+    }
     selectProfile(profile: ConnectOptions['boardProfile']): void { if (this.boardProfile !== profile) { this.backupCurrent = false; } this.boardProfile = profile; this.changed.fire(); }
+    selectBoardId(id: number): void {
+        if (!Number.isInteger(id) || id < 0 || id > 8) { return; }
+        this.boardId = id;
+        try { localStorage.setItem('nodu.board-id', String(id)); } catch { /* private mode */ }
+        this.changed.fire();
+    }
     reportError(action: string, error: unknown): void { this.fail(action, error); }
     note(text: string): void { this.onLog({ text: `${text}\n`, stream: 'system', time: Date.now() }); }
 
@@ -122,13 +165,106 @@ export class NoduDeviceModel implements DeviceClient {
             this.backupCurrent = false;
             this.frame = undefined;
             this.entries = [];
-            this.onState(await this.service.connect({ port: this.selectedPort, boardProfile: this.boardProfile }));
+            this.clearBoardInspection();
+            this.onState(await this.service.connect({ port: this.selectedPort, boardProfile: this.boardProfile, boardId: this.boardId, protocol: 'ide' }));
+            if (this.connected && !this.state.running && this.state.capabilities.files) {
+                await this.readBoardInspection();
+            }
         });
+    }
+
+    /** Read-only; failures surface in the inspection state, not device.error. */
+    async inspectBoard(): Promise<void> {
+        await this.perform('读取板端配置', () => this.readBoardInspection());
+    }
+
+    private async readBoardInspection(): Promise<void> {
+        const generation = ++this.boardInspectionGeneration;
+        const port = this.state.port || '';
+        this.boardInspecting = true;
+        this.changed.fire();
+        try {
+            const result = await this.service.inspectBoard();
+            if (this.disposed || generation !== this.boardInspectionGeneration) { return; }
+            if (this.connected && port && this.state.port === port) {
+                this.boardInspection = result;
+                this.boardInspectionPort = port;
+            }
+        } catch (error) {
+            if (!this.disposed && generation === this.boardInspectionGeneration && this.connected && port && this.state.port === port) {
+                this.boardInspection = { status: 'unavailable', source: '/flash/config.json', pins: {}, peripherals: {},
+                    issues: [`读取板端配置失败：${error instanceof Error ? error.message : String(error)}`] };
+                this.boardInspectionPort = port;
+            }
+        } finally {
+            if (generation === this.boardInspectionGeneration) { this.boardInspecting = false; }
+            if (!this.disposed) { this.changed.fire(); }
+        }
+    }
+
+    async resetDevice(): Promise<void> {
+        this.clearBoardInspection();
+        await this.perform('复位设备', async () => { await this.service.resetDevice(); this.onState(await this.service.getState()); }, true);
+    }
+
+    async saveFile(name: string, data: string, confirmedStartup = false): Promise<boolean | undefined> {
+        return this.perform('写入板端文件', async () => {
+            await this.service.saveFile(name, data, confirmedStartup);
+            this.onState(await this.service.getState());
+            this.note(`已写入板端 ${name}（默认存储）。`);
+            return true;
+        });
+    }
+
+    /** Local formatting; the device is not involved. */
+    async formatScript(code: string, stripComments: boolean, spacesToTabs: boolean): Promise<string | undefined> {
+        return this.perform('格式化脚本', () => this.service.formatScript(code, stripComments, spacesToTabs));
+    }
+
+    async startRecording(fileUri: string): Promise<boolean | undefined> {
+        return this.perform('开始录像', async () => {
+            await this.service.startRecording(fileUri);
+            this.onState(await this.service.getState());
+            return true;
+        });
+    }
+    /** Finalize the recording; returns the counters or undefined on failure. */
+    async stopRecording(): Promise<RecordingStatus | undefined> {
+        return this.perform('结束录像', async () => {
+            const status = await this.service.stopRecording();
+            this.onState(await this.service.getState());
+            this.note(`录像已保存到 ${status.path} · ${status.frames} 帧，${status.bytes} 字节。`);
+            return status;
+        });
+    }
+    async convertVideo(inputUri: string, outputUri: string): Promise<boolean | undefined> {
+        return this.perform('转换视频', async () => {
+            await this.service.convertVideo(inputUri, outputUri);
+            this.note('视频转换完成。');
+            return true;
+        });
+    }
+    async playVideo(inputUri: string): Promise<boolean | undefined> {
+        return this.perform('播放视频', async () => {
+            await this.service.playVideo(inputUri);
+            return true;
+        });
+    }
+
+    /** Bundled terminal binary path — Node-side lookup, no worker needed. */
+    getTerminalExecutable(): Promise<string> {
+        return this.service.getTerminalExecutable();
+    }
+    /** Launcher `-open_*_terminal` requests, consumed once per backend. */
+    takeStartupTerminals(): Promise<string[][]> {
+        return this.service.takeStartupTerminals();
     }
 
     async disconnect(): Promise<void> {
         if (this.flashing) { this.fail('断开设备', new Error('固件正在写入和验证，请保持 USB 连接，完成后再断开。')); return; }
         this.backupCurrent = false;
+        // Invalidate at once so an in-flight inspection resolves stale.
+        this.clearBoardInspection();
         await this.perform('断开设备', async () => { await this.service.disconnect(); this.onState(await this.service.getState()); }, true);
     }
 
@@ -168,13 +304,13 @@ export class NoduDeviceModel implements DeviceClient {
             return Uint8Array.from(binary, char => char.charCodeAt(0));
         });
     }
-    async writeFile(path: string, bytes: Uint8Array, overwrite: boolean): Promise<boolean | undefined> {
+    async writeFile(path: string, bytes: Uint8Array, overwrite: boolean, confirmedStartup = false): Promise<boolean | undefined> {
         return this.perform('写入板端文件', async () => {
             this.backupCurrent = false;
             if (bytes.byteLength > NODU_FILE_LIMIT) { throw new Error('文件超过 2 MiB 限额。'); }
             let binary = '';
             for (let offset = 0; offset < bytes.length; offset += 0x8000) { binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000)); }
-            await this.service.writeFile(path, btoa(binary), overwrite);
+            await this.service.writeFile(path, btoa(binary), overwrite, confirmedStartup);
             this.note(`已写入 ${path} · ${bytes.byteLength} 字节。`);
             return true;
         });

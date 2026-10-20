@@ -3,16 +3,20 @@ import * as React from '@theia/core/shared/react';
 import { BoxLayout, Widget } from '@theia/core/shared/@lumino/widgets';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, CommandService, DisposableCollection, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR } from '@theia/core/lib/common';
+import { getThemeMode } from '@theia/core/lib/common/theme';
 import { MessageService } from '@theia/core/lib/common/message-service';
 import { FrontendApplicationContribution, ApplicationShell, KeybindingContribution, KeybindingRegistry, ReactWidget } from '@theia/core/lib/browser';
 import { AbstractViewContribution } from '@theia/core/lib/browser/shell/view-contribution';
 import { StatusBar, StatusBarAlignment } from '@theia/core/lib/browser/status-bar/status-bar';
+import { ThemeService } from '@theia/core/lib/browser/theming';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { FileNavigatorContribution } from '@theia/navigator/lib/browser/navigator-contribution';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
+import { EditorWidget } from '@theia/editor/lib/browser';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
+import * as monaco from '@theia/monaco-editor-core';
 import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
 import { OutputChannelManager, OutputChannelSeverity } from '@theia/output/lib/browser/output-channel';
 import { OutputContribution } from '@theia/output/lib/browser/output-contribution';
@@ -25,6 +29,7 @@ import { ScopeLayoutState } from './scope-layout-state';
 import { NoduDevicePanel } from './nodu-device-panel';
 import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBrand } from './scope-brand';
+import { SCOPE_LIGHT_THEME_ID, SCOPE_THEME_ID } from './scope-theme';
 export { ScopeLayoutState } from './scope-layout-state';
 
 @injectable()
@@ -66,6 +71,7 @@ export class ScopeToolbar extends ReactWidget {
     @inject(FileService) protected readonly files!: FileService;
     @inject(FileDialogService) protected readonly dialogs!: FileDialogService;
     @inject(EditorManager) protected readonly editors!: EditorManager;
+    @inject(ThemeService) protected readonly themes!: ThemeService;
 
     @postConstruct()
     protected init(): void {
@@ -73,6 +79,7 @@ export class ScopeToolbar extends ReactWidget {
         this.addClass('scope-toolbar-widget');
         this.toDispose.push(this.device.onDidChange(() => this.update()));
         this.toDispose.push(this.layoutState.onDidChange(() => this.update()));
+        this.toDispose.push(this.themes.onDidColorThemeChange(() => this.update()));
         const outside = (event: PointerEvent): void => {
             if (this.layoutState.deviceOpen && event.target instanceof Node && !this.node.querySelector('.scope-device-picker')?.contains(event.target)) {
                 this.layoutState.setDeviceOpen(false);
@@ -96,7 +103,7 @@ export class ScopeToolbar extends ReactWidget {
         // Beginner code faults (REPL/RAM script) are not device failures; they stay in the console.
         const deviceError = !!this.device.error && !ScopeToolbar.USER_CODE_OPS.has(this.device.errorOperation);
         const chipState = deviceError || phase === 'error' ? 'error' : phase === 'connecting' ? 'connecting' : this.device.connected ? 'connected' : 'disconnected';
-        const board = this.device.boardProfile === 'embedfire-cam-gc2145' ? '野火 K210 CAM' : 'K210';
+        const board = this.device.boardLabel;
         const port = (this.device.state.port || this.device.selectedPort).split('/').pop() || '选择端口';
         return <header className="scope-workspace-bar" aria-label="Nodu 工具栏">
             <div className="scope-toolbar-start">
@@ -105,10 +112,10 @@ export class ScopeToolbar extends ReactWidget {
                 <button className={`scope-action scope-action-primary scope-toolbar-run${this.device.state.running ? ' nodu-is-running' : ''}`} disabled={this.device.busy || this.device.state.running} aria-busy={this.device.state.running || undefined} onClick={() => void this.commands.executeCommand('scope.run-current')} title="运行 · Ctrl / ⌘ Enter"><i className={`codicon ${this.device.state.running ? 'codicon-loading codicon-modifier-spin' : 'codicon-play'}`} aria-hidden="true"/>{this.device.state.running ? '运行中' : '运行'}</button>
                 <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${this.device.state.running || this.device.busy ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!this.device.canStop} onClick={() => void this.commands.executeCommand('scope.stop-device')} title="停止"><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                 <div className="scope-device-picker">
-                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || '设备与端口'}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || (this.device.connected ? `${board} · 板端配置声明，非硬件实测` : '设备与端口')}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
                     {/* One permanently mounted form owns drafts/confirmations across popover and mode changes. */}
                     <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="设备设置" hidden={!this.layoutState.deviceOpen}>
-                        <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors} compact={simple} showLogs={() => void this.commands.executeCommand('scope.show-logs')} />
+                        <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors} compact={simple} showLogs={() => void this.commands.executeCommand('scope.show-logs')} showBoardGuide={() => void this.commands.executeCommand('scope.board-guide')} />
                     </div>
                 </div>
             </div>
@@ -117,6 +124,7 @@ export class ScopeToolbar extends ReactWidget {
             <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="控制台" aria-pressed={this.layoutState.consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title="控制台"><i className="codicon codicon-terminal" aria-hidden="true"/></button>
             <button className="scope-action scope-toolbar-icon scope-toolbar-vision" aria-label="视觉" aria-pressed={this.layoutState.visionVisible} onClick={() => void this.commands.executeCommand('scope.toggle-vision')} title="视觉"><i className="codicon codicon-device-camera" aria-hidden="true"/></button>
             <span className="scope-toolbar-divider" aria-hidden="true"/>
+            <button className="scope-action scope-toolbar-icon" aria-label={getThemeMode(this.themes.getCurrentTheme().type) === 'dark' ? '切换到浅色主题' : '切换到深色主题'} title={getThemeMode(this.themes.getCurrentTheme().type) === 'dark' ? '切换到浅色主题' : '切换到深色主题'} onClick={() => void this.commands.executeCommand('scope.toggle-theme')}><i className="codicon codicon-color-mode" aria-hidden="true"/></button>
             <div className="scope-layout-switch" role="group" aria-label="布局模式">
                 <button aria-label="简洁模式" title="简洁模式" aria-pressed={simple} onClick={() => { if (!simple) { void this.commands.executeCommand('scope.layout.simple'); } }}>简</button>
                 <button aria-label="专业模式" title="专业模式" aria-pressed={!simple} onClick={() => { if (simple) { void this.commands.executeCommand('scope.layout.pro'); } }}>专</button>
@@ -145,11 +153,17 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     @inject(StatusBar) protected readonly status!: StatusBar;
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(ClipboardService) protected readonly clipboard!: ClipboardService;
+    @inject(ThemeService) protected readonly themes!: ThemeService;
     protected readonly toDispose = new DisposableCollection();
     private layoutQueue: Promise<unknown> = Promise.resolve();
     private layoutApplied = false;
     private syncFrame: number | undefined;
     private geometry = '';
+    // Traceback navigation: the editor that started the current run, plus the
+    // stderr tail and the highlight ids it produced.
+    private runTarget?: { widget: EditorWidget; control: monaco.editor.IStandaloneCodeEditor; model: monaco.editor.ITextModel; version: number; path: string };
+    private tracebackTail = '';
+    private tracebackDecorations: string[] = [];
     private readonly panelProfiles = {
         simple: { files: false, console: false, vision: false },
         pro: { files: true, console: true, vision: true }
@@ -229,6 +243,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         for (const log of this.device.logs) { deviceChannel.append(log.text, log.stream === 'stderr' ? OutputChannelSeverity.Error : OutputChannelSeverity.Info); }
         this.toDispose.push(this.device.onDidLog(log => {
             deviceChannel.append(log.text, log.stream === 'stderr' ? OutputChannelSeverity.Error : OutputChannelSeverity.Info);
+            if (log.stream === 'stderr') { this.followTraceback(log.text); }
         }));
         // Panel geometry, tab activation and external close commands all update the toolbar.
         const observer = new MutationObserver(() => this.schedulePanelSync());
@@ -242,7 +257,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.toDispose.push(this.shell.onDidRemoveWidget(() => this.schedulePanelSync()));
         let lastDeviceStatus = '';
         this.toDispose.push(this.device.onDidChange(() => {
-            const next = `${this.device.statusLabel}:${this.device.state.port || ''}`;
+            const next = `${this.device.statusLabel}:${this.device.state.port || ''}:${this.device.state.fps ?? ''}:${this.device.state.firmware ?? ''}`;
             if (next !== lastDeviceStatus) { lastDeviceStatus = next; this.updateStatus(); }
         }));
         let lastRunning = this.session.running;
@@ -273,14 +288,16 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     async onDidInitializeLayout(): Promise<void> { await this.serializeLayout(() => this.applyLayout(this.layoutState.mode)); }
-    onStop(): void { this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
+    onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
 
     protected updateStatus(): void {
         if (this.layoutState.mode === 'simple') {
             this.status.removeElement('scope:device'); this.status.removeElement('scope:demo');
             return;
         }
-        void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-terminal-ansiBrightGreen, #64C5AC)' : undefined });
+        const fw = this.device.state.firmware ? ` · ${this.device.state.firmware.split(' ').slice(0, 2).join(' ')}` : '';
+        const fps = typeof this.device.state.fps === 'number' ? ` · ${this.device.state.fps.toFixed(1)} fps` : '';
+        void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}${fw}${fps}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-terminal-ansiBrightGreen, #64C5AC)' : undefined });
         if (this.session.running) {
             void this.status.setElement('scope:demo', { text: '$(play) 示例播放中', alignment: StatusBarAlignment.LEFT, priority: 990, command: 'scope.show-demo-logs', tooltip: '查看示例日志' });
         } else {
@@ -372,6 +389,18 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         command('scope.show-devices', '显示设备与连接', () => this.layoutState.setDeviceOpen(true));
         command('scope.run-current', '运行当前代码', () => this.runCurrentEditor());
         command('scope.stop-device', '停止脚本 / 取消设备操作', () => this.device.stop());
+        // Original IDE shortcuts: Ctrl/⌘+R toggles run/stop, Ctrl/⌘+E toggles connect.
+        command('scope.toggle-run', '运行 / 停止', () => { if (this.device.state.running || this.device.busy) { void this.device.stop(); } else { void this.runCurrentEditor(); } });
+        command('scope.toggle-connect', '连接 / 断开设备', () => {
+            const phase = this.device.state.phase;
+            if (this.device.connected || this.device.busy || phase === 'connecting') { void this.device.disconnect(); return; }
+            if (this.device.selectedPort) { void this.device.connect(); return; }
+            this.layoutState.setDeviceOpen(true);
+            void this.device.scanPorts();
+        });
+        command('scope.reset-device', '复位设备', () => this.device.resetDevice());
+        // The toggle stays inside the two product themes; other registered themes stay reachable via command palette.
+        command('scope.toggle-theme', '切换深浅主题', () => this.themes.setCurrentTheme(getThemeMode(this.themes.getCurrentTheme().type) === 'dark' ? SCOPE_LIGHT_THEME_ID : SCOPE_THEME_ID));
         command('scope.run-demo', '播放 / 暂停示例', async () => { const widget = await this.vision.openView({ activate: true }); widget.showLocalDemo(); this.session.toggleRun(); }, true);
         command('scope.show-logs', '显示设备日志', () => this.serializeLayout(async () => { await this.showConsole(true); await this.settlePanels(); }));
         command('scope.show-demo-logs', '显示示例日志', () => { this.output.getChannel('Nodu · 示例').show(); return this.outputView.openView({ activate: true }); }, true);
@@ -381,7 +410,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     registerMenus(menus: MenuModelRegistry): void {
         const menu = [...MAIN_MENU_BAR, '5_scope'];
         menus.registerSubmenu(menu, '见微');
-        for (const [order, commandId] of ['scope.run-current', 'scope.stop-device', 'scope.show-vision', 'scope.show-devices', 'scope.show-logs', 'scope.layout.simple', 'scope.layout.pro'].entries()) {
+        for (const [order, commandId] of ['scope.run-current', 'scope.stop-device', 'scope.reset-device', 'scope.show-vision', 'scope.show-devices', 'scope.board-guide', 'scope.show-logs', 'scope.toggle-theme', 'scope.layout.simple', 'scope.layout.pro'].entries()) {
             menus.registerMenuAction(menu, { commandId, order: String(order) });
         }
         const demoMenu = [...menu, 'local-demo'];
@@ -391,6 +420,9 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
 
     registerKeybindings(keys: KeybindingRegistry): void {
         keys.registerKeybinding({ command: 'scope.run-current', keybinding: 'ctrlcmd+enter', when: 'editorTextFocus' });
+        // Inside a terminal these keys forward raw bytes instead (terminalFocus).
+        keys.registerKeybinding({ command: 'scope.toggle-run', keybinding: 'ctrlcmd+r', when: '!terminalFocus' });
+        keys.registerKeybinding({ command: 'scope.toggle-connect', keybinding: 'ctrlcmd+e', when: '!terminalFocus' });
     }
 
     protected async runCurrentEditor(): Promise<void> {
@@ -409,7 +441,56 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         // Run Monaco's current buffer, including unsaved changes.
         const code = model?.getValue() ?? widget.editor.document.getText();
         if (!code.trim()) { await this.messages.info('当前代码为空，请输入 Python 代码。'); return; }
+        // Clear the previous run's decoration first: the stored ids belong to
+        // the old run's model and must be removed on that model, not the new one.
+        this.clearTracebackDecoration();
+        // Traceback frames resolve only against this exact buffer and version.
+        if (editor && model) {
+            this.runTarget = { widget, control: editor, model, version: model.getVersionId(), path: widget.editor.uri.path.toString() };
+        } else {
+            this.runTarget = undefined;
+        }
         await this.device.runScript(code, widget.editor.uri.path.base || '当前 Python 代码');
+    }
+
+    /**
+     * Follow stderr `File "…", line n` frames from a device traceback onto the
+     * editor that produced the running script. Only `<stdin>` or the captured
+     * source path/basename map to it; board-internal paths are logged but
+     * never open foreign files. A moved/edited/disposed buffer is skipped.
+     */
+    private followTraceback(text: string): void {
+        const target = this.runTarget;
+        if (!target || target.widget.isDisposed || target.model.isDisposed()
+            || target.control.getModel() !== target.model || target.model.getVersionId() !== target.version) {
+            return;
+        }
+        this.tracebackTail = (this.tracebackTail + text).slice(-16384);
+        const frames = /File "([^"\n]+)", line (\d+)/g;
+        let match: RegExpExecArray | null;
+        let line = 0;
+        while ((match = frames.exec(this.tracebackTail)) !== null) {
+            const name = match[1];
+            if (name === '<stdin>' || name === target.path || name.split('/').pop() === target.path.split('/').pop()) {
+                line = parseInt(match[2], 10);
+            }
+        }
+        if (!line || !Number.isInteger(line) || line < 1 || line > target.model.getLineCount()) { return; }
+        target.control.revealLineInCenter(line);
+        target.control.setPosition({ lineNumber: line, column: 1 });
+        this.tracebackDecorations = target.model.deltaDecorations(this.tracebackDecorations, [{
+            range: new monaco.Range(line, 1, line, target.model.getLineMaxColumn(line)),
+            options: { isWholeLine: true, className: 'nodu-traceback-line' },
+        }]);
+    }
+
+    private clearTracebackDecoration(): void {
+        const target = this.runTarget;
+        if (target && !target.model.isDisposed() && this.tracebackDecorations.length) {
+            target.model.deltaDecorations(this.tracebackDecorations, []);
+        }
+        this.tracebackDecorations = [];
+        this.tracebackTail = '';
     }
 
     protected async applyThresholds(): Promise<void> {

@@ -1,0 +1,751 @@
+--- a/desktop/scope-extension/src/common/nodu-device-protocol.ts
++++ b/desktop/scope-extension/src/common/nodu-device-protocol.ts
+@@ -3,6 +3,8 @@
+ // The service surface stays hand-written.
+ export const NoduDeviceService = Symbol('NoduDeviceService');
+ export const NODU_DEVICE_PATH = '/services/nodu-device';
++export type { BoardInspection } from './nodu-board-info';
++import type { BoardInspection } from './nodu-board-info';
+ export type {
+     ConnectArgs, DeviceBackup, DeviceCapabilities, DeviceFileData, DeviceFrame, DeviceLog,
+     DevicePhase, DeviceState, FirmwarePlan, FirmwareResult, LogStream, ProgressInfo,
+@@ -28,10 +30,14 @@
+     stop(): Promise<void>;
+     listFiles(path: string): Promise<RemoteFile[]>;
+     readFile(path: string): Promise<DeviceFileData>;
+-    writeFile(path: string, data: string, overwrite: boolean): Promise<void>;
++    /** Read-only inspection of the board-side config declaration. */
++    inspectBoard(): Promise<BoardInspection>;
++    writeFile(path: string, data: string, overwrite: boolean, confirmedStartup?: boolean): Promise<void>;
+     setPreview(enabled: boolean): Promise<void>;
+     startCamera(): Promise<void>;
+     saveFile(name: string, data: string, confirmedStartup?: boolean): Promise<void>;
++    /** Local script formatting (comment strip / indent conversion); no device needed. */
++    formatScript(code: string, stripComments: boolean, spacesToTabs: boolean): Promise<string>;
+     resetDevice(): Promise<void>;
+     prepareFirmware(): Promise<FirmwarePlan>;
+     backupDevice(): Promise<DeviceBackup>;
+--- a/desktop/scope-extension/src/node/nodu-device-server.ts
++++ b/desktop/scope-extension/src/node/nodu-device-server.ts
+@@ -7,6 +7,7 @@
+ import { createInterface } from 'readline';
+ import { BackendApplicationContribution } from '@theia/core/lib/node/backend-application';
+ import { ConnectOptions, DeviceBackup, DeviceClient, DeviceFileData, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NoduDeviceService, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
++import { BOARD_CONFIG_MAX_BYTES, BoardInspection, inspectBoardConfig } from '../common/nodu-board-info';
+ import { randomUUID } from 'crypto';
+ import { createRequire } from 'module';
+ 
+@@ -128,11 +129,11 @@
+             });
+         });
+     }
+-    private validatePath(path: string, writing = false): void {
++    private validatePath(path: string, writing = false, confirmedStartup = false): void {
+         if (typeof path !== 'string' || path.length > 512 || !/^\/(flash|sd)(\/|$)/.test(path) || /[\x00-\x1f]/.test(path) || path.split('/').includes('..')) {
+             throw new Error('请选择 /flash 或 /sd 内的有效设备路径。');
+         }
+-        if (writing && /\/(boot|main)\.py$/i.test(path)) { throw new Error('此阶段保护 boot.py 和 main.py；请另存为独立脚本。'); }
++        if (writing && !confirmedStartup && /\/(boot|main)\.py$/i.test(path)) { throw new Error('保护启动文件：写入 boot.py/main.py 需要显式确认。'); }
+     }
+     private validateCode(code: string): void {
+         if (typeof code !== 'string' || !code.trim() || Buffer.byteLength(code, 'utf8') > 256 * 1024 || code.includes('\0')) { throw new Error('脚本须为非空文本，大小不超过 256 KiB。'); }
+@@ -160,11 +161,15 @@
+     stop(): Promise<void> { this.connectionEpoch++; return this.request('stop', {}, 45000); }
+     listFiles(path: string): Promise<RemoteFile[]> { this.validatePath(path); return this.request('listFiles', { path }); }
+     readFile(path: string): Promise<DeviceFileData> { this.validatePath(path); return this.request('readFile', { path }, 910000); }
+-    writeFile(path: string, data: string, overwrite: boolean): Promise<void> {
+-        this.validatePath(path, true);
++    writeFile(path: string, data: string, overwrite: boolean, confirmedStartup = false): Promise<void> {
++        this.validatePath(path, true, confirmedStartup === true);
+         if (typeof data !== 'string' || data.length > Math.ceil(MAX_BYTES / 3) * 4 || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(data) || Buffer.from(data, 'base64').length > MAX_BYTES) { throw new Error('上传文件须为有效数据且不超过 2 MiB。'); }
+-        return this.request('writeFile', { path, data, overwrite: overwrite === true }, 910000);
++        return this.request('writeFile', { path, data, overwrite: overwrite === true, confirmedStartup: confirmedStartup === true }, 910000);
+     }
++    formatScript(code: string, stripComments: boolean, spacesToTabs: boolean): Promise<string> {
++        this.validateCode(code);
++        return this.request('formatScript', { code, stripComments: stripComments === true, spacesToTabs: spacesToTabs === true });
++    }
+     setPreview(enabled: boolean): Promise<void> { return this.request('setPreview', { enabled: enabled === true }); }
+     startCamera(): Promise<void> { return this.request('startCamera', {}, 60000); }
+     saveFile(name: string, data: string, confirmedStartup = false): Promise<void> {
+@@ -175,6 +180,48 @@
+         return this.request('saveFile', { name, data, confirmedStartup: confirmedStartup === true }, 600000);
+     }
+     resetDevice(): Promise<void> { return this.request('resetDevice', {}, 15000); }
++    /** Reads the declared board config; never writes, resets or probes hardware. */
++    async inspectBoard(): Promise<BoardInspection> {
++        const source = '/flash/config.json' as const;
++        const unavailable = (issue: string): BoardInspection => ({ status: 'unavailable', source, pins: {}, peripherals: {}, issues: [issue] });
++        const invalid = (issue: string): BoardInspection => ({ status: 'invalid', source, pins: {}, peripherals: {}, issues: [issue] });
++        if (this.state.phase !== 'connected' || this.state.running || this.state.busy || !this.state.capabilities.files) {
++            return unavailable('需要已连接、空闲且支持板端文件的设备，才能读取配置声明。');
++        }
++        const epoch = this.connectionEpoch;
++        const port = this.state.port;
++        const stillCurrent = (): boolean =>
++            epoch === this.connectionEpoch && !!port && this.state.port === port
++            && this.state.phase === 'connected' && !this.state.running && !this.state.busy;
++        try {
++            const files = await this.request<RemoteFile[]>('listFiles', { path: '/flash' });
++            if (!stillCurrent()) { return unavailable('连接状态已变化，本次检查结果已放弃。'); }
++            const entry = files.find(file => file.name === 'config.json');
++            if (!entry) { return { status: 'missing', source, pins: {}, peripherals: {}, issues: ['板端未找到 /flash/config.json，未声明板型。'] }; }
++            if (entry.directory) { return invalid('config.json 是目录，未读取。'); }
++            if (!Number.isInteger(entry.size) || entry.size < 0) { return invalid('config.json 目录大小字段无效。'); }
++            if (entry.size > BOARD_CONFIG_MAX_BYTES) { return invalid('config.json 超过 16 KiB 上限，未读取。'); }
++            const data = await this.request<DeviceFileData>('readFile', { path: '/flash/config.json' }, 45000);
++            if (!stillCurrent()) { return unavailable('连接状态已变化，本次检查结果已放弃。'); }
++            // Buffer.from() silently ignores junk bytes, so the payload's
++            // canonical alphabet, padding and encoded cap are checked first.
++            if (!data || typeof data.data !== 'string'
++                || data.data.length > Math.ceil(BOARD_CONFIG_MAX_BYTES / 3) * 4
++                || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(data.data)
++                || !Number.isInteger(data.size) || data.size < 0) {
++                return invalid('config.json 读取响应格式无效，未采用。');
++            }
++            if (data.size !== entry.size) { return unavailable('config.json 在读取期间发生变化，已放弃本次结果。'); }
++            const bytes = Buffer.from(data.data, 'base64');
++            if (bytes.length !== data.size) { return invalid('config.json 读取结果长度与声明不符，未采用。'); }
++            let text: string;
++            try { text = new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
++            catch { return invalid('config.json 不是有效的 UTF-8 文本。'); }
++            return inspectBoardConfig(text);
++        } catch (error) {
++            return unavailable(`读取板端配置失败：${error instanceof Error ? error.message : String(error)}`);
++        }
++    }
+     prepareFirmware(): Promise<FirmwarePlan> {
+         const sourceFile = '/opt/homebrew/share/maixpy-k210/firmware/maixpy_v0.6.3_2_gd8901fd22.bin';
+         return this.request('prepareFirmware', { cacheDir: join(homedir(), '.nodu', 'firmware'),
+--- a/desktop/scope-extension/src/node/nodu-backend-module.ts
++++ b/desktop/scope-extension/src/node/nodu-backend-module.ts
+@@ -16,7 +16,7 @@
+         // a runtime boundary. Export only the service API, with no prototype.
+         const names: (keyof NoduDeviceService)[] = ['getState', 'listPorts', 'connect', 'disconnect', 'execute',
+             'runScript', 'stop', 'listFiles', 'readFile', 'writeFile', 'setPreview', 'startCamera',
+-            'saveFile', 'resetDevice',
++            'saveFile', 'formatScript', 'resetDevice', 'inspectBoard',
+             'prepareFirmware', 'backupDevice', 'flashFirmware'];
+         const facade = Object.create(null);
+         for (const name of names) { facade[name] = server[name].bind(server); }
+--- a/desktop/scope-extension/src/browser/nodu-device-client.ts
++++ b/desktop/scope-extension/src/browser/nodu-device-client.ts
+@@ -4,7 +4,8 @@
+ import { RpcProxy } from '@theia/core/lib/common/messaging/proxy-factory';
+ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
+ import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
+-import { ConnectOptions, DeviceBackup, DeviceClient, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NODU_DEVICE_PATH, NoduDeviceService, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
++import { BoardInspection, ConnectOptions, DeviceBackup, DeviceClient, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NODU_DEVICE_PATH, NoduDeviceService, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
++import { BOARD_DEFINITIONS } from '../common/nodu-board-data';
+ 
+ export const NODU_FILE_LIMIT = 2 * 1024 * 1024;
+ 
+@@ -38,6 +39,11 @@
+     plan: FirmwarePlan | undefined;
+     backup: DeviceBackup | undefined;
+     flashResult: FirmwareResult | undefined;
++    /** Board-side config declaration; never a measured hardware identity. */
++    boardInspection: BoardInspection | undefined;
++    boardInspecting = false;
++    private boardInspectionPort = '';
++    private boardInspectionGeneration = 0;
+     private backupPort = '';
+     private backupProfile = '';
+     private backupCurrent = false;
+@@ -54,6 +60,7 @@
+             this.state = { ...this.state, phase: 'error', running: false, busy: false, preview: false };
+             this.frame = undefined;
+             this.entries = [];
++            this.clearBoardInspection();
+             this.fail('设备服务连接', new Error('连接已中断，正在等待服务重新连接。'));
+         }));
+         try {
+@@ -74,6 +81,15 @@
+         if (this.pending || this.state.busy) { return this.pending || this.state.operation || '设备忙'; }
+         return { disconnected: '未连接', connecting: '连接中', connected: '已连接', running: '脚本运行中', error: '连接异常' }[this.state.phase];
+     }
++    /** Toolbar caption: catalog label only for a declared match; never a measured identity. */
++    get boardLabel(): string {
++        if (!this.connected) { return '选择开发板'; }
++        if (this.boardInspection?.status === 'declared' && this.boardInspection.boardId) {
++            const board = BOARD_DEFINITIONS.find(entry => entry.id === this.boardInspection!.boardId);
++            if (board) { return board.label; }
++        }
++        return 'K210 · 未识别';
++    }
+ 
+     init(): Promise<void> {
+         return this.opening ??= this.service.getState().then(state => this.onState(state)).catch(error => {
+@@ -83,8 +99,12 @@
+ 
+     onState(state: DeviceState): void {
+         if (this.disposed) { return; }
++        const previousPort = this.state.port;
+         this.state = state;
+-        if (!this.connected) { this.frame = undefined; this.entries = []; }
++        if (!this.connected) { this.frame = undefined; this.entries = []; this.clearBoardInspection(); }
++        // Any port change invalidates the declaration — including one that
++        // arrives while the first inspection is still in flight.
++        else if (state.port !== previousPort || (this.boardInspectionPort && state.port !== this.boardInspectionPort)) { this.clearBoardInspection(); }
+         if (state.port) { this.selectedPort = state.port; }
+         if (state.boardProfile === 'embedfire-cam-gc2145' || state.boardProfile === 'generic-k210') { this.boardProfile = state.boardProfile; }
+         if (typeof state.boardId === 'number') { this.boardId = state.boardId; }
+@@ -112,7 +132,16 @@
+     }
+ 
+     clearError(): void { this.error = ''; this.errorOperation = ''; this.changed.fire(); }
+-    selectPort(port: string): void { if (this.selectedPort !== port) { this.backupCurrent = false; } this.selectedPort = port; this.changed.fire(); }
++    private clearBoardInspection(): void {
++        this.boardInspectionGeneration++;
++        this.boardInspection = undefined;
++        this.boardInspecting = false;
++        this.boardInspectionPort = '';
++    }
++    selectPort(port: string): void {
++        if (this.selectedPort !== port) { this.backupCurrent = false; this.clearBoardInspection(); }
++        this.selectedPort = port; this.changed.fire();
++    }
+     selectProfile(profile: ConnectOptions['boardProfile']): void { if (this.boardProfile !== profile) { this.backupCurrent = false; } this.boardProfile = profile; this.changed.fire(); }
+     selectBoardId(id: number): void {
+         if (!Number.isInteger(id) || id < 0 || id > 8) { return; }
+@@ -136,21 +165,67 @@
+             this.backupCurrent = false;
+             this.frame = undefined;
+             this.entries = [];
++            this.clearBoardInspection();
+             this.onState(await this.service.connect({ port: this.selectedPort, boardProfile: this.boardProfile, boardId: this.boardId, protocol: 'ide' }));
++            if (this.connected && !this.state.running && this.state.capabilities.files) {
++                await this.readBoardInspection();
++            }
+         });
+     }
+ 
++    /** Read-only; failures surface in the inspection state, not device.error. */
++    async inspectBoard(): Promise<void> {
++        await this.perform('读取板端配置', () => this.readBoardInspection());
++    }
++
++    private async readBoardInspection(): Promise<void> {
++        const generation = ++this.boardInspectionGeneration;
++        const port = this.state.port || '';
++        this.boardInspecting = true;
++        this.changed.fire();
++        try {
++            const result = await this.service.inspectBoard();
++            if (this.disposed || generation !== this.boardInspectionGeneration) { return; }
++            if (this.connected && port && this.state.port === port) {
++                this.boardInspection = result;
++                this.boardInspectionPort = port;
++            }
++        } catch (error) {
++            if (!this.disposed && generation === this.boardInspectionGeneration && this.connected && port && this.state.port === port) {
++                this.boardInspection = { status: 'unavailable', source: '/flash/config.json', pins: {}, peripherals: {},
++                    issues: [`读取板端配置失败：${error instanceof Error ? error.message : String(error)}`] };
++                this.boardInspectionPort = port;
++            }
++        } finally {
++            if (generation === this.boardInspectionGeneration) { this.boardInspecting = false; }
++            if (!this.disposed) { this.changed.fire(); }
++        }
++    }
++
+     async resetDevice(): Promise<void> {
++        this.clearBoardInspection();
+         await this.perform('复位设备', async () => { await this.service.resetDevice(); this.onState(await this.service.getState()); }, true);
+     }
+ 
+-    async saveFile(name: string, data: string, confirmedStartup = false): Promise<void> {
+-        await this.perform('写入板端文件', async () => { await this.service.saveFile(name, data, confirmedStartup); this.onState(await this.service.getState()); });
++    async saveFile(name: string, data: string, confirmedStartup = false): Promise<boolean | undefined> {
++        return this.perform('写入板端文件', async () => {
++            await this.service.saveFile(name, data, confirmedStartup);
++            this.onState(await this.service.getState());
++            this.note(`已写入板端 ${name}（默认存储）。`);
++            return true;
++        });
+     }
+ 
++    /** Local formatting; the device is not involved. */
++    async formatScript(code: string, stripComments: boolean, spacesToTabs: boolean): Promise<string | undefined> {
++        return this.perform('格式化脚本', () => this.service.formatScript(code, stripComments, spacesToTabs));
++    }
++
+     async disconnect(): Promise<void> {
+         if (this.flashing) { this.fail('断开设备', new Error('固件正在写入和验证，请保持 USB 连接，完成后再断开。')); return; }
+         this.backupCurrent = false;
++        // Invalidate at once so an in-flight inspection resolves stale.
++        this.clearBoardInspection();
+         await this.perform('断开设备', async () => { await this.service.disconnect(); this.onState(await this.service.getState()); }, true);
+     }
+ 
+@@ -190,13 +265,13 @@
+             return Uint8Array.from(binary, char => char.charCodeAt(0));
+         });
+     }
+-    async writeFile(path: string, bytes: Uint8Array, overwrite: boolean): Promise<boolean | undefined> {
++    async writeFile(path: string, bytes: Uint8Array, overwrite: boolean, confirmedStartup = false): Promise<boolean | undefined> {
+         return this.perform('写入板端文件', async () => {
+             this.backupCurrent = false;
+             if (bytes.byteLength > NODU_FILE_LIMIT) { throw new Error('文件超过 2 MiB 限额。'); }
+             let binary = '';
+             for (let offset = 0; offset < bytes.length; offset += 0x8000) { binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000)); }
+-            await this.service.writeFile(path, btoa(binary), overwrite);
++            await this.service.writeFile(path, btoa(binary), overwrite, confirmedStartup);
+             this.note(`已写入 ${path} · ${bytes.byteLength} 字节。`);
+             return true;
+         });
+--- a/desktop/scope-extension/src/browser/nodu-device-panel.tsx
++++ b/desktop/scope-extension/src/browser/nodu-device-panel.tsx
+@@ -4,10 +4,11 @@
+ import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
+ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
+ import { BinaryBuffer } from '@theia/core/lib/common/buffer';
++import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
+ import { NODU_FILE_LIMIT, NoduDeviceModel } from './nodu-device-client';
+ import { NoduFirmwarePanel } from './nodu-firmware-panel';
+ 
+-interface Props { model: NoduDeviceModel; files: FileService; dialogs: FileDialogService; editors: EditorManager; showLogs: () => void; compact?: boolean; }
++interface Props { model: NoduDeviceModel; files: FileService; dialogs: FileDialogService; editors: EditorManager; showLogs: () => void; showBoardGuide?: () => void; compact?: boolean; }
+ 
+ /** Device controls retain their values when the shell changes density or layout. */
+ // Original MaixPy IDE 0.2.5 board menu order (see docs/0.1.3 evidence §2).
+@@ -23,7 +24,7 @@
+     'T-Watch',
+ ];
+ 
+-export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, compact = false }: Props): React.ReactElement {
++export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, showBoardGuide, compact = false }: Props): React.ReactElement {
+     const [code, setCode] = React.useState('print("Hello, Nodu")');
+     const [directory, setDirectory] = React.useState(model.directory);
+     const [remotePath, setRemotePath] = React.useState('/flash/nodu_example.py');
+@@ -42,7 +43,18 @@
+                 const uri = await dialogs.showOpenDialog({ title: '选择要写入板端的本地文件（最多 2 MiB）', canSelectFiles: true, canSelectFolders: false, canSelectMany: false, openLabel: '选择文件' });
+                 if (!uri) { return; }
+                 const content = await files.readFile(uri, { limits: { size: NODU_FILE_LIMIT } });
+-                const written = await model.writeFile(remotePath.trim(), content.value.buffer, overwrite);
++                const target = remotePath.trim();
++                let confirmedStartup = false;
++                if (/^(boot|main)\.py$/i.test(target.split('/').pop() || '')) {
++                    const confirm = new ConfirmDialog({
++                        title: '写入启动文件',
++                        msg: `确定将所选文件写入 ${target}？启动文件可能在下次开机执行。`,
++                        ok: '写入启动文件', cancel: '取消',
++                    });
++                    if (!await confirm.open()) { return; }
++                    confirmedStartup = true;
++                }
++                const written = await model.writeFile(target, content.value.buffer, overwrite, confirmedStartup);
+                 if (written) { await model.listFiles(model.directory); }
+             } else {
+                 const uri = await dialogs.showSaveDialog({ title: '将板端文件另存为新的本地文件', inputValue: remotePath.split('/').pop(), saveLabel: '读取并保存' });
+@@ -69,9 +81,9 @@
+         <section className="scope-device-section" aria-label="硬件设备">
+             <div className="scope-section-heading"><h2><i className="codicon codicon-circuit-board" aria-hidden="true" />硬件设备</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`} role="status"><i aria-hidden="true" />{model.statusLabel}</span></div>
+             <div className="nodu-device-field"><label htmlFor="nodu-serial-port">串口</label><div className="nodu-input-action"><select id="nodu-serial-port" value={model.selectedPort} disabled={blocked || model.connected} onChange={event => model.selectPort(event.currentTarget.value)}><option value="">{model.ports.length ? '选择串口' : '扫描后选择串口'}</option>{model.ports.map(port => <option value={port.path} key={port.path}>{port.path} · {port.description}</option>)}</select><button className="theia-button secondary" disabled={blocked || model.connected} onClick={() => void model.scanPorts()} title="重新扫描本机串口"><i className="codicon codicon-refresh" aria-hidden="true" />扫描</button></div></div>
+-            <div className="nodu-device-field"><label htmlFor="nodu-board-profile">板型</label><select id="nodu-board-profile" value={model.boardProfile} disabled={blocked || model.connected} onChange={event => model.selectProfile(event.currentTarget.value as typeof model.boardProfile)}><option value="embedfire-cam-gc2145">野火 K210 CAM · GC2145</option><option value="generic-k210">通用 K210</option></select></div>
+-            <div className="nodu-device-field"><label htmlFor="nodu-board-id">连接板型</label><select id="nodu-board-id" value={model.boardId} disabled={blocked || model.connected} onChange={event => model.selectBoardId(Number(event.currentTarget.value))}>{BOARD_IDS.map((label, id) => <option value={id} key={id}>{label}</option>)}</select></div>
+-            <div className="scope-device-actions">{!model.connected && state.phase !== 'connecting' && <button className="theia-button" disabled={blocked || model.connected} onClick={() => void model.connect()}>连接</button>}{(model.connected || state.phase === 'connecting' || state.phase === 'error' || model.busy) && <button className="theia-button secondary" disabled={model.flashing} onClick={() => void model.disconnect()}>{state.phase === 'connecting' ? '取消' : '断开'}</button>}{!compact && <button className="theia-button secondary nodu-stop" disabled={!model.canStop} onClick={() => void model.stop()}><i className="codicon codicon-debug-stop" aria-hidden="true" />{model.busy || state.phase === 'error' ? '停止 / 取消' : '停止脚本'}</button>}</div>
++            <div className="nodu-device-field"><label htmlFor="nodu-board-profile">相机适配</label><select id="nodu-board-profile" value={model.boardProfile} disabled={blocked || model.connected} onChange={event => model.selectProfile(event.currentTarget.value as typeof model.boardProfile)}><option value="embedfire-cam-gc2145">野火 K210 CAM · GC2145</option><option value="generic-k210">通用 K210</option></select></div>
++            <div className="nodu-device-field"><label htmlFor="nodu-board-id">连接复位方式</label><select id="nodu-board-id" value={model.boardId} disabled={blocked || model.connected} onChange={event => model.selectBoardId(Number(event.currentTarget.value))}>{BOARD_IDS.map((label, id) => <option value={id} key={id}>{label}</option>)}</select></div>
++            <div className="scope-device-actions">{!model.connected && state.phase !== 'connecting' && <button className="theia-button" disabled={blocked || model.connected} onClick={() => void model.connect()}>连接</button>}{(model.connected || state.phase === 'connecting' || state.phase === 'error' || model.busy) && <button className="theia-button secondary" disabled={model.flashing} onClick={() => void model.disconnect()}>{state.phase === 'connecting' ? '取消' : '断开'}</button>}{!compact && <button className="theia-button secondary nodu-stop" disabled={!model.canStop} onClick={() => void model.stop()}><i className="codicon codicon-debug-stop" aria-hidden="true" />{model.busy || state.phase === 'error' ? '停止 / 取消' : '停止脚本'}</button>}{showBoardGuide && <button className="theia-button secondary" onClick={showBoardGuide} title="查看板端配置声明与引脚资料">认识开发板</button>}</div>
+             {model.error && <div className="nodu-device-error" role="alert"><p>{model.error}</p><button className="scope-text-button" onClick={() => model.clearError()}>收起错误</button></div>}
+             {(model.connected || state.firmware) && <details className="nodu-device-details"><summary>设备详情</summary><dl className="scope-device-details nodu-firmware"><div><dt>串口</dt><dd className="scope-mono">{state.port || '—'}</dd></div><div><dt>固件</dt><dd>{state.firmware || '—'}</dd></div><div><dt>架构</dt><dd>{state.architecture || '—'}</dd></div><div><dt>REPL / 文件 / 脚本 / 图像</dt><dd className="nodu-capabilities">{[state.capabilities.repl, state.capabilities.files, state.capabilities.script, state.capabilities.framebuffer].map((supported, index) => <span key={index} className={supported ? 'nodu-capability-yes' : ''} title={['REPL', '文件', 'RAM 脚本', '图像'][index]}>{supported ? '支持' : '不支持'}</span>)}</dd></div></dl></details>}
+         </section>
+--- a/desktop/scope-extension/src/browser/scope-workbench.tsx
++++ b/desktop/scope-extension/src/browser/scope-workbench.tsx
+@@ -14,7 +14,9 @@
+ import { FileService } from '@theia/filesystem/lib/browser/file-service';
+ import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
+ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
++import { EditorWidget } from '@theia/editor/lib/browser';
+ import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
++import * as monaco from '@theia/monaco-editor-core';
+ import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
+ import { OutputChannelManager, OutputChannelSeverity } from '@theia/output/lib/browser/output-channel';
+ import { OutputContribution } from '@theia/output/lib/browser/output-contribution';
+@@ -101,7 +103,7 @@
+         // Beginner code faults (REPL/RAM script) are not device failures; they stay in the console.
+         const deviceError = !!this.device.error && !ScopeToolbar.USER_CODE_OPS.has(this.device.errorOperation);
+         const chipState = deviceError || phase === 'error' ? 'error' : phase === 'connecting' ? 'connecting' : this.device.connected ? 'connected' : 'disconnected';
+-        const board = this.device.boardProfile === 'embedfire-cam-gc2145' ? '野火 K210 CAM' : 'K210';
++        const board = this.device.boardLabel;
+         const port = (this.device.state.port || this.device.selectedPort).split('/').pop() || '选择端口';
+         return <header className="scope-workspace-bar" aria-label="Nodu 工具栏">
+             <div className="scope-toolbar-start">
+@@ -110,10 +112,10 @@
+                 <button className={`scope-action scope-action-primary scope-toolbar-run${this.device.state.running ? ' nodu-is-running' : ''}`} disabled={this.device.busy || this.device.state.running} aria-busy={this.device.state.running || undefined} onClick={() => void this.commands.executeCommand('scope.run-current')} title="运行 · Ctrl / ⌘ Enter"><i className={`codicon ${this.device.state.running ? 'codicon-loading codicon-modifier-spin' : 'codicon-play'}`} aria-hidden="true"/>{this.device.state.running ? '运行中' : '运行'}</button>
+                 <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${this.device.state.running || this.device.busy ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!this.device.canStop} onClick={() => void this.commands.executeCommand('scope.stop-device')} title="停止"><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
+                 <div className="scope-device-picker">
+-                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || '设备与端口'}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
++                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || (this.device.connected ? `${board} · 板端配置声明，非硬件实测` : '设备与端口')}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                     {/* One permanently mounted form owns drafts/confirmations across popover and mode changes. */}
+                     <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="设备设置" hidden={!this.layoutState.deviceOpen}>
+-                        <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors} compact={simple} showLogs={() => void this.commands.executeCommand('scope.show-logs')} />
++                        <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors} compact={simple} showLogs={() => void this.commands.executeCommand('scope.show-logs')} showBoardGuide={() => void this.commands.executeCommand('scope.board-guide')} />
+                     </div>
+                 </div>
+             </div>
+@@ -157,6 +159,11 @@
+     private layoutApplied = false;
+     private syncFrame: number | undefined;
+     private geometry = '';
++    // Traceback navigation: the editor that started the current run, plus the
++    // stderr tail and the highlight ids it produced.
++    private runTarget?: { widget: EditorWidget; control: monaco.editor.IStandaloneCodeEditor; model: monaco.editor.ITextModel; version: number; path: string };
++    private tracebackTail = '';
++    private tracebackDecorations: string[] = [];
+     private readonly panelProfiles = {
+         simple: { files: false, console: false, vision: false },
+         pro: { files: true, console: true, vision: true }
+@@ -236,6 +243,7 @@
+         for (const log of this.device.logs) { deviceChannel.append(log.text, log.stream === 'stderr' ? OutputChannelSeverity.Error : OutputChannelSeverity.Info); }
+         this.toDispose.push(this.device.onDidLog(log => {
+             deviceChannel.append(log.text, log.stream === 'stderr' ? OutputChannelSeverity.Error : OutputChannelSeverity.Info);
++            if (log.stream === 'stderr') { this.followTraceback(log.text); }
+         }));
+         // Panel geometry, tab activation and external close commands all update the toolbar.
+         const observer = new MutationObserver(() => this.schedulePanelSync());
+@@ -280,7 +288,7 @@
+     }
+ 
+     async onDidInitializeLayout(): Promise<void> { await this.serializeLayout(() => this.applyLayout(this.layoutState.mode)); }
+-    onStop(): void { this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
++    onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
+ 
+     protected updateStatus(): void {
+         if (this.layoutState.mode === 'simple') {
+@@ -402,7 +410,7 @@
+     registerMenus(menus: MenuModelRegistry): void {
+         const menu = [...MAIN_MENU_BAR, '5_scope'];
+         menus.registerSubmenu(menu, '见微');
+-        for (const [order, commandId] of ['scope.run-current', 'scope.stop-device', 'scope.reset-device', 'scope.show-vision', 'scope.show-devices', 'scope.show-logs', 'scope.toggle-theme', 'scope.layout.simple', 'scope.layout.pro'].entries()) {
++        for (const [order, commandId] of ['scope.run-current', 'scope.stop-device', 'scope.reset-device', 'scope.show-vision', 'scope.show-devices', 'scope.board-guide', 'scope.show-logs', 'scope.toggle-theme', 'scope.layout.simple', 'scope.layout.pro'].entries()) {
+             menus.registerMenuAction(menu, { commandId, order: String(order) });
+         }
+         const demoMenu = [...menu, 'local-demo'];
+@@ -432,9 +440,56 @@
+         // Run Monaco's current buffer, including unsaved changes.
+         const code = model?.getValue() ?? widget.editor.document.getText();
+         if (!code.trim()) { await this.messages.info('当前代码为空，请输入 Python 代码。'); return; }
++        // Traceback frames resolve only against this exact buffer and version.
++        if (editor && model) {
++            this.runTarget = { widget, control: editor, model, version: model.getVersionId(), path: widget.editor.uri.path.toString() };
++        } else {
++            this.runTarget = undefined;
++        }
++        this.clearTracebackDecoration();
+         await this.device.runScript(code, widget.editor.uri.path.base || '当前 Python 代码');
+     }
+ 
++    /**
++     * Follow stderr `File "…", line n` frames from a device traceback onto the
++     * editor that produced the running script. Only `<stdin>` or the captured
++     * source path/basename map to it; board-internal paths are logged but
++     * never open foreign files. A moved/edited/disposed buffer is skipped.
++     */
++    private followTraceback(text: string): void {
++        const target = this.runTarget;
++        if (!target || target.widget.isDisposed || target.model.isDisposed()
++            || target.control.getModel() !== target.model || target.model.getVersionId() !== target.version) {
++            return;
++        }
++        this.tracebackTail = (this.tracebackTail + text).slice(-16384);
++        const frames = /File "([^"\n]+)", line (\d+)/g;
++        let match: RegExpExecArray | null;
++        let line = 0;
++        while ((match = frames.exec(this.tracebackTail)) !== null) {
++            const name = match[1];
++            if (name === '<stdin>' || name === target.path || name.split('/').pop() === target.path.split('/').pop()) {
++                line = parseInt(match[2], 10);
++            }
++        }
++        if (!line || !Number.isInteger(line) || line < 1 || line > target.model.getLineCount()) { return; }
++        target.control.revealLineInCenter(line);
++        target.control.setPosition({ lineNumber: line, column: 1 });
++        this.tracebackDecorations = target.model.deltaDecorations(this.tracebackDecorations, [{
++            range: new monaco.Range(line, 1, line, target.model.getLineMaxColumn(line)),
++            options: { isWholeLine: true, className: 'nodu-traceback-line' },
++        }]);
++    }
++
++    private clearTracebackDecoration(): void {
++        const target = this.runTarget;
++        if (target && !target.model.isDisposed() && this.tracebackDecorations.length) {
++            target.model.deltaDecorations(this.tracebackDecorations, []);
++        }
++        this.tracebackDecorations = [];
++        this.tracebackTail = '';
++    }
++
+     protected async applyThresholds(): Promise<void> {
+         // Sample thresholds are copied to the clipboard without editing source files.
+         await copyImageParameters(this.clipboard, `(${this.session.threshold.join(', ')})`);
+--- a/desktop/scope-extension/src/browser/scope-frontend-module.ts
++++ b/desktop/scope-extension/src/browser/scope-frontend-module.ts
+@@ -9,13 +9,16 @@
+ import { ScopeColorContribution, ScopeThemeContribution } from './scope-theme';
+ import { ScopeDeviceContribution, ScopeLayoutState, ScopeToolbar, ScopeVisionContribution, ScopeWorkbenchContribution } from './scope-workbench';
+ import { NoduVisionToolsContribution } from './nodu-vision-tools';
++import { NoduFileToolsContribution } from './nodu-file-tools';
+ import { NoduDeviceModel } from './nodu-device-client';
+ import { NoduConsoleWidget } from './nodu-console-widget';
++import { NoduBoardGuideContribution, NoduBoardWidget } from './nodu-board-widget';
+ import { ScopeConsoleContribution } from './scope-workbench';
+ import '../../style/scope.css';
+ import '../../style/widgets.css';
+ import '../../style/layout.css';
+ import '../../style/device.css';
++import '../../style/board-guide.css';
+ 
+ export default new ContainerModule(bind => {
+     bind(NoduDeviceModel).toSelf().inSingletonScope();
+@@ -25,6 +28,9 @@
+     bind(ScopeVisionWidget).toSelf();
+     bind(ScopeDeviceWidget).toSelf();
+     bind(NoduConsoleWidget).toSelf();
++    bind(NoduBoardWidget).toSelf();
++    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduBoardWidget.ID, createWidget: () => ctx.container.get(NoduBoardWidget) })).inSingletonScope();
++    bindViewContribution(bind, NoduBoardGuideContribution);
+     bind(WidgetFactory).toDynamicValue(ctx => ({ id: ScopeVisionWidget.ID, createWidget: () => ctx.container.get(ScopeVisionWidget) })).inSingletonScope();
+     bind(WidgetFactory).toDynamicValue(ctx => ({ id: ScopeDeviceWidget.ID, createWidget: () => ctx.container.get(ScopeDeviceWidget) })).inSingletonScope();
+     bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduConsoleWidget.ID, createWidget: () => ctx.container.get(NoduConsoleWidget) })).inSingletonScope();
+@@ -42,4 +48,7 @@
+     bind(NoduVisionToolsContribution).toSelf().inSingletonScope();
+     bind(CommandContribution).toService(NoduVisionToolsContribution);
+     bind(MenuContribution).toService(NoduVisionToolsContribution);
++    bind(NoduFileToolsContribution).toSelf().inSingletonScope();
++    bind(CommandContribution).toService(NoduFileToolsContribution);
++    bind(MenuContribution).toService(NoduFileToolsContribution);
+ });
+--- a/desktop/scope-extension/test/backend-validation.cjs
++++ b/desktop/scope-extension/test/backend-validation.cjs
+@@ -15,6 +15,16 @@
+     server.onStop();
+ });
+ 
++test('formatScript and startup confirmation validate before the worker', () => {
++    const server = new NoduDeviceServer();
++    assert.throws(() => server.formatScript('   ', true, false), /非空/);
++    assert.throws(() => server.formatScript('x'.repeat(256 * 1024 + 1), false, false), /256 KiB/);
++    // Non-boolean confirmedStartup is treated as unconfirmed, never as truthy.
++    assert.throws(() => server.writeFile('/flash/boot.py', 'eA==', true, 'yes'), /保护/);
++    assert.throws(() => server.writeFile('/flash/main.py', 'eA==', true, 1), /保护/);
++    server.onStop();
++});
++
+ test('malformed and oversized payloads never reach the worker', () => {
+     const server = new NoduDeviceServer();
+     assert.throws(() => server.writeFile('/flash/nodu-test.txt', '%%%not-base64', false), /有效数据/);
+@@ -102,6 +112,14 @@
+         assert.equal(Buffer.from(back.data, 'base64').equals(payload), true);
+         const files = await server.listFiles('/flash');
+         assert.ok(files.some(file => file.name === 'nodu_e2e.bin'));
++        // Startup file: guarded without confirmation, allowed when explicit.
++        assert.throws(() => server.writeFile('/flash/boot.py', 'cHJpbnQoMSk=', true), /保护/);
++        await server.writeFile('/flash/boot.py', 'cHJpbnQoMSk=', true, true);
++        const boot = await server.readFile('/flash/boot.py');
++        assert.equal(Buffer.from(boot.data, 'base64').toString(), 'print(1)');
++        // formatScript needs no device connection but rides the same sidecar.
++        assert.equal(await server.formatScript('x=1 # c\n    y=2', true, true), 'x=1 \n\ty=2');
++        assert.equal(await server.formatScript('x=1', false, false), 'x=1');
+         await server.disconnect();
+         assert.equal((await server.getState()).phase, 'disconnected');
+     } finally {
+@@ -111,6 +129,130 @@
+     }
+ });
+ 
++// Board inspection: read-only config declaration path. `request` is stubbed so
++// no worker or serial port is involved; every test asserts what was asked of it.
++const connectedState = () => ({ phase: 'connected', port: '/dev/mock', busy: false, running: false,
++    preview: false, capabilities: { repl: true, files: true, framebuffer: false, script: true, firmware: false } });
++
++test('board inspection is unavailable when disconnected, running or busy', async () => {
++    const server = new NoduDeviceServer();
++    let calls = 0;
++    server.request = async () => { calls++; return []; };
++    for (const state of [
++        { phase: 'disconnected' }, { phase: 'connecting' }, { phase: 'error' },
++        { ...connectedState(), running: true }, { ...connectedState(), busy: true },
++        { ...connectedState(), capabilities: { ...connectedState().capabilities, files: false } },
++    ]) {
++        server.state = state;
++        const result = await server.inspectBoard();
++        assert.equal(result.status, 'unavailable');
++    }
++    assert.equal(calls, 0, 'inspection must not touch the worker without a healthy connection');
++    await server.onStop();
++});
++
++test('board inspection reports missing config.json without reading it', async () => {
++    const server = new NoduDeviceServer();
++    server.state = connectedState();
++    const methods = [];
++    server.request = async method => { methods.push(method); return []; };
++    const result = await server.inspectBoard();
++    assert.equal(result.status, 'missing');
++    assert.deepEqual(methods, ['listFiles']);
++    await server.onStop();
++});
++
++test('board inspection rejects oversized or directory config before reading', async () => {
++    const server = new NoduDeviceServer();
++    server.state = connectedState();
++    for (const entry of [
++        { name: 'config.json', path: '/flash/config.json', size: 16385, directory: false },
++        { name: 'config.json', path: '/flash/config.json', size: 10, directory: true },
++    ]) {
++        const methods = [];
++        server.request = async method => { methods.push(method); return [entry]; };
++        const result = await server.inspectBoard();
++        assert.equal(result.status, 'invalid', JSON.stringify(entry));
++        assert.deepEqual(methods, ['listFiles'], 'no readFile for a config that cannot be trusted');
++    }
++    await server.onStop();
++});
++
++test('board inspection returns declared result from a real config payload', async () => {
++    const { readFileSync } = require('node:fs');
++    const { join } = require('node:path');
++    const server = new NoduDeviceServer();
++    server.state = connectedState();
++    const text = readFileSync(join(__dirname, 'fixtures', 'board-config-embedfire.json'), 'utf-8');
++    const data = Buffer.from(text, 'utf-8');
++    server.request = async (method, args) => {
++        if (method === 'listFiles') { return [{ name: 'config.json', path: '/flash/config.json', size: data.length, directory: false }]; }
++        if (method === 'readFile') { assert.equal(args.path, '/flash/config.json'); return { data: data.toString('base64'), size: data.length }; }
++        throw new Error(`unexpected request ${method}`);
++    };
++    const result = await server.inspectBoard();
++    assert.equal(result.status, 'declared');
++    assert.equal(result.boardId, 'embedfire-cam-gc2145');
++    await server.onStop();
++});
++
++test('board inspection abandons stale results when the connection changes between awaits', async () => {
++    const server = new NoduDeviceServer();
++    server.state = connectedState();
++    server.request = async method => {
++        if (method === 'listFiles') { return [{ name: 'config.json', path: '/flash/config.json', size: 4, directory: false }]; }
++        // Simulate disconnect/reconnect while the read is in flight.
++        server.connectionEpoch++;
++        return { data: 'e30=', size: 2 };
++    };
++    const result = await server.inspectBoard();
++    assert.equal(result.status, 'unavailable');
++    await server.onStop();
++});
++
++test('board inspection rejects malformed readFile payloads', async () => {
++    const server = new NoduDeviceServer();
++    server.state = connectedState();
++    const entry = { name: 'config.json', path: '/flash/config.json', size: 4, directory: false };
++    // Junk characters/padding that Buffer.from would silently skip, a
++    // non-integer size field, and an over-cap encoded length are all invalid.
++    for (const payload of [
++        { data: 'e30=###junk', size: 4 },
++        { data: 'e30', size: 4 },            // bad padding: 3 chars without '='
++        { data: 'e30=', size: 4.5 },
++        { data: 'e30=', size: -1 },
++        { data: 'AAAA'.repeat(6000), size: 4 },
++        { size: 4 },                          // missing data entirely
++    ]) {
++        server.request = async method => method === 'listFiles' ? [entry] : payload;
++        const result = await server.inspectBoard();
++        assert.equal(result.status, 'invalid', JSON.stringify(payload).slice(0, 60));
++    }
++    // Listing size vs read size disagreement means the file changed mid-read.
++    server.request = async method => method === 'listFiles' ? [entry]
++        : { data: 'e30=', size: 2 };
++    const changed = await server.inspectBoard();
++    assert.equal(changed.status, 'unavailable');
++    assert.ok(changed.issues[0].includes('变化'));
++    await server.onStop();
++});
++
++test('board inspection stays aborted when the connection drops after the read resolves', async () => {
++    const server = new NoduDeviceServer();
++    server.state = connectedState();
++    server.request = async method => {
++        if (method === 'listFiles') { return [{ name: 'config.json', path: '/flash/config.json', size: 2, directory: false }]; }
++        // Read resolves, then the worker reports the connection gone before the
++        // inspection result is handed back.
++        server.connectionEpoch++;
++        server.state = { ...connectedState(), phase: 'error', port: undefined };
++        return { data: 'e30=', size: 2 };
++    };
++    const result = await server.inspectBoard();
++    assert.equal(result.status, 'unavailable');
++    await server.onStop();
++});
++
+ // deviceBinary() resolution: dev fallback when the packaged sidecar is absent.
+ // Renames the staged binary inside try/finally; no port or spawn involved.
+ test('deviceBinary falls back to the dev release build', async t => {
+--- a/desktop/THIRD-PARTY-NOTICES.md
++++ b/desktop/THIRD-PARTY-NOTICES.md
+@@ -27,6 +27,10 @@
+ 
+ Fixed sources, per-file license evidence and mode side effects are recorded in [device-reuse.md](../docs/device-reuse.md); image hashes, write ranges and recovery boundaries are recorded in [device-flash-plan.md](../docs/device-flash-plan.md). Firmware, actual device tests and UI acceptance are documented separately from those source studies.
+ 
++## Bundled FFmpeg media tools
++
++`npm run build:media` builds ffmpeg/ffprobe/ffplay from the pinned official source `ffmpeg-9.0.2.tar.xz` (SHA256 `8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e`, `https://ffmpeg.org/releases/`) with an LGPL-only configuration (`--disable-gpl --disable-nonfree --disable-version3 --disable-autodetect --disable-network`, verified against `-buildconf` output). The staged binaries live in `scope-extension/resources/bin/darwin-<arch>/` next to the device service and dynamically link the bundled `libSDL2-2.0.0.dylib` (sdl2-compat, zlib-style license) and `libSDL3.dylib` (SDL3, zlib-style license; loaded by sdl2-compat via `dlopen`). FFmpeg 9.0.2 is LGPL-2.1-or-later in this configuration: the build uses dynamic linking for its bundled dylib dependencies, and `scope-extension/resources/licenses/ffmpeg/` carries the LGPL-2.1 license text, the SDL license texts, the exact source tarball, the build recipe (`build-media.cjs` + `BUILD-RECIPE.txt`), and build metadata — included for review; whether the corresponding-source obligation is fully satisfied remains a release-time review item. Only the macOS host build exists; Windows/Linux packaging is not implemented. Binaries are ad-hoc signed for local use — release signing, notarization and a complete license clearance remain release-time work, and this inventory is not legal approval. Evidence: `docs/0.1.3/evidence/media-bundle.md`.
++
+ ## Reference sources for the 0.1.3 rewrite
+ 
+ The Rust device service (`desktop/native/`) is rewritten with reference to the pinned, read-only sources listed in `docs/0.1.3/references.md`. Files that port or adapt code carry `// Ported from <repo>@<commit>:<path> (<license>)` headers.
+@@ -40,6 +44,11 @@
+ | micropython/mpremote | `1.25.0` (installed pip package `~/.nodu/python`, not a nodu-refs clone) | MIT — MicroPython; local implementation reused, text shipped with the package |
+ | MaixPy_Doc_Zh_Cn_Backup | `2734af3bcf182e3359cde4ed5a3a5d7d9b75aaf1` | No LICENSE file — reference only, no content copied |
+ 
++`scope-extension/src/common/nodu-board-data.ts` 的引脚别名数值转录自上述 MIT 许可的
++MaixPy-v1_scripts 配置脚本（`config_maix_*.py`）；野火连接器触点表转录自
++`doc.embedfire.com` 公开引脚图（仅事实数值，无复制图片）。两者均为逐条事实转录，
++不含上游代码或文本。
++
+ ### OpenMV plugin (MIT), (C) 2016 OpenMV, LLC
+ 
+ ```
+--- a/.spec/specs/2026-10-19_add-device-service/tasks.md
++++ b/.spec/specs/2026-10-19_add-device-service/tasks.md
+@@ -1,10 +1,13 @@
+ # 实施任务
+-- [ ] 12. 认识开发板：来源核查、配置识别、引脚资料和 Blender 模型
++- [x] 12. 认识开发板：来源核查、配置识别、引脚资料和 Blender 模型
+   - id: task-board-guide
+   - depends-on: task-backend, task-frontend
+   - boundary: common/nodu-board*、设备读取与状态、独立资料页、tools/boards、板端只读 helper、证据文档；保留全部用户改动，不写板端配置
+   - verify: 解析与状态竞态测试、helper 测试、编译构建、双主题/980px UI、Blender 渲染和模型存在性，原始引脚表由主线程核对
+   - ownership: 主线程核查源码、冻结引脚事实与设计、审查成品；实施与验证交付实现执行者
++  - status: 已完成（主线程终审通过，条件检查全部达标）；解析 11/11、后端检查 7/7、helper 11/11、编译与 electron 构建 0 errors；隔离 Electron（NODU_DEVICE_MOCK=1）实测 missing/declared 端到端、待决读取竞态丢弃、目录自动跟随声明与手动选择独立；注入态 UI 双主题与 980×680 截图见 artifacts/board-guide/20261019 与 docs/0.1.3/evidence/board-guide-validation.md；冻结引脚事实已由主线程核对通过
++  - review-round-1: 主线程审查发现 8 项并已修复——畸形标识符/外设并入 invalid、生成代码段改为只读与统一 helper（新增 common/boardPinSample）、pin('D0') 经 pins() 校验、移除 __noduDevice 生产句柄（测试改走 window.theia.container）、浮层遮挡改由 contribution 关闭、标记常显+图例、触点表 4 列、后端 base64/size 严格校验、Blender 按键/卡座/母座几何修正并禁用 .blend1；测试快照改读本地源码 fixture test/fixtures/board-config-embedfire.json（尚未提交）
++  - review-round-2: 终审遗留 5 项已修复——helper 移除 re/ure 正则依赖（字符级 _valid_name，新增阻断 re/ure 导入测试与名字边界用例）；解析器 pins/peripherals 改为全部校验通过后一次赋值（早退 invalid 必为空表）；触点电源标签改语义色高对比；footer 修正 p>details 非法嵌套为 div；目录改为 catalogManuallySelected+lastInspection 语义（未手动选择时跟随最新声明，手动后永不覆盖）
+ - [x] 1. 保存基线与核查来源
+   - id: task-baseline
+   - boundary: 外部快照、docs来源与许可
+--- a/.spec/specs/2026-10-19_add-device-service/checklist.md
++++ b/.spec/specs/2026-10-19_add-device-service/checklist.md
+@@ -1,7 +1,7 @@
+ # 验收清单
+-- [ ] 板型来源审查可追溯，配置声明不冒充硬件探测；未知/冲突不套用默认引脚。
+-- [ ] 开发板资料入口、引脚查询/代码复制、Blender 模型与双主题显示可用；模型与接线资料边界明确。
+-- [ ] 板型读取不写配置、不复位、不自动变更相机适配；断开/切换设备不保留旧识别结果，统一 API 有缺失/边界测试。
++- [x] 板型来源审查可追溯，配置声明不冒充硬件探测；未知/冲突不套用默认引脚。（board-source-audit.md + board-info.cjs 9/9：unknown/conflict 保留实际引脚但不给目录型号）
++- [x] 开发板资料入口、引脚查询/代码复制、Blender 模型与双主题显示可用；模型与接线资料边界明确。（artifacts/board-guide/20261019 截图 01–11；模型标注"结构示意，非机械 CAD"）
++- [x] 板型读取不写配置、不复位、不自动变更相机适配；断开/切换设备不保留旧识别结果，统一 API 有缺失/边界测试。（后端 5/5 竞态测试；mock 端到端 connect→missing/declared；断开清除已实测；nodu_board 7/7）
+ - [x] 基线源码快照SHA重验与清单可用，preview仓库未改。
+ - [x] 新设备服务可连接并识别固件，物理板型独立，原生App验收。
+ - [x] REPL及当前脚本运行/停止，原生日志含真实输出。
+diff --git a/docs/0.1.3/PLAN.md b/docs/0.1.3/PLAN.md
+index e39b924..7c0e8de 100644
+--- a/docs/0.1.3/PLAN.md
++++ b/docs/0.1.3/PLAN.md
+@@ -1,6 +1,6 @@
+ # Nodu 0.1.3 实施计划 — MaixPy IDE 0.2.5 功能 1:1 复刻
+ 
+-日期：2026-10-19。状态：**实施中**：阶段 0 证据与阶段 1 Rust 开发检查点已落地，阶段门禁尚未全部通过。功能对照见 [maixpy-ide-parity.md](maixpy-ide-parity.md)，阶段 1 验证见 [evidence/phase-1-validation.md](evidence/phase-1-validation.md)。
++日期：2026-10-19。状态：**实施中**：阶段 0 证据与阶段 1 Rust 开发检查点已落地，阶段门禁尚未全部通过。功能对照见 [maixpy-ide-parity.md](maixpy-ide-parity.md)，阶段 1 验证见 [evidence/phase-1-validation.md](evidence/phase-1-validation.md)。「认识开发板」实现与验证见 [evidence/board-guide-validation.md](evidence/board-guide-validation.md)（引脚事实核查见 [evidence/board-source-audit.md](evidence/board-source-audit.md)）。
+ 
+ ## 0. 已确认的决定
+ 

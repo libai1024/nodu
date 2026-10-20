@@ -1,0 +1,62 @@
+{
+  "format": "OpenMV CMSIS-NN .network",
+  "k210Executable": false,
+  "comparison": "Each pinned upstream file was byte-compared with the corresponding model in the installed MaixPy IDE 0.2.5. All five matched.",
+  "models": [
+    {
+      "id": "cifar10",
+      "label": "CIFAR-10",
+      "repository": "openmv/openmv",
+      "revision": "c372ebe043a7f100d5d6356cee7c092db02fce1b",
+      "path": "ml/cmsisnn/models/cifar10/cifar10.network",
+      "bytes": 89970,
+      "sha256": "1ba1f96b6e44aa091faf876076bc7a1aee5305822261eb24da953bd0288ffec7",
+      "license": "MIT",
+      "licensePath": "LICENSE"
+    },
+    {
+      "id": "cifar10_fast",
+      "label": "CIFAR-10 Fast",
+      "repository": "openmv/openmv",
+      "revision": "c372ebe043a7f100d5d6356cee7c092db02fce1b",
+      "path": "ml/cmsisnn/models/cifar10_fast/cifar10_fast.network",
+      "bytes": 33602,
+      "sha256": "19d94521d6465df04cd11ffe4dcd75420fec7a64a149d15b27c8b732883974a6",
+      "license": "MIT",
+      "licensePath": "LICENSE"
+    },
+    {
+      "id": "lenet",
+      "label": "LeNet",
+      "repository": "openmv/openmv",
+      "revision": "c372ebe043a7f100d5d6356cee7c092db02fce1b",
+      "path": "ml/cmsisnn/models/lenet/lenet.network",
+      "bytes": 106984,
+      "sha256": "eeda5f743c13e4f58a4c099bad54fb301d7347be6765a01fb1aaad9537abda05",
+      "license": "MIT",
+      "licensePath": "LICENSE"
+    },
+    {
+      "id": "smile",
+      "label": "Smile",
+      "repository": "openmv/openmv",
+      "revision": "c372ebe043a7f100d5d6356cee7c092db02fce1b",
+      "path": "ml/cmsisnn/models/smile/smile.network",
+      "bytes": 23882,
+      "sha256": "6dad6fc66a59d3493c7815ac91c642c087181569843d18938e6fdf0f5c87d95e",
+      "license": "MIT",
+      "licensePath": "LICENSE"
+    },
+    {
+      "id": "chars74k",
+      "label": "Chars74K",
+      "repository": "kwagyeman/openmv",
+      "revision": "a97e4dc1d32ce7facabf2fcf116896289b0f3496",
+      "path": "ml/cmsisnn/models/chars74k/fnt-chars74k.network",
+      "bytes": 93799,
+      "sha256": "63af22e76a1d1cfd931ed8861f06980cb86a8d598d5bed31aaa2c09e8215bf54",
+      "license": "MIT",
+      "licensePath": "LICENSE"
+    }
+  ]
+}

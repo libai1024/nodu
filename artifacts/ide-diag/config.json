@@ -1,0 +1,46 @@
+{
+  "type": "embedfire",
+  "kpu_div": 1,
+  "sdcard": {
+    "cs": 6,
+    "cs_gpio": 28,
+    "sclk": 8,
+    "mosi": 7,
+    "miso": 9
+  },
+  "board_info": {
+    "USER_LED": 17,
+    "BOOT_KEY": 16
+  },
+  "freq_cpu": 416000000,
+  "freq_pll1": 400000000,
+  "lcd": {
+    "offset_y2": 0,
+    "dir": 96,
+    "dcx": 27,
+    "invert": 0,
+    "offset_y1": 0,
+    "ss": 28,
+    "offset_x1": 0,
+    "offset_x2": 0,
+    "rst": 29,
+    "clk": 26,
+    "height": 240,
+    "width": 320
+  },
+  "config_name": "embedfire-k210",
+  "sensor": {
+    "cmos_pclk": 23,
+    "cmos_xclk": 22,
+    "cmos_href": 20,
+    "cmos_pwdn": 21,
+    "cmos_vsync": 18,
+    "cmos_rst": 19,
+    "reg_width": 8,
+    "i2c_num": 2,
+    "pin_clk": 25,
+    "pin_sda": 24,
+    "gpio_clk": 0,
+    "gpio_sda": 0
+  }
+}

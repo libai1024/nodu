@@ -1,0 +1,27 @@
+{
+  "started": "2026-10-19T17:07:40.798Z",
+  "steps": [
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T17:07:40.833Z"
+    },
+    {
+      "k": "connected",
+      "v": "2026-10-19T17:07:44.745Z"
+    },
+    {
+      "k": "execute-return",
+      "v": {
+        "ok": "NODU_BOARD_API:{\"info\": {\"read_via\": \"Maix.config runtime cache\", \"declaration\": \"the runtime cache backs onto /flash/config.json; file edits only take effect after reboot\", \"type\": \"embedfire\", \"config_name\": \"embedfire-k210\", \"source\": \"/flash/config.json\"}, \"pins\": {\"USER_LED\": 17, \"BOOT_KEY\": 16}, \"sensor\": {\"cmos_vsync\": 18, \"cmos_rst\": 19, \"cmos_xclk\": 22, \"gpio_clk\": 0, \"cmos_pclk\": 23, \"gpio_sda\": 0, \"cmos_pwdn\": 21, \"pin_clk\": 25, \"i2c_num\": 2, \"reg_width\": 8, \"cmos_href\": 20, \"pin_sda\": 24}, \"button\": 16, \"led\": 17}\r\n"
+      }
+    },
+    {
+      "k": "logs",
+      "v": "[{\"s\":\"stdout\",\"t\":\"NODU_BOARD_API:{\\\"info\\\": {\\\"read_via\\\": \\\"Maix.config runtime cache\\\", \\\"declaration\\\": \\\"the runtime cache backs onto /flash/config.json; file edits only take effect after reboot\\\", \\\"type\\\": \\\"embedfire\\\", \\\"config_name\\\": \\\"embedfire-k210\\\", \\\"source\\\": \\\"/flash/config.json\\\"}, \\\"pins\\\": {\\\"USER_LED\\\": 17, \\\"BOOT_KEY\\\": 16}, \\\"sensor\\\": {\\\"cmos_vsync\\\": 18, \\\"cmos_rst\\\": 19, \\\"cmos_xclk\\\": 22, \\\"gpio_clk\\\": 0, \\\"cmos_pclk\\\": 23, \\\"gpio_sda\\\": 0, \\\"cmos_pwdn\\\": 21, \\\"pin_clk\\\": 25, \\\"i2c_num\\\": 2, \\\"reg_width\\\": 8, \\\"cmos_href\\\": 20, \\\"pin_sda\\\": 24}, \\\"button\\\": 16, \\\"led\\\": 17}\\r\\n\"}]"
+    },
+    {
+      "k": "done",
+      "v": "2026-10-19T17:07:47.050Z"
+    }
+  ]
+}

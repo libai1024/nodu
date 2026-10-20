@@ -11,13 +11,18 @@ mock = ["dep:nodu-mockboard"]
 [dependencies]
 nodu-protocol.workspace = true
 nodu-serial.workspace = true
+nodu-maix-ide.workspace = true
+nodu-maix-connect.workspace = true
 nodu-repl.workspace = true
+nodu-media.workspace = true
 nodu-mockboard = { workspace = true, optional = true }
 serde.workspace = true
 serde_json.workspace = true
 base64.workspace = true
 sha2.workspace = true
 fs2 = "0.4"
+serialport.workspace = true
+crossterm.workspace = true
 
 [dev-dependencies]
 nodu-mockboard.workspace = true

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// Build the Rust device sidecar for the host and stage it into
-// scope-extension/resources/bin/<platform>-<arch>/nodu-device[.exe].
+// Build the Rust device sidecar + standalone terminal for the host and stage
+// them into scope-extension/resources/bin/<platform>-<arch>/.
 const { execSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -10,7 +10,8 @@ const native = path.join(desktop, 'native');
 
 const platform = process.platform === 'win32' ? 'win32' : process.platform;
 const arch = process.arch === 'x64' ? 'x64' : process.arch;
-const exe = platform === 'win32' ? 'nodu-device.exe' : 'nodu-device';
+const names = ['nodu-device', 'nodu-terminal'];
+const exe = name => (platform === 'win32' ? `${name}.exe` : name);
 
 // Host-platform only: universal macOS binaries and Windows builds are not
 // verified yet. `mock` feature stays in the shipped binary: it is inert
@@ -23,21 +24,45 @@ const env = {
     [pathKey]: [path.join(os.homedir(), '.cargo', 'bin'), process.env[pathKey] || '']
         .join(path.delimiter),
 };
-console.log('build-native: cargo build --release --locked -p nodu-device --features mock');
-execSync('cargo build --release --locked -p nodu-device --features mock', {
+console.log('build-native: cargo build --release --locked -p nodu-device --features mock --bins');
+execSync('cargo build --release --locked -p nodu-device --features mock --bins', {
     cwd: native,
     stdio: 'inherit',
     env,
 });
 
-const built = path.join(native, 'target', 'release', exe);
-if (!fs.existsSync(built)) {
-    console.error(`build-native: expected ${built} after cargo build`);
-    process.exit(1);
-}
 const destDir = path.join(
     desktop, 'scope-extension', 'resources', 'bin', `${platform}-${arch}`);
 fs.mkdirSync(destDir, { recursive: true });
-fs.copyFileSync(built, path.join(destDir, exe));
-fs.chmodSync(path.join(destDir, exe), 0o755);
-console.log(`build-native: staged ${path.relative(desktop, path.join(destDir, exe))}`);
+for (const name of names) {
+    const built = path.join(native, 'target', 'release', exe(name));
+    if (!fs.existsSync(built)) {
+        console.error(`build-native: expected ${built} after cargo build`);
+        process.exit(1);
+    }
+    // macOS keeps a provenance record per inode: overwriting a signed binary in
+    // place makes the kernel kill the next exec/mmap of it. Stage via rename so
+    // the destination is always a fresh inode.
+    const dest = path.join(destDir, exe(name));
+    const tmp = path.join(destDir, `.${exe(name)}.tmp-${process.pid}`);
+    fs.copyFileSync(built, tmp);
+    fs.chmodSync(tmp, 0o755);
+    fs.renameSync(tmp, dest);
+    console.log(`build-native: staged ${path.relative(desktop, path.join(destDir, exe(name)))}`);
+}
+
+// ts-rs exports write line-trailing whitespace that fails git diff --check.
+// Normalize only that (generated files keep all other bytes), never source.
+const generatedDir = path.join(desktop, 'scope-extension', 'src', 'common', 'generated');
+if (fs.existsSync(generatedDir)) {
+    for (const name of fs.readdirSync(generatedDir)) {
+        if (!name.endsWith('.ts')) { continue; }
+        const file = path.join(generatedDir, name);
+        const text = fs.readFileSync(file, 'utf8');
+        const fixed = text.replace(/[\t ]+$/gm, '');
+        if (fixed !== text) {
+            fs.writeFileSync(file, fixed);
+            console.log(`build-native: normalized generated ${name}`);
+        }
+    }
+}

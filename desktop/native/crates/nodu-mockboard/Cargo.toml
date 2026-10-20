@@ -8,6 +8,7 @@ rust-version.workspace = true
 [dependencies]
 nodu-serial.workspace = true
 nodu-repl.workspace = true
+sha2.workspace = true
 
 [lints]
 workspace = true

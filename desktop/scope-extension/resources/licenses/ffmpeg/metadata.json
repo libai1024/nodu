@@ -1,0 +1,72 @@
+{
+  "version": "9.0.2",
+  "source": {
+    "url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+    "sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+    "archive": "ffmpeg-9.0.2.tar.xz"
+  },
+  "sdl2": {
+    "version": "2.32.10",
+    "url": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz",
+    "sha256": "5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165",
+    "archive": "SDL2-2.32.10.tar.gz",
+    "configureFlags": [
+      "--enable-shared",
+      "--disable-static",
+      "--disable-video-x11",
+      "--disable-video-wayland",
+      "--disable-pulseaudio",
+      "--disable-alsa",
+      "--disable-jack",
+      "--disable-libsamplerate"
+    ]
+  },
+  "configureFlags": [
+    "--disable-autodetect",
+    "--disable-gpl",
+    "--disable-nonfree",
+    "--disable-version3",
+    "--disable-doc",
+    "--disable-debug",
+    "--disable-network",
+    "--enable-ffplay",
+    "--enable-sdl2",
+    "--enable-pthreads",
+    "--enable-small",
+    "--enable-static",
+    "--disable-shared",
+    "--cc=clang"
+  ],
+  "buildPlatform": "darwin-arm64",
+  "deploymentTarget": "15.0",
+  "stagedMinOs": {
+    "ffmpeg": "15.0",
+    "ffprobe": "15.0",
+    "ffplay": "15.0",
+    "libSDL2-2.0.0.dylib": "15.0"
+  },
+  "buildHost": {
+    "osRelease": "25.3.0"
+  },
+  "staged": {
+    "executables": {
+      "ffmpeg": "bd6775ce757621a121cbf2b5b17fa644eeb81b3998eacdf201c070f42983847e",
+      "ffprobe": "63539aeb76a636973ee8ec9d96af5820bbe0fadbdfe2477b95076aa49ed4788a",
+      "ffplay": "4a5c50d38c572468d23d08a039aef119f400c095890d67f1ee660698efb9cf55"
+    },
+    "dylibs": [
+      {
+        "source": "/Users/wangwei/Model/k210-studio/desktop/.tools/media/sdl2-install/lib/libSDL2-2.0.0.dylib",
+        "file": "libSDL2-2.0.0.dylib",
+        "sha256": "9cade7627bbcfc3bb9e94552b56544e5abcc2fd288667dd0ec929d3f8bf6c126"
+      }
+    ]
+  },
+  "signing": "ad-hoc (codesign -s -); no release signing or notarization",
+  "smoke": {
+    "encode": "ok: 1146 bytes",
+    "probe": "ok: mpeg4 64x48",
+    "ffplay": "ok: dummy drivers, -autoexit"
+  },
+  "generatedAt": "2026-10-19T16:26:25.466Z"
+}

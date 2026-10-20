@@ -2,8 +2,9 @@
 import type { DeviceCapabilities } from "./DeviceCapabilities";
 import type { DevicePhase } from "./DevicePhase";
 import type { ProgressInfo } from "./ProgressInfo";
+import type { RecordingStatus } from "./RecordingStatus";
 
 /**
  * `state` event payload; absent keys mean unchanged from the host's view.
  */
-export type DeviceState = { phase: DevicePhase, port?: string, boardProfile?: string, firmware?: string, architecture?: string, busy: boolean, operation?: string, running: boolean, preview: boolean, capabilities: DeviceCapabilities, lastError?: string, progress?: ProgressInfo, };
+export type DeviceState = { phase: DevicePhase, port?: string, boardProfile?: string, firmware?: string, architecture?: string, boardId?: number, protocol?: string, busy: boolean, operation?: string, running: boolean, preview: boolean, fps?: number, recording?: RecordingStatus, capabilities: DeviceCapabilities, lastError?: string, progress?: ProgressInfo, };

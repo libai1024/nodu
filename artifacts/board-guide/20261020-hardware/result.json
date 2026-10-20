@@ -1,0 +1,92 @@
+{
+  "started": "2026-10-19T16:56:55.733Z",
+  "steps": [
+    {
+      "k": "defaults",
+      "v": "{\"profile\":\"embedfire-cam-gc2145\",\"boardId\":2,\"phase\":\"disconnected\"}"
+    },
+    {
+      "k": "popover",
+      "v": true
+    },
+    {
+      "k": "ports",
+      "v": "[\"/dev/cu.Bluetooth-Incoming-Port\",\"/dev/cu.debug-console\",\"/dev/cu.usbserial-3120\",\"/dev/tty.Bluetooth-Incoming-Port\",\"/dev/tty.debug-console\",\"/dev/tty.usbserial-3120\"]"
+    },
+    {
+      "k": "selected",
+      "v": "/dev/cu.usbserial-3120"
+    },
+    {
+      "k": "profile+id",
+      "v": "{\"profile\":\"embedfire-cam-gc2145\",\"boardId\":2}"
+    },
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T16:57:02.122Z"
+    },
+    {
+      "k": "connect-end",
+      "v": "2026-10-19T16:57:03.739Z"
+    },
+    {
+      "k": "state",
+      "v": "{\"architecture\":\"K210 [Maix:000000000000000000000000]\",\"boardId\":2,\"boardProfile\":\"embedfire-cam-gc2145\",\"busy\":true,\"capabilities\":{\"files\":true,\"firmware\":false,\"framebuffer\":true,\"repl\":true,\"script\":true},\"firmware\":\"MaixPy 0.6.3\",\"operation\":\"listFiles\",\"phase\":\"connected\",\"port\":\"/dev/cu.usbserial-3120\",\"preview\":true,\"protocol\":\"ide\",\"running\":false}"
+    },
+    {
+      "k": "boardInspection-1",
+      "v": "{\"status\":\"declared\",\"source\":\"/flash/config.json\",\"pins\":{\"USER_LED\":17,\"BOOT_KEY\":16},\"peripherals\":{\"sensor\":{\"cmos_pclk\":23,\"cmos_xclk\":22,\"cmos_href\":20,\"cmos_pwdn\":21,\"cmos_vsync\":18,\"cmos_rst\":19,\"pin_clk\":25,\"pin_sda\":24},\"lcd\":{\"rst\":29,\"dcx\":27,\"ss\":28,\"clk\":26},\"sdcard\":{\"sclk\":8,\"mosi\":7,\"miso\":9,\"cs\":6}},\"issues\":[],\"declaredType\":\"embedfire\",\"configName\":\"embedfire-k210\",\"boardId\":\"embedfire-cam-gc2145\"}"
+    },
+    {
+      "k": "boardLabel",
+      "v": "野火 K210 CAM"
+    },
+    {
+      "k": "busy-error",
+      "v": "{\"busy\":false,\"error\":\"\",\"chip\":\"野火 K210 CAM\"}"
+    },
+    {
+      "k": "popover-closed",
+      "v": true
+    },
+    {
+      "k": "catalog-selection",
+      "v": "embedfire-cam-gc2145"
+    },
+    {
+      "k": "status-line",
+      "v": "板端配置声明：野火 K210 CAM"
+    },
+    {
+      "k": "shot",
+      "v": "real-declared-guide"
+    },
+    {
+      "k": "boardInspection-2",
+      "v": "{\"status\":\"declared\",\"source\":\"/flash/config.json\",\"pins\":{\"USER_LED\":17,\"BOOT_KEY\":16},\"peripherals\":{\"sensor\":{\"cmos_pclk\":23,\"cmos_xclk\":22,\"cmos_href\":20,\"cmos_pwdn\":21,\"cmos_vsync\":18,\"cmos_rst\":19,\"pin_clk\":25,\"pin_sda\":24},\"lcd\":{\"rst\":29,\"dcx\":27,\"ss\":28,\"clk\":26},\"sdcard\":{\"sclk\":8,\"mosi\":7,\"miso\":9,\"cs\":6}},\"issues\":[],\"declaredType\":\"embedfire\",\"configName\":\"embedfire-k210\",\"boardId\":\"embedfire-cam-gc2145\"}"
+    },
+    {
+      "k": "helper-sha256",
+      "v": "aa1566b5d1f3c31aec96f783b8b44b95dca57e0dd4492563137fbc0a088808db"
+    },
+    {
+      "k": "execute-return",
+      "v": {
+        "err": "执行失败：脚本产生了 Traceback（详情见控制台 stderr）。"
+      }
+    },
+    {
+      "k": "stdout-logs",
+      "v": "[{\"s\":\"stderr\",\"t\":\"Traceback (most recent call last):\\r\\n  File \\\"<stdin>\\\", line 4, in <module>\\r\\n  File \\\"<string>\\\", line 123, in pin\\r\\nValueError: board does not declare pin 'LED'\\r\\n\"}]"
+    },
+    {
+      "k": "final-state",
+      "v": "{\"phase\":\"disconnected\",\"inspection\":null,\"chip\":\"选择开发板\"}"
+    },
+    {
+      "k": "shot",
+      "v": "real-final-disconnected-guide"
+    }
+  ],
+  "finished": "2026-10-19T16:57:13.942Z"
+}

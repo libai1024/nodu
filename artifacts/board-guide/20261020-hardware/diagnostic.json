@@ -1,0 +1,27 @@
+{
+  "started": "2026-10-19T16:58:38.291Z",
+  "steps": [
+    {
+      "k": "connect-start",
+      "v": "2026-10-19T16:58:38.325Z"
+    },
+    {
+      "k": "connected",
+      "v": "2026-10-19T16:58:42.010Z"
+    },
+    {
+      "k": "diag-return",
+      "v": {
+        "ok": "NODU_CFG:{\"board_info\": {\"USER_LED\": 17, \"BOOT_KEY\": 16}, \"type\": \"embedfire\", \"config_name\": \"embedfire-k210\"}\r\n"
+      }
+    },
+    {
+      "k": "diag-logs",
+      "v": "[{\"s\":\"stdout\",\"t\":\"NODU_CFG:{\\\"board_info\\\": {\\\"USER_LED\\\": 17, \\\"BOOT_KEY\\\": 16}, \\\"type\\\": \\\"embedfire\\\", \\\"config_name\\\": \\\"embedfire-k210\\\"}\\r\\n\"}]"
+    },
+    {
+      "k": "done",
+      "v": "2026-10-19T16:58:44.007Z"
+    }
+  ]
+}

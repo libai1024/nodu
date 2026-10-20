@@ -101,6 +101,24 @@ pub struct ProgressInfo {
     pub percent: u32,
 }
 
+/// Live counters for an in-progress `.bin` framebuffer recording.
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+#[ts(
+    export,
+    export_to = "../../../../scope-extension/src/common/generated/"
+)]
+pub struct RecordingStatus {
+    pub active: bool,
+    pub path: String,
+    #[ts(type = "number")]
+    pub frames: u64,
+    #[ts(type = "number")]
+    pub bytes: u64,
+    #[ts(type = "number")]
+    pub elapsed_ms: u64,
+}
+
 /// `state` event payload; absent keys mean unchanged from the host's view.
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -122,12 +140,24 @@ pub struct DeviceState {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub architecture: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub board_id: Option<u8>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub protocol: Option<String>,
     pub busy: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub operation: Option<String>,
     pub running: bool,
     pub preview: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub fps: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub recording: Option<RecordingStatus>,
     pub capabilities: DeviceCapabilities,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
@@ -143,12 +173,16 @@ impl Default for DeviceState {
             phase: DevicePhase::Disconnected,
             port: None,
             board_profile: None,
+            board_id: None,
+            protocol: None,
             firmware: None,
             architecture: None,
             busy: false,
             operation: None,
             running: false,
             preview: false,
+            fps: None,
+            recording: None,
             capabilities: DeviceCapabilities::default(),
             last_error: None,
             progress: None,
@@ -248,6 +282,14 @@ pub struct ConnectArgs {
     #[serde(default)]
     #[ts(optional)]
     pub baud: Option<u32>,
+    /// Original MaixPy IDE board id 0–8 (reset sequence selection).
+    #[serde(default)]
+    #[ts(optional)]
+    pub board_id: Option<u8>,
+    /// "ide" (default) or "raw" — raw is kept for migration differential tests.
+    #[serde(default)]
+    #[ts(optional)]
+    pub protocol: Option<String>,
 }
 
 /// File content reply (`data` is base64).
@@ -325,6 +367,7 @@ pub struct FirmwareResult {
 }
 
 /// Event envelope: `{event, data}`.
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "event", content = "data", rename_all = "lowercase")]
 pub enum Event {
@@ -347,6 +390,13 @@ pub const METHODS: &[&str] = &[
     "writeFile",
     "setPreview",
     "startCamera",
+    "saveFile",
+    "formatScript",
+    "resetDevice",
+    "startRecording",
+    "stopRecording",
+    "convertVideo",
+    "playVideo",
     "prepareFirmware",
     "backupDevice",
     "flashFirmware",
@@ -369,6 +419,7 @@ mod tests {
         DeviceCapabilities::export_all().expect("export capabilities");
         ProgressInfo::export_all().expect("export progress");
         DeviceState::export_all().expect("export state");
+        RecordingStatus::export_all().expect("export recording status");
         DeviceLog::export_all().expect("export log");
         LogStream::export_all().expect("export log stream");
         DeviceFrame::export_all().expect("export frame");
