@@ -108,9 +108,13 @@ with the Python command semantics preserved:
 - Real-board read-only probe and complete 16 MiB backup passed after the
   EF6018 allowlist fix; see
   [realboard-readonly-20261020.md](realboard-readonly-20261020.md).
-  No real flash write or post-flash verification has been run.
-- IDE-mode backup path (our extension; Python worker is raw-only) is
-  compile-checked but untested against a board.
+- Real-board same-version `flashFirmware` passed end to end (preserve →
+  probe → verified backup → 1.5 Mbaud write with zero retries → read-back
+  verification); see [realboard-flash-20261020.md](realboard-flash-20261020.md).
+- IDE-mode backup path (our extension; Python worker is raw-only) fails
+  closed on real hardware: merged/corrupted exec output at ~2 KiB
+  boundaries. Raw-mode backup is unaffected; fix tracked as a separate
+  issue.
 - `tools/diff/flash_sessions.py` drives Python's probe/flash but has no
   Rust-side `do_backupDevice` transcript yet (needs a smarter mock board
   serving `Maix.utils.flash_read`/`uhashlib`).

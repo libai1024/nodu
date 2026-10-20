@@ -67,7 +67,7 @@ I4.1,editor,文档文件夹,文件→文档文件夹,~/Documents/MaixPy；不存
 I4.2,editor,新建文件模板,⌘N,# Untitled - By: 用户 - 日期 + hello world 相机循环,0.2.5 字符串,5,passed_host,scope.new-script 原版模板逐字节（phase-7-ui-parity.md）
 I5.1,help,帮助菜单,帮助→MaixPy文档 / 论坛,打开原版 URL,original-private-params §6,5,passed_host,MaixPy文档/论坛打开原版 URL（phase-7-ui-parity.md）
 I5.2,help,关于,应用菜单→关于,版本信息 + OpenMV MIT 署名,0.2.5 字符串,5,passed_host,关于对话框：版本 + OpenMV MIT 署名（phase-7-ui-parity.md）
-K1.1,flash,烧写路径迁移,阶段 6,Rust 实现与 Python 对照样本逐字节一致；门禁不变；DE/E7 时拒绝烧写,PLAN 阶段 6,6,partial,evidence/phase-6-flash-migration.md + realboard-readonly-20261020.md：差分 18 节 + 2 会话逐字节；E7 根因=EF6018 未列白名单已修复；真板只读链路（探针/容量/16MiB 备份/恢复包/负门禁）通过；真板烧写未执行
+K1.1,flash,烧写路径迁移,阶段 6,Rust 实现与 Python 对照样本逐字节一致；门禁不变；DE/E7 时拒绝烧写,PLAN 阶段 6,6,pass,evidence/phase-6-flash-migration.md + realboard-readonly-20261020.md + realboard-flash-20261020.md：差分 18 节 + 2 会话逐字节；E7 根因=EF6018 未列白名单已修复；真板同版本回写（探针/16MiB 备份/1.5Mbaud 写入/回读 SHA+header 验证）通过；IDE 模式备份通道损坏为新发现限制项（fail-closed 生效，raw 路径不受影响）
 P2.1,ui,精简状态栏,简洁模式,只保留行列与语言,0.1.2 P2,7,passed_host,简洁模式状态栏已精简
 P2.2,ui,未连接空状态,视觉面板未连接,短提示 + 连接按钮,0.1.2 P2,7,passed_host,空状态 + 连接设备按钮已实现
 U1.1,ui,专业模式布局对齐,专业模式,工具栏/编辑器/帧缓冲+直方图/串行终端/状态栏与原版主窗口一致,evidence/maixpy-ide-0.2.5-main-window.txt,7,partial,各面板已存在；未逐项对照原版截图验收

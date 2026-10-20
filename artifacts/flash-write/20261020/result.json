@@ -1,0 +1,24 @@
+{
+  "observedAt": "2026-10-20",
+  "board": "embedfire-cam-gc2145 /dev/cu.usbserial-3120, MaixPy 0.6.3 d8901fd22, flash W25Q128JW (EF6018)",
+  "subject": "Real-board flashFirmware same-version rewrite validation",
+  "driver": "flash_run.py -> release nodu-device JSON-lines, protocol=raw",
+  "flashResult": {
+    "verified": true,
+    "firmware": "MaixPy 0.6.3 (v0.6.2-89-gd8901fd22 on 2024-06-17)",
+    "sha256": "6dde2d59adc344ee0c7f96300528b4feff5e36c160f5cc0066016389394f15fa",
+    "writeBytes": 2116325,
+    "writeDurationSeconds": 29,
+    "writeBaud": 1500000,
+    "writeWarnings": 0,
+    "backupDirectory": "~/.nodu/backups/20261020-142547-prewrite (private, not committed)",
+    "postWriteFileCheck": "21/21 user files unchanged"
+  },
+  "newFinding": "IDE-mode backupDevice fails closed: exec stdout merges NODU_DATA lines (lost separators every ~2048 B) at 1.5 Mbaud; raw-mode backup unaffected. Evidence: realboard-flash-20261020.md",
+  "priorFailedRun": "run-ide-backup-failed.txt — same drive in IDE mode failed before any write (fail-closed verified)",
+  "files": [
+    {"name": "flash_run.py", "role": "driver script"},
+    {"name": "run.txt", "role": "full transcript (local only)", "committed": false},
+    {"name": "run-ide-backup-failed.txt", "role": "IDE-mode failure transcript (local only)", "committed": false}
+  ]
+}

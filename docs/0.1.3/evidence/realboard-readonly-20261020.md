@@ -45,4 +45,4 @@
 ## 遗留
 
 - 900 s Node 层超时杀进程（P1，UI 路径）在此只读验证时尚未修复；后续安全修正见 [phase-6-flash-migration.md](phase-6-flash-migration.md)。`line_timeout` 死代码、Windows `std::os::unix` 编译缺口及媒体打包问题仍待处理。
-- 真机 `flashFirmware` 未执行；E7 已解，是否做同版本回写验证是独立决策。
+- 真机 `flashFirmware` 已于当日执行并通过回读验证，见 [realboard-flash-20261020.md](realboard-flash-20261020.md)。该运行另发现 IDE 模式备份通道损坏（fail-closed，无写入）。
