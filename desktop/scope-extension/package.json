@@ -29,6 +29,7 @@
   "theiaExtensions": [
     {
       "frontend": "lib/browser/scope-frontend-module",
+      "frontendPreload": "lib/browser/nodu-i18n-preload",
       "backend": "lib/node/nodu-backend-module"
     }
   ]

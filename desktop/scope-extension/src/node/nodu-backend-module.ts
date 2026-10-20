@@ -2,7 +2,9 @@
 import { ContainerModule } from '@theia/core/shared/inversify';
 import { ConnectionHandler, RpcConnectionHandler } from '@theia/core/lib/common';
 import { BackendApplicationContribution } from '@theia/core/lib/node/backend-application';
+import { LocalizationContribution } from '@theia/core/lib/node/i18n/localization-contribution';
 import { DeviceClient, NODU_DEVICE_PATH, NoduDeviceService } from '../common/nodu-device-protocol';
+import { NoduZhCnLocalizationContribution } from './nodu-localization';
 import { NoduResourcesServer } from './nodu-resources-server';
 import { NODU_RESOURCES_PATH, NoduResourcesService, ResourcesClient } from '../common/nodu-resources-protocol';
 import { NoduDeviceServer } from './nodu-device-server';
@@ -12,6 +14,8 @@ export default new ContainerModule(bind => {
     bind(BackendApplicationContribution).toService(NoduDeviceServer);
     bind(NoduResourcesServer).toSelf().inSingletonScope();
     bind(BackendApplicationContribution).toService(NoduResourcesServer);
+    bind(NoduZhCnLocalizationContribution).toSelf().inSingletonScope();
+    bind(LocalizationContribution).toService(NoduZhCnLocalizationContribution);
     bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler<ResourcesClient>(NODU_RESOURCES_PATH, client => {
         const server = ctx.container.get(NoduResourcesServer);
         const remove = server.addClient(client);

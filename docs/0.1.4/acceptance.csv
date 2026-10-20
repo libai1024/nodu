@@ -10,4 +10,5 @@ I3.2,editor,示例来源清单,构建,manifest.json 记录来源提交、路径�
 I1.1,editor,文件菜单,菜单逐项,新建（模板 ⌘N）/打开/文档文件夹子菜单/示例/更多示例/最近的文件（含清除菜单）/保存/另存为/关闭/打印；快捷键除 §3 偏离外与原版一致,evidence/maixpy-ide-0.2.5-menus.txt,3,passed_host,evidence/phase-3-menus.md（菜单 DOM 实测+截图；Electron 原生菜单与点击交互待人工验收）
 I1.2,editor,编辑菜单,菜单逐项,撤销/重做/剪切/复制/粘贴/从剪贴板历史粘贴/全选/高级 12 项/查找替换/高级查找/转到行（⌘L）；快捷键除 §3 偏离外与原版一致,evidence/maixpy-ide-0.2.5-menus.txt,3,passed_host,evidence/phase-3-menus.md（菜单 DOM 实测+截图；剪贴板环形/折叠/字号键的实际交互待人工验收）
 U1.1,ui,专业模式布局对齐,专业模式,工具栏/帧缓冲/直方图/编辑器/底部面板/状态栏逐项与原版一致或有书面理由；两边截图入库,evidence/maixpy-ide-0.2.5-main-window.txt,4,partial,evidence/phase-4-layout.md（Nodu 侧已逐项核对；两边同状态截图待 N1.6 会话）
+U1.2,ui,界面中文化,全局,菜单栏与各级菜单、标签页/编辑器右键菜单、保存对话框、状态栏默认中文；Nodu 自有项与原版文案一致；不引入 VS Code 语言包,MaixPy IDE 0.2.5 中文界面,4,passed_host,evidence/phase-4-locale.md（浏览器端 DOM 实测；Electron 原生菜单与保存对话框待人工验收）
 N1.6,native,原版并排对照,同一块板按相同步骤运行,PLAN 阶段 5 的 10 个步骤两边结果一致或差异有解释；板端状态与截图入库,PLAN 阶段 5,5,todo,

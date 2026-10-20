@@ -9,6 +9,7 @@
     "frontend": {
       "config": {
         "applicationName": "见微 · Nodu",
+        "defaultLocale": "zh-cn",
         "defaultTheme": "scope-dark",
         "defaultIconTheme": "theia-file-icons",
         "preferences": {

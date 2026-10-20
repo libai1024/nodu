@@ -755,3 +755,54 @@ test('status-bar and Res strings match the original labels', () => {
     assert.equal(s.fpsStatusText(12.34), 'FPS：12.3');
     assert.equal(s.fpsStatusText(undefined), 'FPS：');
 });
+
+test('zh-cn replacement keys are real Theia/Monaco English defaults', () => {
+    const { execSync } = require('node:child_process');
+    const { NODU_ZH_CN } = require('../lib/common/nodu-zh-cn');
+    const { nls } = require('@theia/core/lib/common/nls');
+    const theiaRoot = require('node:path').dirname(require.resolve('@theia/core/package.json'));
+    const atTheia = require('node:path').dirname(theiaRoot); // node_modules/@theia
+    const files = execSync(`find ${atTheia} -name '*.js' -path '*/lib/*' ! -name '*.map'`, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
+        .trim().split('\n');
+    const monacoRoot = require('node:path').dirname(require.resolve('@theia/monaco-editor-core/package.json'));
+    files.push(...execSync(`find ${monacoRoot}/esm -name '*.js'`, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).trim().split('\n'));
+    const defaults = new Set();   // any English default that reaches Localization.localize
+    const byDefaultOnly = new Set(); // literals passed straight to localizeByDefault(...)
+    const patterns = [
+        [/localizeByDefault\(\s*'((?:[^'\\]|\\.)*)'/g, 'byDefault'],
+        [/localizeByDefault\(\s*"((?:[^"\\]|\\.)*)"/g, 'byDefault'],
+        [/localize\(\s*'theia\/[^']+'\s*,\s*'((?:[^'\\]|\\.)*)'/g, 'default'],
+        [/toDefaultLocalizedCommand\(\{[\s\S]*?label:\s*'((?:[^'\\]|\\.)*)'/g, 'default'],
+        [/toLocalizedCommand\(\{[\s\S]*?label:\s*'((?:[^'\\]|\\.)*)'/g, 'default'],
+        // Monaco sources: localize(1187, "Peek Definition") / localize2(1440, "...")
+        [/localize2?\(\s*\d+\s*,\s*"((?:[^"\\]|\\.)*)"/g, 'default'],
+        [/localize2?\(\s*'[^']+'\s*,\s*'((?:[^'\\]|\\.)*)'/g, 'default'],
+        [/localize2?\(\s*"[^"]+"\s*,\s*"((?:[^"\\]|\\.)*)"/g, 'default'],
+    ];
+    for (const f of files) {
+        const s = require('node:fs').readFileSync(f, 'utf8');
+        if (!s.includes('localize') && !s.includes('Localized')) { continue; }
+        for (const [re, kind] of patterns) {
+            re.lastIndex = 0;
+            let m;
+            while ((m = re.exec(s))) {
+                const v = m[1].replace(/\\(.)/g, '$1');
+                defaults.add(v);
+                if (kind === 'byDefault') { byDefaultOnly.add(v); }
+            }
+        }
+    }
+    const misses = [], unresolved = [];
+    for (const key of Object.keys(NODU_ZH_CN)) {
+        if (!defaults.has(key) && !nls.getDefaultKey(key)) { misses.push(key); continue; }
+        // localizeByDefault returns the English default when no metadata key exists —
+        // replacements are never consulted on that path, so those keys must resolve.
+        if (byDefaultOnly.has(key) && !nls.getDefaultKey(key)) { unresolved.push(key); }
+        assert.match(NODU_ZH_CN[key], /[一-鿿]/, `value for "${key}" must be Chinese`);
+    }
+    assert.deepEqual(misses, [], `keys with no matching English default: ${misses.join(', ')}`);
+    assert.deepEqual(unresolved, [], `localizeByDefault keys without a metadata key (would stay English): ${unresolved.join(', ')}`);
+    // Spot-check the mandated terminology actually lands on real keys.
+    assert.ok(defaults.has('Open...'));
+    assert.ok(defaults.has('New File...') || nls.getDefaultKey('New File...'));
+});
