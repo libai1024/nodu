@@ -30,6 +30,7 @@ import { NoduAprilTagDialog } from './nodu-apriltag-generator';
 import { pickBinaryFile } from './nodu-vision-files';
 import { BinaryBuffer } from '@theia/core/lib/common/buffer';
 import { NETWORK_MODELS } from '../../resources/models/model-data';
+import { APRILTAG_MENU, TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
 
 function toBase64(bytes: Uint8Array): string {
     let binary = '';
@@ -83,15 +84,20 @@ export class NoduVisionToolsContribution implements CommandContribution, MenuCon
         registry.registerCommand({ id: 'scope.threshold-editor', label: '阈值编辑器', category: '见微 Nodu' }, {
             execute: () => this.openThresholdEditor().catch(error => this.messages.error(`阈值编辑器：${error instanceof Error ? error.message : String(error)}`)),
         });
-        registry.registerCommand({ id: 'scope.keypoints-editor', label: 'ORB 关键点编辑器', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.keypoints-editor', label: '关键点编辑器', category: '见微 Nodu' }, {
             execute: () => this.openKeypointsEditor().catch(error => this.messages.error(`关键点编辑器：${error instanceof Error ? error.message : String(error)}`)),
         });
-        registry.registerCommand({ id: 'scope.apriltag-generator', label: 'AprilTag 生成器', category: '见微 Nodu' }, {
-            execute: () => this.openAprilTagGenerator().catch(error => this.messages.error(`AprilTag 生成器：${error instanceof Error ? error.message : String(error)}`)),
+        registry.registerCommand({ id: 'scope.apriltag-generator', label: 'AprilTag生成器', category: '见微 Nodu' }, {
+            execute: () => this.openAprilTagGenerator().catch(error => this.messages.error(`AprilTag生成器：${error instanceof Error ? error.message : String(error)}`)),
         });
+        for (const entry of APRILTAG_MENU) {
+            registry.registerCommand({ id: `scope.apriltag.${entry.family}`, label: entry.label, category: '见微 Nodu' }, {
+                execute: () => this.openAprilTagGenerator(entry.family).catch(error => this.messages.error(`AprilTag生成器：${error instanceof Error ? error.message : String(error)}`)),
+            });
+        }
         const searches: [string, string, string][] = [
             ['scope.qr-generator', '二维码生成器', 'https://www.google.com/search?q=qr+code+generator'],
-            ['scope.datamatrix-generator', 'Data Matrix 生成器', 'https://www.google.com/search?q=data+matrix+generator'],
+            ['scope.datamatrix-generator', 'DataMatrix码生成器', 'https://www.google.com/search?q=data+matrix+generator'],
             ['scope.barcode-generator', '条码生成器', 'https://www.google.com/search?q=barcode+generator'],
         ];
         for (const [id, label, url] of searches) {
@@ -99,21 +105,29 @@ export class NoduVisionToolsContribution implements CommandContribution, MenuCon
                 execute: () => open(this.opener, new URI(url)).catch(error => this.messages.error(`${label}：${error instanceof Error ? error.message : String(error)}`)),
             });
         }
-        registry.registerCommand({ id: 'scope.network-library', label: 'CNN 模型库', category: '见微 Nodu' }, {
-            execute: () => this.networkLibrary().catch(error => this.messages.error(`CNN 模型库：${error instanceof Error ? error.message : String(error)}`)),
+        registry.registerCommand({ id: 'scope.network-library', label: 'CNN网络库', category: '见微 Nodu' }, {
+            execute: () => this.networkLibrary().catch(error => this.messages.error(`CNN网络库：${error instanceof Error ? error.message : String(error)}`)),
         });
     }
 
     registerMenus(menus: MenuModelRegistry): void {
-        const vision = [...MAIN_MENU_BAR, '5_scope', 'machine-vision'];
-        menus.registerSubmenu(vision, '机器视觉');
-        menus.registerMenuAction(vision, { commandId: 'scope.threshold-editor', order: '0' });
-        menus.registerMenuAction(vision, { commandId: 'scope.keypoints-editor', order: '1' });
-        menus.registerMenuAction(vision, { commandId: 'scope.apriltag-generator', order: '2' });
-        menus.registerMenuAction(vision, { commandId: 'scope.qr-generator', order: '3' });
-        menus.registerMenuAction(vision, { commandId: 'scope.datamatrix-generator', order: '4' });
-        menus.registerMenuAction(vision, { commandId: 'scope.barcode-generator', order: '5' });
-        menus.registerMenuAction(vision, { commandId: 'scope.network-library', order: '6' });
+        const vision = [...MAIN_MENU_BAR, '5_scope', TOOLS_MENU_GROUPS.toolsGroup, TOOLS_MENU_GROUPS.visionSubmenu];
+        menus.registerSubmenu(vision, '机器视觉', { sortString: '1' });
+        // Direct children first: a group as the first child would render a
+        // leading separator in the browser menu.
+        menus.registerMenuAction(vision, { commandId: 'scope.threshold-editor', order: 'a0' });
+        menus.registerMenuAction(vision, { commandId: 'scope.keypoints-editor', order: 'a1' });
+        const generators = [...vision, 'g_generators'];
+        const apriltag = [...generators, 'apriltag'];
+        menus.registerSubmenu(apriltag, 'AprilTag生成器', { sortString: '0' });
+        APRILTAG_MENU.forEach((entry, order) => {
+            menus.registerMenuAction(apriltag, { commandId: `scope.apriltag.${entry.family}`, order: String(order) });
+        });
+        menus.registerMenuAction(generators, { commandId: 'scope.qr-generator', order: '1' });
+        menus.registerMenuAction(generators, { commandId: 'scope.datamatrix-generator', order: '2' });
+        menus.registerMenuAction(generators, { commandId: 'scope.barcode-generator', order: '3' });
+        const library = [...vision, 'z_library'];
+        menus.registerMenuAction(library, { commandId: 'scope.network-library', order: '0' });
     }
 
     protected async openThresholdEditor(): Promise<void> {
@@ -234,10 +248,10 @@ export class NoduVisionToolsContribution implements CommandContribution, MenuCon
         await dialog.open();
     }
 
-    protected async openAprilTagGenerator(): Promise<void> {
+    protected async openAprilTagGenerator(family?: string): Promise<void> {
         const dialog = new NoduAprilTagDialog(
             Object.assign(new DialogProps(), { title: 'AprilTag 生成器', maxWidth: 760 }),
-            { files: this.files, dialogs: this.dialogs });
+            { files: this.files, dialogs: this.dialogs, family });
         await dialog.open();
     }
 

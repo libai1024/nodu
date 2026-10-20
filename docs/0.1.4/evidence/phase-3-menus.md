@@ -127,3 +127,81 @@ dispose 时触发）→ 防抖 `setMenuBar()` → `electronTheiaCore.setMenu`。
 未验证（待人工或后续会话）：Electron 原生菜单栏的实际渲染（截图工具无屏录
 权限，以 DOM 版代验，刷新路径为代码级核对）、剪贴板环形/打印/字体键在真实
 编辑器中的交互、折叠切换的实际行为。
+
+---
+
+# 阶段 3 续 — 工具 / 窗口 / 帮助 菜单逐项补齐（I1.3）
+
+参考：`docs/0.1.3/evidence/maixpy-ide-0.2.5-menus.txt` `# 工具` / `# 窗口` /
+`# 帮助` 节。顶层菜单 `见微` 更名为 `工具`，菜单路径仍为
+`[..., MAIN_MENU_BAR, '5_scope']`，既有贡献不受影响。
+
+实现位置：
+
+- `desktop/scope-extension/src/common/nodu-tools-menu.ts`（纯表：
+  `BOARD_MENU`、`APRILTAG_MENU`、`ORIGINAL_TOOLS_MENU`、`ORIGINAL_WINDOW_MENU`、
+  `ORIGINAL_HELP_MENU`、`TOOLS_MENU_GROUPS`，由 backend-validation.cjs 与
+  证据文件逐字比对）
+- `scope-workbench.tsx`（顶层 `工具` 菜单、`选择开发板` 九命令、Electron `窗口`
+  菜单与 ⌘M 键位、Nodu 末组与 `示例` 子菜单）
+- `nodu-file-tools.tsx` / `nodu-terminal-tools.tsx` / `nodu-vision-tools.tsx` /
+  `nodu-media-tools.tsx`（各子菜单分组与顺序）
+- `nodu-apriltag-generator.tsx`（`NoduAprilTagDialog` 增加初始 family 参数）
+
+## 逐项映射（工具）
+
+| 原版项 | Nodu 命令 / 位置 | 状态 |
+| --- | --- | --- |
+| 选择开发板 ▸ 9 块板 | `scope.select-board.<0-8>`，`isToggled` 绑定 `NoduDeviceModel.boardId`；连接/忙时禁用（与面板一致） | 已实现，DOM 实测 9 项原文标签、`Sipeed Maix Dock` 默认勾选 |
+| 将打开的脚本保存到开发板的 boot.py | `scope.save-boot-script`（`c→b_file-actions` 组） | 已实现（未连接时禁用，与原版一致） |
+| 发送文件到开发板 | `scope.send-file` | 同上 |
+| 打开终端 ▸ 新终端 | `terminal` 子菜单（`TOOLS_MENU_GROUPS.terminalSubmenu`） | 已实现 |
+| 机器视觉 ▸ 阈值编辑器 / 关键点编辑器 | `scope.threshold-editor` / `scope.keypoints-editor` | 已实现 |
+| AprilTag生成器 ▸ 六家族 | `scope.apriltag.<family>`，各打开对话框并预选 family | 已实现，标签含原版 `ARKTOOLKIT` 拼写 |
+| 二维码 / DataMatrix码 / 条码生成器 | `scope.qr-generator` / `scope.datamatrix-generator` / `scope.barcode-generator` | 已实现 |
+| CNN网络库 | `scope.network-library` | 已实现 |
+| 视频工具 ▸ 转换视频文件 / 播放视频文件 | `scope.convert-video` / `scope.play-video`（子菜单前两项） | 已实现 |
+| （Nodu 附加）开始录制… / 结束录制 / 取消视频任务 | `scope.start-recording` / `scope.stop-recording` / `scope.cancel-media`，分隔线后 | Nodu 附加项 |
+| （Nodu 附加）运行/停止/复位/视觉调试/设备与连接/板卡指南/设备日志/主题/简专模式/示例 | `d_nodu` 末组 + `示例` 子菜单（仅专业模式可见） | Nodu 附加项，DOM 实测 |
+
+板卡 id↔标签证据：`BOARD_MENU` 顺序为原版显示顺序，id 为原版复位序列索引
+（`docs/0.1.3/evidence/original-private-params.md` §2 + `nodu-device/src/reset.rs`
+0xF9/0x06 掩码序列），测试断言 id 为 0–8 置换。
+
+## 窗口（仅 Electron）
+
+原版 `最小化 ⌘M` / `缩放` / `进入全屏 ⌃⌘F`：Theia 1.76 无顶层 Window 菜单，
+已有 `window.electronTheiaCore.{minimize,maximize,unMaximize,isMaximized,
+toggleFullScreen}` API 与 `workbench.action.toggleFullScreen`（⌃⌘F，仅
+Electron 注册，菜单在 查看→外观）。
+
+- `scope.window-minimize` → `electronTheiaCore.minimize()`，⌘M，Electron-only
+- `scope.window-zoom` → `isMaximized() ? unMaximize() : maximize()`
+- `进入全屏` → 复用 `workbench.action.toggleFullScreen`（查看菜单中的同一项保留）
+
+顶层 `窗口` 菜单路径 `[..., MAIN_MENU_BAR, '8_window']`（排序落在
+`7_terminal` 与 `9_help` 之间）；`environment.electron.is()` 为假时
+（浏览器端）整条不注册 —— 浏览器 DOM 实测无 `窗口` 项。
+未发明自定义 IPC。
+
+## 帮助
+
+原版 `MaixPy文档` / `MaixPy论坛` 为前两项（order `0`/`1`），Nodu `关于 Nodu`
+为 order `9`，Theia 原生 About 已注销。浏览器 DOM 实测顺序与全中文标签正确。
+
+## 验证（本续节）
+
+- `npx tsc -p scope-extension --noEmit`：0 错；`npm run compile`：通过；
+  browser-app / electron-app 构建 0 errors。
+- `node scope-extension/test/backend-validation.cjs`：**39/39**（新增：
+  工具/窗口/帮助表逐字比对、板 id 置换、AprilTag family/count 对拍）。
+- `node scripts/check-licenses.cjs`：399 文件干净；`git diff --check`：干净。
+- 浏览器端（`:4188`，headless Chromium + puppeteer）：菜单栏为
+  `文件|编辑|选择|查看|转到|工具|终端|帮助`（无 `窗口`）；工具菜单三层级、
+  分隔线、AprilTag 级联、板勾选状态、简单/专业模式下 `示例` 子菜单显隐均实测；
+  帮助菜单实测 `MaixPy文档|MaixPy论坛|关于 Nodu`。
+  截图：`artifacts/menus-0.1.4/tools-*.png`、`help-menu.png`。
+
+未验证：Electron 原生 `窗口` 菜单的实机渲染与 ⌘M/缩放/全屏交互（命令与键位已按
+Electron-only 注册，浏览器端已证不泄漏）；各生成器/编辑器对话框在实机上的
+打开效果（命令已注册并出现在 DOM）。

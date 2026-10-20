@@ -22,7 +22,7 @@ export const TAG_FAMILIES: readonly TagFamily[] = [
 
 const LABEL_FOOTER = 32;
 
-interface Deps { files: FileService; dialogs: FileDialogService; }
+interface Deps { files: FileService; dialogs: FileDialogService; /** Optional TAG_FAMILIES id preselecting the in-dialog picker. */ family?: string; }
 
 export class NoduAprilTagDialog extends ReactDialog<undefined> {
     /** Shared flag: true means the running batch should stop before the next write. */
@@ -43,7 +43,7 @@ export class NoduAprilTagDialog extends ReactDialog<undefined> {
     }
 
     protected render(): React.ReactNode {
-        return <AprilTagGenerator files={this.deps.files} dialogs={this.deps.dialogs} cancelState={this.cancelState} />;
+        return <AprilTagGenerator files={this.deps.files} dialogs={this.deps.dialogs} cancelState={this.cancelState} initialFamily={this.deps.family} />;
     }
 }
 
@@ -89,8 +89,11 @@ export async function renderTagPng(family: TagFamily, id: number, cell: number, 
     return { bytes: new Uint8Array(await blob.arrayBuffer()), width, height: canvas.height };
 }
 
-function AprilTagGenerator({ files, dialogs, cancelState }: Deps & { cancelState: { current: boolean } }): React.ReactElement {
-    const [familyIndex, setFamilyIndex] = React.useState(0);
+function AprilTagGenerator({ files, dialogs, cancelState, initialFamily }: Omit<Deps, 'family'> & { cancelState: { current: boolean }; initialFamily?: string }): React.ReactElement {
+    const [familyIndex, setFamilyIndex] = React.useState(() => {
+        const at = initialFamily ? TAG_FAMILIES.findIndex(family => family.id === initialFamily) : -1;
+        return at >= 0 ? at : 0;
+    });
     const [start, setStart] = React.useState(0);
     const [end, setEnd] = React.useState(0);
     const [cell, setCell] = React.useState(24);

@@ -196,5 +196,14 @@ export const NODU_ZH_CN: Record<string, string> = {
     'Editor content': '编辑器内容',
     'Select End of Line Sequence': '选择行尾序列',
     'Select Language Mode': '选择语言模式',
-    'Select Encoding': '选择编码'
+    'Select Encoding': '选择编码',
+
+    // ---- Electron additions (native menu / window commands) ----
+    'Toggle Developer Tools': '切换开发者工具',
+    'Reload Window': '重新加载窗口',
+    'Zoom In': '放大',
+    'Zoom Out': '缩小',
+    'Reset Zoom': '重置缩放',
+    'Close Window': '关闭窗口',
+    'Full Screen': '进入全屏'
 };

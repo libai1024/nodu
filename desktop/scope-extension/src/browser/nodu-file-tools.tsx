@@ -14,6 +14,7 @@ import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { NODU_FILE_LIMIT, NoduDeviceModel } from './nodu-device-client';
+import { TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
 
 const STARTUP_RE = /^(boot|main)\.py$/i;
 
@@ -40,20 +41,20 @@ export class NoduFileToolsContribution implements CommandContribution, MenuContr
     }
 
     registerCommands(registry: CommandRegistry): void {
-        registry.registerCommand({ id: 'scope.save-boot-script', label: '保存到 boot.py 启动脚本', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.save-boot-script', label: '将打开的脚本保存到开发板的 boot.py', category: '见微 Nodu' }, {
             execute: () => this.saveBootScript().catch(error => this.messages.error(`写入 boot.py：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.filesUsable(),
         });
-        registry.registerCommand({ id: 'scope.send-file', label: '发送文件到设备…', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.send-file', label: '发送文件到开发板', category: '见微 Nodu' }, {
             execute: () => this.sendFile().catch(error => this.messages.error(`发送文件：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.filesUsable(),
         });
     }
 
     registerMenus(menus: MenuModelRegistry): void {
-        const menu = [...MAIN_MENU_BAR, '5_scope'];
-        menus.registerMenuAction(menu, { commandId: 'scope.save-boot-script', order: '10' });
-        menus.registerMenuAction(menu, { commandId: 'scope.send-file', order: '11' });
+        const group = [...MAIN_MENU_BAR, '5_scope', TOOLS_MENU_GROUPS.filesGroup];
+        menus.registerMenuAction(group, { commandId: 'scope.save-boot-script', order: '0' });
+        menus.registerMenuAction(group, { commandId: 'scope.send-file', order: '1' });
     }
 
     /** Abort when the device changed (disconnect/busy/different port) mid-dialog. */

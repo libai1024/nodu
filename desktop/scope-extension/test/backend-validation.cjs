@@ -806,3 +806,87 @@ test('zh-cn replacement keys are real Theia/Monaco English defaults', () => {
     assert.ok(defaults.has('Open...'));
     assert.ok(defaults.has('New File...') || nls.getDefaultKey('New File...'));
 });
+
+// --- Phase 3b: 工具/窗口/帮助 menu parity -------------------------------------
+
+test('工具/窗口/帮助 menu tables match the 0.2.5 evidence verbatim', () => {
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const m = require('../lib/common/nodu-tools-menu');
+    const evidencePath = path.join(__dirname, '..', '..', '..', 'docs', '0.1.3', 'evidence', 'maixpy-ide-0.2.5-menus.txt');
+    const evidence = fs.readFileSync(evidencePath, 'utf8');
+
+    // Parse one '# section' into a label tree: deeper-indented lines become
+    // children of the preceding item, '----' lines become '-' separators,
+    // '[x:y]' accelerators and '(disabled)' markers are stripped.
+    function parseSection(title) {
+        const lines = evidence.split('\n');
+        const start = lines.indexOf(`# ${title}`);
+        assert.ok(start >= 0, `evidence is missing section # ${title}`);
+        const root = [];
+        const stack = [{ indent: -1, items: root }];
+        for (let i = start + 1; i < lines.length; i++) {
+            const raw = lines[i];
+            if (raw.startsWith('# ')) { break; }
+            if (!raw.trim()) { continue; }
+            const indent = raw.length - raw.trimStart().length;
+            const label = raw.trim()
+                .replace(/\s*\[[^\]]*\]/g, '')
+                .replace(/\s*\(disabled\)\s*/g, '')
+                .trim();
+            if (!label) { continue; }
+            while (stack.length > 1 && stack[stack.length - 1].indent >= indent) { stack.pop(); }
+            const items = stack[stack.length - 1].items;
+            if (label === '----') { items.push('-'); continue; }
+            const item = { label };
+            items.push(item);
+            stack.push({ indent, items: (item.children = []) });
+        }
+        const dropEmpty = items => {
+            for (const item of items) {
+                if (item !== '-' && item.children) {
+                    if (item.children.length) { dropEmpty(item.children); } else { delete item.children; }
+                }
+            }
+            return items;
+        };
+        return dropEmpty(root);
+    }
+    const norm = items => items.map(item => item === '-'
+        ? '-'
+        : (item.children && item.children.length ? { label: item.label, children: norm(item.children) } : { label: item.label }));
+
+    assert.deepEqual(parseSection('工具'), norm(m.ORIGINAL_TOOLS_MENU));
+    assert.deepEqual(parseSection('窗口'), norm(m.ORIGINAL_WINDOW_MENU));
+    assert.deepEqual(parseSection('帮助'), norm(m.ORIGINAL_HELP_MENU));
+});
+
+test('board menu ids are a 0–8 permutation matching the disassembled reset order', () => {
+    const { BOARD_MENU } = require('../lib/common/nodu-tools-menu');
+    assert.equal(BOARD_MENU.length, 9);
+    assert.deepEqual([...BOARD_MENU].map(entry => entry.boardId).sort(), [0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    // authoritative order from docs/0.1.3/evidence/original-private-params.md §2.
+    const byLabel = new Map(BOARD_MENU.map(entry => [entry.label, entry.boardId]));
+    assert.equal(byLabel.get('Kendryte KD233'), 0);
+    assert.equal(byLabel.get('Sipeed Maix Bit( old )'), 1);
+    assert.equal(byLabel.get('Sipeed Maix Dock'), 2);
+    assert.equal(byLabel.get('Sipeed Maix Go( open-ec  new CMSIS_DAP )'), 3);
+    assert.equal(byLabel.get('Sipeed Maix Go( Old CMSIS-DAP )'), 4);
+    assert.equal(byLabel.get('Sipeed Maixduino'), 5);
+    assert.equal(byLabel.get('Sipeed Maix Bit( with Mic )'), 6);
+    assert.equal(byLabel.get('M5StickV'), 7);
+    assert.equal(byLabel.get('T-Watch'), 8);
+});
+
+test('AprilTag family ids exist in the generator with matching counts', () => {
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const { APRILTAG_MENU } = require('../lib/common/nodu-tools-menu');
+    const source = fs.readFileSync(path.join(__dirname, '..', 'lib', 'browser', 'nodu-apriltag-generator.js'), 'utf8');
+    for (const entry of APRILTAG_MENU) {
+        assert.ok(source.includes(`id: '${entry.family}'`), `family ${entry.family} missing from TAG_FAMILIES`);
+        const count = Number(entry.label.match(/\((\d+)标签/)?.[1]);
+        assert.ok(count > 0, `label ${entry.label} has no count`);
+        assert.ok(source.includes(`count: ${count}`), `family ${entry.family} count mismatch: ${entry.label}`);
+    }
+});

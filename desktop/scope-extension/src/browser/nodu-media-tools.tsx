@@ -12,6 +12,7 @@ import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { FileUri } from '@theia/core/lib/common/file-uri';
 import { NoduDeviceModel } from './nodu-device-client';
+import { TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
 
 const VIDEO_INPUT_EXT = /\.(mp4|avi|mjpeg|bin)$/i;
 
@@ -46,11 +47,11 @@ export class NoduMediaToolsContribution implements CommandContribution, MenuCont
             execute: () => this.stopRecording().catch(error => this.messages.error(`结束录制：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.recording && !this.device.busy,
         });
-        registry.registerCommand({ id: 'scope.convert-video', label: '转换视频…', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.convert-video', label: '转换视频文件', category: '见微 Nodu' }, {
             execute: () => this.convertVideo().catch(error => this.messages.error(`转换视频：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.mediaIdle,
         });
-        registry.registerCommand({ id: 'scope.play-video', label: '播放视频…', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.play-video', label: '播放视频文件', category: '见微 Nodu' }, {
             execute: () => this.playVideo().catch(error => this.messages.error(`播放视频：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.mediaIdle,
         });
@@ -63,13 +64,14 @@ export class NoduMediaToolsContribution implements CommandContribution, MenuCont
     }
 
     registerMenus(menus: MenuModelRegistry): void {
-        const video = [...MAIN_MENU_BAR, '5_scope', 'video-tools'];
-        menus.registerSubmenu(video, '视频工具');
-        menus.registerMenuAction(video, { commandId: 'scope.start-recording', order: '0' });
-        menus.registerMenuAction(video, { commandId: 'scope.stop-recording', order: '1' });
-        menus.registerMenuAction(video, { commandId: 'scope.convert-video', order: '2' });
-        menus.registerMenuAction(video, { commandId: 'scope.play-video', order: '3' });
-        menus.registerMenuAction(video, { commandId: 'scope.cancel-media', order: '4' });
+        const video = [...MAIN_MENU_BAR, '5_scope', TOOLS_MENU_GROUPS.toolsGroup, TOOLS_MENU_GROUPS.videoSubmenu];
+        menus.registerSubmenu(video, '视频工具', { sortString: '2' });
+        menus.registerMenuAction(video, { commandId: 'scope.convert-video', order: 'a0' });
+        menus.registerMenuAction(video, { commandId: 'scope.play-video', order: 'a1' });
+        const extras = [...video, 'z_extras'];
+        menus.registerMenuAction(extras, { commandId: 'scope.start-recording', order: '0' });
+        menus.registerMenuAction(extras, { commandId: 'scope.stop-recording', order: '1' });
+        menus.registerMenuAction(extras, { commandId: 'scope.cancel-media', order: '2' });
     }
 
     /** Append the extension to a picked path instead of treating it as a directory. */

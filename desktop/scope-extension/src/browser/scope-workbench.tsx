@@ -2,7 +2,7 @@
 import * as React from '@theia/core/shared/react';
 import { BoxLayout, Widget } from '@theia/core/shared/@lumino/widgets';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
-import { CommandContribution, CommandRegistry, CommandService, DisposableCollection, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR } from '@theia/core/lib/common';
+import { CommandContribution, CommandRegistry, CommandService, DisposableCollection, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR, environment } from '@theia/core/lib/common';
 import { getThemeMode } from '@theia/core/lib/common/theme';
 import { MessageService } from '@theia/core/lib/common/message-service';
 import { FrontendApplicationContribution, ApplicationShell, KeybindingContribution, KeybindingRegistry, ReactWidget } from '@theia/core/lib/browser';
@@ -34,6 +34,8 @@ import { OpenerService, open } from '@theia/core/lib/browser/opener-service';
 import { URI } from '@theia/core/lib/common/uri';
 import { MAIXPY_RELEASES_URL } from './nodu-file-docs';
 import { firmwareStatusText, fpsStatusText, serialPortStatusText } from '../common/nodu-status';
+import { BOARD_MENU, TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
+import '@theia/core/lib/electron-common/electron-api';
 export { ScopeLayoutState } from './scope-layout-state';
 
 @injectable()
@@ -417,17 +419,55 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         command('scope.show-demo-logs', '显示示例日志', () => { this.output.getChannel('Nodu · 示例').show(); return this.outputView.openView({ activate: true }); }, true);
         command('scope.apply-thresholds', '复制示例 LAB 参数', () => this.applyThresholds(), true);
         command('scope.firmware-releases', '最新固件版本及说明', () => open(this.opener, new URI(MAIXPY_RELEASES_URL)).catch(error => this.messages.error(`固件版本：${error instanceof Error ? error.message : String(error)}`)));
+        // Original 工具 ▸ 选择开发板: the ids are the reset-sequence indices
+        // persisted as nodu.board-id; the panel applies the same
+        // connected/busy disable rule to its select.
+        for (const entry of BOARD_MENU) {
+            registry.registerCommand({ id: `scope.select-board.${entry.boardId}`, label: entry.label, category: '见微 Nodu' }, {
+                execute: () => this.device.selectBoardId(entry.boardId),
+                isToggled: () => this.device.boardId === entry.boardId,
+                isEnabled: () => !this.device.connected && !this.device.busy,
+            });
+        }
+        // Electron-only 窗口 menu commands (browser keeps them out of the palette).
+        registry.registerCommand({ id: 'scope.window-minimize', label: '最小化', category: '见微 Nodu' }, {
+            execute: () => { if (window.electronTheiaCore) { window.electronTheiaCore.minimize(); } },
+            isVisible: () => environment.electron.is(),
+        });
+        registry.registerCommand({ id: 'scope.window-zoom', label: '缩放', category: '见微 Nodu' }, {
+            execute: () => {
+                if (!window.electronTheiaCore) { return; }
+                if (window.electronTheiaCore.isMaximized()) { window.electronTheiaCore.unMaximize(); }
+                else { window.electronTheiaCore.maximize(); }
+            },
+            isVisible: () => environment.electron.is(),
+        });
     }
 
     registerMenus(menus: MenuModelRegistry): void {
         const menu = [...MAIN_MENU_BAR, '5_scope'];
-        menus.registerSubmenu(menu, '见微');
+        menus.registerSubmenu(menu, '工具');
+        const boards = [...menu, TOOLS_MENU_GROUPS.boardSubmenu];
+        menus.registerSubmenu(boards, '选择开发板', { sortString: '0' });
+        BOARD_MENU.forEach((entry, order) => {
+            menus.registerMenuAction(boards, { commandId: `scope.select-board.${entry.boardId}`, order: String(order) });
+        });
+        const nodu = [...menu, TOOLS_MENU_GROUPS.noduGroup];
         for (const [order, commandId] of ['scope.run-current', 'scope.stop-device', 'scope.reset-device', 'scope.show-vision', 'scope.show-devices', 'scope.board-guide', 'scope.show-logs', 'scope.toggle-theme', 'scope.layout.simple', 'scope.layout.pro'].entries()) {
-            menus.registerMenuAction(menu, { commandId, order: String(order) });
+            menus.registerMenuAction(nodu, { commandId, order: String(order) });
         }
-        const demoMenu = [...menu, 'local-demo'];
-        menus.registerSubmenu(demoMenu, '示例', { sortString: '9' });
+        const demoMenu = [...nodu, 'local-demo'];
+        menus.registerSubmenu(demoMenu, '示例', { sortString: 'z' });
         for (const [order, commandId] of ['scope.run-demo', 'scope.apply-thresholds', 'scope.show-demo-logs'].entries()) { menus.registerMenuAction(demoMenu, { commandId, order: String(order) }); }
+        if (environment.electron.is()) {
+            // Theia registers workbench.action.toggleFullScreen (⌃⌘F) only in
+            // Electron builds; the browser never gets a 窗口 menu.
+            const windowMenu = [...MAIN_MENU_BAR, '8_window'];
+            menus.registerSubmenu(windowMenu, '窗口');
+            menus.registerMenuAction(windowMenu, { commandId: 'scope.window-minimize', order: '0' });
+            menus.registerMenuAction(windowMenu, { commandId: 'scope.window-zoom', order: '1' });
+            menus.registerMenuAction(windowMenu, { commandId: 'workbench.action.toggleFullScreen', label: '进入全屏', order: '2' });
+        }
     }
 
     registerKeybindings(keys: KeybindingRegistry): void {
@@ -435,6 +475,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         // Inside a terminal these keys forward raw bytes instead (terminalFocus).
         keys.registerKeybinding({ command: 'scope.toggle-run', keybinding: 'ctrlcmd+r', when: '!terminalFocus' });
         keys.registerKeybinding({ command: 'scope.toggle-connect', keybinding: 'ctrlcmd+e', when: '!terminalFocus' });
+        if (environment.electron.is()) {
+            // Original 窗口 ▸ 最小化 accelerator (⌘M on macOS).
+            keys.registerKeybinding({ command: 'scope.window-minimize', keybinding: 'ctrlcmd+m' });
+        }
     }
 
     protected async runCurrentEditor(): Promise<void> {

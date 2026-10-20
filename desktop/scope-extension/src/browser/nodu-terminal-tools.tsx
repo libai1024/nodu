@@ -16,6 +16,7 @@ import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-servi
 import { SerialPortInfo } from '../common/nodu-device-protocol';
 import { NoduDeviceModel } from './nodu-device-client';
 import { BOARD_IDS } from './nodu-device-panel';
+import { TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
 
 type TerminalMode = 'serial' | 'tcp-client' | 'tcp-server' | 'udp-client' | 'udp-server';
 
@@ -168,7 +169,7 @@ export class NoduTerminalContribution implements CommandContribution, MenuContri
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
 
     registerCommands(registry: CommandRegistry): void {
-        registry.registerCommand({ id: 'scope.open-terminal', label: '新终端…', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.open-terminal', label: '新终端', category: '见微 Nodu' }, {
             execute: () => this.openTerminal().catch(error => this.messages.error(`新终端：${error instanceof Error ? error.message : String(error)}`)),
         });
         // Original terminal context: Ctrl-R/Ctrl-E are raw bytes to the link,
@@ -184,8 +185,8 @@ export class NoduTerminalContribution implements CommandContribution, MenuContri
     }
 
     registerMenus(menus: MenuModelRegistry): void {
-        const term = [...MAIN_MENU_BAR, '5_scope', 'terminal-tools'];
-        menus.registerSubmenu(term, '终端');
+        const term = [...MAIN_MENU_BAR, '5_scope', TOOLS_MENU_GROUPS.toolsGroup, TOOLS_MENU_GROUPS.terminalSubmenu];
+        menus.registerSubmenu(term, '打开终端', { sortString: '0' });
         menus.registerMenuAction(term, { commandId: 'scope.open-terminal', order: '0' });
     }
 
