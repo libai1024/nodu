@@ -71,5 +71,5 @@ K1.1,flash,烧写路径迁移,阶段 6,Rust 实现与 Python 对照样本逐字�
 P2.1,ui,精简状态栏,简洁模式,只保留行列与语言,0.1.2 P2,7,passed_host,简洁模式状态栏已精简
 P2.2,ui,未连接空状态,视觉面板未连接,短提示 + 连接按钮,0.1.2 P2,7,passed_host,空状态 + 连接设备按钮已实现
 U1.1,ui,专业模式布局对齐,专业模式,工具栏/编辑器/帧缓冲+直方图/串行终端/状态栏与原版主窗口一致,evidence/maixpy-ide-0.2.5-main-window.txt,7,partial,各面板已存在；未逐项对照原版截图验收
-X1.1,platform,macOS 15 arm64/x64,冒烟+真板,所有适用功能项在两个架构上通过；固件未实现项有明确证据,PLAN 阶段 8,8,partial,arm64 已构建冒烟；universal/x64 与 macOS 15 实机未验
+X1.1,platform,macOS 15 arm64/x64,冒烟+真板,所有适用功能项在两个架构上通过；固件未实现项有明确证据,PLAN 阶段 8,8,partial,universal 侧车已构建（minos 15.0），x86_64 切片 Rosetta 冒烟通过（macos-universal.md）；macOS 15 实机与打包未验
 X1.2,platform,Windows 10 x64,冒烟+真板,所有适用功能项通过；固件未实现项有明确证据；CH340 驱动说明,PLAN 阶段 8,8,todo,
