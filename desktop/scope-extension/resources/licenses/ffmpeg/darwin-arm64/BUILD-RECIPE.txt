@@ -1,0 +1,38 @@
+FFmpeg bundled build recipe (macOS host, target darwin-arm64)
+ffmpeg source: https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
+ffmpeg sha256: 8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
+sdl2 source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz
+sdl2 sha256: 5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165
+sdl2 configure: --prefix=.tools/media/arm64/sdl2-install --enable-shared --disable-static --disable-video-x11 --disable-video-wayland --disable-pulseaudio --disable-alsa --disable-jack --disable-libsamplerate --host=aarch64-apple-darwin
+sdl2 env: MACOSX_DEPLOYMENT_TARGET=15.0 CFLAGS=-arch arm64 -mmacosx-version-min=15.0 LDFLAGS=-arch arm64 -mmacosx-version-min=15.0
+sdl2 make -j<N> (bounded host CPUs, max 8) && make install
+SDL2_CONFIG: .tools/media/arm64/sdl2-install/bin/sdl2-config
+PATH prepend: .tools/media/arm64/sdl2-install/bin
+MACOSX_DEPLOYMENT_TARGET: 15.0
+ffmpeg configure flags:
+  --disable-autodetect
+  --disable-gpl
+  --disable-nonfree
+  --disable-version3
+  --disable-doc
+  --disable-debug
+  --disable-network
+  --enable-ffplay
+  --enable-sdl2
+  --enable-pthreads
+  --enable-small
+  --enable-static
+  --disable-shared
+  --cc=clang
+  --enable-cross-compile
+  --target-os=darwin
+  --arch=aarch64
+  --extra-cflags=-arch arm64 -mmacosx-version-min=15.0
+  --extra-ldflags=-arch arm64 -mmacosx-version-min=15.0
+make -j<N> (bounded host CPUs, max 8)
+dylibs discovered with otool -L (absolute or @rpath refs resolved
+against the SDL2 install), copied beside the executables via
+temp+rename (fresh inode) and rewritten to @loader_path/<basename>
+with install_name_tool, then ad-hoc re-signed `codesign -s - -f`.
+The complete procedure is scripted in build-media.cjs alongside this
+file; run `npm run build:media` from desktop/.

@@ -1,72 +1,273 @@
 {
   "version": "9.0.2",
-  "source": {
-    "url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
-    "sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
-    "archive": "ffmpeg-9.0.2.tar.xz"
-  },
-  "sdl2": {
-    "version": "2.32.10",
-    "url": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz",
-    "sha256": "5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165",
-    "archive": "SDL2-2.32.10.tar.gz",
-    "configureFlags": [
-      "--enable-shared",
-      "--disable-static",
-      "--disable-video-x11",
-      "--disable-video-wayland",
-      "--disable-pulseaudio",
-      "--disable-alsa",
-      "--disable-jack",
-      "--disable-libsamplerate"
-    ]
-  },
-  "configureFlags": [
-    "--disable-autodetect",
-    "--disable-gpl",
-    "--disable-nonfree",
-    "--disable-version3",
-    "--disable-doc",
-    "--disable-debug",
-    "--disable-network",
-    "--enable-ffplay",
-    "--enable-sdl2",
-    "--enable-pthreads",
-    "--enable-small",
-    "--enable-static",
-    "--disable-shared",
-    "--cc=clang"
+  "targetPlatform": "darwin-universal",
+  "architectures": [
+    "arm64",
+    "x86_64"
   ],
-  "buildPlatform": "darwin-arm64",
-  "deploymentTarget": "15.0",
-  "stagedMinOs": {
-    "ffmpeg": "15.0",
-    "ffprobe": "15.0",
-    "ffplay": "15.0",
-    "libSDL2-2.0.0.dylib": "15.0"
-  },
-  "buildHost": {
-    "osRelease": "25.3.0"
-  },
-  "staged": {
-    "executables": {
-      "ffmpeg": "bd6775ce757621a121cbf2b5b17fa644eeb81b3998eacdf201c070f42983847e",
-      "ffprobe": "63539aeb76a636973ee8ec9d96af5820bbe0fadbdfe2477b95076aa49ed4788a",
-      "ffplay": "4a5c50d38c572468d23d08a039aef119f400c095890d67f1ee660698efb9cf55"
+  "perTarget": {
+    "darwin-arm64": {
+      "version": "9.0.2",
+      "targetPlatform": "darwin-arm64",
+      "source": {
+        "url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+        "sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+        "archive": "ffmpeg-9.0.2.tar.xz"
+      },
+      "sdl2": {
+        "version": "2.32.10",
+        "url": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz",
+        "sha256": "5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165",
+        "archive": "SDL2-2.32.10.tar.gz",
+        "configureFlags": [
+          "--enable-shared",
+          "--disable-static",
+          "--disable-video-x11",
+          "--disable-video-wayland",
+          "--disable-pulseaudio",
+          "--disable-alsa",
+          "--disable-jack",
+          "--disable-libsamplerate",
+          "--host=aarch64-apple-darwin"
+        ]
+      },
+      "configureFlags": [
+        "--disable-autodetect",
+        "--disable-gpl",
+        "--disable-nonfree",
+        "--disable-version3",
+        "--disable-doc",
+        "--disable-debug",
+        "--disable-network",
+        "--enable-ffplay",
+        "--enable-sdl2",
+        "--enable-pthreads",
+        "--enable-small",
+        "--enable-static",
+        "--disable-shared",
+        "--cc=clang",
+        "--enable-cross-compile",
+        "--target-os=darwin",
+        "--arch=aarch64",
+        "--extra-cflags=-arch arm64 -mmacosx-version-min=15.0",
+        "--extra-ldflags=-arch arm64 -mmacosx-version-min=15.0"
+      ],
+      "buildPlatform": "darwin-arm64",
+      "deploymentTarget": "15.0",
+      "stagedMinOs": {
+        "ffmpeg": "15.0",
+        "ffprobe": "15.0",
+        "ffplay": "15.0",
+        "libSDL2-2.0.0.dylib": "15.0"
+      },
+      "stagedSlices": {
+        "ffmpeg": [
+          "arm64"
+        ],
+        "ffprobe": [
+          "arm64"
+        ],
+        "ffplay": [
+          "arm64"
+        ],
+        "libSDL2-2.0.0.dylib": [
+          "arm64"
+        ]
+      },
+      "buildHost": {
+        "osRelease": "25.3.0"
+      },
+      "staged": {
+        "executables": {
+          "ffmpeg": "cf4bfa08077434e65e981b42a18365f9da3d51d6184f7a8f3a2047bfccc52356",
+          "ffprobe": "7b75a5d6ab60a2b67532e356ce32bc255fda5ac9a21ad8fb12ccd2e05654fd64",
+          "ffplay": "ae675e660f4c5b9bf6a3cf8f800e5fc449550281e23f4d8f922d4d0657aa8411"
+        },
+        "dylibs": [
+          {
+            "source": ".tools/media/arm64/sdl2-install/lib/libSDL2-2.0.0.dylib",
+            "file": "libSDL2-2.0.0.dylib",
+            "sha256": "e55838ae7810f1732d132c7cab536def234d628aa1ad510cefe6cc78b82b8c38"
+          }
+        ]
+      },
+      "signing": "ad-hoc (codesign -s -); no release signing or notarization",
+      "smoke": {
+        "target": "darwin-arm64",
+        "executed": true,
+        "encode": "ok: 1146 bytes",
+        "probe": "ok: mpeg4 64x48",
+        "ffplay": "ok: dummy drivers, -autoexit"
+      },
+      "generatedAt": "2026-10-20T17:12:57.258Z"
     },
-    "dylibs": [
-      {
-        "source": "/Users/wangwei/Model/k210-studio/desktop/.tools/media/sdl2-install/lib/libSDL2-2.0.0.dylib",
-        "file": "libSDL2-2.0.0.dylib",
-        "sha256": "9cade7627bbcfc3bb9e94552b56544e5abcc2fd288667dd0ec929d3f8bf6c126"
+    "darwin-x64": {
+      "version": "9.0.2",
+      "targetPlatform": "darwin-x64",
+      "source": {
+        "url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+        "sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+        "archive": "ffmpeg-9.0.2.tar.xz"
+      },
+      "sdl2": {
+        "version": "2.32.10",
+        "url": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz",
+        "sha256": "5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165",
+        "archive": "SDL2-2.32.10.tar.gz",
+        "configureFlags": [
+          "--enable-shared",
+          "--disable-static",
+          "--disable-video-x11",
+          "--disable-video-wayland",
+          "--disable-pulseaudio",
+          "--disable-alsa",
+          "--disable-jack",
+          "--disable-libsamplerate",
+          "--host=x86_64-apple-darwin"
+        ]
+      },
+      "configureFlags": [
+        "--disable-autodetect",
+        "--disable-gpl",
+        "--disable-nonfree",
+        "--disable-version3",
+        "--disable-doc",
+        "--disable-debug",
+        "--disable-network",
+        "--enable-ffplay",
+        "--enable-sdl2",
+        "--enable-pthreads",
+        "--enable-small",
+        "--enable-static",
+        "--disable-shared",
+        "--cc=clang",
+        "--enable-cross-compile",
+        "--target-os=darwin",
+        "--arch=x86_64",
+        "--extra-cflags=-arch x86_64 -mmacosx-version-min=15.0",
+        "--extra-ldflags=-arch x86_64 -mmacosx-version-min=15.0",
+        "--disable-x86asm"
+      ],
+      "buildPlatform": "darwin-arm64",
+      "deploymentTarget": "15.0",
+      "stagedMinOs": {
+        "ffmpeg": "15.0",
+        "ffprobe": "15.0",
+        "ffplay": "15.0",
+        "libSDL2-2.0.0.dylib": "15.0"
+      },
+      "stagedSlices": {
+        "ffmpeg": [
+          "x86_64"
+        ],
+        "ffprobe": [
+          "x86_64"
+        ],
+        "ffplay": [
+          "x86_64"
+        ],
+        "libSDL2-2.0.0.dylib": [
+          "x86_64"
+        ]
+      },
+      "buildHost": {
+        "osRelease": "25.3.0"
+      },
+      "staged": {
+        "executables": {
+          "ffmpeg": "89d14ef547908142abf51f3df14b43c7efaa9baf5c6110f23e6018419e8eb8d5",
+          "ffprobe": "26fb38997606292f325469f809efa152442e10ad6d4bc301ad195a2174d1e093",
+          "ffplay": "cb5321c4900d9d32d1fbd878936256dcc6f08c998afbd89db17b32788c10042b"
+        },
+        "dylibs": [
+          {
+            "source": ".tools/media/x64/sdl2-install/lib/libSDL2-2.0.0.dylib",
+            "file": "libSDL2-2.0.0.dylib",
+            "sha256": "0b11de4593fd5446e13b3ce686ba907b0c560c4f32f03405002a97943260ade1"
+          }
+        ]
+      },
+      "signing": "ad-hoc (codesign -s -); no release signing or notarization",
+      "smoke": {
+        "target": "darwin-x64",
+        "executed": true,
+        "encode": "ok: 1146 bytes",
+        "probe": "ok: mpeg4 64x48",
+        "ffplay": "ok: dummy drivers, -autoexit"
+      },
+      "generatedAt": "2026-10-20T17:13:06.312Z"
+    }
+  },
+  "merged": {
+    "ffmpeg": {
+      "thinSha256": [
+        "cf4bfa08077434e65e981b42a18365f9da3d51d6184f7a8f3a2047bfccc52356",
+        "89d14ef547908142abf51f3df14b43c7efaa9baf5c6110f23e6018419e8eb8d5"
+      ],
+      "universal": {
+        "sha256": "2106a55fd4c2bd98f78071e0d7453db1a5fb24068aad8f1a6403b07300a41851",
+        "minOs": [
+          "15.0",
+          "15.0"
+        ]
       }
-    ]
+    },
+    "ffprobe": {
+      "thinSha256": [
+        "7b75a5d6ab60a2b67532e356ce32bc255fda5ac9a21ad8fb12ccd2e05654fd64",
+        "26fb38997606292f325469f809efa152442e10ad6d4bc301ad195a2174d1e093"
+      ],
+      "universal": {
+        "sha256": "1a51769ab26df4696f56960376691423c0f801a05b852840a5a4769168595677",
+        "minOs": [
+          "15.0",
+          "15.0"
+        ]
+      }
+    },
+    "ffplay": {
+      "thinSha256": [
+        "ae675e660f4c5b9bf6a3cf8f800e5fc449550281e23f4d8f922d4d0657aa8411",
+        "cb5321c4900d9d32d1fbd878936256dcc6f08c998afbd89db17b32788c10042b"
+      ],
+      "universal": {
+        "sha256": "036d9a843677962ad9b95437a1f0b9fda1c289f0f46bbad3403efa39cafa314d",
+        "minOs": [
+          "15.0",
+          "15.0"
+        ]
+      }
+    },
+    "libSDL2-2.0.0.dylib": {
+      "thinSha256": [
+        "e55838ae7810f1732d132c7cab536def234d628aa1ad510cefe6cc78b82b8c38",
+        "0b11de4593fd5446e13b3ce686ba907b0c560c4f32f03405002a97943260ade1"
+      ],
+      "universal": {
+        "sha256": "c8d493dbf6f2097fcb818d2e544e90f2c0de8ee81b66b359a916d5c4e19d19a8",
+        "minOs": [
+          "15.0",
+          "15.0"
+        ]
+      }
+    }
   },
-  "signing": "ad-hoc (codesign -s -); no release signing or notarization",
+  "signing": "ad-hoc (codesign -s -) after lipo; no release signing or notarization",
   "smoke": {
-    "encode": "ok: 1146 bytes",
-    "probe": "ok: mpeg4 64x48",
-    "ffplay": "ok: dummy drivers, -autoexit"
+    "darwin-arm64": {
+      "target": "darwin-arm64",
+      "executed": true,
+      "encode": "ok: 1146 bytes",
+      "probe": "ok: mpeg4 64x48",
+      "ffplay": "ok: dummy drivers, -autoexit"
+    },
+    "darwin-x64": {
+      "target": "darwin-x64",
+      "executed": true,
+      "encode": "ok: 1146 bytes",
+      "probe": "ok: mpeg4 64x48",
+      "ffplay": "ok: dummy drivers, -autoexit"
+    }
   },
-  "generatedAt": "2026-10-19T16:26:25.466Z"
+  "generatedAt": "2026-10-20T17:13:07.205Z"
 }

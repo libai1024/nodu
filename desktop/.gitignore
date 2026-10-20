@@ -17,3 +17,4 @@ scope-extension/resources/imaging/
 # LGPL corresponding-source tarballs are fetched by build:media (pinned URL+SHA256);
 # keep them out of git, license texts/recipes are committed.
 scope-extension/resources/licenses/ffmpeg/*.tar.*
+dist/

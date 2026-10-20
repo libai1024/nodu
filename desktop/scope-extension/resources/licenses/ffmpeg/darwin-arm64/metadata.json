@@ -1,0 +1,95 @@
+{
+  "version": "9.0.2",
+  "targetPlatform": "darwin-arm64",
+  "source": {
+    "url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+    "sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+    "archive": "ffmpeg-9.0.2.tar.xz"
+  },
+  "sdl2": {
+    "version": "2.32.10",
+    "url": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz",
+    "sha256": "5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165",
+    "archive": "SDL2-2.32.10.tar.gz",
+    "configureFlags": [
+      "--enable-shared",
+      "--disable-static",
+      "--disable-video-x11",
+      "--disable-video-wayland",
+      "--disable-pulseaudio",
+      "--disable-alsa",
+      "--disable-jack",
+      "--disable-libsamplerate",
+      "--host=aarch64-apple-darwin"
+    ]
+  },
+  "configureFlags": [
+    "--disable-autodetect",
+    "--disable-gpl",
+    "--disable-nonfree",
+    "--disable-version3",
+    "--disable-doc",
+    "--disable-debug",
+    "--disable-network",
+    "--enable-ffplay",
+    "--enable-sdl2",
+    "--enable-pthreads",
+    "--enable-small",
+    "--enable-static",
+    "--disable-shared",
+    "--cc=clang",
+    "--enable-cross-compile",
+    "--target-os=darwin",
+    "--arch=aarch64",
+    "--extra-cflags=-arch arm64 -mmacosx-version-min=15.0",
+    "--extra-ldflags=-arch arm64 -mmacosx-version-min=15.0"
+  ],
+  "buildPlatform": "darwin-arm64",
+  "deploymentTarget": "15.0",
+  "stagedMinOs": {
+    "ffmpeg": "15.0",
+    "ffprobe": "15.0",
+    "ffplay": "15.0",
+    "libSDL2-2.0.0.dylib": "15.0"
+  },
+  "stagedSlices": {
+    "ffmpeg": [
+      "arm64"
+    ],
+    "ffprobe": [
+      "arm64"
+    ],
+    "ffplay": [
+      "arm64"
+    ],
+    "libSDL2-2.0.0.dylib": [
+      "arm64"
+    ]
+  },
+  "buildHost": {
+    "osRelease": "25.3.0"
+  },
+  "staged": {
+    "executables": {
+      "ffmpeg": "cf4bfa08077434e65e981b42a18365f9da3d51d6184f7a8f3a2047bfccc52356",
+      "ffprobe": "7b75a5d6ab60a2b67532e356ce32bc255fda5ac9a21ad8fb12ccd2e05654fd64",
+      "ffplay": "ae675e660f4c5b9bf6a3cf8f800e5fc449550281e23f4d8f922d4d0657aa8411"
+    },
+    "dylibs": [
+      {
+        "source": ".tools/media/arm64/sdl2-install/lib/libSDL2-2.0.0.dylib",
+        "file": "libSDL2-2.0.0.dylib",
+        "sha256": "e55838ae7810f1732d132c7cab536def234d628aa1ad510cefe6cc78b82b8c38"
+      }
+    ]
+  },
+  "signing": "ad-hoc (codesign -s -); no release signing or notarization",
+  "smoke": {
+    "target": "darwin-arm64",
+    "executed": true,
+    "encode": "ok: 1146 bytes",
+    "probe": "ok: mpeg4 64x48",
+    "ffplay": "ok: dummy drivers, -autoexit"
+  },
+  "generatedAt": "2026-10-20T17:12:57.258Z"
+}
