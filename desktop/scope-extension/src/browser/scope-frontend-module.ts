@@ -14,6 +14,9 @@ import { NoduMediaToolsContribution } from './nodu-media-tools';
 import { NoduTerminalContribution } from './nodu-terminal-tools';
 import { NoduFileDocsContribution } from './nodu-file-docs';
 import { NoduDeviceModel } from './nodu-device-client';
+import { NoduResources } from './nodu-resources-client';
+import { NODU_UPDATE_SCHEMA, NoduUpdateContribution } from './nodu-update';
+import { PreferenceContribution } from '@theia/core/lib/common/preferences/preference-schema';
 import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBoardGuideContribution, NoduBoardWidget } from './nodu-board-widget';
 import { ScopeConsoleContribution } from './scope-workbench';
@@ -65,4 +68,8 @@ export default new ContainerModule(bind => {
     for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution]) {
         bind(contribution).toService(NoduTerminalContribution);
     }
+    bind(NoduResources).toSelf().inSingletonScope();
+    bind(NoduUpdateContribution).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(NoduUpdateContribution);
+    bind(PreferenceContribution).toConstantValue({ schema: NODU_UPDATE_SCHEMA });
 });

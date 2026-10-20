@@ -19,12 +19,13 @@ import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
 import * as monaco from '@theia/monaco-editor-core';
+import { NoduResources } from './nodu-resources-client';
 
 const MAIXPY_DOCS_URL = 'https://maixpy.sipeed.com/';
 const MAIXPY_FORUM_URL = 'https://bbs.sipeed.com/';
 const MAIXPY_EXAMPLES_URL = 'https://github.com/sipeed/MaixPy_scripts';
 export const MAIXPY_RELEASES_URL = 'https://github.com/sipeed/MaixPy/releases';
-const FALLBACK_VERSION = '0.1.2';
+const FALLBACK_VERSION = '0.1.4';
 
 /** MaixPy IDE 0.2.5 new-file template, byte-identical to libOpenMV.dylib / af179e44. */
 function newScriptTemplate(user: string): string {
@@ -79,6 +80,7 @@ export class NoduFileDocsContribution implements CommandContribution, MenuContri
     @inject(EnvVariablesServer) protected readonly env!: EnvVariablesServer;
     @inject(ApplicationServer) protected readonly appServer!: ApplicationServer;
     @inject(UntitledResourceResolver) protected readonly untitled!: UntitledResourceResolver;
+    @inject(NoduResources) protected readonly resources!: NoduResources;
     @inject(CommandRegistry) protected readonly commands!: CommandRegistry;
     @inject(MenuModelRegistry) protected readonly menus!: MenuModelRegistry;
     private examplesSubmenu?: Disposable;
@@ -122,10 +124,12 @@ export class NoduFileDocsContribution implements CommandContribution, MenuContri
         await this.registerExamples().catch(() => { this.examplesSubmenu?.dispose(); this.examplesSubmenu = undefined; });
     }
 
-    /** The bundled example tree lives next to the app dir, like the launcher default workspace. */
+    /** Examples come from the user resource dir (~/.nodu/resources) once the
+     * backend has applied the bundled baseline; it falls back to the bundled
+     * tree itself when the startup reset failed. */
     private async registerExamples(): Promise<void> {
-        const root = await this.appServer.getApplicationRoot();
-        const entries = await this.collectExamples(FileUri.create(root).parent.resolve('examples'));
+        const { examplesDir } = await this.resources.ready();
+        const entries = await this.collectExamples(FileUri.create(examplesDir));
         if (!entries.length) {
             this.examplesSubmenu?.dispose();
             this.examplesSubmenu = undefined;

@@ -1,0 +1,23 @@
+[package]
+name = "nodu-resources"
+version = "0.1.4"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde_json.workspace = true
+sha2.workspace = true
+# OS TLS (schannel/Security.framework/OpenSSL) with system trust roots —
+# the same stack the original Qt network code used; avoids the
+# CDLA-licensed webpki root bundles entirely. Pinned release >= 7 days old.
+ureq = { version = "3.4.2", default-features = false, features = ["native-tls-no-default"] }
+# deflate only; no bzip2/aes/zstd backends. Pinned release >= 7 days old
+# (>=9.0.0 fixes RUSTSEC-2026-0368/0369 in the crate's own extract paths).
+zip = { version = "=9.0.2", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

@@ -46,6 +46,10 @@ const READ_TIMEOUT_FLAGS = {
     '-override_read_timeout': 'NODU_READ_TIMEOUT_MS',
     '-override_read_stall_timeout': 'NODU_READ_STALL_TIMEOUT_MS',
 };
+// Bare (no-parameter) original flags -> environment switches.
+const SWITCH_FLAGS = {
+    '-update_resources': 'NODU_UPDATE_RESOURCES',
+};
 
 /** Pull original flags out of `args`; returns {args, terminals, timeouts}. */
 function extractLauncherFlags(args) {
@@ -71,6 +75,8 @@ function extractLauncherFlags(args) {
                 throw new Error(`${arg} expects 1-60000 ms, got ${value}.`);
             }
             timeouts[READ_TIMEOUT_FLAGS[arg]] = String(ms);
+        } else if (Object.hasOwn(SWITCH_FLAGS, arg)) {
+            timeouts[SWITCH_FLAGS[arg]] = '1';
         } else {
             rest.push(arg);
         }
@@ -85,7 +91,7 @@ async function main() {
     }
     let args = suppliedArgs[0] === '--' ? suppliedArgs.slice(1) : [...suppliedArgs];
     if (args.includes('--help') || args.includes('-h')) {
-        console.log(`Nodu ${target} launcher\nUsage: npm run start:${target} -- [workspace] [Theia options]\nDefault workspace: examples/green-tracker\nAddress: http://127.0.0.1:${target === 'browser' ? 4188 : 4189}\nProfile: ${path.join(os.homedir(), '.scope-studio')}\n\nOriginal OpenMV IDE flags (consumed by the launcher, not Theia):\n  -open_serial_terminal <port:baud>        open a serial terminal\n  -open_tcp_client_terminal <host:port>    open a TCP client terminal\n  -open_tcp_server_terminal <port>         open a TCP server terminal\n  -open_udp_client_terminal <host:port>    open a UDP client terminal\n  -open_udp_server_terminal <port>         open a UDP server terminal\n  -override_read_timeout <ms>              IDE reply deadline, 1-60000 (unset keeps each operation's default)\n  -override_read_stall_timeout <ms>        stalled-reply bound, 1-60000 (unset adds no bound)\n\nExample: npm run start:electron -- -open_udp_server_terminal 9000\nNode.js 24 and a completed build are required.`);
+        console.log(`Nodu ${target} launcher\nUsage: npm run start:${target} -- [workspace] [Theia options]\nDefault workspace: examples/green-tracker\nAddress: http://127.0.0.1:${target === 'browser' ? 4188 : 4189}\nProfile: ${path.join(os.homedir(), '.scope-studio')}\n\nOriginal OpenMV IDE flags (consumed by the launcher, not Theia):\n  -open_serial_terminal <port:baud>        open a serial terminal\n  -open_tcp_client_terminal <host:port>    open a TCP client terminal\n  -open_tcp_server_terminal <port>         open a TCP server terminal\n  -open_udp_client_terminal <host:port>    open a UDP client terminal\n  -open_udp_server_terminal <port>         open a UDP server terminal\n  -override_read_timeout <ms>              IDE reply deadline, 1-60000 (unset keeps each operation's default)\n  -override_read_stall_timeout <ms>        stalled-reply bound, 1-60000 (unset adds no bound)\n  -update_resources                        reset user resources to the bundled baseline\n\nExample: npm run start:electron -- -open_udp_server_terminal 9000\nNode.js 24 and a completed build are required.`);
         return;
     }
     let extracted;
@@ -181,7 +187,7 @@ for (const signal of ['SIGINT', 'SIGTERM']) {
 }
 
 // Exportable for unit tests; only run when invoked directly.
-module.exports = { extractLauncherFlags, TERMINAL_FLAGS, READ_TIMEOUT_FLAGS };
+module.exports = { extractLauncherFlags, TERMINAL_FLAGS, READ_TIMEOUT_FLAGS, SWITCH_FLAGS };
 
 if (require.main === module) {
     main().catch(error => fail(error instanceof Error ? error.message : String(error)));

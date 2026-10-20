@@ -12,7 +12,7 @@ const native = path.join(desktop, 'native');
 
 const platform = process.platform === 'win32' ? 'win32' : process.platform;
 const arch = process.arch === 'x64' ? 'x64' : process.arch;
-const names = ['nodu-device', 'nodu-terminal'];
+const names = ['nodu-device', 'nodu-terminal', 'nodu-resources'];
 const exe = name => (platform === 'win32' ? `${name}.exe` : name);
 // Rust target triples per staging dir; non-macOS hosts stay single-arch.
 const MACOS_TARGETS = {
@@ -35,7 +35,10 @@ const env = {
     [pathKey]: [path.join(os.homedir(), '.cargo', 'bin'), process.env[pathKey] || '']
         .join(path.delimiter),
 };
-const cargoArgs = '--release --locked -p nodu-device --features mock --bins';
+// `mock` is a nodu-device feature — qualified form so the multi-package
+// build does not look for it on nodu-resources.
+const cargoArgs =
+    '--release --locked -p nodu-device -p nodu-resources --features nodu-device/mock --bins';
 for (const dir of buildDirs) {
     const target = MACOS_TARGETS[dir];
     const targetArg = target ? ` --target ${target}` : '';

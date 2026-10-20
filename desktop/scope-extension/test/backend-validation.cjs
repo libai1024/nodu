@@ -478,3 +478,105 @@ test('launcher extracts original -open_*/-override_* flags without touching Thei
     // Unknown flags stay untouched for Theia to handle or reject.
     assert.deepEqual(extractLauncherFlags(['--unknown-option', 'v']).args, ['--unknown-option', 'v']);
 });
+
+// ---------- nodu-resources sidecar wiring (0.1.4 Phase 1) ----------
+
+const { existsSync, readFileSync } = require('node:fs');
+
+const resourcesFixture = () => {
+    const { mkdtempSync, mkdirSync, writeFileSync } = require('node:fs');
+    const { tmpdir } = require('node:os');
+    const { join } = require('node:path');
+    const { NoduResourcesServer } = require('../lib/node/nodu-resources-server');
+    const home = mkdtempSync(join(tmpdir(), 'nodu-res-home-'));
+    const candidates = [
+        join(__dirname, '..', '..', 'native', 'target', 'debug', 'nodu-resources'),
+        join(__dirname, '..', 'resources', 'bin', `${process.platform}-${process.arch}`, 'nodu-resources'),
+        join(__dirname, '..', '..', 'native', 'target', 'release', 'nodu-resources'),
+    ];
+    const bin = candidates.find(p => existsSync(p));
+    const saved = {
+        NODU_RESOURCES_HOME: process.env.NODU_RESOURCES_HOME,
+        NODU_RESOURCES_BIN: process.env.NODU_RESOURCES_BIN,
+        NODU_UPDATE_RESOURCES: process.env.NODU_UPDATE_RESOURCES,
+    };
+    const resources = join(home, 'resources');
+    const versionFile = join(home, 'resources-version.json');
+    process.env.NODU_RESOURCES_HOME = home;
+    if (bin) { process.env.NODU_RESOURCES_BIN = bin; }
+    delete process.env.NODU_UPDATE_RESOURCES;
+    const restore = () => {
+        for (const [key, value] of Object.entries(saved)) {
+            if (value === undefined) { delete process.env[key]; } else { process.env[key] = value; }
+        }
+    };
+    return { NoduResourcesServer, home, resources, versionFile, bin, restore, mkdirSync, writeFileSync, join };
+};
+
+test('resources server resets when the version file is missing', async t => {
+    const fx = resourcesFixture();
+    if (!fx.bin) { t.skip('nodu-resources binary not built'); fx.restore(); return; }
+    try {
+        const server = new fx.NoduResourcesServer();
+        const { examplesDir } = await server.ready();
+        assert.ok(existsSync(fx.join(fx.resources, 'examples', 'Nodu')), 'bundled examples copied into the user dir');
+        const recorded = JSON.parse(readFileSync(fx.versionFile, 'utf8'));
+        assert.deepEqual([recorded.major, recorded.minor, recorded.patch], [0, 1, 4]);
+        assert.equal(examplesDir, fx.join(fx.resources, 'examples'));
+        server.onStop();
+    } finally { fx.restore(); }
+});
+
+test('resources server resets when the recorded version is older', async t => {
+    const fx = resourcesFixture();
+    if (!fx.bin) { t.skip('nodu-resources binary not built'); fx.restore(); return; }
+    try {
+        fx.mkdirSync(fx.resources, { recursive: true });
+        fx.writeFileSync(fx.join(fx.resources, 'stale-marker.txt'), 'old');
+        fx.writeFileSync(fx.versionFile, '{"major":0,"minor":0,"patch":1}');
+        const server = new fx.NoduResourcesServer();
+        await server.ready();
+        assert.ok(!existsSync(fx.join(fx.resources, 'stale-marker.txt')), 'stale tree replaced');
+        assert.ok(existsSync(fx.join(fx.resources, 'examples', 'Nodu')));
+        server.onStop();
+    } finally { fx.restore(); }
+});
+
+test('NODU_UPDATE_RESOURCES=1 forces the reset even at equal version', async t => {
+    const fx = resourcesFixture();
+    if (!fx.bin) { t.skip('nodu-resources binary not built'); fx.restore(); return; }
+    try {
+        fx.mkdirSync(fx.resources, { recursive: true });
+        fx.writeFileSync(fx.join(fx.resources, 'marker.txt'), 'keep?');
+        fx.writeFileSync(fx.versionFile, '{"major":0,"minor":1,"patch":4}');
+        process.env.NODU_UPDATE_RESOURCES = '1';
+        const server = new fx.NoduResourcesServer();
+        await server.ready();
+        assert.ok(!existsSync(fx.join(fx.resources, 'marker.txt')), 'forced reset replaced the tree');
+        assert.ok(existsSync(fx.join(fx.resources, 'examples', 'Nodu')));
+        server.onStop();
+    } finally { fx.restore(); }
+});
+
+test('resources server skips the reset when the recorded version matches', async t => {
+    const fx = resourcesFixture();
+    if (!fx.bin) { t.skip('nodu-resources binary not built'); fx.restore(); return; }
+    try {
+        fx.mkdirSync(fx.join(fx.resources, 'examples'), { recursive: true });
+        fx.writeFileSync(fx.join(fx.resources, 'examples', 'marker.txt'), 'user content');
+        fx.writeFileSync(fx.versionFile, '{"major":0,"minor":1,"patch":4}');
+        const server = new fx.NoduResourcesServer();
+        const { examplesDir } = await server.ready();
+        assert.equal(readFileSync(fx.join(fx.resources, 'examples', 'marker.txt'), 'utf8'), 'user content', 'equal version keeps user resources');
+        assert.equal(examplesDir, fx.join(fx.resources, 'examples'));
+        server.onStop();
+    } finally { fx.restore(); }
+});
+
+test('launcher strips -update_resources into NODU_UPDATE_RESOURCES without forwarding it', () => {
+    const { extractLauncherFlags } = require('../../scripts/launch.cjs');
+    const out = extractLauncherFlags(['-update_resources', '--plugins', 'x']);
+    assert.deepEqual(out.args, ['--plugins', 'x']);
+    assert.deepEqual(out.timeouts, { NODU_UPDATE_RESOURCES: '1' });
+    assert.deepEqual(out.terminals, []);
+});
