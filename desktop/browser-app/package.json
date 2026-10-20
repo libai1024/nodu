@@ -17,6 +17,7 @@
           "editor.lineHeight": 22,
           "editor.minimap.enabled": false,
           "editor.scrollBeyondLastLine": false,
+          "editor.renderWhitespace": "none",
           "editor.wordWrap": "on",
           "window.title": "${activeEditorShort}${separator}${rootName}${separator}见微 · Nodu",
           "workbench.colorTheme": "scope-dark",

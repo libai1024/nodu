@@ -171,14 +171,14 @@ export class ScopeVisionWidget extends ReactWidget {
         // One camera toggle: preview on → freeze, a frame exists → resume, otherwise start the helper.
         const cameraControls = <>
             {state.preview
-                ? <button className="theia-button secondary" disabled={model.busy || !state.capabilities.framebuffer} onClick={() => void model.setPreview(false)}><i className="codicon codicon-debug-pause" aria-hidden="true" />冻结</button>
+                ? <button className="theia-button secondary" disabled={model.busy || !state.capabilities.framebuffer} title="禁用帧缓冲区以获得最佳性能" onClick={() => void model.setPreview(false)}><i className="codicon codicon-debug-pause" aria-hidden="true" />禁用</button>
                 : frame
-                    ? <button className="theia-button secondary" disabled={model.busy || !state.capabilities.framebuffer} onClick={() => void model.setPreview(true)}><i className="codicon codicon-play" aria-hidden="true" />继续</button>
+                    ? <button className="theia-button secondary" disabled={model.busy || !state.capabilities.framebuffer} title="恢复帧缓冲区" onClick={() => void model.setPreview(true)}><i className="codicon codicon-play" aria-hidden="true" />启用</button>
                     : <button className="theia-button secondary" disabled={model.busy || state.running || !state.capabilities.framebuffer || !state.capabilities.script} onClick={() => void model.startCamera()}><i className="codicon codicon-play" aria-hidden="true" />启动相机</button>}
             {frame && <button className="theia-button secondary scope-icon-button" aria-label="重新启动相机" title="重新启动相机" disabled={model.busy || state.running || !state.capabilities.framebuffer || !state.capabilities.script} onClick={() => void model.startCamera()}><i className="codicon codicon-refresh" aria-hidden="true" /></button>}
             {state.recording?.active
                 ? <button className="theia-button secondary nodu-recording-active" aria-label="结束录制" title={`结束录制 · ${state.recording.path}`} disabled={model.busy} onClick={() => void this.commands.executeCommand('scope.stop-recording')}><i className="codicon codicon-debug-stop" aria-hidden="true" />结束录制</button>
-                : <button className="theia-button secondary scope-icon-button" aria-label="录制" title="录制帧缓冲到 .bin 录像（上限 10000 帧或 2 GiB）" disabled={model.busy || !state.preview || !state.capabilities.framebuffer} onClick={() => void this.commands.executeCommand('scope.start-recording')}><i className="codicon codicon-record" aria-hidden="true" /></button>}
+                : <button className="theia-button secondary scope-icon-button" aria-label="录制" title="录制帧缓冲区" disabled={model.busy || !state.preview || !state.capabilities.framebuffer} onClick={() => void this.commands.executeCommand('scope.start-recording')}><i className="codicon codicon-record" aria-hidden="true" /></button>}
             {state.recording?.active && <span className="scope-mono nodu-rec-status" role="status">{`${Math.round(state.recording.elapsedMs / 1000)} 秒 · ${state.recording.bytes} B · ${state.recording.elapsedMs > 0 ? (state.recording.frames / (state.recording.elapsedMs / 1000)).toFixed(1) : '0'} FPS`}</span>}
             {state.running && !compact && <button className="theia-button secondary" onClick={() => void model.stop()}>停止脚本</button>}
         </>;

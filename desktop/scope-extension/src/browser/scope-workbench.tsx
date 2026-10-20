@@ -30,6 +30,10 @@ import { NoduDevicePanel } from './nodu-device-panel';
 import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBrand } from './scope-brand';
 import { SCOPE_LIGHT_THEME_ID, SCOPE_THEME_ID } from './scope-theme';
+import { OpenerService, open } from '@theia/core/lib/browser/opener-service';
+import { URI } from '@theia/core/lib/common/uri';
+import { MAIXPY_RELEASES_URL } from './nodu-file-docs';
+import { firmwareStatusText, fpsStatusText, serialPortStatusText } from '../common/nodu-status';
 export { ScopeLayoutState } from './scope-layout-state';
 
 @injectable()
@@ -154,6 +158,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(ClipboardService) protected readonly clipboard!: ClipboardService;
     @inject(ThemeService) protected readonly themes!: ThemeService;
+    @inject(OpenerService) protected readonly opener!: OpenerService;
     protected readonly toDispose = new DisposableCollection();
     private layoutQueue: Promise<unknown> = Promise.resolve();
     private layoutApplied = false;
@@ -291,20 +296,19 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
 
     protected updateStatus(): void {
-        // Right-aligned FPS is live whenever the framebuffer streams; the
-        // backend clears state.fps when preview stops or the link drops.
+        // Original right-side items keep the label with an empty value while
+        // disconnected; FPS stays visible in simple mode like before.
         const fps = this.device.state.fps;
-        if (typeof fps === 'number') {
-            void this.status.setElement('scope:fps', { text: `$(device-camera) ${fps.toFixed(1)} fps`, alignment: StatusBarAlignment.RIGHT, priority: 100, className: 'nodu-statusbar-fps', tooltip: '帧缓冲帧率 · 可能与相机实际帧率不同', accessibilityInformation: { label: `帧缓冲帧率 ${fps.toFixed(1)} FPS`, role: 'status' } });
-        } else {
-            this.status.removeElement('scope:fps');
-        }
+        void this.status.setElement('scope:fps', { text: fpsStatusText(fps), alignment: StatusBarAlignment.RIGHT, priority: 80, className: 'nodu-statusbar-fps', tooltip: '可能与摄像头帧率(FPS)不同', accessibilityInformation: { label: typeof fps === 'number' ? `帧缓冲帧率 ${fps.toFixed(1)} FPS` : '帧缓冲帧率', role: 'status' } });
         if (this.layoutState.mode === 'simple') {
             this.status.removeElement('scope:device'); this.status.removeElement('scope:demo');
+            this.status.removeElement('scope:firmware'); this.status.removeElement('scope:serial-port');
             return;
         }
         const fw = this.device.state.firmware ? ` · ${this.device.state.firmware.split(' ').slice(0, 2).join(' ')}` : '';
         void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}${fw}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-terminal-ansiBrightGreen, #64C5AC)' : undefined });
+        void this.status.setElement('scope:firmware', { text: firmwareStatusText(this.device.state.firmware), alignment: StatusBarAlignment.RIGHT, priority: 100, command: 'scope.firmware-releases', tooltip: '点击查看最新的固件版本及说明', accessibilityInformation: { label: `固件版本 ${this.device.state.firmware ?? '无'}`, role: 'button' } });
+        void this.status.setElement('scope:serial-port', { text: serialPortStatusText(this.device.state.port), alignment: StatusBarAlignment.RIGHT, priority: 90, tooltip: '开发板串口', accessibilityInformation: { label: `串行端口 ${this.device.state.port || '无'}`, role: 'status' } });
         if (this.session.running) {
             void this.status.setElement('scope:demo', { text: '$(play) 示例播放中', alignment: StatusBarAlignment.LEFT, priority: 990, command: 'scope.show-demo-logs', tooltip: '查看示例日志' });
         } else {
@@ -412,6 +416,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         command('scope.show-logs', '显示设备日志', () => this.serializeLayout(async () => { await this.showConsole(true); await this.settlePanels(); }));
         command('scope.show-demo-logs', '显示示例日志', () => { this.output.getChannel('Nodu · 示例').show(); return this.outputView.openView({ activate: true }); }, true);
         command('scope.apply-thresholds', '复制示例 LAB 参数', () => this.applyThresholds(), true);
+        command('scope.firmware-releases', '最新固件版本及说明', () => open(this.opener, new URI(MAIXPY_RELEASES_URL)).catch(error => this.messages.error(`固件版本：${error instanceof Error ? error.message : String(error)}`)));
     }
 
     registerMenus(menus: MenuModelRegistry): void {

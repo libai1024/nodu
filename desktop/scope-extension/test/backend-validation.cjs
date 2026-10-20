@@ -737,3 +737,21 @@ test('original File/Edit menu labels and keybindings match the evidence table', 
     assert.equal(findKeys['editor.action.nextMatchFindAction'], 'ctrlcmd+g|editorTextFocus');
     assert.equal(findKeys['editor.action.previousMatchFindAction'], 'ctrlcmd+shift+g|editorTextFocus');
 });
+
+test('status-bar and Res strings match the original labels', () => {
+    const s = require('../lib/common/nodu-status');
+    assert.equal(s.histogramResolutionText(undefined, undefined), 'Res - 没有图像');
+    assert.equal(s.histogramResolutionText(0, 0, { x: 0, y: 0, width: 4, height: 4 }), 'Res - 没有图像');
+    assert.equal(s.histogramResolutionText(320, 240), 'Res (w:320, h:240)');
+    assert.equal(s.histogramResolutionText(320, 240, { x: 10, y: 20, width: 5, height: 7 }),
+        'Res (w:320, h:240) - ROI (x:10, y:20, w:5, h:7) - Pixels (35)');
+    assert.equal(s.histogramResolutionText(320, 240, { x: 3, y: 4, width: 1, height: 1 }),
+        'Res (w:320, h:240) - Point (x:3, y:4)');
+    assert.equal(s.histogramResolutionText(320, 240, { x: 0, y: 0, width: 0, height: 0 }), 'Res (w:320, h:240)');
+    assert.equal(s.firmwareStatusText('v0.6.2-42'), '固件版本：v0.6.2-42');
+    assert.equal(s.firmwareStatusText(undefined), '固件版本：');
+    assert.equal(s.serialPortStatusText('/dev/cu.usbserial-1'), '串行端口：/dev/cu.usbserial-1');
+    assert.equal(s.serialPortStatusText(undefined), '串行端口：');
+    assert.equal(s.fpsStatusText(12.34), 'FPS：12.3');
+    assert.equal(s.fpsStatusText(undefined), 'FPS：');
+});
