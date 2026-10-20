@@ -1,0 +1,1244 @@
+{
+  "_menubar": [
+    "文件",
+    "编辑",
+    "选择",
+    "查看",
+    "转到",
+    "见微",
+    "终端",
+    "帮助"
+  ],
+  "文件": {
+    "<root>": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建文件...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建文本文件",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建空白文件...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建文件夹...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建窗口",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "打开文件...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "从文件打开工作区...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "打开最近的工作区...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "将文件夹添加到工作区...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "工作区另存为...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "文档文件夹",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "示例",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "更多示例",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "最近的文件",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "保存",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "全部保存",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "另存为...",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "自动保存",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "上传文件...",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "首选项",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "关闭",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "关闭工作区",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "打印...",
+        "sub": true,
+        "disabled": true
+      }
+    ],
+    "新建文件...": [],
+    "新建文本文件": [],
+    "新建空白文件...": [],
+    "新建文件夹...": [],
+    "新建窗口": [],
+    "打开文件...": [],
+    "从文件打开工作区...": [],
+    "打开最近的工作区...": [],
+    "将文件夹添加到工作区...": [],
+    "工作区另存为...": [],
+    "文档文件夹": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "将一些代码添加到“/Users/wangwei/Documents/Nodu”",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "在访达中打开",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "示例": [
+      {
+        "label": "Nodu",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "application",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "basic",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "board",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "hardware",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "machine_vision",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "modules",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "multimedia",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "network",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "更多示例": [],
+    "最近的文件": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "清除菜单",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "保存": [],
+    "全部保存": [],
+    "自动保存": [],
+    "首选项": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "设置",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "键盘快捷方式",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "文件图标主题",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "颜色主题",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "关闭工作区": []
+  },
+  "编辑": {
+    "<root>": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "撤销",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "重做",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "剪切",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "复制",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "粘贴",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "从剪贴板历史记录粘贴",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "复制路径",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "全选",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "高级",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "在文件中替换",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "查找/替换",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到行...",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "撤销": [],
+    "重做": [],
+    "剪切": [],
+    "复制": [],
+    "粘贴": [],
+    "复制路径": [],
+    "全选": [],
+    "高级": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "使空格可见",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "清除空格",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "启用文本环绕",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换注释选择",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "剪切行",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "复制行",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "大写选择",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "小写选择",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "折叠",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "展开",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "切换折叠全部",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "增加字体大小",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "减小字体大小",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "重置字体大小",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "在文件中替换": [],
+    "查找/替换": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "查找/替换",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "打开高级查找...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "查找下一个",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "查找上一个",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "替换并查找",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "全部替换",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "转到行...": []
+  },
+  "选择": {
+    "<root>": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "全选",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "扩大选择范围",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "缩小选择范围",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "向上复制行",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "向下复制行",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "向上移动行",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "向下移动行",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "复制选定内容",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "在上方添加光标",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "在下方添加光标",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "在行尾添加光标",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "添加下一个匹配项",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "添加上一个匹配项",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "选择所有匹配项",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "全选": [],
+    "扩大选择范围": [],
+    "缩小选择范围": [],
+    "在上方添加光标": [],
+    "在下方添加光标": [],
+    "在行尾添加光标": [],
+    "添加下一个匹配项": [],
+    "添加上一个匹配项": [],
+    "选择所有匹配项": []
+  },
+  "查看": {
+    "<root>": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "命令面板...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "打开视图...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "外观",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "编辑器布局",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "大纲",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "搜索",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "视觉调试",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "设备与连接",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "资源管理器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "输出",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "问题",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "查看：切换自动换行",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换缩略图",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换面包屑导航",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换呈现空格",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换粘性滚动",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "命令面板...": [],
+    "打开视图...": [],
+    "外观": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换最大化",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换菜单栏",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换底部面板",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换状态栏可见性",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "折叠所有侧面板",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "编辑器布局": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "向右拆分编辑器",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "向左拆分编辑器",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "向上拆分编辑器",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "向下拆分编辑器",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "水平拆分编辑器",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "垂直拆分编辑器",
+        "sub": true,
+        "disabled": true
+      }
+    ],
+    "大纲": [],
+    "搜索": [],
+    "视觉调试": [],
+    "设备与连接": [],
+    "资源管理器": [],
+    "输出": [],
+    "问题": [],
+    "查看：切换自动换行": [],
+    "切换缩略图": [],
+    "切换面包屑导航": [],
+    "切换呈现空格": [],
+    "切换粘性滚动": []
+  },
+  "转到": {
+    "<root>": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "后退",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "前进",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "上一处编辑位置",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换组",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到文件...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到工作区中的符号...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到编辑器中的符号...",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "转到定义",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到声明",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到类型定义",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到实现",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到引用",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到行/列...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "转到括号",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "下一个问题",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "上一个问题",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "切换组": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "组 1",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "组 2",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "组 3",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "组 4",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "组 5",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "下一组",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "上一组",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "转到文件...": [],
+    "转到工作区中的符号...": [],
+    "转到定义": [],
+    "转到声明": [],
+    "转到类型定义": [],
+    "转到实现": [],
+    "转到引用": [],
+    "转到行/列...": [],
+    "转到括号": [],
+    "下一个问题": [],
+    "上一个问题": []
+  },
+  "见微": {
+    "<root>": [
+      {
+        "label": "运行当前代码",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "停止脚本 / 取消设备操作",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "保存到 boot.py 启动脚本",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "发送文件到设备…",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "复位设备",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "显示视觉调试",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "显示设备与连接",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "认识开发板",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "显示设备日志",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换深浅主题",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换简洁布局",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "切换专业布局",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "示例",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "机器视觉",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "终端",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "视频工具",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "运行当前代码": [],
+    "停止脚本 / 取消设备操作": [],
+    "复位设备": [],
+    "显示视觉调试": [],
+    "显示设备与连接": [],
+    "认识开发板": [],
+    "显示设备日志": [],
+    "切换深浅主题": [],
+    "切换简洁布局": [],
+    "切换专业布局": [],
+    "示例": [
+      {
+        "label": "播放 / 暂停示例",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "复制示例 LAB 参数",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "显示示例日志",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "机器视觉": [
+      {
+        "label": "阈值编辑器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "ORB 关键点编辑器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "AprilTag 生成器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "二维码生成器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "Data Matrix 生成器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "条码生成器",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "CNN 模型库",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "终端": [
+      {
+        "label": "新终端…",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "视频工具": [
+      {
+        "label": "开始录制…",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "结束录制",
+        "sub": true,
+        "disabled": true
+      },
+      {
+        "label": "转换视频…",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "播放视频…",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "取消视频任务",
+        "sub": true,
+        "disabled": true
+      }
+    ]
+  },
+  "终端": {
+    "<root>": [
+      {
+        "label": "<sep>",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建终端",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "新建终端(使用配置文件)...",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "选择默认配置文件...",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "新建终端": [],
+    "新建终端(使用配置文件)...": [],
+    "选择默认配置文件...": []
+  },
+  "帮助": {
+    "<root>": [
+      {
+        "label": "MaixPy文档",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "MaixPy论坛",
+        "sub": true,
+        "disabled": false
+      },
+      {
+        "label": "关于 Nodu",
+        "sub": true,
+        "disabled": false
+      }
+    ],
+    "MaixPy文档": [],
+    "MaixPy论坛": [],
+    "关于 Nodu": []
+  }
+}

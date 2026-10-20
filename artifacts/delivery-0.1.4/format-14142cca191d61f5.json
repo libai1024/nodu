@@ -1,0 +1,85 @@
+{
+  "mode": "format",
+  "token": "14142cca191d61f5",
+  "started": "2026-10-20T18:34:01.445Z",
+  "checks": [
+    {
+      "name": "formatted boot.py equals original",
+      "passed": true,
+      "bytes": 76,
+      "sha256": "e887053371b5b79ed805c5c4060fc9694287f7b5730db538c342c60b4f6e9c71"
+    }
+  ],
+  "connected": {
+    "phase": "connected",
+    "port": "/dev/cu.usbserial-3110",
+    "boardProfile": "embedfire-cam-gc2145",
+    "firmware": "MaixPy 0.6.3",
+    "architecture": "K210 [Maix:000000000000000000000000]",
+    "boardId": 2,
+    "protocol": "ide",
+    "busy": false,
+    "flashCapacityVerified": false,
+    "running": false,
+    "preview": false,
+    "capabilities": {
+      "repl": true,
+      "files": true,
+      "framebuffer": true,
+      "script": true,
+      "firmware": true
+    },
+    "error": ""
+  },
+  "before": {
+    "/flash/boot.py": null,
+    "/sd/boot.py": null,
+    "/flash/nodu-boot-proof-14142cca191d61f5.txt": null
+  },
+  "source": "# Nodu boot formatting comparison.\ndef message():\n    # This comment should disappear only in the formatted variant.\n    return \"NODU_ORIGINAL_BOOT_PROOF_20261021\"\n\nprint(message())\n",
+  "sourceSha256": "7f178aff342ccc8a1a3740f82e176e4fabedad65a2297462e1af242759ec7db7",
+  "editor": "untitled:/Untitled-26.py",
+  "confirmation": [
+    "写入 boot.py将 Untitled-26.py（76 字节）写入板端 boot.py。\n将覆盖开发板默认存储中的 boot.py；已挂载 SD 卡时固件通常写入 /sd。启动文件可能在下次开机执行。取消写入 boot.py"
+  ],
+  "bootPath": "/sd/boot.py",
+  "writtenSha256": "e887053371b5b79ed805c5c4060fc9694287f7b5730db538c342c60b4f6e9c71",
+  "writtenBytes": 76,
+  "cleanupOutput": "NODU_BOOT_CLEANED\r\n",
+  "cleaned": true,
+  "finalLogs": [
+    {
+      "text": "已写入板端 boot.py（默认存储）。\n",
+      "stream": "system",
+      "time": 1792521251091,
+      "observedAt": 1792521251091
+    },
+    {
+      "text": "NODU_BOOT_CLEANED\r\n",
+      "stream": "stdout",
+      "time": 1792521254041,
+      "observedAt": 1792521254042
+    }
+  ],
+  "finalState": {
+    "phase": "disconnected",
+    "boardProfile": "embedfire-cam-gc2145",
+    "firmware": "MaixPy 0.6.3",
+    "architecture": "K210 [Maix:000000000000000000000000]",
+    "boardId": 2,
+    "protocol": "ide",
+    "busy": false,
+    "flashCapacityVerified": false,
+    "running": false,
+    "preview": false,
+    "capabilities": {
+      "repl": false,
+      "files": false,
+      "framebuffer": false,
+      "script": false,
+      "firmware": false
+    },
+    "error": ""
+  },
+  "finished": "2026-10-20T18:34:15.792Z"
+}

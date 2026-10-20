@@ -1,0 +1,29 @@
+[
+  {
+    "file": "main.js",
+    "equal": true,
+    "rawSha": [
+      "05ab7291bdb14c8ec4da5e433c528dc8943cecb22f3fa85ca3d0070d731a86d6",
+      "d05a7204c94f34a0124ae88e8b2ee7e14eb3364dce27e38d46a715848736a7a2"
+    ],
+    "canonicalSha256": "cd8321c6ec338f34bcb9b63dfa665ff88ff5b0c0ab15ae07d2b416e772e4736f"
+  },
+  {
+    "file": "electron-main.js",
+    "equal": true,
+    "rawSha": [
+      "d811831993d15062fa72b03ad0c57936c8363fb133ccac67e81226e6a09e7dde",
+      "f64ba5d7734e5000baf893c552c94a41a3d3a8ad8561111937d31ffd0d536186"
+    ],
+    "canonicalSha256": "56f0d6c18969cf893fdec4a1597f7cca87af3052a5462ae444c42ef89ea8d170"
+  },
+  {
+    "file": "ipc-bootstrap.js",
+    "equal": true,
+    "rawSha": [
+      "dbbfddc1cbbda806de014a33981e20f6b690662fe28303f19f02785913604c1b",
+      "dbbfddc1cbbda806de014a33981e20f6b690662fe28303f19f02785913604c1b"
+    ],
+    "canonicalSha256": "87df2cb27452881cdf42526a103f231b1a86d5b51f090a43b693b31793ec8513"
+  }
+]

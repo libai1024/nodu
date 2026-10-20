@@ -1,0 +1,11 @@
+{
+  "/flash/boot.py": {
+    "error": "Device file does not exist: /flash/boot.py"
+  },
+  "/sd/boot.py": {
+    "size": 182,
+    "sha256": "7f178aff342ccc8a1a3740f82e176e4fabedad65a2297462e1af242759ec7db7",
+    "text": "# Nodu boot formatting comparison.\ndef message():\n    # This comment should disappear only in the formatted variant.\n    return \"NODU_ORIGINAL_BOOT_PROOF_20261021\"\n\nprint(message())\n",
+    "matches": true
+  }
+}

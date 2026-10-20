@@ -1,0 +1,7245 @@
+[
+  {
+    "rel": "basic/demo_crc16.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:52:17.510Z",
+    "sourceBeforeSha": "0ce023989f25064b4d38c7f01f821dcd7c94c096d8347f2f09088f10b9536211",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-1.py",
+      "textLen": 3419,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 1,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504343391,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1205,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1607,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-1.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "01 05 00 00 FF 00\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "b'\\x01\\x05\\x00\\x00\\xff\\x00\\x8c:'\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "b'\\x01\\x05\\x00\\x00\\xff\\x00\\x8c:'\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "01 05 00 0B FF 00\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "b'\\x01\\x05\\x00\\x0b\\xff\\x00\\xfd\\xf8'\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "True\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:52:24.012Z",
+    "sourceAfterSha": "0ce023989f25064b4d38c7f01f821dcd7c94c096d8347f2f09088f10b9536211",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_files.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:52:25.494Z",
+    "sourceBeforeSha": "85cab3c0aff789a7c951409008c54d56db5c6758ea3284c38ed0b6f1f79cd77f",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-2.py",
+      "textLen": 234,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 8,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504351390,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-2.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "------------\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": " dir: flash\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "------------\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": " dir: sd\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "b\"# Installed as /flash/main.py and /sd/main.py after hardware verification.\\n# Show the camera for 3 seconds, save a photograph, then return to the REPL.\\nimport sys\\n\\nDEMO_SECONDS = 3\\nprint('K210 MaixPy: camera demo starts; Ctrl-C stops the demo.')\\ntry:\\n    with open('/flash/demo_cam.py') as _demo_file:\\n        _demo_source = _demo_file.read()\\n    exec(_demo_source)\\nexcept Exception as _demo_error:\\n    sys.print_exception(_demo_error)\\nprint('Ready. Run more demos with the global maixpy command on your computer.')\\n\"\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:52:32.005Z",
+    "sourceAfterSha": "85cab3c0aff789a7c951409008c54d56db5c6758ea3284c38ed0b6f1f79cd77f",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_fs_info.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:52:33.467Z",
+    "sourceBeforeSha": "9f9d98a3f07996b3f219b818dd4a7ba8d22dd049ea1942aa3685464662e31b15",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-3.py",
+      "textLen": 660,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 14,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504359343,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-3.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "/flash total=2.6MB free=2.5MB\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "/sd total=3.7GB free=3.7GB\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:52:39.960Z",
+    "sourceAfterSha": "9f9d98a3f07996b3f219b818dd4a7ba8d22dd049ea1942aa3685464662e31b15",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_globals.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:52:41.434Z",
+    "sourceBeforeSha": "b46577cbaa89e124ea894a8ccf95656e2c0b79fc52c49c298d39c636c1ad179e",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-4.py",
+      "textLen": 345,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 17,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504367313,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1605,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-4.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "2\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 21, in <module>\r\nNameError: name 'global_var' isn't defined\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:52:47.930Z",
+    "sourceAfterSha": "b46577cbaa89e124ea894a8ccf95656e2c0b79fc52c49c298d39c636c1ad179e",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_json.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:52:49.402Z",
+    "sourceBeforeSha": "ef87cbd41a04971fc0a951571e3bce7e591ce84a8cd85a0dced46e324c19c118",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-5.py",
+      "textLen": 261,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 20,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504375283,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1205,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1607,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-5.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "sipeed\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[{'birthday': 2.9102, 'name': 'maixpy', 'sex': 'unstable'}]\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:52:55.900Z",
+    "sourceAfterSha": "ef87cbd41a04971fc0a951571e3bce7e591ce84a8cd85a0dced46e324c19c118",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_logging.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:52:57.363Z",
+    "sourceBeforeSha": "93808456dff1858162f8306ed7d25bbe9c994945dc91a43fcf36cc8970de0ba9",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-6.py",
+      "textLen": 3282,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 23,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504383242,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 403,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 805,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1206,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1607,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-6.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "INFO:test:Test message2: 100(foobar)\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "WARN:test:Test message3: %d(%s)\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "ERROR:test:Test message4\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "CRIT:test:Test message5\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "INFO:root:Test message6\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "ERROR:test:Some trouble (expected)\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 131, in <module>\r\nZeroDivisionError: divide by zero\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "levelname=INFO name=root message=Test message7\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:53:03.860Z",
+    "sourceAfterSha": "93808456dff1858162f8306ed7d25bbe9c994945dc91a43fcf36cc8970de0ba9",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_sha256.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:53:05.337Z",
+    "sourceBeforeSha": "393710bfab52d0ba30e8387d37aa3b404dc6abe7abe211c6eff1a08901b28cee",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-7.py",
+      "textLen": 512,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 32,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504391250,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1205,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-7.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "b\"\\xe5Z\\\\'sj\\x87a\\xc8\\xe9j\\xce\\xc0r\\x10#%\\xe0\\x8c\\xb2\\xd0\\xdb\\xb4\\xd4p,\\xfe8\\xf8\\xab\\x07\\t\"\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "b'_p\\xbf\\x18\\xa0\\x86\\x00p\\x16\\xe9H\\xb0J\\xed;\\x82\\x10:6\\xbe\\xa4\\x17U\\xb6\\xcd\\xdf\\xaf\\x10\\xac\\xe3\\xc6\\xef'\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "False\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:53:11.835Z",
+    "sourceAfterSha": "393710bfab52d0ba30e8387d37aa3b404dc6abe7abe211c6eff1a08901b28cee",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_sys_info.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:53:13.305Z",
+    "sourceBeforeSha": "65f060fa018864b5e4bd62bdd8291422bcd4e458ddb63c64ccf2a7ca25d659be",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-8.py",
+      "textLen": 339,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 36,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504399185,
+        "f": null
+      },
+      {
+        "at": 1792504400186,
+        "f": null
+      },
+      {
+        "at": 1792504401187,
+        "f": null
+      },
+      {
+        "at": 1792504402188,
+        "f": null
+      },
+      {
+        "at": 1792504403188,
+        "f": null
+      },
+      {
+        "at": 1792504404189,
+        "f": null
+      },
+      {
+        "at": 1792504405190,
+        "f": null
+      },
+      {
+        "at": 1792504406191,
+        "f": null
+      },
+      {
+        "at": 1792504407192,
+        "f": null
+      },
+      {
+        "at": 1792504408192,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1204,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1606,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2007,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2408,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2810,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3211,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3613,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4014,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4415,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4817,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5219,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5620,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6023,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6423,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6825,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7227,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7629,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8030,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8431,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8833,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9235,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9637,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10039,
+        "phase": "running",
+        "running": true
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "running",
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-8.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello maixpy\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello maixpy\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello maixpy\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello maixpy\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "implementation: (name='micropython', version=(0, 6, 3))\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "platform: MaixPy\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "path: ['', '.', '/flash']\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "Python version: 3.4.0\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "please input string, end with Enter\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:53:28.233Z",
+    "stopState": {
+      "running": false,
+      "phase": "connected"
+    },
+    "sourceAfterSha": "65f060fa018864b5e4bd62bdd8291422bcd4e458ddb63c64ccf2a7ca25d659be",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_view_mem.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:53:31.180Z",
+    "sourceBeforeSha": "060b8311b0791860a189e9971795f7c13e687ad2ed2d9e540780e548997edf01",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-9.py",
+      "textLen": 298,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 46,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504417058,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 400,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1605,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-9.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "735.9062\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "2292.0\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:53:37.675Z",
+    "sourceAfterSha": "060b8311b0791860a189e9971795f7c13e687ad2ed2d9e540780e548997edf01",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_yield_task.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:53:39.146Z",
+    "sourceBeforeSha": "09fe363f40067df738dfdc224f992b73b8660fdeaad3ff72ea844fa4c20747e1",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-10.py",
+      "textLen": 1307,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 49,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504425023,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-10.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task start\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task init\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task running\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task running\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task running\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task exit\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "False\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "False\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task start\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task init\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "music init\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "pre  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "True\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "pre  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task exit\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "False\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task start\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "task init\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "music init\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "pre  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "True\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:53:45.639Z",
+    "sourceAfterSha": "09fe363f40067df738dfdc224f992b73b8660fdeaad3ff72ea844fa4c20747e1",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/demo_thread.py",
+    "variant": "original",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:53:47.117Z",
+    "sourceBeforeSha": "3bb8fef46fc3bfac43063ab6cb7c23d5c7e37ab37f5a79835845377f2e251ddb",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-11.py",
+      "textLen": 329,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 71,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504433003,
+        "f": null
+      },
+      {
+        "at": 1792504434004,
+        "f": null
+      },
+      {
+        "at": 1792504435006,
+        "f": null
+      },
+      {
+        "at": 1792504436007,
+        "f": null
+      },
+      {
+        "at": 1792504437007,
+        "f": null
+      },
+      {
+        "at": 1792504438009,
+        "f": null
+      },
+      {
+        "at": 1792504439009,
+        "f": null
+      },
+      {
+        "at": 1792504440010,
+        "f": null
+      },
+      {
+        "at": 1792504441010,
+        "f": null
+      },
+      {
+        "at": 1792504442012,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1204,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1606,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2008,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2410,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2811,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3213,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3614,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4015,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4416,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4818,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5220,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5622,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6023,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6425,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6827,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7228,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7629,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8030,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8431,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8833,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9235,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9636,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10038,
+        "phase": "running",
+        "running": true
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "running",
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-11.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 1\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "hello 2\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:54:02.050Z",
+    "stopState": {
+      "running": false,
+      "phase": "connected"
+    },
+    "sourceAfterSha": "3bb8fef46fc3bfac43063ab6cb7c23d5c7e37ab37f5a79835845377f2e251ddb",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_timer.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 16,
+    "startedAt": "2026-10-20T13:54:04.995Z",
+    "sourceBeforeSha": "cd3aee6040043fee6fe1de4673ef83ea8a13fe0c2ae1503df2cae00a780c687d",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-12.py",
+      "textLen": 539,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 90,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504450873,
+        "f": null
+      },
+      {
+        "at": 1792504451874,
+        "f": null
+      },
+      {
+        "at": 1792504452875,
+        "f": null
+      },
+      {
+        "at": 1792504453876,
+        "f": null
+      },
+      {
+        "at": 1792504454877,
+        "f": null
+      },
+      {
+        "at": 1792504455877,
+        "f": null
+      },
+      {
+        "at": 1792504456878,
+        "f": null
+      },
+      {
+        "at": 1792504457879,
+        "f": null
+      },
+      {
+        "at": 1792504458880,
+        "f": null
+      },
+      {
+        "at": 1792504459881,
+        "f": null
+      },
+      {
+        "at": 1792504460881,
+        "f": null
+      },
+      {
+        "at": 1792504461882,
+        "f": null
+      },
+      {
+        "at": 1792504462883,
+        "f": null
+      },
+      {
+        "at": 1792504463883,
+        "f": null
+      },
+      {
+        "at": 1792504464884,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1205,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1605,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2007,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2408,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2810,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3211,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3613,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4015,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4417,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4819,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5220,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5622,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6024,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6426,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6826,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7228,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7630,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8031,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8433,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8833,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9234,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9636,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10038,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10440,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10841,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 11242,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 11644,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12045,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12446,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12848,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 13249,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 13650,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 14051,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 14453,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 14854,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 15255,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 15657,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-12.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "period: 3000\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "time up: [MAIXPY]Timer:(80302ee0) timer=0, channel=0, mode=0, period=3000ms, priority=1, div=0, callback=80302dc0, arg=80302dc0\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "param: <function on_timer at 0x80302dc0>\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "time up: [MAIXPY]Timer:(80302ee0) timer=0, channel=0, mode=0, period=3000ms, priority=1, div=0, callback=80302dc0, arg=80302dc0\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "param: <function on_timer at 0x80302dc0>\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:54:25.539Z",
+    "sourceAfterSha": "cd3aee6040043fee6fe1de4673ef83ea8a13fe0c2ae1503df2cae00a780c687d",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_lcd.py",
+    "variant": "original",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:54:26.980Z",
+    "sourceBeforeSha": "b188f8b5c6c980b343dcbe710d679c3b84ad6c706ab0ea533c1036e92e951235",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-13.py",
+      "textLen": 765,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 96,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504472860,
+        "f": null
+      },
+      {
+        "at": 1792504473861,
+        "f": null
+      },
+      {
+        "at": 1792504474862,
+        "f": null
+      },
+      {
+        "at": 1792504475863,
+        "f": null
+      },
+      {
+        "at": 1792504476863,
+        "f": null
+      },
+      {
+        "at": 1792504477864,
+        "f": null
+      },
+      {
+        "at": 1792504478865,
+        "f": null
+      },
+      {
+        "at": 1792504479866,
+        "f": null
+      },
+      {
+        "at": 1792504480867,
+        "f": null
+      },
+      {
+        "at": 1792504481868,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1608,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2009,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2410,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2812,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3214,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3615,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4015,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4416,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4818,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5220,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5622,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6022,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6424,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6825,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7228,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7630,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8032,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8434,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8835,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9237,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9639,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10040,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-13.py\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:54:41.908Z",
+    "sourceAfterSha": "b188f8b5c6c980b343dcbe710d679c3b84ad6c706ab0ea533c1036e92e951235",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_gpio_intr.py",
+    "variant": "original",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:54:43.349Z",
+    "sourceBeforeSha": "6ce4113bad24f3e78fe38ccac28ee8c4057d4ab4cd450c3f6a003cd17239d8ec",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-14.py",
+      "textLen": 452,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 97,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504489224,
+        "f": null
+      },
+      {
+        "at": 1792504490226,
+        "f": null
+      },
+      {
+        "at": 1792504491226,
+        "f": null
+      },
+      {
+        "at": 1792504492227,
+        "f": null
+      },
+      {
+        "at": 1792504493228,
+        "f": null
+      },
+      {
+        "at": 1792504494229,
+        "f": null
+      },
+      {
+        "at": 1792504495229,
+        "f": null
+      },
+      {
+        "at": 1792504496231,
+        "f": null
+      },
+      {
+        "at": 1792504497233,
+        "f": null
+      },
+      {
+        "at": 1792504498233,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1205,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1606,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2007,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2408,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2810,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3212,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3614,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4016,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4417,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4819,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5221,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5623,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6024,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6426,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6827,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7229,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7631,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8032,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8434,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8835,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9237,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9638,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10040,
+        "phase": "running",
+        "running": true
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "running",
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-14.py\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T13:54:58.275Z",
+    "stopState": {
+      "running": false,
+      "phase": "connected"
+    },
+    "sourceAfterSha": "6ce4113bad24f3e78fe38ccac28ee8c4057d4ab4cd450c3f6a003cd17239d8ec",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_gpio_led.py",
+    "variant": "original",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:55:01.230Z",
+    "sourceBeforeSha": "be488c38f6aca8ed4b404500b9395a769fb2fab587a8621440eded26d7889b24",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-15.py",
+      "textLen": 1121,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 98,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504507111,
+        "f": null
+      },
+      {
+        "at": 1792504508111,
+        "f": null
+      },
+      {
+        "at": 1792504509111,
+        "f": null
+      },
+      {
+        "at": 1792504510112,
+        "f": null
+      },
+      {
+        "at": 1792504511113,
+        "f": null
+      },
+      {
+        "at": 1792504512114,
+        "f": null
+      },
+      {
+        "at": 1792504513115,
+        "f": null
+      },
+      {
+        "at": 1792504514116,
+        "f": null
+      },
+      {
+        "at": 1792504515118,
+        "f": null
+      },
+      {
+        "at": 1792504516119,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2008,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2409,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2811,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3213,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3614,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4014,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4416,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4818,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5220,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5622,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6023,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6425,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6826,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7228,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7630,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8032,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8434,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8834,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9236,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9637,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10039,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-15.py\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 8, in <module>\r\nAttributeError: type object 'board_info' has no attribute 'LED_R'\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:55:16.161Z",
+    "sourceAfterSha": "be488c38f6aca8ed4b404500b9395a769fb2fab587a8621440eded26d7889b24",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_pwm.py",
+    "variant": "original",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:55:17.600Z",
+    "sourceBeforeSha": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-16.py",
+      "textLen": 459,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 100,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504523484,
+        "f": null
+      },
+      {
+        "at": 1792504524484,
+        "f": null
+      },
+      {
+        "at": 1792504525486,
+        "f": null
+      },
+      {
+        "at": 1792504526486,
+        "f": null
+      },
+      {
+        "at": 1792504527487,
+        "f": null
+      },
+      {
+        "at": 1792504528488,
+        "f": null
+      },
+      {
+        "at": 1792504529490,
+        "f": null
+      },
+      {
+        "at": 1792504530490,
+        "f": null
+      },
+      {
+        "at": 1792504531491,
+        "f": null
+      },
+      {
+        "at": 1792504532493,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2007,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2408,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2810,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3212,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3612,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4013,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4415,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4816,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5217,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5618,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6020,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6422,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6823,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7224,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7626,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8028,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8430,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8831,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9233,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9634,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10035,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-16.py\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 7, in <module>\r\nAttributeError: type object 'board_info' has no attribute 'LED_G'\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:55:32.527Z",
+    "sourceAfterSha": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_pwm.py",
+    "variant": "pin-adapted",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:55:33.957Z",
+    "sourceBeforeSha": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-17.py",
+      "textLen": 459,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "from machine import Timer,PWM\nimport time\nfrom board import board_info\nfrom fpioa_manager import fm\n\ntim = Timer(Timer.T",
+    "editedLen": 459,
+    "frameBefore": null,
+    "logsBefore": 102,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504540743,
+        "f": null
+      },
+      {
+        "at": 1792504541744,
+        "f": null
+      },
+      {
+        "at": 1792504542744,
+        "f": null
+      },
+      {
+        "at": 1792504543746,
+        "f": null
+      },
+      {
+        "at": 1792504544746,
+        "f": null
+      },
+      {
+        "at": 1792504545747,
+        "f": null
+      },
+      {
+        "at": 1792504546748,
+        "f": null
+      },
+      {
+        "at": 1792504547749,
+        "f": null
+      },
+      {
+        "at": 1792504548749,
+        "f": null
+      },
+      {
+        "at": 1792504549750,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 400,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1205,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2008,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2410,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2811,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3212,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3614,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4015,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4417,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4819,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5221,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5623,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6025,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6426,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6827,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7228,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7630,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8031,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8433,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8835,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9237,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9638,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10041,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-17.py\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 7, in <module>\r\nAttributeError: type object 'board_info' has no attribute 'LED_G'\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:55:49.792Z",
+    "sourceAfterSha": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/hello_wrold.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:55:51.226Z",
+    "sourceBeforeSha": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-18.py",
+      "textLen": 714,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 104,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504557104,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-18.py\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 16, in <module>\r\n  File \"<stdin>\", line 9, in <module>\r\nNameError: name 'sys' isn't defined\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:55:57.720Z",
+    "sourceAfterSha": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb",
+    "sourceModified": false
+  },
+  {
+    "rel": "basic/hello_wrold.py",
+    "variant": "source-adapted",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T13:55:59.192Z",
+    "sourceBeforeSha": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-19.py",
+      "textLen": 714,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "try:\n    import gc, lcd, image\n    import sys\n    gc.collect()\n    lcd.init()\n    loading = image.Image(size=(lcd.width(",
+    "editedLen": 714,
+    "frameBefore": null,
+    "logsBefore": 106,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504565980,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1205,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1607,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-19.py\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 16, in <module>\r\n  File \"<stdin>\", line 9, in <module>\r\nNameError: name 'sys' isn't defined\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:56:06.596Z",
+    "sourceAfterSha": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_camera.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:56:08.059Z",
+    "sourceBeforeSha": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-20.py",
+      "textLen": 437,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 108,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504573937,
+        "f": null
+      },
+      {
+        "at": 1792504574938,
+        "f": null
+      },
+      {
+        "at": 1792504575939,
+        "f": null
+      },
+      {
+        "at": 1792504576940,
+        "f": null
+      },
+      {
+        "at": 1792504577941,
+        "f": null
+      },
+      {
+        "at": 1792504578941,
+        "f": null
+      },
+      {
+        "at": 1792504579942,
+        "f": null
+      },
+      {
+        "at": 1792504580944,
+        "f": null
+      },
+      {
+        "at": 1792504581947,
+        "f": null
+      },
+      {
+        "at": 1792504582946,
+        "f": null
+      },
+      {
+        "at": 1792504583948,
+        "f": null
+      },
+      {
+        "at": 1792504584949,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1205,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1606,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2007,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2408,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2809,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3214,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3615,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4016,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4417,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4819,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5220,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5622,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6023,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6425,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6826,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7227,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7629,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8030,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8432,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8834,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9236,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9637,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10039,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10440,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10842,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11244,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11645,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12047,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-20.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 12, in <module>\r\nRuntimeError: Sensor Timeout!!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:56:24.993Z",
+    "sourceAfterSha": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a",
+    "sourceModified": false
+  },
+  {
+    "rel": "hardware/demo_camera.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:56:26.425Z",
+    "sourceBeforeSha": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-21.py",
+      "textLen": 437,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "import sensor, lcd\n\ntry:\n    exec(open('/flash/gc2145_board.py').read())\n    init_camera()\nexcept Exception as e:\n    ra",
+    "editedLen": 437,
+    "frameBefore": null,
+    "logsBefore": 113,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504593211,
+        "f": null
+      },
+      {
+        "at": 1792504594211,
+        "f": null
+      },
+      {
+        "at": 1792504595212,
+        "f": null
+      },
+      {
+        "at": 1792504596213,
+        "f": null
+      },
+      {
+        "at": 1792504597213,
+        "f": null
+      },
+      {
+        "at": 1792504598214,
+        "f": null
+      },
+      {
+        "at": 1792504599215,
+        "f": null
+      },
+      {
+        "at": 1792504600217,
+        "f": null
+      },
+      {
+        "at": 1792504601217,
+        "f": null
+      },
+      {
+        "at": 1792504602218,
+        "f": null
+      },
+      {
+        "at": 1792504603219,
+        "f": null
+      },
+      {
+        "at": 1792504604221,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 403,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1205,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1607,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2008,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2410,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2811,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3212,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3613,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4015,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4417,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4819,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5221,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5623,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6025,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6427,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6828,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7229,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7630,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8031,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8432,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8834,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9236,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9638,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10041,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10443,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10845,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11247,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11649,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12053,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-21.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 12, in <module>\r\nRuntimeError: Sensor Timeout!!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:56:44.270Z",
+    "sourceAfterSha": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_fps_display.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:56:45.708Z",
+    "sourceBeforeSha": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-22.py",
+      "textLen": 378,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 118,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504611588,
+        "f": null
+      },
+      {
+        "at": 1792504612590,
+        "f": null
+      },
+      {
+        "at": 1792504613592,
+        "f": null
+      },
+      {
+        "at": 1792504614595,
+        "f": null
+      },
+      {
+        "at": 1792504615596,
+        "f": null
+      },
+      {
+        "at": 1792504616596,
+        "f": null
+      },
+      {
+        "at": 1792504617597,
+        "f": null
+      },
+      {
+        "at": 1792504618597,
+        "f": null
+      },
+      {
+        "at": 1792504619599,
+        "f": null
+      },
+      {
+        "at": 1792504620600,
+        "f": null
+      },
+      {
+        "at": 1792504621601,
+        "f": null
+      },
+      {
+        "at": 1792504622603,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1609,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2010,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2411,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2813,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3215,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3616,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4018,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4421,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4824,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5225,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5627,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6029,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6432,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6835,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7237,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7639,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8042,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8445,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8848,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9250,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9652,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10054,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10455,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10858,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11261,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11662,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12066,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-22.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 12, in <module>\r\nRuntimeError: Sensor Timeout!!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:57:02.663Z",
+    "sourceAfterSha": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_fps_display.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:57:04.106Z",
+    "sourceBeforeSha": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-23.py",
+      "textLen": 378,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "import sensor\nimport image\nimport lcd\nimport time\n\nclock = time.clock()\nlcd.init()\nexec(open('/flash/gc2145_board.py').r",
+    "editedLen": 378,
+    "frameBefore": null,
+    "logsBefore": 123,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504630903,
+        "f": null
+      },
+      {
+        "at": 1792504631905,
+        "f": null
+      },
+      {
+        "at": 1792504632907,
+        "f": null
+      },
+      {
+        "at": 1792504633909,
+        "f": null
+      },
+      {
+        "at": 1792504634909,
+        "f": null
+      },
+      {
+        "at": 1792504635911,
+        "f": null
+      },
+      {
+        "at": 1792504636912,
+        "f": null
+      },
+      {
+        "at": 1792504637912,
+        "f": null
+      },
+      {
+        "at": 1792504638912,
+        "f": null
+      },
+      {
+        "at": 1792504639914,
+        "f": null
+      },
+      {
+        "at": 1792504640916,
+        "f": null
+      },
+      {
+        "at": 1792504641918,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 404,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 806,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1209,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1612,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2015,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2417,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2819,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3221,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3623,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4025,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4428,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4830,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5233,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5634,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6035,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6438,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6839,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7242,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7644,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8047,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8450,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8852,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9256,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9658,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10061,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10463,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10864,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11266,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11669,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12069,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-23.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 12, in <module>\r\nRuntimeError: Sensor Timeout!!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:57:21.982Z",
+    "sourceAfterSha": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_find_green_blob.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:57:23.423Z",
+    "sourceBeforeSha": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-24.py",
+      "textLen": 504,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 128,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504649302,
+        "f": null
+      },
+      {
+        "at": 1792504650303,
+        "f": null
+      },
+      {
+        "at": 1792504651305,
+        "f": null
+      },
+      {
+        "at": 1792504652307,
+        "f": null
+      },
+      {
+        "at": 1792504653309,
+        "f": null
+      },
+      {
+        "at": 1792504654310,
+        "f": null
+      },
+      {
+        "at": 1792504655310,
+        "f": null
+      },
+      {
+        "at": 1792504656312,
+        "f": null
+      },
+      {
+        "at": 1792504657311,
+        "f": null
+      },
+      {
+        "at": 1792504658313,
+        "f": null
+      },
+      {
+        "at": 1792504659315,
+        "f": null
+      },
+      {
+        "at": 1792504660316,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 403,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 805,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1207,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1609,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2011,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2411,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2815,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3218,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3620,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4023,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4425,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4826,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5228,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5629,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6031,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6434,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6835,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7238,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7641,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8042,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8444,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8847,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9250,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9651,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10052,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10455,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10856,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11259,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11662,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12064,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-24.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 13, in <module>\r\nRuntimeError: Sensor timeout!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:57:40.376Z",
+    "sourceAfterSha": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_find_green_blob.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:57:41.804Z",
+    "sourceBeforeSha": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-25.py",
+      "textLen": 504,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "import sensor\nimport image\nimport lcd\nimport time\n\nlcd.init(freq=15000000)\nexec(open('/flash/gc2145_board.py').read())\ni",
+    "editedLen": 504,
+    "frameBefore": null,
+    "logsBefore": 133,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504668601,
+        "f": null
+      },
+      {
+        "at": 1792504669604,
+        "f": null
+      },
+      {
+        "at": 1792504670606,
+        "f": null
+      },
+      {
+        "at": 1792504671608,
+        "f": null
+      },
+      {
+        "at": 1792504672609,
+        "f": null
+      },
+      {
+        "at": 1792504673610,
+        "f": null
+      },
+      {
+        "at": 1792504674611,
+        "f": null
+      },
+      {
+        "at": 1792504675612,
+        "f": null
+      },
+      {
+        "at": 1792504676612,
+        "f": null
+      },
+      {
+        "at": 1792504677613,
+        "f": null
+      },
+      {
+        "at": 1792504678613,
+        "f": null
+      },
+      {
+        "at": 1792504679614,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 403,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 806,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1209,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1612,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2015,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2417,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2818,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3221,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3623,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4026,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4429,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4831,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5235,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5637,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6039,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6441,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6842,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7244,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7645,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8046,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8447,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8848,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9250,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9652,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10054,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10455,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10856,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11258,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11659,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12060,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-25.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 13, in <module>\r\nRuntimeError: Sensor timeout!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:57:59.672Z",
+    "sourceAfterSha": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_scan_qr_code.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:58:01.104Z",
+    "sourceBeforeSha": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-26.py",
+      "textLen": 531,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 138,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504686981,
+        "f": null
+      },
+      {
+        "at": 1792504687981,
+        "f": null
+      },
+      {
+        "at": 1792504688982,
+        "f": null
+      },
+      {
+        "at": 1792504689983,
+        "f": null
+      },
+      {
+        "at": 1792504690984,
+        "f": null
+      },
+      {
+        "at": 1792504691985,
+        "f": null
+      },
+      {
+        "at": 1792504692987,
+        "f": null
+      },
+      {
+        "at": 1792504693988,
+        "f": null
+      },
+      {
+        "at": 1792504694989,
+        "f": null
+      },
+      {
+        "at": 1792504695990,
+        "f": null
+      },
+      {
+        "at": 1792504696991,
+        "f": null
+      },
+      {
+        "at": 1792504697992,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1608,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2009,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2411,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2812,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3213,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3614,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4016,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4417,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4819,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5220,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5622,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6024,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6426,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6828,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7229,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7631,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8033,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8435,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8836,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9237,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9639,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10039,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10441,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10842,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11244,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11645,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12047,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-26.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 13, in <module>\r\nRuntimeError: Sensor Timeout!!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:58:18.035Z",
+    "sourceAfterSha": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_scan_qr_code.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:58:19.469Z",
+    "sourceBeforeSha": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-27.py",
+      "textLen": 531,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "import sensor\nimport image\nimport lcd\nimport time\n\nclock = time.clock()\nlcd.init()\nexec(open('/flash/gc2145_board.py').r",
+    "editedLen": 531,
+    "frameBefore": null,
+    "logsBefore": 143,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504706256,
+        "f": null
+      },
+      {
+        "at": 1792504707257,
+        "f": null
+      },
+      {
+        "at": 1792504708258,
+        "f": null
+      },
+      {
+        "at": 1792504709259,
+        "f": null
+      },
+      {
+        "at": 1792504710260,
+        "f": null
+      },
+      {
+        "at": 1792504711262,
+        "f": null
+      },
+      {
+        "at": 1792504712263,
+        "f": null
+      },
+      {
+        "at": 1792504713264,
+        "f": null
+      },
+      {
+        "at": 1792504714264,
+        "f": null
+      },
+      {
+        "at": 1792504715265,
+        "f": null
+      },
+      {
+        "at": 1792504716266,
+        "f": null
+      },
+      {
+        "at": 1792504717267,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1204,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1606,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2007,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2409,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2811,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3212,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3613,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4014,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4416,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4818,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5218,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5620,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6021,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6422,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6824,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7226,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7627,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8028,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8430,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8831,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9233,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9634,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10036,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10437,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10838,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11240,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11640,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12042,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-27.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 13, in <module>\r\nRuntimeError: Sensor Timeout!!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:58:37.306Z",
+    "sourceAfterSha": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_affine.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:58:38.734Z",
+    "sourceBeforeSha": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-28.py",
+      "textLen": 887,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "Untitled-28.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 148,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504724610,
+        "f": null
+      },
+      {
+        "at": 1792504725611,
+        "f": null
+      },
+      {
+        "at": 1792504726613,
+        "f": null
+      },
+      {
+        "at": 1792504727614,
+        "f": null
+      },
+      {
+        "at": 1792504728614,
+        "f": null
+      },
+      {
+        "at": 1792504729616,
+        "f": null
+      },
+      {
+        "at": 1792504730617,
+        "f": null
+      },
+      {
+        "at": 1792504731618,
+        "f": null
+      },
+      {
+        "at": 1792504732619,
+        "f": null
+      },
+      {
+        "at": 1792504733620,
+        "f": null
+      },
+      {
+        "at": 1792504734621,
+        "f": null
+      },
+      {
+        "at": 1792504735622,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1205,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1606,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2008,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2410,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2811,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3212,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3614,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4014,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4416,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4817,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5219,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5621,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6023,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6425,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6826,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7226,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7628,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8029,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8431,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8833,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9234,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9636,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10037,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10439,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10840,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11242,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11644,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12045,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-28.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "matrix:\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[1.34, -0.12, -62.37]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[0.12, 1.34, -56.84]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[0.00, 0.00, 1.00]\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 30, in <module>\r\nRuntimeError: Sensor timeout!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:58:55.664Z",
+    "sourceAfterSha": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_affine.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:58:57.102Z",
+    "sourceBeforeSha": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-29.py",
+      "textLen": 887,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "Untitled-28.py",
+        "Untitled-29.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "import image\nimport lcd, sensor\nimport time\n\nlcd.init()\n# lcd.init(type=2, freq=20000000)\n\nexec(open('/flash/gc2145_boar",
+    "editedLen": 887,
+    "frameBefore": null,
+    "logsBefore": 157,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504743898,
+        "f": null
+      },
+      {
+        "at": 1792504744899,
+        "f": null
+      },
+      {
+        "at": 1792504745900,
+        "f": null
+      },
+      {
+        "at": 1792504746901,
+        "f": null
+      },
+      {
+        "at": 1792504747900,
+        "f": null
+      },
+      {
+        "at": 1792504748902,
+        "f": null
+      },
+      {
+        "at": 1792504749902,
+        "f": null
+      },
+      {
+        "at": 1792504750902,
+        "f": null
+      },
+      {
+        "at": 1792504751904,
+        "f": null
+      },
+      {
+        "at": 1792504752904,
+        "f": null
+      },
+      {
+        "at": 1792504753905,
+        "f": null
+      },
+      {
+        "at": 1792504754906,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1203,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1605,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2006,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2408,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2809,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3210,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3611,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4012,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4414,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4816,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5218,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5620,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6021,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6423,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6824,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7226,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7628,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8029,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8431,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8832,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9233,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9635,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10037,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10438,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10840,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11242,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11644,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12046,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-29.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "matrix:\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[1.34, -0.12, -62.37]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[0.12, 1.34, -56.84]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[0.00, 0.00, 1.00]\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 30, in <module>\r\nRuntimeError: Sensor timeout!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:59:14.956Z",
+    "sourceAfterSha": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_image_deal.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:59:16.404Z",
+    "sourceBeforeSha": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-30.py",
+      "textLen": 747,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "Untitled-28.py",
+        "Untitled-29.py",
+        "Untitled-30.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 166,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504762287,
+        "f": null
+      },
+      {
+        "at": 1792504763287,
+        "f": null
+      },
+      {
+        "at": 1792504764289,
+        "f": null
+      },
+      {
+        "at": 1792504765289,
+        "f": null
+      },
+      {
+        "at": 1792504766289,
+        "f": null
+      },
+      {
+        "at": 1792504767289,
+        "f": null
+      },
+      {
+        "at": 1792504768290,
+        "f": null
+      },
+      {
+        "at": 1792504769292,
+        "f": null
+      },
+      {
+        "at": 1792504770293,
+        "f": null
+      },
+      {
+        "at": 1792504771293,
+        "f": null
+      },
+      {
+        "at": 1792504772294,
+        "f": null
+      },
+      {
+        "at": 1792504773295,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1607,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2009,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2410,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2811,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3213,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3615,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4016,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4418,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4820,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5221,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5623,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6025,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6426,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6828,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7230,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7632,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8033,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8435,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8837,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9238,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9640,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10041,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10443,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10844,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11246,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11647,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12048,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-30.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 18, in <module>\r\nRuntimeError: Sensor timeout!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:59:33.343Z",
+    "sourceAfterSha": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec",
+    "sourceModified": false
+  },
+  {
+    "rel": "machine_vision/demo_image_deal.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:59:34.784Z",
+    "sourceBeforeSha": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-31.py",
+      "textLen": 747,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "Untitled-28.py",
+        "Untitled-29.py",
+        "Untitled-30.py",
+        "Untitled-31.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "editPreview": "import sensor\nimport image\nimport lcd\nimport time\n\nlcd.init(freq=15000000)\nexec(open('/flash/gc2145_board.py').read())\ni",
+    "editedLen": 747,
+    "frameBefore": null,
+    "logsBefore": 171,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504781579,
+        "f": null
+      },
+      {
+        "at": 1792504782579,
+        "f": null
+      },
+      {
+        "at": 1792504783579,
+        "f": null
+      },
+      {
+        "at": 1792504784580,
+        "f": null
+      },
+      {
+        "at": 1792504785581,
+        "f": null
+      },
+      {
+        "at": 1792504786583,
+        "f": null
+      },
+      {
+        "at": 1792504787583,
+        "f": null
+      },
+      {
+        "at": 1792504788584,
+        "f": null
+      },
+      {
+        "at": 1792504789585,
+        "f": null
+      },
+      {
+        "at": 1792504790586,
+        "f": null
+      },
+      {
+        "at": 1792504791588,
+        "f": null
+      },
+      {
+        "at": 1792504792588,
+        "f": null
+      }
+    ],
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1204,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1605,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2006,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2408,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2810,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3212,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 3614,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4016,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4417,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 4819,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5219,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5621,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6022,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6424,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6826,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7227,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7628,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8029,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8430,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8831,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9233,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9635,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10037,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10438,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10839,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11240,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11642,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12043,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": null,
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-31.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stderr",
+        "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 18, in <module>\r\nRuntimeError: Sensor timeout!\r\n"
+      }
+    ],
+    "hasTraceback": true,
+    "finishedAt": "2026-10-20T13:59:52.633Z",
+    "sourceAfterSha": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec",
+    "sourceModified": false
+  },
+  {
+    "rel": "Nodu/gc2145-camera/camera_preview.py",
+    "variant": "original",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T13:59:54.068Z",
+    "sourceBeforeSha": "fe2ffb7f3d12b82dda1baccac999d6655c0bf4a0acbe59f51f5700923ece609c",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-32.py",
+      "textLen": 1160,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "Untitled-28.py",
+        "Untitled-29.py",
+        "Untitled-30.py",
+        "Untitled-31.py",
+        "Untitled-32.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": null,
+    "logsBefore": 176,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504800858,
+        "f": null
+      },
+      {
+        "at": 1792504801859,
+        "f": {
+          "s": 6,
+          "t": 1792504801783
+        }
+      },
+      {
+        "at": 1792504802859,
+        "f": {
+          "s": 19,
+          "t": 1792504802788
+        }
+      },
+      {
+        "at": 1792504803860,
+        "f": {
+          "s": 33,
+          "t": 1792504803840
+        }
+      },
+      {
+        "at": 1792504804862,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504805863,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504806863,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504807863,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504808865,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504809865,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504810866,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      },
+      {
+        "at": 1792504811867,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      }
+    ],
+    "states": [
+      {
+        "t": 403,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 805,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1207,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1608,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2010,
+        "phase": "running",
+        "running": true,
+        "fps": 13.680108956048587
+      },
+      {
+        "t": 2413,
+        "phase": "running",
+        "running": true,
+        "fps": 12.96777184502216
+      },
+      {
+        "t": 2816,
+        "phase": "running",
+        "running": true,
+        "fps": 13.650565001663118
+      },
+      {
+        "t": 3217,
+        "phase": "running",
+        "running": true,
+        "fps": 12.929829389220332
+      },
+      {
+        "t": 3619,
+        "phase": "running",
+        "running": true,
+        "fps": 13.047342713598603
+      },
+      {
+        "t": 4020,
+        "phase": "running",
+        "running": true,
+        "fps": 13.17816049352211
+      },
+      {
+        "t": 4421,
+        "phase": "running",
+        "running": true,
+        "fps": 12.955584421749254
+      },
+      {
+        "t": 4823,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5224,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 5625,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6026,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6428,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 6830,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7231,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 7633,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8034,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8435,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 8836,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9236,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 9639,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10040,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10442,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 10844,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11246,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 11647,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 12050,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-32.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "CAMERA_OK frames=10 width=320 height=240\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "CAMERA_OK frames=20 width=320 height=240\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "CAMERA_OK frames=30 width=320 height=240\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "Camera check finished; no startup file was written.\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:00:11.918Z",
+    "sourceAfterSha": "fe2ffb7f3d12b82dda1baccac999d6655c0bf4a0acbe59f51f5700923ece609c",
+    "sourceModified": false
+  },
+  {
+    "rel": "Nodu/board-api/nodu_board.py",
+    "variant": "original",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T14:00:13.357Z",
+    "sourceBeforeSha": "aa1566b5d1f3c31aec96f783b8b44b95dca57e0dd4492563137fbc0a088808db",
+    "menuOpen": true,
+    "editor": {
+      "uri": "untitled:/Untitled-33.py",
+      "textLen": 5110,
+      "tabs": [
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "资源管理器",
+        "搜索",
+        "认识开发板",
+        "Untitled-1.py",
+        "Untitled-2.py",
+        "Untitled-3.py",
+        "Untitled-4.py",
+        "Untitled-5.py",
+        "Untitled-6.py",
+        "Untitled-7.py",
+        "Untitled-8.py",
+        "Untitled-9.py",
+        "Untitled-10.py",
+        "Untitled-11.py",
+        "Untitled-12.py",
+        "Untitled-13.py",
+        "Untitled-14.py",
+        "Untitled-15.py",
+        "Untitled-16.py",
+        "Untitled-17.py",
+        "Untitled-18.py",
+        "Untitled-19.py",
+        "Untitled-20.py",
+        "Untitled-21.py",
+        "Untitled-22.py",
+        "Untitled-23.py",
+        "Untitled-24.py",
+        "Untitled-25.py",
+        "Untitled-26.py",
+        "Untitled-27.py",
+        "Untitled-28.py",
+        "Untitled-29.py",
+        "Untitled-30.py",
+        "Untitled-31.py",
+        "Untitled-32.py",
+        "Untitled-33.py",
+        "问题",
+        "输出",
+        "zsh",
+        "",
+        "视觉调试",
+        "大纲",
+        "视觉调试",
+        "大纲",
+        "大纲",
+        "视觉调试"
+      ]
+    },
+    "frameBefore": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "logsBefore": 185,
+    "phaseBefore": "connected",
+    "frames": [
+      {
+        "at": 1792504820156,
+        "f": {
+          "s": 41,
+          "t": 1792504804438
+        }
+      }
+    ],
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1204,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1606,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "phaseAfter": "connected",
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-33.py\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:00:20.776Z",
+    "sourceAfterSha": "aa1566b5d1f3c31aec96f783b8b44b95dca57e0dd4492563137fbc0a088808db",
+    "sourceModified": false
+  }
+]

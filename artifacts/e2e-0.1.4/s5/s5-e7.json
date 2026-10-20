@@ -1,0 +1,40 @@
+{
+  "started": "2026-10-20T14:59:49.176Z",
+  "del": {
+    "ok": "NODU_TESTFILE_REMOVED\r\n"
+  },
+  "gone": {
+    "err": "Device file does not exist: /sd/nodu-student-20261020.txt"
+  },
+  "repl": {
+    "ok": "2\r\n"
+  },
+  "flash": [
+    "/flash/config.json",
+    "/flash/demo_cam.py",
+    "/flash/demo_green.py",
+    "/flash/demo_lcd.py",
+    "/flash/demo_qr.py",
+    "/flash/demo_test.py",
+    "/flash/freq.conf",
+    "/flash/gc2145_board.py",
+    "/flash/main.py",
+    "/flash/nodu-acceptance-1792345884045.txt",
+    "/flash/nodu-ui-roundtrip-20261019.bin"
+  ],
+  "sd": [
+    "/sd/System Volume Information",
+    "/sd/maixpy_demos",
+    "/sd/canmv-full-backup-20261018-224235.bin",
+    "/sd/main.py",
+    "/sd/maixpy_demo_camera.jpg"
+  ],
+  "final": {
+    "phase": "disconnected",
+    "running": false,
+    "preview": false,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  }
+}

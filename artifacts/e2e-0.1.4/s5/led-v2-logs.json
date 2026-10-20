@@ -1,0 +1,88 @@
+{
+  "before": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 275
+  },
+  "after": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 285
+  },
+  "states": [
+    {
+      "t": 402,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 803,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 1205,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 1607,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 2008,
+      "phase": "connected",
+      "running": false
+    }
+  ],
+  "logs": [
+    {
+      "stream": "system",
+      "text": "运行 Untitled-4.py\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=0 value=0 elapsed_ms=0 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=1 value=1 elapsed_ms=150 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=2 value=0 elapsed_ms=300 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=3 value=1 elapsed_ms=451 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=4 value=0 elapsed_ms=601 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=5 value=1 elapsed_ms=751 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=6 value=0 elapsed_ms=901 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED step=7 value=1 elapsed_ms=1051 period_ms=150\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_LED_DONE\r\n"
+    }
+  ],
+  "stillRunning": false
+}

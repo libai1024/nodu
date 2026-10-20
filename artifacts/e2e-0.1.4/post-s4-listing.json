@@ -1,0 +1,102 @@
+{
+  "flash": [
+    {
+      "name": "config.json",
+      "path": "/flash/config.json",
+      "size": 766,
+      "directory": false
+    },
+    {
+      "name": "demo_cam.py",
+      "path": "/flash/demo_cam.py",
+      "size": 1421,
+      "directory": false
+    },
+    {
+      "name": "demo_green.py",
+      "path": "/flash/demo_green.py",
+      "size": 1612,
+      "directory": false
+    },
+    {
+      "name": "demo_lcd.py",
+      "path": "/flash/demo_lcd.py",
+      "size": 920,
+      "directory": false
+    },
+    {
+      "name": "demo_qr.py",
+      "path": "/flash/demo_qr.py",
+      "size": 1704,
+      "directory": false
+    },
+    {
+      "name": "demo_test.py",
+      "path": "/flash/demo_test.py",
+      "size": 2581,
+      "directory": false
+    },
+    {
+      "name": "freq.conf",
+      "path": "/flash/freq.conf",
+      "size": 16,
+      "directory": false
+    },
+    {
+      "name": "gc2145_board.py",
+      "path": "/flash/gc2145_board.py",
+      "size": 7338,
+      "directory": false
+    },
+    {
+      "name": "main.py",
+      "path": "/flash/main.py",
+      "size": 516,
+      "directory": false
+    },
+    {
+      "name": "nodu-acceptance-1792345884045.txt",
+      "path": "/flash/nodu-acceptance-1792345884045.txt",
+      "size": 1579,
+      "directory": false
+    },
+    {
+      "name": "nodu-ui-roundtrip-20261019.bin",
+      "path": "/flash/nodu-ui-roundtrip-20261019.bin",
+      "size": 4124,
+      "directory": false
+    }
+  ],
+  "sd": [
+    {
+      "name": "System Volume Information",
+      "path": "/sd/System Volume Information",
+      "size": 0,
+      "directory": true
+    },
+    {
+      "name": "maixpy_demos",
+      "path": "/sd/maixpy_demos",
+      "size": 0,
+      "directory": true
+    },
+    {
+      "name": "canmv-full-backup-20261018-224235.bin",
+      "path": "/sd/canmv-full-backup-20261018-224235.bin",
+      "size": 16777216,
+      "directory": false
+    },
+    {
+      "name": "main.py",
+      "path": "/sd/main.py",
+      "size": 516,
+      "directory": false
+    },
+    {
+      "name": "maixpy_demo_camera.jpg",
+      "path": "/sd/maixpy_demo_camera.jpg",
+      "size": 4223,
+      "directory": false
+    }
+  ]
+}

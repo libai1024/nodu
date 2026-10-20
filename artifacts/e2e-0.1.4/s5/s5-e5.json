@@ -1,0 +1,133 @@
+{
+  "started": "2026-10-20T14:57:27.344Z",
+  "set": {
+    "before": 288,
+    "after": 812,
+    "uri": "untitled:/Untitled-14.py"
+  },
+  "confirm": "写入 boot.py",
+  "bootWritten": {
+    "size": 812
+  },
+  "discAt": 1,
+  "fastReconnect": true,
+  "reconnectMs": 4935,
+  "logs1": [],
+  "frames": [
+    {
+      "t": 0,
+      "frame": null
+    },
+    {
+      "t": 800,
+      "frame": null
+    },
+    {
+      "t": 1600,
+      "frame": null
+    },
+    {
+      "t": 2400,
+      "frame": null
+    },
+    {
+      "t": 3200,
+      "frame": null
+    },
+    {
+      "t": 4000,
+      "frame": null
+    },
+    {
+      "t": 4800,
+      "frame": null
+    },
+    {
+      "t": 5600,
+      "frame": null
+    },
+    {
+      "t": 6400,
+      "frame": null
+    },
+    {
+      "t": 7200,
+      "frame": null
+    },
+    {
+      "t": 8000,
+      "frame": null
+    },
+    {
+      "t": 8800,
+      "frame": null
+    },
+    {
+      "t": 9600,
+      "frame": null
+    },
+    {
+      "t": 10400,
+      "frame": null
+    },
+    {
+      "t": 11200,
+      "frame": null
+    },
+    {
+      "t": 12000,
+      "frame": null
+    },
+    {
+      "t": 12800,
+      "frame": null
+    },
+    {
+      "t": 13600,
+      "frame": null
+    },
+    {
+      "t": 14400,
+      "frame": null
+    },
+    {
+      "t": 15200,
+      "frame": null
+    },
+    {
+      "t": 16000,
+      "frame": null
+    },
+    {
+      "t": 16800,
+      "frame": null
+    },
+    {
+      "t": 17600,
+      "frame": null
+    },
+    {
+      "t": 18400,
+      "frame": null
+    },
+    {
+      "t": 19200,
+      "frame": null
+    }
+  ],
+  "logs2": [],
+  "stateEnd": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "del": {
+    "ok": "NODU_BOOTPY_REMOVED2\r\n"
+  },
+  "bootAfter": {
+    "err": "Error: Device file does not exist: /sd/boot.py"
+  }
+}

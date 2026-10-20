@@ -1,0 +1,47 @@
+{
+  "panel": {
+    "portOptions": [
+      "扫描后选择串口"
+    ],
+    "profileOptions": [
+      "野火 K210 CAM · GC2145",
+      "通用 K210"
+    ],
+    "boardOptions": [
+      "Kendryte KD233",
+      "Sipeed Maix Bit (old)",
+      "Sipeed Maix Dock",
+      "Sipeed Maix Go (open-ec & new CMSIS-DAP)",
+      "Sipeed Maix Go (Old CMSIS-DAP)",
+      "Sipeed Maixduino",
+      "Sipeed Maix Bit (with Mic)",
+      "M5StickV",
+      "T-Watch"
+    ],
+    "buttons": [
+      "扫描",
+      "连接",
+      "认识开发板",
+      "设备日志",
+      "执行 REPL",
+      "列出目录",
+      "读取到本地…",
+      "选择本地文件写入…"
+    ]
+  },
+  "boardSel": {
+    "value": "2",
+    "text": "Sipeed Maix Dock",
+    "profile": "embedfire-cam-gc2145"
+  },
+  "status": [
+    {
+      "id": "scope:vision",
+      "text": "禁用等待图像"
+    },
+    {
+      "id": "scope:toolbar",
+      "text": "见微文件运行野火 K210 CAMcu.usbserial-3110硬件设备已连接串口选择串口/dev/cu.Bluetooth-Incoming-Port · PciPort/dev/cu.debug-console · PciPort/dev/cu.usbserial-3110 · USB Serial/dev/tty.Bluetooth-Incoming-Port · PciPort/dev/tty.debug-console · PciPort/dev/tty.usbserial-3110 · USB Serial扫描相机适配野火 K210 CAM · GC2145通用 K210连接复位方式Kendryte KD233Sipeed Maix Bit (old)Sipeed Maix DockSipeed Maix Go (open-ec & new CMSIS-DAP)Sipeed Maix Go (Old CMSIS-DAP)Sipeed MaixduinoSipeed Maix Bit (with Mic)M5StickVT-Watch断开认识开发板设备详情串口/dev/cu.usbserial-3110固件MaixPy 0.6.3架构K210 [Maix:000000000000000000000000]REPL / 文件 / 脚本 / 图像支持支持支持支持固件与恢复读取官方固件备份并验证确认重写固件，已保留备份烧写并验证REPL设备日志REPL Python 代码print(\"Hello, Nodu\")执行 REPL板端文件单文件 ≤ 2 MiB板端目录列出目录文件路径覆盖同名文件读取到本地…选择本地文件写入…简专"
+    }
+  ]
+}

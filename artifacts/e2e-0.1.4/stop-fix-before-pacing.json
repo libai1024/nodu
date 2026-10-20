@@ -1,0 +1,448 @@
+{
+  "label": "stop-fix-before-pacing",
+  "started": "2026-10-20T15:53:04.365Z",
+  "sourceSha256": "4775d48b467ee2a30f3bb30547d2c7b96a69d1fc9ee0a21b3b9c3707ff654a21",
+  "binarySha256": "26d0ccf795a33820581a861f0d1493250c36a9d2c747839835b5b09d739deb2b",
+  "cycles": [
+    {
+      "cycle": 0,
+      "samples": [
+        {
+          "elapsedMs": 0,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 116,
+            "time": 1792511593881,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 502,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 123,
+            "time": 1792511594410,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1005,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 130,
+            "time": 1792511594938,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1507,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 136,
+            "time": 1792511595392,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2008,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 143,
+            "time": 1792511595910,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2509,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 150,
+            "time": 1792511596431,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3009,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 156,
+            "time": 1792511596927,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3511,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 162,
+            "time": 1792511597375,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4013,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 169,
+            "time": 1792511597900,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4514,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5017,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5520,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6022,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6524,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7025,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7527,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8028,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8530,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9032,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9534,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "frame": {
+            "sequence": 173,
+            "time": 1792511598197,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        }
+      ],
+      "start": {
+        "began": 1792511592282,
+        "before": {
+          "phase": "connected",
+          "running": false,
+          "busy": false,
+          "protocol": "ide",
+          "frame": null,
+          "error": ""
+        }
+      },
+      "failure": "Error: camera stop: {\"phase\":\"error\",\"running\":false,\"busy\":false,\"protocol\":\"ide\",\"frame\":null,\"error\":\"Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3228/3236 IDE bytes)\"}",
+      "logs": [
+        {
+          "text": "运行 Untitled-17.py\n",
+          "stream": "system",
+          "time": 1792511592306,
+          "receivedAt": 1792511592306
+        },
+        {
+          "text": "init i2c:2 freq:100000\r\r\n",
+          "stream": "stdout",
+          "time": 1792511592985,
+          "receivedAt": 1792511592986
+        },
+        {
+          "text": "[MAIXPY]: sensor id = 45\r\n",
+          "stream": "stdout",
+          "time": 1792511593244,
+          "receivedAt": 1792511593245
+        },
+        {
+          "text": "[MAIXPY]: find gc2145\r\n",
+          "stream": "stdout",
+          "time": 1792511593292,
+          "receivedAt": 1792511593292
+        },
+        {
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+          "stream": "stdout",
+          "time": 1792511593647,
+          "receivedAt": 1792511593648
+        },
+        {
+          "text": "NODU_COMPARE_START\r\n",
+          "stream": "stdout",
+          "time": 1792511594760,
+          "receivedAt": 1792511594761
+        },
+        {
+          "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792511596255,
+          "receivedAt": 1792511596255
+        },
+        {
+          "text": "NODU_COMPARE frames=40 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792511597798,
+          "receivedAt": 1792511597798
+        },
+        {
+          "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3228/3236 IDE bytes)",
+          "stream": "stderr",
+          "time": 1792511618756,
+          "receivedAt": 1792511618759
+        }
+      ]
+    }
+  ],
+  "connected": {
+    "phase": "connected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "frame": null,
+    "error": ""
+  },
+  "editor": {
+    "before": 288,
+    "after": 464,
+    "uri": "untitled:/Untitled-17.py"
+  },
+  "failure": "Error: camera stop: {\"phase\":\"error\",\"running\":false,\"busy\":false,\"protocol\":\"ide\",\"frame\":null,\"error\":\"Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3228/3236 IDE bytes)\"}",
+  "finalObservation": {
+    "phase": "error",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "frame": null,
+    "error": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3228/3236 IDE bytes)"
+  },
+  "lastLogs": [
+    {
+      "text": "运行 Untitled-17.py\n",
+      "stream": "system",
+      "time": 1792511592306,
+      "receivedAt": 1792511592306
+    },
+    {
+      "text": "init i2c:2 freq:100000\r\r\n",
+      "stream": "stdout",
+      "time": 1792511592985,
+      "receivedAt": 1792511592986
+    },
+    {
+      "text": "[MAIXPY]: sensor id = 45\r\n",
+      "stream": "stdout",
+      "time": 1792511593244,
+      "receivedAt": 1792511593245
+    },
+    {
+      "text": "[MAIXPY]: find gc2145\r\n",
+      "stream": "stdout",
+      "time": 1792511593292,
+      "receivedAt": 1792511593292
+    },
+    {
+      "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+      "stream": "stdout",
+      "time": 1792511593647,
+      "receivedAt": 1792511593648
+    },
+    {
+      "text": "NODU_COMPARE_START\r\n",
+      "stream": "stdout",
+      "time": 1792511594760,
+      "receivedAt": 1792511594761
+    },
+    {
+      "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+      "stream": "stdout",
+      "time": 1792511596255,
+      "receivedAt": 1792511596255
+    },
+    {
+      "text": "NODU_COMPARE frames=40 camera_fps=13.2\r\n",
+      "stream": "stdout",
+      "time": 1792511597798,
+      "receivedAt": 1792511597798
+    },
+    {
+      "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3228/3236 IDE bytes)",
+      "stream": "stderr",
+      "time": 1792511618756,
+      "receivedAt": 1792511618759
+    }
+  ],
+  "disconnected": {
+    "phase": "disconnected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "frame": null,
+    "error": ""
+  },
+  "finished": "2026-10-20T15:53:38.843Z"
+}

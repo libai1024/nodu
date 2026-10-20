@@ -1,0 +1,150 @@
+{
+  "started": "2026-10-20T15:38:00.267Z",
+  "cycles": [
+    {
+      "cycle": 0,
+      "sawRunning": true,
+      "frameSeqs": [
+        6,
+        13,
+        17
+      ],
+      "stopMs": null,
+      "logs": [
+        {
+          "stream": "system",
+          "text": "运行 Untitled-15.py\n"
+        },
+        {
+          "stream": "system",
+          "text": "运行 Untitled-15.py\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "init i2c:2 freq:100000\r\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "init i2c:2 freq:100000\r\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: sensor id = 45\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: sensor id = 45\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: find gc2145\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: find gc2145\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "NODU_COMPARE_START\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "NODU_COMPARE_START\r\n"
+        }
+      ],
+      "desync": false,
+      "repl": {
+        "err": "设备正在处理其他操作；请稍候，或停止 / 取消当前操作。"
+      },
+      "endState": {
+        "phase": "running",
+        "running": true,
+        "preview": true,
+        "fps": 13.187045046945881,
+        "busy": true,
+        "frame": {
+          "s": 17,
+          "t": 1792510757115,
+          "w": 320,
+          "h": 240
+        },
+        "logsLen": 300
+      }
+    },
+    {
+      "cycle": 1,
+      "sawRunning": true,
+      "frameSeqs": [
+        17
+      ],
+      "failPhase": "error",
+      "stopMs": null,
+      "logs": [
+        {
+          "stream": "stderr",
+          "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3369/3377 IDE bytes)"
+        },
+        {
+          "stream": "stderr",
+          "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3369/3377 IDE bytes)"
+        }
+      ],
+      "desync": true,
+      "repl": {
+        "err": "Connect a K210 first."
+      },
+      "endState": {
+        "phase": "error",
+        "running": false,
+        "preview": false,
+        "fps": 13.187045046945881,
+        "busy": false,
+        "frame": null,
+        "logsLen": 300
+      }
+    },
+    {
+      "cycle": 2,
+      "sawRunning": false,
+      "frameSeqs": [],
+      "failPhase": "error",
+      "stopMs": null,
+      "logs": [],
+      "desync": false,
+      "repl": {
+        "err": "Connect a K210 first."
+      },
+      "endState": {
+        "phase": "error",
+        "running": false,
+        "preview": false,
+        "fps": 13.187045046945881,
+        "busy": false,
+        "frame": null,
+        "logsLen": 300
+      }
+    }
+  ],
+  "connected": true,
+  "state0": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "doc": {
+    "before": 288,
+    "after": 464,
+    "uri": "untitled:/Untitled-15.py"
+  }
+}

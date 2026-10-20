@@ -1,0 +1,66 @@
+{
+  "token": "7a28482ccd61",
+  "started": "2026-10-20T17:12:52.657Z",
+  "checks": [
+    {
+      "name": "threshold clipboard",
+      "displayed": "(20, 80, -70, -10, -10, 40)",
+      "copied": "(20, 80, -70, -10, -10, 40)",
+      "passed": true
+    },
+    {
+      "name": "clipboard history paste",
+      "source": "NODU_CLIP_ALPHA\nNODU_CLIP_BETA\nNODU_CLIP_ALPHA\n",
+      "passed": true
+    },
+    {
+      "name": "fold all toggle",
+      "foldBefore": [
+        {
+          "start": 1,
+          "end": 2,
+          "collapsed": false
+        },
+        {
+          "start": 4,
+          "end": 5,
+          "collapsed": false
+        }
+      ],
+      "collapsed": [
+        {
+          "start": 1,
+          "end": 2,
+          "collapsed": true
+        },
+        {
+          "start": 4,
+          "end": 5,
+          "collapsed": true
+        }
+      ],
+      "expanded": [
+        {
+          "start": 1,
+          "end": 2,
+          "collapsed": false
+        },
+        {
+          "start": 4,
+          "end": 5,
+          "collapsed": false
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "font size menus",
+      "before": 13,
+      "increased": 14,
+      "restoredEffective": 13,
+      "passed": true
+    }
+  ],
+  "imageSha256": "ae4c8d52c293a7a3de5da0dd1a65ef700723480da20a560c546863cd6f324893",
+  "finished": "2026-10-20T17:13:06.069Z"
+}

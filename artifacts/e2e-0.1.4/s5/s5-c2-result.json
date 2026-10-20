@@ -1,0 +1,32 @@
+{
+  "started": "2026-10-20T14:34:28.794Z",
+  "afterStreamStop": {
+    "phase": "error",
+    "running": false,
+    "preview": false,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "reconnect": true,
+  "v1Set": {
+    "before": 288,
+    "after": 812,
+    "uri": "untitled:/Untitled-7.py"
+  },
+  "v1": {
+    "logs": [],
+    "stillRunning": false,
+    "uri": "untitled:/Untitled-7.py"
+  },
+  "v2Set": {
+    "before": 812,
+    "after": 812,
+    "uri": "untitled:/Untitled-7.py"
+  },
+  "v2": {
+    "logs": [],
+    "stillRunning": false
+  },
+  "reconnect2": false
+}

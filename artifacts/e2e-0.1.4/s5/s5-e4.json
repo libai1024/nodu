@@ -1,0 +1,178 @@
+{
+  "started": "2026-10-20T14:56:11.309Z",
+  "jpgSaved": {
+    "size": 4256
+  },
+  "idle": "{\"busy\":false,\"insp\":false,\"phase\":\"connected\"}",
+  "sawDisconnect": true,
+  "discAt": 2,
+  "discLogs": [],
+  "reconnectT0": "2026-10-20T14:56:21.642Z",
+  "fastReconnect": true,
+  "autorunLogs": [],
+  "autorunFrames": [
+    {
+      "t": 0,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 1000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 2000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 3000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 4000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 5000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 6000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 7000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 8000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 9000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 10000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 11000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 12000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 13000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 14000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 15000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 16000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 17000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 18000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 19000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 20000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 21000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 22000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 23000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 24000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 25000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 26000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 27000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 28000,
+      "frame": null,
+      "running": false
+    },
+    {
+      "t": 29000,
+      "frame": null,
+      "running": false
+    }
+  ],
+  "autorunLogs2": [],
+  "delResp": {
+    "ok": "NODU_BOOTPY_REMOVED\r\n"
+  },
+  "bootPyAfter": {
+    "err": "Device file does not exist: /sd/boot.py"
+  },
+  "delLogs": [
+    {
+      "stream": "stdout",
+      "text": "NODU_BOOTPY_REMOVED\r\n"
+    }
+  ]
+}

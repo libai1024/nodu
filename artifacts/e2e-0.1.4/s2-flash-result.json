@@ -1,0 +1,16 @@
+{
+  "url": "http://127.0.0.1:4188/#/private/tmp/nodu-menu-check-ws",
+  "state": "已连接",
+  "text": "固件与恢复读取官方固件已校验镜像详情版本maixpy_v0.6.3_2_gd8901fd22镜像大小2,116,288 字节镜像写入范围0x000000 – 0x204AE5（末地址不含）计划写入2,116,325 字节SHA-2566dde2d59adc344ee0c7f96300528b4feff5e36c160f5cc0066016389394f15fa官方来源https://dl.sipeed.com/fileList/MAIX/MaixPy/release/master/maixpy_v0.6.3_2_gd8901fd22/maixpy_v0.6.3_2_gd8901fd22.bin备份并验证已验证备份详情Flash 容量16,777,216 字节JEDEC IDEF6018用户文件21 个创建时间2026/10/20 21:25:43Flash SHA-256495289d3c0938ad468d6e63c015a62e74d82fd352049c4163902949429ed32e2备份目录复制路径确认重写固件，已保留备份烧写并验证验证通过烧写详情固件MaixPy 0.6.3 (v0.6.2-89-gd8901fd22 on 2024-06-17)SHA-2566dde2d59adc344ee0c7f96300528b4feff5e36c160f5cc0066016389394f15fa恢复备份/Users/wangwei/.nodu/backups/2026-10-20T13-25-43-460Z-7829feb4设备日志",
+  "ackDisabled": true,
+  "ackChecked": false,
+  "flashDis": true,
+  "backupDis": false,
+  "badges": [
+    "备份并验证",
+    "已验证",
+    "烧写并验证",
+    "验证通过"
+  ],
+  "statusItems": []
+}

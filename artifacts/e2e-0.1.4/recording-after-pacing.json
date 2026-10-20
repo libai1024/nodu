@@ -1,0 +1,227 @@
+{
+  "label": "recording-after-pacing",
+  "mode": "record-only",
+  "started": "2026-10-20T16:06:31.504Z",
+  "sourceSha256": "4775d48b467ee2a30f3bb30547d2c7b96a69d1fc9ee0a21b3b9c3707ff654a21",
+  "binarySha256": "83b0e94a6eedf7323b49aeb7d9a47525f4fe17345ed5f76b2ea3d850c4eccd92",
+  "cycles": [],
+  "connected": {
+    "phase": "connected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "frame": null,
+    "error": ""
+  },
+  "connectLogs": [],
+  "editor": {
+    "before": 288,
+    "after": 464,
+    "uri": "untitled:/Untitled-19.py"
+  },
+  "recording": {
+    "path": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/recording-after-pacing.bin",
+    "trigger": "NoduDeviceModel API",
+    "start": {
+      "began": 1792512397337,
+      "before": {
+        "phase": "connected",
+        "running": false,
+        "busy": false,
+        "protocol": "ide",
+        "frame": null,
+        "error": ""
+      }
+    },
+    "startResult": true,
+    "stateBeforeStop": {
+      "phase": "running",
+      "running": true,
+      "busy": false,
+      "protocol": "ide",
+      "frame": {
+        "sequence": 342,
+        "time": 1792512404127,
+        "width": 320,
+        "height": 240
+      },
+      "error": "",
+      "recording": {
+        "active": true,
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/recording-after-pacing.bin",
+        "frames": 44,
+        "bytes": 85952,
+        "elapsedMs": 5102
+      }
+    },
+    "final": {
+      "active": false,
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/recording-after-pacing.bin",
+      "frames": 45,
+      "bytes": 87904,
+      "elapsedMs": 5255
+    },
+    "fileBytes": 87904,
+    "header": "OMV IMG STR V1.0",
+    "stopped": {
+      "phase": "connected",
+      "running": false,
+      "busy": false,
+      "protocol": "ide",
+      "frame": {
+        "sequence": 343,
+        "time": 1792512404274,
+        "width": 320,
+        "height": 240
+      },
+      "error": ""
+    },
+    "repl": "2\r\n",
+    "logs": [
+      {
+        "text": "运行 Untitled-19.py\n",
+        "stream": "system",
+        "time": 1792512397366,
+        "receivedAt": 1792512397366
+      },
+      {
+        "text": "init i2c:2 freq:100000\r\r\n",
+        "stream": "stdout",
+        "time": 1792512398139,
+        "receivedAt": 1792512398139
+      },
+      {
+        "text": "[MAIXPY]: sensor id = 45\r\n",
+        "stream": "stdout",
+        "time": 1792512398392,
+        "receivedAt": 1792512398397
+      },
+      {
+        "text": "[MAIXPY]: find gc2145\r\n",
+        "stream": "stdout",
+        "time": 1792512398460,
+        "receivedAt": 1792512398461
+      },
+      {
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+        "stream": "stdout",
+        "time": 1792512398787,
+        "receivedAt": 1792512398788
+      },
+      {
+        "text": "NODU_COMPARE_START\r\n",
+        "stream": "stdout",
+        "time": 1792512399912,
+        "receivedAt": 1792512399912
+      },
+      {
+        "text": "NODU_COMPARE frames=20 camera_fps=12.5\r\n",
+        "stream": "stdout",
+        "time": 1792512401431,
+        "receivedAt": 1792512401432
+      },
+      {
+        "text": "NODU_COMPARE frames=40 camera_fps=12.8\r\n",
+        "stream": "stdout",
+        "time": 1792512402952,
+        "receivedAt": 1792512402953
+      },
+      {
+        "text": "录像已保存到 /Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/recording-after-pacing.bin · 45 帧，87904 字节。\n",
+        "stream": "system",
+        "time": 1792512404292,
+        "receivedAt": 1792512404292
+      },
+      {
+        "text": "2\r\n",
+        "stream": "stdout",
+        "time": 1792512404955,
+        "receivedAt": 1792512404957
+      }
+    ]
+  },
+  "finalObservation": {
+    "phase": "connected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "frame": {
+      "sequence": 343,
+      "time": 1792512404274,
+      "width": 320,
+      "height": 240
+    },
+    "error": ""
+  },
+  "lastLogs": [
+    {
+      "text": "运行 Untitled-19.py\n",
+      "stream": "system",
+      "time": 1792512397366,
+      "receivedAt": 1792512397366
+    },
+    {
+      "text": "init i2c:2 freq:100000\r\r\n",
+      "stream": "stdout",
+      "time": 1792512398139,
+      "receivedAt": 1792512398139
+    },
+    {
+      "text": "[MAIXPY]: sensor id = 45\r\n",
+      "stream": "stdout",
+      "time": 1792512398392,
+      "receivedAt": 1792512398397
+    },
+    {
+      "text": "[MAIXPY]: find gc2145\r\n",
+      "stream": "stdout",
+      "time": 1792512398460,
+      "receivedAt": 1792512398461
+    },
+    {
+      "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+      "stream": "stdout",
+      "time": 1792512398787,
+      "receivedAt": 1792512398788
+    },
+    {
+      "text": "NODU_COMPARE_START\r\n",
+      "stream": "stdout",
+      "time": 1792512399912,
+      "receivedAt": 1792512399912
+    },
+    {
+      "text": "NODU_COMPARE frames=20 camera_fps=12.5\r\n",
+      "stream": "stdout",
+      "time": 1792512401431,
+      "receivedAt": 1792512401432
+    },
+    {
+      "text": "NODU_COMPARE frames=40 camera_fps=12.8\r\n",
+      "stream": "stdout",
+      "time": 1792512402952,
+      "receivedAt": 1792512402953
+    },
+    {
+      "text": "录像已保存到 /Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/recording-after-pacing.bin · 45 帧，87904 字节。\n",
+      "stream": "system",
+      "time": 1792512404292,
+      "receivedAt": 1792512404292
+    },
+    {
+      "text": "2\r\n",
+      "stream": "stdout",
+      "time": 1792512404955,
+      "receivedAt": 1792512404957
+    }
+  ],
+  "disconnected": {
+    "phase": "disconnected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "frame": null,
+    "error": ""
+  },
+  "finished": "2026-10-20T16:06:45.504Z"
+}

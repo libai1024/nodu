@@ -26,21 +26,36 @@ test('formatScript and startup confirmation validate before the worker', () => {
 });
 
 test('media methods validate file:// URIs before the worker', () => {
+    const { tmpdir } = require('node:os');
+    const { join } = require('node:path');
+    const { pathToFileURL } = require('node:url');
+    // Build URIs from real tmpdir paths: a hardcoded file:///tmp/... is not a
+    // valid drive-qualified URI form on Windows.
+    const localUri = name => pathToFileURL(join(tmpdir(), name)).href;
     const server = new NoduDeviceServer();
     for (const bad of [`file:///${'a'.repeat(5000)}`, 'file:///a\0b.bin',
-        '/tmp/plain-path.bin', 'https://example.com/x.bin',
+        join(tmpdir(), 'plain-path.bin'), 'https://example.com/x.bin',
         'file://server/share/x.bin', 'file://192.168.0.10/tmp/x.bin',
-        'file:///tmp/x.bin?y=1', 'file:///tmp/x.bin#frag']) {
+        `${localUri('x.bin')}?y=1`, `${localUri('x.bin')}#frag`]) {
         assert.throws(() => server.startRecording(bad), /路径|file|\.bin/, bad);
         assert.throws(() => server.playVideo(bad), /路径|file/, bad);
     }
     // Encoded space/# round-trip and a localhost authority are valid locals.
+    // vscode-uri fsPath lowercases the Windows drive letter; compare
+    // case-folded there, exactly elsewhere.
+    const samePath = (a, b) => assert.equal(
+        process.platform === 'win32' ? a.toLowerCase() : a,
+        process.platform === 'win32' ? b.toLowerCase() : b);
     const mediaPath = server.mediaPath.bind(server);
-    assert.equal(mediaPath('file:///tmp/a%20b.bin', 'x'), '/tmp/a b.bin');
-    assert.equal(mediaPath('file:///tmp/a%23b.bin', 'x'), '/tmp/a#b.bin');
-    assert.equal(mediaPath('file://localhost/tmp/x.bin', 'x'), '/tmp/x.bin');
-    assert.throws(() => server.startRecording('file:///tmp/rec.mp4'), /\.bin/);
-    assert.throws(() => server.convertVideo('file:///tmp/a.bin', 'file:///tmp/out.gif'), /mp4|avi|mjpeg/);
+    samePath(mediaPath(localUri('a b.bin'), 'x'), join(tmpdir(), 'a b.bin'));
+    samePath(mediaPath(localUri('a#b.bin'), 'x'), join(tmpdir(), 'a#b.bin'));
+    samePath(
+        mediaPath(localUri('x.bin').replace('file://', 'file://localhost'), 'x'),
+        join(tmpdir(), 'x.bin'));
+    assert.throws(() => server.startRecording(localUri('rec.mp4')), /\.bin/);
+    assert.throws(
+        () => server.convertVideo(localUri('a.bin'), localUri('out.gif')),
+        /mp4|avi|mjpeg/);
     server.onStop();
 });
 
@@ -164,13 +179,16 @@ test('losing the last UI client defers cleanup until the firmware critical secti
 });
 
 // End-to-end against the Rust sidecar's --mock transport (no hardware).
-// Requires `npm run build:native` to have produced the dev release binary.
+// Requires `npm run build:native` to have staged the release sidecar.
 test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnect', async t => {
     const { existsSync } = require('node:fs');
     const { join } = require('node:path');
-    const binary = join(__dirname, '..', '..', 'native', 'target', 'release',
+    // The staged binary is authoritative: explicit-target builds (Windows
+    // MSVC) do not write native/target/release.
+    const binary = join(__dirname, '..', 'resources', 'bin',
+        `${process.platform}-${process.arch}`,
         process.platform === 'win32' ? 'nodu-device.exe' : 'nodu-device');
-    if (!existsSync(binary)) { t.skip('nodu-device release binary missing; run npm run build:native'); return; }
+    if (!existsSync(binary)) { t.skip('staged nodu-device binary missing; run npm run build:native'); return; }
     const savedBin = process.env.NODU_DEVICE_BIN;
     const savedMock = process.env.NODU_DEVICE_MOCK;
     const savedMediaDir = process.env.NODU_MEDIA_DIR;
@@ -182,7 +200,8 @@ test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnec
     // bundled ffmpeg/ffplay via the dev-only override, and ffplay runs
     // headless under SDL dummy drivers.
     const mediaDir = join(__dirname, '..', 'resources', 'bin', `${process.platform}-${process.arch}`);
-    const hasMedia = existsSync(join(mediaDir, 'ffmpeg')) && existsSync(join(mediaDir, 'ffplay'));
+    const mediaExe = name => (process.platform === 'win32' ? `${name}.exe` : name);
+    const hasMedia = existsSync(join(mediaDir, mediaExe('ffmpeg'))) && existsSync(join(mediaDir, mediaExe('ffplay')));
     if (hasMedia) {
         process.env.NODU_MEDIA_DIR = mediaDir;
         process.env.SDL_VIDEODRIVER = 'dummy';
@@ -209,7 +228,7 @@ test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnec
         const boot = await server.readFile('/flash/boot.py');
         assert.equal(Buffer.from(boot.data, 'base64').toString(), 'print(1)');
         // formatScript needs no device connection but rides the same sidecar.
-        assert.equal(await server.formatScript('x=1 # c\n    y=2', true, true), 'x=1 \n\ty=2');
+        assert.equal(await server.formatScript('x=1 # c\n    y=2', true, true), 'x=1\n\ty=2');
         assert.equal(await server.formatScript('x=1', false, false), 'x=1');
         // Mock framebuffer recording: start camera so frames flow, record a
         // few frames into a .bin, then stop and verify the stream magic.
@@ -218,7 +237,8 @@ test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnec
         const dir = mkdtempSync(join(tmpdir(), 'nodu-rec-'));
         const recPath = join(dir, 'clip.bin');
         await server.startCamera();
-        const status = await server.startRecording(`file://${recPath}`);
+        const { pathToFileURL } = require('node:url');
+        const status = await server.startRecording(pathToFileURL(recPath).href);
         assert.equal(status.active, true);
         await new Promise(resolve => setTimeout(resolve, 400));
         const done = await server.stopRecording();
@@ -232,12 +252,14 @@ test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnec
         // the worker found the bundled tools via NODU_MEDIA_DIR at spawn.
         if (hasMedia) {
             const out = join(dir, 'clip.mp4');
-            await server.convertVideo(`file://${recPath}`, `file://${out}`);
+            await server.convertVideo(
+                pathToFileURL(recPath).href, pathToFileURL(out).href);
             assert.ok(exists(out), 'converted mp4 written');
             // Refuses to overwrite; .bin playback transcodes to a temp
             // MP4 and exits cleanly under SDL dummy drivers.
-            await assert.rejects(server.convertVideo(`file://${recPath}`, `file://${out}`), /exist|覆盖/);
-            await server.playVideo(`file://${recPath}`);
+            await assert.rejects(server.convertVideo(
+                pathToFileURL(recPath).href, pathToFileURL(out).href), /exist|覆盖/);
+            await server.playVideo(pathToFileURL(recPath).href);
         }
         rmSync(dir, { recursive: true, force: true });
     } finally {
@@ -489,10 +511,11 @@ const resourcesFixture = () => {
     const { join } = require('node:path');
     const { NoduResourcesServer } = require('../lib/node/nodu-resources-server');
     const home = mkdtempSync(join(tmpdir(), 'nodu-res-home-'));
+    const exe = process.platform === 'win32' ? 'nodu-resources.exe' : 'nodu-resources';
     const candidates = [
-        join(__dirname, '..', '..', 'native', 'target', 'debug', 'nodu-resources'),
-        join(__dirname, '..', 'resources', 'bin', `${process.platform}-${process.arch}`, 'nodu-resources'),
-        join(__dirname, '..', '..', 'native', 'target', 'release', 'nodu-resources'),
+        join(__dirname, '..', '..', 'native', 'target', 'debug', exe),
+        join(__dirname, '..', 'resources', 'bin', `${process.platform}-${process.arch}`, exe),
+        join(__dirname, '..', '..', 'native', 'target', 'release', exe),
     ];
     const bin = candidates.find(p => existsSync(p));
     const saved = {

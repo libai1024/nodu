@@ -1,0 +1,7 @@
+{
+  "size": 76,
+  "text": "def message():\n\treturn \"NODU_ORIGINAL_BOOT_PROOF_20261021\"\nprint(message())\n",
+  "sha256": "e887053371b5b79ed805c5c4060fc9694287f7b5730db538c342c60b4f6e9c71",
+  "matchesNodu": false,
+  "cleanupDeferred": "Unexpected formatter difference; preserve original bytes for comparison"
+}

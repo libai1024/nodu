@@ -1,0 +1,123 @@
+{
+  "started": "2026-10-20T14:59:05.190Z",
+  "pickBtn": true,
+  "confirmDlg": "选择要发送到设备的文件（最多 2 MiB）nodu-menu-check-wstmpprivate//System/Volumes/xarts/System/Volumes/iSCPreboot/System/Volumes/Hardware/System/Volumes/VM/System/Volumes/Preboot/System/Volumes/Update/Volumes/CleanShot X 5.0.1 [EDiSO]/Volumes/ww显示隐藏文件nodu-menu-check-wshello.pys4-recording.bin取消发送文件",
+  "confirmBtn": "发送文件",
+  "notif": "选择要发送到设备的文件（最多 2 MiB）nodu-menu-check-wstmpprivate//System/Volumes/xarts/System/Volumes/iSCPreboot/System/Volumes/Hardware/System/Volumes/VM/System/Volumes/Preboot/System/Volumes/Update/Volumes/CleanSh",
+  "sent": {
+    "/flash/nodu-student-20261020.txt": {
+      "err": "Device file does not exist: /flash/nodu-student-20261020.txt"
+    },
+    "/sd/nodu-student-20261020.txt": {
+      "err": "Device file does not exist: /sd/nodu-student-20261020.txt"
+    }
+  },
+  "localSha": "3ae26964e26fe27d5d36472f814b90a3bc88097a62cd341de1fb06f415560a7c",
+  "del": {
+    "skipped": "not sent"
+  },
+  "goneAfter": null,
+  "repl": {
+    "ok": "2\r\n"
+  },
+  "flashListing": [
+    {
+      "name": "config.json",
+      "path": "/flash/config.json",
+      "size": 766,
+      "directory": false
+    },
+    {
+      "name": "demo_cam.py",
+      "path": "/flash/demo_cam.py",
+      "size": 1421,
+      "directory": false
+    },
+    {
+      "name": "demo_green.py",
+      "path": "/flash/demo_green.py",
+      "size": 1612,
+      "directory": false
+    },
+    {
+      "name": "demo_lcd.py",
+      "path": "/flash/demo_lcd.py",
+      "size": 920,
+      "directory": false
+    },
+    {
+      "name": "demo_qr.py",
+      "path": "/flash/demo_qr.py",
+      "size": 1704,
+      "directory": false
+    },
+    {
+      "name": "demo_test.py",
+      "path": "/flash/demo_test.py",
+      "size": 2581,
+      "directory": false
+    },
+    {
+      "name": "freq.conf",
+      "path": "/flash/freq.conf",
+      "size": 16,
+      "directory": false
+    },
+    {
+      "name": "gc2145_board.py",
+      "path": "/flash/gc2145_board.py",
+      "size": 7338,
+      "directory": false
+    },
+    {
+      "name": "main.py",
+      "path": "/flash/main.py",
+      "size": 516,
+      "directory": false
+    },
+    {
+      "name": "nodu-acceptance-1792345884045.txt",
+      "path": "/flash/nodu-acceptance-1792345884045.txt",
+      "size": 1579,
+      "directory": false
+    },
+    {
+      "name": "nodu-ui-roundtrip-20261019.bin",
+      "path": "/flash/nodu-ui-roundtrip-20261019.bin",
+      "size": 4124,
+      "directory": false
+    }
+  ],
+  "sdListing": [
+    {
+      "name": "System Volume Information",
+      "path": "/sd/System Volume Information",
+      "size": 0,
+      "directory": true
+    },
+    {
+      "name": "maixpy_demos",
+      "path": "/sd/maixpy_demos",
+      "size": 0,
+      "directory": true
+    },
+    {
+      "name": "canmv-full-backup-20261018-224235.bin",
+      "path": "/sd/canmv-full-backup-20261018-224235.bin",
+      "size": 16777216,
+      "directory": false
+    },
+    {
+      "name": "main.py",
+      "path": "/sd/main.py",
+      "size": 516,
+      "directory": false
+    },
+    {
+      "name": "maixpy_demo_camera.jpg",
+      "path": "/sd/maixpy_demo_camera.jpg",
+      "size": 4256,
+      "directory": false
+    }
+  ]
+}

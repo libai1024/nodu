@@ -1,0 +1,91 @@
+{
+  "cycles": [
+    {
+      "cycle": 0,
+      "frameSeqs": [
+        23,
+        24
+      ],
+      "failPhase": "error",
+      "stopClicked": true,
+      "stopMs": null,
+      "logs": [
+        {
+          "stream": "system",
+          "text": "运行 Untitled-16.py\n"
+        },
+        {
+          "stream": "system",
+          "text": "运行 Untitled-16.py\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "init i2c:2 freq:100000\r\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "init i2c:2 freq:100000\r\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: sensor id = 45\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: sensor id = 45\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: find gc2145\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "[MAIXPY]: find gc2145\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+        },
+        {
+          "stream": "stdout",
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+        },
+        {
+          "stream": "stderr",
+          "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3341/3365 IDE bytes)"
+        },
+        {
+          "stream": "stderr",
+          "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3341/3365 IDE bytes)"
+        }
+      ],
+      "desync": true,
+      "repl": {
+        "err": "Connect a K210 first."
+      },
+      "endState": {
+        "phase": "error",
+        "running": false,
+        "preview": false,
+        "fps": 13.350147220750998,
+        "busy": false,
+        "frame": null,
+        "logsLen": 300
+      }
+    }
+  ],
+  "connected": true,
+  "state0": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "doc": {
+    "before": 288,
+    "after": 464,
+    "uri": "untitled:/Untitled-16.py"
+  }
+}

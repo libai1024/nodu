@@ -1,0 +1,200 @@
+{
+  "started": "2026-10-20T13:47:25.661Z",
+  "steps": [
+    {
+      "k": "defaults",
+      "v": "{\"profile\":\"embedfire-cam-gc2145\",\"boardId\":2,\"phase\":\"connected\",\"selectedPort\":\"/dev/cu.usbserial-3110\"}",
+      "at": "2026-10-20T13:47:31.696Z"
+    },
+    {
+      "k": "shot",
+      "v": "s3-initial",
+      "at": "2026-10-20T13:47:31.718Z"
+    },
+    {
+      "k": "shot",
+      "v": "s3-popover",
+      "at": "2026-10-20T13:47:33.557Z"
+    },
+    {
+      "k": "popover-visible",
+      "v": true,
+      "at": "2026-10-20T13:47:33.557Z"
+    },
+    {
+      "k": "ports",
+      "v": "[]",
+      "at": "2026-10-20T13:47:53.622Z"
+    },
+    {
+      "k": "selectedPort",
+      "v": "",
+      "at": "2026-10-20T13:47:54.026Z"
+    },
+    {
+      "k": "popover-text",
+      "v": "硬件设备已连接串口扫描后选择串口扫描相机适配野火 K210 CAM · GC2145通用 K210连接复位方式Kendryte KD233Sipeed Maix Bit (old)Sipeed Maix DockSipeed Maix Go (open-ec & new CMSIS-DAP)Sipeed Maix Go (Old CMSIS-DAP)Sipeed MaixduinoSipeed Maix Bit (with Mic)M5StickVT-Watch断开停止脚本认识开发板设备详情串口/dev/cu.usbserial-3110固件MaixPy 0.6.3 (v0.6.2-89-gd8901fd22 on 2024-06-17)架构Sipeed_M1 with kendryte-k210REPL / 文件 / 脚本 / 图像支持支持支持不支持固件与恢复读取官方固件备份并验证确认重写固件，已保留备份烧写并验证设备日志REPL设备日志REPL Python 代码print(\"Hello, Nodu\")执行 REPL板端文件单文件 ≤ 2 MiB板端目录列出目录文件路径覆盖同名文件读取到本地…选择本地文件写入…",
+      "at": "2026-10-20T13:47:54.026Z"
+    },
+    {
+      "k": "connect-start",
+      "v": "2026-10-20T13:47:54.026Z",
+      "at": "2026-10-20T13:47:54.026Z"
+    },
+    {
+      "k": "connect-end",
+      "v": {
+        "ms": 1,
+        "phase": "connected"
+      },
+      "at": "2026-10-20T13:47:54.027Z"
+    },
+    {
+      "k": "state",
+      "v": "{\"phase\":\"connected\",\"port\":\"/dev/cu.usbserial-3110\",\"boardProfile\":\"embedfire-cam-gc2145\",\"firmware\":\"MaixPy 0.6.3 (v0.6.2-89-gd8901fd22 on 2024-06-17)\",\"architecture\":\"Sipeed_M1 with kendryte-k210\",\"boardId\":2,\"protocol\":\"raw\",\"busy\":false,\"flashCapacityVerified\":true,\"running\":false,\"preview\":false,\"capabilities\":{\"repl\":true,\"files\":true,\"framebuffer\":false,\"script\":true,\"firmware\":true},\"progress\":{\"stage\":\"flash-verified\",\"completed\":2116325,\"total\":2116325,\"percent\":100}}",
+      "at": "2026-10-20T13:47:54.028Z"
+    },
+    {
+      "k": "chip-label",
+      "v": "K210 · 未识别cu.usbserial-3110",
+      "at": "2026-10-20T13:47:54.028Z"
+    },
+    {
+      "k": "statusbar",
+      "v": "[]",
+      "at": "2026-10-20T13:47:54.028Z"
+    },
+    {
+      "k": "boardInspection",
+      "at": "2026-10-20T13:47:54.029Z"
+    },
+    {
+      "k": "boardLabel",
+      "v": "K210 · 未识别",
+      "at": "2026-10-20T13:47:54.029Z"
+    },
+    {
+      "k": "flash-listing",
+      "v": [
+        {
+          "name": "config.json",
+          "path": "/flash/config.json",
+          "size": 766,
+          "directory": false
+        },
+        {
+          "name": "demo_cam.py",
+          "path": "/flash/demo_cam.py",
+          "size": 1421,
+          "directory": false
+        },
+        {
+          "name": "demo_green.py",
+          "path": "/flash/demo_green.py",
+          "size": 1612,
+          "directory": false
+        },
+        {
+          "name": "demo_lcd.py",
+          "path": "/flash/demo_lcd.py",
+          "size": 920,
+          "directory": false
+        },
+        {
+          "name": "demo_qr.py",
+          "path": "/flash/demo_qr.py",
+          "size": 1704,
+          "directory": false
+        },
+        {
+          "name": "demo_test.py",
+          "path": "/flash/demo_test.py",
+          "size": 2581,
+          "directory": false
+        },
+        {
+          "name": "freq.conf",
+          "path": "/flash/freq.conf",
+          "size": 16,
+          "directory": false
+        },
+        {
+          "name": "gc2145_board.py",
+          "path": "/flash/gc2145_board.py",
+          "size": 7338,
+          "directory": false
+        },
+        {
+          "name": "main.py",
+          "path": "/flash/main.py",
+          "size": 516,
+          "directory": false
+        },
+        {
+          "name": "nodu-acceptance-1792345884045.txt",
+          "path": "/flash/nodu-acceptance-1792345884045.txt",
+          "size": 1579,
+          "directory": false
+        },
+        {
+          "name": "nodu-ui-roundtrip-20261019.bin",
+          "path": "/flash/nodu-ui-roundtrip-20261019.bin",
+          "size": 4124,
+          "directory": false
+        }
+      ],
+      "at": "2026-10-20T13:47:54.139Z"
+    },
+    {
+      "k": "guide-clicked",
+      "v": "认识开发板",
+      "at": "2026-10-20T13:47:54.855Z"
+    },
+    {
+      "k": "shot",
+      "v": "s3-board-guide",
+      "at": "2026-10-20T13:47:56.087Z"
+    },
+    {
+      "k": "guide-text",
+      "v": "已连接 · 尚未读取板端配置读取板端配置浏览开发板资料选择要查看的开发板野火 K210 CAMSipeed Maix BitSipeed Maix DockSipeed Maix GoSipeed Maixduino识别来自板端 /flash/config.json 声明，不是硬件实测；烧相同固件的不同硬件仍以实物为准。从上方选择一块开发板查看引脚资料；这里的浏览与当前连接、相机适配相互独立。板端 config.json 是缓存前的配置文件，可能与固件当前运行值不同，重启后才重新读取；在本页切换资料不会改写板端配置。引脚事实来源：—",
+      "at": "2026-10-20T13:47:56.088Z"
+    },
+    {
+      "k": "guide-status",
+      "v": "已连接 · 尚未读取板端配置",
+      "at": "2026-10-20T13:47:56.089Z"
+    },
+    {
+      "k": "guide-catalog",
+      "v": "",
+      "at": "2026-10-20T13:47:56.089Z"
+    },
+    {
+      "k": "guide-copyable",
+      "v": "{\"copyButtons\":[\"读取板端配置\"],\"codeBlocks\":[],\"links\":[]}",
+      "at": "2026-10-20T13:47:56.089Z"
+    },
+    {
+      "k": "shot",
+      "v": "s3-board-guide-full",
+      "at": "2026-10-20T13:47:56.138Z"
+    },
+    {
+      "k": "after-disconnect-chip",
+      "v": "选择开发板cu.usbserial-3110",
+      "at": "2026-10-20T13:47:56.688Z"
+    },
+    {
+      "k": "reconnect-state",
+      "v": "{\"phase\":\"connected\",\"chip\":\"K210 · 未识别cu.usbserial-3110\",\"boardLabel\":\"K210 · 未识别\",\"inspection\":null}",
+      "at": "2026-10-20T13:48:00.201Z"
+    },
+    {
+      "k": "shot",
+      "v": "s3-reconnected",
+      "at": "2026-10-20T13:48:00.222Z"
+    }
+  ],
+  "finished": "2026-10-20T13:48:00.222Z"
+}

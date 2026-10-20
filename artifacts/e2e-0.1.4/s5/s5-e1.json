@@ -1,0 +1,42 @@
+{
+  "started": "2026-10-20T14:52:33.256Z",
+  "connected": true,
+  "bootPyPre": {
+    "/flash/boot.py": {
+      "err": "Device file does not exist: /flash/boot.py"
+    },
+    "/sd/boot.py": {
+      "err": "Device file does not exist: /sd/boot.py"
+    }
+  },
+  "set": {
+    "before": 288,
+    "after": 812,
+    "uri": "untitled:/Untitled-13.py"
+  },
+  "menuOk": true,
+  "qpVisible": true,
+  "qpItems": "[\"保留原样按当前缓冲区原样写入\",\"保留原样\",\"去除注释并转换缩进去掉 # 注释，4 空格缩进转为制表符\",\"去除注释并转换缩进\",\"取消\",\"取消\"]",
+  "pick": "保留原样按当前缓冲区原样写入",
+  "dialogText": "写入 boot.py将 Untitled-13.py（812 字节）写入板端 boot.py。 将覆盖开发板默认存储中的 boot.py；已挂载 SD 卡时固件通常写入 /sd。启动文件可能在下次开机执行。取消写入 boot.py",
+  "dialogButtons": "[\"取消\",\"写入 boot.py\"]",
+  "confirmBtn": "写入 boot.py",
+  "afterSaveLogs": [
+    {
+      "stream": "system",
+      "text": "已写入板端 boot.py（默认存储）。\n"
+    }
+  ],
+  "notif": "[]",
+  "bootPyPost": {
+    "/flash/boot.py": {
+      "err": "Device file does not exist: /flash/boot.py"
+    },
+    "/sd/boot.py": {
+      "size": 812,
+      "sha256": "a672b479f0bedccf451ede92e000f0e602bbb4430dfdde640a1115c355f41275"
+    }
+  },
+  "srcSha": "a672b479f0bedccf451ede92e000f0e602bbb4430dfdde640a1115c355f41275",
+  "srcLen": 812
+}

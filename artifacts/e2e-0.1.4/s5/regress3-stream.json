@@ -1,0 +1,128 @@
+{
+  "reconnected": true,
+  "uri": "untitled:/Untitled-16.py",
+  "samples": [
+    {
+      "t": 0,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 2002,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 4004,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 6006,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 8007,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 10009,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 12011,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 14013,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 16014,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 18016,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 20018,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 22020,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 24021,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 26023,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 28026,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 30028,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 32029,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    },
+    {
+      "t": 34030,
+      "s": null,
+      "running": false,
+      "phase": "connected"
+    }
+  ],
+  "streamErrors": [],
+  "stopMs": 507,
+  "stopLogs": [],
+  "repl": {
+    "ok": "2\r\n"
+  },
+  "end": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  }
+}

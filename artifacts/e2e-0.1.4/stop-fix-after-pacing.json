@@ -1,0 +1,79 @@
+{
+  "label": "stop-fix-after-pacing",
+  "started": "2026-10-20T16:01:10.718Z",
+  "sourceSha256": "4775d48b467ee2a30f3bb30547d2c7b96a69d1fc9ee0a21b3b9c3707ff654a21",
+  "binarySha256": "83b0e94a6eedf7323b49aeb7d9a47525f4fe17345ed5f76b2ea3d850c4eccd92",
+  "cycles": [],
+  "failure": "Error: Connect failed",
+  "finalObservation": {
+    "phase": "disconnected",
+    "running": false,
+    "busy": false,
+    "frame": null,
+    "error": ""
+  },
+  "lastLogs": [
+    {
+      "text": "运行 Untitled-17.py\n",
+      "stream": "system",
+      "time": 1792511592306,
+      "receivedAt": 1792511592306
+    },
+    {
+      "text": "init i2c:2 freq:100000\r\r\n",
+      "stream": "stdout",
+      "time": 1792511592985,
+      "receivedAt": 1792511592986
+    },
+    {
+      "text": "[MAIXPY]: sensor id = 45\r\n",
+      "stream": "stdout",
+      "time": 1792511593244,
+      "receivedAt": 1792511593245
+    },
+    {
+      "text": "[MAIXPY]: find gc2145\r\n",
+      "stream": "stdout",
+      "time": 1792511593292,
+      "receivedAt": 1792511593292
+    },
+    {
+      "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+      "stream": "stdout",
+      "time": 1792511593647,
+      "receivedAt": 1792511593648
+    },
+    {
+      "text": "NODU_COMPARE_START\r\n",
+      "stream": "stdout",
+      "time": 1792511594760,
+      "receivedAt": 1792511594761
+    },
+    {
+      "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+      "stream": "stdout",
+      "time": 1792511596255,
+      "receivedAt": 1792511596255
+    },
+    {
+      "text": "NODU_COMPARE frames=40 camera_fps=13.2\r\n",
+      "stream": "stdout",
+      "time": 1792511597798,
+      "receivedAt": 1792511597798
+    },
+    {
+      "text": "Command stream desynchronized mid-payload; close the port and reconnect.: Device operation timed out. (received 3228/3236 IDE bytes)",
+      "stream": "stderr",
+      "time": 1792511618756,
+      "receivedAt": 1792511618759
+    }
+  ],
+  "disconnected": {
+    "phase": "disconnected",
+    "running": false,
+    "busy": false,
+    "frame": null,
+    "error": ""
+  },
+  "finished": "2026-10-20T16:02:13.928Z"
+}

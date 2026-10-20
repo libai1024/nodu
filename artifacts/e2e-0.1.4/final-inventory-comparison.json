@@ -1,0 +1,64 @@
+{
+  "capture": "artifacts/e2e-0.1.4/final-inventory-raw.txt",
+  "captureSha256": "cdadbc8c9c299d3a7fc5c2408e41c33750f66c560160d6baca7b0389b58d6a61",
+  "baselineFiles": 21,
+  "baselineHashedFiles": 20,
+  "actualFiles": 21,
+  "missing": [],
+  "added": [],
+  "changed": [
+    {
+      "path": "/sd/maixpy_demo_camera.jpg",
+      "expected": {
+        "size": 4275,
+        "sha256": "9a036ca532e386d641d5380a4de431e0c39ee910784f791f40e036f1df64d23f",
+        "hashSource": "S0"
+      },
+      "actual": {
+        "path": "/sd/maixpy_demo_camera.jpg",
+        "type": "file",
+        "size": 4288,
+        "sha256": "52f9b02d3e2ffdd2eecfdf063ea50f6b4472d330e6f4b4da688ae5b64e587bc7"
+      }
+    }
+  ],
+  "missingDirectories": [],
+  "addedDirectories": [],
+  "preFlashBaselineDifferences": [
+    {
+      "path": "/sd/maixpy_demo_camera.jpg",
+      "baseline": {
+        "size": 4275,
+        "sha256": "9a036ca532e386d641d5380a4de431e0c39ee910784f791f40e036f1df64d23f"
+      },
+      "preFlash": {
+        "size": 4223,
+        "sha256": "fc9b8ef1a9509f998afcfd6d0456aba914deaa8f61a5c2e5e4ff300b39b31d29"
+      }
+    }
+  ],
+  "hashProvenance": {
+    "/flash/config.json": "S0",
+    "/flash/demo_cam.py": "S0",
+    "/flash/demo_green.py": "S0",
+    "/flash/demo_lcd.py": "S0",
+    "/flash/demo_qr.py": "S0",
+    "/flash/demo_test.py": "S0",
+    "/flash/freq.conf": "S0",
+    "/flash/gc2145_board.py": "S0",
+    "/flash/main.py": "S0",
+    "/flash/nodu-acceptance-1792345884045.txt": "S0",
+    "/flash/nodu-ui-roundtrip-20261019.bin": "S0",
+    "/sd/System Volume Information/IndexerVolumeGuid": "S0",
+    "/sd/System Volume Information/WPSettings.dat": "S0",
+    "/sd/maixpy_demos/01_lcd.py": "S0",
+    "/sd/maixpy_demos/02_camera.py": "S0",
+    "/sd/maixpy_demos/03_green_blobs.py": "S0",
+    "/sd/maixpy_demos/04_qrcode.py": "S0",
+    "/sd/maixpy_demos/05_vision_selftest.py": "S0",
+    "/sd/canmv-full-backup-20261018-224235.bin": "pre-flash backup only (S0 size/listing)",
+    "/sd/main.py": "S0",
+    "/sd/maixpy_demo_camera.jpg": "S0"
+  },
+  "identical": false
+}

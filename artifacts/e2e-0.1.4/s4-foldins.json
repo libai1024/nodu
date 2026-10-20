@@ -1,0 +1,67 @@
+{
+  "started": "2026-10-20T14:10:11.305Z",
+  "initial": {
+    "phase": "disconnected",
+    "running": false,
+    "preview": false,
+    "frame": null,
+    "logsLen": 237,
+    "error": null
+  },
+  "reconnectOk": true,
+  "runStart": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "frame": null,
+    "logsLen": 237,
+    "error": null
+  },
+  "streaming": true,
+  "freezeClick": true,
+  "freeze": {
+    "clicked": true,
+    "seqBefore": 437,
+    "seqAfter3s": 438,
+    "static": false,
+    "preview": false
+  },
+  "resumeClick": true,
+  "resume": {
+    "clicked": true,
+    "seqAfter": 467,
+    "resumed": true
+  },
+  "recClick": true,
+  "dlg": {
+    "input": true,
+    "ok": true
+  },
+  "stopRecClick": false,
+  "recLog": "[\"Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.\",\"结束录像失败：Operation cancelled by stop, disconnect, or worker shutdown.\\n\",\"连接设备失败：请先扫描并选择串口。\\n\",\"运行 Untitled-44.py\\n\",\"init i2c:2 freq:100000\\r\\r\\n\",\"[MAIXPY]: sensor id = 45\\r\\n\",\"[MAIXPY]: find gc2145\\r\\n\",\"GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\\r\\n\"]",
+  "fpsSamples": [
+    13.867846358130198,
+    13.867846358130198,
+    13.867846358130198,
+    13.867846358130198,
+    13.867846358130198,
+    13.867846358130198,
+    13.867846358130198,
+    13.867846358130198
+  ],
+  "afterStop": {
+    "phase": "error",
+    "running": false,
+    "preview": false,
+    "fps": 13.867846358130198,
+    "frame": null,
+    "logsLen": 244,
+    "error": "开始录像失败：Operation cancelled by stop, disconnect, or worker shutdown."
+  },
+  "tailLogs": "[{\"s\":\"stderr\",\"t\":\"Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.\"},{\"s\":\"stderr\",\"t\":\"结束录像失败：Operation cancelled by stop, disconnect, or worker shutdown.\\n\"},{\"s\":\"stderr\",\"t\":\"连接设备失败：请先扫描并选择串口。\\n\"},{\"s\":\"system\",\"t\":\"运行 Untitled-44.py\\n\"},{\"s\":\"stdout\",\"t\":\"init i2c:2 freq:100000\\r\\r\\n\"},{\"s\":\"stdout\",\"t\":\"[MAIXPY]: sensor id = 45\\r\\n\"},{\"s\":\"stdout\",\"t\":\"[MAIXPY]: find gc2145\\r\\n\"},{\"s\":\"stdout\",\"t\":\"GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\\r\\n\"},{\"s\":\"stderr\",\"t\":\"Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.\"},{\"s\":\"stderr\",\"t\":\"开始录像失败：Operation cancelled by stop, disconnect, or worker shutdown.\\n\"}]",
+  "reconnectAfterStop": true,
+  "replAfter": {
+    "err": "设备正在处理其他操作；请稍候，或停止 / 取消当前操作。"
+  },
+  "finished": "2026-10-20T14:10:52.284Z"
+}

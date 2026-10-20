@@ -1,0 +1,156 @@
+{
+  "mode": "editor",
+  "token": "3a60cc3c1b08159f",
+  "started": "2026-10-20T17:05:59.546Z",
+  "checks": [
+    {
+      "name": "ZeroDivisionError",
+      "line": 2,
+      "facts": {
+        "uri": "untitled:/Untitled-21.py",
+        "source": "print(\"NODU_RUNTIME_CHECK\")\nprint(1 / 0)\n",
+        "position": {
+          "lineNumber": 2,
+          "column": 1
+        },
+        "decorations": [
+          {
+            "range": {
+              "startLineNumber": 2,
+              "startColumn": 1,
+              "endLineNumber": 2,
+              "endColumn": 13
+            },
+            "className": "nodu-traceback-line"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "text": "运行 Untitled-21.py\n",
+          "stream": "system",
+          "time": 1792515965454,
+          "observedAt": 1792515965454
+        },
+        {
+          "text": "NODU_RUNTIME_CHECK\r\n",
+          "stream": "stdout",
+          "time": 1792515966051,
+          "observedAt": 1792515966051
+        },
+        {
+          "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 2, in <module>\r\nZeroDivisionError: divide by zero\r\n",
+          "stream": "stderr",
+          "time": 1792515966051,
+          "observedAt": 1792515966053
+        }
+      ]
+    },
+    {
+      "name": "SyntaxError",
+      "line": 3,
+      "facts": {
+        "uri": "untitled:/Untitled-22.py",
+        "source": "print(\"NODU_SYNTAX_CHECK\")\nfor i in range(3)\n    print(i)\n",
+        "position": {
+          "lineNumber": 3,
+          "column": 1
+        },
+        "decorations": [
+          {
+            "range": {
+              "startLineNumber": 3,
+              "startColumn": 1,
+              "endLineNumber": 3,
+              "endColumn": 13
+            },
+            "className": "nodu-traceback-line"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "text": "运行 Untitled-22.py\n",
+          "stream": "system",
+          "time": 1792515967735,
+          "observedAt": 1792515967735
+        },
+        {
+          "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 3\r\nSyntaxError: invalid syntax\r\n",
+          "stream": "stderr",
+          "time": 1792515968293,
+          "observedAt": 1792515968294
+        }
+      ]
+    },
+    {
+      "name": "clear old error on rerun",
+      "passed": true,
+      "facts": {
+        "uri": "untitled:/Untitled-22.py",
+        "source": "print(\"NODU_CLEAR_CHECK\")\n",
+        "position": {
+          "lineNumber": 2,
+          "column": 1
+        },
+        "decorations": []
+      }
+    }
+  ],
+  "connected": {
+    "phase": "connected",
+    "port": "/dev/cu.usbserial-3110",
+    "boardProfile": "embedfire-cam-gc2145",
+    "firmware": "MaixPy 0.6.3",
+    "architecture": "K210 [Maix:000000000000000000000000]",
+    "boardId": 2,
+    "protocol": "ide",
+    "busy": false,
+    "flashCapacityVerified": false,
+    "running": false,
+    "preview": false,
+    "capabilities": {
+      "repl": true,
+      "files": true,
+      "framebuffer": true,
+      "script": true,
+      "firmware": true
+    },
+    "error": ""
+  },
+  "finalLogs": [
+    {
+      "text": "运行 Untitled-22.py\n",
+      "stream": "system",
+      "time": 1792515968415,
+      "observedAt": 1792515968415
+    },
+    {
+      "text": "NODU_CLEAR_CHECK\r\n",
+      "stream": "stdout",
+      "time": 1792515969003,
+      "observedAt": 1792515969004
+    }
+  ],
+  "finalState": {
+    "phase": "disconnected",
+    "boardProfile": "embedfire-cam-gc2145",
+    "firmware": "MaixPy 0.6.3",
+    "architecture": "K210 [Maix:000000000000000000000000]",
+    "boardId": 2,
+    "protocol": "ide",
+    "busy": false,
+    "flashCapacityVerified": false,
+    "running": false,
+    "preview": false,
+    "capabilities": {
+      "repl": false,
+      "files": false,
+      "framebuffer": false,
+      "script": false,
+      "firmware": false
+    },
+    "error": ""
+  },
+  "finished": "2026-10-20T17:06:09.563Z"
+}

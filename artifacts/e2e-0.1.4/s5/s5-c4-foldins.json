@@ -1,0 +1,63 @@
+{
+  "started": "2026-10-20T14:50:16.923Z",
+  "connected": true,
+  "set": {
+    "before": 378,
+    "after": 421,
+    "uri": "untitled:/Untitled-9.py"
+  },
+  "streaming": true,
+  "freezeClicked": true,
+  "freeze": {
+    "seqBefore": 1141,
+    "seqAfter3_5s": 1141,
+    "static": true,
+    "preview": false
+  },
+  "resumeClicked": true,
+  "resume": {
+    "seqAfter": 1150,
+    "resumed": true
+  },
+  "histogram": {
+    "rgb": "禁用停止脚本适配100%200%PNGJPEG#1150 · 320 × 240 · LABROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)R · 0…255 · 76800 像素 · 峰值 80620255G · 0…255 · 76800 像素 · 峰值 80620255B · 0…255 · 76800 像素 · 峰值 80620255通道平均数中位数众数StDev最小最大LQUQR1761892556116255132222G1761862556136255130223B170173255603325512321476,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度20 … 80下限20上限80A绿 / 红-70 … -10",
+    "gray": "禁用停止脚本适配100%200%PNGJPEG#1150 · 320 × 240 · LABROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)Y · 0…255 · 76800 像素 · 峰值 61860255通道平均数中位数众数StDev最小最大LQUQY175186255613825513022276,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度20 … 80下限20上限80A绿 / 红-70 … -10下限-70上限-10B蓝 / 黄-10 … 40下限-10上限40白色命中 1,168 / 76,800 像素 · 1.5%(20, 80, -70, -10, -10, 40)复制参数",
+    "lab": "禁用停止脚本适配100%200%PNGJPEG#1150 · 320 × 240 · LABROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)L · 0…100 · 76800 像素 · 峰值 181200100A · -128…127 · 76800 像素 · 峰值 18120-128127B · -128…127 · 76800 像素 · 峰值 18120-128127通道平均数中位数众数StDev最小最大LQUQL717610023151005589A-1-103-3316-21B3105-18280776,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度20 … 80下限20上限80A绿 / 红-70 … -10下限-70上限-",
+    "yuv": "禁用停止脚本适配100%200%PNGJPEG#1150 · 320 × 240 · LABROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)Y · 0…255 · 76800 像素 · 峰值 364340255U · -128…127 · 76800 像素 · 峰值 36434-128127V · -128…127 · 76800 像素 · 峰值 36434-128127通道平均数中位数众数StDev最小最大LQUQY1751862556138255130222U-3005-2117-60V1003-30160176,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度20 … 80下限20上限80A绿 / 红-70 … -10下限-70"
+  },
+  "recClick": true,
+  "dlg": {
+    "input": true,
+    "ok": true
+  },
+  "stopRecClick": false,
+  "recLogs": [
+    "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+    "运行 Untitled-8.py\n",
+    "init i2c:2 freq:100000\r\r\n",
+    "[MAIXPY]: sensor id = 45\r\n",
+    "[MAIXPY]: find gc2145\r\n",
+    "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+    "Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.",
+    "运行 Untitled-9.py\n",
+    "init i2c:2 freq:100000\r\r\n",
+    "[MAIXPY]: sensor id = 45\r\n",
+    "[MAIXPY]: find gc2145\r\n",
+    "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+  ],
+  "afterStop": {
+    "phase": "error",
+    "running": false,
+    "preview": false,
+    "fps": 12.903975069520166,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "tail": "[{\"s\":\"stderr\",\"t\":\"Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.\"},{\"s\":\"system\",\"t\":\"运行 Untitled-9.py\\n\"},{\"s\":\"stdout\",\"t\":\"init i2c:2 freq:100000\\r\\r\\n\"},{\"s\":\"stdout\",\"t\":\"[MAIXPY]: sensor id = 45\\r\\n\"},{\"s\":\"stdout\",\"t\":\"[MAIXPY]: find gc2145\\r\\n\"},{\"s\":\"stdout\",\"t\":\"GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\\r\\n\"},{\"s\":\"stderr\",\"t\":\"Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.\"},{\"s\":\"stderr\",\"t\":\"开始录像失败：Operation cancelled by stop, disconnect, or worker shutdown.\\n\"}]",
+  "reconnectAfter": true,
+  "repl": {
+    "err": "设备正在处理其他操作；请稍候，或停止 / 取消当前操作。"
+  },
+  "finished": "2026-10-20T14:51:01.527Z"
+}

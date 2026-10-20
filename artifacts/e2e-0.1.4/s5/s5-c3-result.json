@@ -1,0 +1,66 @@
+{
+  "reconnect": false,
+  "settle": "{\"busy\":false,\"insp\":false,\"phase\":\"disconnected\",\"preview\":false,\"frame\":null}",
+  "v1rSet": {
+    "before": 288,
+    "after": 812,
+    "uri": "untitled:/Untitled-1.py"
+  },
+  "v1r": {
+    "logs": [],
+    "statesTail": [
+      {
+        "t": 501,
+        "phase": "disconnected",
+        "running": false
+      },
+      {
+        "t": 1002,
+        "phase": "disconnected",
+        "running": false
+      },
+      {
+        "t": 1503,
+        "phase": "disconnected",
+        "running": false
+      },
+      {
+        "t": 2005,
+        "phase": "disconnected",
+        "running": false
+      }
+    ],
+    "phaseEnd": "disconnected"
+  },
+  "v2rSet": {
+    "before": 812,
+    "after": 812,
+    "uri": "untitled:/Untitled-2.py"
+  },
+  "v2r": {
+    "logs": [],
+    "statesTail": [
+      {
+        "t": 501,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1003,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1505,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 2006,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "phaseEnd": "connected"
+  }
+}

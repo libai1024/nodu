@@ -1,0 +1,26 @@
+{
+  "started": "2026-10-20T14:59:27.670Z",
+  "treePick": "clicked",
+  "inputAfter": null,
+  "pickBtn": true,
+  "confirmDlg": "发送文件到设备发送 nodu-student-20261020.txt（37 字节）到设备默认存储，同名文件将被覆盖。取消发送文件",
+  "confirmBtn": true,
+  "afterDlg": "none",
+  "sent": {
+    "/flash/nodu-student-20261020.txt": {
+      "err": "Device file does not exist: /flash/nodu-student-20261020.txt"
+    },
+    "/sd/nodu-student-20261020.txt": {
+      "size": 37,
+      "sha256": "3ae26964e26fe27d5d36472f814b90a3bc88097a62cd341de1fb06f415560a7c",
+      "text": "Nodu student file roundtrip 20261020\n"
+    }
+  },
+  "localSha": "3ae26964e26fe27d5d36472f814b90a3bc88097a62cd341de1fb06f415560a7c",
+  "logs": [
+    {
+      "stream": "system",
+      "text": "已写入板端 nodu-student-20261020.txt（默认存储）。\n"
+    }
+  ]
+}

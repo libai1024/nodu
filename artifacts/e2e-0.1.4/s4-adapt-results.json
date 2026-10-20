@@ -1,0 +1,2163 @@
+[
+  {
+    "rel": "hardware/demo_pwm.py",
+    "variant": "pin-adapted",
+    "kind": "loop",
+    "secs": 10,
+    "startedAt": "2026-10-20T14:02:03.620Z",
+    "sourceBeforeSha": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c",
+    "menuOpen": true,
+    "edit": {
+      "before": 459,
+      "after": 462,
+      "uri": "untitled:/Untitled-34.py"
+    },
+    "editApplied": true,
+    "frameBefore": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "logsBefore": 187,
+    "frames": [
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 1,
+    "states": [
+      {
+        "t": 403,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 806,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1207,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1608,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2009,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2411,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2813,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3218,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3623,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4025,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4427,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4829,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5229,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5632,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6035,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6436,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6839,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7241,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7643,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8046,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8447,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8852,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9254,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9656,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10058,
+        "phase": "running",
+        "running": true
+      }
+    ],
+    "frameAfter": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-34.py\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:02:19.425Z",
+    "stopState": {
+      "running": false,
+      "phase": "connected"
+    },
+    "sourceAfterSha": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c"
+  },
+  {
+    "rel": "basic/hello_wrold.py",
+    "variant": "source-adapted",
+    "kind": "finite",
+    "secs": 10,
+    "startedAt": "2026-10-20T14:02:22.407Z",
+    "sourceBeforeSha": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb",
+    "menuOpen": true,
+    "edit": {
+      "before": 714,
+      "after": 729,
+      "uri": "untitled:/Untitled-35.py"
+    },
+    "editApplied": true,
+    "frameBefore": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "logsBefore": 188,
+    "frames": [
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 1,
+    "states": [
+      {
+        "t": 402,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "connected",
+        "running": false
+      },
+      {
+        "t": 1608,
+        "phase": "connected",
+        "running": false
+      }
+    ],
+    "frameAfter": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [],
+    "stillRunning": false,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-35.py\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:02:29.736Z",
+    "sourceAfterSha": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb"
+  },
+  {
+    "rel": "hardware/demo_camera.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T14:02:31.211Z",
+    "sourceBeforeSha": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a",
+    "menuOpen": true,
+    "edit": {
+      "before": 437,
+      "after": 484,
+      "uri": "untitled:/Untitled-36.py"
+    },
+    "editApplied": true,
+    "frameBefore": {
+      "sequence": 41,
+      "time": 1792504804438,
+      "width": 320,
+      "height": 240
+    },
+    "logsBefore": 189,
+    "frames": [
+      {
+        "s": 41,
+        "t": 1792504804438,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 43,
+        "t": 1792504958576,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 55,
+        "t": 1792504959860,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 68,
+        "t": 1792504960878,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 81,
+        "t": 1792504961851,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 95,
+        "t": 1792504962907,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 107,
+        "t": 1792504963850,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 121,
+        "t": 1792504964900,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 130,
+        "t": 1792504965566,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 130,
+        "t": 1792504965566,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 130,
+        "t": 1792504965566,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 130,
+        "t": 1792504965566,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 9,
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1608,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2010,
+        "phase": "running",
+        "running": true,
+        "fps": 12.974971707749818
+      },
+      {
+        "t": 2412,
+        "phase": "running",
+        "running": true,
+        "fps": 14.079665025620695
+      },
+      {
+        "t": 2814,
+        "phase": "running",
+        "running": true,
+        "fps": 14.129557444598888
+      },
+      {
+        "t": 3216,
+        "phase": "running",
+        "running": true,
+        "fps": 13.671279898798625
+      },
+      {
+        "t": 3617,
+        "phase": "running",
+        "running": true,
+        "fps": 12.977202727356406
+      },
+      {
+        "t": 4019,
+        "phase": "running",
+        "running": true,
+        "fps": 8.014913060194234
+      },
+      {
+        "t": 4421,
+        "phase": "running",
+        "running": true,
+        "fps": 13.129548042618092
+      },
+      {
+        "t": 4822,
+        "phase": "running",
+        "running": true,
+        "fps": 13.201240314613013
+      },
+      {
+        "t": 5224,
+        "phase": "running",
+        "running": true,
+        "fps": 12.93834715849637
+      },
+      {
+        "t": 5626,
+        "phase": "running",
+        "running": true,
+        "fps": 13.03659862105378
+      },
+      {
+        "t": 6028,
+        "phase": "running",
+        "running": true,
+        "fps": 13.197566970459702
+      },
+      {
+        "t": 6430,
+        "phase": "running",
+        "running": true,
+        "fps": 13.193148739809562
+      },
+      {
+        "t": 6832,
+        "phase": "running",
+        "running": true,
+        "fps": 13.264542003618088
+      },
+      {
+        "t": 7235,
+        "phase": "running",
+        "running": true,
+        "fps": 13.736468273785833
+      },
+      {
+        "t": 7636,
+        "phase": "running",
+        "running": true,
+        "fps": 13.279330721731625
+      },
+      {
+        "t": 8037,
+        "phase": "running",
+        "running": true,
+        "fps": 13.28344655279751
+      },
+      {
+        "t": 8439,
+        "phase": "running",
+        "running": true,
+        "fps": 13.784238756799505
+      },
+      {
+        "t": 8841,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 9243,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 9644,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 10045,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 10447,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 10849,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 11251,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 11653,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      },
+      {
+        "t": 12055,
+        "phase": "running",
+        "running": true,
+        "fps": 13.72436331820794
+      }
+    ],
+    "frameAfter": {
+      "sequence": 130,
+      "time": 1792504965566,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [
+      12.974971707749818,
+      14.079665025620695,
+      14.129557444598888,
+      13.671279898798625,
+      12.977202727356406,
+      8.014913060194234,
+      13.129548042618092,
+      13.201240314613013,
+      12.93834715849637,
+      13.03659862105378,
+      13.197566970459702,
+      13.193148739809562,
+      13.264542003618088,
+      13.736468273785833,
+      13.279330721731625,
+      13.28344655279751,
+      13.784238756799505,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794,
+      13.72436331820794
+    ],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-36.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:02:48.985Z",
+    "stopState": {
+      "running": false,
+      "phase": "error"
+    },
+    "sourceAfterSha": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a"
+  },
+  {
+    "rel": "machine_vision/demo_fps_display.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T14:02:55.737Z",
+    "sourceBeforeSha": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5",
+    "menuOpen": true,
+    "edit": {
+      "before": 378,
+      "after": 421,
+      "uri": "untitled:/Untitled-37.py"
+    },
+    "editApplied": true,
+    "frameBefore": null,
+    "logsBefore": 195,
+    "fold": {
+      "freeze": {
+        "before": 179,
+        "after3s": 204,
+        "static": false
+      },
+      "resume": {
+        "after": 204,
+        "resumed": false
+      },
+      "histogram": {
+        "RGB色彩空间": "禁用停止脚本适配100%200%PNGJPEG#204 · 320 × 240ROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)R · 0…255 · 76800 像素 · 峰值 79300255G · 0…255 · 76800 像素 · 峰值 79300255B · 0…255 · 76800 像素 · 峰值 79300255通道平均数中位数众数StDev最小最大LQUQR1751892556116255132222G1751862556136255130223B170173255603325512321476,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度0 … 100下限0上限100A绿 / 红-128 … 127下限-128上限127B蓝 / 黄-128 … 127下限-128上限127(0, 100, -128, 127, -128, 127)复制参数",
+        "灰度色彩空间": "禁用停止脚本适配100%200%PNGJPEG#204 · 320 × 240ROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)Y · 0…255 · 76800 像素 · 峰值 61330255通道平均数中位数众数StDev最小最大LQUQY174186255613825513022176,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度0 … 100下限0上限100A绿 / 红-128 … 127下限-128上限127B蓝 / 黄-128 … 127下限-128上限127(0, 100, -128, 127, -128, 127)复制参数",
+        "LAB色彩空间": "禁用停止脚本适配100%200%PNGJPEG#204 · 320 × 240ROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)L · 0…100 · 76800 像素 · 峰值 164430100A · -128…127 · 76800 像素 · 峰值 16443-128127B · -128…127 · 76800 像素 · 峰值 16443-128127通道平均数中位数众数StDev最小最大LQUQL717610023151005589A-1003-2814-21B2105-2227-1576,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度0 … 100下限0上限100A绿 / 红-128 … 127下限-128上限127B蓝 / 黄-128 … 127下限-128上限127(0, 100, -128, 127, -128, 127)复制参数",
+        "YUV色彩空间": "禁用停止脚本适配100%200%PNGJPEG#204 · 320 × 240ROIRGB / LAB —选区 ROI整张图像清除选区XY宽高直方图全图直方图RGB色彩空间灰度色彩空间LAB色彩空间YUV色彩空间Res (w:320, h:240)Y · 0…255 · 76800 像素 · 峰值 375600255U · -128…127 · 76800 像素 · 峰值 37560-128127V · -128…127 · 76800 像素 · 峰值 37560-128127通道平均数中位数众数StDev最小最大LQUQY1741862556138255130221U-2004-2123-50V0003-29170176,800 像素 · 320 × 240阈值LAB 阈值LAB灰度重置阈值蒙版反向L亮度0 … 100下限0上限100A绿 / 红-128 … 127下限-128上限127B蓝 / 黄-128 … 127下限-128上限127(0, 100, -128, 127, -128, 127)复制参数"
+      }
+    },
+    "frames": [
+      {
+        "s": 133,
+        "t": 1792504983409,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 146,
+        "t": 1792504984427,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 159,
+        "t": 1792504985396,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 172,
+        "t": 1792504986427,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 185,
+        "t": 1792504987406,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 198,
+        "t": 1792504988382,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 204,
+        "t": 1792504988882,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 7,
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 805,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1608,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2009,
+        "phase": "running",
+        "running": true,
+        "fps": 13.694635805677061
+      },
+      {
+        "t": 2410,
+        "phase": "running",
+        "running": true,
+        "fps": 13.616820280739617
+      },
+      {
+        "t": 2811,
+        "phase": "running",
+        "running": true,
+        "fps": 13.199076724583117
+      },
+      {
+        "t": 3212,
+        "phase": "running",
+        "running": true,
+        "fps": 13.850135824126987
+      },
+      {
+        "t": 3613,
+        "phase": "running",
+        "running": true,
+        "fps": 13.284527573172806
+      },
+      {
+        "t": 4014,
+        "phase": "running",
+        "running": true,
+        "fps": 13.274703393346055
+      },
+      {
+        "t": 4416,
+        "phase": "running",
+        "running": true,
+        "fps": 13.375056018078366
+      },
+      {
+        "t": 4816,
+        "phase": "running",
+        "running": true,
+        "fps": 13.665464802702733
+      },
+      {
+        "t": 5216,
+        "phase": "running",
+        "running": true,
+        "fps": 13.103254682051688
+      }
+    ],
+    "frameAfter": {
+      "sequence": 204,
+      "time": 1792504988882,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [
+      13.694635805677061,
+      13.616820280739617,
+      13.199076724583117,
+      13.850135824126987,
+      13.284527573172806,
+      13.274703393346055,
+      13.375056018078366,
+      13.665464802702733,
+      13.103254682051688
+    ],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-37.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:03:17.595Z",
+    "stopState": {
+      "running": false,
+      "phase": "error"
+    },
+    "sourceAfterSha": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5"
+  },
+  {
+    "rel": "machine_vision/demo_find_green_blob.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T14:03:24.339Z",
+    "sourceBeforeSha": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252",
+    "menuOpen": true,
+    "edit": {
+      "before": 504,
+      "after": 547,
+      "uri": "untitled:/Untitled-38.py"
+    },
+    "editApplied": true,
+    "frameBefore": null,
+    "logsBefore": 201,
+    "frames": [
+      {
+        "s": 206,
+        "t": 1792505011998,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 220,
+        "t": 1792505013045,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 231,
+        "t": 1792505013910,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 3,
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 805,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1207,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1609,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2010,
+        "phase": "running",
+        "running": true,
+        "fps": 13.084966194270164
+      },
+      {
+        "t": 2412,
+        "phase": "running",
+        "running": true,
+        "fps": 13.35218216382126
+      },
+      {
+        "t": 2813,
+        "phase": "running",
+        "running": true,
+        "fps": 13.217868030320627
+      },
+      {
+        "t": 3214,
+        "phase": "running",
+        "running": true,
+        "fps": 13.906795433208638
+      },
+      {
+        "t": 3616,
+        "phase": "running",
+        "running": true,
+        "fps": 13.506843870515237
+      },
+      {
+        "t": 4018,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 4422,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 4824,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 5226,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 5628,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 6030,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 6433,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 6836,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 7239,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 7641,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 8043,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 8444,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 8846,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 9248,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 9650,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 10051,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 10455,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 10857,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 11259,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 11661,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      },
+      {
+        "t": 12063,
+        "phase": "running",
+        "running": true,
+        "fps": 13.30480924149921
+      }
+    ],
+    "frameAfter": {
+      "sequence": 231,
+      "time": 1792505013910,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [
+      13.084966194270164,
+      13.35218216382126,
+      13.217868030320627,
+      13.906795433208638,
+      13.506843870515237,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921,
+      13.30480924149921
+    ],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-38.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:03:42.125Z",
+    "stopState": {
+      "running": false,
+      "phase": "error"
+    },
+    "sourceAfterSha": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252"
+  },
+  {
+    "rel": "machine_vision/demo_scan_qr_code.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T14:03:48.882Z",
+    "sourceBeforeSha": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9",
+    "menuOpen": true,
+    "edit": {
+      "before": 531,
+      "after": 574,
+      "uri": "untitled:/Untitled-39.py"
+    },
+    "editApplied": true,
+    "frameBefore": null,
+    "logsBefore": 207,
+    "frames": [
+      {
+        "s": 233,
+        "t": 1792505036536,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 247,
+        "t": 1792505037578,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 260,
+        "t": 1792505038574,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 269,
+        "t": 1792505039456,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 279,
+        "t": 1792505040537,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 290,
+        "t": 1792505041498,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 302,
+        "t": 1792505042526,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 310,
+        "t": 1792505043281,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 310,
+        "t": 1792505043281,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 310,
+        "t": 1792505043281,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 310,
+        "t": 1792505043281,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 8,
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 804,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1204,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1607,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2014,
+        "phase": "running",
+        "running": true,
+        "fps": 13.827003446380608
+      },
+      {
+        "t": 2417,
+        "phase": "running",
+        "running": true,
+        "fps": 13.009145429236753
+      },
+      {
+        "t": 2819,
+        "phase": "running",
+        "running": true,
+        "fps": 13.384021477928163
+      },
+      {
+        "t": 3220,
+        "phase": "running",
+        "running": true,
+        "fps": 13.823499321259272
+      },
+      {
+        "t": 3621,
+        "phase": "running",
+        "running": true,
+        "fps": 8.263851011757328
+      },
+      {
+        "t": 4023,
+        "phase": "running",
+        "running": true,
+        "fps": 13.60619801505436
+      },
+      {
+        "t": 4424,
+        "phase": "running",
+        "running": true,
+        "fps": 13.01210776627652
+      },
+      {
+        "t": 4825,
+        "phase": "running",
+        "running": true,
+        "fps": 13.463971193995198
+      },
+      {
+        "t": 5228,
+        "phase": "running",
+        "running": true,
+        "fps": 7.93596470082901
+      },
+      {
+        "t": 5631,
+        "phase": "running",
+        "running": true,
+        "fps": 13.75694810140428
+      },
+      {
+        "t": 6032,
+        "phase": "running",
+        "running": true,
+        "fps": 14.010933067334836
+      },
+      {
+        "t": 6435,
+        "phase": "running",
+        "running": true,
+        "fps": 8.010581978793986
+      },
+      {
+        "t": 6836,
+        "phase": "running",
+        "running": true,
+        "fps": 13.344527790806485
+      },
+      {
+        "t": 7237,
+        "phase": "running",
+        "running": true,
+        "fps": 13.668609003343262
+      },
+      {
+        "t": 7638,
+        "phase": "running",
+        "running": true,
+        "fps": 8.283851746854337
+      },
+      {
+        "t": 8040,
+        "phase": "running",
+        "running": true,
+        "fps": 13.504130515152736
+      },
+      {
+        "t": 8442,
+        "phase": "running",
+        "running": true,
+        "fps": 5.5442950000056275
+      },
+      {
+        "t": 8844,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 9247,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 9649,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 10050,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 10452,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 10854,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 11255,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 11657,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      },
+      {
+        "t": 12059,
+        "phase": "running",
+        "running": true,
+        "fps": 13.532280409148498
+      }
+    ],
+    "frameAfter": {
+      "sequence": 310,
+      "time": 1792505043281,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [
+      13.827003446380608,
+      13.009145429236753,
+      13.384021477928163,
+      13.823499321259272,
+      8.263851011757328,
+      13.60619801505436,
+      13.01210776627652,
+      13.463971193995198,
+      7.93596470082901,
+      13.75694810140428,
+      14.010933067334836,
+      8.010581978793986,
+      13.344527790806485,
+      13.668609003343262,
+      8.283851746854337,
+      13.504130515152736,
+      5.5442950000056275,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498,
+      13.532280409148498
+    ],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-39.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:04:06.664Z",
+    "stopState": {
+      "running": false,
+      "phase": "error"
+    },
+    "sourceAfterSha": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9"
+  },
+  {
+    "rel": "machine_vision/demo_affine.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T14:04:13.428Z",
+    "sourceBeforeSha": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f",
+    "menuOpen": true,
+    "edit": {
+      "before": 887,
+      "after": 917,
+      "uri": "untitled:/Untitled-40.py"
+    },
+    "editApplied": true,
+    "frameBefore": null,
+    "logsBefore": 213,
+    "frames": [
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 311,
+        "t": 1792505061552,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 1,
+    "states": [
+      {
+        "t": 401,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 803,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1206,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1609,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2010,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2412,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2814,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3217,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 3619,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4020,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4422,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 4824,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5226,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 5629,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6032,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6434,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 6835,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7236,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 7638,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8040,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8442,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 8847,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9249,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 9652,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10054,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10456,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 10858,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 11262,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 11664,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12066,
+        "phase": "running",
+        "running": true
+      }
+    ],
+    "frameAfter": {
+      "sequence": 311,
+      "time": 1792505061552,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-40.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "matrix:\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[1.34, -0.12, -62.37]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[0.12, 1.34, -56.84]\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[0.00, 0.00, 1.00]\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:04:31.203Z",
+    "stopState": {
+      "running": false,
+      "phase": "error"
+    },
+    "sourceAfterSha": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f"
+  },
+  {
+    "rel": "machine_vision/demo_image_deal.py",
+    "variant": "helper-adapted",
+    "kind": "camera",
+    "secs": 12,
+    "startedAt": "2026-10-20T14:04:37.938Z",
+    "sourceBeforeSha": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec",
+    "menuOpen": true,
+    "edit": {
+      "before": 747,
+      "after": 790,
+      "uri": "untitled:/Untitled-41.py"
+    },
+    "editApplied": true,
+    "frameBefore": null,
+    "logsBefore": 223,
+    "frames": [
+      {
+        "s": 313,
+        "t": 1792505085584,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 325,
+        "t": 1792505086606,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 336,
+        "t": 1792505087617,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 346,
+        "t": 1792505088591,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 356,
+        "t": 1792505089521,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 358,
+        "t": 1792505089736,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 358,
+        "t": 1792505089736,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 358,
+        "t": 1792505089736,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 358,
+        "t": 1792505089736,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 358,
+        "t": 1792505089736,
+        "w": 320,
+        "h": 240
+      },
+      {
+        "s": 358,
+        "t": 1792505089736,
+        "w": 320,
+        "h": 240
+      }
+    ],
+    "distinctSequences": 6,
+    "states": [
+      {
+        "t": 400,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 802,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1203,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 1607,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 2013,
+        "phase": "running",
+        "running": true,
+        "fps": 12.912584014275222
+      },
+      {
+        "t": 2414,
+        "phase": "running",
+        "running": true,
+        "fps": 12.06266564452463
+      },
+      {
+        "t": 2816,
+        "phase": "running",
+        "running": true,
+        "fps": 7.773296955754596
+      },
+      {
+        "t": 3218,
+        "phase": "running",
+        "running": true,
+        "fps": 12.29748229463838
+      },
+      {
+        "t": 3619,
+        "phase": "running",
+        "running": true,
+        "fps": 12.193411899550673
+      },
+      {
+        "t": 4020,
+        "phase": "running",
+        "running": true,
+        "fps": 12.4046456439927
+      },
+      {
+        "t": 4422,
+        "phase": "running",
+        "running": true,
+        "fps": 12.337923332810657
+      },
+      {
+        "t": 4824,
+        "phase": "running",
+        "running": true,
+        "fps": 12.119853228577401
+      },
+      {
+        "t": 5224,
+        "phase": "running",
+        "running": true,
+        "fps": 12.480882096826134
+      },
+      {
+        "t": 5625,
+        "phase": "running",
+        "running": true,
+        "fps": 12.256259912326804
+      },
+      {
+        "t": 6028,
+        "phase": "running",
+        "running": true,
+        "fps": 7.621459832860319
+      },
+      {
+        "t": 6430,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 6832,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 7235,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 7637,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 8039,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 8441,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 8843,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 9245,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 9647,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 10049,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 10450,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 10851,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 11251,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 11653,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      },
+      {
+        "t": 12054,
+        "phase": "running",
+        "running": true,
+        "fps": 11.863334434764846
+      }
+    ],
+    "frameAfter": {
+      "sequence": 358,
+      "time": 1792505089736,
+      "width": 320,
+      "height": 240
+    },
+    "fpsSamples": [
+      12.912584014275222,
+      12.06266564452463,
+      7.773296955754596,
+      12.29748229463838,
+      12.193411899550673,
+      12.4046456439927,
+      12.337923332810657,
+      12.119853228577401,
+      12.480882096826134,
+      12.256259912326804,
+      7.621459832860319,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846,
+      11.863334434764846
+    ],
+    "stillRunning": true,
+    "logs": [
+      {
+        "stream": "system",
+        "text": "运行 Untitled-41.py\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "init i2c:2 freq:100000\r\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: sensor id = 45\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "[MAIXPY]: find gc2145\r\n"
+      },
+      {
+        "stream": "stdout",
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+      }
+    ],
+    "hasTraceback": false,
+    "finishedAt": "2026-10-20T14:04:55.713Z",
+    "stopState": {
+      "running": false,
+      "phase": "error"
+    },
+    "sourceAfterSha": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec"
+  }
+]

@@ -1,0 +1,232 @@
+{
+  "at": "2026-10-20T12:55:43.452Z",
+  "port": "/dev/cu.usbserial-3110",
+  "firmware": "MaixPy 0.6.3",
+  "architecture": "K210 [Maix:000000000000000000000000]",
+  "listing": {
+    "/flash": [
+      {
+        "name": "config.json",
+        "path": "/flash/config.json",
+        "size": 766,
+        "directory": false
+      },
+      {
+        "name": "demo_cam.py",
+        "path": "/flash/demo_cam.py",
+        "size": 1421,
+        "directory": false
+      },
+      {
+        "name": "demo_green.py",
+        "path": "/flash/demo_green.py",
+        "size": 1612,
+        "directory": false
+      },
+      {
+        "name": "demo_lcd.py",
+        "path": "/flash/demo_lcd.py",
+        "size": 920,
+        "directory": false
+      },
+      {
+        "name": "demo_qr.py",
+        "path": "/flash/demo_qr.py",
+        "size": 1704,
+        "directory": false
+      },
+      {
+        "name": "demo_test.py",
+        "path": "/flash/demo_test.py",
+        "size": 2581,
+        "directory": false
+      },
+      {
+        "name": "freq.conf",
+        "path": "/flash/freq.conf",
+        "size": 16,
+        "directory": false
+      },
+      {
+        "name": "gc2145_board.py",
+        "path": "/flash/gc2145_board.py",
+        "size": 7338,
+        "directory": false
+      },
+      {
+        "name": "main.py",
+        "path": "/flash/main.py",
+        "size": 516,
+        "directory": false
+      },
+      {
+        "name": "nodu-acceptance-1792345884045.txt",
+        "path": "/flash/nodu-acceptance-1792345884045.txt",
+        "size": 1579,
+        "directory": false
+      },
+      {
+        "name": "nodu-ui-roundtrip-20261019.bin",
+        "path": "/flash/nodu-ui-roundtrip-20261019.bin",
+        "size": 4124,
+        "directory": false
+      }
+    ],
+    "/sd": [
+      {
+        "name": "System Volume Information",
+        "path": "/sd/System Volume Information",
+        "size": 0,
+        "directory": true
+      },
+      {
+        "name": "IndexerVolumeGuid",
+        "path": "/sd/System Volume Information/IndexerVolumeGuid",
+        "size": 76,
+        "directory": false
+      },
+      {
+        "name": "WPSettings.dat",
+        "path": "/sd/System Volume Information/WPSettings.dat",
+        "size": 12,
+        "directory": false
+      },
+      {
+        "name": "maixpy_demos",
+        "path": "/sd/maixpy_demos",
+        "size": 0,
+        "directory": true
+      },
+      {
+        "name": "01_lcd.py",
+        "path": "/sd/maixpy_demos/01_lcd.py",
+        "size": 920,
+        "directory": false
+      },
+      {
+        "name": "02_camera.py",
+        "path": "/sd/maixpy_demos/02_camera.py",
+        "size": 1421,
+        "directory": false
+      },
+      {
+        "name": "03_green_blobs.py",
+        "path": "/sd/maixpy_demos/03_green_blobs.py",
+        "size": 1612,
+        "directory": false
+      },
+      {
+        "name": "04_qrcode.py",
+        "path": "/sd/maixpy_demos/04_qrcode.py",
+        "size": 1704,
+        "directory": false
+      },
+      {
+        "name": "05_vision_selftest.py",
+        "path": "/sd/maixpy_demos/05_vision_selftest.py",
+        "size": 2581,
+        "directory": false
+      },
+      {
+        "name": "canmv-full-backup-20261018-224235.bin",
+        "path": "/sd/canmv-full-backup-20261018-224235.bin",
+        "size": 16777216,
+        "directory": false
+      },
+      {
+        "name": "main.py",
+        "path": "/sd/main.py",
+        "size": 516,
+        "directory": false
+      },
+      {
+        "name": "maixpy_demo_camera.jpg",
+        "path": "/sd/maixpy_demo_camera.jpg",
+        "size": 4275,
+        "directory": false
+      }
+    ]
+  },
+  "hashes": {
+    "/flash/config.json": {
+      "size": 766,
+      "sha256": "c1c9542727d1331a14153592ede6ec681a6e8a9f8e55fd4051858106340d7799"
+    },
+    "/flash/demo_cam.py": {
+      "size": 1421,
+      "sha256": "8e26ca312643e6d36b98e535a35e33dd20c8d6c05c830832bdec4ee4a234c0e3"
+    },
+    "/flash/demo_green.py": {
+      "size": 1612,
+      "sha256": "ed9f0a4059d51ec52f8bdd14e12fa8b9794941e66fb21f501228cd3981b4d78e"
+    },
+    "/flash/demo_lcd.py": {
+      "size": 920,
+      "sha256": "970c8c9c7703dfcb0d0696c2da0552ea9d723a1af39e10e9841c195ff6cc30a1"
+    },
+    "/flash/demo_qr.py": {
+      "size": 1704,
+      "sha256": "cb7bde40caef80df4a455b5469ff35a0f6e855882c7cde6e649850ec9607dd2d"
+    },
+    "/flash/demo_test.py": {
+      "size": 2581,
+      "sha256": "0c4581b2257c278a2871724e32b11c553a9f9e0c12c15b9923279eed6e03a214"
+    },
+    "/flash/freq.conf": {
+      "size": 16,
+      "sha256": "e9608cb36f208d509ce910f02c64feee137af6a8b9b68ed99199a143e7cbf2ab"
+    },
+    "/flash/gc2145_board.py": {
+      "size": 7338,
+      "sha256": "aa99ea97d1fa355483fa4d50cabcaaacbc8694a1e0f384785fad32f9adf8f9dd"
+    },
+    "/flash/main.py": {
+      "size": 516,
+      "sha256": "6b9ee4426fee24b0265dd24222735df93552b1b5de52bf7b83e8c630f3ee0290"
+    },
+    "/flash/nodu-acceptance-1792345884045.txt": {
+      "size": 1579,
+      "sha256": "5ce8c37a770ac1a1c5b74b64e49aa5c6d87d146eeae616eeacadd16f62329d27"
+    },
+    "/flash/nodu-ui-roundtrip-20261019.bin": {
+      "size": 4124,
+      "sha256": "f019cbe2e09ff7d9fa2f4f4cfedb129bbd67cf1a26c8dd870dbeea3eb1571002"
+    },
+    "/sd/System Volume Information/IndexerVolumeGuid": {
+      "size": 76,
+      "sha256": "421c4ad04a42f5e8ff4924217599060300ea07641fd77fc8dfee218a32ad9d6d"
+    },
+    "/sd/System Volume Information/WPSettings.dat": {
+      "size": 12,
+      "sha256": "e2419175509a4a7f046e75c382ba701cf1fd77eb5ba77960a327dcd9e955ac68"
+    },
+    "/sd/maixpy_demos/01_lcd.py": {
+      "size": 920,
+      "sha256": "970c8c9c7703dfcb0d0696c2da0552ea9d723a1af39e10e9841c195ff6cc30a1"
+    },
+    "/sd/maixpy_demos/02_camera.py": {
+      "size": 1421,
+      "sha256": "8e26ca312643e6d36b98e535a35e33dd20c8d6c05c830832bdec4ee4a234c0e3"
+    },
+    "/sd/maixpy_demos/03_green_blobs.py": {
+      "size": 1612,
+      "sha256": "ed9f0a4059d51ec52f8bdd14e12fa8b9794941e66fb21f501228cd3981b4d78e"
+    },
+    "/sd/maixpy_demos/04_qrcode.py": {
+      "size": 1704,
+      "sha256": "cb7bde40caef80df4a455b5469ff35a0f6e855882c7cde6e649850ec9607dd2d"
+    },
+    "/sd/maixpy_demos/05_vision_selftest.py": {
+      "size": 2581,
+      "sha256": "0c4581b2257c278a2871724e32b11c553a9f9e0c12c15b9923279eed6e03a214"
+    },
+    "/sd/main.py": {
+      "size": 516,
+      "sha256": "6b9ee4426fee24b0265dd24222735df93552b1b5de52bf7b83e8c630f3ee0290"
+    },
+    "/sd/maixpy_demo_camera.jpg": {
+      "size": 4275,
+      "sha256": "9a036ca532e386d641d5380a4de431e0c39ee910784f791f40e036f1df64d23f"
+    }
+  }
+}

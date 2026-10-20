@@ -1,0 +1,145 @@
+{
+  "before": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 285
+  },
+  "after": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 298
+  },
+  "states": [
+    {
+      "t": 402,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 804,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 1206,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 1606,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 2008,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 2409,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 2811,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 3211,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 3613,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 4013,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 4414,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 4815,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 5217,
+      "phase": "running",
+      "running": true
+    },
+    {
+      "t": 5618,
+      "phase": "connected",
+      "running": false
+    }
+  ],
+  "logs": [
+    {
+      "stream": "system",
+      "text": "运行 Untitled-5.py\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY_ARMED\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY value=1 interrupts=0\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_KEY_DONE\r\n"
+    }
+  ],
+  "stillRunning": false
+}

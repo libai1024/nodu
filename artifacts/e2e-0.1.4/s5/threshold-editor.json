@@ -1,0 +1,34 @@
+{
+  "started": "2026-10-20T14:33:55.757Z",
+  "streamSet": {
+    "before": 378,
+    "after": 421,
+    "uri": "untitled:/Untitled-6.py"
+  },
+  "streaming": true,
+  "jpegSaved": true,
+  "frameInfo": {
+    "s": 468,
+    "t": 1792506842578,
+    "w": 320,
+    "h": 240
+  },
+  "dialogOpen": true,
+  "initialTuple": "(0, 100, -128, 127, -128, 127)",
+  "sliderSet": [
+    "L 下限=20",
+    "L 上限=80",
+    "A 下限=-70",
+    "A 上限=-10",
+    "B 下限=-10",
+    "B 上限=40"
+  ],
+  "afterSetTuple": "(20, 80, -70, -10, -10, 40)",
+  "sliderLabels": "[\"L 下限\",\"L 上限\",\"A 下限\",\"A 上限\",\"B 下限\",\"B 上限\",\"L 下限\",\"L 上限\",\"A 下限\",\"A 上限\",\"B 下限\",\"B 上限\"]",
+  "maskToggle": false,
+  "finalTuple": "(20, 80, -70, -10, -10, 40)",
+  "copyClicked": true,
+  "copyFeedback": null,
+  "dialogButtons": "[\"重置\",\"复制参数\",\"完成\"]",
+  "maskInfo": "白色命中 0 / 76,800 像素 · 0.0%"
+}

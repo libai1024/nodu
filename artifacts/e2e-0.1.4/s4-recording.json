@@ -1,0 +1,22 @@
+{
+  "rel": "machine_vision/demo_fps_display.py",
+  "variant": "recording-check",
+  "streamStarted": true,
+  "dialogVisible": "保存原始录像（.bin，不可覆盖已有文件）nodu-menu-check-wstmpprivate//System/Volumes/xarts/System/Volumes/iSCPreboot/System/Volumes/Hardware/System/Volumes/VM/System/Volumes/Preboot/System/Volumes/Update/Volumes/CleanShot X 5.0.1 [EDiSO]/Volumes/ww显示隐藏文件nodu-menu-check-ws格式:OpenMV 录像流All FilesName:取消开始录制",
+  "dialogHandled": {
+    "input": true,
+    "btns": [
+      "取消",
+      "开始录制"
+    ],
+    "clicked": true
+  },
+  "logsAfter": [
+    "Command stream desynchronized mid-payload; close the port and reconnect.: Operation cancelled by stop, disconnect, or worker shutdown.",
+    "运行 Untitled-42.py\n",
+    "init i2c:2 freq:100000\r\r\n",
+    "[MAIXPY]: sensor id = 45\r\n",
+    "[MAIXPY]: find gc2145\r\n",
+    "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+  ]
+}

@@ -1,0 +1,383 @@
+{
+  "started": "2026-10-20T14:52:56.635Z",
+  "connected": true,
+  "resetMenu": true,
+  "resetStates": [
+    {
+      "t": 1002,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 2003,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 3005,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 4007,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 5026,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 6028,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 7030,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 8032,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 9033,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 10035,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 11036,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 12038,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 13040,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 14042,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 15043,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 16044,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 17046,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 18048,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 19049,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 20052,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 21054,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 22056,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 23058,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 24060,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 25061,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 26063,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 27065,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 28066,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 29068,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 30070,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 31071,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 32073,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 33075,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 34076,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 35079,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 36081,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 37082,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 38084,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 39086,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 40088,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 41089,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 42090,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 43092,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 44094,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 45096,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 46098,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 47100,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 48101,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 49103,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 50105,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 51106,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 52107,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 53108,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 54110,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 55111,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 56112,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 57114,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 58116,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 59117,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    },
+    {
+      "t": 60118,
+      "phase": "disconnected",
+      "running": false,
+      "frame": null
+    }
+  ],
+  "resetLogs": [],
+  "resetDone": {
+    "phase": "disconnected",
+    "running": false,
+    "preview": false,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "delResp": {
+    "err": "Connect a K210 first."
+  },
+  "bootPyAfter": {
+    "err": "Connect a K210 first."
+  },
+  "delLogs": []
+}

@@ -1,0 +1,20 @@
+{
+  "phase": "connected",
+  "port": "/dev/cu.usbserial-3110",
+  "boardProfile": "embedfire-cam-gc2145",
+  "firmware": "MaixPy 0.6.3",
+  "architecture": "K210 [Maix:000000000000000000000000]",
+  "boardId": 2,
+  "protocol": "ide",
+  "busy": false,
+  "flashCapacityVerified": false,
+  "running": false,
+  "preview": true,
+  "capabilities": {
+    "repl": true,
+    "files": true,
+    "framebuffer": true,
+    "script": true,
+    "firmware": true
+  }
+}

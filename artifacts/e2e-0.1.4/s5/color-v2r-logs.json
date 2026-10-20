@@ -1,0 +1,26 @@
+{
+  "logs": [],
+  "statesTail": [
+    {
+      "t": 501,
+      "phase": "connected",
+      "running": false
+    },
+    {
+      "t": 1003,
+      "phase": "connected",
+      "running": false
+    },
+    {
+      "t": 1505,
+      "phase": "connected",
+      "running": false
+    },
+    {
+      "t": 2006,
+      "phase": "connected",
+      "running": false
+    }
+  ],
+  "phaseEnd": "connected"
+}

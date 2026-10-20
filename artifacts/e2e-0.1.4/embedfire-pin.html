@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<title>引脚 &mdash; 快速使用手册----野火K210 AI视觉相机  文档</title>
+<link rel="shortcut icon" type="image/x-icon" href="../../../_static/images/logo.ico"/>
+
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="摄像头" href="../camara/camara.html" />
+    <link rel="prev" title="MicroPython学习" href="../../mircopython/mircopython_use/mircopython_use.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<a href="https://embedfire.com/"><img alt="embedfire" title="官网" src="../../../_static/images/embedfire.png"/></a>
+&nbsp;<a href="https://www.firebbs.cn/"><img alt="firebbs" title="论坛" src="../../../_static/images/firebbs.png"/></a>
+&nbsp;<a href="https://gitee.com/"><img alt="gitee" title="gitee" src="../../../_static/images/gitee.png"/></a>
+&nbsp;<a href="https://github.com/"><img alt="github" title="github" src="../../../_static/images/github.png"/></a>
+&nbsp;<a href="https://doc.embedfire.com"><img alt="pdf" title="pdf" src="../../../_static/images/pdf.png"/></a>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+
+<a href="../../../index.html">
+  <img src="../../../_static/images/logo-1.png" style="margin-top: -20px;" class="logo" alt="Logo"/>
+  快速使用手册----野火K210 AI视觉相机
+</a>
+
+
+
+  
+  
+    <!--<div class="version">
+      8630923
+    </div>-->
+  
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about_us.html">关于野火</a></li>
+</ul>
+<p class="caption"><span class="caption-text">常见问题汇总</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../question/hardware/hardware.html">硬件问题</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../question/software/software.html">软件问题</a></li>
+</ul>
+<p class="caption"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduce/k210-core/k210-core.html">k210介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduce/k210-embedfire/k210-embedfire.html">野火K210 AI视觉相机介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduce/micropython/micropython.html">mircopython介绍</a></li>
+</ul>
+<p class="caption"><span class="caption-text">环境搭建</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../environment/data_download/data_download.html">资料下载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environment/ch340_driver/ch340_driver.html">CH340驱动安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environment/ide_install/ide_install.html">CanMV IDE安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environment/img_flash/img_flash.html">镜像烧录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../environment/example_import%26canmv_use/example_import%26canmv_use.html">例程与IDE使用指南</a></li>
+</ul>
+<p class="caption"><span class="caption-text">MircoPython</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../mircopython/mircopython_use/mircopython_use.html">MicroPython学习</a></li>
+</ul>
+<p class="caption"><span class="caption-text">外设使用（API的介绍）</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">引脚</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">引脚组1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">引脚组2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../camara/camara.html">摄像头</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../touchscreen/touchscreen.html">触摸屏</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../screen/screen.html">屏幕</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sd_card/sd_card.html">sd卡</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gpio/gpio.html">gpio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key/key.html">按键</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../led/led.html">用户灯</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../timer/timer.html">定时器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uart/uart.html">串口</a></li>
+</ul>
+<p class="caption"><span class="caption-text">lvgl</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lvgl/lvgl_introduce/lvgl_introduce.html">lvgl使用介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lvgl/button/button.html">按键</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lvgl/slider/slider.html">滑块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lvgl/chart/chart.html">图表</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lvgl/mutli/mutli.html">多功能</a></li>
+</ul>
+<p class="caption"><span class="caption-text">ai例程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/ai_introduce/ai_introduce.html">介绍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/face_attribute/face_attribute.html">人脸属性检测</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/face_detect_with_68landmark/face_detect_with_68landmark.html">人脸检测68点模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/face_mask_detect/face_mask_detect.html">人脸口罩检测</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/face_recognization/face_recognization.html">人脸识别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/mnist/mnist.html">手写数字识别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/self_learn_classifier/self_learn_classifier.html">自学习</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/voc20_object_detect/voc20_object_detect.html">20类物体分类</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/body_detect/body_detect.html">身体检测</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/head_detect/head_detect.html">头部检测</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/yolo_face_detect/yolo_face_detect.html">Yolo人脸检测</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_program/yolo_hand_detect/yolo_hand_detect.html">Yolo手掌检测</a></li>
+</ul>
+<p class="caption"><span class="caption-text">镜像编译</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../image/image_build/image_build.html">镜像编译</a></li>
+</ul>
+<p class="caption"><span class="caption-text">版权</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../LICENSE.html">版权说明</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">快速使用手册----野火K210 AI视觉相机</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<style>
+
+    @media screen and (max-width: 1100px){
+        .prodcut-show-main{
+            display: none;
+        }
+    }
+    .prodcut-show-main{
+        background: #edf0f2;
+        width: 100%;
+        height: 170px;
+        margin-bottom: 24px;
+    }
+    .prodcut-show-main .prodcut-show-main-left{
+        width: 33%;
+    }
+    .prodcut-show-main .prodcut-show-main-right{
+        width: 64%;
+        margin-top: 13px;
+        margin-right: 18px;
+    }
+    .prodcut-show-main .prodcut-show-main-right p{
+        color: gray;
+        font-size: 84%;
+        height: 74px;
+        overflow-x: hidden;
+    }
+    .product-show-name .fa-pull-left{
+
+        font-size: 124%;
+        color: #0077ff;
+        font-weight: bolder;
+
+    }
+    .product-show-name{
+        margin-bottom: 12px;
+    }
+    .fa-pull-right a{
+
+        background: #0077ff;
+        color: white;
+        padding: 6px 16px;
+        border-radius: 4px;
+        font-size: 80%;
+        margin-right: 10px;
+
+    }
+    .prodcut-show-img{
+        height: 170px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+</style>
+
+<div class="prodcut-show-main clearfix">
+    <div class="fa-pull-left prodcut-show-main-left">
+        <div class="prodcut-show-img">
+        <!------------------------------------------------------------------------------------------------------>
+        <div align="center">
+            <a href="https://yehuosm.tmall.com"><img alt="产品图片" height="80%" width="80%" src="../../../_static/images/product.png"/></a>
+        </div>
+        <!------------------------------------------------------------------------------------------------------>
+        </div>
+    </div>
+    <div class="fa-pull-right prodcut-show-main-right">
+        <div class="product-show-name clearfix">
+            <div class="fa-pull-left ">
+                <!-------------------------------------------------------->
+                快速使用手册--野火K210 AI视觉相机 <span></span>
+                <!-------------------------------------------------------->
+            </div>
+        </div>
+
+        <div class="fa-pull-left">
+            <!-------------------------------------------------------------------------------------------------------------------------------->
+            <a href="https://doc.embedfire.com/" target="_blank">PDF文档 </a>
+
+            <a href="https://gitee.com/" target="_blank">配套程序</a>
+
+            <a href="https://yehuosm.tmall.com" target="_blank">立即购买</a>
+            <!-------------------------------------------------------------------------------------------------------------------------------->
+
+        </div>
+        <br>
+        <br>
+        <!-------------------------------------------------------------------------------------------------------------------------------->
+        <p>快速使用手册--野火K210 AI视觉相机
+        </p>
+        <!-------------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>
+
+
+<div class="rst-content">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>引脚</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+  <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+   <div itemprop="articleBody">
+    
+  <div class="section" id="id1">
+<h1>引脚<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">野火K210</span> <span class="pre">AI视觉相机</span></code> 有两组引脚，一组是具有28个引脚（后面统称引脚组1），另一组具有6个引脚（后面统称引脚组2），如下图所示</p>
+<img alt="野火logo" class="align-center" src="../../../_images/pin.png" />
+<p>这些引脚组里的IO引脚可以任意复用成其他外设使用，比如说可以复用成uart,spi,i2c,gpio,gpiohs等。</p>
+<div class="section" id="id2">
+<h2>引脚组1<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>引脚组1里的IO引脚的电平3.3V的，连接引脚时需要注意引脚的电平是否为3.3V，如果连接1.8V 或者 5V的引脚时需要注意添加电平转换</p>
+<img alt="野火logo" class="align-center" src="../../../_images/pin1.png" />
+<ul class="simple">
+<li><p>引脚组1的IO引脚中 <code class="docutils literal notranslate"><span class="pre">IO_0</span></code> , <code class="docutils literal notranslate"><span class="pre">IO_1</span></code> 在串口例程中作为串口1使用</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>引脚组2<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>引脚组2里的IO引脚的电平1.8V的，连接引脚时需要注意引脚的电平是否为1.8V，如果连接3.3V 或者 5V的引脚时需要注意添加电平转换.</p>
+<img alt="野火logo" class="align-center" src="../../../_images/pin2.png" />
+</div>
+</div>
+
+
+   </div>
+   
+  </div>
+  <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../camara/camara.html" class="btn btn-neutral float-right" title="摄像头" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../../mircopython/mircopython_use/mircopython_use.html" class="btn btn-neutral float-left" title="MicroPython学习" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, embedfire-野火 www.embedfire.com
+    <br>
+      
+        <span class="commit">
+          Revision <code>8630923</code>.
+        </span>
+      
+        <span class="lastupdated">
+          最后更新于 2025-05-23, 16:52:43 — GMT+08:00 .
+        </span>
+
+    <br><a href="https://beian.miit.gov.cn" target="_blank">粤ICP备18017226号-1</a>
+    </p>
+  </div> 
+
+</footer>
+
+</div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

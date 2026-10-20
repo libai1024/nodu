@@ -1,0 +1,59 @@
+{
+  "connected": true,
+  "syntaxEditor": "untitled:/Untitled-10.py",
+  "syntaxSet": {
+    "before": 288,
+    "after": 58,
+    "uri": "untitled:/Untitled-10.py"
+  },
+  "syntaxLogs": [
+    {
+      "stream": "system",
+      "text": "运行 Untitled-10.py\n"
+    },
+    {
+      "stream": "stderr",
+      "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 3\r\nSyntaxError: invalid syntax\r\n"
+    }
+  ],
+  "syntaxState": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "syntaxDecorations": "{\"squiggles\":0,\"glyphMarks\":4,\"markers\":[],\"selection\":null,\"statusItems\":[]}",
+  "syntaxModelMarkers": "[]",
+  "runtimeEditor": "untitled:/Untitled-11.py",
+  "runtimeSet": {
+    "before": 288,
+    "after": 41,
+    "uri": "untitled:/Untitled-11.py"
+  },
+  "runtimeLogs": [
+    {
+      "stream": "system",
+      "text": "运行 Untitled-11.py\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_RUNTIME_START\r\n"
+    },
+    {
+      "stream": "stderr",
+      "text": "Traceback (most recent call last):\r\n  File \"<stdin>\", line 2, in <module>\r\nZeroDivisionError: divide by zero\r\n"
+    }
+  ],
+  "runtimeState": {
+    "phase": "connected",
+    "running": false,
+    "preview": true,
+    "busy": false,
+    "frame": null,
+    "logsLen": 300
+  },
+  "runtimeDecorations": "{\"squiggles\":0,\"glyphMarks\":4,\"markers\":[],\"selection\":null,\"statusItems\":[]}",
+  "runtimeModelMarkers": "[]"
+}

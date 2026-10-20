@@ -1,0 +1,57 @@
+{
+  "logs": [
+    {
+      "stream": "system",
+      "text": "运行 Untitled-6.py\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "init i2c:2 freq:100000\r\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "[MAIXPY]: sensor id = 45\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "[MAIXPY]: find gc2145\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR_START min_pixels=240 threshold=(20, 80, -70, -10, -10, 40)\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR frame=0 blobs=0 min_pixels=240\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR frame=10 blobs=0 min_pixels=240\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR frame=20 blobs=0 min_pixels=240\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR frame=30 blobs=0 min_pixels=240\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR frame=40 blobs=0 min_pixels=240\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR frame=50 blobs=0 min_pixels=240\r\n"
+    },
+    {
+      "stream": "stdout",
+      "text": "NODU_COLOR_DONE\r\n"
+    }
+  ],
+  "phaseEnd": "connected"
+}

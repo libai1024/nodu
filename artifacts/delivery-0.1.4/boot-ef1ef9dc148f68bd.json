@@ -1,0 +1,89 @@
+{
+  "mode": "boot",
+  "token": "ef1ef9dc148f68bd",
+  "started": "2026-10-20T17:03:39.174Z",
+  "checks": [
+    {
+      "name": "boot autorun after reset",
+      "passed": true,
+      "token": "ef1ef9dc148f68bd",
+      "marker": "/flash/nodu-boot-proof-ef1ef9dc148f68bd.txt"
+    }
+  ],
+  "connected": {
+    "phase": "connected",
+    "port": "/dev/cu.usbserial-3110",
+    "boardProfile": "embedfire-cam-gc2145",
+    "firmware": "MaixPy 0.6.3",
+    "architecture": "K210 [Maix:000000000000000000000000]",
+    "boardId": 2,
+    "protocol": "ide",
+    "busy": false,
+    "flashCapacityVerified": false,
+    "running": false,
+    "preview": false,
+    "capabilities": {
+      "repl": true,
+      "files": true,
+      "framebuffer": true,
+      "script": true,
+      "firmware": true
+    },
+    "error": ""
+  },
+  "before": {
+    "/flash/boot.py": null,
+    "/sd/boot.py": null,
+    "/flash/nodu-boot-proof-ef1ef9dc148f68bd.txt": null
+  },
+  "source": "# Nodu automatic-boot proof ef1ef9dc148f68bd\nwith open(\"/flash/nodu-boot-proof-ef1ef9dc148f68bd.txt\", \"w\") as proof:\n    proof.write(\"NODU_BOOT_AUTORUN:ef1ef9dc148f68bd\\n\")\nprint(\"NODU_BOOT_AUTORUN:ef1ef9dc148f68bd\")\n",
+  "sourceSha256": "b751d82dc265b33d74d4c1e1da52fdbd6f6e20ef1adb78bf7addb775fbef36de",
+  "editor": "untitled:/Untitled-20.py",
+  "confirmation": [
+    "写入 boot.py将 Untitled-20.py（217 字节）写入板端 boot.py。\n将覆盖开发板默认存储中的 boot.py；已挂载 SD 卡时固件通常写入 /sd。启动文件可能在下次开机执行。取消写入 boot.py"
+  ],
+  "bootPath": "/sd/boot.py",
+  "markerAbsentBeforeReset": true,
+  "resetRequestedAt": "2026-10-20T17:03:52.124Z",
+  "proof": {
+    "data": "Tk9EVV9CT09UX0FVVE9SVU46ZWYxZWY5ZGMxNDhmNjhiZAo=",
+    "size": 35
+  },
+  "cleanupOutput": "NODU_BOOT_CLEANED\r\n",
+  "cleanupFailure": "Error: Device stat returned malformed data.",
+  "finalLogs": [
+    {
+      "text": "已写入板端 boot.py（默认存储）。\n",
+      "stream": "system",
+      "time": 1792515829080,
+      "observedAt": 1792515829080
+    },
+    {
+      "text": "NODU_BOOT_CLEANED\r\n",
+      "stream": "stdout",
+      "time": 1792515846502,
+      "observedAt": 1792515846503
+    }
+  ],
+  "finalState": {
+    "phase": "disconnected",
+    "boardProfile": "embedfire-cam-gc2145",
+    "firmware": "MaixPy 0.6.3",
+    "architecture": "K210 [Maix:000000000000000000000000]",
+    "boardId": 2,
+    "protocol": "ide",
+    "busy": false,
+    "flashCapacityVerified": false,
+    "running": false,
+    "preview": false,
+    "capabilities": {
+      "repl": false,
+      "files": false,
+      "framebuffer": false,
+      "script": false,
+      "firmware": false
+    },
+    "error": ""
+  },
+  "finished": "2026-10-20T17:04:07.676Z"
+}

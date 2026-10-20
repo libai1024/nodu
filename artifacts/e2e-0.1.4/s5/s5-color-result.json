@@ -1,0 +1,73 @@
+{
+  "connected": true,
+  "v1Editor": {
+    "ok": true,
+    "uri": "untitled:/Untitled-3.py"
+  },
+  "v1Set": {
+    "before": 288,
+    "after": 812,
+    "uri": "untitled:/Untitled-3.py"
+  },
+  "v1": {
+    "logs": [],
+    "phaseEnd": "connected",
+    "statesTail": [
+      {
+        "t": 11538,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12039,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12540,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 13042,
+        "phase": "connected",
+        "running": false
+      }
+    ]
+  },
+  "v2Editor": {
+    "ok": true,
+    "uri": "untitled:/Untitled-4.py"
+  },
+  "v2Set": {
+    "before": 288,
+    "after": 812,
+    "uri": "untitled:/Untitled-4.py"
+  },
+  "v2": {
+    "logs": [],
+    "phaseEnd": "connected",
+    "statesTail": [
+      {
+        "t": 11534,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12035,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 12535,
+        "phase": "running",
+        "running": true
+      },
+      {
+        "t": 13037,
+        "phase": "connected",
+        "running": false
+      }
+    ]
+  }
+}

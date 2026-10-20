@@ -1,0 +1,1 @@
+{"after":{"bounds":{"height":22,"width":36,"x":1428,"y":167},"description":"禁用帧缓冲区以获得最佳性能","enabled":true,"role":"AXCheckBox","title":"禁用","value":1},"before":{"bounds":{"height":22,"width":36,"x":1428,"y":167},"description":"禁用帧缓冲区以获得最佳性能","enabled":true,"role":"AXCheckBox","title":"禁用","value":0}}
