@@ -3,7 +3,7 @@ N1.1,native,Rust stdio 与 Node 接入,启动设备服务,生成 TS 类型；Nod
 N1.2,native,raw REPL 真板回归,连接后执行代码和运行脚本,输出正确；停止后可再次执行；用户代码异常不改变连接状态,Nodu 0.1.2,1,passed_host,evidence/phase-1-validation.md
 N1.3,native,普通文件迁移回归,写入测试文件再读回并删除,4 KiB 内容 SHA-256 一致；默认拒绝覆盖；启动文件保护仍生效,Nodu 0.1.2,1,passed_host,evidence/phase-1-validation.md
 N1.4,native,解析与输入边界,畸形 stdio 和串口输入,超大行有界丢弃后可读下一行；非法 data 不覆盖文件；错误输出保留首字节；递归深度受限,阶段 1 审查,1,passed_host,evidence/phase-1-validation.md
-N1.5,native,Python 与 Rust 差分,相同输入分别执行两套实现,协议字节与结果 fixture 一致；所有差异有解释,PLAN 测试策略,1,todo,
+N1.5,native,Python 与 Rust 差分,相同输入分别执行两套实现,协议字节与结果 fixture 一致；所有差异有解释,PLAN 测试策略,1,partial,模拟板级 12/12 步观测一致（evidence/worker-differential.md）；真板差分并入 N1.6
 N1.6,native,原版并排对照,同一块板按相同步骤运行,保存原版与 Nodu 的对应日志和截图,PLAN 阶段门禁,1,todo,
 N1.7,native,跨平台构建与打包,macOS universal 和 Windows 构建,侧车可被应用发现并运行；目标平台冒烟通过,PLAN 阶段 1 与阶段 8,1,partial,仅 darwin-arm64 已构建并冒烟；universal 与 Windows 未做（media-bundle.md）
 A1.1,connect,选择开发板（9 种）,工具→选择开发板→任一项,单选勾选；写入用户配置 boardconfig；重启后保持,evidence/original-private-params.md §2,2,partial,9 项复位方式选择已实现（nodu-device-panel BOARD_IDS）；原版持久化 boardconfig 未实现
