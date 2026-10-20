@@ -172,7 +172,7 @@ test('rust sidecar mock board: connect, REPL execute, file round-trip, disconnec
         const state = await server.connect({ port: 'mock', boardProfile: 'generic-k210' });
         assert.equal(state.phase, 'connected');
         assert.equal(state.capabilities.repl, true);
-        assert.equal(state.capabilities.firmware, false);
+        assert.equal(state.capabilities.firmware, true);
         assert.equal(await server.execute('print(42)'), '42\n');
         const payload = Buffer.alloc(4096, 0x5a);
         await server.writeFile('/flash/nodu_e2e.bin', payload.toString('base64'), false);

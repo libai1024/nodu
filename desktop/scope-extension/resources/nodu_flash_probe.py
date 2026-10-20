@@ -18,8 +18,8 @@ import time
 import nodu_flash_protocol as protocol
 
 
-STUB_SHA256 = 'dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05'
-STUB_SIZE = 8672
+STUB_SHA256 = '6e9843b2bf365637af3853b1d827fc832a1a5ac4cd8dc5f203053bf5d29833a2'
+STUB_SIZE = 8688
 STUB_PATH = Path(__file__).with_name('flash-probe') / 'probe.bin'
 
 

@@ -356,9 +356,14 @@ impl Worker {
             // IDE exec returns the whole stdout in one transaction; the
             // line-by-line framing/verification contract is unchanged.
             self.check()?;
-            let out = self
-                .exec(code, false, Duration::from_secs(120))
-                .map_err(|e| fw_err(format!("Device backup failed: {e}")))?;
+            let out = match self.exec(code, false, Duration::from_secs(120)) {
+                Ok(out) => out,
+                // Python propagates cancellation and transport/protocol
+                // failures unchanged; only device-side errors become
+                // FirmwareError so desync still tears down the port.
+                Err(e) if e.is_cancelled() || e.is_protocol() => return Err(e),
+                Err(e) => return Err(fw_err(format!("Device backup failed: {e}"))),
+            };
             for line in out.split('\n') {
                 self.check()?;
                 let stripped = line.strip_suffix('\r').unwrap_or(line);
@@ -585,8 +590,7 @@ impl Worker {
         let mut failures = 0u32;
         let mut assembled = firmware::private_file(destination, true).map_err(fw_into)?;
         let total = size.max(1);
-        let mut offset = 0u64;
-        while offset < total {
+        for offset in (0..total).step_by(64 * 1024) {
             self.check()?;
             let length = (64 * 1024u64).min(size - offset);
             let code = firmware::dump_script(length, remote, offset).map_err(fw_into)?;
@@ -643,7 +647,6 @@ impl Worker {
             digest.update(&data);
             let _ = std::fs::remove_file(&part);
             progress(offset + length, size);
-            offset += length;
         }
         {
             use std::io::Write;

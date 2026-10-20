@@ -26,7 +26,7 @@ B2.1,run,停止,⌘R 或停止按钮,SCRIPT_STOP；IDE interrupt 不显示为错
 B3.1,run,报错跳行,脚本抛异常,"解析 File ""x"", line N；编辑器跳到对应行并高亮",openmvplugin.cpp@af179e4 错误正则,2,passed_host,followTraceback 实现 + UI 验证（phase-5-files.md）
 B4.1,run,脚本输出,运行中,TX_BUF 内容实时显示在串行终端面板,ide_dbg.c TX_BUF,2,passed_board,evidence/phase-2-ide.md
 B5.1,run,运行状态同步,板端脚本自行结束,SCRIPT_RUNNING 轮询后按钮恢复为开始,ide_dbg.c,2,passed_board,evidence/phase-2-ide.md
-C1.1,fb,自动帧缓冲,运行任意含 sensor.snapshot() 的脚本,帧缓冲面板自动显示图像；无需辅助脚本,ide_dbg.c FRAME_SIZE/FRAME_DUMP,3,passed_board,320×240 JPEG 约 13 fps（phase-2-ide.md）；startCamera 间歇失败原因未查明
+C1.1,fb,自动帧缓冲,运行任意含 sensor.snapshot() 的脚本,帧缓冲面板自动显示图像；无需辅助脚本,ide_dbg.c FRAME_SIZE/FRAME_DUMP,3,passed_board,320×240 JPEG 约 13 fps（phase-2-ide.md）；startCamera 间歇失败已定位为板上固件 sensor.reset() 时序竞争（realboard-readonly-20261020.md）
 C2.1,fb,禁用帧缓冲,勾选“禁用”,FB_ENABLE(0)；面板显示已禁用提示；取消勾选恢复,主窗口证据；ide_dbg.c,3,passed_board,运行中暂停/继续已验证（phase-2-ide.md）
 C3.1,fb,JPEG 压缩选项,原版行为实测,与原版一致（固件只送 JPEG 时记录为无效项）,0.2.5 字符串,3,passed_host,固件仅送 JPEG；已记录为不适用项
 C4.1,fb,缩放,勾选“缩放”,缩放到合适大小；取消为原尺寸,主窗口证据,3,passed_host,视觉面板适配/原尺寸切换
@@ -67,7 +67,7 @@ I4.1,editor,文档文件夹,文件→文档文件夹,~/Documents/MaixPy；不存
 I4.2,editor,新建文件模板,⌘N,# Untitled - By: 用户 - 日期 + hello world 相机循环,0.2.5 字符串,5,passed_host,scope.new-script 原版模板逐字节（phase-7-ui-parity.md）
 I5.1,help,帮助菜单,帮助→MaixPy文档 / 论坛,打开原版 URL,original-private-params §6,5,passed_host,MaixPy文档/论坛打开原版 URL（phase-7-ui-parity.md）
 I5.2,help,关于,应用菜单→关于,版本信息 + OpenMV MIT 署名,0.2.5 字符串,5,passed_host,关于对话框：版本 + OpenMV MIT 署名（phase-7-ui-parity.md）
-K1.1,flash,烧写路径迁移,阶段 6,Rust 实现与 Python 对照样本逐字节一致；门禁不变；DE/E7 时拒绝烧写,PLAN 阶段 6,6,partial,evidence/phase-6-flash-migration.md：差分 18 节 + 2 会话逐字节通过并抓到 7 个真实移植 bug；worker 三条命令已接线且门禁测试通过；真板烧写未验
+K1.1,flash,烧写路径迁移,阶段 6,Rust 实现与 Python 对照样本逐字节一致；门禁不变；DE/E7 时拒绝烧写,PLAN 阶段 6,6,partial,evidence/phase-6-flash-migration.md + realboard-readonly-20261020.md：差分 18 节 + 2 会话逐字节；E7 根因=EF6018 未列白名单已修复；真板只读链路（探针/容量/16MiB 备份/恢复包/负门禁）通过；真板烧写未执行
 P2.1,ui,精简状态栏,简洁模式,只保留行列与语言,0.1.2 P2,7,passed_host,简洁模式状态栏已精简
 P2.2,ui,未连接空状态,视觉面板未连接,短提示 + 连接按钮,0.1.2 P2,7,passed_host,空状态 + 连接设备按钮已实现
 U1.1,ui,专业模式布局对齐,专业模式,工具栏/编辑器/帧缓冲+直方图/串行终端/状态栏与原版主窗口一致,evidence/maixpy-ide-0.2.5-main-window.txt,7,partial,各面板已存在；未逐项对照原版截图验收

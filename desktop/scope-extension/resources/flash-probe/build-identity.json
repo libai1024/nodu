@@ -11,25 +11,25 @@
   },
   "codec": {
     "path": "desktop/scope-extension/resources/nodu_flash_protocol.py",
-    "bytes": 7555,
-    "sha256": "caa90b2e1192c5ac30191435898643394fb20b4d22f1ad306af9943f6289c929"
+    "bytes": 7614,
+    "sha256": "cb882cbc06f905d609d2516f56f5c280f50a0709ff2c4ef38957fa8211464f0a"
   },
   "candidate": {
     "path": "desktop/scope-extension/resources/nodu_flash_probe_candidate.py",
     "bytes": 10182,
-    "sha256": "2dfdacb7648efacaac1ba47d465ea06d498c809de5a9dc68e9cb787364133c9a"
+    "sha256": "0312060e0122e26aa2128881a906a92dd3126251bed10fd1c5092fe37ffe98c2"
   },
   "bin": {
     "path": "desktop/scope-extension/resources/flash-probe/probe.bin",
-    "bytes": 8672,
-    "sha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05"
+    "bytes": 8688,
+    "sha256": "6e9843b2bf365637af3853b1d827fc832a1a5ac4cd8dc5f203053bf5d29833a2"
   },
   "activation": {
     "host": "desktop/scope-extension/resources/nodu_flash_probe.py",
     "binary": "desktop/scope-extension/resources/flash-probe/probe.bin",
     "byteIdentical": true,
     "hardwareExecuted": true,
-    "state": "Fifth native attempt: current-content cache revalidation passed; first DE returned short [DE,E7]. REPL recovered and serial released; 21 files, inventory, boot and unverified 16MiB prefix rechecked unchanged. No accepted JEDEC or firmware write.",
+    "state": "Sixth attempt: E7 diagnosed via diagnostic candidate - chip is Winbond W25Q128JW 1.8V variant (JEDEC EF6018, legacy EF17), correct 16 MiB. Baseline allowlist widened with jedec[1]==0x60; stub rebuilt from fixed source/toolchain.",
     "hardwareAttempted": true,
     "currentCapacityVerified": false
   }

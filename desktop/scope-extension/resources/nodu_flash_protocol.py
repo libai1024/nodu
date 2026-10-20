@@ -32,6 +32,7 @@ STUB_OPERATIONS = frozenset((0xD2, 0xD7, 0xDE))
 # profile, partition size, historical ID, or wrapping read sets capacity.
 SUPPORTED_IDS = {
     b'\xef\x40\x18': ('Winbond W25Q128 family', 16777216),
+    b'\xef\x60\x18': ('Winbond W25Q128 family', 16777216),
     b'\xef\x70\x18': ('Winbond W25Q128 family', 16777216),
 }
 

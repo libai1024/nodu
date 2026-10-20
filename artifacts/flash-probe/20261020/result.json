@@ -1,0 +1,49 @@
+{
+  "observedAt": "2026-10-20",
+  "board": "embedfire-cam-gc2145 /dev/cu.usbserial-3120 (FTDI), MaixPy 0.6.3 d8901fd22",
+  "subject": "Real-board read-only validation: E7 diagnosis, allowlist fix, complete verified backup",
+  "e7RootCause": "Winbond W25Q128JW 1.8V variant, JEDEC EF6018 + legacy EF17; not in stub allowlist (40|70)",
+  "newStub": {
+    "bytes": 8688,
+    "sha256": "6e9843b2bf365637af3853b1d827fc832a1a5ac4cd8dc5f203053bf5d29833a2"
+  },
+  "backupResult": {
+    "verified": true,
+    "flashBytes": 16777216,
+    "flashSha256": "ec7378fb43579151e56b916934e12689ac8f4c75dd018ca876aa506f4898473f",
+    "flashJedecId": "EF6018",
+    "files": 21,
+    "durationMinutes": 23,
+    "backupLocation": "~/.nodu/backups/20261020-131953-realboard (private, not committed)"
+  },
+  "negativeGate": "flashFirmware refused without JEDEC proof (run1)",
+  "camera": "startCamera intermittent OSError Reset Failed = board firmware sensor.reset() timing race vs boot demo; not host-side",
+  "flashWrites": 0,
+  "files": [
+    {
+      "name": "e7_diag.py",
+      "bytes": 1209,
+      "sha256": "5c8b0988b73ab278c8b2d3a9925be8a5b58446dfedb3c92117cc95bd7b2bcce2"
+    },
+    {
+      "name": "run-camera.txt",
+      "bytes": 10568,
+      "sha256": "bc7949e40649251c6a2ccbd52f19b55c4c92a4313ab4960fcf031c452a5d62e9"
+    },
+    {
+      "name": "run-camera2.txt",
+      "bytes": 10286,
+      "sha256": "ab638959e18ca229d183e13bd42f0d89965e3a6e422d3534c551dd22bc99adc4"
+    },
+    {
+      "name": "run1.txt",
+      "bytes": 93100,
+      "sha256": "09ba176cb985c4d04802f80f3f5f7ab6e10025dd05b4faba0c4014a1ccec38e7"
+    },
+    {
+      "name": "run2.txt",
+      "bytes": 174937,
+      "sha256": "2262de8977ec5f22c1301fb20983f45ecba4bc89e74f9b574f5b620a06d47bf4"
+    }
+  ]
+}

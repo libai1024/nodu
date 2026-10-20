@@ -581,10 +581,12 @@ impl Worker {
     fn session(&mut self) -> Session<'_> {
         let active = self.active_generation;
         let deadline = self.deadline;
+        let restoring = self.restoring_io;
         let shared = Arc::clone(&self.shared);
         let check = move || {
-            if active != shared.generation.load(Ordering::SeqCst)
-                || shared.input_closed.load(Ordering::SeqCst)
+            if !restoring
+                && (active != shared.generation.load(Ordering::SeqCst)
+                    || shared.input_closed.load(Ordering::SeqCst))
             {
                 return Err(ReplError::cancelled());
             }
@@ -606,10 +608,12 @@ impl Worker {
     fn ide_session(&mut self) -> IdeSession<'_> {
         let active = self.active_generation;
         let deadline = self.deadline;
+        let restoring = self.restoring_io;
         let shared = Arc::clone(&self.shared);
         let check: Check = std::sync::Arc::new(move || {
-            if active != shared.generation.load(Ordering::SeqCst)
-                || shared.input_closed.load(Ordering::SeqCst)
+            if !restoring
+                && (active != shared.generation.load(Ordering::SeqCst)
+                    || shared.input_closed.load(Ordering::SeqCst))
             {
                 return Err(ReplError::cancelled());
             }

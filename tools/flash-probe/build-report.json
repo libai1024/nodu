@@ -340,31 +340,31 @@
   "artifacts": {
     "probe.elf": {
       "bytes": 148368,
-      "sha256": "bba12baa71f0fc030b0a73ebc5bb52734c4f470c798dc843f10f5e32d999881f"
+      "sha256": "10bc91944ef854556c8c11eacce7b33a7dba9b4597a852c314f10418cd358abc"
     },
     "probe.bin": {
-      "bytes": 8672,
-      "sha256": "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05"
+      "bytes": 8688,
+      "sha256": "6e9843b2bf365637af3853b1d827fc832a1a5ac4cd8dc5f203053bf5d29833a2"
     },
     "probe.map": {
       "bytes": 68079,
-      "sha256": "9ad5a0d89c0961f45c220486a6dd8dc28f9ea508c2bbda02bec05af35171cfb4"
+      "sha256": "d8930b379cca534e184b8a5bd2bdf9054b9dd43d9701438f7287acba7347b85e"
     },
     "probe.disassembly.txt": {
-      "bytes": 169002,
-      "sha256": "90f1f81b43418e53b6be456123b066c16b8d2f7527f29daa1356b5d5a761bddd"
+      "bytes": 169234,
+      "sha256": "b766a25444a5524d1576593372c361e0e937569a531d3015d01fd68f08a5644b"
     },
     "probe.symbols.txt": {
       "bytes": 1760,
-      "sha256": "96e2b1df25376efa6491249e061c75cf6723777990775b11760b7f54935c8abb"
+      "sha256": "755831e9b224854c24b22e4ac6bb96d523ab2d7f13528d6bc45526166ab6b31c"
     },
     "probe.sections.txt": {
       "bytes": 4765,
-      "sha256": "968a14277c863cf7f6938e29cdd69ad6f55d3b4c5aef5b1c2fc2ba5a01a47768"
+      "sha256": "6bf37a6d1432588dbfddab9d25dabe374597c1e62942d63e69d23bea1cf9aa01"
     },
     "probe.size.txt": {
       "bytes": 156,
-      "sha256": "e576ab25d031528427a21e51ee59d4d047faa927e32c0c626fc4314a3c8e28e2"
+      "sha256": "62ed3bf65c83a5afaa50ab8e7b3c4eb37cdb27dd6b55e7e4a0c638f30496118e"
     }
   }
 }

@@ -103,13 +103,22 @@ int main(void)
 
     uint8_t id[] = {0xef, 0x40, 0x18}, old[] = {0xef, 0x17};
     assert(probe_identity_allowed(id, old));
+    id[1] = 0x60; assert(probe_identity_allowed(id, old));
     id[1] = 0x70; assert(probe_identity_allowed(id, old)); id[1] = 0x40;
-    for (unsigned int byte = 0; byte < 3; ++byte)
+    for (unsigned int value = 0; value < 256; ++value) {
+        id[1] = (uint8_t)value;
+        assert(probe_identity_allowed(id, old) ==
+               (value == 0x40 || value == 0x60 || value == 0x70));
+    }
+    id[1] = 0x40;
+    for (unsigned int byte = 0; byte < 3; ++byte) {
+        if (byte == 1) continue;
         for (unsigned int bit = 0; bit < 8; ++bit) {
             id[byte] ^= (uint8_t)(1u << bit);
             assert(!probe_identity_allowed(id, old));
             id[byte] ^= (uint8_t)(1u << bit);
         }
+    }
     for (unsigned int byte = 0; byte < 2; ++byte)
         for (unsigned int bit = 0; bit < 8; ++bit) {
             old[byte] ^= (uint8_t)(1u << bit);

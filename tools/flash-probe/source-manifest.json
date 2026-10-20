@@ -32,7 +32,7 @@
   {
     "origin": "Nodu candidate",
     "path": "src/protocol.c",
-    "sha256": "c6eac4ccfa593f5f303a63dd975404f20cd03feddda96d090b4c0c2b522580f3",
+    "sha256": "167303113a316aece2414b5290e3569e6d2f0dbbbe12026df9a43a788ec39f91",
     "license_observed": "Apache-2.0, explicit file header"
   },
   {

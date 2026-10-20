@@ -46,7 +46,8 @@ uint32_t probe_crc32(const uint8_t *message, size_t size)
 int probe_identity_allowed(const uint8_t jedec[3], const uint8_t legacy[2])
 {
     return jedec[0] == 0xef &&
-           (jedec[1] == 0x40 || jedec[1] == 0x70) && jedec[2] == 0x18 &&
+           (jedec[1] == 0x40 || jedec[1] == 0x60 || jedec[1] == 0x70) &&
+           jedec[2] == 0x18 &&
            legacy[0] == 0xef && legacy[1] == 0x17;
 }
 

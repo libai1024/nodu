@@ -28,6 +28,7 @@ pub const STUB_OPERATIONS: [u8; 3] = [0xD2, 0xD7, 0xDE];
 /// profile, partition size, historical ID, or wrapping read sets capacity.
 pub static SUPPORTED_IDS: &[([u8; 3], &str, u64)] = &[
     ([0xEF, 0x40, 0x18], "Winbond W25Q128 family", 16_777_216),
+    ([0xEF, 0x60, 0x18], "Winbond W25Q128 family", 16_777_216),
     ([0xEF, 0x70, 0x18], "Winbond W25Q128 family", 16_777_216),
 ];
 

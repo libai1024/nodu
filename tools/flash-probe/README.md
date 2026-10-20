@@ -38,7 +38,7 @@ SPI 只发送固定读取命令 **9F、90 00 00 00、4B 00 00 00 00**。D7 只�
 
 首次无运行库链接实际缺少 `__floatunsidf`、`__divdf3`、`__muldf3`、`__fixunsdfsi`。显式旧版 libgcc 链接并 GC 后，最终保留 **divdf3.o、muldf3.o、fixunsdfsi.o、floatunsidf.o、_clzsi2.o、_clz.o** 六个成员，`nm -u` 为空。map 最初抽取但随后 GC 丢弃的其他成员不算进入 BIN。未链接 libc、完整 BSP、DMA、nncase 或其他 SDK 驱动实现。
 
-当前 BIN **8,672 字节**，SHA-256 `dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05`；入口 `0x80000000`，`_bss=_ebss=0x800021E0`，`_end=0x80002200`，hart0/hart1 栈顶分别为 `0x8000A200`、`0x80012200`，在独立 128 KiB 链接区内。ELF、map、反汇编和依赖文件都在 `build/`。本机纯协议/SLIP 的 ASan+UBSan 测试通过，见 `host-test-report.txt`。**当前第二候选尚未执行；第一候选的失败不认证任何容量。**
+当前 BIN **8,688 字节**，SHA-256 `6e9843b2bf365637af3853b1d827fc832a1a5ac4cd8dc5f203053bf5d29833a2`；入口 `0x80000000`，`_bss=_ebss=0x800021F0`，`_end=0x80002200`，hart0/hart1 栈顶分别为 `0x8000A200`、`0x80012200`，在独立 128 KiB 链接区内。ELF、map、反汇编和依赖文件都在 `build/`。本机纯协议/SLIP 的 ASan+UBSan 测试通过（含 0x60 类型字节 256 值扫描）。2026-10-20 扩白名单：`EF6018`（Winbond W25Q128JW 1.8V 变体，E7 诊断候选实测 ID），容量位 `0x18` 与 legacy `EF17` 门禁不变。
 
 独立代码审查发现旧编译选项下 TX 位域会生成字节写。已加入官方 SDK 的 `-fstrict-volatile-bitfields`，并将 TXDATA 明确写为 32 位 MMIO；最终反汇编 `uart_put_byte` 的 `0x800010B4` 为 `sw a0,0(a5)`，UARTHS 初始化也使用 32 位寄存器读写。仅有起始符加 ESC 的不完整帧现在也会超时清理，避免 size=0 的半帧残留。周期预算依赖已运行的 CPU cycle counter，尚未在硬件上标定实际时长。
 

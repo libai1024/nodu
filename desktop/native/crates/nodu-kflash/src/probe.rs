@@ -18,8 +18,8 @@ use crate::codec;
 use crate::error::{FlashError, Result};
 use crate::pyjson;
 
-pub const STUB_SHA256: &str = "dcc964360f50c97aa21ad66c18a3f1866442cb27a552ae4245b1f9c75629ea05";
-pub const STUB_SIZE: u64 = 8672;
+pub const STUB_SHA256: &str = "6e9843b2bf365637af3853b1d827fc832a1a5ac4cd8dc5f203053bf5d29833a2";
+pub const STUB_SIZE: u64 = 8688;
 
 fn probe_err(message: impl Into<String>) -> FlashError {
     FlashError::probe(message)

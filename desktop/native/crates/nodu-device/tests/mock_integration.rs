@@ -322,7 +322,9 @@ fn flash_gates_block_before_any_write() {
     let r = h.run_until_reply(&json!(10), 500);
     assert_eq!(
         r["error"],
-        json!("Flashing is blocked until the actual flash JEDEC capacity is verified; a 16 MiB read-back alone is not proof.")
+        json!(
+            "Flashing is blocked until the actual flash JEDEC capacity is verified; a 16 MiB read-back alone is not proof."
+        )
     );
     // backupDevice without a backupDir stops before RAM probing.
     h.submit(json!({"id": 11, "method": "backupDevice", "args": {}}));
