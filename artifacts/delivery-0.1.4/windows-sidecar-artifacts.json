@@ -1,0 +1,20 @@
+{
+  "nodu-device.exe": {
+    "bytes": 2231296,
+    "sha256": "2ca7773bfa2250e6353cc38514b3f7f6a443293ed9ff7a1909b837ca6fc03fbe",
+    "machine": "0x8664",
+    "execution": "not executed; Windows VM license blocked"
+  },
+  "nodu-terminal.exe": {
+    "bytes": 518144,
+    "sha256": "ea8c724cd0ad5cea8738f31f7cb3724bceeae856021ed4b2016362ec40a5be1e",
+    "machine": "0x8664",
+    "execution": "not executed; Windows VM license blocked"
+  },
+  "nodu-resources.exe": {
+    "bytes": 1125376,
+    "sha256": "98d51fcd0dd8b8407bd1a86a4fae0751c2be9e00a4f4710db246bc69f3d62765",
+    "machine": "0x8664",
+    "execution": "not executed; Windows VM license blocked"
+  }
+}

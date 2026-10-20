@@ -7,6 +7,7 @@
 
 use std::fs;
 use std::io::Write;
+#[cfg(unix)]
 use std::os::unix::fs::MetadataExt;
 use std::path::Path;
 
@@ -56,7 +57,9 @@ pub struct Member {
     pub name: String,
     pub dostime: u16,
     pub dosdate: u16,
-    /// `ZipInfo.external_attr` — `(st_mode & 0xFFFF) << 16` on POSIX.
+    /// `ZipInfo.external_attr` — `(st_mode & 0xFFFF) << 16` on POSIX; on
+    /// non-Unix hosts it carries a canonical regular-file mode (0o444/0o644),
+    /// not an inferred Windows ACL mapping.
     pub external_attr: u32,
     /// Already-raw (pre-compression) member bytes.
     pub data: Vec<u8>,
@@ -65,10 +68,27 @@ pub struct Member {
 /// `archive.write(source, source.name)` for a regular file.
 pub fn member_from_file(path: &Path) -> Result<Member> {
     let meta = fs::metadata(path).map_err(|e| FlashError::device(e.to_string()))?;
+    #[cfg(unix)]
     let mtime = meta.mtime();
+    #[cfg(not(unix))]
+    let mtime = i64::try_from(
+        meta.modified()
+            .map_err(|e| FlashError::device(e.to_string()))?
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(|_| fw("zipfile does not support timestamps before 1980"))?
+            .as_secs(),
+    )
+    .map_err(|_| fw("File modification time is out of range."))?;
     let (dostime, dosdate) =
         dos_datetime(mtime).ok_or_else(|| fw("zipfile does not support timestamps before 1980"))?;
+    #[cfg(unix)]
     let mode = meta.mode() & 0xFFFF;
+    #[cfg(not(unix))]
+    let mode = if meta.permissions().readonly() {
+        0o100444
+    } else {
+        0o100644
+    };
     let data = fs::read(path).map_err(|e| FlashError::device(e.to_string()))?;
     let name = path
         .file_name()

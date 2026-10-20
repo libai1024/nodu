@@ -1,0 +1,32 @@
+FFmpeg bundled build recipe (Windows host, target win32-x64)
+ffmpeg source: https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
+ffmpeg sha256: 8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
+sdl2 source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz
+sdl2 sha256: 5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165
+MSYS2 UCRT64 toolchain (gcc/make/pkg-config/objdump); invoked as
+  usr\bin\bash.exe --login -s -- <cacheDir> <jobs> <ffmpegVersion> <sdl2Version>
+  with scripts/build-media-windows.sh on stdin
+sdl2 configure: --host=x86_64-w64-mingw32 --enable-shared --disable-static --disable-video-x11 --disable-video-wayland --disable-pulseaudio --disable-alsa --disable-jack --disable-libsamplerate
+ffmpeg configure flags:
+  --disable-autodetect
+  --disable-gpl
+  --disable-nonfree
+  --disable-version3
+  --disable-doc
+  --disable-debug
+  --disable-network
+  --enable-ffplay
+  --enable-sdl2
+  --enable-w32threads
+  --disable-pthreads
+  --enable-small
+  --enable-static
+  --disable-shared
+  --disable-x86asm
+  --target-os=mingw32
+  --arch=x86_64
+  --cc=gcc
+  --extra-ldflags=-static-libgcc -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,-Bdynamic,--no-whole-archive
+make -j<N> (bounded host CPUs, max 8); toolchain identity in toolchain.txt
+Import tables audited with objdump -p; only system DLLs + SDL2.dll allowed.
+Run `npm run build:media` from desktop/ on a Windows host.

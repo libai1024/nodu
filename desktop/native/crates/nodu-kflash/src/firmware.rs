@@ -7,6 +7,7 @@
 
 use std::fs;
 use std::io::{Read, Write};
+#[cfg(unix)]
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
@@ -38,8 +39,9 @@ fn hex_digest(digest: &[u8]) -> String {
 }
 
 /// `private_directory(value, fresh=False)` — absolute path, no symlinks,
-/// fresh dirs must not pre-exist, every missing ancestor created `0o700`,
-/// final directory forced to `0o700`.
+/// fresh dirs must not pre-exist. On Unix every missing ancestor is created
+/// `0o700` and the final directory is forced to `0o700`; on Windows the
+/// directory ACLs are inherited — no POSIX mode equivalence is claimed.
 pub fn private_directory(value: &str, fresh: bool) -> Result<PathBuf> {
     let path = Path::new(value);
     if !path.is_absolute() {
@@ -63,21 +65,29 @@ pub fn private_directory(value: &str, fresh: bool) -> Result<PathBuf> {
         }
     }
     for directory in missing.iter().rev() {
-        fs::DirBuilder::new()
-            .mode(0o700)
+        let builder = fs::DirBuilder::new();
+        #[cfg(unix)]
+        let mut builder = builder;
+        #[cfg(unix)]
+        builder.mode(0o700);
+        builder
             .create(directory)
             .map_err(|e| FlashError::device(e.to_string()))?;
     }
+    #[cfg(unix)]
     fs::set_permissions(path, fs::Permissions::from_mode(0o700))
         .map_err(|e| FlashError::device(e.to_string()))?;
     Ok(path.to_path_buf())
 }
 
 /// `private_file(path, mode)`: `O_WRONLY|O_CREAT`, `O_EXCL` for the default
-/// `'xb'` or `O_TRUNC` for `'wb'`; mode `0o600`.
+/// `'xb'` or `O_TRUNC` for `'wb'`; mode `0o600` on Unix, inherited ACLs on
+/// Windows (no POSIX mode equivalence is claimed there).
 pub fn private_file(path: &Path, exclusive: bool) -> Result<fs::File> {
     let mut options = fs::OpenOptions::new();
-    options.write(true).mode(0o600);
+    options.write(true);
+    #[cfg(unix)]
+    options.mode(0o600);
     if exclusive {
         options.create_new(true);
     } else {
@@ -173,6 +183,7 @@ pub fn prepare(
                 "Existing firmware cache is invalid; move it aside before preparing again.",
             ));
         }
+        #[cfg(unix)]
         fs::set_permissions(&destination, fs::Permissions::from_mode(0o600))
             .map_err(|e| FlashError::device(e.to_string()))?;
         log("Official firmware cache verified (SHA256).");

@@ -1,0 +1,95 @@
+name: Windows x64 build and package
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "desktop/**"
+      - "brand/assets/**"
+      - ".github/workflows/windows-build.yml"
+  pull_request:
+    paths:
+      - "desktop/**"
+      - "brand/assets/**"
+      - ".github/workflows/windows-build.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  windows-x64:
+    runs-on: windows-2025
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.21.0"
+          architecture: x64
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+      - uses: msys2/setup-msys2@v2
+        id: msys2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            make
+            tar
+            xz
+            diffutils
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-pkgconf
+      - name: Install the pinned Rust toolchain and WASM CLI
+        working-directory: desktop/native
+        run: |
+          rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy --target wasm32-unknown-unknown --target x86_64-pc-windows-msvc
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $lock = Get-Content Cargo.lock -Raw
+          $match = [regex]::Match($lock, 'name = "wasm-bindgen"\s*\r?\nversion = "([^"]+)"')
+          if (-not $match.Success) { throw "Pinned wasm-bindgen version is missing" }
+          cargo install wasm-bindgen-cli --version $match.Groups[1].Value --locked
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Install JavaScript dependencies and Electron
+        run: |
+          npm ci
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm exec -- install-electron
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Rust checks on Windows
+        working-directory: desktop/native
+        run: |
+          cargo fmt --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo clippy --workspace --all-targets -- -D warnings
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo test --workspace --locked
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build the complete desktop application
+        env:
+          MSYS2_ROOT: ${{ steps.msys2.outputs.msys2-location }}
+        run: npm run build:electron
+      - name: Validate the staged backend and source licenses
+        run: |
+          node -e "const fs=require('fs');for(const name of ['nodu-device.exe','nodu-terminal.exe','nodu-resources.exe','ffmpeg.exe','ffprobe.exe','ffplay.exe','SDL2.dll']){if(!fs.existsSync('scope-extension/resources/bin/win32-x64/'+name))throw Error('Missing staged tool: '+name)}"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node scope-extension/test/backend-validation.cjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node scripts/check-licenses.cjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Produce the Windows portable package
+        run: npm run package:electron -- --arch x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nodu-windows-x64
+          if-no-files-found: error
+          path: |
+            desktop/dist/Nodu-*-win32-x64.zip
+            desktop/dist/manifest.json

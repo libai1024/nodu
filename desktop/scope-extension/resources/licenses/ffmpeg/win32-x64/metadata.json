@@ -1,0 +1,174 @@
+{
+  "version": "9.0.2",
+  "targetPlatform": "win32-x64",
+  "source": {
+    "url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+    "sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e"
+  },
+  "sdl2": {
+    "version": "2.32.10",
+    "url": "https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.tar.gz",
+    "sha256": "5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165",
+    "configureFlags": [
+      "--host=x86_64-w64-mingw32",
+      "--enable-shared",
+      "--disable-static",
+      "--disable-video-x11",
+      "--disable-video-wayland",
+      "--disable-pulseaudio",
+      "--disable-alsa",
+      "--disable-jack",
+      "--disable-libsamplerate"
+    ]
+  },
+  "configureFlags": [
+    "--disable-autodetect",
+    "--disable-gpl",
+    "--disable-nonfree",
+    "--disable-version3",
+    "--disable-doc",
+    "--disable-debug",
+    "--disable-network",
+    "--enable-ffplay",
+    "--enable-sdl2",
+    "--enable-w32threads",
+    "--disable-pthreads",
+    "--enable-small",
+    "--enable-static",
+    "--disable-shared",
+    "--disable-x86asm",
+    "--target-os=mingw32",
+    "--arch=x86_64",
+    "--cc=gcc",
+    "--extra-ldflags=-static-libgcc -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,-Bdynamic,--no-whole-archive"
+  ],
+  "buildPlatform": "win32-x64",
+  "staged": {
+    "ffmpeg.exe": {
+      "sha256": "b009e4acb7e57c3abf1845186015af267058f487877d6961b1217589ce1b6e09",
+      "pe": "IMAGE_FILE_MACHINE_AMD64 (0x8664)",
+      "imports": [
+        "bcrypt.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "api-ms-win-crt-conio-l1-1-0.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "ole32.dll",
+        "OLEAUT32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll",
+        "AVICAP32.dll"
+      ]
+    },
+    "ffprobe.exe": {
+      "sha256": "7f5d881eca7b53fe855bc11f4107a09857bf50fe5182ab4154ee7c1e15634bd1",
+      "pe": "IMAGE_FILE_MACHINE_AMD64 (0x8664)",
+      "imports": [
+        "bcrypt.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "ole32.dll",
+        "OLEAUT32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll",
+        "AVICAP32.dll"
+      ]
+    },
+    "ffplay.exe": {
+      "sha256": "2c61409de3a7edb9812e437170e9952020cda167ab45974f38cabd39cb513705",
+      "pe": "IMAGE_FILE_MACHINE_AMD64 (0x8664)",
+      "imports": [
+        "bcrypt.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "ole32.dll",
+        "OLEAUT32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll",
+        "AVICAP32.dll",
+        "SDL2.dll"
+      ]
+    },
+    "SDL2.dll": {
+      "sha256": "1b4b98fbe85e6a2bd67735e79d90d36fe927722b52cb10cc562d35bd2fc2930e",
+      "pe": "IMAGE_FILE_MACHINE_AMD64 (0x8664)",
+      "imports": [
+        "ADVAPI32.dll",
+        "GDI32.dll",
+        "IMM32.dll",
+        "KERNEL32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "ole32.dll",
+        "OLEAUT32.dll",
+        "SETUPAPI.dll",
+        "SHELL32.dll",
+        "USER32.dll",
+        "VERSION.dll",
+        "WINMM.dll"
+      ]
+    }
+  },
+  "runtime": {
+    "checks": {
+      "ffmpeg.exe -version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers\r",
+      "ffprobe.exe -version": "ffprobe version 9.0.2 Copyright (c) 2007-2026 the FFmpeg developers\r",
+      "ffplay.exe -version": "ffplay version 9.0.2 Copyright (c) 2003-2026 the FFmpeg developers\r"
+    },
+    "licenseCheck": "ffmpeg -L reports LGPL",
+    "smoke": {
+      "target": "win32-x64",
+      "executed": true,
+      "encode": "ok: 1146 bytes",
+      "probe": "ok: mpeg4 64x48",
+      "ffplay": "ok: dummy drivers, -autoexit"
+    }
+  },
+  "generatedAt": "2026-10-20T20:30:54.073Z"
+}

@@ -447,6 +447,51 @@ fn validate_restore_package() {
     }
 }
 
+#[test]
+fn private_paths_preserve_exclusive_creation() {
+    let root = tempfile::tempdir().unwrap();
+    let nested = root.path().join("a").join("b").join("c");
+    let dir = firmware::private_directory(nested.to_str().unwrap(), true).unwrap();
+    assert!(dir.is_dir());
+    // A fresh directory that already exists is rejected.
+    assert!(firmware::private_directory(dir.to_str().unwrap(), true).is_err());
+    let file_path = dir.join("portable.bin");
+    {
+        let mut f = firmware::private_file(&file_path, true).unwrap();
+        f.write_all(b"portable").unwrap();
+    }
+    // Exclusive creation never silently replaces existing content.
+    assert!(firmware::private_file(&file_path, true).is_err());
+    assert_eq!(std::fs::read(&file_path).unwrap(), b"portable");
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        assert_eq!(dir.metadata().unwrap().permissions().mode() & 0o777, 0o700);
+        assert_eq!(
+            file_path.metadata().unwrap().permissions().mode() & 0o777,
+            0o600
+        );
+    }
+}
+
+#[test]
+fn package_member_uses_platform_metadata() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("portable.bin");
+    std::fs::write(&path, b"portable").unwrap();
+    let member = kfpkg::member_from_file(&path).unwrap();
+    assert_eq!(member.name, "portable.bin");
+    assert_eq!(member.data, b"portable");
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        let meta = std::fs::metadata(&path).unwrap();
+        assert_eq!(member.external_attr, (meta.mode() & 0xFFFF) << 16);
+    }
+    #[cfg(not(unix))]
+    assert_eq!(member.external_attr, 0o100644 << 16);
+}
+
 fn hex(data: &[u8]) -> String {
     data.iter().map(|b| format!("{b:02x}")).collect()
 }
