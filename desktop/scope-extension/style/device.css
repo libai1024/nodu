@@ -24,6 +24,8 @@
 .nodu-device-details > summary { cursor: pointer; color: var(--theia-descriptionForeground); padding: 4px 0; }
 .nodu-device-details > summary:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
 .nodu-firmware dt { flex-shrink: 0; }
+.nodu-firmware .nodu-firmware-link { color: var(--theia-textLink-foreground); text-underline-offset: 3px; }
+.nodu-firmware .nodu-firmware-link:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
 .nodu-firmware .nodu-capabilities { display: flex; gap: 7px; font-size: 11px; }
 .nodu-capability-yes { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
 .scope-widget .nodu-code-input { font-family: var(--theia-code-font-family, monospace); font-size: 12px; resize: vertical; min-height: 64px; max-height: 300px; }

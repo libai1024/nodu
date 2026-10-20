@@ -6,7 +6,7 @@ N1.4,native,解析与输入边界,畸形 stdio 和串口输入,超大行有界�
 N1.5,native,Python 与 Rust 差分,相同输入分别执行两套实现,协议字节与结果 fixture 一致；所有差异有解释,PLAN 测试策略,1,partial,模拟板级 12/12 步观测一致（evidence/worker-differential.md）；真板差分并入 N1.6
 N1.6,native,原版并排对照,同一块板按相同步骤运行,保存原版与 Nodu 的对应日志和截图,PLAN 阶段门禁,1,todo,
 N1.7,native,跨平台构建与打包,macOS universal 和 Windows 构建,侧车可被应用发现并运行；目标平台冒烟通过,PLAN 阶段 1 与阶段 8,1,partial,仅 darwin-arm64 已构建并冒烟；universal 与 Windows 未做（media-bundle.md）
-A1.1,connect,选择开发板（9 种）,工具→选择开发板→任一项,单选勾选；写入用户配置 boardconfig；重启后保持,evidence/original-private-params.md §2,2,partial,9 项复位方式选择已实现（nodu-device-panel BOARD_IDS）；原版持久化 boardconfig 未实现
+A1.1,connect,选择开发板（9 种）,工具→选择开发板→任一项,单选勾选；写入用户配置 boardconfig；重启后保持,evidence/original-private-params.md §2,2,passed_host,LocalStorageService 按用户持久化 boardId/boardProfile（phase-7-ui-parity.md）
 A1.2,connect,板型复位时序,连接时,按板型 ID 执行 DTR/RTS 三步、每步 100 ms,evidence/original-private-params.md §3,2,partial,时序已实现并有单元测试；真板仅验证过板 ID 0/2 复位映射（phase-2-ide.md）
 A1.3,connect,野火 CAM / 通用 K210 物理板型,连接,物理板型与固件身份分开显示；复位时序映射到实测可用的原版 ID,Nodu 0.1.2 + 阶段 2 实测,2,passed_board,evidence/phase-2-ide.md
 A2.1,connect,连接,工具栏“连接”或 ⌘E,等待 [MaixPy] init end（10 s）→ 进入 IDE 模式 → 读版本；按钮变为断开,ide_dbg.c；original-private-params §4,2,passed_board,evidence/phase-2-ide.md
@@ -15,9 +15,9 @@ A2.3,connect,IDE 模式无应答,固件不响应 QUERY_STATUS,"提示 Connect fa
 A2.4,connect,取消连接,连接进度框按取消,提示检查硬件与选板；端口释放,0.2.5 字符串,2,passed_board,evidence/phase-2-ide.md
 A2.5,connect,断开,⌘E 或按钮,端口释放；状态清空,openmvplugin.cpp@af179e4,2,passed_board,evidence/phase-2-ide.md
 A3.1,connect,调速,进入 IDE 模式后,主机切到 1500000 bps；read_buf_len 2048,original-private-params §4,2,passed_board,真板连接完成 115200→1500000 切换（phase-2-ide.md）
-A4.1,connect,状态栏固件版本,连接后,显示“固件版本：x.y.z”；点击打开最新固件说明,主窗口证据,2,partial,固件版本显示已实现；点击打开固件说明未实现
+A4.1,connect,状态栏固件版本,连接后,显示“固件版本：x.y.z”；点击打开最新固件说明,主窗口证据,2,passed_host,固件版本链接到 Sipeed MaixPy releases（phase-7-ui-parity.md）
 A4.2,connect,状态栏串口,连接后,显示“串行端口：”端口名,主窗口证据,2,passed_board,端口名显示于 chip 与设备详情（phase-2-ide.md）
-A4.3,connect,状态栏 FPS,有帧时,显示 FPS；提示可能与摄像头帧率不同,主窗口证据,3,partial,FPS 在视觉面板/录制状态显示；状态栏 FPS 未单列
+A4.3,connect,状态栏 FPS,有帧时,显示 FPS；提示可能与摄像头帧率不同,主窗口证据,3,passed_host,右对齐 statusbar FPS，数据来自 state.fps；预览停/断链清除（phase-7-ui-parity.md）
 A5.1,connect,软复位,固件 SYS_RESET,板子复位；IDE 断开或重连行为与原版一致,ide_dbg.c USBDBG_SYS_RESET,2,passed_board,evidence/phase-2-ide.md
 A6.1,update,版本检查,启动后,读取 maixpy_ide_version.txt 等价源；有新版本时提示,original-private-params §6,2,todo,
 A6.2,update,资源包更新,启动后,读取资源版本；下载 zip；校验后解压到用户目录；提示重启,original-private-params §6,2,todo,
@@ -62,11 +62,11 @@ H1.2,video,播放视频文件,工具→视频工具→播放视频文件,内置 
 I1.1,editor,文件菜单,菜单逐项,新建（原版模板）/打开/文档文件夹/示例/更多示例/最近文件/保存/另存为/关闭/打印；快捷键一致,evidence/maixpy-ide-0.2.5-menus.txt,5,partial,Theia 文件菜单 + 发送文件/保存 boot 已接；原版模板/文档文件夹/最近文件未逐项对齐
 I1.2,editor,编辑菜单,菜单逐项,撤销/重做/剪切/复制/粘贴/剪贴板历史/全选/高级/查找替换/转到行；快捷键一致,evidence/maixpy-ide-0.2.5-menus.txt,5,partial,基础项由 Theia 提供；剪贴板历史等原版专属项未实现
 I2.1,editor,补全与悬停文档,输入 MaixPy API,离线补全与文档提示,openmvplugin.cpp@af179e4 文档解析,5,passed_host,api-index.json 离线 API 数据已内置
-I3.1,editor,示例菜单,文件→示例,内置 MaixPy-v1_scripts 分类菜单；打开为新文件,menus.txt；MaixPy-v1_scripts,5,partial,examples 目录与 board-api 示例存在；分类示例菜单未实现
-I4.1,editor,文档文件夹,文件→文档文件夹,~/Documents/MaixPy；不存在时创建,menus.txt,5,todo,
-I4.2,editor,新建文件模板,⌘N,# Untitled - By: 用户 - 日期 + hello world 相机循环,0.2.5 字符串,5,todo,
-I5.1,help,帮助菜单,帮助→MaixPy文档 / 论坛,打开原版 URL,original-private-params §6,5,todo,
-I5.2,help,关于,应用菜单→关于,版本信息 + OpenMV MIT 署名,0.2.5 字符串,5,todo,
+I3.1,editor,示例菜单,文件→示例,内置 MaixPy-v1_scripts 分类菜单；打开为新文件,menus.txt；MaixPy-v1_scripts,5,partial,desktop/examples 分类子菜单已接入，打开为未保存副本；内置示例仅 7 个 .py，非完整脚本库（phase-7-ui-parity.md）
+I4.1,editor,文档文件夹,文件→文档文件夹,~/Documents/MaixPy；不存在时创建,menus.txt,5,passed_host,~/Documents/Nodu（有意改名）；Electron reveal/Finder，browser 降级提示（phase-7-ui-parity.md）
+I4.2,editor,新建文件模板,⌘N,# Untitled - By: 用户 - 日期 + hello world 相机循环,0.2.5 字符串,5,passed_host,scope.new-script 原版模板逐字节（phase-7-ui-parity.md）
+I5.1,help,帮助菜单,帮助→MaixPy文档 / 论坛,打开原版 URL,original-private-params §6,5,passed_host,MaixPy文档/论坛打开原版 URL（phase-7-ui-parity.md）
+I5.2,help,关于,应用菜单→关于,版本信息 + OpenMV MIT 署名,0.2.5 字符串,5,passed_host,关于对话框：版本 + OpenMV MIT 署名（phase-7-ui-parity.md）
 K1.1,flash,烧写路径迁移,阶段 6,Rust 实现与 Python 对照样本逐字节一致；门禁不变；DE/E7 时拒绝烧写,PLAN 阶段 6,6,todo,
 P2.1,ui,精简状态栏,简洁模式,只保留行列与语言,0.1.2 P2,7,passed_host,简洁模式状态栏已精简
 P2.2,ui,未连接空状态,视觉面板未连接,短提示 + 连接按钮,0.1.2 P2,7,passed_host,空状态 + 连接设备按钮已实现

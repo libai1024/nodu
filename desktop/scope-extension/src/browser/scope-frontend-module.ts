@@ -12,6 +12,7 @@ import { NoduVisionToolsContribution } from './nodu-vision-tools';
 import { NoduFileToolsContribution } from './nodu-file-tools';
 import { NoduMediaToolsContribution } from './nodu-media-tools';
 import { NoduTerminalContribution } from './nodu-terminal-tools';
+import { NoduFileDocsContribution } from './nodu-file-docs';
 import { NoduDeviceModel } from './nodu-device-client';
 import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBoardGuideContribution, NoduBoardWidget } from './nodu-board-widget';
@@ -56,6 +57,10 @@ export default new ContainerModule(bind => {
     bind(NoduMediaToolsContribution).toSelf().inSingletonScope();
     bind(CommandContribution).toService(NoduMediaToolsContribution);
     bind(MenuContribution).toService(NoduMediaToolsContribution);
+    bind(NoduFileDocsContribution).toSelf().inSingletonScope();
+    for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution]) {
+        bind(contribution).toService(NoduFileDocsContribution);
+    }
     bind(NoduTerminalContribution).toSelf().inSingletonScope();
     for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution]) {
         bind(contribution).toService(NoduTerminalContribution);

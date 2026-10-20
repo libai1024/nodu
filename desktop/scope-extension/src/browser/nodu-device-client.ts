@@ -4,6 +4,7 @@ import { DisposableCollection } from '@theia/core/lib/common/disposable';
 import { RpcProxy } from '@theia/core/lib/common/messaging/proxy-factory';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
+import { LocalStorageService } from '@theia/core/lib/browser/storage-service';
 import { BoardInspection, ConnectOptions, DeviceBackup, DeviceClient, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NODU_DEVICE_PATH, NoduDeviceService, RecordingStatus, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
 import { BOARD_DEFINITIONS } from '../common/nodu-board-data';
 
@@ -13,6 +14,9 @@ export const NODU_FILE_LIMIT = 2 * 1024 * 1024;
 @injectable()
 export class NoduDeviceModel implements DeviceClient {
     @inject(WebSocketConnectionProvider) protected readonly connections!: WebSocketConnectionProvider;
+    // Per-user store: StorageService is rebound to the workspace-scoped
+    // WorkspaceStorageService, but the board choice must follow the user.
+    @inject(LocalStorageService) protected readonly storage!: LocalStorageService;
     private readonly changed = new Emitter<void>();
     private readonly logged = new Emitter<DeviceLog>();
     readonly onDidChange = this.changed.event;
@@ -57,18 +61,42 @@ export class NoduDeviceModel implements DeviceClient {
         this.toDispose.push(this.service.onDidOpenConnection(() => { void this.init(); }));
         this.toDispose.push(this.service.onDidCloseConnection(() => {
             if (this.disposed) { return; }
-            this.state = { ...this.state, phase: 'error', running: false, busy: false, preview: false };
+            this.state = { ...this.state, phase: 'error', running: false, busy: false, preview: false, fps: undefined };
             this.frame = undefined;
             this.entries = [];
             this.clearBoardInspection();
             this.fail('设备服务连接', new Error('连接已中断，正在等待服务重新连接。'));
         }));
-        try {
-            const raw = localStorage.getItem('nodu.board-id');
-            const saved = raw === null ? undefined : Number(raw);
-            if (saved !== undefined && Number.isInteger(saved) && saved >= 0 && saved <= 8) { this.boardId = saved; }
-        } catch { /* private mode */ }
+        void this.restoreSelection();
         void this.init();
+    }
+
+    /** Per-user board selection (original persisted /boardconfig.txt). */
+    private async restoreSelection(): Promise<void> {
+        const [savedId, savedProfile] = await Promise.all([
+            this.storage.getData<number>('nodu.board-id').catch(() => undefined),
+            this.storage.getData<string>('nodu.board-profile').catch(() => undefined),
+        ]);
+        if (this.disposed) { return; }
+        let changed = false;
+        if (typeof savedId === 'number' && Number.isInteger(savedId) && savedId >= 0 && savedId <= 8) {
+            this.boardId = savedId;
+            changed = true;
+        } else {
+            // Legacy pre-StorageService key; migrated on next persist.
+            try {
+                const raw = localStorage.getItem('nodu.board-id');
+                const legacy = raw === null ? undefined : Number(raw);
+                if (legacy !== undefined && Number.isInteger(legacy) && legacy >= 0 && legacy <= 8) { this.boardId = legacy; changed = true; }
+            } catch { /* private mode */ }
+        }
+        if (savedProfile === 'embedfire-cam-gc2145' || savedProfile === 'generic-k210') { this.boardProfile = savedProfile; changed = true; }
+        if (changed) { this.changed.fire(); }
+    }
+
+    private persistSelection(): void {
+        void this.storage.setData('nodu.board-id', this.boardId);
+        void this.storage.setData('nodu.board-profile', this.boardProfile);
     }
 
     get connected(): boolean { return this.state.phase === 'connected' || this.state.phase === 'running'; }
@@ -106,8 +134,8 @@ export class NoduDeviceModel implements DeviceClient {
         // arrives while the first inspection is still in flight.
         else if (state.port !== previousPort || (this.boardInspectionPort && state.port !== this.boardInspectionPort)) { this.clearBoardInspection(); }
         if (state.port) { this.selectedPort = state.port; }
-        if (state.boardProfile === 'embedfire-cam-gc2145' || state.boardProfile === 'generic-k210') { this.boardProfile = state.boardProfile; }
-        if (typeof state.boardId === 'number') { this.boardId = state.boardId; }
+        if ((state.boardProfile === 'embedfire-cam-gc2145' || state.boardProfile === 'generic-k210') && state.boardProfile !== this.boardProfile) { this.boardProfile = state.boardProfile; this.persistSelection(); }
+        if (typeof state.boardId === 'number' && state.boardId !== this.boardId) { this.boardId = state.boardId; this.persistSelection(); }
         // The worker also mirrors a failed operation's message into lastError;
         // when it repeats the error just recorded by fail(), keep its operation label.
         if (state.lastError && !this.error.endsWith(state.lastError)) { this.error = state.lastError; this.errorOperation = ''; }
@@ -142,11 +170,11 @@ export class NoduDeviceModel implements DeviceClient {
         if (this.selectedPort !== port) { this.backupCurrent = false; this.clearBoardInspection(); }
         this.selectedPort = port; this.changed.fire();
     }
-    selectProfile(profile: ConnectOptions['boardProfile']): void { if (this.boardProfile !== profile) { this.backupCurrent = false; } this.boardProfile = profile; this.changed.fire(); }
+    selectProfile(profile: ConnectOptions['boardProfile']): void { if (this.boardProfile !== profile) { this.backupCurrent = false; this.boardProfile = profile; this.persistSelection(); } this.changed.fire(); }
     selectBoardId(id: number): void {
         if (!Number.isInteger(id) || id < 0 || id > 8) { return; }
         this.boardId = id;
-        try { localStorage.setItem('nodu.board-id', String(id)); } catch { /* private mode */ }
+        this.persistSelection();
         this.changed.fire();
     }
     reportError(action: string, error: unknown): void { this.fail(action, error); }

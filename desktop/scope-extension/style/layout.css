@@ -57,7 +57,10 @@
 .nodu-simple #theia-statusBar #status-bar-problem-marker-status,
 .nodu-simple #theia-statusBar #status-bar-theia-notification-center,
 .nodu-simple #theia-statusBar [id='status-bar-scope:device'],
-.nodu-simple #theia-statusBar [id='status-bar-scope:demo'] { display: none !important; }
+.nodu-simple #theia-statusBar [id='status-bar-scope:demo'],
+.nodu-simple #theia-statusBar [id='status-bar-scope:fps'] { display: none !important; }
+.nodu-statusbar-fps { font-variant-numeric: tabular-nums; }
+
 /* Simple mode drops the breadcrumbs row; the multirow TabBar min-height reads
    --theia-breadcrumbs-height at use time, so zeroing it removes the gap. */
 .nodu-simple .theia-breadcrumbs { display: none !important; }

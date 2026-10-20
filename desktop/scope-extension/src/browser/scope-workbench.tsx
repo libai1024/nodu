@@ -291,13 +291,20 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
 
     protected updateStatus(): void {
+        // Right-aligned FPS is live whenever the framebuffer streams; the
+        // backend clears state.fps when preview stops or the link drops.
+        const fps = this.device.state.fps;
+        if (typeof fps === 'number') {
+            void this.status.setElement('scope:fps', { text: `$(device-camera) ${fps.toFixed(1)} fps`, alignment: StatusBarAlignment.RIGHT, priority: 100, className: 'nodu-statusbar-fps', tooltip: '帧缓冲帧率 · 可能与相机实际帧率不同', accessibilityInformation: { label: `帧缓冲帧率 ${fps.toFixed(1)} FPS`, role: 'status' } });
+        } else {
+            this.status.removeElement('scope:fps');
+        }
         if (this.layoutState.mode === 'simple') {
             this.status.removeElement('scope:device'); this.status.removeElement('scope:demo');
             return;
         }
         const fw = this.device.state.firmware ? ` · ${this.device.state.firmware.split(' ').slice(0, 2).join(' ')}` : '';
-        const fps = typeof this.device.state.fps === 'number' ? ` · ${this.device.state.fps.toFixed(1)} fps` : '';
-        void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}${fw}${fps}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-terminal-ansiBrightGreen, #64C5AC)' : undefined });
+        void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}${fw}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-terminal-ansiBrightGreen, #64C5AC)' : undefined });
         if (this.session.running) {
             void this.status.setElement('scope:demo', { text: '$(play) 示例播放中', alignment: StatusBarAlignment.LEFT, priority: 990, command: 'scope.show-demo-logs', tooltip: '查看示例日志' });
         } else {
