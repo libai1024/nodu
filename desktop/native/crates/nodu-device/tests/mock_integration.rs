@@ -942,7 +942,7 @@ fn format_script_needs_no_device() {
         "args": {"code": "x = 1  # gone\n    y = 2\n",
                  "stripComments": true, "spacesToTabs": true}}));
     let r = h.run_until_reply(&json!(1), 500);
-    assert_eq!(r["result"], json!("x = 1  \n\ty = 2\n"));
+    assert_eq!(r["result"], json!("x = 1\n\ty = 2\n"));
     // '#' inside a string literal is not a comment.
     h.submit(json!({"id": 2, "method": "formatScript",
         "args": {"code": "s = '#k'\n", "stripComments": true, "spacesToTabs": false}}));

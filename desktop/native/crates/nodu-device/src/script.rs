@@ -33,9 +33,19 @@ fn err(message: impl Into<String>) -> Result<String, String> {
     Err(message.into())
 }
 
+fn trim_padding(out: &mut Vec<u8>) {
+    while matches!(out.last(), Some(b' ' | b'\t')) {
+        out.pop();
+    }
+}
+
 /// Format a Python buffer: optionally strip `#` comments and/or convert
-/// 4-space leading indentation to tabs. Strings and inline spacing are never
-/// touched; newlines (including `\r\n`) are preserved verbatim.
+/// 4-space leading indentation to tabs. With stripping enabled,
+/// comment-only and blank physical lines outside string literals are
+/// removed entirely (like the original `loadFilter`), and whitespace
+/// padding left by removed comments is trimmed. String literal contents —
+/// including their newlines and indentation — are never touched; the line
+/// endings of retained lines (`\n` or `\r\n`) are preserved verbatim.
 pub fn format(code: &str, strip_comments: bool, spaces_to_tabs: bool) -> Result<String, String> {
     if code.len() > MAX_CODE_BYTES {
         return err("Script exceeds the 256 KiB limit.");
@@ -65,8 +75,23 @@ pub fn format(code: &str, strip_comments: bool, spaces_to_tabs: bool) -> Result<
                     let blank = j >= bytes.len()
                         || bytes[j] == b'\n'
                         || (bytes[j] == b'\r' && bytes.get(j + 1) == Some(&b'\n'));
+                    // Stripping removes blank and comment-only physical
+                    // lines entirely (CRLF included); they never take part
+                    // in indent checks or reach the output.
+                    if strip_comments && (blank || bytes.get(j) == Some(&b'#')) {
+                        while j < bytes.len() && bytes[j] != b'\n' {
+                            j += 1;
+                        }
+                        if j < bytes.len() {
+                            j += 1; // consume the LF
+                        }
+                        i = j;
+                        line_start = true;
+                        continue;
+                    }
                     // Comment-only lines do not take part in indent-style or
-                    // multiple-of-4 checks: their indentation is kept as-is.
+                    // multiple-of-4 checks; when stripping is off they pass
+                    // through untouched.
                     if !indent.is_empty() && !blank && bytes[j] != b'#' {
                         let has_space = indent.contains(&b' ');
                         let has_tab = indent.contains(&b'\t');
@@ -119,7 +144,9 @@ pub fn format(code: &str, strip_comments: bool, spaces_to_tabs: bool) -> Result<
                             }
                             j += 1;
                         }
-                        if !strip_comments {
+                        if strip_comments {
+                            trim_padding(&mut out);
+                        } else {
                             out.extend_from_slice(&bytes[i..j]);
                         }
                         i = j;
@@ -148,6 +175,16 @@ pub fn format(code: &str, strip_comments: bool, spaces_to_tabs: bool) -> Result<
                         i += skip;
                     }
                     b'\n' => {
+                        if strip_comments {
+                            let cr = out.last() == Some(&b'\r');
+                            if cr {
+                                out.pop();
+                            }
+                            trim_padding(&mut out);
+                            if cr {
+                                out.push(b'\r');
+                            }
+                        }
                         out.push(b'\n');
                         i += 1;
                         line_start = true;
@@ -196,6 +233,9 @@ pub fn format(code: &str, strip_comments: bool, spaces_to_tabs: bool) -> Result<
             }
         }
     }
+    if strip_comments && state == StringState::None {
+        trim_padding(&mut out);
+    }
     // `out` only ever holds copied input bytes plus tabs, so it stays UTF-8;
     // surface an error instead of silently returning an empty script.
     String::from_utf8(out).map_err(|_| "脚本格式化产物不是有效 UTF-8。".to_string())
@@ -206,6 +246,27 @@ mod tests {
     use super::format;
 
     #[test]
+    fn frozen_original_boot_format_comparison() {
+        // Frozen original-IDE result: artifacts/delivery-0.1.4/
+        // original-boot-formatted-readback.json produced 76 bytes; the
+        // untouched variant preserved 182.
+        let code = "# Nodu boot formatting comparison.\ndef message():\n    # This comment should disappear only in the formatted variant.\n    return \"NODU_ORIGINAL_BOOT_PROOF_20261021\"\n\nprint(message())\n";
+        assert_eq!(
+            format(code, true, true).unwrap(),
+            "def message():\n\treturn \"NODU_ORIGINAL_BOOT_PROOF_20261021\"\nprint(message())\n"
+        );
+    }
+
+    #[test]
+    fn multiline_string_content_survives_stripping() {
+        let code = "s = '''a\n\n    \n# literal\nb'''\n\nx=1 # c\n";
+        assert_eq!(
+            format(code, true, false).unwrap(),
+            "s = '''a\n\n    \n# literal\nb'''\nx=1\n"
+        );
+    }
+
+    #[test]
     fn both_flags_false_is_identity() {
         let code = "x = 1  # keep me\n    y = '#str'\n";
         assert_eq!(format(code, false, false).unwrap(), code);
@@ -214,7 +275,7 @@ mod tests {
     #[test]
     fn inline_comment_stripped_newline_kept() {
         let code = "x = 1  # comment\ny = 2\n";
-        assert_eq!(format(code, true, false).unwrap(), "x = 1  \ny = 2\n");
+        assert_eq!(format(code, true, false).unwrap(), "x = 1\ny = 2\n");
     }
 
     #[test]
@@ -222,7 +283,7 @@ mod tests {
         let code = "a = '#no'  # yes\nb = \"#no\"\n";
         assert_eq!(
             format(code, true, false).unwrap(),
-            "a = '#no'  \nb = \"#no\"\n"
+            "a = '#no'\nb = \"#no\"\n"
         );
     }
 
@@ -231,7 +292,7 @@ mod tests {
         let code = "a = 'it\\'# still string'  # real\nb = \"x\\\\\" # tail\n";
         assert_eq!(
             format(code, true, false).unwrap(),
-            "a = 'it\\'# still string'  \nb = \"x\\\\\" \n"
+            "a = 'it\\'# still string'\nb = \"x\\\\\"\n"
         );
     }
 
@@ -244,13 +305,13 @@ mod tests {
     #[test]
     fn unicode_passes_through() {
         let code = "# 注释\ns = '中文 # 保留'\n";
-        assert_eq!(format(code, true, false).unwrap(), "\ns = '中文 # 保留'\n");
+        assert_eq!(format(code, true, false).unwrap(), "s = '中文 # 保留'\n");
     }
 
     #[test]
     fn comment_at_eof_without_newline() {
         let code = "x = 1 # tail";
-        assert_eq!(format(code, true, false).unwrap(), "x = 1 ");
+        assert_eq!(format(code, true, false).unwrap(), "x = 1");
     }
 
     #[test]
@@ -258,7 +319,7 @@ mod tests {
         let code = "x = 1\r\n    y = 2\r\n# gone\r\nz = 3\r\n";
         assert_eq!(
             format(code, true, false).unwrap(),
-            "x = 1\r\n    y = 2\r\n\r\nz = 3\r\n"
+            "x = 1\r\n    y = 2\r\nz = 3\r\n"
         );
         assert_eq!(format(code, false, false).unwrap(), code);
     }
@@ -321,12 +382,12 @@ mod tests {
     #[test]
     fn comment_only_line_is_not_code_indent() {
         // A 2-space indented comment line must not trip the multiple-of-4 or
-        // style checks; the newline (and indent) survive the strip.
+        // style checks; the whole physical line is removed by the strip.
         let code = "  # comment\n    x=1\n";
-        assert_eq!(format(code, true, true).unwrap(), "  \n\tx=1\n");
+        assert_eq!(format(code, true, true).unwrap(), "\tx=1\n");
         // Tab-indented comment lines do not set the file style either.
         let code = "\t# c\n    x=1\n";
-        assert_eq!(format(code, true, true).unwrap(), "\t\n\tx=1\n");
+        assert_eq!(format(code, true, true).unwrap(), "\tx=1\n");
     }
 
     #[test]
