@@ -20,6 +20,7 @@ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
 import * as monaco from '@theia/monaco-editor-core';
 import { NoduResources } from './nodu-resources-client';
+import { buildExampleTree, MAX_EXAMPLE_DEPTH, MAX_EXAMPLE_FILES } from '../common/nodu-examples';
 
 const MAIXPY_DOCS_URL = 'https://maixpy.sipeed.com/';
 const MAIXPY_FORUM_URL = 'https://bbs.sipeed.com/';
@@ -69,7 +70,7 @@ export class NoduAboutDialog extends ReactDialog<void> {
     }
 }
 
-interface ExampleEntry { dir: string; name: string; uri: URI; }
+interface ExampleEntry { rel: string; uri: URI; }
 
 @injectable()
 export class NoduFileDocsContribution implements CommandContribution, MenuContribution, FrontendApplicationContribution {
@@ -129,42 +130,45 @@ export class NoduFileDocsContribution implements CommandContribution, MenuContri
      * tree itself when the startup reset failed. */
     private async registerExamples(): Promise<void> {
         const { examplesDir } = await this.resources.ready();
-        const entries = await this.collectExamples(FileUri.create(examplesDir));
-        if (!entries.length) {
+        const found = await this.collectExamples(FileUri.create(examplesDir));
+        if (!found.length) {
             this.examplesSubmenu?.dispose();
             this.examplesSubmenu = undefined;
             return;
         }
+        const uriByRel = new Map(found.map(entry => [entry.rel, entry.uri]));
+        const tree = buildExampleTree(found.map(entry => entry.rel));
         const examplesPath = [...CommonMenus.FILE, '2z_nodu', 'examples'];
-        const submenus = new Set<string>();
-        for (const entry of entries) {
-            const segments = entry.dir ? entry.dir.split('/') : [];
-            for (let depth = 1; depth <= segments.length; depth++) {
-                submenus.add(segments.slice(0, depth).join('/'));
-            }
+        for (const submenu of tree.submenus) {
+            this.exampleDisposables.push(this.menus.registerSubmenu(
+                [...examplesPath, ...submenu.segments],
+                submenu.segments[submenu.segments.length - 1],
+                { sortString: submenu.order }));
         }
-        for (const rel of [...submenus].sort()) {
-            this.exampleDisposables.push(this.menus.registerSubmenu([...examplesPath, ...rel.split('/')], rel.split('/').pop()!, { sortString: rel }));
-        }
-        entries.forEach((entry, index) => {
+        tree.files.forEach((file, index) => {
+            const rel = [...file.dir, file.name].join('/');
+            const uri = uriByRel.get(rel);
+            if (!uri) { return; }
             const id = `scope.example.${index}`;
             this.exampleDisposables.push(this.commands.registerCommand(
-                { id, label: `打开示例 ${entry.dir ? `${entry.dir}/` : ''}${entry.name}`, category: '见微 Nodu' },
-                { execute: () => this.openExample(entry.uri).catch(error => this.messages.error(`示例：${error instanceof Error ? error.message : String(error)}`)) }));
-            this.exampleDisposables.push(this.menus.registerMenuAction(entry.dir ? [...examplesPath, ...entry.dir.split('/')] : examplesPath, { commandId: id, label: entry.name, order: entry.name }));
+                { id, label: `打开示例 ${rel}`, category: '见微 Nodu' },
+                { execute: () => this.openExample(uri).catch(error => this.messages.error(`示例：${error instanceof Error ? error.message : String(error)}`)) }));
+            this.exampleDisposables.push(this.menus.registerMenuAction(
+                file.dir.length ? [...examplesPath, ...file.dir] : examplesPath,
+                { commandId: id, label: file.name, order: file.order }));
         });
     }
 
     private async collectExamples(base: URI): Promise<ExampleEntry[]> {
         const entries: ExampleEntry[] = [];
         const walk = async (dir: URI, rel: string, depth: number): Promise<void> => {
-            if (depth > 2 || entries.length >= 48) { return; }
+            if (depth > MAX_EXAMPLE_DEPTH || entries.length >= MAX_EXAMPLE_FILES) { return; }
             const stat = await this.files.resolve(dir).catch(() => undefined);
             for (const child of stat?.children ?? []) {
-                if (entries.length >= 48) { return; }
+                if (entries.length >= MAX_EXAMPLE_FILES) { return; }
                 if (child.name.startsWith('.') || child.name === '__pycache__') { continue; }
                 if (child.isDirectory) { await walk(child.resource, rel ? `${rel}/${child.name}` : child.name, depth + 1); }
-                else if (/\.py$/i.test(child.name)) { entries.push({ dir: rel, name: child.name, uri: child.resource }); }
+                else if (/\.py$/i.test(child.name)) { entries.push({ rel: rel ? `${rel}/${child.name}` : child.name, uri: child.resource }); }
             }
         };
         await walk(base, '', 0);

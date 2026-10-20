@@ -128,17 +128,18 @@ export class NoduUpdateContribution implements FrontendApplicationContribution {
         }
     }
 
-    /** Original wording: 网络请求失败“%1” / 无法打开资源文件“%1” / 错误：%1！ */
+    /** Original wording: the two specific failures are standalone sentences;
+     * only the generic case is wrapped as `错误：%1！`. */
     private installErrorText(error: unknown, url: string): string | undefined {
         const message = error instanceof Error ? error.message : String(error);
         if (message === 'cancelled') { return undefined; }
         if (/network request failed/i.test(message)) {
-            return `网络请求失败“${url}”`;
+            return `网络请求失败“${url}”！`;
         }
-        if (/archive|checksum|sha256|unsafe path|not a regular file|symlink/i.test(message)) {
-            return `无法打开资源文件“${url}”`;
+        if (/archive|checksum|sha256|unsafe path|not a regular file|symlink|zip/i.test(message)) {
+            return `无法打开资源文件“${url}”！`;
         }
-        return message.replace(/[！!。.\s]+$/, '');
+        return `错误：${message.replace(/[！!。.\s]+$/, '')}！`;
     }
 
     private async installResources(template: string, version: string, urlForErrors: string): Promise<void> {
@@ -182,7 +183,7 @@ export class NoduUpdateContribution implements FrontendApplicationContribution {
             dismiss();
             const text = this.installErrorText(error, urlForErrors);
             if (text !== undefined) {
-                await new UpdateMessageDialog({ title: '包更新' }, `错误：${text}！`).open();
+                await new UpdateMessageDialog({ title: '包更新' }, text).open();
             }
         } finally {
             disposables.dispose();

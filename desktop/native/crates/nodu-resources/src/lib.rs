@@ -113,17 +113,26 @@ pub struct CheckResult {
 }
 
 /// Only https:// plus loopback http for tests; anything else is refused.
+/// The URL is parsed, not prefix-matched: `http://localhost:80@evil.com/`
+/// and `http://127.0.0.1.evil.com/` must not slip through.
 fn ensure_safe_url(url: &str) -> Result<()> {
-    if url.starts_with("https://") {
-        return Ok(());
-    }
-    for host in ["http://127.0.0.1", "http://localhost"] {
-        if url == host
-            || url.starts_with(&format!("{host}:"))
-            || url.starts_with(&format!("{host}/"))
-        {
-            return Ok(());
+    let uri: ureq::http::Uri = url
+        .parse()
+        .map_err(|_| Error::msg(format!("unparseable url {url:?}")))?;
+    match uri.scheme_str() {
+        Some("https") => return Ok(()),
+        Some("http") => {
+            let authority = uri.authority();
+            if let Some(authority) = authority {
+                if !authority.as_str().contains('@') {
+                    let host = authority.host();
+                    if host == "127.0.0.1" || host == "localhost" {
+                        return Ok(());
+                    }
+                }
+            }
         }
+        _ => {}
     }
     Err(Error::msg(format!(
         "refusing non-HTTPS url {url:?} (loopback http allowed for tests)"
@@ -632,6 +641,13 @@ mod tests {
         assert!(ensure_safe_url("http://localhost/x").is_ok());
         assert!(ensure_safe_url("http://example.com/x").is_err());
         assert!(ensure_safe_url("ftp://127.0.0.1/x").is_err());
+        // Prefix-matching would let these through; the parsed host does not.
+        assert!(ensure_safe_url("http://localhost:80@evil.com/x").is_err());
+        assert!(ensure_safe_url("http://127.0.0.1@evil.com/x").is_err());
+        assert!(ensure_safe_url("http://127.0.0.1.evil.com/x").is_err());
+        assert!(ensure_safe_url("http://localhost.evil.com/x").is_err());
+        assert!(ensure_safe_url("http://[::1]/x").is_err());
+        assert!(ensure_safe_url("not a url").is_err());
     }
 
     #[test]

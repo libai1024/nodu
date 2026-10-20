@@ -25,6 +25,7 @@
     "build:imaging": "node scripts/build-imaging.cjs",
     "build:media": "node scripts/build-media.cjs",
     "fetch:models": "node scripts/fetch-models.cjs",
+    "vendor:examples": "node scripts/vendor-examples.cjs",
     "build:models": "node scripts/build-models.cjs",
     "check:licenses": "node scripts/check-licenses.cjs"
   },

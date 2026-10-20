@@ -580,3 +580,81 @@ test('launcher strips -update_resources into NODU_UPDATE_RESOURCES without forwa
     assert.deepEqual(out.timeouts, { NODU_UPDATE_RESOURCES: '1' });
     assert.deepEqual(out.terminals, []);
 });
+
+test('vendor-examples enforces the pinned commit and rewrites only vendored categories', t => {
+    const { execFileSync } = require('node:child_process');
+    const { mkdtempSync, mkdirSync, writeFileSync, existsSync: exists, readFileSync: read, readdirSync } = require('node:fs');
+    const crypto = require('node:crypto');
+    const { tmpdir } = require('node:os');
+    const { join: joinPath, resolve } = require('node:path');
+    const script = resolve(__dirname, '..', '..', 'scripts', 'vendor-examples.cjs');
+    const source = resolve(__dirname, '..', '..', '..', '..', 'nodu-refs', 'MaixPy-v1_scripts');
+    if (!exists(joinPath(source, '.git'))) { t.skip('MaixPy-v1_scripts checkout missing'); return; }
+
+    // A bogus --source (git repo at the wrong commit) must fail.
+    const bogus = mkdtempSync(joinPath(tmpdir(), 'nodu-vendor-bogus-'));
+    execFileSync('git', ['init', '-q', bogus]);
+    writeFileSync(joinPath(bogus, 'x.py'), 'x\n');
+    execFileSync('git', ['-C', bogus, '-c', 'user.email=t@t', '-c', 'user.name=t', 'add', 'x.py']);
+    execFileSync('git', ['-C', bogus, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'x']);
+    assert.throws(() => execFileSync('node', [script, '--source', bogus, '--dest', joinPath(bogus, 'out')], { encoding: 'utf8' }), /expected/);
+
+    const dest = mkdtempSync(joinPath(tmpdir(), 'nodu-vendor-'));
+    mkdirSync(joinPath(dest, 'Nodu'), { recursive: true });
+    writeFileSync(joinPath(dest, 'Nodu', 'marker.txt'), 'keep');
+    const out = execFileSync('node', [script, '--source', source, '--dest', dest], { encoding: 'utf8' });
+    const skipped = [...out.matchAll(/skipped (\S+) \((\d+) bytes/g)].length;
+
+    const tracked = execFileSync('git', ['-C', source, 'ls-files', '*.py'], { encoding: 'utf8' })
+        .split('\n').filter(Boolean).length;
+    const manifest = JSON.parse(read(joinPath(dest, 'manifest.json'), 'utf8'));
+    assert.equal(manifest.source, 'sipeed/MaixPy-v1_scripts');
+    assert.equal(manifest.commit, '8d7c5f98ba654d226f433d31718d852674cab08d');
+    const pyEntries = manifest.files.filter(f => f.path.endsWith('.py'));
+    assert.equal(pyEntries.length, tracked - skipped, 'vendored .py = tracked - skipped');
+    const sample = pyEntries[pyEntries.length >> 1];
+    const digest = crypto.createHash('sha256').update(read(joinPath(dest, sample.path))).digest('hex');
+    assert.equal(digest, sample.sha256, 'manifest sha256 matches the copied file');
+    assert.equal(read(joinPath(dest, 'LICENSE'), 'utf8'), read(joinPath(source, 'LICENSE'), 'utf8'));
+    // The top-level dirs mirror the source categories; Nodu is left alone.
+    for (const dir of ['application', 'basic', 'board', 'hardware', 'machine_vision', 'modules', 'multimedia', 'network']) {
+        assert.ok(exists(joinPath(dest, dir)), `missing vendored category ${dir}`);
+    }
+    assert.equal(read(joinPath(dest, 'Nodu', 'marker.txt'), 'utf8'), 'keep', 'Nodu untouched');
+
+    // Re-run: idempotent, manifest identical, marker still there.
+    const first = read(joinPath(dest, 'manifest.json'));
+    writeFileSync(joinPath(dest, 'application', 'stray.txt'), 'stale');
+    execFileSync('node', [script, '--source', source, '--dest', dest]);
+    assert.deepEqual(read(joinPath(dest, 'manifest.json')), first, 'deterministic manifest');
+    assert.ok(!exists(joinPath(dest, 'application', 'stray.txt')), 'previous vendored tree replaced');
+    assert.equal(read(joinPath(dest, 'Nodu', 'marker.txt'), 'utf8'), 'keep');
+    void readdirSync;
+});
+
+test('buildExampleTree orders Nodu first, sorts numerically, caps depth and count', () => {
+    const { buildExampleTree } = require('../lib/common/nodu-examples');
+    const tree = buildExampleTree([
+        'Nodu/green-tracker/main.py',
+        'basic/demo_10.py',
+        'basic/demo_2.py',
+        'basic/gpio/led.py',
+        'application/app.py',
+        'x.py',
+        'a/b/c/d/e/too_deep.py',
+        'a/b/c/d/e/.hidden.py',
+        'a/__pycache__/junk.py',
+    ]);
+    const top = tree.submenus.filter(s => s.segments.length === 1).map(s => s.segments[0]);
+    assert.deepEqual(top, ['Nodu', 'application', 'basic']);
+    const basic = tree.files.filter(f => f.dir.join('/') === 'basic').map(f => f.name);
+    assert.deepEqual(basic, ['demo_2.py', 'demo_10.py'], 'numeric-aware sort');
+    const gpioOrder = tree.submenus.find(s => s.segments.join('/') === 'basic/gpio');
+    const demo2 = tree.files.find(f => f.name === 'demo_2.py');
+    assert.ok(gpioOrder && demo2 && gpioOrder.order < demo2.order, 'directories sort before files');
+    assert.ok(!tree.files.some(f => f.name === 'too_deep.py'), 'depth > 5 dropped');
+    assert.ok(!tree.files.some(f => f.name === '.hidden.py' || f.name === 'junk.py'));
+    assert.ok(tree.files.some(f => f.name === 'x.py' && f.dir.length === 0), 'root-level file kept');
+    const capped = buildExampleTree(Array.from({ length: 1200 }, (_, i) => `d/f${i}.py`));
+    assert.equal(capped.files.length, 1000, 'file cap');
+});

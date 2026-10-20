@@ -1,0 +1,816 @@
+{
+  "source": "sipeed/MaixPy-v1_scripts",
+  "commit": "8d7c5f98ba654d226f433d31718d852674cab08d",
+  "files": [
+    {
+      "path": "LICENSE",
+      "bytes": 1063,
+      "sha256": "620df7a325fba88d8fd7ba87e3b0e3f7ea0593e42c7e5165011c8998c25d15e5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1702,
+      "sha256": "e89d1facf6614095d8b9c94c38161a31ed049569505c8841c9a169374e8b4429"
+    },
+    {
+      "path": "application/camera/cube_camera_shutter.py",
+      "bytes": 999,
+      "sha256": "c025536347f0cbf200c473e839a0e6bb3eb6bf39d9e01fd5ec51273358be5240"
+    },
+    {
+      "path": "application/capture_image_tool/boot.py",
+      "bytes": 6531,
+      "sha256": "ee92de625855c9db5063cc90d1fd0b93096a16907f0b5a84e78a623e574d52d2"
+    },
+    {
+      "path": "application/editor_pye.py",
+      "bytes": 99,
+      "sha256": "fc2cf2af85012b06315ff5b5efde8e458d0f64f003f89fa05a98919a0825e866"
+    },
+    {
+      "path": "application/gimbal/Gimbal.py",
+      "bytes": 8048,
+      "sha256": "34b57365bffc25c1719854083d24a410e19dda9911854948ed915c71bfd92eff"
+    },
+    {
+      "path": "application/uartTrans/demo_cmd.py",
+      "bytes": 1146,
+      "sha256": "f1e1ff393cdedc7f41df8d8c140a4b7f7c18bf3e2fca4f44f16b6d935101a3f2"
+    },
+    {
+      "path": "application/uartTrans/demo_data.py",
+      "bytes": 1356,
+      "sha256": "2659b3e091ac7bc668b186097acc242bd2a5acb64f4421675ff9870924e72de6"
+    },
+    {
+      "path": "application/uartTrans/demo_dual.py",
+      "bytes": 1432,
+      "sha256": "91b920fc9bc4e081e78fd1e4ce9a7a6348b4aef43c8441cd0260fe5fc94559a9"
+    },
+    {
+      "path": "application/uartTrans/uart_protocol.py",
+      "bytes": 6690,
+      "sha256": "c1569776b2f8040264402044541b90bf380feb2ceaa829f8c7c83d5d91cac438"
+    },
+    {
+      "path": "basic/demo_crc16.py",
+      "bytes": 3419,
+      "sha256": "0ce023989f25064b4d38c7f01f821dcd7c94c096d8347f2f09088f10b9536211"
+    },
+    {
+      "path": "basic/demo_files.py",
+      "bytes": 234,
+      "sha256": "85cab3c0aff789a7c951409008c54d56db5c6758ea3284c38ed0b6f1f79cd77f"
+    },
+    {
+      "path": "basic/demo_fs_info.py",
+      "bytes": 660,
+      "sha256": "9f9d98a3f07996b3f219b818dd4a7ba8d22dd049ea1942aa3685464662e31b15"
+    },
+    {
+      "path": "basic/demo_globals.py",
+      "bytes": 345,
+      "sha256": "b46577cbaa89e124ea894a8ccf95656e2c0b79fc52c49c298d39c636c1ad179e"
+    },
+    {
+      "path": "basic/demo_json.py",
+      "bytes": 261,
+      "sha256": "ef87cbd41a04971fc0a951571e3bce7e591ce84a8cd85a0dced46e324c19c118"
+    },
+    {
+      "path": "basic/demo_logging.py",
+      "bytes": 3282,
+      "sha256": "93808456dff1858162f8306ed7d25bbe9c994945dc91a43fcf36cc8970de0ba9"
+    },
+    {
+      "path": "basic/demo_ram_fs.py",
+      "bytes": 901,
+      "sha256": "ff927718928b8b0b7b1a2750ec41ec0557c1ab483ee4852d9b20dcdcc586c8eb"
+    },
+    {
+      "path": "basic/demo_repl_to_read.py",
+      "bytes": 112,
+      "sha256": "4a000c8743301ffaa0b6fc4aa2f7ab599bbc75c3082f4dc735561bbaaad6a93d"
+    },
+    {
+      "path": "basic/demo_set_gc_heap_size.py",
+      "bytes": 1983,
+      "sha256": "9d04fa23a40ec2b12cd0e064d02bfc31af37d6e726ae2e9c6eb3cd1911cc8048"
+    },
+    {
+      "path": "basic/demo_sha256.py",
+      "bytes": 512,
+      "sha256": "393710bfab52d0ba30e8387d37aa3b404dc6abe7abe211c6eff1a08901b28cee"
+    },
+    {
+      "path": "basic/demo_sys_info.py",
+      "bytes": 339,
+      "sha256": "65f060fa018864b5e4bd62bdd8291422bcd4e458ddb63c64ccf2a7ca25d659be"
+    },
+    {
+      "path": "basic/demo_thread.py",
+      "bytes": 329,
+      "sha256": "3bb8fef46fc3bfac43063ab6cb7c23d5c7e37ab37f5a79835845377f2e251ddb"
+    },
+    {
+      "path": "basic/demo_time.py",
+      "bytes": 511,
+      "sha256": "4600936c9b3106a1c38aa80fed1a47f50f64e9190724d7fea36e97d511c8096f"
+    },
+    {
+      "path": "basic/demo_view_mem.py",
+      "bytes": 298,
+      "sha256": "060b8311b0791860a189e9971795f7c13e687ad2ed2d9e540780e548997edf01"
+    },
+    {
+      "path": "basic/demo_yield.py",
+      "bytes": 957,
+      "sha256": "44fdb83543d60d67a8d8d26225b5321a565f72176891a60b28a4ac0130108999"
+    },
+    {
+      "path": "basic/demo_yield_task.py",
+      "bytes": 1307,
+      "sha256": "09fe363f40067df738dfdc224f992b73b8660fdeaad3ff72ea844fa4c20747e1"
+    },
+    {
+      "path": "basic/hello_wrold.py",
+      "bytes": 714,
+      "sha256": "b6cedd59024d9564654fd7c65c0aed82d41f961e84fe93a082046bac1519aeeb"
+    },
+    {
+      "path": "board/board.py",
+      "bytes": 1471,
+      "sha256": "5ca55bbd66cdf563c1c7265c03312094812c4c215d0624ab9fced5b80c54764b"
+    },
+    {
+      "path": "board/config_maix_amigo.py",
+      "bytes": 1398,
+      "sha256": "3312fe5e4b7a46ef1aa2b5e7c5a1f7b75df87624814422f3ad7255d2a2062af5"
+    },
+    {
+      "path": "board/config_maix_amigo_ips.py",
+      "bytes": 1500,
+      "sha256": "1da01b5c8c3f8865c9eedcc8fde196b05843c0bad7810e210fe22a9a6abd309c"
+    },
+    {
+      "path": "board/config_maix_bit.py",
+      "bytes": 549,
+      "sha256": "2eab3643e64c2a56c6f3d53bac8fcdf9f5a0fb37cbbd90d9127d04ac67953b49"
+    },
+    {
+      "path": "board/config_maix_cube.py",
+      "bytes": 1374,
+      "sha256": "291f99ec470fb69d754a04ba554c5f6c1de1965399b356c03572f9ee05888bda"
+    },
+    {
+      "path": "board/config_maix_dock.py",
+      "bytes": 671,
+      "sha256": "b611497d026a1e85cbd7252dbf709a6e5cda7a391b4c457f21e1e60246b9fdf4"
+    },
+    {
+      "path": "board/config_maix_duino.py",
+      "bytes": 1049,
+      "sha256": "9bf441e245c1dfa634803bb28f8a62005161e352c493150d2eebc834e147297b"
+    },
+    {
+      "path": "board/config_maix_go.py",
+      "bytes": 704,
+      "sha256": "e40dbf0871d273e389c4496b25003a23e97843abdbf6b65716f723ce3fb00ff4"
+    },
+    {
+      "path": "hardware/demo_binocular.py",
+      "bytes": 543,
+      "sha256": "9dd6d477b7736c867bdf6dd554711ccdb4479152fb9ef26d94b2ee8a2f12d740"
+    },
+    {
+      "path": "hardware/demo_camera.py",
+      "bytes": 437,
+      "sha256": "5089b8ede6051bb22298520cf89fab42c4cad3e08de0cfdeb5011e5f83a7b41a"
+    },
+    {
+      "path": "hardware/demo_cpu.py",
+      "bytes": 128,
+      "sha256": "f84c54f160d8d07f880aa8fa31b19b5998e09de19f42b02de9d7ffdcb0e2cb19"
+    },
+    {
+      "path": "hardware/demo_fft_spectrum.py",
+      "bytes": 1272,
+      "sha256": "ab8a676d73617d85c45ba3c1cc492e3355f1d4d44111ed59233a239f037d61e6"
+    },
+    {
+      "path": "hardware/demo_fft_waterfall.py",
+      "bytes": 999,
+      "sha256": "68d8d6169ea9d9c02a9e4cf262844629161079cb564d4e3a23e989cfaecb7103"
+    },
+    {
+      "path": "hardware/demo_gpio_intr.py",
+      "bytes": 452,
+      "sha256": "6ce4113bad24f3e78fe38ccac28ee8c4057d4ab4cd450c3f6a003cd17239d8ec"
+    },
+    {
+      "path": "hardware/demo_gpio_led.py",
+      "bytes": 1121,
+      "sha256": "be488c38f6aca8ed4b404500b9395a769fb2fab587a8621440eded26d7889b24"
+    },
+    {
+      "path": "hardware/demo_i2c.py",
+      "bytes": 538,
+      "sha256": "76d5ebc6005255fd8de1e6d9ecee6101991f64d94b36785c9ca1e88c85ee51fc"
+    },
+    {
+      "path": "hardware/demo_i2c_oled.py",
+      "bytes": 2599,
+      "sha256": "a0e807b4a11b94438de59981b0c292609074612db57f9a69a3dc25731c66ad8f"
+    },
+    {
+      "path": "hardware/demo_i2c_slave.py",
+      "bytes": 401,
+      "sha256": "76e6a709c6424a192d6d65df3547cf9ba482c7647e1fe57e55485d5894ac5bd7"
+    },
+    {
+      "path": "hardware/demo_i2s.py",
+      "bytes": 922,
+      "sha256": "ff7237f92c6461935cb5c7f436b77eadd3ae5d18a28563af85b4a1202c9a9f3e"
+    },
+    {
+      "path": "hardware/demo_lcd.py",
+      "bytes": 765,
+      "sha256": "b188f8b5c6c980b343dcbe710d679c3b84ad6c706ab0ea533c1036e92e951235"
+    },
+    {
+      "path": "hardware/demo_lcd_800x480.py",
+      "bytes": 563,
+      "sha256": "ccefbed0c75d5b75185f9e52d7e64586144b68349827cfe91b006b418886d2cb"
+    },
+    {
+      "path": "hardware/demo_mic_array.py",
+      "bytes": 495,
+      "sha256": "486f57d488bd272c2c600b0037283921d94c93afdc50e164dc0d4e58c7065038"
+    },
+    {
+      "path": "hardware/demo_onewire_ds18x20.py",
+      "bytes": 1916,
+      "sha256": "917c163013e71586cddbd350eb8ea38370984b7cf28999ff37f9a256c37fcef0"
+    },
+    {
+      "path": "hardware/demo_pwm.py",
+      "bytes": 459,
+      "sha256": "be3143606d25617608fef14189b13a8a719fafecfb2d3791bd4204d9553c518c"
+    },
+    {
+      "path": "hardware/demo_spi_cs.py",
+      "bytes": 868,
+      "sha256": "90aa39ba80f6a2e3b9284d794767757dcb241050f33eb3e2718c91b41af1568c"
+    },
+    {
+      "path": "hardware/demo_spi_soft.py",
+      "bytes": 579,
+      "sha256": "3d25656ad8aa018939e0989f6139d453f738fea34c19bfc040babe32fa544863"
+    },
+    {
+      "path": "hardware/demo_switch_sensor.py",
+      "bytes": 982,
+      "sha256": "577368afd6eed1049ef57796ff3bf430010f358af6861e4608d70fc7eab44d3a"
+    },
+    {
+      "path": "hardware/demo_timer.py",
+      "bytes": 539,
+      "sha256": "cd3aee6040043fee6fe1de4673ef83ea8a13fe0c2ae1503df2cae00a780c687d"
+    },
+    {
+      "path": "hardware/demo_touchscreen.py",
+      "bytes": 847,
+      "sha256": "191ba3b424127277da37acbbc44486446aa417dfc62224d0bc6eb9fedfff2b01"
+    },
+    {
+      "path": "hardware/demo_uart_loop.py",
+      "bytes": 769,
+      "sha256": "6d833ac84434fca32e0e044e50d4581bf566d0e2ee507d4e9a1151a4b9ffac6a"
+    },
+    {
+      "path": "hardware/demo_uart_many.py",
+      "bytes": 975,
+      "sha256": "0d40f34a7515d35e48a06cd8638b6552a40d3fb9e5442abc94c786b0aeb43ee3"
+    },
+    {
+      "path": "hardware/demo_wdt.py",
+      "bytes": 1184,
+      "sha256": "56e644f3315bb22aacfa867466d0ab35c368949861c836383c002b246d542a3a"
+    },
+    {
+      "path": "hardware/fpioa_manager.py",
+      "bytes": 2463,
+      "sha256": "3bb799ab55464b32a640820013368415e31018e2112c05dfde5041367c753429"
+    },
+    {
+      "path": "machine_vision/debug_kpu_yolov2.py",
+      "bytes": 1952,
+      "sha256": "4911c7556b53124a3cca5660ae51bbe4190634b64012a0be1afa5df6bf8b9c08"
+    },
+    {
+      "path": "machine_vision/demo_affine.py",
+      "bytes": 887,
+      "sha256": "e0858b075de151240d59db8c140a65198505a9e14ff16953fe512b95e0fe287f"
+    },
+    {
+      "path": "machine_vision/demo_find_green_blob.py",
+      "bytes": 504,
+      "sha256": "bac7ea3f8b5236b8c391bf07b34ffd4008c679a561142d132297bbc1a3a2d252"
+    },
+    {
+      "path": "machine_vision/demo_fps_display.py",
+      "bytes": 378,
+      "sha256": "4183f6ab00166aba9ae291d5596e423a6bce0a3faf85d659e938a27b4341a1c5"
+    },
+    {
+      "path": "machine_vision/demo_image_deal.py",
+      "bytes": 747,
+      "sha256": "e9fb15dd3078932678d6a053559b4d6975fa0d0f6191b07d22f89399403bc7ec"
+    },
+    {
+      "path": "machine_vision/demo_scan_qr_code.py",
+      "bytes": 531,
+      "sha256": "ab42e81a67704453302ed19b58b82331713ab2abacca5ced94a5ec949abf3da9"
+    },
+    {
+      "path": "machine_vision/face_find/demo_find_face.py",
+      "bytes": 1882,
+      "sha256": "070254d1cdd78f76bd012924b9f2c45184ec096a7b58da09e1577a35f359e590"
+    },
+    {
+      "path": "machine_vision/face_recognization/demo_face_recognization.py",
+      "bytes": 3987,
+      "sha256": "2872bff84a051251ce65e376a81b8f54e57d2e1defffbde7cadb365c3f5cddc9"
+    },
+    {
+      "path": "machine_vision/fans_share/mask.kmodel/mask.py",
+      "bytes": 1735,
+      "sha256": "e7abc92cc3a53e3245910f3e54d800bd347056b74488ad7404a0abe081ffa42f"
+    },
+    {
+      "path": "machine_vision/fans_share/yolov2_apple,banana,orange/main.py",
+      "bytes": 925,
+      "sha256": "802e2d179ecb9032e5e1a29ae78745dea9ed4327c71b392c0da64f316929b7f6"
+    },
+    {
+      "path": "machine_vision/fmap/fmap.py",
+      "bytes": 1893,
+      "sha256": "59d9757fdf97eddb90343388d270766f37d2e6abe6dd3a2540e85e03b54da703"
+    },
+    {
+      "path": "machine_vision/load_big_model/demo_load_big_model.py",
+      "bytes": 706,
+      "sha256": "3ea7aca19e76c818fba237e15194b8336b32926b8e64e23eec01e1da10b16f8e"
+    },
+    {
+      "path": "machine_vision/mobilenet_1000_class/mobilenetv1_1000class.py",
+      "bytes": 1590,
+      "sha256": "6e7f47b3ac86bc501d4e7809b822d2b69e8ceb629a56dab5e47116f890e0eb66"
+    },
+    {
+      "path": "machine_vision/model_le2be.py",
+      "bytes": 1376,
+      "sha256": "0d8020a3500c4cf4e611b90a7ae2530770a73d83270c79ddda420fe3f7b40066"
+    },
+    {
+      "path": "machine_vision/self_learning_classifier/self_learning_classifier.py",
+      "bytes": 3802,
+      "sha256": "1d3faf7588a9f4dcaa9907b6aefcd4f6d623f0a747fd4557dd62f638d8345a1b"
+    },
+    {
+      "path": "machine_vision/self_learning_classifier/self_learning_classifier_load.py",
+      "bytes": 1443,
+      "sha256": "db971e444ee58b0b7d6158f3709b681995a5b0697b0006dfd530a9821547556c"
+    },
+    {
+      "path": "machine_vision/yolov2_20class.py",
+      "bytes": 1083,
+      "sha256": "bcfc808728a9aaa366df9f7637fc1b1629f64be63a84fb66150d9309b77edf47"
+    },
+    {
+      "path": "modules/grove/chainable_RGB_LED/RGB_LED.py",
+      "bytes": 3534,
+      "sha256": "8f7c795600162da4688c78d59f1271003de6e395b673c57bf0906fa1076a7394"
+    },
+    {
+      "path": "modules/grove/chainable_RGB_LED/breath.py",
+      "bytes": 830,
+      "sha256": "58b5eafac52209480a1d83786e45dffdb9f52988124f3635730b1832d9955aa2"
+    },
+    {
+      "path": "modules/grove/chainable_RGB_LED/fade_inout.py",
+      "bytes": 682,
+      "sha256": "8a4db7bc1417f2dad290ba1c031e98b118e2465ed7eaa6dcb42339deb7f3d0e7"
+    },
+    {
+      "path": "modules/grove/ultrasonic/measure.py",
+      "bytes": 337,
+      "sha256": "06322e4ee5a45e309a699dcfe11f9d1ce2ffd784f3e94a17b243ded4930b93d0"
+    },
+    {
+      "path": "modules/grove/ws2812/ws2812.py",
+      "bytes": 378,
+      "sha256": "b7873549b62fd442f6b2a5c22eb4bb42ba4a77067de922bc3bbaa1f29c6ad843"
+    },
+    {
+      "path": "modules/others/OLED/ssd1306/main.py",
+      "bytes": 676,
+      "sha256": "ad9cb135e3e98faebe7c2ebc1f0c1ac968003b9de30d2ebf12c30f5712bf1235"
+    },
+    {
+      "path": "modules/others/OLED/ssd1306/ssd1306k.py",
+      "bytes": 6251,
+      "sha256": "a94cc70c16fd7932730defdde7128fd8e670beee5b021f36a7cbb93ef74ca89f"
+    },
+    {
+      "path": "modules/others/Servo/Servo.py",
+      "bytes": 905,
+      "sha256": "e04fc9f8622b701bd02c4fafbb894b35baa8ef76f8ed72fd362bd9a8bd9ecbaf"
+    },
+    {
+      "path": "modules/others/ads1115/ads1115.py",
+      "bytes": 8668,
+      "sha256": "22506a03bfd19505caa52b8d844b5cae4e3ff83b775d506d3897fe23c03972b2"
+    },
+    {
+      "path": "modules/others/adxl345/adxl345.py",
+      "bytes": 3395,
+      "sha256": "51a6828a3b02e4805a1c74d673ffc78bcdf5066f887dc200a66b1e4d428b9b04"
+    },
+    {
+      "path": "modules/others/amg88xx/test_amg88xx.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "modules/others/bmm150/bmm150.py",
+      "bytes": 30355,
+      "sha256": "5d2bb9a59e21e43cfe38f792e49507a2dee3e788a054a67e4f7ac41597055ebd"
+    },
+    {
+      "path": "modules/others/dht11/dht11.py",
+      "bytes": 6881,
+      "sha256": "1d2b95157f021476c9490530baeded34069b4d0f6578e0b04d862217432640bf"
+    },
+    {
+      "path": "modules/others/es8374/es8374.py",
+      "bytes": 29694,
+      "sha256": "87cd0a95f0ba2ae8740c3c6f7b003268dc9668bd2ca0c7c7329186d800f6907f"
+    },
+    {
+      "path": "modules/others/es8374/sound.py",
+      "bytes": 5425,
+      "sha256": "f7a3525f368f9c9c2b50d54ee14e29527bc4b274d202832ef87c5b17a1b0b3f9"
+    },
+    {
+      "path": "modules/others/heimann_HTPA_32x32/HTPA_32x32_demo.py",
+      "bytes": 2352,
+      "sha256": "cbb05496bc401506cc0f1ed24eaab9f746a734299401290d1c9ca1b85970e528"
+    },
+    {
+      "path": "modules/others/mlx90640/mlx90640.py",
+      "bytes": 4537,
+      "sha256": "480c898d1312cccbbd520d2fca9d28a96752e3b46ac830a75a8c5679466d37f3"
+    },
+    {
+      "path": "modules/others/pca9685/pca9685.py",
+      "bytes": 1658,
+      "sha256": "2abb06a3d57f2dbc85909efe66599822cc415e1c7b4cbf7fd2ea654fea5feca1"
+    },
+    {
+      "path": "modules/spmod/sp_bt/demo_sp_bt.py",
+      "bytes": 1125,
+      "sha256": "8961b9d69976fdf0f1de8835f2cd4501900a9ae3612720d1b1ef95f94319555c"
+    },
+    {
+      "path": "modules/spmod/sp_eink/demo_sp_eink.py",
+      "bytes": 7546,
+      "sha256": "6e94d5654c03a9dceaadd70fa5a41c3b1a1076d81ef05b5fb679a77c92f4e207"
+    },
+    {
+      "path": "modules/spmod/sp_ethernet/demo_ethernet_tcp.py",
+      "bytes": 1109,
+      "sha256": "9d9fa232c24488a9df77ddf56f176019e99b867749f2472e7b043d383bb267d5"
+    },
+    {
+      "path": "modules/spmod/sp_ethernet/demo_ethernet_udp.py",
+      "bytes": 1263,
+      "sha256": "52ecb8ea4f1f6ebe6b47196374e8ea38b9c25bf625e4c45cca985fd964f6840d"
+    },
+    {
+      "path": "modules/spmod/sp_lcd114/demo_sp_lcd114.py",
+      "bytes": 6216,
+      "sha256": "34a75514910d0f968c3a2aee51c002e503a12f9420060fa98fc858ce3d66b104"
+    },
+    {
+      "path": "modules/spmod/sp_lora/demo_sp_lora.py",
+      "bytes": 14994,
+      "sha256": "e7a82a9a0f7fdb9a7d9b6b94a8fe18acd8e5cc99c8b69bb7ebbc5968e86e7cec"
+    },
+    {
+      "path": "modules/spmod/sp_rfid/demo_sp_rfid.py",
+      "bytes": 16978,
+      "sha256": "4a3be7d6d2defffca4d1cb9db728193857aa46c6a2f79d7bd85db9fa648f4ad6"
+    },
+    {
+      "path": "modules/spmod/sp_tof/demo_vl53l0x.py",
+      "bytes": 7437,
+      "sha256": "bcbfbc789e7b669254483bab5217612fdc029472621318f918ab43ed178af085"
+    },
+    {
+      "path": "modules/spmod/sp_tof/demo_vl53l1x.py",
+      "bytes": 8595,
+      "sha256": "c29e0a48ed10b432bf016756cfeeaec6413b1cb66389c4ef09536b6c8dc492e4"
+    },
+    {
+      "path": "modules/spmod/sp_weather/demo_sp_weather.py",
+      "bytes": 10191,
+      "sha256": "76b2e29f8bafe4aeeff44da7d52d0a752a229cb953a2b9b2133d0ab4d7f7ab29"
+    },
+    {
+      "path": "multimedia/audio/play_wav.py",
+      "bytes": 1384,
+      "sha256": "bd2ed37156cc9f4d3ee556e4c0ef1a732a07834bb304c629c762dee92d4ccac0"
+    },
+    {
+      "path": "multimedia/audio/record_play.py",
+      "bytes": 1067,
+      "sha256": "ecea5513a124178129aa21504ee780fd66451d493619eddcf58effa36f88a171"
+    },
+    {
+      "path": "multimedia/audio/record_wav.py",
+      "bytes": 1148,
+      "sha256": "5024c97190a477c9e38fa8fc0f75338296473d8524214d79d0faed0479c160dc"
+    },
+    {
+      "path": "multimedia/gui/image/anime.py",
+      "bytes": 323,
+      "sha256": "33f06968fcdd9e0ebbc8f91c5cf322760fab75bd80d8a032f5ba243b14bbee24"
+    },
+    {
+      "path": "multimedia/gui/image/demo_draw_circle.py",
+      "bytes": 349,
+      "sha256": "13d8fa5a0ba362564c5c038df302e00dffcd7313d5c181e9a6ac70055ae8ab53"
+    },
+    {
+      "path": "multimedia/gui/image/demo_draw_font/image_draw_font.py",
+      "bytes": 3929,
+      "sha256": "8ded3098dd778a841099e34c3f52c050c906cb820ff2ad4d0732ee178758fa07"
+    },
+    {
+      "path": "multimedia/gui/image/demo_draw_font/image_draw_string.py",
+      "bytes": 720,
+      "sha256": "d8b734e16e2c084f6e74bc64da9f6293af76f38176f03866a0730c6808522072"
+    },
+    {
+      "path": "multimedia/gui/image/demo_draw_font/test_draw_font.py",
+      "bytes": 5744,
+      "sha256": "16ea4f43b86216e8ddb71c2fe3ea503d2ae366fa9d2402c7ccf34eb42a966a71"
+    },
+    {
+      "path": "multimedia/gui/image/demo_rotation_corr.py",
+      "bytes": 402,
+      "sha256": "d7752a4296304b9892151ea5a7a1e9ed4d01b75ae413bca3406207dda1592496"
+    },
+    {
+      "path": "multimedia/gui/image/demo_save_picture.py",
+      "bytes": 384,
+      "sha256": "4d11b8cb1b707d311b8f919cb5a32460f26bebc74f7ab4a8d6f285773277987d"
+    },
+    {
+      "path": "multimedia/gui/lvgl/amigo_touchscreen/test_touch.py",
+      "bytes": 2925,
+      "sha256": "ff2e491d4900d1d99510a9486dd1fc1af77dcdd3e5196f6c5b1c4fca508a6107"
+    },
+    {
+      "path": "multimedia/gui/lvgl/amigo_touchscreen/touch.py",
+      "bytes": 2887,
+      "sha256": "37e09593c84748999536facbdb67ae135bc203db9d88bfb83b2b6540d20abd85"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_advanced.py",
+      "bytes": 8995,
+      "sha256": "d3a0cb99342f55390f5d2087b0aa0def676acb55a9582e7df0a3a62cb02184bb"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_button.py",
+      "bytes": 1521,
+      "sha256": "f5b4f3ab9a8a84fa5a08ff881858cdeba434d5b48d639bba09ffad18c6731857"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_button2.py",
+      "bytes": 1373,
+      "sha256": "c0358bec89b62b52d67df3856f482f0284425c19050c72b389817ccbf980cae0"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_chart_anime.py",
+      "bytes": 3857,
+      "sha256": "8cf3998b843ad6f3de9b5ab8d77571bc53092e225c7f4c07f845a995f99c9dae"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_image.Image.py",
+      "bytes": 2347,
+      "sha256": "7a294f0c007c2fa1ca058f0160081dbf783e60000d437ad30b63004138aa9ab6"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_img.py",
+      "bytes": 1659,
+      "sha256": "18e7e18090b31c6a119da86de825859a47b20dfe2e96b874fb859f0daff70cf3"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_img_png.py",
+      "bytes": 4743,
+      "sha256": "ee539ac7f6ffd9507d6107841d009895d7f6e8b0cc7d7571dd8d3600585bd3fd"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_multiple_screens.py",
+      "bytes": 2659,
+      "sha256": "8d1cc69ef7309e5c55f1f3228783f570b6b8403d1998f5063901b77ed985ac39"
+    },
+    {
+      "path": "multimedia/gui/lvgl/lvgl_unicode.py",
+      "bytes": 5440,
+      "sha256": "47c052bb79fb5e04659bfa5da79896a043d292a032520e402efcc43502da8984"
+    },
+    {
+      "path": "multimedia/gui/maixui/bme280.py",
+      "bytes": 8810,
+      "sha256": "244619a8712ce9d6380d2b24cdac71130896b3b10c83cdbb39e446438ecae616"
+    },
+    {
+      "path": "multimedia/gui/maixui/button.py",
+      "bytes": 5563,
+      "sha256": "1e954808aa00b2f7377feababe1fcba27c57655505a99aa71312f1786479fa6a"
+    },
+    {
+      "path": "multimedia/gui/maixui/msa301.py",
+      "bytes": 24806,
+      "sha256": "c6853b0fda158a9209715389860bf784662248cfecc6c6a7d6927cdb528bb6cc"
+    },
+    {
+      "path": "multimedia/gui/maixui/pmu_axp173.py",
+      "bytes": 13072,
+      "sha256": "8474b9c5e9cadcc41076abf0d2c7c8b02f3e9a30f7d53c26f684006db1ef9052"
+    },
+    {
+      "path": "multimedia/gui/maixui/qmcx983.py",
+      "bytes": 3202,
+      "sha256": "2d79075ee1ef963abbf4ee9ad27b08c5334a2a8b637e1132154f49aca720fa86"
+    },
+    {
+      "path": "multimedia/gui/maixui/shtxx.py",
+      "bytes": 1797,
+      "sha256": "c51aa7e2c1973421ef16b14bacbf3bcb04937893f591ba24baa65a40622003a3"
+    },
+    {
+      "path": "multimedia/nes/forward_keyboard.py",
+      "bytes": 4605,
+      "sha256": "a230583ba34bfd157a6f2f3552c4d72f100dabb9d35d13e7030f3f843d3b42bf"
+    },
+    {
+      "path": "multimedia/nes/nes_amigo_handle_and_sound.py",
+      "bytes": 1310,
+      "sha256": "909f11511c45ab95eb61bfd181fb3e0f68a552f19dbec9dc5d739c182deb25d1"
+    },
+    {
+      "path": "multimedia/nes/nes_emulator.py",
+      "bytes": 632,
+      "sha256": "f5ae96aa660617024535dfc2e51260cc322f46840497da9ac021ef78e56b01f3"
+    },
+    {
+      "path": "multimedia/nes/nes_ps2.py",
+      "bytes": 681,
+      "sha256": "8cfac01140ee05501a1dadf8b9b697596e8facb18887411a81095102a0824680"
+    },
+    {
+      "path": "multimedia/nes/nes_py_input.py",
+      "bytes": 1801,
+      "sha256": "e3e562bb76566a544c5d02b750e68aa65c9a299470b33bf5a80aede2b5b7c1a8"
+    },
+    {
+      "path": "multimedia/speech_recognizer/demo_isolated_word_on_maixdock.py",
+      "bytes": 3936,
+      "sha256": "118d6b20565b8e755d0d8d4b2ef3d9ddae4c0d8cb1edca033d5bfb31f9a04656"
+    },
+    {
+      "path": "multimedia/speech_recognizer/isolated_word.py",
+      "bytes": 1623,
+      "sha256": "a72a6bd893c79662146cfc157a67bb0887e6eb0015830d38d0dc970e48389448"
+    },
+    {
+      "path": "multimedia/speech_recognizer/test_maix_asr.py",
+      "bytes": 5346,
+      "sha256": "39bb20ed4a9bcb07553b03e5a671acf0221df52d4f21d0b33b72ef17579eb632"
+    },
+    {
+      "path": "multimedia/video/amigo_play_video.py",
+      "bytes": 696,
+      "sha256": "0240dfbecd71b2a3fd2f309f9036cf63c40e758d6661b0184ab313ca8d3ba906"
+    },
+    {
+      "path": "multimedia/video/demo_video_capture.py",
+      "bytes": 269,
+      "sha256": "7d4c68091c14b9f1061b6921ae42e7ff1bad4c8518a980b633a49f23be6dbbcf"
+    },
+    {
+      "path": "multimedia/video/demo_video_play.py",
+      "bytes": 951,
+      "sha256": "3e06ca51e217eaea94c42e8b9f6c97617dcd62f738c1f7a9de98bf142fdf89d0"
+    },
+    {
+      "path": "multimedia/video/demo_video_record.py",
+      "bytes": 768,
+      "sha256": "5e13de1a8e4e9af0ef7161ad6c7edea821ce156f54d0dd505bba12d6c19b972f"
+    },
+    {
+      "path": "network/demo_esp32_ap_scan.py",
+      "bytes": 1282,
+      "sha256": "c2f32b5fd0ff1fff7a9b1cfdc32e0d13d70a63c54fbc933ea14c7282e460ef86"
+    },
+    {
+      "path": "network/demo_esp32_ping.py",
+      "bytes": 987,
+      "sha256": "8f7a413c9602ee6fea325482966b8d0225213f585b61a9cdad8e5721000eab01"
+    },
+    {
+      "path": "network/demo_esp32_read_adc.py",
+      "bytes": 1629,
+      "sha256": "6eb0fcb21c5ca8fc0b9eb7dc08972e74181ef74a13902598f569f77b4fa5b076"
+    },
+    {
+      "path": "network/demo_espat_ap_scan.py",
+      "bytes": 1976,
+      "sha256": "7224e856c4dd41c40892df87636c008553c7d9717d158ca87d31cb1cc57b941b"
+    },
+    {
+      "path": "network/demo_espat_ap_test.py",
+      "bytes": 544,
+      "sha256": "7f51758bd84a33988d95525a040f8a1177500b4a909e5e1dad2a176924d13980"
+    },
+    {
+      "path": "network/demo_http_get_jpg.py",
+      "bytes": 8479,
+      "sha256": "f2bce40a46eedbd9d90daa49e9c7fbbb7f9f91e62abe78bcd13a90e2b70398c7"
+    },
+    {
+      "path": "network/demo_socket_https.py",
+      "bytes": 3195,
+      "sha256": "a04db1bad95fbc7c2bcb91584bd2e3b9f6ba2362577f75caa9a2cf8d3f7d2f97"
+    },
+    {
+      "path": "network/demo_socket_mqtt.py",
+      "bytes": 55,
+      "sha256": "0c594f1d57bc45e1bbc0940bfac281270b7b9ab86f5f78cad227486270aa6ffe"
+    },
+    {
+      "path": "network/demo_socket_pic_client.py",
+      "bytes": 4509,
+      "sha256": "c9600f69e76bd559b8f30fbc8942c4ddf69909e91581cf73dd5d36f7b7cf22d6"
+    },
+    {
+      "path": "network/demo_socket_pic_server.py",
+      "bytes": 3133,
+      "sha256": "c035936fd9d7c0adc3675705c77b7361bb5866456d7d53839d68c1b924e9c49c"
+    },
+    {
+      "path": "network/demo_socket_tcp_client.py",
+      "bytes": 2754,
+      "sha256": "08c9ff427cd95f02d35743d2fd0247dbd8499a4fab4cec8cc2346839344d8808"
+    },
+    {
+      "path": "network/demo_socket_tcp_server.py",
+      "bytes": 946,
+      "sha256": "f4c2327360ca209373eb0e15bcbbc71e85a7c77544d889d808f88eec6a699ceb"
+    },
+    {
+      "path": "network/demo_socket_udp_client.py",
+      "bytes": 2289,
+      "sha256": "1127f5dcb1b59454f69d3b86f654fe78042c4690934d7411c20f2d971762b655"
+    },
+    {
+      "path": "network/demo_socket_udp_server.py",
+      "bytes": 466,
+      "sha256": "54b71e7c96e4d696367bcfd8bf0fd069874ccfbc90ee6ed5fee9e30e4fac5607"
+    },
+    {
+      "path": "network/espat_upgrade.py",
+      "bytes": 6123,
+      "sha256": "f497f40072f4286db5e33bb50bb15dfc11a1b72b7ee4a1c9f501c5d7051d00a9"
+    },
+    {
+      "path": "network/network_esp32.py",
+      "bytes": 4425,
+      "sha256": "a0fe31c1be8fa12a22ff0341c8e6a7309b5f85d59c4c6d8db08058a761660d65"
+    },
+    {
+      "path": "network/network_espat.py",
+      "bytes": 4594,
+      "sha256": "e71a2a92727ed023b516a24ad39462834e04e08290ca5e82b40985c61d9f2096"
+    },
+    {
+      "path": "network/network_wiznet5k.py",
+      "bytes": 3122,
+      "sha256": "760c9e0889b008edfb66fc2a2689f9c57d38c515b19a757eae2b9f86b43465b6"
+    }
+  ]
+}

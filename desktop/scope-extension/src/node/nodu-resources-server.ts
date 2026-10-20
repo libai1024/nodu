@@ -176,6 +176,9 @@ export class NoduResourcesServer implements NoduResourcesService, BackendApplica
     }
     async checkResources(url: string): Promise<VersionCheck> {
         this.validateUrl(url, '资源版本地址');
+        // The startup reset may still be running; reading the recorded
+        // version early would compare against 0.0.0.
+        await this.ready();
         const installed = this.recordedVersion() ?? '0.0.0';
         const result = await this.runSidecar(['check-resources', '--url', url, '--installed', installed]);
         const inner = result.result as VersionCheck | undefined;
@@ -190,9 +193,12 @@ export class NoduResourcesServer implements NoduResourcesService, BackendApplica
      * and phase events, forwarded to every connected frontend; closing the
      * child's stdin is the cancellation channel.
      */
-    installResources(template: string, version: string, requireSha256: boolean): Promise<void> {
+    async installResources(template: string, version: string, requireSha256: boolean): Promise<void> {
         this.validateUrl(template, '资源下载地址');
         this.validateVersion(version);
+        // Wait out the startup reset so an install cannot race it for the
+        // resources dir / version file.
+        await this.ready();
         if (this.installer) { return Promise.reject(new Error('已有资源安装在进行中。')); }
         const args = [
             'install',

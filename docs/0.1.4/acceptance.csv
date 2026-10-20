@@ -5,8 +5,8 @@ A6.2,update,资源包更新,启动后,资源版本较新时弹“安装 / 取消
 A6.3,update,资源初始化,启动时,已记录资源版本低于应用版本时从安装包复制资源到 ~/.nodu/resources 并写入版本,openmvplugin.cpp@af179e4 约 150–200,1,passed_host,evidence/phase-1-resources.md
 A6.4,update,解压安全,安装资源包,拒绝绝对路径、..、符号链接与超限包；不写出目标目录之外,PLAN §2 阶段 1,1,passed_host,evidence/phase-1-resources.md
 G3.1,term,命令行参数,启动参数,-open_*_terminal / -override_read_timeout / -override_read_stall_timeout / -update_resources 均生效；-update_resources 强制重置资源,OpenMV.json.in@af179e4,1,passed_host,evidence/phase-1-resources.md
-I3.1,editor,示例菜单,文件→示例,内置 MaixPy-v1_scripts@8d7c5f98 全部 .py（按原分类）与 Nodu 示例；打开为未保存副本；更多示例打开 GitHub,menus.txt；MaixPy-v1_scripts,2,todo,
-I3.2,editor,示例来源清单,构建,manifest.json 记录来源提交、路径与 SHA-256；THIRD-PARTY-NOTICES 更新；check-licenses 通过,references.md,2,todo,
+I3.1,editor,示例菜单,文件→示例,内置 MaixPy-v1_scripts@8d7c5f98 全部 .py（按原分类）与 Nodu 示例；打开为未保存副本；更多示例打开 GitHub,menus.txt；MaixPy-v1_scripts,2,passed_host,evidence/phase-2-examples.md
+I3.2,editor,示例来源清单,构建,manifest.json 记录来源提交、路径与 SHA-256；THIRD-PARTY-NOTICES 更新；check-licenses 通过,references.md,2,passed_host,evidence/phase-2-examples.md
 I1.1,editor,文件菜单,菜单逐项,新建（模板 ⌘N）/打开/文档文件夹子菜单/示例/更多示例/最近的文件（含清除菜单）/保存/另存为/关闭/打印；快捷键除 §3 偏离外与原版一致,evidence/maixpy-ide-0.2.5-menus.txt,3,todo,
 I1.2,editor,编辑菜单,菜单逐项,撤销/重做/剪切/复制/粘贴/从剪贴板历史粘贴/全选/高级 12 项/查找替换/高级查找/转到行（⌘L）；快捷键除 §3 偏离外与原版一致,evidence/maixpy-ide-0.2.5-menus.txt,3,todo,
 U1.1,ui,专业模式布局对齐,专业模式,工具栏/帧缓冲/直方图/编辑器/底部面板/状态栏逐项与原版一致或有书面理由；两边截图入库,evidence/maixpy-ide-0.2.5-main-window.txt,4,todo,

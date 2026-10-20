@@ -40,7 +40,7 @@ The Rust device service (`desktop/native/`) is rewritten with reference to the p
 | openmv/qt-creator — `src/plugins/openmv` only | `af179e44cddf396a5ab618792d71e9de5cc67032` | MIT (plugin, text below); `tools/tag*.c` BSD-2 (University of Michigan, text below). `qcustomplot` is GPL-3.0 and is NOT ported; `openmv-qtc-14.0.2`/`20.0.2` and newer branches carry a non-commercial clause and are NOT used |
 | sipeed/MaixPy-v1 | `d8901fd2272f000226f1c1037c1eb7c412b88e66` | MIT / Apache-2.0 (texts below) |
 | sipeed/kflash.py | `550828c768b16ef329695d3f5eace3f6bcf14af2` | MIT — same license text as the kflash 1.1.6 package referenced above; not duplicated |
-| sipeed/MaixPy-v1_scripts | `8d7c5f98ba654d226f433d31718d852674cab08d` | MIT (text below) |
+| sipeed/MaixPy-v1_scripts | `8d7c5f98ba654d226f433d31718d852674cab08d` | MIT (text below); `*.py` examples vendored into `desktop/scope-extension/resources/nodu-resources/examples/` with provenance in `examples/manifest.json` (regenerate via `npm run vendor:examples`) |
 | micropython/mpremote | `1.25.0` (installed pip package `~/.nodu/python`, not a nodu-refs clone) | MIT — MicroPython; local implementation reused, text shipped with the package |
 | MaixPy_Doc_Zh_Cn_Backup | `2734af3bcf182e3359cde4ed5a3a5d7d9b75aaf1` | No LICENSE file — reference only, no content copied |
 
