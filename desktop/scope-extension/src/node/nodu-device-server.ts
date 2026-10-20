@@ -15,6 +15,7 @@ import { randomUUID } from 'crypto';
 import { createRequire } from 'module';
 
 const initialState = (): DeviceState => ({ phase: 'disconnected', busy: false, running: false, preview: false,
+    flashCapacityVerified: false,
     capabilities: { repl: false, files: false, framebuffer: false, script: false, firmware: false } });
 const MAX_BYTES = 2 * 1024 * 1024;
 

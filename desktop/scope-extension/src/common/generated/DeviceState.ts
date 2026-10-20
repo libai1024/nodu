@@ -7,4 +7,9 @@ import type { RecordingStatus } from "./RecordingStatus";
 /**
  * `state` event payload; absent keys mean unchanged from the host's view.
  */
-export type DeviceState = { phase: DevicePhase, port?: string, boardProfile?: string, firmware?: string, architecture?: string, boardId?: number, protocol?: string, busy: boolean, operation?: string, running: boolean, preview: boolean, fps?: number, recording?: RecordingStatus, capabilities: DeviceCapabilities, lastError?: string, progress?: ProgressInfo, };
+export type DeviceState = { phase: DevicePhase, port?: string, boardProfile?: string, firmware?: string, architecture?: string, boardId?: number, protocol?: string, busy: boolean, 
+/**
+ * Python `flashCapacityVerified` — true only after the reviewed RAM
+ * reader returned a matching JEDEC proof for this connection.
+ */
+flashCapacityVerified: boolean, operation?: string, running: boolean, preview: boolean, fps?: number, recording?: RecordingStatus, capabilities: DeviceCapabilities, lastError?: string, progress?: ProgressInfo, };

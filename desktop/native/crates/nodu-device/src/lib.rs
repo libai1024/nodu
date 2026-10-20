@@ -34,6 +34,8 @@ use nodu_serial::Transport;
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
 
+mod flash;
+
 pub const MAX_CODE_BYTES: usize = 256 * 1024;
 
 fn err_device(message: impl Into<String>) -> ReplError {
@@ -457,6 +459,17 @@ pub struct Worker {
     /// `-override_read_stall_timeout`: bounds progress stalls inside a
     /// partially received IDE reply (fail-closed, never a mid-reply ping).
     read_stall_timeout: Option<Duration>,
+    /// Python `session_id` (uuid4().hex): per-connection nonce, renewed
+    /// after probe/flash reconnects, cleared on disconnect.
+    session_id: Option<String>,
+    /// Pinned official firmware path from `prepareFirmware`.
+    prepared_firmware: Option<std::path::PathBuf>,
+    /// Verified backup of THIS connection required before flashing.
+    backup_record: Option<Value>,
+    /// JEDEC capacity proof emitted by the reviewed RAM reader.
+    flash_capacity_proof: Option<Value>,
+    /// Pre-probe preservation manifest + directory for post-op checks.
+    pre_probe_record: Option<Value>,
 }
 
 impl Worker {
@@ -490,6 +503,11 @@ impl Worker {
             recorder: None,
             read_timeout: None,
             read_stall_timeout: None,
+            session_id: None,
+            prepared_firmware: None,
+            backup_record: None,
+            flash_capacity_proof: None,
+            pre_probe_record: None,
         }
     }
 
@@ -801,9 +819,9 @@ impl Worker {
             "stopRecording" => self.do_stop_recording(),
             "convertVideo" => self.do_convert_video(args),
             "playVideo" => self.do_play_video(args),
-            "prepareFirmware" | "backupDevice" | "flashFirmware" => {
-                Err(err_device(UNIMPLEMENTED_MESSAGE))
-            }
+            "prepareFirmware" => self.do_prepare_firmware(args),
+            "backupDevice" => self.do_backup_device(args),
+            "flashFirmware" => self.do_flash_firmware(args),
             _ => Err(err_device("Unknown device method.")),
         }
     }
@@ -1040,6 +1058,7 @@ impl Worker {
             s.preview = false;
             s.firmware = None;
             s.architecture = None;
+            s.flash_capacity_verified = false;
         });
         self.port_lock = Some(PortLock::acquire(port)?);
         self.board_id = board_id;
@@ -1048,11 +1067,19 @@ impl Worker {
             let transport = (self.transport_factory)(port, 115200)?;
             self.transport = Some(transport);
             self.baud = nodu_maix_ide::BAUD;
+            self.session_id = Some(flash::new_token());
+            self.backup_record = None;
+            self.flash_capacity_proof = None;
+            self.pre_probe_record = None;
             return self.connect_ide(board_id);
         }
         let transport = (self.transport_factory)(port, baud)?;
         self.transport = Some(transport);
         self.baud = baud;
+        self.session_id = Some(flash::new_token());
+        self.backup_record = None;
+        self.flash_capacity_proof = None;
+        self.pre_probe_record = None;
         {
             let mut session = self.session();
             session.enter_raw_repl(Duration::from_secs(10))?;
@@ -1100,7 +1127,7 @@ impl Worker {
                 files: true,
                 framebuffer: false,
                 script: true,
-                firmware: false,
+                firmware: true,
             };
         }))
         .unwrap_or_default())
@@ -1128,6 +1155,11 @@ impl Worker {
         self.ide_stderr_seen = false;
         self.ide_out_bytes = 0;
         self.ide_holdback.clear();
+        self.session_id = None;
+        self.backup_record = None;
+        self.pre_probe_record = None;
+        self.flash_capacity_proof = None;
+        self.state.flash_capacity_verified = false;
     }
 
     /// Reset the IDE line classifier + UTF-8 decoder before each execution.
@@ -1184,7 +1216,7 @@ impl Worker {
                 files: true,
                 framebuffer: true,
                 script: true,
-                firmware: false,
+                firmware: true,
             };
         });
         Ok(self.snapshot())
@@ -1526,6 +1558,7 @@ impl Worker {
             s.running = false;
             s.preview = false;
             s.fps = None;
+            s.flash_capacity_verified = false;
             s.capabilities = DeviceCapabilities::default();
         });
         Ok(Value::Null)
@@ -1534,6 +1567,9 @@ impl Worker {
     fn do_execute(&mut self, args: &Map<String, Value>) -> Result<Value> {
         self.require(true)?;
         let code = self.valid_code(args)?.to_string();
+        // Any code execution can change flash/files; the prior verified
+        // backup no longer authorizes flashing (Python parity).
+        self.backup_record = None;
         let out = self.exec(&code, true, OPERATION_TIMEOUT)?;
         Ok(Value::String(out))
     }
@@ -1541,6 +1577,7 @@ impl Worker {
     fn do_run_script(&mut self, args: &Map<String, Value>) -> Result<Value> {
         self.require(true)?;
         let code = self.valid_code(args)?.to_string();
+        self.backup_record = None;
         self.check()?;
         if self.mode == ConnMode::Ide {
             let check = self.connect_check();
@@ -1819,6 +1856,7 @@ impl Worker {
             s.running = false;
             s.preview = false;
             s.fps = None;
+            s.flash_capacity_verified = false;
             s.capabilities = DeviceCapabilities::default();
         });
         Ok(Value::Null)
@@ -2084,6 +2122,7 @@ impl Worker {
             Some(Value::Bool(b)) => *b,
             _ => return Err(err_device("overwrite must be a boolean.")),
         };
+        self.backup_record = None;
         let stat = self.stat_remote(&path)?;
         if stat
             .as_ref()

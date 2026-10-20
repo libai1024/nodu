@@ -82,7 +82,7 @@ pub struct DeviceCapabilities {
     pub files: bool,
     pub framebuffer: bool,
     pub script: bool,
-    /// Firmware prepare/backup/flash path; false while the Rust sidecar has none.
+    /// Firmware prepare/backup/flash path (implemented by the sidecar).
     pub firmware: bool,
 }
 
@@ -147,6 +147,9 @@ pub struct DeviceState {
     #[ts(optional)]
     pub protocol: Option<String>,
     pub busy: bool,
+    /// Python `flashCapacityVerified` — true only after the reviewed RAM
+    /// reader returned a matching JEDEC proof for this connection.
+    pub flash_capacity_verified: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub operation: Option<String>,
@@ -173,6 +176,7 @@ impl Default for DeviceState {
             phase: DevicePhase::Disconnected,
             port: None,
             board_profile: None,
+            flash_capacity_verified: false,
             board_id: None,
             protocol: None,
             firmware: None,

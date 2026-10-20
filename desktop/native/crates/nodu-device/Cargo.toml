@@ -15,6 +15,7 @@ nodu-maix-ide.workspace = true
 nodu-maix-connect.workspace = true
 nodu-repl.workspace = true
 nodu-media.workspace = true
+nodu-kflash.workspace = true
 nodu-mockboard = { workspace = true, optional = true }
 serde.workspace = true
 serde_json.workspace = true

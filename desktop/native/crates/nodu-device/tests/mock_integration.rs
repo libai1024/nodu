@@ -129,7 +129,7 @@ fn connect_then_execute() {
     assert_eq!(st["phase"], json!("connected"));
     assert_eq!(st["capabilities"]["repl"], json!(true));
     assert_eq!(st["capabilities"]["framebuffer"], json!(false));
-    assert_eq!(st["capabilities"]["firmware"], json!(false));
+    assert_eq!(st["capabilities"]["firmware"], json!(true));
 
     h.submit(json!({"id": 2, "method": "execute", "args": {"code": "print(42)"}}));
     let r = h.run_until_reply(&json!(2), 2000);
@@ -295,26 +295,61 @@ fn malformed_and_duplicate_and_unknown_rejected() {
 }
 
 #[test]
-fn unimplemented_methods_reply_chinese_message() {
+fn firmware_methods_validate_before_device_io() {
     let mut h = Harness::new();
-    for (i, m) in [
-        "setPreview",
-        "startCamera",
-        "prepareFirmware",
-        "backupDevice",
-        "flashFirmware",
-    ]
-    .iter()
-    .enumerate()
-    {
-        h.submit(json!({"id": 100 + i, "method": m, "args": {"enabled": true}}));
-        let r = h.run_until_reply(&json!(100 + i), 500);
-        assert_eq!(
-            r["error"],
-            json!("此功能将在后续阶段由新设备服务提供。"),
-            "{m}"
-        );
+    h.submit(json!({"id": 100, "method": "prepareFirmware", "args": {}}));
+    let r = h.run_until_reply(&json!(100), 500);
+    assert_eq!(
+        r["error"],
+        json!("Backup/cache directory must be an absolute backend-managed path.")
+    );
+    for (i, m) in ["backupDevice", "flashFirmware"].iter().enumerate() {
+        h.submit(json!({"id": 101 + i, "method": m, "args": {}}));
+        let r = h.run_until_reply(&json!(101 + i), 500);
+        assert_eq!(r["error"], json!("Connect a K210 first."), "{m}");
     }
+    h.submit(json!({"id": 200, "method": "unknownThing", "args": {}}));
+    let r = h.run_until_reply(&json!(200), 500);
+    assert_eq!(r["error"], json!("Unknown device method."));
+}
+
+#[test]
+fn flash_gates_block_before_any_write() {
+    let mut h = Harness::new();
+    h.connect();
+    // Unverified capacity: flashFirmware must stop at the JEDEC gate.
+    h.submit(json!({"id": 10, "method": "flashFirmware", "args": {"backupDir": "/tmp/x"}}));
+    let r = h.run_until_reply(&json!(10), 500);
+    assert_eq!(
+        r["error"],
+        json!("Flashing is blocked until the actual flash JEDEC capacity is verified; a 16 MiB read-back alone is not proof.")
+    );
+    // backupDevice without a backupDir stops before RAM probing.
+    h.submit(json!({"id": 11, "method": "backupDevice", "args": {}}));
+    let r = h.run_until_reply(&json!(11), 2000);
+    assert_eq!(
+        r["error"],
+        json!("An absolute managed backup directory is required before RAM probing.")
+    );
+    // prepareFirmware rejects a non-pinned source image offline.
+    let tmp_root = std::env::temp_dir().join(format!("nodu-fw-test-{}", std::process::id()));
+    let tmp_cache = tmp_root.join("cache");
+    std::fs::create_dir_all(&tmp_cache).unwrap();
+    let tmp = tmp_root.join("bad-fw.bin");
+    std::fs::write(&tmp, b"bad").unwrap();
+    h.submit(json!({"id": 12, "method": "prepareFirmware", "args": {
+        "cacheDir": tmp_cache.to_string_lossy(),
+        "sourceFile": tmp.to_string_lossy()}}));
+    let r = h.run_until_reply(&json!(12), 2000);
+    assert_eq!(
+        r["error"],
+        json!("Official firmware image size is not the pinned 2116288 bytes.")
+    );
+    let _ = std::fs::remove_dir_all(&tmp_root);
+    // The session must still be healthy after all three blocked attempts.
+    h.submit(json!({"id": 13, "method": "execute", "args": {"code": "print(7)"}}));
+    let r = h.run_until_reply(&json!(13), 2000);
+    assert_eq!(r["result"], json!("7\n"));
 }
 
 #[test]

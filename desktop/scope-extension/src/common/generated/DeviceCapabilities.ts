@@ -3,8 +3,8 @@
 /**
  * Feature flags reported after connect.
  */
-export type DeviceCapabilities = { repl: boolean, files: boolean, framebuffer: boolean, script: boolean,
+export type DeviceCapabilities = { repl: boolean, files: boolean, framebuffer: boolean, script: boolean, 
 /**
- * Firmware prepare/backup/flash path; false while the Rust sidecar has none.
+ * Firmware prepare/backup/flash path (implemented by the sidecar).
  */
 firmware: boolean, };

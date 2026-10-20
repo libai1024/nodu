@@ -3,11 +3,11 @@
 /**
  * `connect` request arguments.
  */
-export type ConnectArgs = { port: string, boardProfile: string, baud?: number,
+export type ConnectArgs = { port: string, boardProfile: string, baud?: number, 
 /**
  * Original MaixPy IDE board id 0–8 (reset sequence selection).
  */
-boardId?: number,
+boardId?: number, 
 /**
  * "ide" (default) or "raw" — raw is kept for migration differential tests.
  */
