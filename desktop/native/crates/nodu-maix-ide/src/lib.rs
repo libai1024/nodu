@@ -45,6 +45,9 @@ const MAX_FRAME_PIXELS: u64 = 1_048_576;
 const MAX_JPEG: usize = 2 * 1024 * 1024;
 const WRITE_CHUNK: usize = 1024;
 const WRITE_PACE: Duration = Duration::from_millis(1);
+// Original openmvpluginserialport.cpp paces completed commands so the
+// board/USB serial bridge can settle before the next transaction.
+const COMMAND_PACE: Duration = Duration::from_millis(if cfg!(target_os = "macos") { 2 } else { 1 });
 const READ_SLICE: Duration = Duration::from_millis(50);
 const FILE_SAVE_TIMEOUT: Duration = Duration::from_secs(30);
 const FILE_SAVE_POLL: Duration = Duration::from_millis(20);
@@ -197,6 +200,7 @@ impl<'a> IdeSession<'a> {
             }
             std::thread::sleep(WRITE_PACE);
         }
+        std::thread::sleep(COMMAND_PACE);
         Ok(())
     }
 
@@ -452,7 +456,9 @@ impl<'a> IdeSession<'a> {
         while got < length {
             // The request header was already sent, so a cancelled check or
             // a dead read leaves the stream position unknown — desync.
-            (self.check)().map_err(|e| ReplError::protocol(format!("{DESYNC}: {e}")))?;
+            (self.check)().map_err(|e| {
+                ReplError::protocol(format!("{DESYNC}: {e} (received {got}/{length} IDE bytes)"))
+            })?;
             if got > 0
                 && let Some(stall) = self.stall_timeout
                 && last_progress.elapsed() >= stall
@@ -480,6 +486,7 @@ impl<'a> IdeSession<'a> {
                 Err(e) => return Err(ReplError::protocol(format!("{DESYNC}: {e}"))),
             }
         }
+        std::thread::sleep(COMMAND_PACE);
         Ok(Some(out))
     }
 }
@@ -941,8 +948,41 @@ mod tests {
             s.version().unwrap_err()
         };
         assert!(e.is_protocol(), "{e}");
+        assert!(e.to_string().contains("received 1/12 IDE bytes"), "{e}");
         // The fed reply byte really was consumed before the failure fired.
         assert_eq!(t.in_waiting().unwrap(), 0);
+    }
+
+    #[test]
+    fn completed_read_observes_original_command_pacing() {
+        // The original plugin sleeps after every completed command; a fully
+        // received reply must cost at least COMMAND_PACE.
+        let mut t = MemoryTransport::new();
+        let mut v = Vec::new();
+        for u in [0u32, 6, 3] {
+            v.extend_from_slice(&u.to_le_bytes());
+        }
+        t.feed(&v);
+        let started = Instant::now();
+        assert_eq!(session(&mut t).version().unwrap(), [0, 6, 3]);
+        assert!(
+            started.elapsed() >= COMMAND_PACE,
+            "took {:?}",
+            started.elapsed()
+        );
+    }
+
+    #[test]
+    fn empty_write_observes_original_command_pacing() {
+        // No-payload commands (STOP/RESET) observe the same pacing.
+        let mut t = MemoryTransport::new();
+        let started = Instant::now();
+        session(&mut t).stop().unwrap();
+        assert!(
+            started.elapsed() >= COMMAND_PACE,
+            "took {:?}",
+            started.elapsed()
+        );
     }
 
     #[test]

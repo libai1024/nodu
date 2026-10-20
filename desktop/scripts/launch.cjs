@@ -145,6 +145,9 @@ async function main() {
 
     const profile = path.join(os.homedir(), '.scope-studio');
     const env = { ...process.env, THEIA_CONFIG_DIR: path.join(profile, 'config') };
+    // Inherited from Electron-hosted terminals (e.g. IDE-integrated shells);
+    // it would make the Electron binary run the app as plain Node.
+    delete env.ELECTRON_RUN_AS_NODE;
     if (extracted.terminals.length) {
         env.NODU_STARTUP_TERMINALS = JSON.stringify(extracted.terminals);
         console.log(`Nodu: opening ${extracted.terminals.length} terminal(s) after startup`);

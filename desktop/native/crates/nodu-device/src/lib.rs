@@ -2310,12 +2310,32 @@ impl Worker {
         Ok(())
     }
 
+    /// Finish bounded idle-poll transactions before servicing queued
+    /// stop/disconnect requests. Cancelling a reply after its header has
+    /// been sent would poison the IDE stream. Shutdown and deadlines still
+    /// fail closed; request handlers retain generation cancellation.
+    fn poll_ide_check(&self) -> Check {
+        let deadline = self.deadline;
+        let shared = Arc::clone(&self.shared);
+        Arc::new(move || {
+            if shared.input_closed.load(Ordering::SeqCst) {
+                return Err(ReplError::cancelled());
+            }
+            if let Some(deadline) = deadline
+                && Instant::now() > deadline
+            {
+                return Err(ReplError::timeout("Device operation timed out."));
+            }
+            Ok(())
+        })
+    }
+
     /// Idle-time poll for IDE connections: drain TX, track `running`, and
     /// pull a framebuffer frame whenever preview is on — including frames a
     /// user's own `sensor.snapshot()` produces while no script runs.
     fn poll_ide(&mut self) -> Result<()> {
         let preview = self.state.preview;
-        let check = self.connect_check();
+        let check = self.poll_ide_check();
         self.with_transport(|this, t| {
             // IDE replies have no transaction framing, so any timeout or
             // read error is a desync: propagate and let the caller close

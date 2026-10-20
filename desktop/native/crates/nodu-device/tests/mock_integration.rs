@@ -5,6 +5,7 @@
 //! parser feeding garbage.
 
 use std::io::BufReader;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -1033,4 +1034,258 @@ fn write_file_empty_readback_sha_passes() {
     let r = h.run_until_reply(&json!(2), 4000);
     assert!(r.get("result").is_some(), "{r}");
     assert_eq!(h.board.file("/flash/empty.bin"), Some(Vec::new()));
+}
+
+// ---------- queued stop/disconnect during an in-flight frame reply ----------
+
+/// Wraps `MockBoard` and injects a queued request while a frame reply is
+/// still being read: the 6-byte `[0x30, 0x82, len LE]` dump header sets the
+/// owed payload length, the first armed payload read returns a single byte,
+/// then the request is submitted through the real `SubmitState` — the exact
+/// generation bump a queued stop/disconnect performs on hardware. Any write
+/// while payload bytes remain owed is a mid-reply write and is recorded.
+struct FrameRequestTransport {
+    board: MockBoard,
+    shared: Arc<SubmitState>,
+    request: Value,
+    armed: Arc<AtomicBool>,
+    fired: Arc<AtomicBool>,
+    wrote_mid_reply: Arc<AtomicBool>,
+    remaining: usize,
+    stall_after_first_byte: bool,
+}
+
+impl Transport for FrameRequestTransport {
+    fn in_waiting(&mut self) -> std::io::Result<usize> {
+        self.board.in_waiting()
+    }
+
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        if self.remaining == 0 {
+            return self.board.read(buf);
+        }
+        let armed = self.armed.load(Ordering::SeqCst);
+        let fired = self.fired.load(Ordering::SeqCst);
+        if armed && fired && self.stall_after_first_byte {
+            // A truncated real reply: no more bytes ever arrive.
+            return Ok(0);
+        }
+        // The first armed payload read is limited to one byte so the
+        // injection provably lands mid-reply; later reads drain normally.
+        let first_armed = armed && !fired;
+        let cap = if first_armed { 1 } else { self.remaining }.min(buf.len());
+        let n = self.board.read(&mut buf[..cap])?;
+        self.remaining = self.remaining.saturating_sub(n);
+        if first_armed && n > 0 {
+            self.fired.store(true, Ordering::SeqCst);
+            self.shared.submit(self.request.clone());
+        }
+        Ok(n)
+    }
+
+    fn write_all(&mut self, buf: &[u8]) -> std::io::Result<()> {
+        if self.remaining > 0 {
+            self.wrote_mid_reply.store(true, Ordering::SeqCst);
+        }
+        if buf.len() == 6 && buf[0] == 0x30 && buf[1] == 0x82 {
+            self.remaining = u32::from_le_bytes([buf[2], buf[3], buf[4], buf[5]]) as usize;
+        }
+        self.board.write_all(buf)
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.board.flush()
+    }
+
+    fn reset_input_buffer(&mut self) -> std::io::Result<()> {
+        self.board.reset_input_buffer()
+    }
+
+    fn set_baud_rate(&mut self, baud: u32) -> std::io::Result<()> {
+        self.board.set_baud_rate(baud)
+    }
+
+    fn unread(&mut self, data: &[u8]) {
+        self.board.unread(data);
+    }
+
+    fn set_dtr(&mut self, level: bool) -> std::io::Result<()> {
+        self.board.set_dtr(level)
+    }
+
+    fn set_rts(&mut self, level: bool) -> std::io::Result<()> {
+        self.board.set_rts(level)
+    }
+}
+
+/// Same MockBoard/shared/lines construction as `IdeHarness`, but the
+/// transport factory wraps the board in `FrameRequestTransport` and returns
+/// the atomic controls. `request` is injected once, mid-frame-reply.
+fn ide_frame_harness(
+    request: Value,
+    stall_after_first_byte: bool,
+) -> (
+    IdeHarness,
+    Arc<AtomicBool>,
+    Arc<AtomicBool>,
+    Arc<AtomicBool>,
+) {
+    let lines = Arc::new(Mutex::new(Vec::new()));
+    let shared = Arc::new(SubmitState::new(Box::new(SinkWriter(lines.clone()))));
+    let board = MockBoard::new();
+    let armed = Arc::new(AtomicBool::new(false));
+    let fired = Arc::new(AtomicBool::new(false));
+    let wrote_mid_reply = Arc::new(AtomicBool::new(false));
+    let port = format!(
+        "mock-ide-frame-{}",
+        std::thread::current().name().unwrap_or("t")
+    );
+    let (board2, shared2, request2) = (board.clone(), shared.clone(), request.clone());
+    let (a2, f2, w2) = (armed.clone(), fired.clone(), wrote_mid_reply.clone());
+    let factory: nodu_device::TransportFactory = Arc::new(move |_, _| {
+        Ok(Box::new(FrameRequestTransport {
+            board: board2.clone(),
+            shared: shared2.clone(),
+            request: request2.clone(),
+            armed: a2.clone(),
+            fired: f2.clone(),
+            wrote_mid_reply: w2.clone(),
+            remaining: 0,
+            stall_after_first_byte,
+        }) as Box<dyn Transport>)
+    });
+    (
+        IdeHarness {
+            worker: Worker::new(shared, factory),
+            lines,
+            board,
+            port,
+        },
+        armed,
+        fired,
+        wrote_mid_reply,
+    )
+}
+
+#[test]
+fn ide_queued_stop_drains_inflight_frame() {
+    let (mut h, armed, fired, wrote_mid_reply) =
+        ide_frame_harness(json!({"id": 90, "method": "stop", "args": {}}), false);
+    h.connect();
+    h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
+    assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
+    h.drain(20);
+    let frames_before = h.frames().len();
+    // Arm only after connect + camera replies so the injection lands inside
+    // a pending frame read, not between worker steps.
+    armed.store(true, Ordering::SeqCst);
+    h.worker.step(Duration::from_millis(2));
+    assert!(
+        fired.load(Ordering::SeqCst),
+        "request was not injected mid-reply"
+    );
+    let r = h.run_until_reply(&json!(90), 4000);
+    assert!(r.get("result").is_some(), "stop failed: {r}");
+    assert!(
+        !wrote_mid_reply.load(Ordering::SeqCst),
+        "a write hit the wire while reply bytes were still owed"
+    );
+    assert!(
+        h.frames().len() > frames_before,
+        "the in-flight frame never became an event"
+    );
+    let st = h.last_state();
+    assert_eq!(st["phase"], json!("connected"), "{st}");
+    assert_eq!(st["running"], json!(false));
+    assert!(
+        !h.logs("stderr").iter().any(|l| l.contains("desynchroniz")),
+        "stderr: {:?}",
+        h.logs("stderr")
+    );
+    // The link survived: a fresh request works without reconnecting.
+    h.submit(json!({"id": 3, "method": "execute", "args": {"code": "print(7)"}}));
+    let r3 = h.run_until_reply(&json!(3), 3000);
+    assert_eq!(r3["result"], json!("7\n"), "{r3}");
+}
+
+#[test]
+fn ide_queued_disconnect_drains_inflight_frame() {
+    let (mut h, armed, fired, wrote_mid_reply) =
+        ide_frame_harness(json!({"id": 90, "method": "disconnect", "args": {}}), false);
+    h.connect();
+    h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
+    assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
+    h.drain(20);
+    let frames_before = h.frames().len();
+    armed.store(true, Ordering::SeqCst);
+    h.worker.step(Duration::from_millis(2));
+    assert!(
+        fired.load(Ordering::SeqCst),
+        "request was not injected mid-reply"
+    );
+    let r = h.run_until_reply(&json!(90), 4000);
+    assert!(r.get("result").is_some(), "disconnect failed: {r}");
+    assert!(
+        !wrote_mid_reply.load(Ordering::SeqCst),
+        "a write hit the wire while reply bytes were still owed"
+    );
+    assert!(
+        h.frames().len() > frames_before,
+        "the in-flight frame never became an event"
+    );
+    assert_eq!(h.last_state()["phase"], json!("disconnected"));
+    assert!(
+        !h.logs("stderr").iter().any(|l| l.contains("desynchroniz")),
+        "stderr: {:?}",
+        h.logs("stderr")
+    );
+    // Reconnect with a fresh id (the connect id1 reply is already in lines).
+    h.submit(json!({"id": 3, "method": "connect",
+        "args": {"port": h.port.clone(), "boardProfile": "generic-k210", "boardId": 2}}));
+    let r3 = h.run_until_reply(&json!(3), 8000);
+    assert!(r3.get("result").is_some(), "reconnect failed: {r3}");
+    assert_eq!(h.last_state()["protocol"], json!("ide"));
+}
+
+#[test]
+fn ide_queued_stop_stalled_frame_still_fails_closed() {
+    let (mut h, armed, fired, wrote_mid_reply) =
+        ide_frame_harness(json!({"id": 90, "method": "stop", "args": {}}), true);
+    h.connect();
+    h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
+    assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
+    h.drain(20);
+    let frames_before = h.frames().len();
+    // Tight timeouts model a reply that starts then stops progressing.
+    h.worker.set_read_timeouts(
+        Some(Duration::from_millis(120)),
+        Some(Duration::from_millis(30)),
+    );
+    armed.store(true, Ordering::SeqCst);
+    h.worker.step(Duration::from_millis(2));
+    assert!(
+        fired.load(Ordering::SeqCst),
+        "request was not injected mid-reply"
+    );
+    // The stalled reply desyncs the stream; the queued stop then gets a
+    // reply without ever writing onto the poisoned transport.
+    let r = h.run_until_reply(&json!(90), 4000);
+    assert!(r.get("id") == Some(&json!(90)), "{r}");
+    assert!(
+        !wrote_mid_reply.load(Ordering::SeqCst),
+        "queued stop wrote onto a mid-reply/poisoned transport"
+    );
+    assert_eq!(
+        h.frames().len(),
+        frames_before,
+        "a truncated frame must not become an event"
+    );
+    let st = h.last_state();
+    assert_eq!(st["phase"], json!("error"), "{st}");
+    assert_eq!(st["capabilities"]["framebuffer"], json!(false));
+    assert!(
+        h.logs("stderr").iter().any(|l| l.contains("stalled")),
+        "stderr: {:?}",
+        h.logs("stderr")
+    );
 }
