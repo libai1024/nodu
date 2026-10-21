@@ -5,7 +5,7 @@
 //! parser feeding garbage.
 
 use std::io::BufReader;
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -1053,7 +1053,15 @@ struct FrameRequestTransport {
     wrote_mid_reply: Arc<AtomicBool>,
     remaining: usize,
     stall_after_first_byte: bool,
+    /// Firmware-faithful: the mid-reply `SCRIPT_RUNNING` header write wakes
+    /// the USB task and flushes the held payload tail.
+    unsticks_on_poke: bool,
+    unstuck: bool,
+    pokes: Arc<AtomicU32>,
 }
+
+/// The stall-recovery poke header: bare `SCRIPT_RUNNING`, 4-byte reply.
+const POKE_HEADER: [u8; 6] = [0x30, 0x87, 4, 0, 0, 0];
 
 impl Transport for FrameRequestTransport {
     fn in_waiting(&mut self) -> std::io::Result<usize> {
@@ -1066,8 +1074,9 @@ impl Transport for FrameRequestTransport {
         }
         let armed = self.armed.load(Ordering::SeqCst);
         let fired = self.fired.load(Ordering::SeqCst);
-        if armed && fired && self.stall_after_first_byte {
-            // A truncated real reply: no more bytes ever arrive.
+        if armed && fired && self.stall_after_first_byte && !self.unstuck {
+            // A truncated real reply: no more bytes arrive until (when
+            // `unsticks_on_poke`) a recovery write lands.
             return Ok(0);
         }
         // The first armed payload read is limited to one byte so the
@@ -1084,8 +1093,14 @@ impl Transport for FrameRequestTransport {
     }
 
     fn write_all(&mut self, buf: &[u8]) -> std::io::Result<()> {
-        if self.remaining > 0 {
+        if self.remaining > 0 && buf != POKE_HEADER.as_slice() {
             self.wrote_mid_reply.store(true, Ordering::SeqCst);
+        }
+        if buf == POKE_HEADER.as_slice() {
+            self.pokes.fetch_add(1, Ordering::SeqCst);
+            if self.unsticks_on_poke {
+                self.unstuck = true;
+            }
         }
         if buf.len() == 6 && buf[0] == 0x30 && buf[1] == 0x82 {
             self.remaining = u32::from_le_bytes([buf[2], buf[3], buf[4], buf[5]]) as usize;
@@ -1124,11 +1139,13 @@ impl Transport for FrameRequestTransport {
 fn ide_frame_harness(
     request: Value,
     stall_after_first_byte: bool,
+    unsticks_on_poke: bool,
 ) -> (
     IdeHarness,
     Arc<AtomicBool>,
     Arc<AtomicBool>,
     Arc<AtomicBool>,
+    Arc<AtomicU32>,
 ) {
     let lines = Arc::new(Mutex::new(Vec::new()));
     let shared = Arc::new(SubmitState::new(Box::new(SinkWriter(lines.clone()))));
@@ -1136,12 +1153,18 @@ fn ide_frame_harness(
     let armed = Arc::new(AtomicBool::new(false));
     let fired = Arc::new(AtomicBool::new(false));
     let wrote_mid_reply = Arc::new(AtomicBool::new(false));
+    let pokes = Arc::new(AtomicU32::new(0));
     let port = format!(
         "mock-ide-frame-{}",
         std::thread::current().name().unwrap_or("t")
     );
     let (board2, shared2, request2) = (board.clone(), shared.clone(), request.clone());
-    let (a2, f2, w2) = (armed.clone(), fired.clone(), wrote_mid_reply.clone());
+    let (a2, f2, w2, p2) = (
+        armed.clone(),
+        fired.clone(),
+        wrote_mid_reply.clone(),
+        pokes.clone(),
+    );
     let factory: nodu_device::TransportFactory = Arc::new(move |_, _| {
         Ok(Box::new(FrameRequestTransport {
             board: board2.clone(),
@@ -1152,6 +1175,9 @@ fn ide_frame_harness(
             wrote_mid_reply: w2.clone(),
             remaining: 0,
             stall_after_first_byte,
+            unsticks_on_poke,
+            unstuck: false,
+            pokes: p2.clone(),
         }) as Box<dyn Transport>)
     });
     (
@@ -1164,13 +1190,17 @@ fn ide_frame_harness(
         armed,
         fired,
         wrote_mid_reply,
+        pokes,
     )
 }
 
 #[test]
 fn ide_queued_stop_drains_inflight_frame() {
-    let (mut h, armed, fired, wrote_mid_reply) =
-        ide_frame_harness(json!({"id": 90, "method": "stop", "args": {}}), false);
+    let (mut h, armed, fired, wrote_mid_reply, _pokes) = ide_frame_harness(
+        json!({"id": 90, "method": "stop", "args": {}}),
+        false,
+        false,
+    );
     h.connect();
     h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
     assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
@@ -1210,8 +1240,11 @@ fn ide_queued_stop_drains_inflight_frame() {
 
 #[test]
 fn ide_queued_disconnect_drains_inflight_frame() {
-    let (mut h, armed, fired, wrote_mid_reply) =
-        ide_frame_harness(json!({"id": 90, "method": "disconnect", "args": {}}), false);
+    let (mut h, armed, fired, wrote_mid_reply, _pokes) = ide_frame_harness(
+        json!({"id": 90, "method": "disconnect", "args": {}}),
+        false,
+        false,
+    );
     h.connect();
     h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
     assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
@@ -1248,17 +1281,20 @@ fn ide_queued_disconnect_drains_inflight_frame() {
 }
 
 #[test]
-fn ide_queued_stop_stalled_frame_still_fails_closed() {
-    let (mut h, armed, fired, wrote_mid_reply) =
-        ide_frame_harness(json!({"id": 90, "method": "stop", "args": {}}), true);
+fn ide_queued_stop_stalled_frame_poke_recovers() {
+    // Same wiring as the permanent-stall test, but the transport unsticks
+    // on the recovery poke exactly like the firmware: the held tail plus
+    // the poke's 4-byte running answer arrive, the frame completes, and
+    // the queued stop still gets a clean reply — no desync at all.
+    let (mut h, armed, fired, wrote_mid_reply, pokes) =
+        ide_frame_harness(json!({"id": 90, "method": "stop", "args": {}}), true, true);
     h.connect();
     h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
     assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
     h.drain(20);
     let frames_before = h.frames().len();
-    // Tight timeouts model a reply that starts then stops progressing.
     h.worker.set_read_timeouts(
-        Some(Duration::from_millis(120)),
+        Some(Duration::from_millis(4000)),
         Some(Duration::from_millis(30)),
     );
     armed.store(true, Ordering::SeqCst);
@@ -1267,10 +1303,62 @@ fn ide_queued_stop_stalled_frame_still_fails_closed() {
         fired.load(Ordering::SeqCst),
         "request was not injected mid-reply"
     );
-    // The stalled reply desyncs the stream; the queued stop then gets a
-    // reply without ever writing onto the poisoned transport.
+    let r = h.run_until_reply(&json!(90), 4000);
+    assert!(r.get("result").is_some(), "stop failed after recovery: {r}");
+    assert!(
+        pokes.load(Ordering::SeqCst) >= 1,
+        "no recovery poke was sent"
+    );
+    assert!(
+        !wrote_mid_reply.load(Ordering::SeqCst),
+        "a non-poke write hit the wire while reply bytes were still owed"
+    );
+    assert!(
+        h.frames().len() > frames_before,
+        "the recovered frame never became an event"
+    );
+    let st = h.last_state();
+    assert_eq!(st["phase"], json!("connected"), "{st}");
+    assert!(
+        !h.logs("stderr").iter().any(|l| l.contains("desynchroniz")),
+        "stderr: {:?}",
+        h.logs("stderr")
+    );
+    // The link survived: a fresh request works without reconnecting.
+    h.submit(json!({"id": 3, "method": "execute", "args": {"code": "print(7)"}}));
+    let r3 = h.run_until_reply(&json!(3), 3000);
+    assert_eq!(r3["result"], json!("7\n"), "{r3}");
+}
+
+#[test]
+fn ide_queued_stop_stalled_frame_still_fails_closed() {
+    let (mut h, armed, fired, wrote_mid_reply, pokes) =
+        ide_frame_harness(json!({"id": 90, "method": "stop", "args": {}}), true, false);
+    h.connect();
+    h.submit(json!({"id": 2, "method": "startCamera", "args": {}}));
+    assert!(h.run_until_reply(&json!(2), 4000).get("result").is_some());
+    h.drain(20);
+    let frames_before = h.frames().len();
+    // Tight timeouts model a reply that starts then stops progressing.
+    h.worker.set_read_timeouts(
+        Some(Duration::from_millis(300)),
+        Some(Duration::from_millis(30)),
+    );
+    armed.store(true, Ordering::SeqCst);
+    h.worker.step(Duration::from_millis(2));
+    assert!(
+        fired.load(Ordering::SeqCst),
+        "request was not injected mid-reply"
+    );
+    // Recovery pokes went out but the tail never arrived: the reply times
+    // out, the stream is desynced, and the queued stop then gets a reply
+    // without ever writing onto the poisoned transport.
     let r = h.run_until_reply(&json!(90), 4000);
     assert!(r.get("id") == Some(&json!(90)), "{r}");
+    assert!(
+        pokes.load(Ordering::SeqCst) >= 1,
+        "no recovery poke was sent"
+    );
     assert!(
         !wrote_mid_reply.load(Ordering::SeqCst),
         "queued stop wrote onto a mid-reply/poisoned transport"
@@ -1284,7 +1372,9 @@ fn ide_queued_stop_stalled_frame_still_fails_closed() {
     assert_eq!(st["phase"], json!("error"), "{st}");
     assert_eq!(st["capabilities"]["framebuffer"], json!(false));
     assert!(
-        h.logs("stderr").iter().any(|l| l.contains("stalled")),
+        h.logs("stderr")
+            .iter()
+            .any(|l| l.contains("recovery writes")),
         "stderr: {:?}",
         h.logs("stderr")
     );

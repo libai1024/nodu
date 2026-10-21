@@ -37,8 +37,9 @@ usage: nodu-device [--mock] [-override_read_timeout <ms>]
   --mock                              in-memory MaixPy simulator (dev/tests)
   -override_read_timeout <ms>         IDE reply deadline, 1-60000;
                                       unset uses each operation's default limit
-  -override_read_stall_timeout <ms>   stalled partial-reply bound, 1-60000;
-                                      unset adds no stall bound
+  -override_read_stall_timeout <ms>   stalled partial-reply budget, 1-60000;
+                                      unset keeps the 1 s default that pokes
+                                      SCRIPT_RUNNING mid-reply (original plugin)
 ";
 
 fn timeout_flag(args: &[String], i: &mut usize, name: &str) -> Result<Duration, String> {

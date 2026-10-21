@@ -1,0 +1,1975 @@
+{
+  "label": "poke-recovery-r6",
+  "mode": "three-stop-cycles-and-record",
+  "sourcePath": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/comparison-camera.py",
+  "started": "2026-10-21T01:56:06.349Z",
+  "sourceSha256": "4775d48b467ee2a30f3bb30547d2c7b96a69d1fc9ee0a21b3b9c3707ff654a21",
+  "binarySha256": "67d6586c0c3aa26bd4dcc88bde0b9146b394e7414ffbd1531927e475ac449297",
+  "cycles": [
+    {
+      "cycle": 0,
+      "samples": [
+        {
+          "elapsedMs": 5,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 2,
+            "time": 1792547774028,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 510,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 8,
+            "time": 1792547774538,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1013,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 11,
+            "time": 1792547774913,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1514,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 16,
+            "time": 1792547775520,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2016,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 20,
+            "time": 1792547775973,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2518,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 25,
+            "time": 1792547776521,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3018,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 29,
+            "time": 1792547776977,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3519,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 33,
+            "time": 1792547777501,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4021,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 37,
+            "time": 1792547777965,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4524,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5029,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5530,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6032,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6533,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7038,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7540,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8043,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8545,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9046,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9549,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        }
+      ],
+      "start": {
+        "began": 1792547772371,
+        "before": {
+          "phase": "connected",
+          "running": false,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": null,
+          "error": ""
+        }
+      },
+      "stopped": {
+        "phase": "connected",
+        "running": false,
+        "busy": false,
+        "protocol": "ide",
+        "preview": true,
+        "frame": {
+          "sequence": 38,
+          "time": 1792547778113,
+          "width": 320,
+          "height": 240
+        },
+        "error": ""
+      },
+      "stopMs": 2684,
+      "repl": "2\r\n",
+      "logs": [
+        {
+          "text": "运行 Untitled-32.py\n",
+          "stream": "system",
+          "time": 1792547772392,
+          "receivedAt": 1792547772392
+        },
+        {
+          "text": "init i2c:2 freq:100000\r\r\n",
+          "stream": "stdout",
+          "time": 1792547773132,
+          "receivedAt": 1792547773133
+        },
+        {
+          "text": "[MAIXPY]: sensor id = 45\r\n",
+          "stream": "stdout",
+          "time": 1792547773372,
+          "receivedAt": 1792547773373
+        },
+        {
+          "text": "[MAIXPY]: find gc2145\r\n",
+          "stream": "stdout",
+          "time": 1792547773429,
+          "receivedAt": 1792547773430
+        },
+        {
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+          "stream": "stdout",
+          "time": 1792547773730,
+          "receivedAt": 1792547773731
+        },
+        {
+          "text": "NODU_COMPARE_START\r\n",
+          "stream": "stdout",
+          "time": 1792547774789,
+          "receivedAt": 1792547774789
+        },
+        {
+          "text": "NODU_COMPARE frames=20 camera_fps=10.8\r\n",
+          "stream": "stdout",
+          "time": 1792547776312,
+          "receivedAt": 1792547776313
+        },
+        {
+          "text": "NODU_COMPARE frames=40 camera_fps=10.7\r\n",
+          "stream": "stdout",
+          "time": 1792547777844,
+          "receivedAt": 1792547777844
+        },
+        {
+          "text": "IDE reply recovery poke #1 (received 3435/3441 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547779223,
+          "receivedAt": 1792547779224
+        },
+        {
+          "text": "IDE reply recovery poke #2 (received 3439/3445 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547780253,
+          "receivedAt": 1792547780253
+        },
+        {
+          "text": "IDE reply recovery poke #3 (received 3443/3449 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547781284,
+          "receivedAt": 1792547781284
+        },
+        {
+          "text": "IDE reply recovery poke #4 (received 3447/3453 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547782311,
+          "receivedAt": 1792547782313
+        },
+        {
+          "text": "IDE reply recovery poke #5 (received 3451/3457 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547783343,
+          "receivedAt": 1792547783344
+        },
+        {
+          "text": "IDE reply recovery poke #6 (received 3455/3461 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547784373,
+          "receivedAt": 1792547784374
+        },
+        {
+          "text": "IDE reply recovery poke #7 (received 3459/3465 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547785401,
+          "receivedAt": 1792547785402
+        },
+        {
+          "text": "Dropped an incomplete frame reply (Timed out reading 3465 IDE bytes (got 3463, 7 recovery writes).); stream verified synchronized.\n",
+          "stream": "stderr",
+          "time": 1792547786575,
+          "receivedAt": 1792547786576
+        },
+        {
+          "text": "NODU_COMPARE frames=60 camera_fps=11.4\r\n",
+          "stream": "stdout",
+          "time": 1792547786589,
+          "receivedAt": 1792547786589
+        },
+        {
+          "text": "NODU_COMPARE frames=80 camera_fps=11.8\r\n",
+          "stream": "stdout",
+          "time": 1792547786589,
+          "receivedAt": 1792547786593
+        },
+        {
+          "text": "NODU_COMPARE frames=100 camera_fps=12.0\r\n",
+          "stream": "stdout",
+          "time": 1792547786589,
+          "receivedAt": 1792547786594
+        },
+        {
+          "text": "NODU_COMPARE frames=120 camera_fps=12.2\r\n",
+          "stream": "stdout",
+          "time": 1792547786589,
+          "receivedAt": 1792547786596
+        },
+        {
+          "text": "NODU_COMPARE frames=140 camera_fps=12.3\r\n",
+          "stream": "stdout",
+          "time": 1792547786599,
+          "receivedAt": 1792547786605
+        },
+        {
+          "text": "IDE reply recovery poke #1 (received 3388/3396 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547787790,
+          "receivedAt": 1792547787790
+        },
+        {
+          "text": "IDE reply recovery poke #2 (received 3392/3400 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547788826,
+          "receivedAt": 1792547788827
+        },
+        {
+          "text": "IDE reply recovery poke #3 (received 3396/3404 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547789855,
+          "receivedAt": 1792547789855
+        },
+        {
+          "text": "IDE reply recovery poke #4 (received 3400/3408 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547790884,
+          "receivedAt": 1792547790884
+        },
+        {
+          "text": "IDE reply recovery poke #5 (received 3404/3412 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547791914,
+          "receivedAt": 1792547791915
+        },
+        {
+          "text": "IDE reply recovery poke #6 (received 3408/3416 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547792941,
+          "receivedAt": 1792547792942
+        },
+        {
+          "text": "IDE reply recovery poke #7 (received 3412/3420 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547793973,
+          "receivedAt": 1792547793973
+        },
+        {
+          "text": "Dropped an incomplete frame reply (Timed out reading 3420 IDE bytes (got 3416, 7 recovery writes).); stream verified synchronized.\n",
+          "stream": "stderr",
+          "time": 1792547795145,
+          "receivedAt": 1792547795146
+        },
+        {
+          "text": "2\r\n",
+          "stream": "stdout",
+          "time": 1792547795615,
+          "receivedAt": 1792547795616
+        }
+      ]
+    },
+    {
+      "cycle": 1,
+      "samples": [
+        {
+          "elapsedMs": 0,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 39,
+            "time": 1792547797261,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 502,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1005,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1507,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2009,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2510,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3010,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3512,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4015,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4516,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5020,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5521,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6023,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6525,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7027,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7528,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8030,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8532,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 42,
+            "time": 1792547797580,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9034,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 43,
+            "time": 1792547806194,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9536,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 45,
+            "time": 1792547806421,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        }
+      ],
+      "start": {
+        "began": 1792547795635,
+        "before": {
+          "phase": "connected",
+          "running": false,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 38,
+            "time": 1792547778113,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        }
+      },
+      "stopped": {
+        "phase": "connected",
+        "running": false,
+        "busy": false,
+        "protocol": "ide",
+        "preview": true,
+        "frame": {
+          "sequence": 46,
+          "time": 1792547815088,
+          "width": 320,
+          "height": 240
+        },
+        "error": ""
+      },
+      "stopMs": 7777,
+      "repl": "2\r\n",
+      "logs": [
+        {
+          "text": "运行 Untitled-32.py\n",
+          "stream": "system",
+          "time": 1792547795652,
+          "receivedAt": 1792547795652
+        },
+        {
+          "text": "init i2c:2 freq:100000\r\r\n",
+          "stream": "stdout",
+          "time": 1792547796406,
+          "receivedAt": 1792547796407
+        },
+        {
+          "text": "[MAIXPY]: sensor id = 45\r\n",
+          "stream": "stdout",
+          "time": 1792547796643,
+          "receivedAt": 1792547796644
+        },
+        {
+          "text": "[MAIXPY]: find gc2145\r\n",
+          "stream": "stdout",
+          "time": 1792547796700,
+          "receivedAt": 1792547796701
+        },
+        {
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+          "stream": "stdout",
+          "time": 1792547797050,
+          "receivedAt": 1792547797051
+        },
+        {
+          "text": "IDE reply recovery poke #1 (received 3293/3313 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547798749,
+          "receivedAt": 1792547798750
+        },
+        {
+          "text": "IDE reply recovery poke #2 (received 3297/3317 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547799779,
+          "receivedAt": 1792547799779
+        },
+        {
+          "text": "IDE reply recovery poke #3 (received 3301/3321 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547800806,
+          "receivedAt": 1792547800807
+        },
+        {
+          "text": "IDE reply recovery poke #4 (received 3305/3325 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547801835,
+          "receivedAt": 1792547801835
+        },
+        {
+          "text": "IDE reply recovery poke #5 (received 3309/3329 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547802861,
+          "receivedAt": 1792547802862
+        },
+        {
+          "text": "IDE reply recovery poke #6 (received 3313/3333 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547803890,
+          "receivedAt": 1792547803891
+        },
+        {
+          "text": "IDE reply recovery poke #7 (received 3317/3337 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547804929,
+          "receivedAt": 1792547804930
+        },
+        {
+          "text": "Dropped an incomplete frame reply (Timed out reading 3337 IDE bytes (got 3321, 7 recovery writes).); stream verified synchronized.\n",
+          "stream": "stderr",
+          "time": 1792547806102,
+          "receivedAt": 1792547806103
+        },
+        {
+          "text": "NODU_COMPARE_START\r\n",
+          "stream": "stdout",
+          "time": 1792547806157,
+          "receivedAt": 1792547806157
+        },
+        {
+          "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792547806157,
+          "receivedAt": 1792547806161
+        },
+        {
+          "text": "NODU_COMPARE frames=40 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792547806157,
+          "receivedAt": 1792547806162
+        },
+        {
+          "text": "NODU_COMPARE frames=60 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792547806157,
+          "receivedAt": 1792547806163
+        },
+        {
+          "text": "NODU_COMPARE frames=80 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792547806157,
+          "receivedAt": 1792547806164
+        },
+        {
+          "text": "NODU_COMPARE frames=100 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547806244,
+          "receivedAt": 1792547806245
+        },
+        {
+          "text": "IDE reply recovery poke #1 (received 3416/3436 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547807531,
+          "receivedAt": 1792547807532
+        },
+        {
+          "text": "IDE reply recovery poke #2 (received 3420/3440 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547808562,
+          "receivedAt": 1792547808563
+        },
+        {
+          "text": "IDE reply recovery poke #3 (received 3424/3444 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547809591,
+          "receivedAt": 1792547809592
+        },
+        {
+          "text": "IDE reply recovery poke #4 (received 3428/3448 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547810622,
+          "receivedAt": 1792547810622
+        },
+        {
+          "text": "IDE reply recovery poke #5 (received 3432/3452 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547811650,
+          "receivedAt": 1792547811651
+        },
+        {
+          "text": "IDE reply recovery poke #6 (received 3436/3456 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547812678,
+          "receivedAt": 1792547812679
+        },
+        {
+          "text": "IDE reply recovery poke #7 (received 3440/3460 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547813704,
+          "receivedAt": 1792547813705
+        },
+        {
+          "text": "Dropped an incomplete frame reply (Timed out reading 3460 IDE bytes (got 3444, 7 recovery writes).); stream verified synchronized.\n",
+          "stream": "stderr",
+          "time": 1792547814873,
+          "receivedAt": 1792547814874
+        },
+        {
+          "text": "NODU_COMPARE frames=120 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547814888,
+          "receivedAt": 1792547814888
+        },
+        {
+          "text": "NODU_COMPARE frames=140 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547814888,
+          "receivedAt": 1792547814889
+        },
+        {
+          "text": "NODU_COMPARE frames=160 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547814888,
+          "receivedAt": 1792547814892
+        },
+        {
+          "text": "NODU_COMPARE frames=180 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547814888,
+          "receivedAt": 1792547814893
+        },
+        {
+          "text": "NODU_COMPARE frames=200 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547814888,
+          "receivedAt": 1792547814894
+        },
+        {
+          "text": "NODU_COMPARE frames=220 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547814897,
+          "receivedAt": 1792547814901
+        },
+        {
+          "text": "2\r\n",
+          "stream": "stdout",
+          "time": 1792547815574,
+          "receivedAt": 1792547815575
+        }
+      ]
+    },
+    {
+      "cycle": 2,
+      "samples": [
+        {
+          "elapsedMs": 1,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 47,
+            "time": 1792547817236,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 503,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 51,
+            "time": 1792547817697,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1004,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 1506,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2008,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 2510,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3012,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 3514,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4017,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 4520,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5021,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 5523,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6025,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 6526,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7028,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 7530,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8033,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 8538,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9040,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 52,
+            "time": 1792547817841,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        },
+        {
+          "elapsedMs": 9541,
+          "phase": "running",
+          "running": true,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 53,
+            "time": 1792547826378,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        }
+      ],
+      "start": {
+        "began": 1792547815592,
+        "before": {
+          "phase": "connected",
+          "running": false,
+          "busy": false,
+          "protocol": "ide",
+          "preview": true,
+          "frame": {
+            "sequence": 46,
+            "time": 1792547815088,
+            "width": 320,
+            "height": 240
+          },
+          "error": ""
+        }
+      },
+      "stopped": {
+        "phase": "connected",
+        "running": false,
+        "busy": false,
+        "protocol": "ide",
+        "preview": true,
+        "frame": {
+          "sequence": 53,
+          "time": 1792547826378,
+          "width": 320,
+          "height": 240
+        },
+        "error": ""
+      },
+      "stopMs": 7569,
+      "repl": "2\r\n",
+      "logs": [
+        {
+          "text": "运行 Untitled-32.py\n",
+          "stream": "system",
+          "time": 1792547815618,
+          "receivedAt": 1792547815618
+        },
+        {
+          "text": "init i2c:2 freq:100000\r\r\n",
+          "stream": "stdout",
+          "time": 1792547816367,
+          "receivedAt": 1792547816368
+        },
+        {
+          "text": "[MAIXPY]: sensor id = 45\r\n",
+          "stream": "stdout",
+          "time": 1792547816605,
+          "receivedAt": 1792547816606
+        },
+        {
+          "text": "[MAIXPY]: find gc2145\r\n",
+          "stream": "stdout",
+          "time": 1792547816665,
+          "receivedAt": 1792547816666
+        },
+        {
+          "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+          "stream": "stdout",
+          "time": 1792547817022,
+          "receivedAt": 1792547817023
+        },
+        {
+          "text": "IDE reply recovery poke #1 (received 3404/3414 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547818946,
+          "receivedAt": 1792547818947
+        },
+        {
+          "text": "IDE reply recovery poke #2 (received 3408/3418 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547819977,
+          "receivedAt": 1792547819977
+        },
+        {
+          "text": "IDE reply recovery poke #3 (received 3412/3422 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547821002,
+          "receivedAt": 1792547821003
+        },
+        {
+          "text": "IDE reply recovery poke #4 (received 3416/3426 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547822029,
+          "receivedAt": 1792547822030
+        },
+        {
+          "text": "IDE reply recovery poke #5 (received 3420/3430 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547823059,
+          "receivedAt": 1792547823059
+        },
+        {
+          "text": "IDE reply recovery poke #6 (received 3424/3434 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547824086,
+          "receivedAt": 1792547824087
+        },
+        {
+          "text": "IDE reply recovery poke #7 (received 3428/3438 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547825114,
+          "receivedAt": 1792547825115
+        },
+        {
+          "text": "Dropped an incomplete frame reply (Timed out reading 3438 IDE bytes (got 3432, 7 recovery writes).); stream verified synchronized.\n",
+          "stream": "stderr",
+          "time": 1792547826286,
+          "receivedAt": 1792547826287
+        },
+        {
+          "text": "NODU_COMPARE_START\r\n",
+          "stream": "stdout",
+          "time": 1792547826340,
+          "receivedAt": 1792547826341
+        },
+        {
+          "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+          "stream": "stdout",
+          "time": 1792547826340,
+          "receivedAt": 1792547826344
+        },
+        {
+          "text": "NODU_COMPARE frames=40 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547826340,
+          "receivedAt": 1792547826345
+        },
+        {
+          "text": "NODU_COMPARE frames=60 camera_fps=13.0\r\n",
+          "stream": "stdout",
+          "time": 1792547826340,
+          "receivedAt": 1792547826346
+        },
+        {
+          "text": "NODU_COMPARE frames=80 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547826340,
+          "receivedAt": 1792547826347
+        },
+        {
+          "text": "NODU_COMPARE frames=100 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547826424,
+          "receivedAt": 1792547826425
+        },
+        {
+          "text": "IDE reply recovery poke #1 (received 3415/3433 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547827482,
+          "receivedAt": 1792547827483
+        },
+        {
+          "text": "IDE reply recovery poke #2 (received 3419/3437 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547828513,
+          "receivedAt": 1792547828514
+        },
+        {
+          "text": "IDE reply recovery poke #3 (received 3423/3441 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547829540,
+          "receivedAt": 1792547829540
+        },
+        {
+          "text": "IDE reply recovery poke #4 (received 3427/3445 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547830566,
+          "receivedAt": 1792547830567
+        },
+        {
+          "text": "IDE reply recovery poke #5 (received 3431/3449 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547831595,
+          "receivedAt": 1792547831596
+        },
+        {
+          "text": "IDE reply recovery poke #6 (received 3435/3453 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547832628,
+          "receivedAt": 1792547832628
+        },
+        {
+          "text": "IDE reply recovery poke #7 (received 3439/3457 bytes)\n",
+          "stream": "stderr",
+          "time": 1792547833655,
+          "receivedAt": 1792547833655
+        },
+        {
+          "text": "Dropped an incomplete frame reply (Timed out reading 3457 IDE bytes (got 3443, 7 recovery writes).); stream verified synchronized.\n",
+          "stream": "stderr",
+          "time": 1792547834819,
+          "receivedAt": 1792547834820
+        },
+        {
+          "text": "NODU_COMPARE frames=120 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547834833,
+          "receivedAt": 1792547834834
+        },
+        {
+          "text": "NODU_COMPARE frames=140 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547834833,
+          "receivedAt": 1792547834836
+        },
+        {
+          "text": "NODU_COMPARE frames=160 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547834833,
+          "receivedAt": 1792547834838
+        },
+        {
+          "text": "NODU_COMPARE frames=180 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547834833,
+          "receivedAt": 1792547834839
+        },
+        {
+          "text": "NODU_COMPARE frames=200 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547834833,
+          "receivedAt": 1792547834839
+        },
+        {
+          "text": "NODU_COMPARE frames=220 camera_fps=13.1\r\n",
+          "stream": "stdout",
+          "time": 1792547834849,
+          "receivedAt": 1792547834850
+        },
+        {
+          "text": "2\r\n",
+          "stream": "stdout",
+          "time": 1792547835358,
+          "receivedAt": 1792547835358
+        }
+      ]
+    }
+  ],
+  "connected": {
+    "phase": "connected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "preview": true,
+    "frame": null,
+    "error": ""
+  },
+  "connectLogs": [],
+  "editor": {
+    "before": 288,
+    "after": 464,
+    "uri": "untitled:/Untitled-32.py"
+  },
+  "recording": {
+    "path": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/poke-recovery-r6.bin",
+    "trigger": "NoduDeviceModel API",
+    "start": {
+      "began": 1792547835373,
+      "before": {
+        "phase": "connected",
+        "running": false,
+        "busy": false,
+        "protocol": "ide",
+        "preview": true,
+        "frame": {
+          "sequence": 53,
+          "time": 1792547826378,
+          "width": 320,
+          "height": 240
+        },
+        "error": ""
+      }
+    },
+    "startResult": true,
+    "stateBeforeStop": {
+      "phase": "running",
+      "running": true,
+      "busy": false,
+      "protocol": "ide",
+      "preview": true,
+      "frame": {
+        "sequence": 60,
+        "time": 1792547837482,
+        "width": 320,
+        "height": 240
+      },
+      "error": "",
+      "recording": {
+        "active": true,
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/poke-recovery-r6.bin",
+        "frames": 6,
+        "bytes": 19872,
+        "elapsedMs": 1573
+      }
+    },
+    "final": {
+      "active": false,
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/poke-recovery-r6.bin",
+      "frames": 6,
+      "bytes": 19872,
+      "elapsedMs": 10035
+    },
+    "fileBytes": 19872,
+    "header": "OMV IMG STR V1.0",
+    "stopped": {
+      "phase": "connected",
+      "running": false,
+      "busy": false,
+      "protocol": "ide",
+      "preview": true,
+      "frame": {
+        "sequence": 60,
+        "time": 1792547837482,
+        "width": 320,
+        "height": 240
+      },
+      "error": ""
+    },
+    "repl": "2\r\n",
+    "logs": [
+      {
+        "text": "运行 Untitled-32.py\n",
+        "stream": "system",
+        "time": 1792547835384,
+        "receivedAt": 1792547835384
+      },
+      {
+        "text": "init i2c:2 freq:100000\r\r\n",
+        "stream": "stdout",
+        "time": 1792547836134,
+        "receivedAt": 1792547836135
+      },
+      {
+        "text": "[MAIXPY]: sensor id = 45\r\n",
+        "stream": "stdout",
+        "time": 1792547836372,
+        "receivedAt": 1792547836373
+      },
+      {
+        "text": "[MAIXPY]: find gc2145\r\n",
+        "stream": "stdout",
+        "time": 1792547836431,
+        "receivedAt": 1792547836432
+      },
+      {
+        "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+        "stream": "stdout",
+        "time": 1792547836792,
+        "receivedAt": 1792547836793
+      },
+      {
+        "text": "IDE reply recovery poke #1 (received 3414/3426 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547838594,
+        "receivedAt": 1792547838594
+      },
+      {
+        "text": "IDE reply recovery poke #2 (received 3418/3430 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547839622,
+        "receivedAt": 1792547839623
+      },
+      {
+        "text": "IDE reply recovery poke #3 (received 3422/3434 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547840652,
+        "receivedAt": 1792547840653
+      },
+      {
+        "text": "IDE reply recovery poke #4 (received 3426/3438 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547841684,
+        "receivedAt": 1792547841685
+      },
+      {
+        "text": "IDE reply recovery poke #5 (received 3430/3442 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547842713,
+        "receivedAt": 1792547842715
+      },
+      {
+        "text": "IDE reply recovery poke #6 (received 3434/3446 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547843743,
+        "receivedAt": 1792547843744
+      },
+      {
+        "text": "IDE reply recovery poke #7 (received 3438/3450 bytes)\n",
+        "stream": "stderr",
+        "time": 1792547844771,
+        "receivedAt": 1792547844772
+      },
+      {
+        "text": "Dropped an incomplete frame reply (Timed out reading 3450 IDE bytes (got 3442, 7 recovery writes).); stream verified synchronized.\n",
+        "stream": "stderr",
+        "time": 1792547845937,
+        "receivedAt": 1792547845938
+      },
+      {
+        "text": "录像已保存到 /Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/poke-recovery-r6.bin · 6 帧，19872 字节。\n",
+        "stream": "system",
+        "time": 1792547845953,
+        "receivedAt": 1792547845953
+      },
+      {
+        "text": "NODU_COMPARE_START\r\n",
+        "stream": "stdout",
+        "time": 1792547845986,
+        "receivedAt": 1792547845987
+      },
+      {
+        "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+        "stream": "stdout",
+        "time": 1792547845986,
+        "receivedAt": 1792547845988
+      },
+      {
+        "text": "NODU_COMPARE frames=40 camera_fps=13.2\r\n",
+        "stream": "stdout",
+        "time": 1792547845986,
+        "receivedAt": 1792547845989
+      },
+      {
+        "text": "NODU_COMPARE frames=60 camera_fps=13.1\r\n",
+        "stream": "stdout",
+        "time": 1792547845986,
+        "receivedAt": 1792547845989
+      },
+      {
+        "text": "NODU_COMPARE frames=80 camera_fps=13.1\r\n",
+        "stream": "stdout",
+        "time": 1792547845986,
+        "receivedAt": 1792547845990
+      },
+      {
+        "text": "NODU_COMPARE frames=100 camera_fps=13.1\r\n",
+        "stream": "stdout",
+        "time": 1792547845996,
+        "receivedAt": 1792547845998
+      },
+      {
+        "text": "2\r\n",
+        "stream": "stdout",
+        "time": 1792547846551,
+        "receivedAt": 1792547846552
+      }
+    ]
+  },
+  "finalObservation": {
+    "phase": "connected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "preview": true,
+    "frame": {
+      "sequence": 60,
+      "time": 1792547837482,
+      "width": 320,
+      "height": 240
+    },
+    "error": ""
+  },
+  "lastLogs": [
+    {
+      "text": "运行 Untitled-32.py\n",
+      "stream": "system",
+      "time": 1792547835384,
+      "receivedAt": 1792547835384
+    },
+    {
+      "text": "init i2c:2 freq:100000\r\r\n",
+      "stream": "stdout",
+      "time": 1792547836134,
+      "receivedAt": 1792547836135
+    },
+    {
+      "text": "[MAIXPY]: sensor id = 45\r\n",
+      "stream": "stdout",
+      "time": 1792547836372,
+      "receivedAt": 1792547836373
+    },
+    {
+      "text": "[MAIXPY]: find gc2145\r\n",
+      "stream": "stdout",
+      "time": 1792547836431,
+      "receivedAt": 1792547836432
+    },
+    {
+      "text": "GC2145_INIT {'format84': 6, 'freq': 24000000, 'f2': 15, 'registers': 646}\r\n",
+      "stream": "stdout",
+      "time": 1792547836792,
+      "receivedAt": 1792547836793
+    },
+    {
+      "text": "IDE reply recovery poke #1 (received 3414/3426 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547838594,
+      "receivedAt": 1792547838594
+    },
+    {
+      "text": "IDE reply recovery poke #2 (received 3418/3430 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547839622,
+      "receivedAt": 1792547839623
+    },
+    {
+      "text": "IDE reply recovery poke #3 (received 3422/3434 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547840652,
+      "receivedAt": 1792547840653
+    },
+    {
+      "text": "IDE reply recovery poke #4 (received 3426/3438 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547841684,
+      "receivedAt": 1792547841685
+    },
+    {
+      "text": "IDE reply recovery poke #5 (received 3430/3442 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547842713,
+      "receivedAt": 1792547842715
+    },
+    {
+      "text": "IDE reply recovery poke #6 (received 3434/3446 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547843743,
+      "receivedAt": 1792547843744
+    },
+    {
+      "text": "IDE reply recovery poke #7 (received 3438/3450 bytes)\n",
+      "stream": "stderr",
+      "time": 1792547844771,
+      "receivedAt": 1792547844772
+    },
+    {
+      "text": "Dropped an incomplete frame reply (Timed out reading 3450 IDE bytes (got 3442, 7 recovery writes).); stream verified synchronized.\n",
+      "stream": "stderr",
+      "time": 1792547845937,
+      "receivedAt": 1792547845938
+    },
+    {
+      "text": "录像已保存到 /Users/wangwei/Model/k210-studio/artifacts/e2e-0.1.4/poke-recovery-r6.bin · 6 帧，19872 字节。\n",
+      "stream": "system",
+      "time": 1792547845953,
+      "receivedAt": 1792547845953
+    },
+    {
+      "text": "NODU_COMPARE_START\r\n",
+      "stream": "stdout",
+      "time": 1792547845986,
+      "receivedAt": 1792547845987
+    },
+    {
+      "text": "NODU_COMPARE frames=20 camera_fps=13.2\r\n",
+      "stream": "stdout",
+      "time": 1792547845986,
+      "receivedAt": 1792547845988
+    },
+    {
+      "text": "NODU_COMPARE frames=40 camera_fps=13.2\r\n",
+      "stream": "stdout",
+      "time": 1792547845986,
+      "receivedAt": 1792547845989
+    },
+    {
+      "text": "NODU_COMPARE frames=60 camera_fps=13.1\r\n",
+      "stream": "stdout",
+      "time": 1792547845986,
+      "receivedAt": 1792547845989
+    },
+    {
+      "text": "NODU_COMPARE frames=80 camera_fps=13.1\r\n",
+      "stream": "stdout",
+      "time": 1792547845986,
+      "receivedAt": 1792547845990
+    },
+    {
+      "text": "NODU_COMPARE frames=100 camera_fps=13.1\r\n",
+      "stream": "stdout",
+      "time": 1792547845996,
+      "receivedAt": 1792547845998
+    },
+    {
+      "text": "2\r\n",
+      "stream": "stdout",
+      "time": 1792547846551,
+      "receivedAt": 1792547846552
+    }
+  ],
+  "disconnected": {
+    "phase": "disconnected",
+    "running": false,
+    "busy": false,
+    "protocol": "ide",
+    "preview": false,
+    "frame": null,
+    "error": ""
+  },
+  "finished": "2026-10-21T01:57:27.088Z"
+}

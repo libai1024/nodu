@@ -30,6 +30,13 @@ const CMD_FRAME_SIZE: u8 = 0x81;
 const CMD_FRAME_DUMP: u8 = 0x82;
 const CMD_ARCH_STR: u8 = 0x83;
 const CMD_SCRIPT_RUNNING: u8 = 0x87;
+/// The original plugin's stall recovery (`READ_STALL_TIMEOUT = 1000`): when
+/// a partially received reply stops making progress, a bare
+/// `SCRIPT_RUNNING` header is written mid-reply. The firmware finishes the
+/// pending payload first and appends this many reply bytes after it — the
+/// host write is what flushes the serial bridge's held tail.
+const SCRIPT_RUNNING_REPLY: usize = 4;
+const STALL_BUDGET: Duration = Duration::from_millis(1000);
 const CMD_FILE_SAVE_STATUS: u8 = 0x88;
 const CMD_QUERY_STATUS: u8 = 0x8d;
 const CMD_TX_LEN: u8 = 0x8e;
@@ -114,9 +121,16 @@ pub struct IdeSession<'a> {
     transport: &'a mut dyn Transport,
     check: Check,
     timeout: Duration,
-    /// Optional reply stall budget (`-override_read_stall_timeout`): once a
-    /// reply has started, this long without progress is a protocol error.
+    /// Recovery-poke interval for an incomplete reply
+    /// (`-override_read_stall_timeout` overrides the 1 s default): once any
+    /// reply bytes have arrived, a mid-reply `SCRIPT_RUNNING` recovery write
+    /// goes out every interval until the reply completes — matching the
+    /// original plugin, which does not re-arm on incoming bytes.
+    /// `None` disables recovery (overall `timeout` only).
     stall_timeout: Option<Duration>,
+    /// Recovery writes issued by the in-progress `read_opt`; resync uses it
+    /// to bound how many poke replies may legitimately still be in flight.
+    pokes: u32,
 }
 
 impl<'a> IdeSession<'a> {
@@ -125,15 +139,14 @@ impl<'a> IdeSession<'a> {
             transport,
             check,
             timeout,
-            stall_timeout: None,
+            stall_timeout: Some(STALL_BUDGET),
+            pokes: 0,
         }
     }
 
-    /// Builder: bound how long a partially received reply may stall before
-    /// the stream is declared desynchronized. `None` keeps the historical
-    /// behaviour (overall `timeout` only). Unlike the original plugin, which
-    /// sent a `SCRIPT_RUNNING` ping mid-reply, a stall here fails closed —
-    /// injecting a request mid-reply would corrupt the byte stream.
+    /// Builder: replace the recovery-poke interval. `None` disables recovery
+    /// entirely — an incomplete reply then just waits out the overall
+    /// `timeout` before failing closed.
     #[must_use]
     pub fn with_stall_timeout(mut self, stall: Option<Duration>) -> Self {
         self.stall_timeout = stall;
@@ -311,7 +324,18 @@ impl<'a> IdeSession<'a> {
     /// A valid frame locks the framebuffer until it is dumped (or FB is
     /// disabled); invalid headers disable FB to release that lock.
     pub fn frame(&mut self) -> Result<Option<Frame>, ReplError> {
-        let header = self.read_command(CMD_FRAME_SIZE, 12)?;
+        // Write failures still propagate directly: a dead TX side is an
+        // unrecoverable desync no probe can fix.
+        self.send_header(CMD_FRAME_SIZE, 12)?;
+        let header = match self.read_opt(12, self.timeout.min(FRAME_READ_BUDGET)) {
+            Ok(Some(h)) => h,
+            Ok(None) => {
+                return self.frame_resync(ReplError::protocol(
+                    "Timed out reading 12 frame-size bytes (got 0).",
+                ));
+            }
+            Err(e) => return self.frame_resync(e),
+        };
         let width = u32::from_le_bytes(take4(&header, 0)?);
         let height = u32::from_le_bytes(take4(&header, 4)?);
         let jpeg_len = u32::from_le_bytes(take4(&header, 8)?) as usize;
@@ -332,15 +356,17 @@ impl<'a> IdeSession<'a> {
         }
         // A zero-byte dump timeout means the firmware may still send the
         // frame later; writing FB-disable now could desync the stream, so
-        // this is a protocol error and the caller must close the port.
+        // any read failure first goes through `frame_resync`: a verified
+        // clean channel drops this frame instead of killing the session.
         self.send_header(CMD_FRAME_DUMP, jpeg_len as u32)?;
-        let jpeg = match self.read_opt(jpeg_len, self.timeout)? {
-            Some(j) => j,
-            None => {
-                return Err(ReplError::protocol(format!(
+        let jpeg = match self.read_opt(jpeg_len, self.timeout.min(FRAME_READ_BUDGET)) {
+            Ok(Some(j)) => j,
+            Ok(None) => {
+                return self.frame_resync(ReplError::protocol(format!(
                     "Timed out reading {jpeg_len} frame bytes (got 0)."
                 )));
             }
+            Err(e) => return self.frame_resync(e),
         };
         let jpeg_ok = jpeg.starts_with(&[0xff, 0xd8])
             && jpeg.ends_with(&[0xff, 0xd9])
@@ -438,58 +464,157 @@ impl<'a> IdeSession<'a> {
     }
 
     /// Read exactly `length` bytes within `timeout`. `Ok(None)` is only a
-    /// clean zero-byte timeout; a partial reply is always a protocol error
-    /// because the stream can no longer be resynchronized safely.
+    /// clean zero-byte timeout; a reply that never completes is a protocol
+    /// error because the stream can no longer be resynchronized safely.
     fn read_opt(&mut self, length: usize, timeout: Duration) -> Result<Option<Vec<u8>>, ReplError> {
         if length > MAX_RESPONSE {
             return Err(ReplError::protocol(format!(
                 "Reply length {length} exceeds the 2 MiB bound."
             )));
         }
+        // `out` may grow past `length`: every recovery poke adds a
+        // SCRIPT_RUNNING reply whose 4 bytes arrive appended after the
+        // payload we still owe. Only the first `length` bytes are returned.
         let mut out = vec![0u8; length];
+        let mut expected = length;
         let mut got = 0usize;
+        self.pokes = 0;
         let deadline = Instant::now() + timeout;
         // Stall tracking only matters once the reply has started: a zero-byte
         // wait keeps using the overall timeout (the firmware may simply be
-        // idle), while a partial reply that stops progressing is desync.
-        let mut last_progress = Instant::now();
-        while got < length {
+        // idle or not in IDE mode — never write into that stream).
+        // The original does NOT restart this timer on arriving bytes: while
+        // the reply is incomplete it pokes once per second regardless, which
+        // also covers a tail that dribbles in too slowly to ever finish.
+        let mut last_poke = Instant::now();
+        while got < expected {
             // The request header was already sent, so a cancelled check or
             // a dead read leaves the stream position unknown — desync.
             (self.check)().map_err(|e| {
-                ReplError::protocol(format!("{DESYNC}: {e} (received {got}/{length} IDE bytes)"))
+                ReplError::protocol(format!(
+                    "{DESYNC}: {e} (received {got}/{expected} IDE bytes)"
+                ))
             })?;
             if got > 0
                 && let Some(stall) = self.stall_timeout
-                && last_progress.elapsed() >= stall
+                && last_poke.elapsed() >= stall
             {
-                return Err(ReplError::protocol(format!(
-                    "Reply stalled after {got}/{length} IDE bytes (no progress).",
-                )));
+                // Same recovery as the original plugin: a mid-reply
+                // SCRIPT_RUNNING header write wakes the firmware's USB task
+                // so the held tail flushes; expect its 4-byte answer after
+                // the pending payload and restart the poke timer.
+                self.send_header(CMD_SCRIPT_RUNNING, SCRIPT_RUNNING_REPLY as u32)
+                    .map_err(|e| {
+                        ReplError::protocol(format!(
+                            "{DESYNC}: {e} (recovery write after {got}/{expected} IDE bytes)"
+                        ))
+                    })?;
+                expected += SCRIPT_RUNNING_REPLY;
+                out.resize(expected, 0);
+                self.pokes += 1;
+                last_poke = Instant::now();
+                eprintln!(
+                    "IDE reply recovery poke #{} (received {got}/{expected} bytes)",
+                    self.pokes
+                );
+                continue;
             }
             if Instant::now() >= deadline {
                 return if got == 0 {
                     Ok(None)
                 } else {
                     Err(ReplError::protocol(format!(
-                        "Timed out reading {length} IDE bytes (got {got})."
+                        "Timed out reading {expected} IDE bytes (got {got}, {} recovery writes).",
+                        self.pokes
                     )))
                 };
             }
-            let want = (length - got).min(4096);
+            let want = (expected - got).min(4096);
             match self.transport.read(&mut out[got..got + want]) {
                 Ok(0) => std::thread::sleep(READ_SLICE.min(Duration::from_millis(5))),
-                Ok(n) => {
-                    got += n;
-                    last_progress = Instant::now();
-                }
+                Ok(n) => got += n,
                 Err(e) => return Err(ReplError::protocol(format!("{DESYNC}: {e}"))),
             }
         }
         std::thread::sleep(COMMAND_PACE);
+        out.truncate(length);
         Ok(Some(out))
     }
+
+    /// Frame payload never completed: verify the wire is clean, then drop
+    /// this frame instead of tearing down the connection — the original
+    /// plugin likewise hands its caller a truncated buffer rather than
+    /// disconnecting; we additionally prove resynchronization first.
+    /// Only frame reads get this grace: a truncated CONTROL reply still
+    /// fails closed since its contents carry real protocol meaning.
+    fn frame_resync(&mut self, e: ReplError) -> Result<Option<Frame>, ReplError> {
+        if self.resync() {
+            eprintln!("Dropped an incomplete frame reply ({e}); stream verified synchronized.");
+            return Ok(None);
+        }
+        Err(e)
+    }
+
+    /// After an incomplete frame reply, prove the firmware has nothing left
+    /// in flight so the stream is safe to keep using. One poke answer may
+    /// legitimately still land (bounded residue); anything beyond it means
+    /// real misalignment. Then confirm the command channel still answers
+    /// `SCRIPT_RUNNING` and goes quiet again.
+    ///
+    /// Deliberately bypasses `self.check`: the recovery runs after the
+    /// caller's deadline/cancellation already fired, under its own bounded
+    /// wall clock (~2.5 s worst case) — the same trade-off the original's
+    /// blocking `waitForReadyRead` loop makes.
+    fn resync(&mut self) -> bool {
+        let mut scratch = [0u8; 4096];
+        let mut tolerated = SCRIPT_RUNNING_REPLY;
+        let drain_end = Instant::now() + Duration::from_millis(300);
+        while Instant::now() < drain_end {
+            match self.transport.read(&mut scratch) {
+                Ok(0) => std::thread::sleep(Duration::from_millis(10)),
+                Ok(n) => {
+                    if n > tolerated {
+                        return false;
+                    }
+                    tolerated -= n;
+                }
+                Err(_) => return false,
+            }
+        }
+        // Liveness probe on the command channel: firmware answers
+        // SCRIPT_RUNNING whether idle or running.
+        let mut header = [0u8; 6];
+        header[0] = CMD_HEADER;
+        header[1] = CMD_SCRIPT_RUNNING;
+        header[2..].copy_from_slice(&(SCRIPT_RUNNING_REPLY as u32).to_le_bytes());
+        if self.transport.write_all(&header).is_err() || self.transport.flush().is_err() {
+            return false;
+        }
+        let mut buf = [0u8; 4];
+        let mut got = 0usize;
+        let probe_end = Instant::now() + Duration::from_secs(2);
+        while got < buf.len() && Instant::now() < probe_end {
+            match self.transport.read(&mut buf[got..]) {
+                Ok(0) => std::thread::sleep(Duration::from_millis(5)),
+                Ok(n) => got += n,
+                Err(_) => return false,
+            }
+        }
+        if got != 4 || u32::from_le_bytes(buf) > 1 {
+            return false;
+        }
+        // The clean answer arrived; the channel must now stay quiet —
+        // a late payload tail arriving here is misalignment, not residue.
+        std::thread::sleep(Duration::from_millis(50));
+        matches!(self.transport.in_waiting(), Ok(0))
+    }
 }
+
+/// Frame reads get an internal budget below the caller's operation window:
+/// a healthy dump completes far under a second, so a read that burns 8 s is
+/// already lost — and the slack leaves room for `resync` before the shared
+/// deadline forces a desync teardown.
+const FRAME_READ_BUDGET: Duration = Duration::from_secs(8);
 
 /// Decode the JPEG SOF segment for pixel dimensions without decoding pixels.
 fn jpeg_dimensions(jpeg: &[u8]) -> Option<(u32, u32)> {
@@ -510,6 +635,7 @@ mod tests {
     use super::*;
     use nodu_repl::never_cancel;
     use nodu_serial::MemoryTransport;
+    use std::collections::VecDeque;
     use std::io;
 
     fn session(t: &mut MemoryTransport) -> IdeSession<'_> {
@@ -543,28 +669,173 @@ mod tests {
         assert!(session(&mut t).query_status().is_err());
     }
 
+    /// Reply that stalls mid-payload, then completes — including its
+    /// `SCRIPT_RUNNING` poke answers — once each recovery write lands.
+    struct StallRecovery {
+        head: VecDeque<u8>,
+        pending: VecDeque<Vec<u8>>,
+        written: Vec<u8>,
+        pokes: u32,
+    }
+
+    impl StallRecovery {
+        fn new(head: &[u8]) -> Self {
+            Self {
+                head: head.iter().copied().collect(),
+                pending: VecDeque::new(),
+                written: Vec::new(),
+                pokes: 0,
+            }
+        }
+    }
+
+    impl nodu_serial::Transport for StallRecovery {
+        fn in_waiting(&mut self) -> io::Result<usize> {
+            Ok(self.head.len())
+        }
+
+        fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+            let mut n = 0;
+            while n < buf.len() {
+                let Some(b) = self.head.pop_front() else {
+                    break;
+                };
+                buf[n] = b;
+                n += 1;
+            }
+            Ok(n)
+        }
+
+        fn write_all(&mut self, buf: &[u8]) -> io::Result<()> {
+            self.written.extend_from_slice(buf);
+            if buf == [0x30, CMD_SCRIPT_RUNNING, 4, 0, 0, 0] {
+                self.pokes += 1;
+                if let Some(chunk) = self.pending.pop_front() {
+                    self.head.extend(chunk);
+                }
+            }
+            Ok(())
+        }
+
+        fn flush(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+        fn reset_input_buffer(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+        fn set_baud_rate(&mut self, _baud: u32) -> io::Result<()> {
+            Ok(())
+        }
+        fn unread(&mut self, data: &[u8]) {
+            for &b in data.iter().rev() {
+                self.head.push_front(b);
+            }
+        }
+        fn set_dtr(&mut self, _level: bool) -> io::Result<()> {
+            Ok(())
+        }
+        fn set_rts(&mut self, _level: bool) -> io::Result<()> {
+            Ok(())
+        }
+    }
+
     #[test]
-    fn stalled_partial_reply_fails_closed_before_overall_timeout() {
-        // The reply started (2 of 8 bytes) then went silent: the stall bound
-        // fires long before the 30 s overall deadline — a fail-closed desync,
-        // never the original plugin's unsafe mid-reply ping.
-        let mut t = MemoryTransport::new();
-        t.feed(&[0x01, 0x02]);
-        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_secs(30))
+    fn stalled_reply_recovers_via_script_running_poke() {
+        // Original-plugin semantics: reply starts (2 of 8), stalls; the
+        // recovery write flushes the tail plus a 4-byte running answer.
+        // Firmware semantics: the poke write flushes the held payload tail,
+        // then appends its own 4-byte running answer — all in one burst.
+        let mut t = StallRecovery::new(&[0x01, 0x02]);
+        t.pending
+            .push_back(vec![0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 1, 0, 0, 0]);
+        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_secs(10))
+            .with_stall_timeout(Some(Duration::from_millis(30)));
+        let reply = s.read_command(0x80, 8).unwrap();
+        assert_eq!(reply, vec![1, 2, 3, 4, 5, 6, 7, 8]);
+        assert_eq!(t.pokes, 1);
+        // Stream is back in sync: the poke reply was consumed, not left over.
+    }
+
+    #[test]
+    fn repeated_stalls_poke_until_overall_timeout() {
+        // Tail never arrives: each stall budget emits one poke until the
+        // overall deadline fails closed with the poke count in the error.
+        let mut t = StallRecovery::new(&[0x01, 0x02]);
+        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_millis(220))
             .with_stall_timeout(Some(Duration::from_millis(40)));
-        let started = Instant::now();
-        let err = s.read_command(0x80, 8).expect_err("stall must error");
-        assert!(err.is_protocol(), "stall is a protocol desync: {err:?}");
-        assert!(err.to_string().contains("stalled"), "{err}");
-        assert!(
-            started.elapsed() < Duration::from_secs(5),
-            "took {:?}",
-            started.elapsed()
-        );
-        // Without the stall bound the same gap waits for the overall timeout.
+        let err = s
+            .read_command(0x80, 8)
+            .expect_err("unrecovered stall errors");
+        assert!(err.is_protocol(), "{err:?}");
+        assert!(err.to_string().contains("recovery writes"), "{err}");
+        assert!(t.pokes >= 2, "pokes: {}", t.pokes);
+    }
+
+    #[test]
+    fn zero_byte_reply_never_pokes() {
+        // A reply that never starts stays a clean overall timeout — the
+        // recovery write must not fire into a possibly non-IDE stream.
+        let mut t = StallRecovery::new(&[]);
+        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_millis(120))
+            .with_stall_timeout(Some(Duration::from_millis(20)));
+        assert!(s.read_command(0x80, 8).is_err());
+        assert_eq!(t.pokes, 0);
+    }
+
+    #[test]
+    fn stalled_recovery_write_failure_is_desync() {
+        // A poke that cannot even be written leaves stream state unknown.
+        struct DeadWrite(StallRecovery);
+        impl nodu_serial::Transport for DeadWrite {
+            fn in_waiting(&mut self) -> io::Result<usize> {
+                self.0.in_waiting()
+            }
+            fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+                self.0.read(buf)
+            }
+            fn write_all(&mut self, buf: &[u8]) -> io::Result<()> {
+                // The request header itself still works; only a recovery
+                // poke write dies with the port gone mid-reply.
+                if buf == [0x30, CMD_SCRIPT_RUNNING, 4, 0, 0, 0] {
+                    return Err(io::Error::new(io::ErrorKind::BrokenPipe, "port gone"));
+                }
+                self.0.write_all(buf)
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                Ok(())
+            }
+            fn reset_input_buffer(&mut self) -> io::Result<()> {
+                Ok(())
+            }
+            fn set_baud_rate(&mut self, _b: u32) -> io::Result<()> {
+                Ok(())
+            }
+            fn unread(&mut self, data: &[u8]) {
+                self.0.unread(data);
+            }
+            fn set_dtr(&mut self, _l: bool) -> io::Result<()> {
+                Ok(())
+            }
+            fn set_rts(&mut self, _l: bool) -> io::Result<()> {
+                Ok(())
+            }
+        }
+        let mut t = DeadWrite(StallRecovery::new(&[0x01, 0x02]));
+        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_secs(10))
+            .with_stall_timeout(Some(Duration::from_millis(20)));
+        let err = s.read_command(0x80, 8).expect_err("dead poke errors");
+        assert!(err.is_protocol(), "{err:?}");
+        assert!(err.to_string().contains("recovery write"), "{err}");
+    }
+
+    #[test]
+    fn overall_timeout_without_stall_recovery() {
+        // Disabled stall handling keeps the historical behaviour: a partial
+        // reply simply waits for the overall deadline, no poke is written.
         let mut t = MemoryTransport::new();
         t.feed(&[0x01, 0x02]);
-        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_millis(120));
+        let mut s = IdeSession::new(&mut t, never_cancel(), Duration::from_millis(120))
+            .with_stall_timeout(None);
         let err = s.read_command(0x80, 8).expect_err("overall timeout");
         assert!(err.to_string().contains("Timed out"), "{err}");
     }

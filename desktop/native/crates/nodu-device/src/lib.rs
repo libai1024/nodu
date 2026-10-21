@@ -456,8 +456,9 @@ pub struct Worker {
     /// `-override_read_timeout`: per-reply wait for IDE protocol reads;
     /// `None` keeps each call site's default.
     read_timeout: Option<Duration>,
-    /// `-override_read_stall_timeout`: bounds progress stalls inside a
-    /// partially received IDE reply (fail-closed, never a mid-reply ping).
+    /// `-override_read_stall_timeout`: replaces the 1 s default budget
+    /// inside a partially received IDE reply; on stall a mid-reply
+    /// `SCRIPT_RUNNING` recovery write goes out (original-plugin behaviour).
     read_stall_timeout: Option<Duration>,
     /// Python `session_id` (uuid4().hex): per-connection nonce, renewed
     /// after probe/flash reconnects, cleared on disconnect.
@@ -502,7 +503,7 @@ impl Worker {
             last_frame_at: None,
             recorder: None,
             read_timeout: None,
-            read_stall_timeout: None,
+            read_stall_timeout: Some(Duration::from_secs(1)),
             session_id: None,
             prepared_firmware: None,
             backup_record: None,
@@ -512,11 +513,16 @@ impl Worker {
     }
 
     /// `-override_read_timeout` / `-override_read_stall_timeout` launch
-    /// flags: apply to every IDE session built from now on; `None` preserves
-    /// the historical per-site timeouts. Set before `main_loop`.
+    /// flags: apply to every IDE session built from now on; `None` leaves
+    /// the existing value (call-site timeout / 1 s stall-recovery budget).
+    /// Set before `main_loop`.
     pub fn set_read_timeouts(&mut self, read: Option<Duration>, stall: Option<Duration>) {
-        self.read_timeout = read;
-        self.read_stall_timeout = stall;
+        if let Some(read) = read {
+            self.read_timeout = Some(read);
+        }
+        if let Some(stall) = stall {
+            self.read_stall_timeout = Some(stall);
+        }
     }
 
     /// Per-reply read wait for IDE sessions: the configured override wins,
