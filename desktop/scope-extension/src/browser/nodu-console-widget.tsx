@@ -9,7 +9,7 @@ import { NoduDeviceModel } from './nodu-device-client';
 @injectable()
 export class NoduConsoleWidget extends ReactWidget {
     static readonly ID = 'nodu:console';
-    static readonly LABEL = '控制台';
+    static readonly LABEL = '串行终端';
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
     @inject(ClipboardService) protected readonly clipboard!: ClipboardService;
     @inject(CommandService) protected readonly commands!: CommandService;
@@ -62,7 +62,7 @@ export class NoduConsoleWidget extends ReactWidget {
                     <button className="scope-action scope-toolbar-icon" aria-label="清空" title="清空" disabled={!logs.length}
                         onClick={() => { this.clearedAt = Date.now(); this.update(); }}>
                         <i className="codicon codicon-clear-all" aria-hidden="true"/></button>
-                    <button className="scope-action scope-toolbar-icon" aria-label="关闭控制台" title="关闭控制台"
+                    <button className="scope-action scope-toolbar-icon" aria-label="关闭串行终端" title="关闭串行终端"
                         onClick={() => void this.commands.executeCommand('scope.toggle-console')}>
                         <i className="codicon codicon-close" aria-hidden="true"/></button>
                 </span>

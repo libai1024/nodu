@@ -237,12 +237,15 @@ export class NoduDeviceModel implements DeviceClient {
     }
 
     async saveFile(name: string, data: string, confirmedStartup = false): Promise<boolean | undefined> {
-        return this.perform('写入板端文件', async () => {
+        const written = await this.perform('写入板端文件', async () => {
             await this.service.saveFile(name, data, confirmedStartup);
             this.onState(await this.service.getState());
             this.note(`已写入板端 ${name}（默认存储）。`);
             return true;
         });
+        // A listing already on screen (开发板文件) must not go stale; the write itself has succeeded.
+        if (written && this.connected && this.entries.length) { await this.listFiles(this.directory); }
+        return written;
     }
 
     /** Local formatting; the device is not involved. */

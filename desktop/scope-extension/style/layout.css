@@ -17,14 +17,17 @@
 .scope-toolbar-icon[aria-pressed='true'] { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
 .scope-toolbar-run { height: 30px; min-height: 30px; padding: 0 12px; }
 .scope-toolbar-run.nodu-is-running:disabled { background: var(--theia-button-background); color: var(--theia-button-foreground); border-color: transparent; opacity: .7; }
-.scope-toolbar-files { height: 30px; min-height: 30px; padding: 0 9px; border-color: transparent; background: transparent; }
-.scope-toolbar-files[aria-pressed='true'] { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
+/* 项目 ▾: quiet text button; the project name truncates before other controls shrink. */
+.nodu-toolbar-project { height: 30px; min-height: 30px; max-width: 200px; gap: 6px; padding: 0 8px; border-color: transparent; background: transparent; }
+.nodu-toolbar-project:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-toolbar-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-toolbar-project .codicon-chevron-down, .scope-device-chip .codicon-chevron-down { font-size: 12px; opacity: .75; }
+/* 运行 | ▾ split button: one primary surface, a 1px seam between the halves. */
+.nodu-run-split { display: inline-flex; align-items: stretch; flex-shrink: 0; }
+.nodu-run-split > .scope-toolbar-run { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.nodu-run-more { width: 24px; min-width: 24px; height: 30px; min-height: 30px; padding: 0; justify-content: center; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: 1px solid color-mix(in srgb, var(--theia-button-foreground) 28%, transparent); }
+.nodu-run-more .codicon { font-size: 12px; }
 .scope-toolbar-divider { width: 1px; height: 18px; margin: 0 4px; flex-shrink: 0; background: var(--theia-panel-border); }
-.scope-layout-switch { display: inline-flex; align-items: center; height: 26px; padding: 2px; gap: 1px; flex-shrink: 0; border: 1px solid var(--theia-panel-border); border-radius: 13px; }
-.scope-layout-switch > button { height: 22px; min-width: 30px; padding: 0 7px; border: 0; border-radius: 11px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 12px; cursor: pointer; }
-.scope-layout-switch > button:hover { color: var(--theia-foreground); }
-.scope-layout-switch > button[aria-pressed='true'] { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
-.scope-layout-switch > button:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 1px; }
 .nodu-toolbar-stop.nodu-stop-active { color: var(--theia-errorForeground); }
 .nodu-toolbar-stop:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
 .nodu-toolbar-stop:disabled { background: transparent; border-color: transparent; }
@@ -89,3 +92,7 @@ body.nodu-simple #editor-status-eol,
 body.nodu-simple #editor-status-tabbing-config {
     display: none;
 }
+@media (max-width: 900px) { .nodu-toolbar-project { max-width: 120px; } }
+@media (max-width: 700px) { .nodu-toolbar-project-name { display: none; } }
+.nodu-board-files-widget { padding: 0 12px 12px; overflow: auto; }
+.nodu-board-files-widget .nodu-preview-empty { padding-top: 32px; }

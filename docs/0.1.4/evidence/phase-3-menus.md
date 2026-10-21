@@ -162,7 +162,7 @@ dispose 时触发）→ 防抖 `setMenuBar()` → `electronTheiaCore.setMenu`。
 | CNN网络库 | `scope.network-library` | 已实现 |
 | 视频工具 ▸ 转换视频文件 / 播放视频文件 | `scope.convert-video` / `scope.play-video`（子菜单前两项） | 已实现 |
 | （Nodu 附加）开始录制… / 结束录制 / 取消视频任务 | `scope.start-recording` / `scope.stop-recording` / `scope.cancel-media`，分隔线后 | Nodu 附加项 |
-| （Nodu 附加）运行/停止/复位/视觉调试/设备与连接/板卡指南/设备日志/主题/简专模式/示例 | `d_nodu` 末组 + `示例` 子菜单（仅专业模式可见） | Nodu 附加项，DOM 实测 |
+| （Nodu 附加）运行/停止/复位/显示帧缓冲/设备与连接/板卡指南/设备日志/主题/简洁模式/专业模式/示例（2026-10-21 更名：原“视觉调试”“简专模式”） | `d_nodu` 末组 + `示例` 子菜单（仅专业模式可见） | Nodu 附加项，DOM 实测 |
 
 板卡 id↔标签证据：`BOARD_MENU` 顺序为原版显示顺序，id 为原版复位序列索引
 （`docs/0.1.3/evidence/original-private-params.md` §2 + `nodu-device/src/reset.rs`

@@ -118,7 +118,15 @@ async function startCamera() {
         result.editor = await helpers.setModelText(page, source);
         if (await helpers.getModelText(page) !== source) throw Error('Editor source mismatch');
 
-        await page.evaluate(() => document.querySelector('[aria-label="专业模式"]')?.click());
+        // The 简/专 buttons became a menu in the 0.1.4 UI refactor; builds without them switch via the command.
+        await page.evaluate(async () => {
+            const legacy = document.querySelector('[aria-label="专业模式"]');
+            if (legacy) { legacy.click(); return; }
+            const container = window.theia.container;
+            const registry = [...container._bindingDictionary._map.keys()].find(key => typeof key === 'function' && key.prototype
+                && ['registerCommand', 'executeCommand', 'getCommand'].every(method => typeof key.prototype[method] === 'function'));
+            await container.get(registry).executeCommand('scope.layout.pro');
+        });
         for (let cycle = 0; cycle < (recordOnly ? 0 : comparison ? 1 : 3); cycle++) {
             const entry = { cycle, samples: [] };
             result.cycles.push(entry);

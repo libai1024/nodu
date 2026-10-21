@@ -21,6 +21,7 @@ import { PreferenceContribution } from '@theia/core/lib/common/preferences/prefe
 import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBoardGuideContribution, NoduBoardWidget } from './nodu-board-widget';
 import { ScopeConsoleContribution } from './scope-workbench';
+import { NoduBoardFilesContribution, NoduBoardFilesWidget } from './nodu-board-files';
 import '../../style/scope.css';
 import '../../style/widgets.css';
 import '../../style/layout.css';
@@ -44,6 +45,9 @@ export default new ContainerModule(bind => {
     bindViewContribution(bind, ScopeVisionContribution);
     bindViewContribution(bind, ScopeDeviceContribution);
     bindViewContribution(bind, ScopeConsoleContribution);
+    bind(NoduBoardFilesWidget).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduBoardFilesWidget.ID, createWidget: () => ctx.container.get(NoduBoardFilesWidget) })).inSingletonScope();
+    bindViewContribution(bind, NoduBoardFilesContribution);
     bind(ScopeThemeContribution).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(ScopeThemeContribution);
     bind(ScopeColorContribution).toSelf().inSingletonScope();

@@ -913,3 +913,20 @@ test('AprilTag family ids exist in the generator with matching counts', () => {
         assert.ok(source.includes(`count: ${count}`), `family ${entry.family} count mismatch: ${entry.label}`);
     }
 });
+
+test('保存到开发板 file names are bare names within the byte limit', () => {
+    const { boardFileNameProblem, BOARD_FILE_NAME_MAX_BYTES } = require('../lib/common/nodu-board-file-name');
+    // Surrounding spaces are trimmed by the caller, so they are not a problem here.
+    for (const name of ['main.py', 'demo_1.py', ' camera.py ', '测试.py', '.hidden', 'a'.repeat(BOARD_FILE_NAME_MAX_BYTES)]) {
+        assert.equal(boardFileNameProblem(name), undefined, JSON.stringify(name));
+    }
+    for (const name of ['', '   ', '.', '..', 'a/b.py', 'a\\b.py', 'a:b.py', 'a*b.py', 'a?.py', 'a"b.py', 'a<b>.py', 'a|b.py', 'a\0b.py', 'a\nb.py']) {
+        assert.notEqual(boardFileNameProblem(name), undefined, JSON.stringify(name));
+    }
+    // FAT drops a trailing dot, so this would land as the startup file boot.py unconfirmed.
+    assert.notEqual(boardFileNameProblem('boot.py.'), undefined);
+    // The limit counts UTF-8 bytes: 21 CJK characters are 63 bytes, 22 are 66.
+    assert.equal(boardFileNameProblem('测'.repeat(21)), undefined);
+    assert.notEqual(boardFileNameProblem('测'.repeat(22)), undefined);
+    assert.notEqual(boardFileNameProblem('a'.repeat(BOARD_FILE_NAME_MAX_BYTES + 1)), undefined);
+});

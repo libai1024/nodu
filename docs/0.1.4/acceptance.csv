@@ -12,4 +12,5 @@ I1.2,editor,编辑菜单,菜单逐项,撤销/重做/剪切/复制/粘贴/从剪�
 I1.3,editor,工具/窗口/帮助菜单,菜单逐项,选择开发板 9 项含勾选/boot.py 保存/发送文件/打开终端/机器视觉（AprilTag 六家族等）/视频工具/Nodu 末组；窗口仅 Electron（最小化 ⌘M/缩放/进入全屏）；帮助 文档/论坛/关于,evidence/maixpy-ide-0.2.5-menus.txt,3,passed_host,evidence/phase-3-menus.md；evidence/side-by-side-20261020.md（窗口最小化/缩放/全屏已实操；真板 boot.py 和发送文件见学生流程）
 U1.1,ui,专业模式布局对齐,专业模式,工具栏/帧缓冲/直方图/编辑器/底部面板/状态栏逐项与原版一致或有书面理由；两边截图入库,evidence/maixpy-ide-0.2.5-main-window.txt,4,partial,evidence/phase-4-layout.md；evidence/side-by-side-20261020.md（两侧有出图截图；严格同状态/同帧对照未完成）
 U1.2,ui,界面中文化,全局,菜单栏与各级菜单、标签页/编辑器右键菜单、保存对话框、状态栏默认中文；Nodu 自有项与原版文案一致；不引入 VS Code 语言包,MaixPy IDE 0.2.5 中文界面,4,passed_host,evidence/phase-4-locale.md；evidence/side-by-side-20261020.md（原生中文菜单及保存提示已实操）
+U1.3,ui,工具栏与文件入口重构,顶部工具栏与菜单,项目菜单（新建/打开/示例/最近的文件/保存到电脑）；运行▾（运行/保存到开发板/设为开机脚本/发送其他文件）；停止；设备入口；三个面板开关与⋯菜单；专业模式含开发板文件视图；既有入口（主题/简专切换/面板开关）仍可从⋯/查看/工具菜单到达,HANDOFF.md §5（用户 UI 方向）,4,partial,evidence/ui-layout-20261021.md（浏览器目标+模拟板实测；Electron 原生菜单/真板/Windows 未验证；用户尚未逐项确认方向）
 N1.6,native,原版并排对照,同一块板按相同步骤运行,PLAN 阶段 5 的 10 个步骤两边结果一致或差异有解释；板端状态与截图入库,PLAN 阶段 5,5,partial,evidence/side-by-side-20261020.md（连接/出图/发送文件/释放端口有证据；时长/停止/同源等早期结论撤回；其余步骤待补）

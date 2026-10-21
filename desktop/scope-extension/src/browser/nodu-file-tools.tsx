@@ -7,7 +7,7 @@ import * as React from '@theia/core/shared/react';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR } from '@theia/core/lib/common';
 import { MessageService } from '@theia/core/lib/common/message-service';
-import { QuickPickService } from '@theia/core/lib/common/quick-pick-service';
+import { QuickInputService, QuickPickService } from '@theia/core/lib/common/quick-pick-service';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
@@ -15,6 +15,7 @@ import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { NODU_FILE_LIMIT, NoduDeviceModel } from './nodu-device-client';
 import { TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
+import { boardFileNameProblem } from '../common/nodu-board-file-name';
 
 const STARTUP_RE = /^(boot|main)\.py$/i;
 
@@ -34,6 +35,7 @@ export class NoduFileToolsContribution implements CommandContribution, MenuContr
     @inject(FileDialogService) protected readonly dialogs!: FileDialogService;
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(QuickPickService) protected readonly quickPick!: QuickPickService;
+    @inject(QuickInputService) protected readonly quickInput!: QuickInputService;
 
     private filesUsable(): boolean {
         return this.device.connected && !this.device.busy
@@ -43,6 +45,10 @@ export class NoduFileToolsContribution implements CommandContribution, MenuContr
     registerCommands(registry: CommandRegistry): void {
         registry.registerCommand({ id: 'scope.save-boot-script', label: '将打开的脚本保存到开发板的 boot.py', category: '见微 Nodu' }, {
             execute: () => this.saveBootScript().catch(error => this.messages.error(`写入 boot.py：${error instanceof Error ? error.message : String(error)}`)),
+            isEnabled: () => this.filesUsable(),
+        });
+        registry.registerCommand({ id: 'scope.save-current-to-board', label: '将当前脚本保存到开发板', category: '见微 Nodu' }, {
+            execute: () => this.saveCurrentToBoard().catch(error => this.messages.error(`保存到开发板：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.filesUsable(),
         });
         registry.registerCommand({ id: 'scope.send-file', label: '发送文件到开发板', category: '见微 Nodu' }, {
@@ -126,6 +132,58 @@ export class NoduFileToolsContribution implements CommandContribution, MenuContr
         const written = await this.device.saveFile('boot.py', toBase64(bytes), true);
         if (written === true) {
             await this.messages.info(`已将 ${sourceName} 写入板端 boot.py（默认存储）。`);
+        }
+    }
+
+    /**
+     * Save the current editor buffer (unsaved edits included) under a chosen
+     * name in the board's default storage. Distinct from 运行 (RAM only) and
+     * 设为开机脚本 (boot.py); the local file is never modified or saved.
+     */
+    protected async saveCurrentToBoard(): Promise<void> {
+        const widget = this.editors.currentEditor;
+        const control = widget && MonacoEditor.get(widget)?.getControl();
+        const model = control?.getModel();
+        if (!widget || !control || !model) {
+            await this.messages.info('请先打开要保存到开发板的文件。');
+            return;
+        }
+        const port = this.device.state.port;
+        const version = model.getVersionId();
+        const code = model.getValue();
+        if (!code.trim()) {
+            await this.messages.info('当前代码为空，没有可保存的内容。');
+            return;
+        }
+        const name = (await this.quickInput.input({
+            title: '保存到开发板',
+            prompt: '开发板默认存储中的文件名；同名文件将被覆盖',
+            value: widget.editor.uri.path.base || 'main.py',
+            validateInput: async input => boardFileNameProblem(input),
+        }))?.trim();
+        if (!name) { return; }
+        const bytes = new TextEncoder().encode(code);
+        if (bytes.length > NODU_FILE_LIMIT) {
+            await this.messages.error('文件超过 2 MiB 限额。');
+            return;
+        }
+        const startup = STARTUP_RE.test(name);
+        const confirm = new ConfirmDialog({
+            title: '保存到开发板',
+            msg: startup
+                ? `将当前内容（${bytes.length} 字节）保存为板端 ${name}，同名文件将被覆盖。启动文件可能在下次开机执行。`
+                : `将当前内容（${bytes.length} 字节）保存为板端 ${name}，同名文件将被覆盖。`,
+            ok: startup ? '写入启动文件' : '保存', cancel: '取消',
+        });
+        if (!await confirm.open()) { return; }
+        if (widget.isDisposed || control.getModel() !== model || model.isDisposed() || model.getVersionId() !== version) {
+            await this.messages.info('编辑器内容已变化，请重试。');
+            return;
+        }
+        if (!await this.deviceUnchanged(port, '保存到开发板')) { return; }
+        const written = await this.device.saveFile(name, toBase64(bytes), startup);
+        if (written === true) {
+            await this.messages.info(`已保存到开发板 ${name}（默认存储）。`);
         }
     }
 

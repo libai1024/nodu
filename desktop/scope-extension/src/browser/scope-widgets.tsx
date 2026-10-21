@@ -75,7 +75,7 @@ function SyntheticFrame({ snapshot }: { snapshot: ScopeSnapshot }): React.ReactE
 @injectable()
 export class ScopeVisionWidget extends ReactWidget {
     static readonly ID = 'scope:vision';
-    static readonly LABEL = '视觉调试';
+    static readonly LABEL = '帧缓冲';
     // Only camera/preview faults surface here; REPL/script errors stay in the console.
     private static readonly CAMERA_OPS = new Set(['启动相机', '开启预览', '暂停预览']);
     @inject(ScopeSession) protected readonly session!: ScopeSession;
@@ -95,7 +95,7 @@ export class ScopeVisionWidget extends ReactWidget {
     protected init(): void {
         this.id = ScopeVisionWidget.ID;
         this.title.label = ScopeVisionWidget.LABEL;
-        this.title.caption = 'Nodu · 视觉调试';
+        this.title.caption = 'Nodu · 帧缓冲';
         this.title.closable = true;
         this.title.iconClass = 'codicon codicon-eye';
         this.addClass('scope-widget');
@@ -183,7 +183,8 @@ export class ScopeVisionWidget extends ReactWidget {
             {state.running && !compact && <button className="theia-button secondary" onClick={() => void model.stop()}>停止脚本</button>}
         </>;
         return <section className="scope-preview-section" aria-label="设备相机预览">
-            {!compact && <div className="scope-section-heading"><h2><Icon name="camera" />设备相机</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`}><i aria-hidden="true" />{model.connected ? (state.preview ? '预览中' : '预览暂停') : model.statusLabel}</span></div>}
+            {/* The source switch already names 设备相机; keep the heading for assistive tech only. */}
+            {!compact && <div className="scope-section-heading"><h2 className="scope-visually-hidden">设备相机</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`}><i aria-hidden="true" />{model.connected ? (state.preview ? '预览中' : '预览暂停') : model.statusLabel}</span></div>}
             {model.connected ? <>
                 {frame ? <NoduImageTools frame={frame} tools={this.imageTools} files={this.files} dialogs={this.dialogs} clipboard={this.clipboard} compact={compact} leading={cameraControls} /> : <><div className="scope-device-actions nodu-camera-actions">{cameraControls}</div><div className="scope-frame-stage nodu-camera-stage"><div className="nodu-preview-empty"><i className="codicon codicon-device-camera" aria-hidden="true" /><strong>{state.capabilities.framebuffer ? '等待图像' : '相机未启用'}</strong></div></div></>}
                 {/* IDE framebuffer keeps streaming frames while a script runs. */}
