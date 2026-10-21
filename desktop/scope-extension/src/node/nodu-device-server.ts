@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 import { injectable } from '@theia/core/shared/inversify';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
-import { existsSync } from 'fs';
-import { homedir } from 'os';
+import { existsSync, mkdirSync } from 'fs';
+import { homedir, tmpdir } from 'os';
 import { dirname, join } from 'path';
 import { createInterface } from 'readline';
 import { BackendApplicationContribution } from '@theia/core/lib/node/backend-application';
@@ -31,6 +31,8 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
     private backupDirectory?: string;
     private connectionEpoch = 0;
     private flashTask?: Promise<FirmwareResult>;
+    /** Short-lived second sidecar for convert/play: host-only work that must not wait for the camera script. */
+    private mediaWorker?: ChildProcessWithoutNullStreams;
 
     addClient(client: DeviceClient): () => void {
         clearTimeout(this.idleTimer);
@@ -258,21 +260,68 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
         }
         return fsPath;
     }
-    startRecording(fileUri: string): Promise<RecordingStatus> {
-        const path = this.mediaPath(fileUri, '录像目标');
+    /** Without a target the raw stream goes to a fresh file under the OS temp directory. */
+    startRecording(fileUri?: string): Promise<RecordingStatus> {
+        const path = fileUri === undefined ? NoduDeviceServer.tempRecordingPath() : this.mediaPath(fileUri, '录像目标');
         if (!/\.bin$/i.test(path)) { throw new Error('录像目标须为 .bin 文件。'); }
         return this.request('startRecording', { path });
+    }
+    private static tempRecordingPath(): string {
+        const directory = join(tmpdir(), 'nodu-recordings');
+        mkdirSync(directory, { recursive: true, mode: 0o700 });
+        const now = new Date(), two = (n: number): string => String(n).padStart(2, '0');
+        const stamp = `${now.getFullYear()}${two(now.getMonth() + 1)}${two(now.getDate())}-${two(now.getHours())}${two(now.getMinutes())}${two(now.getSeconds())}`;
+        return join(directory, `nodu-${stamp}-${randomUUID().slice(0, 8)}.bin`);
     }
     stopRecording(): Promise<RecordingStatus> { return this.request('stopRecording'); }
     convertVideo(inputUri: string, outputUri: string): Promise<void> {
         const input = this.mediaPath(inputUri, '输入视频');
         const output = this.mediaPath(outputUri, '输出视频');
         if (!/\.(mp4|avi|mjpeg)$/i.test(output)) { throw new Error('输出须为 .mp4、.avi 或 .mjpeg 文件。'); }
-        return this.request('convertVideo', { input, output }, 910000);
+        return this.mediaRequest('convertVideo', { input, output });
     }
     playVideo(inputUri: string): Promise<void> {
         const input = this.mediaPath(inputUri, '输入视频');
-        return this.request('playVideo', { input }, 910000);
+        return this.mediaRequest('playVideo', { input });
+    }
+    /** Cancels the convert/play job: the sidecar kills ffmpeg/ffplay on stop, then exits on stdin EOF. */
+    cancelMedia(): Promise<void> {
+        const worker = this.mediaWorker;
+        if (worker && !worker.stdin.writableEnded) { worker.stdin.write(JSON.stringify({ id: 2, method: 'stop', args: {} }) + '\n'); }
+        return Promise.resolve();
+    }
+    /**
+     * Runs one media request on its own sidecar process. It never opens a
+     * serial port, so it can convert while the camera script runs or a
+     * recording is still being written by the device worker.
+     */
+    private mediaRequest(method: 'convertVideo' | 'playVideo', args: object): Promise<void> {
+        if (this.mediaWorker) { return Promise.reject(new Error('已有视频任务在进行；请等待完成或取消。')); }
+        const worker = spawn(this.deviceBinary(), [], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
+        this.mediaWorker = worker;
+        return new Promise<void>((resolve, reject) => {
+            let settled = false;
+            const settle = (error?: Error): void => {
+                if (settled) { return; }
+                settled = true;
+                clearTimeout(timer);
+                if (this.mediaWorker === worker) { this.mediaWorker = undefined; }
+                if (!worker.stdin.writableEnded) { worker.stdin.end(); }
+                if (error) { reject(error); } else { resolve(); }
+            };
+            const timer = setTimeout(() => { void this.cancelMedia(); settle(new Error('视频任务超时，已取消。')); }, 910000);
+            const reader = createInterface({ input: worker.stdout });
+            reader.on('line', line => {
+                try {
+                    const message = JSON.parse(line);
+                    if (message.id === 1) { settle(message.error ? new Error(String(message.error)) : undefined); }
+                } catch { /* State/log events of the media sidecar are not forwarded. */ }
+            });
+            worker.stderr.on('data', data => this.publish('onLog', { text: String(data).slice(0, 8000), stream: 'stderr', time: Date.now() }));
+            worker.on('error', error => settle(new Error(`视频服务启动失败：${error.message}`)));
+            worker.on('exit', (code, signal) => { reader.close(); settle(new Error(`视频服务已退出（${signal || code}）。`)); });
+            worker.stdin.write(JSON.stringify({ id: 1, method, args }) + '\n');
+        });
     }
     /** Reads the declared board config; never writes, resets or probes hardware. */
     async inspectBoard(): Promise<BoardInspection> {
@@ -344,6 +393,8 @@ export class NoduDeviceServer implements NoduDeviceService, BackendApplicationCo
     }
     private shutdown(): void {
         this.connectionEpoch++;
+        void this.cancelMedia();
+        this.mediaWorker?.stdin.end();
         clearTimeout(this.idleTimer);
         const worker = this.worker; this.worker = undefined;
         worker?.stdin.end();

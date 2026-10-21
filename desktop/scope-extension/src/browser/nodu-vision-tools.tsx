@@ -65,7 +65,7 @@ export class NoduThresholdDialog extends ReactDialog<undefined> {
     get value(): undefined { return undefined; }
 
     protected render(): React.ReactNode {
-        return <NoduImageTools frame={this.frame} tools={this.tools} files={this.deps.files} dialogs={this.deps.dialogs} clipboard={this.deps.clipboard} thresholdOnly />;
+        return <NoduImageTools frame={this.frame} tools={this.tools} clipboard={this.deps.clipboard} variant="threshold" />;
     }
 }
 

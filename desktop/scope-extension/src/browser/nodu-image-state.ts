@@ -11,7 +11,7 @@ export class NoduImageToolState {
     grayThreshold: [number, number] = [0, 255];
     invert = false;
     mask = false;
-    zoom: 'fit' | '100' | '200' = 'fit';
+    /** Original 缩放 (缩放到合适大小): scale the frame to the free space; off shows native pixels. */
+    fit = true;
     histogram: ColorSpace = 'rgb';
-    exportFormat: 'png' | 'jpeg' = 'png';
 }

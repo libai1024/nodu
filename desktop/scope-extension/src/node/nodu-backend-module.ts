@@ -34,7 +34,7 @@ export default new ContainerModule(bind => {
         const names: (keyof NoduDeviceService)[] = ['getState', 'listPorts', 'connect', 'disconnect', 'execute',
             'runScript', 'stop', 'listFiles', 'readFile', 'writeFile', 'setPreview', 'startCamera',
             'saveFile', 'formatScript', 'resetDevice', 'inspectBoard',
-            'startRecording', 'stopRecording', 'convertVideo', 'playVideo',
+            'startRecording', 'stopRecording', 'convertVideo', 'playVideo', 'cancelMedia',
             'getTerminalExecutable', 'takeStartupTerminals',
             'prepareFirmware', 'backupDevice', 'flashFirmware'];
         const facade = Object.create(null);

@@ -30,7 +30,7 @@
             "width": 1520,
             "height": 960,
             "minWidth": 980,
-            "minHeight": 680,
+            "minHeight": 720,
             "backgroundColor": "#181d20"
           },
           "appUserModelId": "org.scope.studio"

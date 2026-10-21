@@ -39,13 +39,15 @@ export interface NoduDeviceService {
     /** Local script formatting (comment strip / indent conversion); no device needed. */
     formatScript(code: string, stripComments: boolean, spacesToTabs: boolean): Promise<string>;
     resetDevice(): Promise<void>;
-    /** Begin a `.bin` framebuffer recording at a file:// URI target. */
-    startRecording(fileUri: string): Promise<RecordingStatus>;
+    /** Begin a `.bin` framebuffer recording at a file:// URI target, or a fresh temp file when omitted. */
+    startRecording(fileUri?: string): Promise<RecordingStatus>;
     stopRecording(): Promise<RecordingStatus>;
-    /** Bundled-ffmpeg transcode; only while disconnected, output must not exist. */
+    /** Bundled-ffmpeg transcode on a separate media sidecar; output must not exist. */
     convertVideo(inputUri: string, outputUri: string): Promise<void>;
     /** Bundled-ffplay playback; .bin streams are converted to a temp MP4 first. */
     playVideo(inputUri: string): Promise<void>;
+    /** Cancel the convert/play job in flight, if any. */
+    cancelMedia(): Promise<void>;
     /** Path of the bundled `nodu-terminal` binary (Node-side only lookup). */
     getTerminalExecutable(): Promise<string>;
     /** `NODU_STARTUP_TERMINALS` argument arrays, consumed once per backend. */

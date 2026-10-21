@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Video tools: record the framebuffer to an OpenMV ImageWriter .bin stream,
 // transcode recordings/videos with the bundled ffmpeg, and play them back
-// with the bundled ffplay. Recording appends device frames on the worker;
-// conversion/playback are local host work that never touches the serial port.
+// with the bundled ffplay. Recording starts at once into a temp .bin on the
+// device worker; on stop the user picks where to save it (MP4 by default).
+// Conversion/playback run on a separate media sidecar, never the serial port.
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR, URI } from '@theia/core/lib/common';
 import { MessageService } from '@theia/core/lib/common/message-service';
@@ -10,6 +11,10 @@ import { QuickPickService } from '@theia/core/lib/common/quick-pick-service';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
+import { FileService } from '@theia/filesystem/lib/browser/file-service';
+import { FileStat } from '@theia/filesystem/lib/common/files';
+import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
+import { EnvVariablesServer } from '@theia/core/lib/common/env-variables';
 import { FileUri } from '@theia/core/lib/common/file-uri';
 import { NoduDeviceModel } from './nodu-device-client';
 import { TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
@@ -23,6 +28,9 @@ export class NoduMediaToolsContribution implements CommandContribution, MenuCont
     @inject(QuickPickService) protected readonly quickPick!: QuickPickService;
     @inject(ProgressService) protected readonly progress!: ProgressService;
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
+    @inject(FileService) protected readonly files!: FileService;
+    @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
+    @inject(EnvVariablesServer) protected readonly env!: EnvVariablesServer;
 
     /** True while a convert/play job is in flight; backs the cancel command. */
     private mediaJob = false;
@@ -33,17 +41,15 @@ export class NoduMediaToolsContribution implements CommandContribution, MenuCont
             && this.device.state.capabilities.framebuffer === true
             && this.device.state.preview === true && !this.recording;
     }
-    /** Conversion/playback only conflict with a recording or a running script. */
-    private get mediaIdle(): boolean {
-        return !this.device.busy && !this.recording && !this.device.state.running;
-    }
+    /** One convert/play job at a time; the camera and recording keep running meanwhile. */
+    private get mediaIdle(): boolean { return !this.mediaJob; }
 
     registerCommands(registry: CommandRegistry): void {
-        registry.registerCommand({ id: 'scope.start-recording', label: '开始录制…', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.start-recording', label: '开始录制', category: '见微 Nodu' }, {
             execute: () => this.startRecording().catch(error => this.messages.error(`开始录制：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.canRecord,
         });
-        registry.registerCommand({ id: 'scope.stop-recording', label: '结束录制', category: '见微 Nodu' }, {
+        registry.registerCommand({ id: 'scope.stop-recording', label: '结束录制并保存…', category: '见微 Nodu' }, {
             execute: () => this.stopRecording().catch(error => this.messages.error(`结束录制：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.recording && !this.device.busy,
         });
@@ -58,7 +64,7 @@ export class NoduMediaToolsContribution implements CommandContribution, MenuCont
         // Cancelling only applies to a media job in flight — recordings are
         // finalized with the dedicated 结束录制 command, never cancelled away.
         registry.registerCommand({ id: 'scope.cancel-media', label: '取消视频任务', category: '见微 Nodu' }, {
-            execute: () => this.device.stop().catch(error => this.messages.error(`取消视频任务：${error instanceof Error ? error.message : String(error)}`)),
+            execute: () => this.device.cancelMedia().catch(error => this.messages.error(`取消视频任务：${error instanceof Error ? error.message : String(error)}`)),
             isEnabled: () => this.mediaJob,
         });
     }
@@ -87,69 +93,68 @@ export class NoduMediaToolsContribution implements CommandContribution, MenuCont
         this.mediaJob = true;
         try {
             return await this.progress.withProgress(`${label}…`, 'notification', task, () => {
-                if (this.mediaJob) { void this.device.stop(); }
+                if (this.mediaJob) { void this.device.cancelMedia(); }
             });
         } finally {
             this.mediaJob = false;
         }
     }
 
-    /** Choose a new .bin target, then start appending framebuffer frames. */
-    protected async startRecording(): Promise<void> {
-        const port = this.device.state.port;
-        const picked = await this.dialogs.showSaveDialog({
-            title: '保存原始录像（.bin，不可覆盖已有文件）',
-            saveLabel: '开始录制',
-            filters: { 'OpenMV 录像流': ['bin'] },
-            inputValue: 'recording.bin',
-        });
-        if (!picked) { return; }
-        const uri = NoduMediaToolsContribution.withExtension(picked, 'bin');
-        if (!this.canRecord || this.device.state.port !== port) {
-            await this.messages.info('设备状态已变化，录像未开始；请重试。');
-            return;
-        }
-        await this.device.startRecording(uri.toString());
+    /** Save dialogs open in the project folder, else the home folder — never the filesystem root. */
+    private async defaultFolder(): Promise<FileStat | undefined> {
+        const root = this.workspace.tryGetRoots()[0];
+        if (root) { return root; }
+        try { return await this.files.resolve(new URI(await this.env.getHomeDirUri())); } catch { return undefined; }
     }
 
-    /** Finalize the recording, then offer MP4 conversion or raw retention. */
+    /** Start at once, like MaixPy IDE: frames go to a temp .bin until 结束录制. */
+    protected async startRecording(): Promise<void> {
+        await this.device.startRecording();
+    }
+
+    /** Finalize, then save as MP4 (default) or keep the raw OpenMV .bin. */
     protected async stopRecording(): Promise<void> {
         const status = await this.device.stopRecording();
         if (!status) { return; }
-        const action = await this.messages.info(
-            `录像完成：${status.frames} 帧，${status.bytes} 字节，约 ${Math.round(status.elapsedMs / 1000)} 秒。\n原始录像已保存在 ${status.path}。`,
-            '转为 MP4', '保留原始录像',
-        );
-        if (action !== '转为 MP4') { return; }
-        if (this.device.state.running) {
-            const confirm = new ConfirmDialog({
-                title: '转换录像',
-                msg: '停止相机脚本并转换录像？',
-                ok: '停止并转换', cancel: '取消',
-            });
-            if (!await confirm.open()) { return; }
-            await this.device.stop();
-            if (this.device.state.running || this.device.busy) {
-                await this.messages.info('脚本仍在运行，转换已取消；原始录像已保留。');
+        const raw = FileUri.create(status.path);
+        const seconds = (status.elapsedMs / 1000).toFixed(1);
+        const now = new Date(), two = (n: number): string => String(n).padStart(2, '0');
+        const name = `nodu-${now.getFullYear()}${two(now.getMonth() + 1)}${two(now.getDate())}-${two(now.getHours())}${two(now.getMinutes())}${two(now.getSeconds())}`;
+        const picked = await this.dialogs.showSaveDialog({
+            title: `保存录像（${status.frames} 帧，${seconds} 秒）`,
+            saveLabel: '保存',
+            filters: { 'MPEG-4 视频': ['mp4'], 'OpenMV 原始录像': ['bin'] },
+            inputValue: `${name}.mp4`,
+        }, await this.defaultFolder());
+        if (!picked) {
+            await this.messages.info(`录像未另存；原始录像保留在 ${status.path}。`);
+            return;
+        }
+        const target = /\.bin$/i.test(picked.path.base) ? picked : NoduMediaToolsContribution.withExtension(picked, 'mp4');
+        if (target.path.ext.toLowerCase() === '.bin') {
+            // The dialog already confirmed any overwrite; a failed move leaves the raw file in place.
+            try { await this.files.move(raw, target, { overwrite: true }); } catch (error) {
+                await this.messages.warn(`无法写入 ${target.path.fsPath()}（${error instanceof Error ? error.message : String(error)}）；原始录像保留在 ${status.path}。`);
                 return;
             }
+            this.device.note(`录像已保存到 ${target.path.fsPath()}`);
+            return;
         }
-        // The finalized path comes from the worker, not the dialog that was
-        // used at start — another window may have recorded elsewhere.
-        const source = FileUri.create(status.path).toString();
-        const suggested = `${status.path.split(/[\\/]/).pop()!.replace(/\.bin$/i, '')}.mp4`;
-        const picked = await this.dialogs.showSaveDialog({
-            title: '转换录像为 MP4（输出文件不可已存在）',
-            saveLabel: '转换',
-            filters: { 'MPEG-4 视频': ['mp4'] },
-            inputValue: suggested,
-        });
-        if (!picked) { return; }
-        const target = NoduMediaToolsContribution.withExtension(picked, 'mp4');
-        const ok = await this.runMediaJob('正在转换录像', () => this.device.convertVideo(source, target.toString()));
-        if (ok === true) {
-            await this.messages.info(`已转换到 ${target.path.base}；原始录像已保留。`);
+        // ffmpeg never overwrites: encode next to the raw stream, then move into place.
+        const encoded = raw.parent.resolve(`${raw.path.name}.mp4`);
+        const ok = await this.runMediaJob('正在保存 MP4', () => this.device.convertVideo(raw.toString(), encoded.toString()));
+        if (ok !== true) {
+            await this.messages.warn(`MP4 转换未完成；原始录像保留在 ${status.path}。`);
+            return;
         }
+        try {
+            await this.files.move(encoded, target, { overwrite: true });
+        } catch (error) {
+            await this.messages.warn(`无法写入 ${target.path.fsPath()}（${error instanceof Error ? error.message : String(error)}）；MP4 保留在 ${encoded.path.fsPath()}。`);
+            return;
+        }
+        await this.files.delete(raw).catch(() => undefined);
+        this.device.note(`录像已保存到 ${target.path.fsPath()}`);
     }
 
     /** Convert any supported video or .bin stream; output must not exist. */

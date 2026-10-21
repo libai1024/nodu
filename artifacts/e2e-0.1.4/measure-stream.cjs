@@ -142,13 +142,15 @@ async function startCamera() {
                 }
                 if (comparison) {
                     await page.screenshot({ path: `${root}/${label}-running.png` });
-                    const clickText = text => page.evaluate(text => {
+                    // Text buttons before the title-row redesign; the 帧缓冲 title-row icon buttons after it.
+                    const clickText = (text, label) => page.evaluate((text, label) => {
                         const b = [...document.querySelectorAll('button')].find(b =>
-                            b.textContent.trim() === text && b.getBoundingClientRect().width > 0 && !b.disabled);
+                            (b.textContent.trim() === text || (label && b.getAttribute('aria-label')?.startsWith(label)))
+                            && b.getBoundingClientRect().width > 0 && !b.disabled);
                         if (!b) throw Error(`Visible button missing: ${text}`);
                         b.click();
-                    }, text);
-                    await clickText('禁用');
+                    }, text, label);
+                    await clickText('禁用', '禁用帧缓冲区');
                     await page.waitForFunction(() => !window.__t.busy && window.__t.state.preview === false);
                     await sleep(500);
                     entry.freezeBefore = await snapshot();
@@ -156,7 +158,7 @@ async function startCamera() {
                     entry.freezeAfter = await snapshot();
                     if (entry.freezeBefore.frame?.sequence !== entry.freezeAfter.frame?.sequence) throw Error('Frame changed after preview disabled');
                     await page.screenshot({ path: `${root}/${label}-disabled.png` });
-                    await clickText('启用');
+                    await clickText('启用', '启用帧缓冲区');
                     await until('framebuffer resume', s => s.frame && s.frame.sequence !== entry.freezeAfter.frame?.sequence);
                     entry.resumed = await snapshot();
                     entry.histograms = {};

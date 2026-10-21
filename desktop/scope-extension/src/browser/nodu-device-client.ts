@@ -253,7 +253,7 @@ export class NoduDeviceModel implements DeviceClient {
         return this.perform('格式化脚本', () => this.service.formatScript(code, stripComments, spacesToTabs));
     }
 
-    async startRecording(fileUri: string): Promise<boolean | undefined> {
+    async startRecording(fileUri?: string): Promise<boolean | undefined> {
         return this.perform('开始录像', async () => {
             await this.service.startRecording(fileUri);
             this.onState(await this.service.getState());
@@ -269,18 +269,16 @@ export class NoduDeviceModel implements DeviceClient {
             return status;
         });
     }
+    // Media jobs run on their own sidecar, so they never mark the device busy.
     async convertVideo(inputUri: string, outputUri: string): Promise<boolean | undefined> {
-        return this.perform('转换视频', async () => {
-            await this.service.convertVideo(inputUri, outputUri);
-            this.note('视频转换完成。');
-            return true;
-        });
+        return this.mediaJob('转换视频', () => this.service.convertVideo(inputUri, outputUri));
     }
     async playVideo(inputUri: string): Promise<boolean | undefined> {
-        return this.perform('播放视频', async () => {
-            await this.service.playVideo(inputUri);
-            return true;
-        });
+        return this.mediaJob('播放视频', () => this.service.playVideo(inputUri));
+    }
+    cancelMedia(): Promise<void> { return this.service.cancelMedia(); }
+    private async mediaJob(label: string, task: () => Promise<void>): Promise<boolean | undefined> {
+        try { await task(); return true; } catch (error) { this.fail(label, error); this.changed.fire(); return undefined; }
     }
 
     /** Bundled terminal binary path — Node-side lookup, no worker needed. */
