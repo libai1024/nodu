@@ -28,6 +28,7 @@
     "vendor:examples": "node scripts/vendor-examples.cjs",
     "build:models": "node scripts/build-models.cjs",
     "check:licenses": "node scripts/check-licenses.cjs",
+    "check:brand": "node scripts/check-brand.cjs",
     "package:electron": "node scripts/package-electron.cjs"
   },
   "devDependencies": {
