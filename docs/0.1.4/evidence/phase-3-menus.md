@@ -160,9 +160,28 @@ dispose 时触发）→ 防抖 `setMenuBar()` → `electronTheiaCore.setMenu`。
 | AprilTag生成器 ▸ 六家族 | `scope.apriltag.<family>`，各打开对话框并预选 family | 已实现，标签含原版 `ARKTOOLKIT` 拼写 |
 | 二维码 / DataMatrix码 / 条码生成器 | `scope.qr-generator` / `scope.datamatrix-generator` / `scope.barcode-generator` | 已实现 |
 | CNN网络库 | `scope.network-library` | 已实现 |
-| 视频工具 ▸ 转换视频文件 / 播放视频文件 | `scope.convert-video` / `scope.play-video`（子菜单前两项） | 已实现 |
-| （Nodu 附加）开始录制… / 结束录制 / 取消视频任务 | `scope.start-recording` / `scope.stop-recording` / `scope.cancel-media`，分隔线后 | Nodu 附加项 |
+| 视频工具 ▸ 转换视频文件 / 播放视频文件 | `scope.convert-video` / `scope.play-video`（子菜单前两项）；2026-10-22 起在独立的媒体 sidecar 进程中执行，相机脚本运行或录制进行中也可转换 | 已实现 |
+| （Nodu 附加）开始录制 / 结束录制并保存… / 取消视频任务 | `scope.start-recording` / `scope.stop-recording` / `scope.cancel-media`，分隔线后；录制 / 停止也在帧缓冲标题栏（见下文“录制流程”） | Nodu 附加项 |
 | （Nodu 附加）运行/停止/复位/显示帧缓冲/设备与连接/板卡指南/设备日志/主题/简洁模式/专业模式/示例（2026-10-21 更名：原“视觉调试”“简专模式”） | `d_nodu` 末组 + `示例` 子菜单（仅专业模式可见） | Nodu 附加项，DOM 实测 |
+
+### 录制流程（2026-10-22 改写，提交 `a9cdace`）
+
+参考 MaixPy IDE 的录制方式，替换原先“先选 `.bin` 位置、停止后询问转为 MP4 / 保留原始录像”的流程：
+
+1. 点 `开始录制`（菜单或帧缓冲标题栏的录制图标）立即开始，不弹对话框；原始帧写入
+   系统临时目录 `nodu-recordings/` 下的新 `.bin`（OpenMV ImageWriter 格式）。
+2. 录制中帧缓冲图像下方的状态行显示 `● 录制 mm:ss.t · 大小 · FPS`，计时在两帧之间也持续走；
+   标题栏按钮个数不变，只是录制图标换成红色停止图标。
+3. `结束录制并保存…` 完成 `.bin` 收尾后弹出保存对话框：默认位于项目文件夹（无项目时为用户主目录），
+   默认文件名 `nodu-<日期>-<时间>.mp4`，筛选器为 MPEG-4 视频 / OpenMV 原始录像。
+4. 选 MP4：用内置 ffmpeg 在临时目录编码后移到目标位置，成功后删除临时 `.bin`；
+   编码或写入失败时保留临时文件并提示其路径。选 `.bin`：直接移动原始录像。取消对话框：原始录像保留在临时目录。
+
+转换与播放在单独启动的 `nodu-device` 进程中完成，不打开串口，所以不必先停止相机脚本；
+`取消视频任务` 只终止该进程中的 ffmpeg / ffplay。
+
+验证：模拟板浏览器预览（`:4196`）跑通录制 → 停止 → 保存 MP4，`file` 识别为 ISO Media MP4，
+临时 `.bin` 已删除；Node 端脚本确认脚本运行中可转换、取消返回取消错误；用户在 Electron 中用真板复测通过。
 
 板卡 id↔标签证据：`BOARD_MENU` 顺序为原版显示顺序，id 为原版复位序列索引
 （`docs/0.1.3/evidence/original-private-params.md` §2 + `nodu-device/src/reset.rs`
