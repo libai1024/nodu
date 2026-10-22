@@ -1,0 +1,107 @@
+/* SPDX-License-Identifier: MIT */
+/* In-editor ghost hint. Font family, size, line height and width are set
+   inline from the editor so the measured height matches what is drawn. */
+.nodu-tutor-ghost-zone { pointer-events: none; user-select: none; -webkit-user-select: none; }
+.nodu-tutor-ghost {
+    box-sizing: border-box; margin: 2px 0; padding: 3px 10px 5px;
+    border-left: 2px solid color-mix(in srgb, var(--theia-scope-accent) 60%, transparent);
+    border-radius: 0 3px 3px 0;
+    background: color-mix(in srgb, var(--theia-scope-accent) 7%, transparent);
+    color: var(--theia-descriptionForeground);
+    pointer-events: auto; cursor: default;
+}
+.nodu-tutor-ghost-collapsed { padding-block: 0; background: transparent; }
+.nodu-tutor-ghost-head { display: flex; align-items: center; gap: 10px; min-width: 0; font-family: var(--theia-ui-font-family); font-size: 12px; }
+.nodu-tutor-ghost-step { flex-shrink: 0; color: var(--theia-scope-accent); font-weight: 600; }
+.nodu-tutor-ghost-level { flex-shrink: 0; font-size: 11px; opacity: .8; }
+.nodu-tutor-ghost-intent { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-tutor-ghost-actions { display: inline-flex; gap: 2px; margin-left: auto; flex-shrink: 0; }
+.nodu-tutor-ghost-button {
+    height: 20px; padding: 0 6px; border: 0; border-radius: 3px; background: transparent;
+    color: var(--theia-textLink-foreground); font: inherit; font-size: 11px; cursor: pointer;
+}
+.nodu-tutor-ghost-button:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-tutor-ghost-section { margin-top: 2px; font-family: var(--theia-ui-font-family); font-size: 12.5px; }
+.nodu-tutor-ghost-section .nodu-tutor-ghost-label { margin-right: 8px; font-size: 11px; opacity: .75; }
+.nodu-tutor-ghost-l0 .nodu-tutor-ghost-text { color: var(--theia-editor-foreground); opacity: .78; }
+.nodu-tutor-ghost-code {
+    margin: 2px 0 0; padding: 0; white-space: pre-wrap; overflow-wrap: anywhere;
+    font: inherit; font-family: var(--theia-code-font-family, monospace);
+    color: color-mix(in srgb, var(--theia-editor-foreground) 58%, transparent);
+}
+.nodu-tutor-ghost-l2 > .nodu-tutor-ghost-label, .nodu-tutor-ghost-l3 > .nodu-tutor-ghost-label { display: block; margin-top: 4px; }
+.nodu-tutor-ghost-l3 > .nodu-tutor-ghost-label { color: var(--theia-scope-warn); opacity: 1; }
+
+/* 教学步骤 panel. */
+.nodu-tutor-content { display: flex; flex-direction: column; min-height: 100%; padding: 8px 14px 16px; }
+.nodu-tutor-content .nodu-preview-empty { padding-top: 32px; }
+.nodu-tutor-head h2 { margin: 4px 0 2px; font-size: 13px; font-weight: 600; }
+.nodu-tutor-head .scope-helper { margin: 0 0 8px; }
+.nodu-tutor-progress { height: 3px; border-radius: 2px; background: var(--theia-panel-border); overflow: hidden; }
+.nodu-tutor-progress > span { display: block; height: 100%; background: var(--theia-scope-accent); }
+.nodu-tutor-head .scope-caption { margin: 4px 0 0; }
+.nodu-tutor-reminders { display: grid; gap: 6px; margin-top: 12px; }
+.nodu-tutor-reminder {
+    display: flex; align-items: baseline; gap: 6px; padding: 6px 8px; border-radius: 4px; font-size: 12px;
+    background: color-mix(in srgb, var(--theia-scope-warn) 12%, transparent);
+}
+.nodu-tutor-reminder > .codicon { flex-shrink: 0; color: var(--theia-scope-warn); }
+.nodu-tutor-reminder > span { flex: 1; }
+.nodu-tutor-reminder > button { flex-shrink: 0; }
+.nodu-tutor-step { margin-top: 14px; padding: 12px; border: 1px solid var(--theia-panel-border); border-radius: 5px; background: var(--theia-editor-background); }
+.nodu-tutor-step-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--theia-descriptionForeground); }
+.nodu-tutor-step h3 { margin: 4px 0 6px; font-size: 14px; font-weight: 600; }
+.nodu-tutor-goal { margin: 0 0 6px; font-size: 12.5px; }
+.nodu-tutor-step .scope-helper { margin: 0 0 8px; }
+.nodu-tutor-step .scope-helper strong { margin-right: 4px; color: var(--theia-foreground); font-weight: 500; }
+.nodu-tutor-tag {
+    display: inline-block; padding: 0 5px; border: 1px solid var(--theia-panel-border); border-radius: 3px;
+    color: var(--theia-descriptionForeground); font-size: 10.5px; line-height: 16px; white-space: nowrap;
+}
+.nodu-tutor-tag-warn { border-color: color-mix(in srgb, var(--theia-scope-warn) 60%, transparent); color: var(--theia-scope-warn); }
+.nodu-tutor-tag-done { border-color: color-mix(in srgb, var(--theia-scope-ok) 60%, transparent); color: var(--theia-scope-ok); }
+.nodu-tutor-warn { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0 0 8px; font-size: 12px; color: var(--theia-scope-warn); }
+.nodu-tutor-anchor { margin: 0 0 8px; }
+.nodu-tutor-anchor .scope-text-button { font-family: var(--theia-code-font-family, monospace); }
+.nodu-tutor-block { margin-top: 10px; }
+.nodu-tutor-block h4 { margin: 0 0 6px; font-size: 11px; font-weight: 500; color: var(--theia-descriptionForeground); }
+.nodu-tutor-levels { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.nodu-tutor-levels > button {
+    height: 24px; padding: 0 8px; border: 1px solid var(--theia-input-border); border-radius: 3px;
+    background: transparent; color: var(--theia-descriptionForeground); font-size: 11px;
+}
+.nodu-tutor-levels > button[aria-pressed='true'] { border-color: var(--theia-focusBorder); background: var(--theia-list-inactiveSelectionBackground); color: var(--theia-foreground); }
+.nodu-tutor-levels > button:last-child:not(:first-child) { margin-left: auto; }
+.nodu-tutor-hints { display: grid; gap: 8px; }
+.nodu-tutor-hint p { margin: 0; font-size: 12.5px; line-height: 1.6; }
+.nodu-tutor-hint-label { margin-bottom: 2px; font-size: 11px; color: var(--theia-descriptionForeground); }
+.nodu-tutor-code {
+    margin: 0; padding: 8px; overflow-x: auto; border-radius: 4px; background: var(--theia-input-background);
+    font-family: var(--theia-code-font-family, monospace); font-size: 12px; line-height: 1.5;
+    user-select: none; -webkit-user-select: none;
+}
+.nodu-tutor-contract { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 12px; }
+.nodu-tutor-contract > li { display: flex; align-items: baseline; gap: 6px; }
+.nodu-tutor-contract .nodu-tutor-tag { flex-shrink: 0; }
+.nodu-tutor-rules { margin-top: 10px; font-size: 12px; }
+.nodu-tutor-rules summary { cursor: pointer; color: var(--theia-descriptionForeground); }
+.nodu-tutor-rules strong { display: block; margin-top: 8px; font-weight: 500; }
+.nodu-tutor-rules p { margin: 2px 0 0; color: var(--theia-descriptionForeground); }
+.nodu-tutor-options { display: grid; gap: 4px; margin: 0; padding: 0; border: 0; }
+.nodu-tutor-actions { display: flex; gap: 8px; margin-top: 12px; }
+.nodu-tutor-list { margin-top: 16px; }
+.nodu-tutor-list h3 { margin: 0 0 6px; font-size: 11px; font-weight: 500; color: var(--theia-descriptionForeground); }
+.nodu-tutor-list ol { display: grid; gap: 1px; margin: 0 0 10px; padding: 0; list-style: none; }
+.nodu-tutor-item {
+    display: flex; align-items: center; gap: 7px; width: 100%; min-height: 28px; padding: 3px 6px;
+    border: 0; border-radius: 3px; background: transparent; color: var(--theia-foreground); font-size: 12px; text-align: left;
+}
+.nodu-tutor-item:hover:not(:disabled) { background: var(--theia-list-hoverBackground); }
+.nodu-tutor-item[aria-current='step'] { background: var(--theia-list-inactiveSelectionBackground); }
+.scope-widget .nodu-tutor-item:disabled { opacity: .55; }
+.nodu-tutor-item .codicon { flex-shrink: 0; font-size: 13px; color: var(--theia-descriptionForeground); }
+.nodu-tutor-passed .codicon { color: var(--theia-scope-ok); }
+.nodu-tutor-item[aria-current='step'] .codicon { color: var(--theia-scope-accent); }
+.nodu-tutor-item-id { flex-shrink: 0; width: 26px; color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-tutor-item-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-tutor-passed .nodu-tutor-item-title { color: var(--theia-descriptionForeground); }

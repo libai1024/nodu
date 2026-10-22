@@ -23,11 +23,15 @@ import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBoardGuideContribution, NoduBoardWidget } from './nodu-board-widget';
 import { ScopeConsoleContribution } from './scope-workbench';
 import { NoduBoardFilesContribution, NoduBoardFilesWidget } from './nodu-board-files';
+import { NoduTutorModel } from './nodu-tutor-model';
+import { NoduTutorHintsContribution } from './nodu-tutor-hints';
+import { NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
 import '../../style/scope.css';
 import '../../style/widgets.css';
 import '../../style/layout.css';
 import '../../style/device.css';
 import '../../style/board-guide.css';
+import '../../style/tutor.css';
 
 export default new ContainerModule(bind => {
     bind(NoduDeviceModel).toSelf().inSingletonScope();
@@ -85,4 +89,15 @@ export default new ContainerModule(bind => {
     bind(NoduUpdateContribution).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(NoduUpdateContribution);
     bind(PreferenceContribution).toConstantValue({ schema: NODU_UPDATE_SCHEMA });
+    // Teaching steps (T1): bound last so its first-open runs after the workbench applied its layout.
+    bind(NoduTutorModel).toSelf().inSingletonScope();
+    bind(NoduTutorWidget).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduTutorWidget.ID, createWidget: () => ctx.container.get(NoduTutorWidget) })).inSingletonScope();
+    bindViewContribution(bind, NoduTutorViewContribution);
+    bind(FrontendApplicationContribution).toService(NoduTutorViewContribution);
+    bind(TabBarToolbarContribution).toService(NoduTutorViewContribution);
+    bind(NoduTutorHintsContribution).toSelf().inSingletonScope();
+    for (const contribution of [FrontendApplicationContribution, CommandContribution, KeybindingContribution]) {
+        bind(contribution).toService(NoduTutorHintsContribution);
+    }
 });

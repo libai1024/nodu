@@ -17,6 +17,9 @@ export function registerScopeLanguages(): void {
     if (!monaco.languages.getLanguages().some(language => language.id === 'json')) {
         registerJson();
     }
+    if (!monaco.languages.getLanguages().some(language => language.id === 'c')) {
+        registerC();
+    }
 }
 
 function registerPython(): void {
@@ -171,6 +174,96 @@ function registerJson(): void {
                 [/[^"\\]+/, 'string'],
                 [/\\(?:["\\/bfnrt]|u[\da-fA-F]{4})/, 'string.escape'],
                 [/\\./, 'string.escape.invalid'],
+                [/"/, 'string', '@pop']
+            ]
+        }
+    });
+}
+
+// Highlighting only, for the STM32 teaching projects. Symbols, diagnostics and
+// navigation need clangd with the project's real compile database.
+function registerC(): void {
+    monaco.languages.register({
+        id: 'c',
+        aliases: ['C', 'c'],
+        extensions: ['.c', '.h'],
+        mimetypes: ['text/x-csrc', 'text/x-chdr']
+    });
+    monaco.languages.setLanguageConfiguration('c', {
+        comments: { lineComment: '//', blockComment: ['/*', '*/'] },
+        brackets: [['{', '}'], ['[', ']'], ['(', ')']],
+        autoClosingPairs: [
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '"', close: '"', notIn: ['string', 'comment'] },
+            { open: "'", close: "'", notIn: ['string', 'comment'] },
+            { open: '/*', close: ' */', notIn: ['string'] }
+        ],
+        surroundingPairs: [
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '"', close: '"' },
+            { open: "'", close: "'" }
+        ],
+        indentationRules: {
+            increaseIndentPattern: /^.*\{[^}"']*$|^.*\([^)"']*$/,
+            decreaseIndentPattern: /^\s*[}\]\)]/
+        }
+    });
+    monaco.languages.setMonarchTokensProvider('c', {
+        defaultToken: '',
+        tokenPostfix: '.c',
+        keywords: [
+            'auto', 'break', 'case', 'const', 'continue', 'default', 'do', 'else', 'enum',
+            'extern', 'for', 'goto', 'if', 'inline', 'register', 'restrict', 'return',
+            'sizeof', 'static', 'struct', 'switch', 'typedef', 'union', 'volatile', 'while',
+            '_Alignas', '_Alignof', '_Atomic', '_Generic', '_Noreturn', '_Static_assert', '_Thread_local'
+        ],
+        types: ['char', 'double', 'float', 'int', 'long', 'short', 'signed', 'unsigned', 'void', '_Bool', 'bool', 'size_t'],
+        constants: ['true', 'false', 'NULL'],
+        tokenizer: {
+            root: [
+                [/^\s*#\s*include\b/, { token: 'keyword.directive', next: '@include' }],
+                [/^\s*#\s*[A-Za-z_]\w*/, 'keyword.directive'],
+                [/[ \t\r\n]+/, 'white'],
+                [/\/\*/, 'comment', '@comment'],
+                [/\/\/.*$/, 'comment'],
+                [/"/, 'string', '@string'],
+                [/'(?:[^'\\]|\\.)*'/, 'string'],
+                [/0[xX][\da-fA-F]+[uUlL]*/, 'number.hex'],
+                [/0[bB][01]+[uUlL]*/, 'number.binary'],
+                [/(?:\d+\.\d*|\.\d+)(?:[eE][+-]?\d+)?[fFlL]?/, 'number.float'],
+                [/\d+[eE][+-]?\d+[fFlL]?/, 'number.float'],
+                [/\d+[uUlL]*/, 'number'],
+                [/[A-Za-z_]\w*/, {
+                    cases: {
+                        '@keywords': 'keyword',
+                        '@types': 'type.identifier',
+                        '@constants': 'keyword',
+                        // stdint (uint8_t), HAL (HAL_StatusTypeDef) and project (*_t) type names.
+                        '[A-Za-z_]\\w*_t|[A-Za-z_]\\w*TypeDef': 'type.identifier',
+                        '@default': 'identifier'
+                    }
+                }],
+                [/[{}()\[\]]/, '@brackets'],
+                [/[;,.]/, 'delimiter'],
+                [/[+\-*/%&|^~<>=!?:]+/, 'operator']
+            ],
+            include: [
+                [/\s+/, 'white'],
+                [/<[^>\n]*>|"[^"\n]*"/, 'string', '@pop'],
+                [/$/, '', '@pop']
+            ],
+            comment: [
+                [/[^*/]+/, 'comment'],
+                [/\*\//, 'comment', '@pop'],
+                [/[*/]/, 'comment']
+            ],
+            string: [
+                [/[^"\\]+/, 'string'],
+                [/\\./, 'string.escape'],
                 [/"/, 'string', '@pop']
             ]
         }

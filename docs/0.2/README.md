@@ -6,6 +6,7 @@
 - [STM32 P0 验证工程与命令](../../tools/stm32-p0/README.md)
 
 - [Theia 1.76 教学辅助 Agent 调研报告](TEACHING-AGENT-RESEARCH.md)
+- [嵌入式 C 的 AI 教学辅助设计](AI-TUTOR-DESIGN.md)（设计草案，T1 交互原型已实现）
 - [固定版本资料与源码核查记录](sources.json)
 - [0.2.1 嵌入式 C 开发设计](../0.2.1/README.md)（PRD、功能与界面设计，待评审）
 - [0.1.1 交接与未完成事项](../0.1.1/HANDOFF.md)
