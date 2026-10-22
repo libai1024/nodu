@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>05 串口 ISP 引导卡</title>
+<link rel="stylesheet" href="mockup.css">
+<style>
+    .col { display: grid; grid-template-rows: 1fr 230px; min-height: 0; min-width: 0; }
+    .guide { position: absolute; right: 24px; top: 300px; width: 440px; padding: 16px 18px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 14px 40px rgba(0,0,0,.5); }
+    .guide .hd { display: flex; align-items: center; justify-content: space-between; }
+    .guide h3 { margin: 0; font-size: 14px; font-weight: 600; }
+    .guide .pg { color: var(--muted); font-size: 12px; }
+    .art { position: relative; height: 150px; margin: 12px 0; border-radius: 6px; background: #13235A; overflow: hidden; }
+    .art .chipb { position: absolute; left: 236px; top: 46px; width: 60px; height: 60px; background: #0B0C0F; border-radius: 3px; }
+    .art .hdr { position: absolute; left: 30px; top: 30px; width: 74px; height: 92px; border: 1px dashed rgba(255,255,255,.25); border-radius: 4px; }
+    .pin { position: absolute; width: 10px; height: 10px; border-radius: 2px; background: var(--gold); }
+    .jmp { position: absolute; left: 49px; width: 32px; height: 14px; border-radius: 3px; background: #E7EAEF; }
+    .art .lbl { position: absolute; font: 11px var(--mono); color: #DCE4FF; }
+    .art .hl { position: absolute; left: 40px; top: 44px; width: 54px; height: 30px; border: 2px solid var(--gold); border-radius: 5px; }
+    .art .rst { position: absolute; left: 350px; top: 60px; width: 34px; height: 34px; border-radius: 50%; background: #2A2F38; border: 3px solid #E7EAEF; }
+    .steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 13px; }
+    .steps li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+    .steps .n { width: 20px; height: 20px; border-radius: 50%; background: var(--raised); border: 1px solid var(--border); font-size: 11px; display: flex; align-items: center; justify-content: center; }
+    .wait { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 10px 12px; border-radius: 6px; background: var(--blue-soft); color: var(--blue-300); font-size: 12.5px; }
+    .spin { width: 14px; height: 14px; border: 2px solid var(--blue-400); border-right-color: transparent; border-radius: 50%; display: inline-block; }
+    .ft { display: flex; justify-content: flex-end; margin-top: 12px; }
+    .mon { padding: 8px 14px; font: 12.5px/20px var(--mono); color: #C3C9D3; }
+    .mon .sep { color: var(--blue-300); }
+    .mon .busy { margin-top: 8px; color: var(--muted); font-family: var(--ui); }
+</style>
+</head>
+<body>
+<div class="window">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span>uart-hello-f103 — Nodu</div>
+    <div class="toolbar">
+        <div class="tb-start">
+            <span class="mark-slot"></span>
+            <button class="btn ghost"><i data-i="folder"></i>uart-hello-f103<i data-i="chevron"></i></button>
+            <button class="btn outline"><i data-i="build"></i>编译</button>
+            <span class="split"><button class="btn primary" style="opacity:.7"><i data-i="play"></i>运行中</button><button class="btn primary" style="opacity:.7"><i data-i="chevron"></i></button></span>
+            <button class="btn icon danger"><i data-i="stop"></i></button>
+            <span class="chip"><span class="dot busy"></span>通用 F103C8<span class="sub">COM5</span><i data-i="chevron"></i></span>
+        </div>
+        <div class="tb-center"><span class="task"><span class="step done"><i data-i="check"></i>编译</span><span class="step now"><span class="dot busy"></span>等待进入下载模式</span><span class="step"><i data-i="circle"></i>写入</span><span class="step"><i data-i="circle"></i>校验</span><span class="step"><i data-i="circle"></i>运行</span></span></div>
+        <div class="tb-end"><button class="btn icon on"><i data-i="files"></i></button><button class="btn icon on"><i data-i="panel"></i></button><button class="btn icon"><i data-i="more"></i></button></div>
+    </div>
+    <div class="body" style="grid-template-columns: 232px 1fr;">
+        <div class="side">
+            <h4>资源管理器</h4>
+            <div class="tree">
+                <div style="--d:0"><i data-i="chevron"></i>uart-hello-f103</div>
+                <div style="--d:1"><i data-i="right"></i>App</div>
+                <div style="--d:1"><i data-i="right"></i>Board</div>
+                <div style="--d:1"><i data-i="chevron"></i>Core</div>
+                <div style="--d:2"><i data-i="right"></i>Inc</div>
+                <div style="--d:2"><i data-i="chevron"></i>Src</div>
+                <div style="--d:3" class="sel">main.c</div>
+                <div style="--d:3" class="f">syscalls.c</div>
+                <div style="--d:1" class="f">nodu.json</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="main">
+                <div class="tabs"><span class="tab on">main.c<i data-i="x"></i></span></div>
+                <div class="code">
+                    <div class="ln"><span class="n">1</span><span class="pp">#include</span> <span class="st">"main.h"</span></div>
+                    <div class="ln"><span class="n">2</span><span class="pp">#include</span> <span class="st">&lt;stdio.h&gt;</span></div>
+                    <div class="ln"><span class="n">3</span></div>
+                    <div class="ln"><span class="n">4</span><span class="ty">int</span> <span class="fn">main</span>(<span class="ty">void</span>)</div>
+                    <div class="ln"><span class="n">5</span>{</div>
+                    <div class="ln"><span class="n">6</span>    <span class="fn">HAL_Init</span>();</div>
+                    <div class="ln"><span class="n">7</span>    <span class="fn">SystemClock_Config</span>();</div>
+                    <div class="ln"><span class="n">8</span>    <span class="fn">board_uart_init</span>();</div>
+                    <div class="ln"><span class="n">9</span></div>
+                    <div class="ln"><span class="n">10</span>    <span class="ty">uint32_t</span> n = <span class="nu">0</span>;</div>
+                    <div class="ln"><span class="n">11</span>    <span class="kw">while</span> (<span class="nu">1</span>) {</div>
+                    <div class="ln"><span class="n">12</span>        <span class="fn">printf</span>(<span class="st">"Hello from Nodu #%lu\r\n"</span>, n++);</div>
+                    <div class="ln"><span class="n">13</span>        <span class="fn">HAL_Delay</span>(<span class="nu">1000</span>);</div>
+                    <div class="ln"><span class="n">14</span>    }</div>
+                    <div class="ln"><span class="n">15</span>}</div>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="ptabs">
+                    <span class="ptab">问题</span><span class="ptab on">串口监视器</span><span class="ptab">编译输出</span>
+                    <span class="ptools"><span class="chip" style="height:24px"><span class="dot warn"></span>COM5 · 115200</span><button class="btn icon"><i data-i="pause"></i></button><button class="btn icon"><i data-i="copy"></i></button><button class="btn icon"><i data-i="clear"></i></button></span>
+                </div>
+                <div class="mon">
+                    <div class="sep">── 运行 #3 · 15:21:40 · 3be09c1 ────────────────────────────</div>
+                    <div>Hello from Nodu #0</div><div>Hello from Nodu #1</div>
+                    <div class="busy"><i data-i="usb"></i> 串口正用于下载 · 完成后自动恢复</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status"><span>通用 F103C8 · STM32F103C8</span><span>Flash 9.8 %</span><span>串口下载</span><span class="r"><span>行 12，列 9</span><span>C</span></span></div>
+</div>
+<div class="guide" role="dialog" aria-label="让开发板进入下载模式">
+    <div class="hd"><h3>让开发板进入下载模式</h3><span class="pg">1 / 2</span></div>
+    <div class="art" role="img" aria-label="开发板示意：BOOT0 跳线接 3.3V，然后按 RESET">
+        <div class="hdr"></div>
+        <div class="pin" style="left:44px;top:50px"></div><div class="pin" style="left:62px;top:50px"></div><div class="pin" style="left:80px;top:50px"></div>
+        <div class="pin" style="left:44px;top:98px"></div><div class="pin" style="left:62px;top:98px"></div><div class="pin" style="left:80px;top:98px"></div>
+        <div class="jmp" style="top:48px"></div><div class="jmp" style="left:67px;top:96px"></div>
+        <div class="hl"></div>
+        <span class="lbl" style="left:112px;top:50px">BOOT0 → 3.3V</span>
+        <span class="lbl" style="left:112px;top:98px">BOOT1 → GND</span>
+        <div class="chipb"></div><span class="lbl" style="left:234px;top:112px">STM32F103</span>
+        <div class="rst"></div><span class="lbl" style="left:348px;top:102px">RESET</span>
+    </div>
+    <ol class="steps">
+        <li><span class="n">1</span><span>把 BOOT0 跳线接到 3.3V，BOOT1 保持接 GND</span></li>
+        <li><span class="n">2</span><span>按一下 RESET 键</span></li>
+    </ol>
+    <div class="wait"><span class="spin"></span>等待开发板应答 · 已等待 8 秒</div>
+    <div class="ft"><button class="btn outline">取消</button></div>
+</div>
+<div class="note">效果图 · 板子图为示意，实际图来自板卡包</div>
+<script src="icons.js"></script>
+</body>
+</html>

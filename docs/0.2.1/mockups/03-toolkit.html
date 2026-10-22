@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>03 安装 STM32 工具包</title>
+<link rel="stylesheet" href="mockup.css">
+<style>
+    .dialog { left: 400px; top: 170px; width: 640px; padding: 24px 28px 22px; }
+    .dialog p.lead { margin: 6px 0 20px; color: var(--muted); }
+    .comp { display: grid; grid-template-columns: 22px 1fr auto 70px; align-items: center; gap: 10px; height: 38px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .comp:last-of-type { border-bottom: 0; }
+    .comp .what { color: var(--muted); font-size: 12px; }
+    .comp .sz { color: var(--muted); font: 12px var(--mono); text-align: right; }
+    .bar { height: 6px; border-radius: 3px; background: var(--hover); overflow: hidden; margin: 18px 0 8px; }
+    .bar i { display: block; height: 100%; width: 46%; background: var(--blue); }
+    .prog { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
+    .opts { display: grid; grid-template-columns: 60px 1fr auto; gap: 10px 12px; align-items: center; margin-top: 20px; font-size: 12.5px; }
+    .opts .field { font: 12px var(--mono); }
+    .actions { display: flex; align-items: center; gap: 10px; margin-top: 22px; }
+    .actions .sp { flex: 1; }
+    .actions .btn { height: 32px; padding: 0 16px; }
+    .spin { width: 14px; height: 14px; border: 2px solid var(--blue-400); border-right-color: transparent; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="window">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span>blink-f407 — Nodu</div>
+    <div class="toolbar">
+        <div class="tb-start">
+            <span class="mark-slot"></span>
+            <button class="btn ghost"><i data-i="folder"></i>blink-f407<i data-i="chevron"></i></button>
+            <button class="btn outline"><i data-i="build"></i>编译</button>
+            <span class="split"><button class="btn primary"><i data-i="play"></i>运行</button><button class="btn primary"><i data-i="chevron"></i></button></span>
+            <button class="btn icon"><i data-i="stop"></i></button>
+            <span class="chip"><span class="dot idle"></span>探索者 F407<span class="sub">未连接</span><i data-i="chevron"></i></span>
+        </div>
+        <div class="tb-center"></div>
+        <div class="tb-end"><button class="btn icon"><i data-i="files"></i></button><button class="btn icon"><i data-i="panel"></i></button><button class="btn icon"><i data-i="more"></i></button></div>
+    </div>
+    <div class="body" style="grid-template-columns: 1fr; background: var(--editor)"></div>
+    <div class="status"><span>探索者 F407 · STM32F407ZG</span></div>
+</div>
+<div class="scrim"></div>
+<div class="dialog" role="dialog" aria-label="安装 STM32 工具包">
+    <h2>安装 STM32 工具包</h2>
+    <p class="lead">编译和下载 STM32 程序需要这些工具，只需安装一次。</p>
+    <div class="comp"><span class="ok"><i data-i="check"></i></span><span>Arm GNU 工具链 14.2 <span class="what">编译器</span></span><span class="ok">已安装</span><span class="sz">52 MB</span></div>
+    <div class="comp"><span class="ok"><i data-i="check"></i></span><span>CMake 4.4 · Ninja 1.13 <span class="what">构建</span></span><span class="ok">已安装</span><span class="sz">18 MB</span></div>
+    <div class="comp"><span class="blue"><span class="spin"></span></span><span>clangd 23.1 <span class="what">代码补全与检查</span></span><span class="blue">下载中 61%</span><span class="sz">38 MB</span></div>
+    <div class="comp"><span class="muted"><i data-i="circle"></i></span><span>OpenOCD 0.12 · stm32flash 0.7 <span class="what">下载到开发板</span></span><span class="muted">等待</span><span class="sz">9 MB</span></div>
+    <div class="comp"><span class="muted"><i data-i="circle"></i></span><span>STM32CubeF4 1.28.3 · CubeF1 1.8.7 <span class="what">官方 HAL 驱动</span></span><span class="muted">等待</span><span class="sz">21 MB</span></div>
+    <div class="bar"><i></i></div>
+    <div class="prog"><span>64 MB / 138 MB · 6.2 MB/s</span><span>约 12 秒</span></div>
+    <div class="opts">
+        <span class="muted">位置</span><span class="field">~/.nodu/toolkits</span><span class="muted">安装后 410 MB</span>
+        <span class="muted">下载源</span><span class="field">国内镜像<i data-i="chevron"></i></span><span class="muted">每个文件都会校验</span>
+    </div>
+    <div class="actions"><button class="btn outline"><i data-i="download"></i>从离线包导入…</button><span class="sp"></span><button class="btn outline">取消</button><button class="btn primary" disabled style="opacity:.55">安装中</button></div>
+</div>
+<div class="note">效果图 · 大小与速度为示意，以打包实测为准</div>
+<script src="icons.js"></script>
+</body>
+</html>

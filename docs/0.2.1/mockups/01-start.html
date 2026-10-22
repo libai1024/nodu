@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>01 开始页</title>
+<link rel="stylesheet" href="mockup.css">
+<style>
+    .start { display: flex; flex-direction: column; align-items: center; padding-top: 92px; background: var(--editor); }
+    .hero { display: flex; align-items: center; gap: 14px; }
+    .hero .mark { width: 44px; height: 54px; color: var(--text); }
+    .hero b { font-size: 34px; letter-spacing: .01em; font-weight: 600; }
+    .hero span { font-size: 22px; color: var(--muted); }
+    .claim { margin: 14px 0 44px; color: var(--muted); font-size: 15px; }
+    .actions { display: grid; grid-template-columns: repeat(3, 220px); gap: 16px; }
+    .act { height: 104px; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .act .t { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
+    .act .d { color: var(--muted); font-size: 12.5px; }
+    .act.primary { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+    .act.primary .t { color: var(--blue-300); }
+    .recent { width: 692px; margin-top: 44px; }
+    .recent h3 { margin: 0 0 8px; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+    .row { display: grid; grid-template-columns: 180px 190px 1fr 80px; align-items: center; height: 40px; padding: 0 12px; border-radius: 6px; font-size: 13px; }
+    .row:hover, .row.hl { background: var(--surface); }
+    .kind { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .tagc { font-size: 11px; padding: 1px 6px; border-radius: 3px; background: var(--blue-soft); color: var(--blue-300); }
+    .tagk { font-size: 11px; padding: 1px 6px; border-radius: 3px; background: var(--raised); color: var(--muted); }
+    .path { color: var(--muted); font: 12px var(--mono); }
+    .when { color: var(--muted); font-size: 12px; text-align: right; }
+</style>
+</head>
+<body>
+<div class="window">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span>Nodu</div>
+    <div class="toolbar">
+        <div class="tb-start">
+            <span class="mark-slot"></span>
+            <button class="btn ghost"><i data-i="folder"></i>未打开项目<i data-i="chevron"></i></button>
+        </div>
+        <div class="tb-center"></div>
+        <div class="tb-end"><button class="btn icon"><i data-i="more"></i></button></div>
+    </div>
+    <div class="body" style="grid-template-columns: 1fr;">
+        <div class="main">
+            <div class="tabs"><span class="tab on">开始<i data-i="x"></i></span></div>
+            <div class="start">
+                <div class="hero"><span class="mark-slot"></span><b>nodu</b><span>见微</span></div>
+                <div class="claim">从第一行代码，到第一次点亮。</div>
+                <div class="actions">
+                    <div class="card act primary"><div class="t"><i data-i="plus"></i>新建项目</div><div class="d">STM32 C 语言或 K210 MicroPython</div></div>
+                    <div class="card act"><div class="t"><i data-i="open"></i>打开项目</div><div class="d">打开电脑上的项目文件夹</div></div>
+                    <div class="card act"><div class="t"><i data-i="spark"></i>示例</div><div class="d">LED 闪烁、串口打印、颜色追踪</div></div>
+                </div>
+                <div class="recent">
+                    <h3>最近的项目</h3>
+                    <div class="row hl"><span>blink-f407</span><span class="kind"><span class="tagc">STM32</span>探索者 F407</span><span class="path">~/Nodu/blink-f407</span><span class="when">昨天</span></div>
+                    <div class="row"><span>uart-hello-f103</span><span class="kind"><span class="tagc">STM32</span>通用 F103C8</span><span class="path">~/Nodu/uart-hello-f103</span><span class="when">10 月 21 日</span></div>
+                    <div class="row"><span>green-tracker</span><span class="kind"><span class="tagk">K210</span>MicroPython</span><span class="path">~/Nodu/green-tracker</span><span class="when">10 月 20 日</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status"><span>未打开项目</span></div>
+</div>
+<div class="note">效果图 · 非运行截图 · 颜色为 2026-10-21 品牌提案暂用值</div>
+<script src="icons.js"></script>
+</body>
+</html>
