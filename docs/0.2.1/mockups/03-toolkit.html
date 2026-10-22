@@ -2,24 +2,30 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>03 安装 STM32 工具包</title>
+<title>03 STM32 工具包信息与损坏说明</title>
 <link rel="stylesheet" href="mockup.css">
 <style>
-    .dialog { left: 400px; top: 170px; width: 640px; padding: 24px 28px 22px; }
-    .dialog p.lead { margin: 6px 0 20px; color: var(--muted); }
-    .comp { display: grid; grid-template-columns: 22px 1fr auto 70px; align-items: center; gap: 10px; height: 38px; border-bottom: 1px solid var(--border); font-size: 13px; }
-    .comp:last-of-type { border-bottom: 0; }
+    .settings { display: grid; grid-template-columns: 220px 1fr; min-height: 0; background: var(--editor); }
+    .nav { padding: 14px 0; border-right: 1px solid var(--border); background: var(--panel); }
+    .nav div { height: 30px; display: flex; align-items: center; padding: 0 18px; color: var(--muted); font-size: 13px; }
+    .nav div.on { color: var(--text); background: var(--hover); box-shadow: inset 2px 0 0 var(--blue); }
+    .page { padding: 28px 40px; max-width: 880px; }
+    .page .top { display: flex; align-items: baseline; justify-content: space-between; }
+    .page h2 { margin: 0; font-size: 18px; font-weight: 600; }
+    .page .lead { margin: 6px 0 20px; color: var(--muted); }
+    .comp { display: grid; grid-template-columns: 260px 1fr 250px; align-items: center; height: 40px; border-bottom: 1px solid var(--border); font-size: 13px; }
     .comp .what { color: var(--muted); font-size: 12px; }
-    .comp .sz { color: var(--muted); font: 12px var(--mono); text-align: right; }
-    .bar { height: 6px; border-radius: 3px; background: var(--hover); overflow: hidden; margin: 18px 0 8px; }
-    .bar i { display: block; height: 100%; width: 46%; background: var(--blue); }
-    .prog { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
-    .opts { display: grid; grid-template-columns: 60px 1fr auto; gap: 10px 12px; align-items: center; margin-top: 20px; font-size: 12.5px; }
-    .opts .field { font: 12px var(--mono); }
-    .actions { display: flex; align-items: center; gap: 10px; margin-top: 22px; }
-    .actions .sp { flex: 1; }
-    .actions .btn { height: 32px; padding: 0 16px; }
-    .spin { width: 14px; height: 14px; border: 2px solid var(--blue-400); border-right-color: transparent; border-radius: 50%; display: inline-block; }
+    .comp .lic { color: var(--muted); font: 12px var(--mono); text-align: right; }
+    .meta { display: grid; grid-template-columns: 60px 1fr auto; gap: 10px 12px; align-items: center; margin-top: 22px; font-size: 12.5px; }
+    .meta .field { font: 12px var(--mono); }
+    .acts { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .acts .btn { height: 32px; padding: 0 16px; }
+    .card-err { position: absolute; right: 28px; top: 586px; width: 500px; padding: 16px 18px; background: var(--surface); border: 1px solid rgba(242,112,106,.45); border-radius: 8px; box-shadow: 0 14px 40px rgba(0,0,0,.5); font-size: 13px; }
+    .card-err h3 { margin: 0 0 8px; display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--error); }
+    .card-err p { margin: 0 0 6px; color: #C3C9D3; }
+    .card-err ul { margin: 4px 0 8px; padding-left: 18px; color: #C3C9D3; line-height: 1.75; }
+    .card-err .det { color: var(--muted); font: 11.5px/1.7 var(--mono); padding: 8px 10px; border-radius: 4px; background: var(--editor); }
+    .card-err .ft { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -32,32 +38,43 @@
             <button class="btn outline"><i data-i="build"></i>编译</button>
             <span class="split"><button class="btn primary"><i data-i="play"></i>运行</button><button class="btn primary"><i data-i="chevron"></i></button></span>
             <button class="btn icon"><i data-i="stop"></i></button>
-            <span class="chip"><span class="dot idle"></span>探索者 F407<span class="sub">未连接</span><i data-i="chevron"></i></span>
+            <span class="chip"><span class="dot ok"></span>探索者 F407<span class="sub">ST-LINK</span><i data-i="chevron"></i></span>
         </div>
-        <div class="tb-center"></div>
+        <div class="tb-center"><span class="task error"><i data-i="xcircle"></i>STM32 工具包不完整</span></div>
         <div class="tb-end"><button class="btn icon"><i data-i="files"></i></button><button class="btn icon"><i data-i="panel"></i></button><button class="btn icon"><i data-i="more"></i></button></div>
     </div>
-    <div class="body" style="grid-template-columns: 1fr; background: var(--editor)"></div>
-    <div class="status"><span>探索者 F407 · STM32F407ZG</span></div>
-</div>
-<div class="scrim"></div>
-<div class="dialog" role="dialog" aria-label="安装 STM32 工具包">
-    <h2>安装 STM32 工具包</h2>
-    <p class="lead">编译和下载 STM32 程序需要这些工具，只需安装一次。</p>
-    <div class="comp"><span class="ok"><i data-i="check"></i></span><span>Arm GNU 工具链 14.2 <span class="what">编译器</span></span><span class="ok">已安装</span><span class="sz">52 MB</span></div>
-    <div class="comp"><span class="ok"><i data-i="check"></i></span><span>CMake 4.4 · Ninja 1.13 <span class="what">构建</span></span><span class="ok">已安装</span><span class="sz">18 MB</span></div>
-    <div class="comp"><span class="blue"><span class="spin"></span></span><span>clangd 23.1 <span class="what">代码补全与检查</span></span><span class="blue">下载中 61%</span><span class="sz">38 MB</span></div>
-    <div class="comp"><span class="muted"><i data-i="circle"></i></span><span>OpenOCD 0.12 · stm32flash 0.7 <span class="what">下载到开发板</span></span><span class="muted">等待</span><span class="sz">9 MB</span></div>
-    <div class="comp"><span class="muted"><i data-i="circle"></i></span><span>STM32CubeF4 1.28.3 · CubeF1 1.8.7 <span class="what">官方 HAL 驱动</span></span><span class="muted">等待</span><span class="sz">21 MB</span></div>
-    <div class="bar"><i></i></div>
-    <div class="prog"><span>64 MB / 138 MB · 6.2 MB/s</span><span>约 12 秒</span></div>
-    <div class="opts">
-        <span class="muted">位置</span><span class="field">~/.nodu/toolkits</span><span class="muted">安装后 410 MB</span>
-        <span class="muted">下载源</span><span class="field">国内镜像<i data-i="chevron"></i></span><span class="muted">每个文件都会校验</span>
+    <div class="body" style="grid-template-columns: 1fr;">
+        <div class="main">
+            <div class="tabs"><span class="tab">main.c</span><span class="tab on">设置<i data-i="x"></i></span></div>
+            <div class="settings">
+                <div class="nav"><div>编辑器</div><div>外观</div><div>串口监视器</div><div class="on">STM32 工具包</div><div>K210</div></div>
+                <div class="page">
+                    <div class="top"><h2>STM32 工具包 2026.11.0</h2><span class="err"><i data-i="xcircle"></i> 3 个文件缺失 · 10 月 22 日</span></div>
+                    <div class="lead">随 Nodu 安装，编译和下载 STM32 程序时使用。</div>
+                    <div class="comp"><span>Arm GNU 工具链 14.2</span><span class="what">编译器</span><span class="lic">GPL-3.0</span></div>
+                    <div class="comp"><span>CMake 4.4 · Ninja 1.13</span><span class="what">构建</span><span class="lic">BSD-3-Clause · Apache-2.0</span></div>
+                    <div class="comp"><span><span class="err">●</span> OpenOCD 0.12</span><span class="what">ST-LINK 下载</span><span class="lic">GPL-2.0</span></div>
+                    <div class="comp"><span>stm32flash 0.7</span><span class="what">串口下载</span><span class="lic">GPL-2.0</span></div>
+                    <div class="comp"><span>clangd 23.1</span><span class="what">代码补全与检查</span><span class="lic">Apache-2.0 with LLVM Exception</span></div>
+                    <div class="comp"><span>STM32CubeF4 1.28.3 · CubeF1 1.8.7</span><span class="what">官方 HAL 驱动</span><span class="lic">BSD-3-Clause · Apache-2.0</span></div>
+                    <div class="meta">
+                        <span class="muted">位置</span><span class="field">/Applications/Nodu.app/…/toolkits/stm32/darwin</span><span class="muted">占用 238 MB</span>
+                    </div>
+                    <div class="acts"><button class="btn outline"><i data-i="book"></i>许可与源码</button><button class="btn primary"><i data-i="shield"></i>检查工具包</button></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="actions"><button class="btn outline"><i data-i="download"></i>从离线包导入…</button><span class="sp"></span><button class="btn outline">取消</button><button class="btn primary" disabled style="opacity:.55">安装中</button></div>
+    <div class="status"><span>探索者 F407 · STM32F407ZG</span><span>Flash —</span></div>
 </div>
-<div class="note">效果图 · 大小与速度为示意，以打包实测为准</div>
+<div class="card-err" role="dialog" aria-label="STM32 工具包有 3 个文件缺失或损坏">
+    <h3><i data-i="xcircle"></i>STM32 工具包有 3 个文件缺失或损坏</h3>
+    <p>编辑不受影响，但不能编译和下载。</p>
+    <ul><li>重新安装 Nodu 可以修复</li><li>如果反复出现，检查杀毒软件是否隔离了 Nodu 的文件</li></ul>
+    <div class="det">缺失 openocd/bin/openocd<br>缺失 openocd/lib/libusb-1.0.0.dylib<br>缺失 openocd/share/openocd/scripts/target/stm32f4x.cfg</div>
+    <div class="ft"><button class="btn outline">重新检查</button><button class="btn ghost">知道了</button></div>
+</div>
+<div class="note">效果图 · 工具包随安装包提供，没有下载对话框；说明卡与设置页同时显示仅为说明</div>
 <script src="icons.js"></script>
 </body>
 </html>

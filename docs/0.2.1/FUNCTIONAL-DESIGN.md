@@ -16,16 +16,14 @@ flowchart TB
   end
   subgraph NODE[Node 后端]
     ES[NoduEmbeddedServer RPC]
-    TS[NoduToolkitServer RPC]
     KS[NoduDeviceServer（K210，不变）]
     PH[插件宿主 + vscode-clangd]
   end
   subgraph RUST[Rust 侧车]
     EMB[nodu-embedded：工程 / 编译 / 产物 / 下载 / 监视 / 租约]
-    RES[nodu-resources：工具包安装（扩展）]
     K210[nodu-device（不变）]
   end
-  subgraph TOOLS[STM32 工具包（本机）]
+  subgraph TOOLS[STM32 工具包（随安装包）]
     CMAKE[CMake + Ninja + Arm GCC]
     OCD[OpenOCD]
     SF[stm32flash]
@@ -36,10 +34,8 @@ flowchart TB
   WIZ --> ES
   DEV --> ES
   MON --> ES
-  WIZ --> TS
   LSPC --> PH --> CLANGD
   ES --> EMB
-  TS --> RES
   KS --> K210
   EMB --> CMAKE
   EMB --> OCD
@@ -82,7 +78,7 @@ blink-f407/
 ```
 
 - 目录名沿用 CubeMX 习惯（`Core/Inc`、`Core/Src`），学生以后转到 CubeIDE 不会陌生（P2）。
-- 启动文件、系统文件、链接脚本、`hal_conf.h` 进入工程：它们是学习内容，学生会读、会改。HAL 驱动与 CMSIS 头文件留在共享 SDK（D2）。
+- 启动文件、系统文件、链接脚本、`hal_conf.h` 进入工程：它们是学习内容，学生会读、会改。HAL 驱动与 CMSIS 头文件留在 Nodu 自带的只读 SDK（D2）。
 - `system_stm32f4xx.c` 保持官方原文，不加 Nodu 修改；时钟配置写在 `Board/board_clock.c` 的 `SystemClock_Config()` 中，与 CubeMX 生成的代码结构一致。
 - `syscalls.c` 提供 `_write()`，把 `printf` 重定向到板卡包声明的调试串口；`_sbrk` 等桩函数用 newlib nano 自带的 nosys。
 - `.nodu/` 被 `.gitignore` 忽略。现有 `nodu-tutor-plan.ts` 已经把教学计划放在 `.nodu-tutor/` 而非 `.nodu/`，两者不冲突。
@@ -120,7 +116,7 @@ blink-f407/
 }
 ```
 
-- 打开工程时，缺少锁定的 SDK 或工具包版本 → 提示安装该版本（T5）；不自动换成新版本。
+- 打开工程时，若锁定的工具包版本与 Nodu 内置的不同，提示一次；学生确认后用内置版本编译并更新锁文件（T5，TOOLKIT-DISTRIBUTION §7）。
 - `template.files` 记录生成时每个文件的摘要，用于以后的模板升级差异显示（P2），不覆盖学生修改。
 
 ### 2.4 源文件收集与 CMake
@@ -212,54 +208,39 @@ F103C8 通用板卡包只提供 `empty` 和 `uart-hello`，时钟用 HSI 加 PLL
 
 ## 4. STM32 工具包
 
+分发方式、组件来源、实测体积、打包流水线、安装包托管与许可见 [TOOLKIT-DISTRIBUTION.md](TOOLKIT-DISTRIBUTION.md)。本节只写运行时 Nodu 怎样使用工具包。
+
 ### 4.1 组成
 
-| 组件 | 版本 | 来源 | 处理 |
-| --- | --- | --- | --- |
-| Arm GNU 工具链 | 14.2.Rel1 | Arm 官方归档，SHA-256 与官方值比对（P0 已核对 darwin-arm64） | 裁剪：只保留 C 前端、binutils、GDB（为调试阶段预留）、`thumb/v7-m/nofp` 与 `thumb/v7e-m+fp/hard` 多库；去掉 C++ / Fortran 前端、LTO 工具和文档。P0 机器实测裁剪后约 141 MB（完整安装 976 MB） |
-| CMake | 4.4.3 | Kitware 官方归档 | 去掉文档与 GUI |
-| Ninja | 1.13.2 | 官方归档 | 原样 |
-| OpenOCD | 0.12.0 | 按固定上游源码与 libusb 版本自行构建（与 `build-media.cjs` 构建 ffmpeg 的做法一致）；xPack 0.12.0 为备选 | P0 用的是 Homebrew 构建；换成分发版本后，需重跑 SWD 实物验证 |
-| stm32flash | 0.7 | 固定源码（SHA-256 `c4c9cd8b…`）自行构建 | P0 已核对源码行为 |
-| clangd | 23.1.0 | clangd 官方发布（mac 95.4 MB / windows 28.3 MB 压缩包） | macOS 按架构拆分 |
-| SDK：CubeF4 | 1.28.3 | P0 锁定的 Cube / HAL / Device 三个 commit | 只保留 HAL、CMSIS Core 与 F405/F407 设备头文件和许可文件 |
-| SDK：CubeF1 | 1.8.7 | 同上 | 只保留 HAL、CMSIS Core 与 F103 设备头文件和许可文件 |
+| 组件 | 版本 | 用途 |
+| --- | --- | --- |
+| Arm GNU 工具链 | 14.2.Rel1（只保留 C 与 Cortex-M3 / M4F 多库） | 编译、链接、`objcopy`、`size`；GDB 为调试阶段预留 |
+| CMake / Ninja | 4.4.3 / 1.13.2 | 配置与构建 |
+| OpenOCD | 0.12.0 + scripts | ST-LINK 下载、复位、备份 |
+| stm32flash | 0.7 | 串口 ISP |
+| clangd | 23.1.0 | 补全、跳转、实时诊断 |
+| SDK | CubeF4 1.28.3、CubeF1 1.8.7（P0 锁定的 commit） | HAL、CMSIS、启动文件与模板 |
 
-以上版本与 P0 锁定的一致。**包含的工具版本一旦发布就不变**；升级工具链等于发布新的工具包版本，旧工程继续使用锁定的旧版本（T5）。
+版本与 P0 锁定的一致。工具包按平台打进 Nodu 安装包，每个 Nodu 版本内置一个工具包版本；升级工具链随 Nodu 的次版本发布（TOOLKIT-DISTRIBUTION §7）。
 
-体积估算：裁剪后的工具链、clangd、CMake、OpenOCD 合计安装后约 300–400 MB，压缩后每平台约 120–150 MB。这是按 P0 机器测量和官方包大小推算的，M1 打包后实测；超出 PRD 体积目标时，优先压缩 clangd（单架构）和工具链多库。
+### 4.2 位置与查找
 
-### 4.2 安装位置与清单
-
-```
-<工具根目录>/
-├── manifest-installed.json      已安装组件、版本、摘要、安装时间
-└── components/<组件>/<版本>/     只读
-```
-
-- 工具根目录默认 macOS `~/.nodu/toolkits/`，Windows `%LOCALAPPDATA%\Nodu\toolkits\`。Windows 用户名含中文时，默认改用系统盘根目录下的 `Nodu\toolkits`（ASCII 路径），可在设置中修改。GCC 与 Ninja 在非 ASCII 路径下的行为需要在 Windows 实测（M5）。
-- **工具包清单随应用发布**（`resources/toolkits/stm32.json`），列出每个组件在每个平台的归档名、大小、SHA-256、文件数上限和镜像地址。下载源只是传输通道：无论从哪个镜像、还是从离线包取得，都按应用内的清单校验。
+- 安装包内的路径为 `resources/toolkits/stm32/<platform>/`（macOS 为 `darwin`，Windows 为 `win32-x64`），只读。查找顺序：环境变量 `NODU_STM32_TOOLKIT` → 安装包内的路径 → 开发环境的 `desktop/.tools/stm32/<platform>/`。
+- Windows 上安装路径含非 ASCII 字符、且实测工具无法处理时，第一次使用把工具包复制到 `%PUBLIC%\Nodu\toolkits\<版本>\`，之后使用这份副本（TOOLKIT-DISTRIBUTION §6）。
 - 不修改系统 PATH，不写注册表。Nodu 调用工具时传入完整路径，并为子进程构造只含工具包目录的 PATH，避免学生电脑上其他 GCC 或 CMake 混入。
+- `toolkit.json` 随工具包一起打包，列出每个文件的相对路径、大小与 SHA-256，以及组件版本与许可。
 
-### 4.3 安装流程
+### 4.3 完整性检查
 
-扩展现有的 `nodu-resources` CLI（已有 URL 安全检查、SHA-256 校验、条目数与解压大小上限、暂存目录后整体换入、失败回滚），新增：
+- 第一次打开 C 工程时，检查每个文件存在且大小正确，并在后台对全部文件做一次 SHA-256 校验，结果记在用户数据目录；之后每次只检查文件元数据。
+- 检查失败时，编辑照常可用，编译和下载不可用，提示重新安装 Nodu 或检查杀毒软件（文案见 TOOLKIT-DISTRIBUTION §6）。
+- 设置中的“检查工具包”随时重新做完整校验。
 
-| 新增 | 说明 |
-| --- | --- |
-| `install-toolkit` 命令 | 按清单逐个组件下载、校验、解压、换入；进度事件沿用 `{"event":"progress"}` |
-| 断点续传 | HTTP Range；临时文件按组件摘要命名，重启后继续 |
-| 强制 SHA-256 | 工具包组件必须校验，不提供跳过选项（现有资源包的校验是可选的） |
-| 可执行权限 | 解压时按清单恢复可执行位；拒绝符号链接与硬链接（打包时已展开） |
-| 上限来自清单 | 单文件与总大小上限由清单给出，同时不超过代码里的硬上限 |
-| 离线包导入 | `.nodupack` 是 zip，内含各组件归档；按应用内清单逐个校验，不信任包内自带的清单。应用清单里没有的版本拒绝导入 |
-| macOS 隔离属性 | 下载的可执行文件带 `com.apple.quarantine` 时，在校验通过后移除；ad-hoc 签名与公证问题见 [PLAN.md](PLAN.md) 风险 |
+Windows 上，下载器使用 ST 官方驱动。Nodu 不安装驱动；第一次检测下载器失败时，检查 USB 设备列表里是否有 VID 0483 的设备，没有驱动时给出 ST 官方驱动页面和安装步骤（T9）。
 
-Windows 上，下载器使用 ST 官方驱动。安装工具包时不安装驱动；第一次检测下载器失败时，检查 USB 设备列表里是否有 VID 0483 的设备，没有驱动时给出 ST 官方驱动页面和安装步骤（T9）。
+### 4.4 工具包信息（T7，P1）
 
-### 4.4 工具包管理界面（T7，P1）
-
-设置 → STM32 工具包：版本列表、占用空间、被哪些最近工程使用、修复（重新校验所有文件）、删除。删除正在被打开工程锁定的版本时要求确认。
+设置 → STM32 工具包：当前版本、各组件的版本与许可、安装位置、占用空间、“检查工具包”按钮。0.2.1 只有一个内置版本，没有下载、安装、离线导入、删除或多版本管理。
 
 ## 5. 编译
 
@@ -371,7 +352,7 @@ M2 原型的通过条件：
 ### 6.2 clangd 配置
 
 - 启动参数：`--compile-commands-dir=build/debug --header-insertion=never --background-index --clang-tidy=false --log=error -j=2`。
-- `--query-driver=<工具包>/arm-gnu/*/bin/arm-none-eabi-gcc`：让 clangd 从交叉编译器读取内置头文件路径与宏，否则会找不到 `<stdint.h>` 等 newlib 头文件。
+- `--query-driver=<工具包>/arm-gnu/bin/arm-none-eabi-gcc`：让 clangd 从交叉编译器读取内置头文件路径与宏，否则会找不到 `<stdint.h>` 等 newlib 头文件。
 - `--header-insertion=never` 满足 E5：补全 HAL 函数时不自动插入 `#include`，由学生自己写。
 - 工程模板内放 `.clangd`，用 `CompileFlags.Remove` 去掉 clang 不认识的 GCC 参数（如 `-fcyclomatic-complexity`、`-mthumb-interwork`），防止出现误报。
 - clangd 只读取编译数据库，**不会执行 CMake**（调研 §6）。编译数据库由 Nodu 在打开工程时生成：已信任的工程执行一次 `cmake --preset debug`（只配置，不编译，约 1–2 s），满足 E6；未信任的工程不生成，clangd 只做单文件分析。
@@ -497,7 +478,7 @@ sequenceDiagram
 | 串口 | `nodu-device-locks/<port sha256>.lock`（现有） | K210 设备服务、STM32 串口监视器、串口 ISP、`nodu-terminal` 四者之一 |
 | ST-LINK | `nodu-device-locks/probe-<serial>.lock`（新增） | 下载 / 复位 / 备份；以后的调试会话 |
 | 工程编译目录 | `.nodu/build.lock` | 当前编译 |
-| 工具包目录 | `toolkits/.install.lock` | 安装 / 修复 / 删除 |
+| 工具包副本（仅 Windows 非 ASCII 路径） | `%PUBLIC%\Nodu\toolkits\.copy.lock` | 第一次使用时的复制 |
 
 - 锁是进程级 flock，进程退出（包括崩溃）后由操作系统释放，不会残留（PRD §6 可靠性）。
 - 获取失败时，错误信息包含拥有者描述（锁文件内写入 `{pid, owner, window}`），界面显示“串口正被 K210 设备连接占用”这类说明（K2）。
@@ -517,7 +498,8 @@ sequenceDiagram
 
 | 方法 | 参数 | 结果 / 事件 | 超时 |
 | --- | --- | --- | --- |
-| `openProject` | 工程路径、是否已信任 | 清单与锁的校验结果、缺失的 SDK / 工具包 | 10 s |
+| `openProject` | 工程路径、是否已信任 | 清单与锁的校验结果、工具包完整性、与内置工具包的版本差异 | 10 s |
+| `checkToolkit` | `full?` | 工具包版本、缺失或损坏的文件 | 元数据 5 s；完整校验 300 s |
 | `configure` | 工程、预设 | 编译数据库路径 | 120 s |
 | `build` | 工程、`clean?` | `buildId`；事件 `build.progress`、`build.diagnostic`、`build.done`（容量、产物） | 600 s |
 | `listProbes` | — | 下载器列表（序列号、型号、固件版本） | 10 s |
@@ -538,9 +520,9 @@ sequenceDiagram
 
 | 层 | 新增 |
 | --- | --- |
-| Node | `NoduEmbeddedServer`（侧车进程管理，镜像 `nodu-device-server.ts` 的结构）、`NoduToolkitServer`（调用 `nodu-resources install-toolkit`）；在 `nodu-backend-module.ts` 中以白名单方式暴露 |
-| common | `nodu-embedded-protocol.ts`（RPC 路径 `/services/nodu-embedded`、`EmbeddedClient` 事件接口）、`nodu-toolkit-protocol.ts`、生成的类型 |
-| browser | `NoduProjectModel`（当前工程类型、清单、当前产物）、`NoduEmbeddedModel`（编译、下载、监视状态）；`nodu-start-page.tsx`、`nodu-new-project.tsx`、`nodu-build-problems.ts`、`nodu-serial-monitor.tsx`、`nodu-flash-panel.tsx`、`nodu-toolkit-install.tsx`；工具栏数据源 `nodu-toolbar-model.ts` |
+| Node | `NoduEmbeddedServer`（侧车进程管理，镜像 `nodu-device-server.ts` 的结构）；在 `nodu-backend-module.ts` 中以白名单方式暴露 |
+| common | `nodu-embedded-protocol.ts`（RPC 路径 `/services/nodu-embedded`、`EmbeddedClient` 事件接口）、生成的类型 |
+| browser | `NoduProjectModel`（当前工程类型、清单、当前产物）、`NoduEmbeddedModel`（编译、下载、监视状态）；`nodu-start-page.tsx`、`nodu-new-project.tsx`、`nodu-build-problems.ts`、`nodu-serial-monitor.tsx`、`nodu-flash-panel.tsx`、`nodu-toolkit-info.tsx`；工具栏数据源 `nodu-toolbar-model.ts` |
 
 `ScopeToolbar` 改为从 `NoduToolbarModel` 读取当前项目类型下的按钮配置，K210 配置保持现状。这是 `scope-workbench.tsx` 唯一需要改的地方，见 [PLAN.md](PLAN.md) §3 与品牌会话的分工。
 
@@ -549,20 +531,20 @@ sequenceDiagram
 | 风险 | 措施 |
 | --- | --- |
 | 打开别人的工程时执行恶意 CMake 脚本 | CMake 配置会执行工程代码。由 Nodu 模板新建的工程自动信任；其他工程（外部、压缩包解压、从网上下载）先经 Theia 工作区信任确认，未信任时不配置、不编译、不下载 |
-| 工具包被替换 | 清单随应用发布，每个文件校验 SHA-256；安装后组件目录只读；每次启动侧车时抽查关键可执行文件的大小与修改时间，异常时要求修复 |
+| 工具包被替换或损坏 | `toolkit.json` 随应用发布，每个文件有 SHA-256；第一次使用时完整校验，之后检查元数据；工具包目录只读；macOS 上工具与应用一起签名 |
 | 下载到错误的芯片或板子 | 写入前核对设备 ID、容量和唯一 ID；第 3 步与第 5 步之间复核唯一 ID；恢复备份只能写回同一颗芯片 |
 | 程序锁死芯片（例如关掉 SWD 引脚） | 首次备份；ST-LINK 连接失败时诊断提示“可尝试在按住复位的情况下连接”或改用串口 ISP（ROM 引导不受用户程序影响） |
 | 选项字节被改动 | Nodu 不发出任何选项字节命令；OpenOCD 命令集是白名单，TCL 端口只监听 127.0.0.1 且使用随机端口 |
 | 本机网络服务暴露 | OpenOCD 的 GDB 与 telnet 端口在下载时关闭（`gdb_port disabled`、`telnet_port disabled`）；TCL 端口仅本机 |
 | 工程路径注入命令 | 所有外部进程用参数数组启动，不经过 shell；OpenOCD TCL 命令中的路径按 TCL 规则转义，含换行等控制字符的路径直接拒绝 |
-| 下载源被劫持 | 只接受 HTTPS；摘要来自应用内清单而不是下载源 |
+| 安装包被篡改 | 下载页给出 SHA-256；macOS 包带代码签名（目前只是 ad-hoc）。`toolkit.json` 与工具包在同一个安装包里，完整性检查只能发现损坏或被杀毒软件隔离的文件，防篡改依赖安装包本身的签名与校验值 |
 
 ## 12. 与 K210 共存
 
 - 工作台根据当前工程类型（`nodu.json` 的 `kind`，或没有清单时的 K210）选择工具栏与面板。切换工程类型不重建 K210 设备会话；K210 侧车在打开 C 工程时如已连接，保持连接直到用户断开或 5 s 无客户端（现有规则）。
 - K210 的串口与 STM32 的串口共用锁（§9），所以同一个 USB 串口不会被两边同时打开。
 - K210 代码路径不改：`nodu-device`、`NoduDeviceServer`、`NoduDeviceModel` 的行为保持 0.1.4 状态。回归项见 [acceptance.csv](acceptance.csv) 的 K 组。
-- 未安装工具包时，Nodu 不启动 `nodu-embedded`、插件宿主不加载 clangd 扩展，应用启动与 0.1.4 相同（K3）。
+- 没有打开 C 工程时，Nodu 不启动 `nodu-embedded`、插件宿主不加载 clangd 扩展，应用启动与 0.1.4 相同（K3）。内置的工具包只占用磁盘，启动时不读取。
 
 ## 13. 调试（下一阶段，0.2.1 只预留）
 

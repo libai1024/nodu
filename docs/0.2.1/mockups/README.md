@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | [01-start.html](01-start.html) | 开始页 | [UI-DESIGN §5.1](../UI-DESIGN.md#51-开始页u3) |
 | [02-new-project.html](02-new-project.html) | 新建项目向导 | §5.2 |
-| [03-toolkit.html](03-toolkit.html) | 安装 STM32 工具包（下载中） | §5.3 |
+| [03-toolkit.html](03-toolkit.html) | 设置中的 STM32 工具包信息、工具包损坏说明卡 | §5.3、[TOOLKIT-DISTRIBUTION §6](../TOOLKIT-DISTRIBUTION.md#6-首次使用与完整性检查) |
 | [04-workbench.html](04-workbench.html) | C 工作台：编译错误、悬停解释、问题列表 | §3、§6、§7.1 |
 | [05-uart-isp.html](05-uart-isp.html) | 串口 ISP：任务条、引导卡、监视器让出串口 | §3.5、§7.2、§8.3 |
 | [06-device-diagnose.html](06-device-diagnose.html) | 设备弹层（专业模式）与下载诊断卡 | §4、§8.5 |

@@ -12,6 +12,7 @@
 | --- | --- |
 | [PRD.md](PRD.md) | 产品需求：目标、用户与场景、功能清单与优先级、非功能需求、发布标准 |
 | [FUNCTIONAL-DESIGN.md](FUNCTIONAL-DESIGN.md) | 功能与技术设计：工程模型、板卡包、工具包、编译、clangd、下载、串口监视、协议、安全 |
+| [TOOLKIT-DISTRIBUTION.md](TOOLKIT-DISTRIBUTION.md) | 工具包分发：方案比较、实测体积、打包流水线、安装包托管、是否需要登录、许可与源码 |
 | [UI-DESIGN.md](UI-DESIGN.md) | 界面设计：信息架构、工具栏、设备弹层、开始页与向导、问题与输出、串口监视器、下载引导、文案 |
 | [mockups/](mockups/README.md) | 六张效果图（HTML 源文件；PNG 用 `render.cjs` 在本机生成） |
 | [PLAN.md](PLAN.md) | 实施阶段、并行分工、关口、需要用户提供的条件 |
@@ -19,8 +20,8 @@
 
 ## 方案摘要
 
-- **工程**：普通 CMake 工程加 `nodu.json` 清单与 `nodu.lock.json` 版本锁。官方 HAL / CMSIS 放在本机只读共享 SDK 中，启动文件、系统文件、链接脚本与板级代码进入工程。可导出为自带 Drivers 的独立工程，在终端、VS Code 或 CI 中构建。
-- **工具**：Arm GNU 14.2.Rel1、CMake、Ninja、OpenOCD、stm32flash、clangd 组成“STM32 工具包”，首次需要时下载，或从离线包导入（面向课堂）。应用安装包不内置工具链。清单与 SHA-256 随应用发布，镜像只作传输通道。
+- **工程**：普通 CMake 工程加 `nodu.json` 清单与 `nodu.lock.json` 版本锁。官方 HAL / CMSIS 放在 Nodu 自带的只读 SDK 中，启动文件、系统文件、链接脚本与板级代码进入工程。可导出为自带 Drivers 的独立工程，在终端、VS Code 或 CI 中构建。
+- **工具**：Arm GNU 14.2.Rel1、CMake、Ninja、OpenOCD、stm32flash、clangd 和 HAL / CMSIS 组成“STM32 工具包”，按平台打进 Nodu 安装包：装好 Nodu 就能编译和下载，不需要再从官方站点下载。裁剪后实测每个平台安装后约 240 MB，单架构安装包增加约 74 MB。服务器只托管 Nodu 安装包与 GPL 源码，下载不需要登录。详见 [TOOLKIT-DISTRIBUTION.md](TOOLKIT-DISTRIBUTION.md)。
 - **服务**：新增 Rust 侧车 `nodu-embedded`，负责工程校验、编译、产物、下载、串口监视和资源租约。它与 K210 的 `nodu-device` 共用串口锁，不扩展现有 K210 状态机。
 - **编辑**：clangd 提供补全、跳转（可进入只读 HAL 源码）、悬停和实时诊断。推荐接入方式是 Theia 插件宿主加 vscode-clangd（MIT），在 M2 原型中确认；不可行时改用自写的精简 LSP 客户端。
 - **下载**：ST-LINK（SWD，OpenOCD）与串口 ISP（stm32flash，引导 BOOT0）两条路径。每次写入前核对芯片型号与容量，首次写入某颗芯片前备份原程序。不修改选项字节与读保护。
@@ -32,12 +33,13 @@
 | 编号 | 问题 | 建议 |
 | --- | --- | --- |
 | D1 | “编译”单独占一个工具栏按钮，还是收进“运行 ▾” | 单独按钮：不接板也能用，是 C 学习中最频繁的操作。C 工程没有帧缓冲开关，工具栏总数仍是 9 个，与 K210 相同 |
-| D2 | HAL / CMSIS 放在共享 SDK 还是复制进每个工程 | 共享只读 SDK 加“导出独立工程” |
-| D3 | 工具链随安装包内置，还是按需下载 | 按需下载加离线包导入 |
+| D2 | HAL / CMSIS 放在 Nodu 自带的 SDK 还是复制进每个工程 | 自带只读 SDK 加“导出独立工程” |
+| D3 | 工具链随安装包内置，还是按需下载 | 按平台打进安装包（实测单架构增加约 74 MB）；按需下载留到需要多版本时再做 |
 | D4 | clangd 的接入方式 | 插件宿主加 vscode-clangd，M2 先测体积、启动时间与内存 |
 | D5 | 断点调试是否纳入 0.2.1 | 不纳入，作为下一阶段 |
 | D6 | F103C8 的具体板型、串口转换器型号 | 需要用户提供实物信息；未提供前只发布“通用 F103C8”板卡包，不含 LED 和按键模板 |
-| D7 | 工具包镜像放在哪里 | 国内对象存储为主、GitHub Releases 为备，需用户确定账号与域名 |
+| D7 | Nodu 安装包托管在哪里 | 国内对象存储加 CDN 为主（需要已 ICP 备案的域名），GitHub Releases 为备；需用户确定账号与域名 |
+| D8 | 下载是否需要登录 | 不需要；账号与 AI 教学一起设计 |
 
 ## 与既有文档的关系
 
