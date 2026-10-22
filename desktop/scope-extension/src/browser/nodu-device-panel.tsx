@@ -60,7 +60,8 @@ export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, show
             <div className="scope-device-actions"><button className="theia-button secondary" disabled={!model.connected || !state.capabilities.repl || state.running || blocked || !code.trim()} onClick={() => void model.execute(code)}>执行 REPL</button></div>
             {replOutput && <pre className="nodu-repl-output" aria-label="设备输出" tabIndex={0}>{replOutput}</pre>}
         </section>
-        {/* Professional mode has the docked 开发板文件 view; keep this copy mounted (drafts survive mode switches) but out of sight. */}
-        <div hidden={!compact}><NoduBoardFiles model={model} files={files} dialogs={dialogs} editors={editors} /></div>
+        {/* Professional mode has the docked 开发板文件 view; keep this copy mounted (drafts survive mode switches) but out of sight.
+            Simple mode shows it only once a board with a file system (K210 / MaixPy) is connected. */}
+        <div hidden={!compact || !model.connected || !state.capabilities.files}><NoduBoardFiles model={model} files={files} dialogs={dialogs} editors={editors} /></div>
     </div>;
 }

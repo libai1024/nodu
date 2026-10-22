@@ -113,3 +113,5 @@
 .nodu-picker-family .nodu-picker-label > strong { font-weight: 600; }
 .nodu-picker-family .nodu-picker-label > span { color: var(--theia-descriptionForeground); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
 .scope-widget .nodu-picker-family:disabled { opacity: .55; }
+.nodu-board-files-intro { margin: -4px 0 10px; color: var(--theia-descriptionForeground); font-size: 11px; line-height: 1.5; }
+.nodu-board-files-empty { margin: 8px 0 10px; color: var(--theia-descriptionForeground); font-size: 11px; line-height: 1.5; }
