@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" role="img" aria-labelledby="title"><title id="title">标签、活动线与按钮居中细节</title><defs><clipPath id="header"><rect width="700" height="62"/></clipPath></defs>
+<rect x="0" y="0" width="1000" height="1000" rx="0" fill="#FFFFFF"/>
+<text x="40" y="56" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="29" font-weight="650" fill="#1D2129">两套 UI · 共用对齐规范</text>
+<text x="40" y="90" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="15" font-weight="400" fill="#5B616C">文字在每个标签内部居中；活动线、图标和按钮使用同一套几何规则。</text>
+<text x="40" y="137" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="600" fill="#1D2129">K210 · 运行输出选中</text>
+<g transform="translate(40 155) scale(1.3)"><g clip-path="url(#header)">
+<rect x="0" y="0" width="700" height="330" rx="0" fill="#FFFFFF" stroke="#E0E3E8"/>
+<rect x="0" y="0" width="700" height="32" rx="0" fill="#F7F8FA"/>
+<g data-tab="运行输出" data-box="8,0,104,32">
+<text x="60" y="16" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#1D2129">运行输出</text>
+<rect x="20" y="30" width="80" height="2" rx="0" fill="#2F5BFF"/>
+</g>
+<g data-tab="Python 交互" data-box="112,0,104,32">
+<text x="164" y="16" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">Python 交互</text>
+</g>
+<g data-tab="终端" data-box="216,0,104,32">
+<text x="268" y="16" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">终端</text>
+</g>
+<circle cx="607" cy="16" r="1.2" fill="#5B616C"/>
+<circle cx="612" cy="16" r="1.2" fill="#5B616C"/>
+<circle cx="617" cy="16" r="1.2" fill="#5B616C"/>
+<rect x="639" y="11" width="10" height="10" rx="0" fill="none" stroke="#5B616C"/>
+<path d="M672 14 L676 18" fill="none" stroke="#5B616C" stroke-width="1.5"/>
+<path d="M676 18 L680 14" fill="none" stroke="#5B616C" stroke-width="1.5"/>
+<path d="M0 32 L700 32" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="14" y="50" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#1D2129">main.py · K210</text>
+<text x="270" y="50" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#187244">已连接</text>
+<text x="356" y="50" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">空闲</text>
+<text x="560" y="46" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#5B616C">查找</text>
+<text x="608" y="46" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#2449DB">跟随</text>
+<text x="656" y="46" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#5B616C">清空</text>
+<path d="M0 62 L700 62" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+</g></g>
+<text x="40" y="282" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="600" fill="#1D2129">STM32 · 串口监视选中</text>
+<g transform="translate(40 300) scale(1.3)"><g clip-path="url(#header)">
+<rect x="0" y="0" width="700" height="330" rx="0" fill="#181B21" stroke="#343A45"/>
+<rect x="0" y="0" width="700" height="32" rx="0" fill="#1D2027"/>
+<g data-tab="构建与下载" data-box="8,0,104,32">
+<text x="60" y="16" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#949CAA">构建与下载</text>
+</g>
+<g data-tab="串口监视" data-box="112,0,104,32">
+<text x="164" y="16" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#E7EAEF">串口监视</text>
+<rect x="124" y="30" width="80" height="2" rx="0" fill="#2F5BFF"/>
+</g>
+<g data-tab="终端" data-box="216,0,104,32">
+<text x="268" y="16" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#949CAA">终端</text>
+</g>
+<circle cx="607" cy="16" r="1.2" fill="#949CAA"/>
+<circle cx="612" cy="16" r="1.2" fill="#949CAA"/>
+<circle cx="617" cy="16" r="1.2" fill="#949CAA"/>
+<rect x="639" y="11" width="10" height="10" rx="0" fill="none" stroke="#949CAA"/>
+<path d="M672 14 L676 18" fill="none" stroke="#949CAA" stroke-width="1.5"/>
+<path d="M676 18 L680 14" fill="none" stroke="#949CAA" stroke-width="1.5"/>
+<path d="M0 32 L700 32" fill="none" stroke="#343A45" stroke-width="1"/>
+<text x="14" y="50" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#E7EAEF">CH340 · COM5 ▾</text>
+<text x="270" y="50" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#949CAA">115200</text>
+<text x="356" y="50" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#45C486">已连接</text>
+<text x="560" y="46" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#949CAA">查找</text>
+<text x="608" y="46" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#8FA8FF">跟随</text>
+<text x="656" y="46" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#949CAA">断开</text>
+<path d="M0 62 L700 62" fill="none" stroke="#343A45" stroke-width="1"/>
+</g></g>
+<text x="40" y="432" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">标签几何（放大 3 倍，标注为逻辑像素）</text>
+<rect x="40" y="486" width="312" height="96" rx="0" fill="#F7F8FA" stroke="#E0E3E8"/>
+<text x="196" y="534" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="39" font-weight="500" fill="#1D2129">Python 交互</text>
+<rect x="76" y="576" width="240" height="6" rx="0" fill="#2F5BFF"/>
+<path d="M196 458V610 M22 534H370" fill="none" stroke="#2449DB" stroke-width="1" stroke-dasharray="4 4"/>
+<path d="M40 468 L352 468" fill="none" stroke="#5B616C" stroke-width="1"/>
+<path d="M40 463 L40 473" fill="none" stroke="#5B616C" stroke-width="1"/>
+<path d="M352 463 L352 473" fill="none" stroke="#5B616C" stroke-width="1"/>
+<text x="196" y="452" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="500" fill="#5B616C">104 px</text>
+<text x="394" y="504" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="16" font-weight="600" fill="#1D2129">文字中心：52 × 16</text>
+<text x="394" y="536" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="15" font-weight="400" fill="#5B616C">标签：104 × 32   /   下划线：80 × 2</text>
+<text x="394" y="568" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="15" font-weight="400" fill="#5B616C">下划线左右内缩 12，中心与文字重合。</text>
+<text x="40" y="648" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">按钮与工具</text>
+<rect x="40" y="676" width="920" height="104" rx="0" fill="#F7F8FA"/>
+<rect x="62" y="710" width="80" height="26" rx="4" fill="#2F5BFF"/>
+<text x="102.0" y="723" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF">发送</text>
+<rect x="162" y="710" width="80" height="26" rx="4" fill="#2F5BFF"/>
+<text x="202.0" y="723" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF">执行</text>
+<rect x="262" y="710" width="128" height="26" rx="4" fill="#F7F8FA" stroke="#E0E3E8"/>
+<text x="326.0" y="723" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#1D2129">选择串口</text>
+<rect x="428" y="709" width="28" height="28" rx="3" fill="#FFFFFF" stroke="#E0E3E8"/>
+<circle cx="437" cy="723" r="1.2" fill="#5B616C"/>
+<circle cx="442" cy="723" r="1.2" fill="#5B616C"/>
+<circle cx="447" cy="723" r="1.2" fill="#5B616C"/>
+<rect x="472" y="709" width="28" height="28" rx="3" fill="#FFFFFF" stroke="#E0E3E8"/>
+<rect x="481" y="718" width="10" height="10" rx="0" fill="none" stroke="#5B616C"/>
+<rect x="516" y="709" width="28" height="28" rx="3" fill="#FFFFFF" stroke="#E0E3E8"/>
+<path d="M526 721 L530 725" fill="none" stroke="#5B616C" stroke-width="1.5"/>
+<path d="M530 725 L534 721" fill="none" stroke="#5B616C" stroke-width="1.5"/>
+<text x="580" y="719" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="600" fill="#1D2129">文字双向居中 · 图标居中</text>
+<text x="580" y="745" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">统一命中区、内边距与控件间距</text>
+<path d="M40 820 L960 820" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="40" y="860" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="17" font-weight="600" fill="#1D2129">状态不引起布局跳动</text>
+<text x="40" y="892" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="400" fill="#5B616C">默认、悬停、选中、键盘焦点保持相同宽高；计数使用固定槽。</text>
+<text x="40" y="920" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="400" fill="#5B616C">日志、代码和输入正文左对齐；标签、按钮和图标在控件中居中。</text>
+<text x="40" y="964" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="11" font-weight="400" fill="#5B616C">设计示意，非应用截图。K210 与 STM32 各有一套 UI，共用标签、按钮和阅读细节规范。</text>
+</svg>
