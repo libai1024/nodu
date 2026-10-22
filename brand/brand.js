@@ -36,6 +36,7 @@
     const LABELS = {
         'brand-blue': '品牌蓝', signal: '点亮黄', 'on-signal': '点亮黄上的文字', ink: '芯片墨', paper: '丝印白',
         canvas: '画布', editor: '编辑区', panel: '面板', surface: '表面', raised: '抬升', hover: '悬停', border: '分隔线',
+        chrome: '界面框架', overlay: '浮层',
         'border-strong': '输入框边框', input: '输入底', text: '正文', 'text-2': '次要文字', 'text-muted': '弱化文字',
         'text-disabled': '禁用文字', terminal: '终端底', idle: '未连接', ok: '成功', warn: '警告', error: '错误',
         'idle-bg': '未连接底', 'ok-bg': '成功底', 'warn-bg': '警告底', 'error-bg': '错误底', 'signal-bg': '里程碑底',
@@ -132,7 +133,7 @@
             ramp('点亮黄色阶', '400 为品牌色；斜纹格（500–900）只用于印刷和插画',
                 N.yellowRamp.map(([step, hex]) => swatch(hex, step, { cls: `${step === '400' ? 'is-brand' : ''} ${Number(step) >= 500 ? 'print' : ''}` }))),
             ...THEMES.map(theme => ramp(theme === 'dark' ? '深色工作台 · 芯片墨' : '浅色工作台 · 丝印白',
-                theme === 'dark' ? '冷石墨，与蓝色同一色相' : '暖纸，保留阅读感，与点亮黄同调',
+                theme === 'dark' ? '冷石墨，与蓝色同一色相' : '纯白编辑区与浮层，冷灰界面框架，与芯片墨同一色相',
                 NEUTRAL_KEYS.map(([key, name]) => swatch(N.neutrals[theme][key], name))))
         );
     }

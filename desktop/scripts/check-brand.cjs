@@ -6,7 +6,8 @@
 // 2. A token pair misses its WCAG target (4.5:1 text, 3:1 UI and large text).
 // 3. Raster exports (PNG / ICO / ICNS) are missing or older than their SVG masters.
 // 4. Desktop UI source (tracked files in scope-extension/src and style) still uses a superseded
-//    v1 colour, or hardcodes a v2 brand colour instead of NODU_COLORS / --theia-* variables.
+//    colour (v1, or the v2.0 warm-paper light theme), or hardcodes a v2 brand colour instead of
+//    NODU_COLORS / --theia-* variables.
 // 5. The Electron window background is not the dark editor token.
 // Run from anywhere: node desktop/scripts/check-brand.cjs   (desktop: npm run check:brand)
 'use strict';
@@ -59,6 +60,9 @@ if (!fs.existsSync(manifest)) {
 const hexes = list => new Set(list.map(h => h.toUpperCase()));
 const legacy = hexes(T.legacy);
 const brand = hexes([...Object.values(T.core).map(c => c.hex), ...T.blueRamp.map(([, h]) => h), ...T.yellowRamp.map(([, h]) => h)]);
+// Silk White is pure white since v2.1. White on its own is a neutral primitive (text on scrims and
+// sample frames), not a brand signature, so it stays allowed as a literal.
+brand.delete('#FFFFFF');
 const tracked = execFileSync('git', ['ls-files', '-z', '--cached', '--', 'desktop/scope-extension/src', 'desktop/scope-extension/style'], { cwd: repo, encoding: 'utf8' })
     .split('\0').filter(f => /\.(tsx?|css)$/.test(f) && f !== GENERATED_IDE);
 let scanned = 0;
@@ -69,7 +73,7 @@ for (const rel of tracked) {
     text.split('\n').forEach((line, i) => {
         for (const match of line.matchAll(/#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b/g)) {
             const hex = match[0].slice(0, 7).toUpperCase();
-            if (legacy.has(hex)) fail('legacy', `${rel}:${i + 1} uses superseded v1 colour ${match[0]}`);
+            if (legacy.has(hex)) fail('legacy', `${rel}:${i + 1} uses superseded colour ${match[0]} (v1 blue or the v2.0 warm-paper light theme)`);
             else if (brand.has(hex)) fail('literal', `${rel}:${i + 1} hardcodes brand colour ${match[0]}; use NODU_COLORS or a --theia-* variable`);
         }
         if (/--theia-terminal-ansiBrightGreen/.test(line)) fail('semantic', `${rel}:${i + 1} borrows terminal green; use var(--theia-scope-ok)`);

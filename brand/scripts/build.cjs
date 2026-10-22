@@ -44,9 +44,10 @@ function masters() {
 function tokensCss() {
     const block = (sel, obj, extra = '') => `${sel} {\n${extra}${Object.entries(obj).map(([k, v]) => `  --nd-${k}: ${v};`).join('\n')}\n}\n`;
     const dark = T.resolve('dark'), light = T.resolve('light');
-    return `/* ${HEADER} */\n/* Nodu · 见微 brand tokens v${T.version}. Light by default; set data-theme="dark" on <html> for the dark workbench. */\n` +
-        block(':root,\n:root[data-theme="light"]', light, '  color-scheme: light;\n') +
-        block(':root[data-theme="dark"]', dark, '  color-scheme: dark;\n');
+    // Theme blocks match any element, so a demo inside the page can pin its own theme with data-theme.
+    return `/* ${HEADER} */\n/* Nodu · 见微 brand tokens v${T.version}. Light by default; set data-theme="dark" on <html> (or on any element) for the dark workbench. */\n` +
+        block(':root,\n[data-theme="light"]', light, '  color-scheme: light;\n') +
+        block('[data-theme="dark"]', dark, '  color-scheme: dark;\n');
 }
 function tokensJson() {
     const data = {

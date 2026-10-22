@@ -32,7 +32,7 @@ test('both themes define the same colour IDs, all valid hex', () => {
     }
 });
 
-test('no superseded v1 colour remains in the theme', () => {
+test('no superseded colour (v1, or the v2.0 warm-paper light theme) remains in the theme', () => {
     const legacy = new Set(tokens.legacy.map(h => h.toUpperCase()));
     for (const theme of ['dark', 'light']) {
         for (const [id, value] of Object.entries(workbenchColors(theme))) {

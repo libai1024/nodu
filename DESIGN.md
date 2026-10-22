@@ -1,13 +1,13 @@
 ---
 name: "Nodu · 见微"
 description: "面向 STM32、K210、ESP32 等主流 MCU 的嵌入式入门学习 IDE：点亮标志、电路板配色、芯片墨与丝印白工作台。"
-version: "brand v2 · 2026-10-21"
+version: "brand v2.1 · 2026-10-22（浅色主题改为纯白）"
 source: "brand/src/tokens.cjs（色值）· brand/src/geometry.cjs（标志）· brand/README.md（规则）"
 colors:
   nodu-blue: "#2F5BFF"
   blink-yellow: "#FFC23D"
   chip-ink: "#14171C"
-  silk-white: "#F6F5F0"
+  silk-white: "#FFFFFF"
   on-primary: "#FFFFFF"
   dark-editor: "#14171C"
   dark-panel: "#181B21"
@@ -18,10 +18,10 @@ colors:
   dark-muted: "#949CAA"
   dark-accent: "#8FA8FF"
   dark-primary-hover: "#3F68FF"
-  light-editor: "#F6F5F0"
-  light-panel: "#EFEDE6"
-  light-surface: "#E7E4DB"
-  light-border: "#D8D4C8"
+  light-editor: "#FFFFFF"
+  light-panel: "#F7F8FA"
+  light-surface: "#F0F2F5"
+  light-border: "#E0E3E8"
   light-text: "#1D2129"
   light-muted: "#5B616C"
   light-accent: "#2449DB"
@@ -83,7 +83,7 @@ components:
 
 - **Nodu 蓝 `#2F5BFF`**：主要动作、焦点、选中、进度、活动标记。白字 5.2:1，深浅主题共用同一个主按钮。
 - **点亮黄 `#FFC23D`**：标志灯罩与学习里程碑，只放在芯片墨上。
-- **芯片墨 `#14171C` / 丝印白 `#F6F5F0`**：深色与浅色工作台的基准面。
+- **芯片墨 `#14171C` / 丝印白 `#FFFFFF`**：深色与浅色工作台的基准面。浅色主题是纯白：编辑区、输入框、菜单与浮层为白色，工具栏、侧栏、底部面板与状态栏用冷灰 `#F7F8FA`，分隔线 `#E0E3E8`，与芯片墨同一色相，不用暖色纸面。
 - **状态**：未连接灰、连接中 / 进行中用主色族加脉冲、已连接绿、风险琥珀、错误红。每个颜色只说一件事，状态永远配文字。
 - **语义独立**：代码语法、终端 ANSI、直方图通道色与样例画面不随品牌色替换。
 - **对比度**：文字 ≥ 4.5:1，图标、边框、焦点环与大字 ≥ 3:1，由 `brand/scripts/build.cjs` 与 `desktop/scripts/check-brand.cjs` 自动校验。

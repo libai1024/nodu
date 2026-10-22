@@ -22,9 +22,10 @@ export function workbenchColors(type: NoduThemeType): Record<string, string> {
     const c = NODU_COLORS[type], n = NODU_NEUTRALS[type], syn = NODU_SYNTAX[type], find = NODU_FIND_MATCH[type];
     const dark = type === 'dark';
     // Neutral steps that differ by theme: dark rows lift towards light, light rows sink towards ink.
+    // c.chrome (toolbar, status bar, section headers) and c.overlay (menus, widgets) come from the tokens.
     const rowHover = dark ? c.raised : c.hover;
     const rowInactive = dark ? c.hover : c.raised;
-    const chrome = dark ? c.editor : c.surface;
+    const activityBar = dark ? c.editor : c.chrome;
     const secondaryHover = mix(c.text, c.raised, 0.08);
     const ansi: Record<string, string> = {};
     NODU_ANSI[type].forEach((hex, i) => { ansi[`terminal.ansi${i >= 8 ? 'Bright' : ''}${ANSI_KEYS[i % 8]}`] = hex; });
@@ -43,7 +44,7 @@ export function workbenchColors(type: NoduThemeType): Record<string, string> {
         'textSeparator.foreground': c.border,
         'icon.foreground': c['text-muted'],
         'widget.shadow': dark ? '#0000004D' : alpha(c.ink, 0.15),
-        'activityBar.background': chrome,
+        'activityBar.background': activityBar,
         'activityBar.foreground': c.text,
         'activityBar.inactiveForeground': c['text-disabled'],
         'activityBar.border': c.border,
@@ -54,7 +55,7 @@ export function workbenchColors(type: NoduThemeType): Record<string, string> {
         'sideBar.foreground': c['text-2'],
         'sideBar.border': c.border,
         'sideBarTitle.foreground': c.text,
-        'sideBarSectionHeader.background': c.surface,
+        'sideBarSectionHeader.background': c.chrome,
         'sideBarSectionHeader.foreground': c['text-2'],
         'sideBarSectionHeader.border': c.border,
         'editor.background': c.editor,
@@ -81,7 +82,7 @@ export function workbenchColors(type: NoduThemeType): Record<string, string> {
         'editorGroup.border': c.border,
         'editorGroupHeader.tabsBackground': c.panel,
         'editorGroupHeader.tabsBorder': c.border,
-        'editorWidget.background': c.surface,
+        'editorWidget.background': c.overlay,
         'editorWidget.foreground': c.text,
         'editorWidget.border': c.border,
         'tab.activeBackground': c.editor,
@@ -97,24 +98,24 @@ export function workbenchColors(type: NoduThemeType): Record<string, string> {
         'panelTitle.activeForeground': c.text,
         'panelTitle.activeBorder': c.marker,
         'panelTitle.inactiveForeground': c['text-muted'],
-        'panelSectionHeader.background': c.surface,
-        'titleBar.activeBackground': c.surface,
+        'panelSectionHeader.background': c.chrome,
+        'titleBar.activeBackground': c.chrome,
         'titleBar.activeForeground': c.text,
         'titleBar.inactiveBackground': c.panel,
         'titleBar.inactiveForeground': c['text-muted'],
         'titleBar.border': c.border,
         'menubar.selectionBackground': rowInactive,
         'menubar.selectionForeground': c.text,
-        'menu.background': c.surface,
+        'menu.background': c.overlay,
         'menu.foreground': c.text,
         'menu.border': c.border,
         'menu.selectionBackground': rowInactive,
         'menu.selectionForeground': c.text,
         'menu.separatorBackground': c.border,
-        'statusBar.background': c.surface,
+        'statusBar.background': c.chrome,
         'statusBar.foreground': c['text-2'],
         'statusBar.border': c.border,
-        'statusBar.noFolderBackground': c.surface,
+        'statusBar.noFolderBackground': c.chrome,
         'statusBar.debuggingBackground': c.soft,
         'statusBarItem.hoverBackground': rowInactive,
         'statusBarItem.prominentBackground': c.soft,
@@ -157,11 +158,11 @@ export function workbenchColors(type: NoduThemeType): Record<string, string> {
         'badge.background': c.raised,
         'badge.foreground': c.text,
         'progressBar.background': c.busy,
-        'quickInput.background': c.surface,
+        'quickInput.background': c.overlay,
         'quickInput.foreground': c.text,
         'quickInputTitle.background': c.raised,
         'notificationCenterHeader.background': c.raised,
-        'notifications.background': c.surface,
+        'notifications.background': c.overlay,
         'notifications.foreground': c.text,
         'notifications.border': c.border,
         'notificationsErrorIcon.foreground': c.error,

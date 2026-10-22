@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 // Nodu · 见微 brand tokens, v2 (2026-10-21): direction 02「点亮」, primary palette 「电路板」.
 // Single source of truth. brand/scripts/build.cjs derives brand/assets, brand/tokens.*, and
-// desktop/scope-extension/src/common/nodu-brand.ts from this file; desktop/scripts/check-brand.cjs
+// desktop/scope-extension/src/browser/nodu-brand.ts from this file; desktop/scripts/check-brand.cjs
 // fails when any of them drift. Change colours here, then run `node brand/scripts/build.cjs`.
 'use strict';
 
-const version = '2.0.0';
-const updated = '2026-10-21';
+// 2.1.0 (2026-10-22): the light theme moves from warm paper to clean white.
+const version = '2.1.0';
+const updated = '2026-10-22';
 
 // ---------- core ----------
 // Names describe the material they come from: a board, its silkscreen, a chip, a lit LED.
@@ -14,7 +15,7 @@ const core = {
     blue: { hex: '#2F5BFF', name: 'Nodu 蓝', en: 'Nodu Blue', role: '主要动作、焦点、选中、进度、活动标记' },
     yellow: { hex: '#FFC23D', name: '点亮黄', en: 'Blink Yellow', role: '标志灯罩与学习里程碑；只放在芯片墨上' },
     ink: { hex: '#14171C', name: '芯片墨', en: 'Chip Ink', role: '标志板体、深色工作台、浅底文字' },
-    paper: { hex: '#F6F5F0', name: '丝印白', en: 'Silk White', role: '浅色工作台、文档与官网阅读面、深底文字' }
+    paper: { hex: '#FFFFFF', name: '丝印白', en: 'Silk White', role: '浅色工作台、文档与官网阅读面、深底文字' }
 };
 
 // ---------- ramps ----------
@@ -34,7 +35,8 @@ const primary = {
 };
 
 // ---------- workbench neutrals ----------
-// Dark: cool graphite on the blue hue. Light: warm paper.
+// Dark: cool graphite on the blue hue. Light: clean white editor, inputs and overlays, with
+// cool-grey chrome on Chip Ink's hue (about 218°), so the page reads white rather than paper.
 const neutrals = {
     dark: {
         canvas: '#0F1115', editor: '#14171C', panel: '#181B21', surface: '#1D2027', raised: '#23272F', hover: '#2A2F38',
@@ -42,9 +44,9 @@ const neutrals = {
         text: '#E7EAEF', textSecondary: '#B9C0CB', textMuted: '#949CAA', textDisabled: '#6E7684', terminal: '#181B21'
     },
     light: {
-        canvas: '#E3E0D6', editor: '#F6F5F0', panel: '#EFEDE6', surface: '#E7E4DB', raised: '#DDD9CE', hover: '#E4E1D7',
-        border: '#D8D4C8', borderStrong: '#8A867A', input: '#FFFFFF',
-        text: '#1D2129', textSecondary: '#3E434C', textMuted: '#5B616C', textDisabled: '#A3A7AE', terminal: '#FAF9F5'
+        canvas: '#E9ECF0', editor: '#FFFFFF', panel: '#F7F8FA', surface: '#F0F2F5', raised: '#E7EAEE', hover: '#EDEFF3',
+        border: '#E0E3E8', borderStrong: '#868C97', input: '#FFFFFF',
+        text: '#1D2129', textSecondary: '#3E434C', textMuted: '#5B616C', textDisabled: '#A3A7AE', terminal: '#FFFFFF'
     }
 };
 
@@ -80,9 +82,11 @@ const findMatch = { dark: { match: '#5A5735', highlight: '#5A573580' }, light: {
 // The dome is always Blink Yellow on Chip Ink; the rim keeps the ink tile visible on dark docks.
 const logo = { tile: core.ink.hex, dome: core.yellow.hex, legs: '#FFFFFF', rim: '#2A2F38', rimSmall: '#3A404B' };
 
-// Superseded v1 colours (2026-10-19 blue / SCOPE mint). check-brand.cjs rejects them in app code.
+// Superseded colours. check-brand.cjs rejects them in app code: v1 (2026-10-19 blue / SCOPE mint),
+// then the v2.0 warm-paper light theme (2026-10-21), replaced by clean white in v2.1.
 const legacy = ['#4F7CFF', '#8EACFF', '#244BB0', '#E8EEFF', '#64C5AC', '#181D20', '#101827', '#101729', '#1C2226',
-    '#20272B', '#293338', '#303C41', '#344047', '#526068', '#E8ECE9', '#A9B7B9', '#85969B', '#C6D0CD', '#263C30', '#EDF8EF'];
+    '#20272B', '#293338', '#303C41', '#344047', '#526068', '#E8ECE9', '#A9B7B9', '#85969B', '#C6D0CD', '#263C30', '#EDF8EF',
+    '#F6F5F0', '#E3E0D6', '#EFEDE6', '#E7E4DB', '#DDD9CE', '#E4E1D7', '#D8D4C8', '#8A867A', '#FAF9F5'];
 
 // ---------- colour maths (WCAG 2.x) ----------
 function rgb(hex) {
@@ -115,6 +119,9 @@ function resolve(theme) {
     const t = {
         'brand-blue': core.blue.hex, signal: core.yellow.hex, 'on-signal': core.ink.hex, ink: core.ink.hex, paper: core.paper.hex,
         canvas: n.canvas, editor: n.editor, panel: n.panel, surface: n.surface, raised: n.raised, hover: n.hover,
+        // chrome: toolbar, status bar and section headers. overlay: menus, editor widgets, quick input, notifications.
+        // Dark keeps both on surface; light keeps chrome on the panel grey and floats overlays in white.
+        chrome: dark ? n.surface : n.panel, overlay: dark ? n.surface : n.editor,
         border: n.border, 'border-strong': n.borderStrong, input: n.input,
         text: n.text, 'text-2': n.textSecondary, 'text-muted': n.textMuted, 'text-disabled': n.textDisabled, terminal: n.terminal,
         primary: p.primary, 'on-primary': p.onPrimary, 'primary-hover': p.hover, 'primary-active': p.active,
@@ -142,6 +149,8 @@ function checks(theme) {
         ['正文 / 编辑区', 'text', 'editor', 4.5], ['正文 / 面板', 'text', 'panel', 4.5], ['正文 / 表面', 'text', 'surface', 4.5],
         ['次要文字 / 编辑区', 'text-2', 'editor', 4.5], ['弱化文字 / 编辑区', 'text-muted', 'editor', 4.5],
         ['弱化文字 / 面板', 'text-muted', 'panel', 4.5], ['弱化文字 / 表面', 'text-muted', 'surface', 4.5],
+        ['正文 / 界面框架', 'text', 'chrome', 4.5], ['弱化文字 / 界面框架', 'text-muted', 'chrome', 4.5],
+        ['正文 / 浮层', 'text', 'overlay', 4.5], ['弱化文字 / 浮层', 'text-muted', 'overlay', 4.5],
         ['强调文字与链接 / 编辑区', 'accent', 'editor', 4.5], ['强调文字与链接 / 面板', 'accent', 'panel', 4.5],
         ['强调文字与链接 / 表面', 'accent', 'surface', 4.5],
         ['主按钮文字 / 主按钮', 'on-primary', 'primary', 4.5], ['主按钮文字 / 悬停', 'on-primary', 'primary-hover', 4.5],
@@ -154,7 +163,8 @@ function checks(theme) {
         ['活动标记 / 编辑区', 'marker', 'editor', 3], ['活动标记 / 面板', 'marker', 'panel', 3],
         ['焦点环 / 编辑区', 'focus', 'editor', 3], ['焦点环 / 表面', 'focus', 'surface', 3],
         ['输入框边框 / 输入底', 'border-strong', 'input', 3], ['输入框边框 / 面板', 'border-strong', 'panel', 3],
-        ['主按钮 / 编辑区', 'primary', 'editor', 3],
+        ['主按钮 / 编辑区', 'primary', 'editor', 3], ['主按钮 / 界面框架', 'primary', 'chrome', 3],
+        ['焦点环 / 界面框架', 'focus', 'chrome', 3],
         ...['idle', 'busy', 'ok', 'warn', 'error'].map(k => [`${k} 状态点 / 表面`, k, 'surface', 3])
     ];
     for (const k of Object.keys(syntax[theme])) list.push([`语法 ${k} / 编辑区`, `syn-${k}`, 'editor', 4.5]);
