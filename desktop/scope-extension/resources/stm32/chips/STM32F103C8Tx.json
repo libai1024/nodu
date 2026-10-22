@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "STM32F103C8Tx",
+  "name": "STM32F103C8T6",
+  "family": "f1",
+  "series": "STM32F1xx",
+  "define": "STM32F103xB",
+  "core": "Cortex-M3",
+  "cpuFlags": [
+    "-mcpu=cortex-m3",
+    "-mfloat-abi=soft"
+  ],
+  "sdk": {
+    "id": "stm32cube-f1",
+    "dir": "cube-f1",
+    "version": "1.8.7"
+  },
+  "startup": "startup_stm32f103xb.s",
+  "flash": {
+    "base": 134217728,
+    "size": 65536,
+    "eraseUnit": "1 KB 页",
+    "pageSize": 1024
+  },
+  "ram": {
+    "base": 536870912,
+    "size": 20480
+  },
+  "deviceId": 1040,
+  "registers": {
+    "idcode": 3758366720,
+    "flashSize": 536868832,
+    "uid": 536868840,
+    "rdp": {
+      "address": 1073881116,
+      "mask": 2,
+      "level0": 0
+    }
+  },
+  "openocdTarget": "target/stm32f1x.cfg",
+  "bootUart": {
+    "instance": "USART1",
+    "tx": "PA9",
+    "rx": "PA10"
+  },
+  "notes": "Flash 容量寄存器在不少芯片上报告 128 KB；只要求不小于工程需要。",
+  "gpioPorts": "ABCD",
+  "elfCpu": "7-M",
+  "ramKiB": 20
+}

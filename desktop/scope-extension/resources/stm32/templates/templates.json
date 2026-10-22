@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "templates": [
+    { "id": "empty", "version": 1, "name": "空工程", "description": "时钟与 HAL 初始化，空的主循环", "needs": [] },
+    { "id": "uart-hello", "version": 1, "name": "串口输出", "description": "每秒从调试串口打印一行，在串口监视器中查看", "needs": ["debugUart"] },
+    { "id": "blink", "version": 1, "name": "LED 闪烁", "description": "LED0 每 500 ms 翻转，串口同步打印", "needs": ["debugUart", "led"] }
+  ],
+  "halModules": ["CORTEX", "DMA", "EXTI", "FLASH", "GPIO", "PWR", "RCC", "UART"]
+}
