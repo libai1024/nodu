@@ -1,0 +1,6 @@
+{
+  "bytes": 1048576,
+  "sha256": "5d94950ba7e1708599cee9f111df6b49b0a4bf06b51fae8b39dac85dc49b62e9",
+  "privateBackup": ".local/stm32-p0/backups/f407-before-p0.bin",
+  "note": "Full application Flash read before P0 write; no option bytes changed"
+}

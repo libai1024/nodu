@@ -38,3 +38,6 @@ backups/
 
 # Frozen tool manifests include these build logs.
 !/tools/flash-probe/**/build/build.log
+
+# STM32 P0 local tools, SDKs, builds and device backups.
+/.local/stm32-p0/

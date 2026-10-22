@@ -1,0 +1,26 @@
+["cmake", "-S", "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/tools/stm32-p0", "-B", "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f103c8", "-G", "Ninja", "-DCMAKE_TOOLCHAIN_FILE=/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/tools/stm32-p0/cmake/arm-gcc.cmake", "-DARM_TOOLCHAIN_ROOT=/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/tools/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi", "-DNODU_TARGET=f103c8", "-DSDK_ROOT=/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1"]
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f103c8
+
+exitCode=0
+["cmake", "--build", "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f103c8"]
+[1/12] Building C object CMakeFiles/firmware.dir/src/interrupts.c.obj
+[2/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c.obj
+[3/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c.obj
+[4/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/system_stm32f1xx.c.obj
+[5/12] Building C object CMakeFiles/firmware.dir/src/main.c.obj
+[6/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c.obj
+[7/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c.obj
+[8/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c.obj
+[9/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c.obj
+[10/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c.obj
+[11/12] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c.obj
+[12/12] Linking C executable firmware.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:        2624 B        64 KB      4.00%
+             RAM:        2600 B        20 KB     12.70%
+   text	   data	    bss	    dec	    hex	filename
+   2588	     36	   2564	   5188	   1444	/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f103c8/firmware.elf
+
+exitCode=0

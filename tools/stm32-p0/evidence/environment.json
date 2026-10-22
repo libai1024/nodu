@@ -1,0 +1,33 @@
+{
+  "gcc": {
+    "version": "arm-none-eabi-gcc (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 14.2.1 20241119",
+    "path": "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/tools/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-gcc",
+    "binarySha256": "07bfe9e74cfe028af639bf38703b2259c608aedee6ff991752084a10b82da614"
+  },
+  "gdb": {
+    "version": "GNU gdb (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 15.2.90.20241130-git",
+    "path": "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/tools/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-gdb",
+    "binarySha256": "20f9736aae55f47c54273a219cdc376d1377e25e0ab8d0ec14ea293b7c180103"
+  },
+  "cmake": {
+    "version": "cmake version 4.4.3",
+    "path": "/opt/homebrew/Cellar/cmake/4.4.3/bin/cmake",
+    "binarySha256": "01bb5214684f5390e96e0d6aef7aafd7415b77ecbcfd59f6b55b018d8de0d9a2"
+  },
+  "ninja": {
+    "version": "1.13.2",
+    "path": "/opt/homebrew/Cellar/ninja/1.13.2/bin/ninja",
+    "binarySha256": "2c9fb8385bf9e8b780fb2bdcd03353c28ee8c197508807514941a421cd80bd84"
+  },
+  "openocd": {
+    "version": "Open On-Chip Debugger 0.12.0",
+    "path": "/opt/homebrew/Cellar/open-ocd/0.12.0_1/bin/openocd",
+    "binarySha256": "a9fd35f31ece54a5f0fd2b906d52ad0acdbda55a59593898b7b8c8824f5f3202"
+  },
+  "stm32flash": {
+    "version": "0.7",
+    "path": "/opt/homebrew/Cellar/stm32flash/0.7/bin/stm32flash",
+    "binarySha256": "9c6263ab9252b73387a559806958fcd7f2de410120bb070798b15a872bff9063",
+    "cliSmokeOnly": "Error probing interface \"serial_posix\"\nCannot handle device \"/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/nonexistent-port\"\nFailed to open port: /Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/nonexistent-port\nstm32flash 0.7\n\nhttp://stm32flash.sourceforge.net/\n\n\n"
+  }
+}

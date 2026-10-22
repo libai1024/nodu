@@ -1,0 +1,20 @@
+{
+  "target": "f103c8",
+  "transport": "stlink",
+  "command": [
+    "openocd",
+    "-f",
+    "interface/stlink.cfg",
+    "-f",
+    "target/stm32f1x.cfg"
+  ],
+  "steps": [
+    "Select exactly one intended probe",
+    "Identify target and back up Flash",
+    "Check group ID plus capacity; reject mismatches before erase",
+    "Program immutable ELF and verify",
+    "Read back BIN and compare SHA256",
+    "Reset and inspect heartbeat at 0x20000000"
+  ],
+  "executed": false
+}

@@ -1,0 +1,6 @@
+{
+  "initialIssuesFixed": 4,
+  "hardwareEvidenceLifecycleFixed": true,
+  "hardwareMatrixComplete": false,
+  "independentReview": "read-only source review; no hardware access"
+}
