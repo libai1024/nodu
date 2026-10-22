@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>02 新建项目向导</title>
+<link rel="stylesheet" href="mockup.css">
+<style>
+    .dialog { left: 170px; top: 170px; width: 1100px; height: 540px; display: grid; grid-template-rows: 60px 1fr 72px; }
+    .head { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--border); }
+    .cols { display: grid; grid-template-columns: 230px 1fr 300px; min-height: 0; }
+    .col { padding: 18px 20px; border-right: 1px solid var(--border); overflow: hidden; }
+    .col:last-child { border-right: 0; }
+    .col .label { margin-bottom: 12px; }
+    .kind { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 6px; margin-bottom: 8px; border: 1px solid transparent; }
+    .kind b { font-size: 14px; } .kind span { color: var(--muted); font-size: 12px; }
+    .kind.on { background: var(--blue-soft); border-color: var(--blue); }
+    .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .board { padding: 12px; display: grid; grid-template-rows: 120px auto; gap: 10px; }
+    .board.on { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+    .pcb { border-radius: 4px; background: #0D2A1C; position: relative; overflow: hidden; }
+    .pcb.blue { background: #13235A; }
+    .pcb i.c { position: absolute; background: #0B0C0F; border-radius: 2px; }
+    .pcb i.h { position: absolute; height: 6px; background: repeating-linear-gradient(90deg, var(--gold) 0 3px, transparent 3px 7px); opacity: .85; }
+    .pcb i.u { position: absolute; width: 18px; height: 12px; background: #9AA3B2; border-radius: 2px; }
+    .bname { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13.5px; }
+    .bsub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .tags { display: flex; gap: 6px; margin-top: 8px; }
+    .tg { font-size: 11px; padding: 1px 6px; border-radius: 3px; background: var(--raised); color: var(--muted); border: 1px solid var(--border); }
+    .tg.ok { color: var(--ok); border-color: rgba(69,196,134,.35); background: rgba(69,196,134,.08); }
+    .tg.b { color: var(--blue-300); border-color: rgba(95,130,255,.35); background: var(--blue-soft); }
+    .tpl { padding: 12px 14px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--border); background: var(--raised); }
+    .tpl.on { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+    .tpl b { display: block; font-size: 13.5px; margin-bottom: 3px; } .tpl span { color: var(--muted); font-size: 12px; }
+    .tpl.dim { opacity: .5; }
+    .foot { display: grid; grid-template-columns: 70px 260px 60px 1fr auto auto; align-items: center; gap: 10px; padding: 0 24px; border-top: 1px solid var(--border); }
+    .foot .field { font-family: var(--mono); font-size: 12.5px; }
+    .foot .btn { height: 32px; padding: 0 16px; }
+</style>
+</head>
+<body>
+<div class="window">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span>Nodu</div>
+    <div class="toolbar"><div class="tb-start"><span class="mark-slot"></span><button class="btn ghost"><i data-i="folder"></i>未打开项目<i data-i="chevron"></i></button></div><div class="tb-center"></div><div class="tb-end"><button class="btn icon"><i data-i="more"></i></button></div></div>
+    <div class="body" style="grid-template-columns: 1fr; background: var(--editor)"></div>
+    <div class="status"><span>未打开项目</span></div>
+</div>
+<div class="scrim"></div>
+<div class="dialog" role="dialog" aria-label="新建项目">
+    <div class="head"><h2>新建项目</h2><button class="btn icon"><i data-i="x"></i></button></div>
+    <div class="cols">
+        <div class="col">
+            <div class="label">项目类型</div>
+            <div class="kind on"><b>STM32 · C 语言</b><span>官方 HAL 驱动，编译后下载到板上</span></div>
+            <div class="kind"><b>K210 · MicroPython</b><span>脚本直接在板上运行，带相机</span></div>
+        </div>
+        <div class="col">
+            <div class="label">开发板</div>
+            <div class="boards">
+                <div class="card board on">
+                    <div class="pcb blue"><i class="c" style="left:120px;top:36px;width:56px;height:56px"></i><i class="h" style="left:12px;top:10px;width:270px"></i><i class="h" style="left:12px;top:106px;width:270px"></i><i class="u" style="left:6px;top:52px"></i></div>
+                    <div><div class="bname">正点原子 探索者 F407</div><div class="bsub">STM32F407ZGT6 · 1 MB Flash · 192 KB RAM</div>
+                    <div class="tags"><span class="tg b">推荐</span><span class="tg ok">已验证</span></div></div>
+                </div>
+                <div class="card board">
+                    <div class="pcb"><i class="c" style="left:126px;top:44px;width:40px;height:40px"></i><i class="h" style="left:40px;top:14px;width:210px"></i><i class="h" style="left:40px;top:102px;width:210px"></i><i class="u" style="left:6px;top:56px"></i></div>
+                    <div><div class="bname">通用 F103C8 核心板</div><div class="bsub">STM32F103C8T6 · 64 KB Flash · 20 KB RAM</div>
+                    <div class="tags"><span class="tg">只含串口模板</span></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="label">模板</div>
+            <div class="tpl on"><b>LED 闪烁</b><span>LED0 每 0.5 秒闪烁一次，串口同步打印</span></div>
+            <div class="tpl"><b>串口打印 Hello</b><span>每秒在串口监视器打印一行</span></div>
+            <div class="tpl"><b>空工程</b><span>只有时钟和 HAL 初始化</span></div>
+        </div>
+    </div>
+    <div class="foot">
+        <span class="muted">项目名</span><span class="field">blink-f407</span>
+        <span class="muted">位置</span><span class="field">~/Nodu/<i data-i="folder"></i></span>
+        <button class="btn outline">取消</button><button class="btn primary">创建</button>
+    </div>
+</div>
+<div class="note">效果图 · 非运行截图 · 板子图为示意线框</div>
+<script src="icons.js"></script>
+</body>
+</html>

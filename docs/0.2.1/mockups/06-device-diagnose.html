@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>06 设备弹层与下载诊断</title>
+<link rel="stylesheet" href="mockup.css">
+<style>
+    .pop { position: absolute; left: 300px; top: 70px; width: 400px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 14px 40px rgba(0,0,0,.5); font-size: 12.5px; }
+    .sec { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    .sec:last-child { border-bottom: 0; }
+    .sec .label { margin-bottom: 8px; }
+    .row { display: flex; align-items: center; gap: 8px; }
+    .row + .row { margin-top: 8px; }
+    .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .seg span { padding: 4px 12px; }
+    .seg span.on { background: var(--blue-soft); color: var(--blue-300); box-shadow: inset 0 0 0 1px var(--blue); }
+    .field { flex: 1; font: 12px var(--mono); height: 28px; }
+    .bad { color: var(--error); }
+    .diag { position: absolute; left: 760px; top: 70px; width: 520px; padding: 18px 20px; background: var(--surface); border: 1px solid rgba(242,112,106,.45); border-radius: 8px; box-shadow: 0 14px 40px rgba(0,0,0,.5); }
+    .diag h3 { margin: 0 0 14px; display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--error); }
+    .chk { display: grid; grid-template-columns: 22px 1fr; gap: 6px; padding: 8px 0; border-top: 1px solid var(--border); }
+    .chk:first-of-type { border-top: 0; }
+    .chk .t { font-weight: 600; }
+    .chk .t.dim { font-weight: 400; color: var(--muted); }
+    .chk ul { margin: 6px 0 0; padding-left: 16px; color: #C3C9D3; line-height: 1.75; }
+    .chk a { color: var(--blue-300); text-decoration: none; }
+    .acts { display: flex; gap: 8px; margin-top: 14px; }
+    .acts .sp { flex: 1; }
+    .acts .btn { height: 30px; }
+    .dim-main { opacity: .4; }
+</style>
+</head>
+<body>
+<div class="window">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span>blink-f407 — Nodu</div>
+    <div class="toolbar">
+        <div class="tb-start">
+            <span class="mark-slot"></span>
+            <button class="btn ghost"><i data-i="folder"></i>blink-f407<i data-i="chevron"></i></button>
+            <button class="btn outline"><i data-i="build"></i>编译</button>
+            <span class="split"><button class="btn primary"><i data-i="play"></i>运行</button><button class="btn primary"><i data-i="chevron"></i></button></span>
+            <button class="btn icon"><i data-i="stop"></i></button>
+            <span class="chip" style="border-color: rgba(242,112,106,.5)"><span class="dot err"></span>探索者 F407<span class="sub">未检测到下载器</span><i data-i="chevron"></i></span>
+        </div>
+        <div class="tb-center"><span class="task error"><i data-i="xcircle"></i>下载失败 · 未检测到下载器</span></div>
+        <div class="tb-end"><button class="btn icon on"><i data-i="files"></i></button><button class="btn icon"><i data-i="panel"></i></button><button class="btn icon"><i data-i="more"></i></button></div>
+    </div>
+    <div class="body dim-main" style="grid-template-columns: 232px 1fr;">
+        <div class="side"><h4>资源管理器</h4></div>
+        <div class="main"><div class="tabs"><span class="tab on">main.c</span></div><div class="code"></div></div>
+    </div>
+    <div class="status"><span>探索者 F407 · STM32F407ZG</span><span>Flash 0.3 %</span><span>ST-LINK</span></div>
+</div>
+<div class="pop" role="dialog" aria-label="设备设置">
+    <div class="sec">
+        <div class="label">开发板</div>
+        <div class="row" style="justify-content: space-between"><b>正点原子 探索者 F407</b><span class="muted">STM32F407ZGT6</span></div>
+    </div>
+    <div class="sec">
+        <div class="label">下载方式</div>
+        <div class="row"><span class="seg"><span class="on">ST-LINK（SWD）</span><span>串口（ISP）</span></span></div>
+        <div class="row"><span class="muted" style="width:44px">下载器</span><span class="field">未检测到下载器<i data-i="chevron"></i></span><button class="btn icon"><i data-i="refresh"></i></button></div>
+    </div>
+    <div class="sec">
+        <div class="label">芯片</div>
+        <div class="row muted">上次识别：STM32F407 · 设备 ID 0x413 · 1024 KB · 10 分钟前</div>
+        <div class="row"><button class="btn outline">识别</button><button class="btn outline">复位开发板</button></div>
+    </div>
+    <div class="sec">
+        <div class="label">备份与恢复</div>
+        <div class="row" style="justify-content: space-between"><span>出厂程序 · 10 月 22 日 15:30 · 1 MB</span><button class="btn outline">恢复…</button></div>
+    </div>
+    <div class="sec row" style="justify-content: space-between"><span class="muted">STM32 工具包 2026.11.0 · 已安装</span><button class="btn ghost">管理</button></div>
+</div>
+<div class="diag" role="dialog" aria-label="下载失败：未检测到下载器">
+    <h3><i data-i="xcircle"></i>下载失败：未检测到下载器</h3>
+    <div class="chk"><span class="bad"><i data-i="xcircle"></i></span><div><div class="t">电脑检测到 ST-LINK</div>
+        <ul><li>换一根能传数据的 USB 线（有些线只能充电）</li><li>直接插电脑，不经过 USB 集线器</li><li>Windows：<a href="#">安装 ST-LINK 驱动 <i data-i="link"></i></a></li></ul></div></div>
+    <div class="chk"><span class="muted"><i data-i="circle"></i></span><div class="t dim">开发板供电（目标电压）</div></div>
+    <div class="chk"><span class="muted"><i data-i="circle"></i></span><div class="t dim">芯片应答（SWDIO / SWCLK / GND 接线）</div></div>
+    <div class="chk"><span class="muted"><i data-i="circle"></i></span><div class="t dim">芯片型号与工程一致</div></div>
+    <div class="acts"><button class="btn outline"><i data-i="usb"></i>改用串口下载</button><button class="btn ghost">查看日志</button><span class="sp"></span><button class="btn primary"><i data-i="refresh"></i>重试</button></div>
+</div>
+<div class="note">效果图 · 设备弹层（专业模式）与诊断卡同时显示仅为说明，实际一次只显示一个</div>
+<script src="icons.js"></script>
+</body>
+</html>

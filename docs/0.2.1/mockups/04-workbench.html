@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>04 C 工作台：编译错误与问题</title>
+<link rel="stylesheet" href="mockup.css">
+<style>
+    .col { display: grid; grid-template-rows: 1fr 264px; min-height: 0; min-width: 0; }
+    .prob { padding: 6px 0; font-size: 12.5px; overflow: hidden; }
+    .pf { display: flex; align-items: center; gap: 6px; height: 26px; padding: 0 14px; color: var(--text); font-weight: 600; }
+    .pf .cnt { margin-left: auto; color: var(--muted); font-weight: 400; }
+    .pi { display: grid; grid-template-columns: 18px 52px 1fr auto; column-gap: 8px; padding: 5px 14px 7px 30px; }
+    .pi.sel { background: var(--blue-soft); box-shadow: inset 2px 0 0 var(--blue); }
+    .pi .pos { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+    .pi .src { font-size: 11px; color: var(--muted); border: 1px solid var(--border); border-radius: 3px; padding: 0 5px; height: 18px; line-height: 16px; }
+    .pi .ex { grid-column: 3 / 5; color: #C3C9D3; margin-top: 2px; }
+    .pi .raw { grid-column: 3 / 5; color: var(--muted); font: 11.5px/1.5 var(--mono); margin-top: 2px; }
+    .pi .hint { grid-column: 3 / 5; margin-top: 2px; color: var(--blue-300); }
+    .hover { position: absolute; left: 140px; top: 384px; width: 500px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--raised); box-shadow: 0 10px 28px rgba(0,0,0,.4); font-size: 12.5px; }
+    .hover .t { display: flex; gap: 6px; align-items: center; font-weight: 600; color: var(--error); }
+    .hover p { margin: 4px 0 0; color: #C3C9D3; }
+    .hover .raw { margin-top: 6px; color: var(--muted); font: 11.5px/1.5 var(--mono); }
+</style>
+</head>
+<body>
+<div class="window">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span>blink-f407 — Nodu</div>
+    <div class="toolbar">
+        <div class="tb-start">
+            <span class="mark-slot"></span>
+            <button class="btn ghost"><i data-i="folder"></i>blink-f407<i data-i="chevron"></i></button>
+            <button class="btn outline"><i data-i="build"></i>编译</button>
+            <span class="split"><button class="btn primary"><i data-i="play"></i>运行</button><button class="btn primary"><i data-i="chevron"></i></button></span>
+            <button class="btn icon"><i data-i="stop"></i></button>
+            <span class="chip"><span class="dot ok"></span>探索者 F407<span class="sub">ST-LINK</span><i data-i="chevron"></i></span>
+        </div>
+        <div class="tb-center"><span class="task error"><i data-i="xcircle"></i>2 个错误 · 1 个警告</span></div>
+        <div class="tb-end">
+            <button class="btn icon on"><i data-i="files"></i></button>
+            <button class="btn icon on rel"><i data-i="panel"></i><span class="badge">2</span></button>
+            <button class="btn icon"><i data-i="more"></i></button>
+        </div>
+    </div>
+    <div class="body" style="grid-template-columns: 232px 1fr;">
+        <div class="side">
+            <h4>资源管理器</h4>
+            <div class="tree">
+                <div style="--d:0"><i data-i="chevron"></i>blink-f407</div>
+                <div style="--d:1"><i data-i="right"></i>App</div>
+                <div style="--d:1"><i data-i="right"></i>Board</div>
+                <div style="--d:1"><i data-i="chevron"></i>Core</div>
+                <div style="--d:2"><i data-i="right"></i>Inc</div>
+                <div style="--d:2"><i data-i="chevron"></i>Src</div>
+                <div style="--d:3" class="sel"><span class="err">●</span>main.c</div>
+                <div style="--d:3" class="f">stm32f4xx_hal_msp.c</div>
+                <div style="--d:3" class="f">stm32f4xx_it.c</div>
+                <div style="--d:3" class="f">syscalls.c</div>
+                <div style="--d:3" class="f">system_stm32f4xx.c</div>
+                <div style="--d:1"><i data-i="right"></i>Linker</div>
+                <div style="--d:1"><i data-i="right"></i>Startup</div>
+                <div style="--d:1" class="f">CMakeLists.txt</div>
+                <div style="--d:1" class="f">nodu.json</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="main">
+                <div class="tabs">
+                    <span class="tab on"><span class="err">●</span>main.c<i data-i="x"></i></span>
+                    <span class="tab"><i data-i="lock"></i>stm32f4xx_hal_gpio.h<span class="ro">只读 · HAL F4 1.28.3</span></span>
+                </div>
+                <div class="code">
+                    <div class="ln"><span class="n">1</span><span class="pp">#include</span> <span class="st">"main.h"</span></div>
+                    <div class="ln"><span class="n">2</span><span class="pp">#include</span> <span class="st">"board.h"</span></div>
+                    <div class="ln"><span class="n">3</span><span class="pp">#include</span> <span class="st">&lt;stdio.h&gt;</span></div>
+                    <div class="ln"><span class="n">4</span></div>
+                    <div class="ln"><span class="n">5</span><span class="ty">int</span> <span class="fn">main</span>(<span class="ty">void</span>)</div>
+                    <div class="ln"><span class="n">6</span>{</div>
+                    <div class="ln"><span class="n">7</span>    <span class="fn">HAL_Init</span>();</div>
+                    <div class="ln"><span class="n">8</span>    <span class="fn">SystemClock_Config</span>();</div>
+                    <div class="ln"><span class="n">9</span>    <span class="fn">board_uart_init</span>();</div>
+                    <div class="ln"><span class="n">10</span>    <span class="fn">board_led_init</span>();</div>
+                    <div class="ln"><span class="n">11</span></div>
+                    <div class="ln"><span class="n">12</span>    <span class="ty">uint32_t</span> count = <span class="nu">0</span>;</div>
+                    <div class="ln"><span class="n">13</span>    <span class="ty">uint32_t</span> <span class="squig w">start</span> = <span class="fn">HAL_GetTick</span>();</div>
+                    <div class="ln"><span class="n">14</span>    <span class="fn">printf</span>(<span class="st">"Hello from Nodu\r\n"</span>);</div>
+                    <div class="ln"><span class="n">15</span></div>
+                    <div class="ln"><span class="n">16</span>    <span class="kw">while</span> (<span class="nu">1</span>) {</div>
+                    <div class="ln cur"><span class="n">17</span>        <span class="squig">HAL_GPIO_TogglePn</span>(<span class="ma">LED0_GPIO_Port</span>, <span class="ma">LED0_Pin</span>);</div>
+                    <div class="ln"><span class="n">18</span>        <span class="fn">printf</span>(<span class="st">"LED toggle #%lu\r\n"</span>, count++)</div>
+                    <div class="ln"><span class="n">19</span>        <span class="squig">HAL_Delay</span>(<span class="nu">500</span>);</div>
+                    <div class="ln"><span class="n">20</span>    }</div>
+                    <div class="ln"><span class="n">21</span>}</div>
+                    <div class="hover">
+                        <div class="t"><i data-i="xcircle"></i>HAL_GPIO_TogglePn 未声明 <span class="src" style="margin-left:auto;color:var(--muted);font-weight:400">编译</span></div>
+                        <p>使用前没有看到它的声明。检查拼写，或包含声明它的头文件。</p>
+                        <p class="blue">你是不是要用 HAL_GPIO_TogglePin？</p>
+                        <div class="raw">implicit declaration of function 'HAL_GPIO_TogglePn'; did you mean 'HAL_GPIO_TogglePin'? [-Wimplicit-function-declaration]</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="ptabs">
+                    <span class="ptab on">问题 <span class="count e">2</span></span>
+                    <span class="ptab">串口监视器</span>
+                    <span class="ptab">编译输出</span>
+                    <span class="ptools"><button class="btn icon"><i data-i="xcircle"></i></button><button class="btn icon"><i data-i="x"></i></button></span>
+                </div>
+                <div class="prob">
+                    <div class="pf"><i data-i="chevron"></i><i data-i="file"></i>Core/Src/main.c<span class="cnt">3</span></div>
+                    <div class="pi sel">
+                        <span class="err"><i data-i="xcircle"></i></span><span class="pos">17:9</span><span>HAL_GPIO_TogglePn 未声明</span><span class="src">编译</span>
+                        <span class="ex">使用前没有看到它的声明。检查拼写，或包含声明它的头文件。</span>
+                        <span class="hint">你是不是要用 HAL_GPIO_TogglePin？</span>
+                        <span class="raw">implicit declaration of function 'HAL_GPIO_TogglePn'</span>
+                    </div>
+                    <div class="pi">
+                        <span class="err"><i data-i="xcircle"></i></span><span class="pos">19:9</span><span>可能缺少分号</span><span class="src">编译</span>
+                        <span class="ex">上一条语句（第 18 行）末尾可能缺少分号。这类错误常报在下一行。</span>
+                        <span class="raw">expected ';' before 'HAL_Delay'</span>
+                    </div>
+                    <div class="pi">
+                        <span class="warn"><i data-i="warn"></i></span><span class="pos">13:14</span><span>变量 start 未使用</span><span class="src">编译</span>
+                        <span class="ex">变量定义了但没有使用。删除，或确认是否忘了使用它。</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status">
+        <span>探索者 F407 · STM32F407ZG</span><span>Flash —</span>
+        <span class="r"><span>行 17，列 9</span><span>C</span></span>
+    </div>
+</div>
+<script src="icons.js"></script>
+</body>
+</html>
