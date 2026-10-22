@@ -108,3 +108,8 @@
 .nodu-picker-current { display: flex; align-items: center; gap: 8px; font-size: 12px; }
 .nodu-picker-current > span { display: flex; flex-direction: column; min-width: 0; }
 .nodu-picker-current .scope-mono { color: var(--theia-descriptionForeground); font-size: 11px; }
+.scope-widget .nodu-picker-family { min-height: 40px; }
+.nodu-picker-family .nodu-picker-label { display: flex; flex-direction: column; line-height: 1.35; }
+.nodu-picker-family .nodu-picker-label > strong { font-weight: 600; }
+.nodu-picker-family .nodu-picker-label > span { color: var(--theia-descriptionForeground); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+.scope-widget .nodu-picker-family:disabled { opacity: .55; }

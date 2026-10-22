@@ -6,8 +6,35 @@ import type { SerialPortInfo } from './generated/SerialPortInfo';
 
 export type BoardProfile = 'embedfire-cam-gc2145' | 'generic-k210';
 
+export type BoardFamilyId = 'k210' | 'stm32' | 'esp32';
+
+export interface BoardFamily {
+    id: BoardFamilyId;
+    label: string;
+    /** One line under the name, e.g. the runtime the boards use. */
+    detail: string;
+    /** Families without a device backend on main are listed but cannot be picked. */
+    available: boolean;
+    /** Shown instead of the board count while unavailable. */
+    status?: string;
+}
+
+/** First step of the simple-mode picker. Only K210 has a backend on main. */
+export const BOARD_FAMILIES: readonly BoardFamily[] = [
+    { id: 'k210', label: 'K210', detail: 'Kendryte K210 · MaixPy', available: true },
+    // STM32 HAL build/flash/monitor is on spec/2026-10-20_validate-stm32-hal (docs/0.2.1, M0).
+    { id: 'stm32', label: 'STM32', detail: 'STM32 · C 语言（HAL）', available: false, status: '开发中（0.2.1）' },
+    // docs/0.2.1/PRD.md lists ESP32 as out of scope for 0.2.1.
+    { id: 'esp32', label: 'ESP32', detail: 'Espressif ESP32', available: false, status: '规划中' },
+];
+
+export function familyById(id: string | undefined): BoardFamily | undefined {
+    return BOARD_FAMILIES.find(family => family.id === id);
+}
+
 export interface BoardPreset {
     id: string;
+    family: BoardFamilyId;
     label: string;
     profile: BoardProfile;
     /** Original MaixPy IDE board id 0–8 (connect reset sequence). */
@@ -16,17 +43,21 @@ export interface BoardPreset {
 
 /** 野火 first (the project's camera board), then the original 选择开发板 order. */
 export const BOARD_PRESETS: readonly BoardPreset[] = [
-    { id: 'embedfire-k210-cam', label: '野火 K210 CAM', profile: 'embedfire-cam-gc2145', boardId: 2 },
-    { id: 'maix-dock', label: 'Sipeed Maix Dock', profile: 'generic-k210', boardId: 2 },
-    { id: 'maix-bit-mic', label: 'Sipeed Maix Bit（带麦克风）', profile: 'generic-k210', boardId: 6 },
-    { id: 'maix-bit-old', label: 'Sipeed Maix Bit（旧版）', profile: 'generic-k210', boardId: 1 },
-    { id: 'maixduino', label: 'Sipeed Maixduino', profile: 'generic-k210', boardId: 5 },
-    { id: 'maix-go-new', label: 'Sipeed Maix Go（新版 CMSIS-DAP）', profile: 'generic-k210', boardId: 3 },
-    { id: 'maix-go-old', label: 'Sipeed Maix Go（旧版 CMSIS-DAP）', profile: 'generic-k210', boardId: 4 },
-    { id: 'm5stickv', label: 'M5StickV', profile: 'generic-k210', boardId: 7 },
-    { id: 't-watch', label: 'T-Watch', profile: 'generic-k210', boardId: 8 },
-    { id: 'kd233', label: 'Kendryte KD233', profile: 'generic-k210', boardId: 0 },
+    { id: 'embedfire-k210-cam', family: 'k210', label: '野火 K210 CAM', profile: 'embedfire-cam-gc2145', boardId: 2 },
+    { id: 'maix-dock', family: 'k210', label: 'Sipeed Maix Dock', profile: 'generic-k210', boardId: 2 },
+    { id: 'maix-bit-mic', family: 'k210', label: 'Sipeed Maix Bit（带麦克风）', profile: 'generic-k210', boardId: 6 },
+    { id: 'maix-bit-old', family: 'k210', label: 'Sipeed Maix Bit（旧版）', profile: 'generic-k210', boardId: 1 },
+    { id: 'maixduino', family: 'k210', label: 'Sipeed Maixduino', profile: 'generic-k210', boardId: 5 },
+    { id: 'maix-go-new', family: 'k210', label: 'Sipeed Maix Go（新版 CMSIS-DAP）', profile: 'generic-k210', boardId: 3 },
+    { id: 'maix-go-old', family: 'k210', label: 'Sipeed Maix Go（旧版 CMSIS-DAP）', profile: 'generic-k210', boardId: 4 },
+    { id: 'm5stickv', family: 'k210', label: 'M5StickV', profile: 'generic-k210', boardId: 7 },
+    { id: 't-watch', family: 'k210', label: 'T-Watch', profile: 'generic-k210', boardId: 8 },
+    { id: 'kd233', family: 'k210', label: 'Kendryte KD233', profile: 'generic-k210', boardId: 0 },
 ];
+
+export function presetsIn(family: BoardFamilyId): BoardPreset[] {
+    return BOARD_PRESETS.filter(preset => preset.family === family);
+}
 
 export function presetById(id: string | undefined): BoardPreset | undefined {
     return BOARD_PRESETS.find(preset => preset.id === id);

@@ -1,18 +1,21 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
 import { SerialPortInfo } from '../common/nodu-device-protocol';
-import { BOARD_PRESETS, BoardPreset, boardPorts, resolvePort, shortPortName } from '../common/nodu-board-presets';
+import { BOARD_FAMILIES, BoardFamilyId, BoardPreset, boardPorts, familyById, presetsIn, resolvePort, shortPortName } from '../common/nodu-board-presets';
 import { NoduDeviceModel } from './nodu-device-client';
 
 interface Props { model: NoduDeviceModel; onConnected?: () => void; showBoardGuide?: () => void; }
 
 /**
- * Simple-mode device picker: pick the board on the desk and it connects.
+ * Simple-mode device picker: chip family, then the board on the desk, and it connects.
+ * With a remembered board it opens on that family's boards (one click to reconnect).
  * The port is chosen automatically when only one USB serial device is
  * present (or the remembered one is); otherwise a second step lists them.
  * Nothing here connects without a click: connecting resets a K210.
  */
 export function NoduBoardPicker({ model, onConnected, showBoardGuide }: Props): React.ReactElement {
+    // undefined: follow the remembered board's family; null: the user went back to the family list.
+    const [familyChoice, setFamilyChoice] = React.useState<BoardFamilyId | null | undefined>();
     const [choosing, setChoosing] = React.useState<BoardPreset | undefined>();
     const [showAll, setShowAll] = React.useState(false);
     const [target, setTarget] = React.useState<string | undefined>();
@@ -54,7 +57,7 @@ export function NoduBoardPicker({ model, onConnected, showBoardGuide }: Props): 
         const hidden = model.ports.length - candidates.length;
         return <div className="nodu-picker" aria-label={`为 ${choosing.label} 选择串口`}>
             <div className="nodu-picker-step">
-                <button className="scope-text-button" onClick={() => setChoosing(undefined)} disabled={connecting}><i className="codicon codicon-arrow-left" aria-hidden="true" />开发板</button>
+                <button className="scope-text-button" onClick={() => setChoosing(undefined)} disabled={connecting}><i className="codicon codicon-arrow-left" aria-hidden="true" />{familyById(choosing.family)?.label ?? ''} 开发板</button>
                 <span>{choosing.label}</span>
             </div>
             {listed.length === 0
@@ -79,8 +82,32 @@ export function NoduBoardPicker({ model, onConnected, showBoardGuide }: Props): 
     }
 
     const last = model.rememberedPreset;
-    const presets = last ? [last, ...BOARD_PRESETS.filter(preset => preset !== last)] : BOARD_PRESETS;
-    return <div className="nodu-picker" aria-label="选择开发板">
+    const family = familyById(familyChoice === undefined ? last?.family : familyChoice ?? undefined);
+    if (!family?.available) {
+        return <div className="nodu-picker" aria-label="选择芯片系列">
+            <p className="nodu-picker-hint">先选择开发板使用的芯片系列。</p>
+            <ul className="nodu-picker-list">{BOARD_FAMILIES.map(entry => {
+                const count = presetsIn(entry.id).length;
+                return <li key={entry.id}>
+                    <button className="nodu-picker-item nodu-picker-family" disabled={!entry.available} onClick={() => setFamilyChoice(entry.id)}
+                        title={entry.available ? undefined : `${entry.label} 支持${entry.status ?? '尚未完成'}，暂不能连接`}>
+                        <i className="codicon codicon-chip" aria-hidden="true" />
+                        <span className="nodu-picker-label"><strong>{entry.label}</strong><span>{entry.detail}</span></span>
+                        <span className="nodu-picker-meta">{entry.available ? `${count} 款开发板` : entry.status}</span>
+                        {entry.available && <i className="codicon codicon-chevron-right" aria-hidden="true" />}
+                    </button>
+                </li>;
+            })}</ul>
+        </div>;
+    }
+
+    const boards = presetsIn(family.id);
+    const presets = last && last.family === family.id ? [last, ...boards.filter(preset => preset !== last)] : boards;
+    return <div className="nodu-picker" aria-label={`选择 ${family.label} 开发板`}>
+        <div className="nodu-picker-step">
+            <button className="scope-text-button" onClick={() => setFamilyChoice(null)} disabled={connecting}><i className="codicon codicon-arrow-left" aria-hidden="true" />芯片系列</button>
+            <span>{family.label}</span>
+        </div>
         <p className="nodu-picker-hint">选择桌上的开发板，Nodu 会找到它的串口并连接。连接时开发板会复位。</p>
         <ul className="nodu-picker-list">{presets.map(preset => <li key={preset.id}>
             <button className="nodu-picker-item" disabled={blocked} aria-busy={target === preset.id || undefined} onClick={() => void pick(preset)}>

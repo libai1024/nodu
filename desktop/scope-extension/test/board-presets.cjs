@@ -2,7 +2,7 @@
 // Simple-mode board picker data (run after npm run compile).
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { BOARD_PRESETS, boardPorts, resolvePort, presetFor, shortPortName } = require('../lib/common/nodu-board-presets');
+const { BOARD_FAMILIES, BOARD_PRESETS, boardPorts, resolvePort, presetFor, presetsIn, shortPortName } = require('../lib/common/nodu-board-presets');
 const { BOARD_MENU } = require('../lib/common/nodu-tools-menu');
 
 test('every original board id is reachable and labels are unique', () => {
@@ -43,4 +43,16 @@ test('port resolution: serial number, then path, then the only candidate; never 
 test('short port names', () => {
     assert.equal(shortPortName('/dev/cu.usbserial-3120'), 'cu.usbserial-3120');
     assert.equal(shortPortName('COM5'), 'COM5');
+});
+
+test('families: only K210 is pickable, every preset belongs to a listed family', () => {
+    assert.deepEqual(BOARD_FAMILIES.map(family => family.id), ['k210', 'stm32', 'esp32']);
+    assert.deepEqual(BOARD_FAMILIES.filter(family => family.available).map(family => family.id), ['k210']);
+    for (const family of BOARD_FAMILIES) {
+        assert.equal('family' in family, false, family.id);
+        if (!family.available) { assert.ok(family.status, family.id); assert.equal(presetsIn(family.id).length, 0, family.id); }
+    }
+    assert.equal(presetsIn('k210').length, BOARD_PRESETS.length);
+    const ids = new Set(BOARD_FAMILIES.map(family => family.id));
+    for (const preset of BOARD_PRESETS) { assert.ok(ids.has(preset.family), preset.id); }
 });
