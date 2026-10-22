@@ -39,6 +39,7 @@ import { NoduEmbeddedPanel } from './nodu-embedded-panel';
 import { NoduEmbeddedContribution } from './nodu-embedded-contribution';
 import { NoduBottomPanelWidget, NoduBottomPanelContribution } from './nodu-bottom-panel';
 import { NoduShellPanelWidget } from './nodu-shell-panel';
+import { NoduProblemsPanel } from './nodu-problems-panel';
 import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-creation-handler';
 import { NoduClangdClient } from './nodu-clangd-client';
 
@@ -48,10 +49,11 @@ export default new ContainerModule(bind => {
     bind(NoduEmbeddedModel).toSelf().inSingletonScope();
     bind(NoduEmbeddedPanel).toSelf();
     bind(NoduShellPanelWidget).toSelf().inSingletonScope();
+    bind(NoduProblemsPanel).toSelf().inSingletonScope();
     bind(NoduBottomPanelWidget).toSelf().inSingletonScope();
     bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduBottomPanelWidget.ID, createWidget: () => ctx.container.get(NoduBottomPanelWidget) })).inSingletonScope();
     bind(NoduBottomPanelContribution).toSelf().inSingletonScope();
-    for (const contribution of [CommandContribution, MenuContribution, TerminalCreationHandler]) {
+    for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution, TerminalCreationHandler]) {
         bind(contribution).toService(NoduBottomPanelContribution);
     }
     bind(NoduEmbeddedContribution).toSelf().inSingletonScope();

@@ -57,8 +57,7 @@
 /* Lumino treats max-width:0 as infinity, so the positive subpixel bound is intentional. */
 .nodu-simple #theia-left-content-panel.theia-mod-collapsed,
 .nodu-simple #theia-right-content-panel.theia-mod-collapsed { min-width: 0 !important; max-width: .1px !important; width: 0 !important; overflow: hidden; }
-.nodu-simple #theia-right-content-panel .lm-TabBar,
-.nodu-simple #theia-bottom-content-panel .lm-TabBar { display: none !important; min-height: 0 !important; max-height: .1px !important; }
+.nodu-simple #theia-right-content-panel .lm-TabBar { display: none !important; min-height: 0 !important; max-height: .1px !important; }
 .nodu-simple #theia-statusBar #status-bar-bottom-panel-toggle,
 .nodu-simple #theia-statusBar #status-bar-problem-marker-status,
 .nodu-simple #theia-statusBar #status-bar-theia-notification-center,

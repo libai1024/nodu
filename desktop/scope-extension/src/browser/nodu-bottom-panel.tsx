@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
-import { ApplicationShell, BaseWidget, BoxLayout, ReactWidget, StackedPanel, Widget, WidgetManager, WidgetOpenerOptions } from '@theia/core/lib/browser';
-import { CommandContribution, CommandRegistry, CommandService, Emitter, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
+import { ApplicationShell, BaseWidget, BoxLayout, FrontendApplicationContribution, ReactWidget, StackedPanel, Widget, WidgetManager, WidgetOpenerOptions } from '@theia/core/lib/browser';
+import { CommandContribution, CommandRegistry, CommandService, DisposableCollection, Emitter, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
 import { ContextMenuRenderer } from '@theia/core/lib/browser/context-menu-renderer';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-creation-handler';
@@ -12,9 +12,10 @@ import { NoduEmbeddedPanel } from './nodu-embedded-panel';
 import { NoduEmbeddedModel, PanelTab } from './nodu-embedded-model';
 import { NoduDeviceModel } from './nodu-device-client';
 import { NoduShellPanelWidget } from './nodu-shell-panel';
+import { NoduProblemsPanel } from './nodu-problems-panel';
 import '../../style/bottom-panel.css';
 
-export type BottomPage = 'output' | 'repl' | 'monitor' | 'terminal';
+export type BottomPage = 'output' | 'repl' | 'monitor' | 'terminal' | 'problems';
 const PANEL_MENU = ['nodu-bottom-panel-menu'];
 
 /** One docked owner, with a distinct page set for each project platform. */
@@ -25,12 +26,17 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     @inject(NoduConsoleWidget) protected readonly console!: NoduConsoleWidget;
     @inject(NoduEmbeddedPanel) protected readonly embeddedPanel!: NoduEmbeddedPanel;
     @inject(NoduShellPanelWidget) protected readonly terminalPanel!: NoduShellPanelWidget;
+    @inject(NoduProblemsPanel) protected readonly problemsPanel!: NoduProblemsPanel;
     @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     @inject(CommandService) protected readonly commands!: CommandService;
     @inject(ContextMenuRenderer) protected readonly menus!: ContextMenuRenderer;
+    @inject(MenuModelRegistry) protected readonly menuRegistry!: MenuModelRegistry;
+    @inject(CommandRegistry) protected readonly commandRegistry!: CommandRegistry;
+    private readonly menuEntries = new DisposableCollection();
+    private readonly problemAliases = new Set<Widget>();
     private readonly tracked = new Emitter<Widget[]>();
     readonly onDidChangeTrackableWidgets = this.tracked.event;
     private readonly stack = new StackedPanel();
@@ -60,11 +66,14 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
         this.stack.addClass('nodu-bottom-pages');
         this.stack.node.setAttribute('role', 'tabpanel');
         this.stack.node.id = 'nodu-bottom-page';
-        for (const widget of [this.console, this.embeddedPanel, this.terminalPanel]) {
+        for (const widget of [this.console, this.embeddedPanel, this.terminalPanel, this.problemsPanel]) {
             this.stack.addWidget(widget);
             widget.hide();
         }
         this.toDispose.push(this.tracked);
+        this.toDispose.push(this.menuEntries);
+        this.toDispose.push(this.problemsPanel.onDidChangeProblems(() => this.refreshStatus()));
+        this.toDispose.push(this.shell.bottomPanel.onDidChangeCurrent(() => this.syncDockTabs()));
         this.toDispose.push(this.terminalPanel.onDidChangeTrackableWidgets(() => this.tracked.fire(this.getTrackableWidgets())));
         this.toDispose.push(this.embedded.onDidChange(() => this.refreshPlatform()));
         this.toDispose.push(this.device.onDidChange(() => this.refreshStatus()));
@@ -88,8 +97,9 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
             // Native panel shortcuts also need to dismiss the maximized overlay.
             if (this.maximized && this.shell.bottomPanel.isHidden) { this.shell.doToggleMaximized(this.shell.bottomPanel); }
             this.refreshStatus();
+            this.syncDockTabs();
         });
-        dockObserver.observe(this.shell.bottomPanel.node, { attributes: true, attributeFilter: ['class'] });
+        dockObserver.observe(this.shell.bottomPanel.node, { attributes: true, childList: true, attributeFilter: ['class'] });
         this.toDispose.push({ dispose: () => dockObserver.disconnect() });
         this.toDispose.push({ dispose: () => { this.resizeObserver?.disconnect(); if (this.saveSizeTimer) { clearTimeout(this.saveSizeTimer); } } });
     }
@@ -97,8 +107,9 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     get isSTM32(): boolean { return this.platform === 'stm32'; }
     get activePage(): BottomPage { return this.selected; }
     get maximized(): boolean { return this.shell.bottomPanel.node.classList.contains('theia-maximized'); }
+    get problemCounts(): { errors: number; warnings: number; infos: number; total: number } { return this.problemsPanel.counts; }
     get tabs(): ReadonlyArray<{ id: BottomPage; label: string; status?: string }> {
-        return this.isSTM32 ? [
+        const tabs: Array<{ id: BottomPage; label: string; status?: string }> = this.isSTM32 ? [
             { id: 'output', label: '构建与下载', status: this.embedded.errors.length ? `${this.embedded.errors.length} 个错误` : this.embedded.busy ? '任务进行中' : undefined },
             { id: 'monitor', label: '串口监视', status: this.embedded.monitor.state === 'open' ? '串口已连接' : undefined },
             { id: 'terminal', label: '终端' },
@@ -107,6 +118,21 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
             { id: 'repl', label: 'Python 交互' },
             { id: 'terminal', label: '终端' },
         ];
+        if (this.selected === 'problems') { tabs.push({ id: 'problems', label: '问题' }); }
+        return tabs;
+    }
+
+    private syncDockTabs(): void {
+        let changed = false;
+        for (const bar of this.shell.bottomAreaTabBars) {
+            const hide = bar.currentTitle?.owner === this;
+            if (bar.hasClass('nodu-bottom-owner-tabs') !== hide) {
+                bar.toggleClass('nodu-bottom-owner-tabs', hide);
+                bar.fit();
+                changed = true;
+            }
+        }
+        if (changed) { this.shell.bottomPanel.fit(); }
     }
 
     private storageKey(name: string): string { return `nodu.bottom.${name}:${this.workspacePath}:${this.platform}`; }
@@ -127,23 +153,25 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     }
     private restorePage(): void {
         const saved = this.read('page');
-        this.selected = this.tabs.some(tab => tab.id === saved) ? saved as BottomPage : 'output';
+        this.selected = saved === 'problems' || this.tabs.some(tab => tab.id === saved) ? saved as BottomPage : 'output';
         // Restoring a page never creates a terminal or opens a device connection.
         this.showSelected();
     }
     private refreshStatus(): void {
-        const signature = JSON.stringify([this.platform, this.selected, this.tabs, this.maximized]);
+        const signature = JSON.stringify([this.platform, this.selected, this.tabs, this.maximized, this.problemCounts]);
         if (signature !== this.statusSignature) { this.statusSignature = signature; this.header.update(); }
     }
     async selectPage(page: BottomPage, createTerminal = true): Promise<void> {
-        if (!this.tabs.some(tab => tab.id === page)) { return; }
+        if (page !== 'problems' && !this.tabs.some(tab => tab.id === page)) { return; }
         this.selected = page;
         this.remember('page', page);
         this.showSelected();
+        requestAnimationFrame(() => this.header.node.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' }));
         if (page === 'terminal' && createTerminal) { await this.terminalPanel.ensureSession(); }
     }
     showEmbedded(tab: PanelTab = 'output'): void {
         this.refreshPlatform();
+        if (tab === 'problems') { void this.selectPage('problems', false); return; }
         this.selected = tab === 'monitor' ? 'monitor' : 'output';
         this.embeddedPanel.setView(tab);
         this.remember('page', this.selected);
@@ -151,7 +179,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     }
     private showSelected(embeddedTab?: PanelTab): void {
         if (!this.header) { return; }
-        const child = this.selected === 'terminal' ? this.terminalPanel : this.isSTM32 ? this.embeddedPanel : this.console;
+        const child = this.selected === 'problems' ? this.problemsPanel : this.selected === 'terminal' ? this.terminalPanel : this.isSTM32 ? this.embeddedPanel : this.console;
         if (child === this.console) { this.console.setView(this.selected === 'repl' ? 'repl' : 'output'); }
         if (child === this.embeddedPanel) { this.embeddedPanel.setView(embeddedTab ?? (this.selected === 'monitor' ? 'monitor' : 'output')); }
         for (const widget of this.stack.widgets) { widget.setHidden(widget !== child); }
@@ -161,13 +189,26 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
         this.stack.fit();
         child.fit();
     }
-    async adoptTerminal(terminal: TerminalWidget, options?: WidgetOpenerOptions): Promise<void> {
-        await this.selectPage('terminal', false);
-        this.terminalPanel.adopt(terminal, options);
+    async adoptTerminal(terminal: TerminalWidget, options?: WidgetOpenerOptions, reveal = true): Promise<void> {
+        if (reveal) { await this.selectPage('terminal', false); }
+        this.terminalPanel.adopt(terminal, options, reveal);
         this.tracked.fire(this.getTrackableWidgets());
     }
-    getTrackableWidgets(): Widget[] { return [this.console, this.embeddedPanel, this.terminalPanel]; }
+    /** Keep framework references valid while all Problems entry points reveal one view. */
+    adoptProblemsAlias(widget: Widget): void {
+        if (this.problemAliases.has(widget)) { return; }
+        this.problemAliases.add(widget);
+        this.stack.addWidget(widget);
+        widget.hide();
+        widget.disposed.connect(() => this.problemAliases.delete(widget));
+        this.tracked.fire(this.getTrackableWidgets());
+    }
+    getTrackableWidgets(): Widget[] { return [this.console, this.embeddedPanel, this.terminalPanel, this.problemsPanel, ...this.problemAliases]; }
     revealWidget(id: string): Widget | undefined {
+        if (id === this.problemsPanel.id || [...this.problemAliases].some(widget => widget.id === id)) {
+            void this.selectPage('problems', false);
+            return this.problemsPanel;
+        }
         if (this.terminalPanel.getTrackableWidgets().some(widget => widget.id === id) || id === this.terminalPanel.id) {
             void this.selectPage('terminal', false);
             return id === this.terminalPanel.id ? this.terminalPanel : this.terminalPanel.revealWidget(id);
@@ -184,7 +225,20 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
         super.onActivateRequest(msg);
         this.header.node.querySelector<HTMLButtonElement>('[aria-selected="true"]')?.focus();
     }
-    openMenu(element: HTMLElement): void { const rect = element.getBoundingClientRect(); this.menus.render({ menuPath: PANEL_MENU, anchor: { x: rect.left, y: rect.bottom }, context: this.node }); }
+    openMenu(element: HTMLElement): void {
+        this.menuEntries.dispose();
+        const views = this.shell.getWidgets('bottom').filter(widget => widget !== this && !(widget instanceof TerminalWidget));
+        if (views.length) {
+            this.menuEntries.push(this.menuRegistry.registerSubmenu([...PANEL_MENU, '1-tools'], '其他面板'));
+            for (const [index, widget] of views.entries()) {
+                const id = `nodu.panel.reveal.${widget.id}`;
+                this.menuEntries.push(this.commandRegistry.registerCommand({ id, label: widget.title.label }, { execute: () => this.shell.activateWidget(widget.id) }));
+                this.menuEntries.push(this.menuRegistry.registerMenuAction([...PANEL_MENU, '1-tools'], { commandId: id, order: String(index) }));
+            }
+        }
+        const rect = element.getBoundingClientRect();
+        this.menus.render({ menuPath: PANEL_MENU, anchor: { x: rect.left, y: rect.bottom }, context: this.node });
+    }
     collapse(): void { if (this.maximized) { this.toggleMaximized(); } void this.shell.collapsePanel('bottom'); }
     toggleMaximized(): void { this.shell.toggleMaximized(this); this.header.update(); }
     resizeBy(delta: number): void {
@@ -228,6 +282,9 @@ class BottomPanelHeader extends ReactWidget {
                 </button>)}
             </div>
             <div className="nodu-bottom-chrome">
+                {this.owner.activePage !== 'problems' && this.owner.problemCounts.total > 0 && <button className="nodu-panel-icon nodu-problems-toggle"
+                    aria-label={`问题：${this.owner.problemCounts.errors} 个错误，${this.owner.problemCounts.warnings} 个警告`} title="问题 · ⌘/Ctrl+Shift+M"
+                    onClick={() => void this.owner.selectPage('problems', false)}><i className={`codicon codicon-${this.owner.problemCounts.errors ? 'error' : 'warning'}`} aria-hidden="true"/><span>{this.owner.problemCounts.total}</span></button>}
                 <button className="nodu-panel-icon" aria-label="面板更多操作" title="面板更多操作" onClick={event => this.owner.openMenu(event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
                 <button className="nodu-panel-icon" aria-label={this.owner.maximized ? '恢复面板大小' : '最大化面板'} title={this.owner.maximized ? '恢复面板大小' : '最大化面板'} onClick={() => this.owner.toggleMaximized()}><i className={`codicon codicon-${this.owner.maximized ? 'screen-normal' : 'screen-full'}`} aria-hidden="true"/></button>
                 <button className="nodu-panel-icon" aria-label="收起面板" title="收起面板 · ⌘/Ctrl+J" onClick={() => this.owner.collapse()}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
@@ -238,10 +295,38 @@ class BottomPanelHeader extends ReactWidget {
 
 /** Standard Theia terminal commands use the same dock owner and real PTYs. */
 @injectable()
-export class NoduBottomPanelContribution implements TerminalCreationHandler, CommandContribution, MenuContribution {
+export class NoduBottomPanelContribution implements TerminalCreationHandler, CommandContribution, MenuContribution, FrontendApplicationContribution {
     readonly priority = 0;
     @inject(WidgetManager) protected readonly widgets!: WidgetManager;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    private readonly disposables = new DisposableCollection();
+    private owner?: NoduBottomPanelWidget;
+    async onDidInitializeLayout(): Promise<void> {
+        const owner = this.owner = await this.panel(false);
+        this.disposables.push(this.shell.onDidAddWidget(widget => {
+            // Let addWidget finish focus registration before moving the same live widget.
+            queueMicrotask(() => {
+                if (!this.owner || widget.isDisposed || !this.shell.getWidgets('bottom').includes(widget)) { return; }
+                if (widget instanceof TerminalWidget) { void this.owner.adoptTerminal(widget, undefined, false); }
+                else if (widget.id === 'problems') { this.owner.adoptProblemsAlias(widget); }
+            });
+        }));
+        const existing = this.shell.getWidgets('bottom');
+        // Parents first: a restored split must join its original terminal session.
+        const terminals = existing.filter((widget): widget is TerminalWidget => widget instanceof TerminalWidget);
+        const pending = new Set(terminals);
+        while (pending.size) {
+            const ready = [...pending].find(terminal => {
+                const location = terminal.location;
+                return typeof location !== 'object' || !('parentTerminal' in location)
+                    || ![...pending].some(parent => parent.id === location.parentTerminal);
+            }) ?? [...pending][0];
+            pending.delete(ready);
+            await owner.adoptTerminal(ready, undefined, false);
+        }
+        for (const widget of existing) { if (widget.id === 'problems') { owner.adoptProblemsAlias(widget); } }
+    }
+    onStop(): void { this.owner = undefined; this.disposables.dispose(); }
     private async panel(reveal = true): Promise<NoduBottomPanelWidget> {
         const panel = await this.widgets.getOrCreateWidget<NoduBottomPanelWidget>(NoduBottomPanelWidget.ID);
         if (!this.shell.getAreaFor(panel)) { await this.shell.addWidget(panel, { area: 'bottom', rank: 50 }); }
@@ -256,6 +341,12 @@ export class NoduBottomPanelContribution implements TerminalCreationHandler, Com
         return true;
     }
     registerCommands(registry: CommandRegistry): void {
+        registry.registerCommand({ id: 'nodu.panel.problems', label: '问题', category: '见微 Nodu' }, {
+            execute: async () => { const panel = await this.panel(); await panel.selectPage('problems', false); await this.shell.activateWidget(panel.revealWidget('nodu:problems-panel')!.id); },
+        });
+        this.disposables.push(registry.registerHandler('problemsView:toggle', {
+            execute: () => registry.executeCommand('nodu.panel.problems'),
+        }));
         registry.registerCommand({ id: 'scope.show-terminal', label: '显示终端', category: '见微 Nodu' }, {
             execute: async () => { const panel = await this.panel(); await panel.selectPage('terminal'); },
         });
@@ -282,11 +373,12 @@ export class NoduBottomPanelContribution implements TerminalCreationHandler, Com
         }
     }
     registerMenus(menus: MenuModelRegistry): void {
+        menus.registerMenuAction([...PANEL_MENU, '0-pages'], { commandId: 'nodu.panel.problems', order: '9' });
         for (const [index, page] of ['output-k210', 'repl', 'output-stm32', 'monitor', 'terminal'].entries()) {
             menus.registerMenuAction([...PANEL_MENU, '0-pages'], { commandId: `nodu.panel.page.${page}`, order: String(index) });
         }
         for (const [index, commandId] of ['nodu.panel.grow', 'nodu.panel.shrink', 'nodu.panel.maximize', 'nodu.panel.collapse'].entries()) {
-            menus.registerMenuAction([...PANEL_MENU, '1-size'], { commandId, order: String(index) });
+            menus.registerMenuAction([...PANEL_MENU, '2-size'], { commandId, order: String(index) });
         }
     }
 }

@@ -5,9 +5,6 @@ import { KeybindingRegistry, ReactWidget } from '@theia/core/lib/browser';
 import { CommandRegistry } from '@theia/core/lib/common/command';
 import { ContextKeyService } from '@theia/core/lib/browser/context-key-service';
 import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
-import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
-import { URI } from '@theia/core/lib/common/uri';
-import { Diagnostic } from '../common/nodu-embedded-protocol';
 import { parseSerialDraft, serialHex, SerialEnding, SerialFormat } from '../common/nodu-serial-data';
 import { NoduEmbeddedModel, PanelTab, MonitorLine, formatBytes } from './nodu-embedded-model';
 import { NoduSelect } from './nodu-select';
@@ -19,7 +16,6 @@ export class NoduEmbeddedPanel extends ReactWidget {
     static readonly ID = 'nodu:c-panel';
     static readonly LABEL = '构建与下载';
     @inject(NoduEmbeddedModel) protected readonly model!: NoduEmbeddedModel;
-    @inject(EditorManager) protected readonly editors!: EditorManager;
     @inject(ClipboardService) protected readonly clipboard!: ClipboardService;
     @inject(CommandRegistry) protected readonly commandRegistry!: CommandRegistry;
     @inject(KeybindingRegistry) protected readonly keybindings!: KeybindingRegistry;
@@ -78,6 +74,10 @@ export class NoduEmbeddedPanel extends ReactWidget {
     }
 
     public setView(view: PanelTab): void {
+        if (view === 'problems') {
+            void this.commandRegistry.executeCommand('nodu.panel.problems');
+            return;
+        }
         if (view === this.currentView) { return; }
         this.readingState.set(this.currentView, { follow: this.follow, query: this.query, searching: this.searching, scrollTop: this.logRef.current?.scrollTop || 0 });
         this.currentView = view;
@@ -101,13 +101,6 @@ export class NoduEmbeddedPanel extends ReactWidget {
         const following = node.scrollHeight - node.scrollTop - node.clientHeight < 24;
         if (following !== this.follow) { this.follow = following; this.update(); }
     };
-
-    private async open(d: Diagnostic): Promise<void> {
-        if (!d.absolute) { return; }
-        const line = Math.max(0, (d.line ?? 1) - 1);
-        const character = Math.max(0, (d.column ?? 1) - 1);
-        await this.editors.open(URI.fromFilePath(this.model.toLocal(d.absolute)), { mode: 'activate', selection: { start: { line, character }, end: { line, character } } });
-    }
 
     private icon(name: string, label: string, action: () => void, pressed?: boolean): React.ReactNode {
         return <button className="nodu-ep-icon" title={label} aria-label={label} aria-pressed={pressed} onClick={action}>
@@ -221,10 +214,6 @@ export class NoduEmbeddedPanel extends ReactWidget {
     private buildContext(): React.ReactNode {
         const model = this.model;
         return <div className="nodu-ep-context">
-            <div className="nodu-ep-segment" aria-label="构建内容">
-                <button aria-pressed={model.panelTab === 'output'} onClick={() => this.setView('output')}>输出</button>
-                <button aria-pressed={model.panelTab === 'problems'} onClick={() => this.setView('problems')}>诊断{model.errors.length ? ` ${model.errors.length}` : ''}</button>
-            </div>
             <span className="nodu-ep-context-note">{model.busy && <i className="codicon codicon-loading codicon-modifier-spin" role="status" aria-label={model.task?.text || '处理中'} title={model.task?.text}/>}</span>
             {this.readingActions(false)}
         </div>;
@@ -234,10 +223,10 @@ export class NoduEmbeddedPanel extends ReactWidget {
         const model = this.model;
         return <>
             {model.awaitUser === 'exitBoot' && <div className="nodu-ep-notice" role="status"><span>请恢复 BOOT 配置并复位。</span><button onClick={() => void model.finishBoot()}>已恢复并复位</button></div>}
-            {model.panelTab === 'problems' ? <div className="nodu-ep-diagnostics">{this.problems()}</div> :
-                <div ref={this.logRef} className="nodu-ep-log" tabIndex={0} aria-label="构建与下载输出" onScroll={this.onScroll}>
-                    {model.output.map((line, index) => <div key={index}>{this.highlight(line) || '\u00a0'}</div>)}
-                </div>}
+            <div ref={this.logRef} className="nodu-ep-log" tabIndex={0} aria-label="构建与下载输出" onScroll={this.onScroll}>
+                {model.output.map((line, index) => <div key={index}>{this.highlight(line) || '\u00a0'}</div>)}
+            </div>
+            {this.capacity()}
         </>;
     }
 
@@ -334,12 +323,12 @@ export class NoduEmbeddedPanel extends ReactWidget {
         </>;
     }
 
-    private problems(): React.ReactNode {
+    private capacity(): React.ReactNode {
         const build = this.model.lastBuild;
         if (!build) { return null; }
         const flash = build.capacity?.FLASH;
         const ram = build.capacity?.RAM;
-        const capacity = flash && ram ? <div className="nodu-c-capacity" aria-label="容量">
+        return flash && ram ? <div className="nodu-c-capacity" aria-label="容量">
             {[['Flash', flash], ['RAM', ram]].map(([name, region]) => {
                 const r = region as { used: number; size: number; percent: number };
                 return <div key={name as string} className={`nodu-c-meter${r.percent > 90 ? ' nodu-c-meter-high' : ''}`}>
@@ -349,27 +338,6 @@ export class NoduEmbeddedPanel extends ReactWidget {
                 </div>;
             })}
         </div> : null;
-        if (!build.diagnostics.length) {
-            return <div>{capacity}<p className="nodu-c-empty">{build.ok ? '没有错误或警告。' : '编译失败，但没有可定位的错误。切换到“输出”查看原文。'}</p></div>;
-        }
-        return <div>
-            {capacity}
-            <ul className="nodu-c-problems" aria-label="编译问题">
-                {build.diagnostics.map((d, index) => <li key={index} className={`nodu-c-problem nodu-c-${d.severity}`}>
-                    <button className="nodu-c-problem-head" onClick={() => void this.open(d)} disabled={!d.absolute}>
-                        <i className={`codicon codicon-${d.severity === 'error' ? 'error' : 'warning'}`} aria-label={d.severity === 'error' ? '错误' : '警告'}/>
-                        <span className="nodu-c-problem-title">{d.explanation?.title ?? d.message}</span>
-                        {d.file && <span className="nodu-c-problem-where">{d.file}{d.line ? `:${d.line}` : ''}{d.column ? `:${d.column}` : ''}</span>}
-                    </button>
-                    {d.explanation && <div className="nodu-c-problem-body">
-                        <p>{d.explanation.explain}</p>
-                        <p><strong>改法：</strong>{d.explanation.fix}</p>
-                    </div>}
-                    <p className="nodu-c-problem-raw">{d.inSdk ? '来自 HAL，通常由工程代码的用法引起 · ' : ''}编译器原文：{d.message}</p>
-                    {d.notes?.map((note, i) => <p key={i} className="nodu-c-problem-raw">↳ {note.file}:{note.line} {note.message}</p>)}
-                </li>)}
-            </ul>
-        </div>;
     }
 
 }

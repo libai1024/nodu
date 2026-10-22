@@ -227,6 +227,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     @inject(OpenerService) protected readonly opener!: OpenerService;
     @inject(MenuModelRegistry) protected readonly menuRegistry!: MenuModelRegistry;
     @inject(NoduBoardFilesContribution) protected readonly boardFiles!: NoduBoardFilesContribution;
+    @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     protected readonly toDispose = new DisposableCollection();
     // Each panel auto-opens at most once per session (first run / first frame);
     // a manual toggle also counts, so a panel the user closed never pops back.
@@ -234,6 +235,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private readonly linkedProjectSubmenus = new Set<string>();
     private layoutQueue: Promise<unknown> = Promise.resolve();
     private layoutApplied = false;
+    private layoutPlatform: 'k210' | 'stm32' = 'k210';
     private syncFrame: number | undefined;
     private geometry = '';
     // Traceback navigation: the editor that started the current run, plus the
@@ -242,8 +244,8 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private tracebackTail = '';
     private tracebackDecorations: string[] = [];
     private readonly panelProfiles = {
-        simple: { files: false, console: true, vision: false },
-        pro: { files: true, console: true, vision: true }
+        simple: { files: false, vision: false },
+        pro: { files: true, vision: true }
     };
 
     private serializeLayout(action: () => Promise<unknown>): Promise<unknown> {
@@ -336,7 +338,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.toolbar.onBeforeMenu = path => { if (path === NODU_PROJECT_MENU) { this.linkProjectSubmenus(); } };
         let lastDeviceStatus = '';
         this.toDispose.push(this.device.onDidChange(() => {
-            if (this.device.frame && !this.autoRevealed.vision) { this.autoReveal('vision'); }
+            if (!this.embedded.isC && this.device.frame && !this.autoRevealed.vision) { this.autoReveal('vision'); }
             const next = `${this.device.statusLabel}:${this.device.state.port || ''}:${this.device.state.fps ?? ''}:${this.device.state.firmware ?? ''}`;
             if (next !== lastDeviceStatus) { lastDeviceStatus = next; this.updateStatus(); }
         }));
@@ -346,6 +348,11 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         }));
         this.toDispose.push(this.workspace.onWorkspaceChanged(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目')));
         void this.workspace.roots.then(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目'));
+        this.toDispose.push(this.embedded.onDidChange(() => {
+            if (this.layoutApplied && this.layoutPlatform !== (this.embedded.isC ? 'stm32' : 'k210')) {
+                void this.serializeLayout(() => this.applyPlatformLayout());
+            }
+        }));
         this.updateStatus();
     }
 
@@ -370,6 +377,12 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
 
     protected updateStatus(): void {
+        if (this.embedded.isC) {
+            for (const item of ['scope:device', 'scope:demo', 'scope:firmware', 'scope:serial-port', 'scope:fps']) {
+                this.status.removeElement(item);
+            }
+            return;
+        }
         // Original right-side items keep the label with an empty value while
         // disconnected; FPS stays visible in simple mode like before.
         const fps = this.device.state.fps;
@@ -393,7 +406,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     protected async applyLayout(mode: 'simple' | 'pro'): Promise<void> {
         if (this.layoutApplied) {
             this.syncPanels();
-            this.panelProfiles[this.layoutState.mode] = { files: this.layoutState.filesVisible, console: this.layoutState.consoleVisible, vision: this.layoutState.visionVisible };
+            const previous = this.panelProfiles[this.layoutState.mode];
+            previous.files = this.layoutState.filesVisible;
+            // STM32 has no camera panel; do not overwrite the user's K210 preference.
+            if (this.layoutPlatform === 'k210') { previous.vision = this.layoutState.visionVisible; }
         }
         this.layoutState.setMode(mode);
         document.body.classList.toggle('nodu-simple', mode === 'simple');
@@ -405,14 +421,36 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         await this.ensureSimplePanel(this.filesWidget(), 'left');
         await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right');
         await this.ensureSimplePanel(this.consoleView.tryGetWidget(), 'bottom');
-        await Promise.all([this.shell.collapsePanel('left'), this.shell.collapsePanel('right'), this.shell.collapsePanel('bottom')]);
         // Professional mode docks 开发板文件 beside the local explorer (added, not revealed).
         if (mode === 'pro' && !this.boardFiles.tryGetWidget()?.isAttached) { await this.boardFiles.openView({ activate: false, reveal: false }); }
         const profile = this.panelProfiles[mode];
         if (profile.files) { await this.navigator.openView({ reveal: true, activate: false }); }
-        if (profile.vision) { await this.vision.openView({ reveal: true, activate: false }); }
-        if (profile.console) { await this.showConsole(false); }
+        else { await this.shell.collapsePanel('left'); }
+        if (!this.embedded.isC && profile.vision) { await this.vision.openView({ reveal: true, activate: false }); }
+        else { await this.shell.collapsePanel('right'); }
+        // The bottom area has one shared visibility, active page and set of sessions.
+        // Changing the surrounding layout must not hide/reveal it or move focus.
+        if (!this.layoutApplied) { await this.showConsole(false); }
+        this.layoutPlatform = this.embedded.isC ? 'stm32' : 'k210';
         this.layoutApplied = true;
+        this.updateStatus();
+        await this.settlePanels();
+    }
+
+    private async applyPlatformLayout(): Promise<void> {
+        const platform = this.embedded.isC ? 'stm32' : 'k210';
+        if (!this.layoutApplied || platform === this.layoutPlatform) { return; }
+        this.syncPanels();
+        const profile = this.panelProfiles[this.layoutState.mode];
+        if (this.layoutPlatform === 'k210') { profile.vision = this.layoutState.visionVisible; }
+        this.layoutPlatform = platform;
+        if (platform === 'stm32') {
+            // Leave an unrelated right-side tool alone when it is the active view.
+            if (this.layoutState.visionVisible) { await this.shell.collapsePanel('right'); }
+        } else if (profile.vision) {
+            await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right');
+            await this.vision.openView({ reveal: true, activate: false });
+        }
         this.updateStatus();
         await this.settlePanels();
     }
@@ -453,9 +491,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private autoReveal(panel: 'console' | 'vision'): void {
         // Frames may already be flowing when the page loads; the startup layout would collapse the
         // panel again and the one-shot would be spent. Keep it for the first frame after layout.
-        if (this.autoRevealed[panel] || !this.layoutApplied) { return; }
+        if (this.autoRevealed[panel] || !this.layoutApplied || (panel === 'vision' && this.embedded.isC)) { return; }
         this.autoRevealed[panel] = true;
         void this.serializeLayout(async () => {
+            if (panel === 'vision' && this.embedded.isC) { return; }
             this.syncPanels();
             if (panel === 'console' && !this.layoutState.consoleVisible) { await this.showConsole(false); }
             if (panel === 'vision' && !this.layoutState.visionVisible) {

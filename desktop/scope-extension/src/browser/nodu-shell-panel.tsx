@@ -6,7 +6,8 @@ import {
     StackedPanel, Widget, WidgetOpenerOptions
 } from '@theia/core/lib/browser';
 import { SingleTextInputDialog } from '@theia/core/lib/browser/dialogs';
-import { DisposableCollection, Emitter, URI } from '@theia/core/lib/common';
+import { ContextMenuRenderer } from '@theia/core/lib/browser/context-menu-renderer';
+import { CommandRegistry, DisposableCollection, Emitter, MenuModelRegistry, URI } from '@theia/core/lib/common';
 import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
 import { TerminalWidget } from '@theia/terminal/lib/browser/base/terminal-widget';
 import { ShellTerminalServerProxy } from '@theia/terminal/lib/common/shell-terminal-protocol';
@@ -15,6 +16,7 @@ import { NoduSelect } from './nodu-select';
 import '../../style/shell-panel.css';
 
 export type TerminalOpenerOptions = WidgetOpenerOptions;
+const SHELL_MORE_MENU = ['nodu-shell-more'];
 
 interface ShellSession {
     readonly id: string;
@@ -46,6 +48,9 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
     @inject(TerminalService) protected readonly terminals!: TerminalService;
     @inject(ShellTerminalServerProxy) protected readonly terminalServer!: ShellTerminalServerProxy;
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
+    @inject(CommandRegistry) protected readonly commands!: CommandRegistry;
+    @inject(MenuModelRegistry) protected readonly menuRegistry!: MenuModelRegistry;
+    @inject(ContextMenuRenderer) protected readonly menus!: ContextMenuRenderer;
 
     private readonly sessions: ShellSession[] = [];
     private readonly terminalListeners = new Map<TerminalWidget, DisposableCollection>();
@@ -69,6 +74,7 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
         this.title.closable = false;
         this.addClass('nodu-shell-panel');
         this.node.setAttribute('aria-label', '本机终端');
+        this.registerMenu();
 
         const layout = new BoxLayout({ direction: 'top-to-bottom', spacing: 0 });
         this.layout = layout;
@@ -119,10 +125,12 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
 
     /**
      * Take ownership of a terminal already started by the caller.
-     * This deliberately does not call start() or TerminalService.open().
+     * This deliberately does not call start(), close() or TerminalService.open().
+     * Silent adoption preserves the selected session and focus. When no session is
+     * selected yet, the first one is prepared without activating its terminal.
      */
-    adopt(terminal: TerminalWidget, options?: TerminalOpenerOptions): void {
-        this.adoptInWorkspace(terminal, options, this.workspaceUri, this.workspaceName);
+    adopt(terminal: TerminalWidget, options?: TerminalOpenerOptions, reveal = true): void {
+        this.adoptInWorkspace(terminal, options, this.workspaceUri, this.workspaceName, reveal);
     }
 
     private adoptInWorkspace(terminal: TerminalWidget, options: TerminalOpenerOptions | undefined,
@@ -155,16 +163,19 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
             // Lumino reparents the widget and delivers its attach/resize messages.
             session.panel.addWidget(terminal);
             session.terminals.push(terminal);
-            session.active = terminal;
             this.watchTerminal(terminal);
             this.trackedChanged.fire(this.getTrackableWidgets());
         }
-        session.active = terminal;
+        // The session panel owns visibility; showing a child cannot reveal a
+        // background session or the bottom panel itself.
         terminal.show();
         if (reveal) {
+            session.active = terminal;
             this.failure = '';
             this.selectSession(session);
             if (options?.mode !== 'reveal') { terminal.activate(); }
+        } else if (!this.selected && session.workspaceUri === this.workspaceUri) {
+            this.selectSession(session);
         } else { this.refresh(); }
     }
 
@@ -336,8 +347,7 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
         });
     }
 
-    private async renameTerminal(): Promise<void> {
-        const terminal = this.currentTerminal();
+    private async renameTerminal(terminal = this.currentTerminal()): Promise<void> {
         if (!terminal) { return; }
         const name = await new SingleTextInputDialog({
             title: '重命名终端', initialValue: terminal.title.label,
@@ -355,6 +365,35 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
         this.empty?.update();
     }
 
+    private menuTerminal(id?: string): TerminalWidget | undefined {
+        const terminal = id ? this.getTrackableWidgets().find(widget => widget.id === id) as TerminalWidget | undefined : this.currentTerminal();
+        return terminal && !terminal.isDisposed ? terminal : undefined;
+    }
+
+    private registerMenu(): void {
+        const actions = [
+            { id: 'nodu.shell.find', label: '查找终端内容', run: (terminal: TerminalWidget) => terminal.getSearchBox().show() },
+            { id: 'nodu.shell.rename', label: '重命名终端…', run: (terminal: TerminalWidget) => this.renameTerminal(terminal) },
+        ];
+        actions.forEach((action, index) => {
+            this.toDispose.push(this.commands.registerCommand({ id: action.id, label: action.label }, {
+                execute: (id?: string) => { const terminal = this.menuTerminal(id); if (terminal) { return action.run(terminal); } },
+                isEnabled: (id?: string) => !!this.menuTerminal(id),
+            }));
+            this.toDispose.push(this.menuRegistry.registerMenuAction(SHELL_MORE_MENU, { commandId: action.id, order: String(index) }));
+        });
+    }
+
+    private openMore(element: HTMLElement): void {
+        const terminal = this.currentTerminal();
+        if (!terminal) { return; }
+        const bounds = element.getBoundingClientRect();
+        this.menus.render({
+            menuPath: SHELL_MORE_MENU, anchor: { x: bounds.left, y: bounds.bottom },
+            context: this.node, args: [terminal.id], includeAnchorArg: false,
+        });
+    }
+
     private action(label: string, icon: string, run: () => void, disabled = false): React.ReactNode {
         return <button className="nodu-shell-action" title={label} aria-label={label} disabled={disabled}
             onClick={run}><i className={`codicon codicon-${icon}`} aria-hidden="true"/></button>;
@@ -369,6 +408,7 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
         return <div className="nodu-shell-bar" role="toolbar" aria-label="终端会话操作">
             <i className="codicon codicon-terminal nodu-shell-context-icon" aria-hidden="true"/>
             <NoduSelect className="nodu-shell-select" aria-label="终端会话" value={this.selected?.id ?? ''}
+                title={this.selected ? `${this.selected.active.title.label} · ${this.selected.workspace}` : '本机终端'}
                 disabled={!sessions.length} onChange={value => {
                     const session = sessions.find(item => item.id === value);
                     if (session) { this.selectSession(session); }
@@ -382,9 +422,9 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
             <div className="nodu-shell-actions">
                 {this.action('新建终端', 'add', () => void this.createSession(true), busy)}
                 {this.action('拆分终端', 'split-horizontal', () => void this.createSession(true, terminal), busy || !terminal)}
-                {this.action('查找终端内容', 'search', () => terminal?.getSearchBox().show(), !terminal)}
-                {this.action('重命名终端', 'edit', () => void this.renameTerminal(), !terminal)}
                 {this.action('结束终端', 'trash', () => terminal?.close(), !terminal || busy)}
+                <button type="button" className="nodu-shell-action" title="终端更多操作" aria-label="终端更多操作" aria-haspopup="menu" disabled={!terminal}
+                    onClick={event => this.openMore(event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
             </div>
         </div>;
     }

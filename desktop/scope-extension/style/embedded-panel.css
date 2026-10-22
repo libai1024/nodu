@@ -51,6 +51,10 @@
 .nodu-ep-search span { white-space: nowrap; color: var(--theia-descriptionForeground); }
 .nodu-ep mark { background: var(--theia-editor-findMatchHighlightBackground); color: inherit; outline: 1px solid var(--theia-editor-findMatchHighlightBorder, transparent); }
 .nodu-ep-diagnostics { flex: 1; min-height: 0; overflow: auto; padding: 8px 16px; }
+.nodu-ep > .nodu-c-capacity { flex: 0 0 auto; min-width: 0; margin: 0; padding: 6px 12px; border-top: 1px solid var(--theia-panel-border); }
+.nodu-ep > .nodu-c-capacity .nodu-c-meter { min-width: 0; max-width: 100%; }
+.nodu-ep > .nodu-c-capacity .nodu-c-meter-bar { flex: 0 1 120px; min-width: 24px; }
+.nodu-ep > .nodu-c-capacity .nodu-c-meter > span:last-child { white-space: nowrap; }
 /* Compact shared selectors keep parameter controls stable at narrow widths. */
 .nodu-c-panel .nodu-ep-context > .nodu-select:not(.nodu-ep-port):not(.nodu-ep-baud) { width: 80px; max-width: 80px; }
 .nodu-c-panel .nodu-ep-send > .nodu-select { width: 80px; min-width: 80px; max-width: 80px; }

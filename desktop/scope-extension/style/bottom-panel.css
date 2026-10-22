@@ -13,11 +13,14 @@
 .nodu-bottom-chrome { display: inline-flex; align-items: center; flex-shrink: 0; gap: 4px; }
 .nodu-panel-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; min-width: 28px; height: 28px; margin: 0; padding: 0; border: 0; border-radius: 3px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
 .nodu-panel-icon > .codicon { font-size: 16px; }
+.nodu-problems-toggle { width: auto; gap: 4px; padding-inline: 6px; color: var(--theia-errorForeground); }
+.nodu-problems-toggle > span { font-size: 11px; font-variant-numeric: tabular-nums; }
 .nodu-bottom-pages, .nodu-bottom-pages > .lm-Widget { min-width: 0; min-height: 0; }
 .nodu-bottom-pages .scope-widget { padding: 0; }
 .nodu-panel-narrow .nodu-bottom-header { gap: 0; padding-inline: 4px; }
 .nodu-panel-narrow .nodu-bottom-chrome { gap: 0; }
 .nodu-panel-compact .nodu-bottom-header { padding-inline: 0; }
-.nodu-panel-compact .nodu-bottom-chrome > button:not(:first-child) { display: none; }
-/* Only suppress the redundant dock tab for our sole bottom container. Other views remain reachable. */
-#theia-bottom-content-panel:has(> .nodu-bottom-panel):not(:has(> .lm-Widget:not(.lm-TabBar):not(.nodu-bottom-panel))) > .lm-TabBar { min-height: 0 !important; max-height: .1px !important; display: none !important; }
+.nodu-panel-compact .nodu-bottom-chrome > button:nth-last-child(-n+2) { display: none; }
+/* The shared owner supplies navigation in both modes. Native auxiliary views
+   retain their own tabs and toolbars when explicitly opened. */
+#theia-bottom-content-panel .lm-TabBar.nodu-bottom-owner-tabs { min-height: 0 !important; max-height: .1px !important; display: none !important; }

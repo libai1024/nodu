@@ -74,6 +74,16 @@ Node 测试文件：[console-state](../../../desktop/scripts/nodu-console-state.
 
 截图：[340 px 面板自定义菜单](../../../.impeccable/review/custom-select-stm32-340.png)、[Electron 自定义菜单](../../../.impeccable/review/custom-select-electron.png)。
 
+## 追加：专业与简洁模式共用底部面板
+
+2026-10-22，专业模式去掉重复的“开发面板 / zsh / 问题”外层导航，保留与简洁模式相同的平台标签、工具栏和交互。已有终端按原分屏关系迁入会话选择器，不重建进程；切换模式保留当前页、面板展开状态、终端和输入草稿。终端工具栏保留会话选择、新建、分屏、结束与更多，查找和重命名收进更多菜单。框架提供的其他辅助面板保留原生工具栏，并可从“其他面板”进入。
+
+编译诊断和语言检查结果统一读取 ProblemManager，在“问题”视图按文件分组；同位置、同内容的重复报告合并显示并保留来源。支持文字筛选、严重程度筛选和点击定位源码。平时通过问题计数或更多菜单进入，打开后在同一标签行显示“问题”，不增加第二层导航。STM32 构建输出下保留 Flash/RAM 容量条，删除原“输出 / 诊断”二级切换；无源码位置的构建失败仍保留在构建输出。STM32 默认不打开 K210 的图像面板，也不显示其固件/FPS 等空状态项。
+
+本轮验证：TypeScript 编译及 Browser/Electron bundle 通过；Node 共 35 项通过，其中新增 17 项覆盖诊断合并、布局切换、终端接管和分屏生命周期、初始化竞态及辅助面板可达性。实际 UI 验证了真实 clangd 错误的筛选与源码跳转、问题状态栏和菜单入口、原生输出面板访问，以及 980 px 窗口布局。专业/简洁往返切换后，Shell 仍返回相同 PID 和会话变量，串口草稿保持不变。K210 专业模式与最新 macOS Electron 预览也已检查；测试用源码错误已撤销，未执行设备连接或下载。
+
+截图：[最新 Electron 专业模式](../../../.impeccable/review/unified-pro-electron.png)、[980 px STM32](../../../.impeccable/review/unified-pro-stm32-980.png)、[真实诊断与源码跳转](../../../.impeccable/review/unified-pro-problems.png)、[K210 专业模式](../../../.impeccable/review/unified-pro-k210.png)。新增测试：[底部接管](../../../desktop/scripts/nodu-bottom-panel.test.cjs)、[终端生命周期](../../../desktop/scripts/nodu-shell-panel.test.cjs)、[问题合并](../../../desktop/scope-extension/test/problems.cjs)、[模式布局](../../../desktop/scope-extension/test/workbench-layout.cjs)。
+
 ## 后续项与验收边界
 
 统一的当前缓冲导出、时间戳开关和 STM32 新输出计数列为后续项。
