@@ -1,0 +1,1085 @@
+{
+  "formulae": [
+    {
+      "name": "open-ocd",
+      "full_name": "open-ocd",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [
+        "openocd"
+      ],
+      "versioned_formulae": [],
+      "desc": "On-chip debugging, in-system programming and boundary-scan testing",
+      "license": "GPL-2.0-or-later",
+      "homepage": "https://openocd.org/",
+      "versions": {
+        "stable": "0.12.0",
+        "head": "HEAD",
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://downloads.sourceforge.net/project/openocd/openocd/0.12.0/openocd-0.12.0.tar.bz2",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa"
+        },
+        "head": {
+          "url": "https://github.com/openocd-org/openocd.git",
+          "branch": "master",
+          "using": null
+        }
+      },
+      "patches": [],
+      "revision": 1,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/open-ocd-0.12.0_1.arm64_tahoe.bottle.tar.gz",
+              "sha256": "2f69ce7044f8af47279213325e0e46feae77ec451c1d0277a2619f62f4f3c370"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [
+        "pkgconf"
+      ],
+      "dependencies": [
+        "capstone",
+        "hidapi",
+        "libftdi",
+        "libusb"
+      ],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "0.12.0_1",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497499,
+          "runtime_dependencies": [
+            {
+              "full_name": "json-c",
+              "version": "0.19",
+              "revision": 0,
+              "bottle_rebuild": 1,
+              "pkg_version": "0.19",
+              "declared_directly": false
+            },
+            {
+              "full_name": "libunistring",
+              "version": "1.4.2",
+              "revision": 0,
+              "bottle_rebuild": 1,
+              "pkg_version": "1.4.2",
+              "declared_directly": false
+            },
+            {
+              "full_name": "gettext",
+              "version": "1.0",
+              "revision": 0,
+              "bottle_rebuild": 2,
+              "pkg_version": "1.0",
+              "declared_directly": false
+            },
+            {
+              "full_name": "capstone",
+              "version": "5.0.9",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "5.0.9",
+              "declared_directly": true
+            },
+            {
+              "full_name": "hidapi",
+              "version": "0.15.0",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "0.15.0",
+              "declared_directly": true
+            },
+            {
+              "full_name": "icu4c@78",
+              "version": "78.3",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "78.3",
+              "declared_directly": false
+            },
+            {
+              "full_name": "xz",
+              "version": "5.8.4",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "5.8.4",
+              "declared_directly": false
+            },
+            {
+              "full_name": "lz4",
+              "version": "1.10.0",
+              "revision": 0,
+              "bottle_rebuild": 3,
+              "pkg_version": "1.10.0",
+              "declared_directly": false
+            },
+            {
+              "full_name": "zstd",
+              "version": "1.5.7",
+              "revision": 1,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.5.7_1",
+              "declared_directly": false
+            },
+            {
+              "full_name": "boost",
+              "version": "1.92.0",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.92.0",
+              "declared_directly": false
+            },
+            {
+              "full_name": "confuse",
+              "version": "3.4",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "3.4",
+              "declared_directly": false
+            },
+            {
+              "full_name": "libusb",
+              "version": "1.0.30",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.0.30",
+              "declared_directly": true
+            },
+            {
+              "full_name": "libftdi",
+              "version": "1.5",
+              "revision": 2,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.5_2",
+              "declared_directly": true
+            }
+          ],
+          "installed_on_request": true
+        }
+      ],
+      "linked_keg": "0.12.0_1",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/o/open-ocd.rb",
+      "ruby_source_checksum": {
+        "sha256": "293adb2c38f20e79946a6e85544fa66daf297aeb83d85b8d4339a711e82ad045"
+      },
+      "head_dependencies": {
+        "build_dependencies": [
+          "autoconf",
+          "automake",
+          "jimtcl",
+          "libtool",
+          "texinfo",
+          "pkgconf"
+        ],
+        "dependencies": [
+          "capstone",
+          "hidapi",
+          "libftdi",
+          "libusb"
+        ],
+        "test_dependencies": [],
+        "recommended_dependencies": [],
+        "optional_dependencies": [],
+        "uses_from_macos": [],
+        "uses_from_macos_bounds": []
+      }
+    },
+    {
+      "name": "stm32flash",
+      "full_name": "stm32flash",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Open source flash program for STM32 using the ST serial bootloader",
+      "license": "GPL-2.0-or-later",
+      "homepage": "https://sourceforge.net/projects/stm32flash/",
+      "versions": {
+        "stable": "0.7",
+        "head": null,
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://downloads.sourceforge.net/project/stm32flash/stm32flash-0.7.tar.gz",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "c4c9cd8bec79da63b111d15713ef5cc2cd947deca411d35d6e3065e227dc414a"
+        }
+      },
+      "patches": [],
+      "revision": 0,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/stm32flash-0.7.arm64_tahoe.bottle.tar.gz",
+              "sha256": "f8e474cef1409121473bd9d5faaee88d9a164949b2b6f3bba17dff7a20875383"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [],
+      "dependencies": [],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "0.7",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497499,
+          "runtime_dependencies": [],
+          "installed_on_request": true
+        }
+      ],
+      "linked_keg": "0.7",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/s/stm32flash.rb",
+      "ruby_source_checksum": {
+        "sha256": "232469957cdc97a4b9162c103d7665d4e589248b4890ab006b11646cd85c8244"
+      }
+    },
+    {
+      "name": "capstone",
+      "full_name": "capstone",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Multi-platform, multi-architecture disassembly framework",
+      "license": "BSD-3-Clause",
+      "homepage": "https://www.capstone-engine.org/",
+      "versions": {
+        "stable": "5.0.9",
+        "head": "HEAD",
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://github.com/capstone-engine/capstone/archive/refs/tags/5.0.9.tar.gz",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "0619da31af08152600af95c481527ef6d756c0a8404fca7544a4fdf6dfc2c0f9"
+        },
+        "head": {
+          "url": "https://github.com/capstone-engine/capstone.git",
+          "branch": "next",
+          "using": null
+        }
+      },
+      "patches": [],
+      "revision": 0,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": ":any",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/capstone-5.0.9.arm64_tahoe.bottle.tar.gz",
+              "sha256": "136ef83fb2c78de33a0500d8e9d3628eb1db37d4ef00496e8027e00a5918eb33"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [],
+      "dependencies": [
+        "gettext"
+      ],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "5.0.9",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497493,
+          "runtime_dependencies": [
+            {
+              "full_name": "json-c",
+              "version": "0.19",
+              "revision": 0,
+              "bottle_rebuild": 1,
+              "pkg_version": "0.19",
+              "declared_directly": false
+            },
+            {
+              "full_name": "libunistring",
+              "version": "1.4.2",
+              "revision": 0,
+              "bottle_rebuild": 1,
+              "pkg_version": "1.4.2",
+              "declared_directly": false
+            },
+            {
+              "full_name": "gettext",
+              "version": "1.0",
+              "revision": 0,
+              "bottle_rebuild": 2,
+              "pkg_version": "1.0",
+              "declared_directly": true
+            }
+          ],
+          "installed_on_request": false
+        }
+      ],
+      "linked_keg": "5.0.9",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/c/capstone.rb",
+      "ruby_source_checksum": {
+        "sha256": "74d7afa733f1f748ad4b71e691b519b865f35e07da778f9b1bc111a5f926dfce"
+      }
+    },
+    {
+      "name": "hidapi",
+      "full_name": "hidapi",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Library for communicating with USB and Bluetooth HID devices",
+      "license": "GPL-3.0-only OR BSD-3-Clause OR HIDAPI",
+      "homepage": "https://libusb.info/hidapi/",
+      "versions": {
+        "stable": "0.15.0",
+        "head": "HEAD",
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://github.com/libusb/hidapi/archive/refs/tags/hidapi-0.15.0.tar.gz",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "5d84dec684c27b97b921d2f3b73218cb773cf4ea915caee317ac8fc73cef8136"
+        },
+        "head": {
+          "url": "https://github.com/libusb/hidapi.git",
+          "branch": "master",
+          "using": null
+        }
+      },
+      "patches": [],
+      "revision": 0,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": ":any",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/hidapi-0.15.0.arm64_tahoe.bottle.tar.gz",
+              "sha256": "0839953f6566e9d44dcde4714cf3bb8fe8455eb8cf978bb5fb0fbfc595f5f16b"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [
+        "cmake",
+        "pkgconf"
+      ],
+      "dependencies": [],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "0.15.0",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497493,
+          "runtime_dependencies": [],
+          "installed_on_request": false
+        }
+      ],
+      "linked_keg": "0.15.0",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/h/hidapi.rb",
+      "ruby_source_checksum": {
+        "sha256": "79923915f60dd675e43bb6e8280abfd1e791fa99273572bb97291a7c55a3e6f8"
+      }
+    },
+    {
+      "name": "libftdi",
+      "full_name": "libftdi",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Library to talk to FTDI chips",
+      "license": "LGPL-2.1-only",
+      "homepage": "https://www.intra2net.com/en/developer/libftdi",
+      "versions": {
+        "stable": "1.5",
+        "head": null,
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.5.tar.bz2",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "7c7091e9c86196148bd41177b4590dccb1510bfe6cea5bf7407ff194482eb049"
+        }
+      },
+      "patches": [
+        {
+          "strip": "p1",
+          "file": "Patches/libftdi/1.5.patch"
+        }
+      ],
+      "revision": 2,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": ":any",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/libftdi-1.5_2.arm64_tahoe.bottle.tar.gz",
+              "sha256": "09132f1d347fe01a17da39c406e4311ad5af9609c5306afdfe912132df89f74f"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [
+        "cmake",
+        "pkgconf",
+        "swig"
+      ],
+      "dependencies": [
+        "boost",
+        "confuse",
+        "libusb"
+      ],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "1.5_2",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497498,
+          "runtime_dependencies": [
+            {
+              "full_name": "icu4c@78",
+              "version": "78.3",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "78.3",
+              "declared_directly": false
+            },
+            {
+              "full_name": "xz",
+              "version": "5.8.4",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "5.8.4",
+              "declared_directly": false
+            },
+            {
+              "full_name": "lz4",
+              "version": "1.10.0",
+              "revision": 0,
+              "bottle_rebuild": 3,
+              "pkg_version": "1.10.0",
+              "declared_directly": false
+            },
+            {
+              "full_name": "zstd",
+              "version": "1.5.7",
+              "revision": 1,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.5.7_1",
+              "declared_directly": false
+            },
+            {
+              "full_name": "boost",
+              "version": "1.92.0",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.92.0",
+              "declared_directly": true
+            },
+            {
+              "full_name": "confuse",
+              "version": "3.4",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "3.4",
+              "declared_directly": true
+            },
+            {
+              "full_name": "libusb",
+              "version": "1.0.30",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.0.30",
+              "declared_directly": true
+            }
+          ],
+          "installed_on_request": false
+        }
+      ],
+      "linked_keg": "1.5_2",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/lib/libftdi.rb",
+      "ruby_source_checksum": {
+        "sha256": "bd6c58f2599df7109a4900543454820ecf22b5a739c22cf4854254144dedd07d"
+      }
+    },
+    {
+      "name": "libusb",
+      "full_name": "libusb",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Library for USB device access",
+      "license": "LGPL-2.1-or-later",
+      "homepage": "https://libusb.info/",
+      "versions": {
+        "stable": "1.0.30",
+        "head": "HEAD",
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://github.com/libusb/libusb/releases/download/v1.0.30/libusb-1.0.30.tar.bz2",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "fea36f34f9156400209595e300840767ab1a385ede1dc7ee893015aea9c6dbaf"
+        },
+        "head": {
+          "url": "https://github.com/libusb/libusb.git",
+          "branch": "master",
+          "using": null
+        }
+      },
+      "patches": [],
+      "revision": 0,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": ":any",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/libusb-1.0.30.arm64_tahoe.bottle.tar.gz",
+              "sha256": "184daaa6108f0a56eb72c58cc4124dbbb0b54a655632dffdf8334569d71e2a34"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [],
+      "dependencies": [],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "1.0.30",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1790158452,
+          "runtime_dependencies": [],
+          "installed_on_request": false
+        }
+      ],
+      "linked_keg": "1.0.30",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/lib/libusb.rb",
+      "ruby_source_checksum": {
+        "sha256": "513c20f992711ced872639a391fbb0b3194e397ffddc4968b9f9b1e4f03b48ee"
+      },
+      "head_dependencies": {
+        "build_dependencies": [
+          "autoconf",
+          "automake",
+          "libtool"
+        ],
+        "dependencies": [],
+        "test_dependencies": [],
+        "recommended_dependencies": [],
+        "optional_dependencies": [],
+        "uses_from_macos": [],
+        "uses_from_macos_bounds": []
+      }
+    },
+    {
+      "name": "boost",
+      "full_name": "boost",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [
+        "boost@1.92"
+      ],
+      "versioned_formulae": [
+        "boost@1.85"
+      ],
+      "desc": "Collection of portable C++ source libraries",
+      "license": "BSL-1.0",
+      "homepage": "https://www.boost.org/",
+      "versions": {
+        "stable": "1.92.0",
+        "head": "HEAD",
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://github.com/boostorg/boost/releases/download/boost-1.92.0/boost-1.92.0-b2-nodocs.tar.xz",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "ea7b982002cc9dfbe59b0b217b206f470dc75f3de0bb2973d844118934d82411"
+        },
+        "head": {
+          "url": "https://github.com/boostorg/boost.git",
+          "branch": "master",
+          "using": null
+        }
+      },
+      "patches": [],
+      "revision": 0,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/boost-1.92.0.arm64_tahoe.bottle.tar.gz",
+              "sha256": "686277661ee32946032c02d6e365b0183dd7763f2e220be6c7949595458cef57"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [],
+      "dependencies": [
+        "icu4c@78",
+        "xz",
+        "zstd"
+      ],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [
+        "bzip2"
+      ],
+      "uses_from_macos_bounds": [
+        {}
+      ],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "1.92.0",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497494,
+          "runtime_dependencies": [
+            {
+              "full_name": "icu4c@78",
+              "version": "78.3",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "78.3",
+              "declared_directly": true
+            },
+            {
+              "full_name": "xz",
+              "version": "5.8.4",
+              "revision": 0,
+              "bottle_rebuild": 0,
+              "pkg_version": "5.8.4",
+              "declared_directly": true
+            },
+            {
+              "full_name": "lz4",
+              "version": "1.10.0",
+              "revision": 0,
+              "bottle_rebuild": 3,
+              "pkg_version": "1.10.0",
+              "declared_directly": false
+            },
+            {
+              "full_name": "zstd",
+              "version": "1.5.7",
+              "revision": 1,
+              "bottle_rebuild": 0,
+              "pkg_version": "1.5.7_1",
+              "declared_directly": true
+            }
+          ],
+          "installed_on_request": false
+        }
+      ],
+      "linked_keg": "1.92.0",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/b/boost.rb",
+      "ruby_source_checksum": {
+        "sha256": "b60482a490e30be2f84ac142e09de2f02ab0e571c05e7450fe62ec47ec64f0bb"
+      }
+    },
+    {
+      "name": "confuse",
+      "full_name": "confuse",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Configuration file parser library written in C",
+      "license": "ISC",
+      "homepage": "https://www.nongnu.org/confuse/manual/",
+      "versions": {
+        "stable": "3.4",
+        "head": null,
+        "bottle": true
+      },
+      "urls": {
+        "stable": {
+          "url": "https://github.com/libconfuse/libconfuse/releases/download/v3.4/confuse-3.4.tar.xz",
+          "tag": null,
+          "revision": null,
+          "using": null,
+          "checksum": "36bfa3928f9c323914c7c8317e8722cb22f41db69d7c9d4c24b4689fa955445d"
+        }
+      },
+      "patches": [],
+      "revision": 0,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {
+        "stable": {
+          "rebuild": 0,
+          "root_url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles",
+          "files": {
+            "arm64_tahoe": {
+              "cellar": ":any",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/confuse-3.4.arm64_tahoe.bottle.tar.gz",
+              "sha256": "9587a497f55f655fc94c7a357b9d8f6d407def51af0dbf35f18f2defe57941e9"
+            }
+          }
+        }
+      },
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [
+        "pkgconf"
+      ],
+      "dependencies": [],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [],
+      "conflicts_with_reasons": [],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [
+        {
+          "version": "3.4",
+          "used_options": [],
+          "built_as_bottle": true,
+          "poured_from_bottle": true,
+          "time": 1792497497,
+          "runtime_dependencies": [],
+          "installed_on_request": false
+        }
+      ],
+      "linked_keg": "3.4",
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "a65d62841d62086e7f85f8a600f12e1f72feea91",
+      "ruby_source_path": "Formula/c/confuse.rb",
+      "ruby_source_checksum": {
+        "sha256": "3106da001ac5434a2d999f02cec81560664c970ceb5d5932454f098974b81d1b"
+      }
+    }
+  ],
+  "casks": []
+}

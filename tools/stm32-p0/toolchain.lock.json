@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "host": "darwin-arm64",
+  "tools": {
+    "armGnu": {
+      "version": "14.2.rel1",
+      "gccVersion": "14.2.1",
+      "archive": "arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz",
+      "url": "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz",
+      "sha256": "c7c78ffab9bebfce91d99d3c24da6bf4b81c01e16cf551eb2ff9f25b9e0a3818",
+      "checksumUrl": "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz.sha256asc"
+    },
+    "cmake": "4.4.3",
+    "ninja": "1.13.2",
+    "openocd": { "version": "0.12.0", "homebrewVersion": "0.12.0_1" },
+    "stm32flash": { "version": "0.7", "sourceSha256": "c4c9cd8bec79da63b111d15713ef5cc2cd947deca411d35d6e3065e227dc414a" }
+  },
+  "sdk": {
+    "f1": {
+      "repository": "https://github.com/STMicroelectronics/STM32CubeF1.git",
+      "tag": "v1.8.7",
+      "commit": "d12e75247d5bcedc734f829b394517ab4c2726e3",
+      "halCommit": "fee494a92b5ad331f92ad21f76c66a5cb83773ee",
+      "deviceCommit": "c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22"
+    },
+    "f4": {
+      "repository": "https://github.com/STMicroelectronics/STM32CubeF4.git",
+      "tag": "v1.28.3",
+      "commit": "94cae6e83f00e276a11957e7833c01ac3d0bd7af",
+      "halCommit": "b6f0ed3829f3829eb358a2e7417d80bba1a42db7",
+      "deviceCommit": "3c77349ce04c8af401454cc51f85ea9a50e34fc1"
+    }
+  }
+}

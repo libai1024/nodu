@@ -1,0 +1,15 @@
+{
+  "hardwareAccess": false,
+  "passed": [
+    "source-change plan rejected",
+    "same BIN with changed ELF stored as distinct bundle",
+    "ELF tamper rejected even when BIN is unchanged",
+    "failed real compile invalidated previous successful artifact",
+    "concurrent target ownership rejected"
+  ],
+  "finalBuilds": [
+    "f103c8",
+    "f407zg"
+  ],
+  "plansExecuted": false
+}

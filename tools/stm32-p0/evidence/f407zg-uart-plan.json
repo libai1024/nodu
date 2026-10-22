@@ -1,0 +1,27 @@
+{
+  "target": "f407zg",
+  "transport": "uart",
+  "command": [
+    "stm32flash",
+    "-b",
+    "115200",
+    "-m",
+    "8e1",
+    "-f",
+    "-w",
+    "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/artifacts/f862810363c29b88f8d825635ece50985025eec56cfe5aac3ec551a64585e07c/firmware.bin",
+    "-v",
+    "-S",
+    "0x08000000:3592",
+    "<STM32_PORT>"
+  ],
+  "steps": [
+    "Confirm MCU and port; close monitor",
+    "BOOT0=1, BOOT1=0, reset",
+    "Query ROM device identity and back up existing Flash before write",
+    "Execute only after identity/capacity checks",
+    "BOOT0=0 and normal reset",
+    "Observe application separately; write verification is not an execution test"
+  ],
+  "executed": false
+}

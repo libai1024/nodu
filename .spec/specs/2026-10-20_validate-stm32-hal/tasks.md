@@ -1,0 +1,33 @@
+# STM32 HAL P0 任务
+
+- [x] 创建独立分支并固化范围
+  - id: task-scope
+  - boundary: 仅独立工作树和任务包。
+  - verify: git branch --show-current 为 spec/2026-10-20_validate-stm32-hal，主 checkout 仍为 main。
+- [x] 安装并记录工具与 SDK 固定版本
+  - id: task-tools
+  - depends-on: task-scope
+  - boundary: tools/stm32-p0、.local/stm32-p0及必要主机工具依赖。
+  - verify: 官方摘要、各工具版本、SDK commit 记录。
+- [x] 两目标 HAL 实际构建与 ELF 检查
+  - id: task-build
+  - depends-on: task-tools
+  - boundary: tools/stm32-p0 工程与本地构建树。
+  - verify: 两次实际 CMake/Ninja 构建通过，段布局和容量匹配。
+- [ ] F407 ST-LINK 实物下载运行
+  - id: task-f407-swd
+  - depends-on: task-build
+  - boundary: 用户连接的 F407，应用 Flash 与复位，不改保护。
+  - verify: 身份、原 Flash 备份、写入校验、读回摘要、RAM heartbeat 变化。
+  - blocked: F407 已识别备份，准备写入时探针被拔出，尚未完成写入。
+- [ ] F103 ST-LINK 与两目标 UART 实物验证
+  - id: task-remaining-hardware
+  - depends-on: task-build
+  - boundary: 用户明确连接的 STM32。
+  - verify: 每条路径实际写入、读回、正常启动记录。
+  - blocked: F103 下载器尚未枚举，当前无 STM32 UART 端口。
+- [x] 汇总证据和边界检查
+  - id: task-report
+  - depends-on: task-build
+  - boundary: tools/stm32-p0 文档证据、docs/0.2 开发文档及文档导航、该任务包。
+  - verify: 日志、文档、任务一致；未验证项明确；git diff 只含授权边界。

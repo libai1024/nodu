@@ -1,0 +1,35 @@
+{
+  "target": "f103c8",
+  "binaryBytes": 2624,
+  "binarySha256": "fa7b5878122e240ac4d058b93f94a6df554cec7c72ba090371a6672069b03f95",
+  "fileSha256": {
+    "firmware.elf": "302271a39d0bf35a5c77270724e9dabb7147d075fc847c3ac333aa9efb36b36d",
+    "firmware.bin": "fa7b5878122e240ac4d058b93f94a6df554cec7c72ba090371a6672069b03f95",
+    "firmware.hex": "0018fd3746ce341048831921f7acfa619b1546b48cfc1afa3d961fa0cf1636fd",
+    "firmware.map": "0a96579b1781014d824c621ee8fa61b431f4cbf69696095e1d2fcae8e4695ea3"
+  },
+  "bundleSha256": "5d11bde3208123c07be1f1365721d4e9c6cd0f6c12a106fd46306c98fce052e0",
+  "initialStack": "0x20005000",
+  "resetVector": "0x8000955",
+  "statusAddress": "0x20000000",
+  "artifact": ".local/stm32-p0/artifacts/5d11bde3208123c07be1f1365721d4e9c6cd0f6c12a106fd46306c98fce052e0",
+  "elfAttributes": "Attribute Section: aeabi\nFile Attributes\n  Tag_CPU_name: \"7-M\"\n  Tag_CPU_arch: v7\n  Tag_CPU_arch_profile: Microcontroller\n  Tag_THUMB_ISA_use: Thumb-2\n  Tag_ABI_PCS_wchar_t: 4\n  Tag_ABI_FP_denormal: Needed\n  Tag_ABI_FP_exceptions: Needed\n  Tag_ABI_FP_number_model: IEEE 754\n  Tag_ABI_align_needed: 8-byte\n  Tag_ABI_enum_size: small\n  Tag_ABI_optimization_goals: Prefer Speed\n  Tag_CPU_unaligned_access: v6\n",
+  "sourceSha256": {
+    "tools/stm32-p0/src/interrupts.c": "c1f9bab878081ddae23bb7cd02b2bea5d2add95ebe47284c815633997fcc28ae",
+    "tools/stm32-p0/src/main.c": "4beb05c0186367602c8f740b75e324aaf327f0983af90b072bd8694d97b51b50",
+    "tools/stm32-p0/src/runtime.c": "1ba005e2505d84e0213df3097e35de120cddd2b7cd18f8c4071b37452a4c9722",
+    "tools/stm32-p0/linker/common.ld": "93052d6c4a59731a0b135e211a299cc5d799739a64bd69868d2216142354d8c5",
+    "tools/stm32-p0/linker/f103c8.ld": "114bd8eefee7f631b03cd1058872141f99205ff68bada8d76b744cf06afb8951",
+    "tools/stm32-p0/linker/f407zg.ld": "ff59350c27414ac8bdbdb8ceacb0429f5f0c808eef6f965bbc658ca0b683d140",
+    "tools/stm32-p0/CMakeLists.txt": "e622d08f27b5539d2bc3024acc85d1a33ee919a2a20ffc12ff6698e2fa9b940d",
+    "tools/stm32-p0/cmake/arm-gcc.cmake": "20daff568b8a99be0b2292dd2d32683149853b6e473283d56b5d20be63b0d044",
+    "tools/stm32-p0/toolchain.lock.json": "cc3f5400a8348d5948fb6c598ee56fd8440ae54d88814150ff348eca05a68f0f"
+  },
+  "sdk": {
+    "repository": "https://github.com/STMicroelectronics/STM32CubeF1.git",
+    "tag": "v1.8.7",
+    "commit": "d12e75247d5bcedc734f829b394517ab4c2726e3",
+    "halCommit": "fee494a92b5ad331f92ad21f76c66a5cb83773ee",
+    "deviceCommit": "c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22"
+  }
+}

@@ -1,0 +1,40 @@
+["cmake", "-S", "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/tools/stm32-p0", "-B", "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f407zg", "-G", "Ninja", "-DCMAKE_TOOLCHAIN_FILE=/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/tools/stm32-p0/cmake/arm-gcc.cmake", "-DARM_TOOLCHAIN_ROOT=/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/tools/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi", "-DNODU_TARGET=f407zg", "-DSDK_ROOT=/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4"]
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f407zg
+
+exitCode=0
+["cmake", "--build", "/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f407zg"]
+[1/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c.obj
+[2/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.obj
+[3/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.obj
+[4/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj
+[5/13] Building C object CMakeFiles/firmware.dir/src/interrupts.c.obj
+[6/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.obj
+[7/13] Building C object CMakeFiles/firmware.dir/src/main.c.obj
+[8/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.obj
+[9/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.obj
+/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c: In function 'FLASH_MassErase':
+/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c:948:60: warning: unused parameter 'Banks' [-Wunused-parameter]
+  948 | static void FLASH_MassErase(uint8_t VoltageRange, uint32_t Banks)
+      |                                                   ~~~~~~~~~^~~~~
+/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c: In function 'FLASH_OB_EnableWRP':
+/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c:1027:74: warning: unused parameter 'Banks' [-Wunused-parameter]
+ 1027 | static HAL_StatusTypeDef FLASH_OB_EnableWRP(uint32_t WRPSector, uint32_t Banks)
+      |                                                                 ~~~~~~~~~^~~~~
+/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c: In function 'FLASH_OB_DisableWRP':
+/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c:1063:75: warning: unused parameter 'Banks' [-Wunused-parameter]
+ 1063 | static HAL_StatusTypeDef FLASH_OB_DisableWRP(uint32_t WRPSector, uint32_t Banks)
+      |                                                                  ~~~~~~~~~^~~~~
+[10/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj
+[11/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj
+[12/13] Building C object CMakeFiles/firmware.dir/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj
+[13/13] Linking C executable firmware.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:        3592 B         1 MB      0.34%
+             RAM:        2600 B       128 KB      1.98%
+             CCM:           0 B        64 KB      0.00%
+   text	   data	    bss	    dec	    hex	filename
+   3556	     36	   2564	   6156	   180c	/Users/wangwei/.codex/worktrees/stm32-hal-validation/k210-studio/.local/stm32-p0/build/f407zg/firmware.elf
+
+exitCode=0
