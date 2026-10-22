@@ -109,7 +109,7 @@ export interface BackupRecord {
 }
 
 export interface ProbeInfo { vid: number; pid: number; model: string; serial: string; product: string; driver: 'ok' | 'missing' }
-export interface PortInfo { path: string; description: string; vid?: number; pid?: number; serial_number?: string; stlinkVcp?: boolean }
+export interface PortInfo { path: string; description: string; vid?: number; pid?: number; serial_number?: string }
 
 export interface ProjectStatus {
     path: string;
@@ -133,3 +133,16 @@ export interface CatalogBoard {
     led: { pin: string } | null;
     templates: CatalogTemplate[];
 }
+
+/** Manual connection state. A disconnected session never reopens itself. */
+export interface MonitorSnapshot {
+    open: boolean;
+    state: 'closed' | 'connecting' | 'open' | 'disconnected' | 'lent';
+    port: string;
+    baud: number;
+    session?: string;
+    owner?: string;
+    message?: string;
+}
+export interface MonitorData { port: string; session: string; data: string }
+export interface MonitorWriteResult { sent: number }

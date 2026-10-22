@@ -4,7 +4,6 @@ import { CommandContribution, CommandRegistry, CommandService, MenuContribution,
 import { URI } from '@theia/core/lib/common/uri';
 import { ApplicationShell, CommonCommands, CommonMenus, FrontendApplicationContribution, KeybindingContribution, KeybindingRegistry } from '@theia/core/lib/browser';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
-import { AbstractViewContribution } from '@theia/core/lib/browser/shell/view-contribution';
 import { StatusBar, StatusBarAlignment } from '@theia/core/lib/browser/status-bar/status-bar';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
@@ -12,26 +11,18 @@ import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { ProjectStatus } from '../common/nodu-embedded-protocol';
 import { EmbeddedError, NoduEmbeddedModel, PanelTab } from './nodu-embedded-model';
-import { NoduEmbeddedPanel } from './nodu-embedded-panel';
 import { NoduNewProjectDialog } from './nodu-new-project';
-import { NODU_PROJECT_MENU } from './scope-workbench';
+import { NODU_PROJECT_MENU, ScopeConsoleContribution } from './scope-workbench';
 import { ScopeLayoutState } from './scope-layout-state';
 import { C_COMMANDS, NODU_C_RUN_MENU } from './nodu-embedded-commands';
 
 export { C_COMMANDS };
 
-@injectable()
-export class NoduEmbeddedPanelContribution extends AbstractViewContribution<NoduEmbeddedPanel> {
-    constructor() {
-        super({ widgetId: NoduEmbeddedPanel.ID, widgetName: NoduEmbeddedPanel.LABEL, defaultWidgetOptions: { area: 'bottom', rank: 40 } });
-    }
-}
-
 /** Commands, keys and menus of the STM32 C workbench; inert until a C project is open. */
 @injectable()
 export class NoduEmbeddedContribution implements FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution {
     @inject(NoduEmbeddedModel) protected readonly model!: NoduEmbeddedModel;
-    @inject(NoduEmbeddedPanelContribution) protected readonly panel!: NoduEmbeddedPanelContribution;
+    @inject(ScopeConsoleContribution) protected readonly panel!: ScopeConsoleContribution;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     @inject(CommandService) protected readonly commands!: CommandService;
     @inject(EditorManager) protected readonly editors!: EditorManager;
@@ -70,7 +61,7 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     }
 
     async showPanel(tab?: PanelTab, activate = false): Promise<void> {
-        if (tab) { this.model.panelTab = tab; }
+        (await this.panel.widget).showEmbedded(tab ?? this.model.panelTab);
         await this.panel.openView({ area: 'bottom', reveal: true, activate });
         this.model.fire();
     }
@@ -127,7 +118,7 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         const ok = await this.model.run();
         const failedBuild = this.model.lastBuild && !this.model.lastBuild.ok;
         if (failedBuild) { await this.showPanel('problems'); }
-        else if (ok) { await this.showPanel('monitor'); }
+        else if (ok) { await this.showPanel('output'); }
         else if (this.model.lastError) { this.layoutState.setDeviceOpen(true); }
     }
 
@@ -163,13 +154,13 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         add(C_COMMANDS.stop, '停止', () => this.model.stop());
         add(C_COMMANDS.reset, '复位开发板', () => this.model.reset(), () => c() && this.model.project?.flashMethod === 'stlink');
         add(C_COMMANDS.identify, '识别芯片', () => this.model.identify(), () => c() && this.model.project?.flashMethod === 'stlink');
-        registry.registerCommand({ id: C_COMMANDS.togglePanel, label: '问题与串口监视器', category: 'STM32' }, {
+        registry.registerCommand({ id: C_COMMANDS.togglePanel, label: 'STM32 开发面板', category: 'STM32' }, {
             execute: () => this.togglePanel(), isEnabled: c, isVisible: c, isToggled: () => this.isPanelVisible(),
         });
-        add(C_COMMANDS.finishBoot, '已恢复 BOOT0，打开串口监视器', async () => { await this.model.finishBoot(); await this.showPanel('monitor'); });
+        add(C_COMMANDS.finishBoot, '已恢复 BOOT 并复位', async () => { await this.model.finishBoot(); await this.showPanel('monitor'); });
         add(C_COMMANDS.showProblems, '显示问题', () => this.showPanel('problems', true));
         add(C_COMMANDS.showMonitor, '显示串口监视器', () => this.showPanel('monitor', true));
-        add(C_COMMANDS.showOutput, '显示编译输出', () => this.showPanel('output', true));
+        add(C_COMMANDS.showOutput, '显示构建与下载', () => this.showPanel('output', true));
         add(C_COMMANDS.checkToolkit, '检查 STM32 工具包', async () => {
             const report = await this.model.call<{ ok: boolean; problemCount: number; version: string }>('checkToolkit', { full: true });
             if (report.ok) { void this.messages.info(`STM32 工具包 ${report.version} 完整。`); }

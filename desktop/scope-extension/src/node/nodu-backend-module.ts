@@ -9,7 +9,7 @@ import { NoduResourcesServer } from './nodu-resources-server';
 import { NODU_RESOURCES_PATH, NoduResourcesService, ResourcesClient } from '../common/nodu-resources-protocol';
 import { NoduDeviceServer } from './nodu-device-server';
 import { NoduEmbeddedServer } from './nodu-embedded-server';
-import { EmbeddedClient, NODU_EMBEDDED_PATH, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
+import { EmbeddedClient, EmbeddedMethod, NODU_EMBEDDED_PATH, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
 
 export default new ContainerModule(bind => {
     bind(NoduDeviceServer).toSelf().inSingletonScope();
@@ -53,6 +53,7 @@ export default new ContainerModule(bind => {
         const names: (keyof NoduEmbeddedService)[] = ['call', 'homeDirectory', 'clangdStart', 'clangdSend', 'clangdStop'];
         const facade = Object.create(null);
         for (const name of names) { facade[name] = server[name].bind(server); }
+        facade.call = (method: EmbeddedMethod, args: Record<string, unknown>) => server.callForClient(client, method, args);
         return facade as NoduEmbeddedService;
     })).inSingletonScope();
 });

@@ -11,6 +11,12 @@ import { BoardPreset, RememberedBoard, presetById } from '../common/nodu-board-p
 
 export const NODU_FILE_LIMIT = 2 * 1024 * 1024;
 
+/** Frontend ordering only: this is not a worker request or script identifier. */
+export interface NoduDeviceLog extends DeviceLog {
+    sequence: number;
+    clippedCharacters: number;
+}
+
 /** One RPC session is shared by the toolbar, both layouts and all device views. */
 @injectable()
 export class NoduDeviceModel implements DeviceClient {
@@ -39,7 +45,8 @@ export class NoduDeviceModel implements DeviceClient {
     /** Last board + port connected from the simple-mode picker; per user. */
     remembered: RememberedBoard | undefined;
     frame: DeviceFrame | undefined;
-    logs: DeviceLog[] = [];
+    logs: NoduDeviceLog[] = [];
+    logSequence = 0;
     error = '';
     // Operation label that produced `error`; '' = backend/device-level fault.
     errorOperation = '';
@@ -163,8 +170,13 @@ export class NoduDeviceModel implements DeviceClient {
 
     onLog(log: DeviceLog): void {
         if (this.disposed) { return; }
-        const text = log.text.slice(-32000);
-        const bounded = { ...log, text: log.stream === 'system' && !text.endsWith('\n') ? `${text}\n` : text };
+        let start = Math.max(0, log.text.length - 32000);
+        if (start && log.text.charCodeAt(start) >= 0xdc00 && log.text.charCodeAt(start) <= 0xdfff) { start++; }
+        const text = log.text.slice(start);
+        if (!text) { return; }
+        const bounded: NoduDeviceLog = { ...log, sequence: ++this.logSequence,
+            clippedCharacters: Math.max(0, log.text.length - text.length),
+            text: log.stream === 'system' && !text.endsWith('\n') ? `${text}\n` : text };
         this.logs.push(bounded);
         let length = this.logs.reduce((sum, item) => sum + item.text.length, 0);
         while (this.logs.length > 300 || length > 200000) { length -= this.logs.shift()!.text.length; }
@@ -334,13 +346,15 @@ export class NoduDeviceModel implements DeviceClient {
         await this.perform('断开设备', async () => { await this.service.disconnect(); this.onState(await this.service.getState()); }, true);
     }
 
-    async execute(code: string): Promise<void> {
+    async execute(code: string): Promise<string | undefined> {
         if (!code.trim()) { return; }
-        await this.perform('执行 REPL', async () => {
+        return this.perform('执行 REPL', async () => {
             this.backupCurrent = false;
             this.note(`REPL > ${code}`);
-            // The service streams stdout/stderr through onLog; its return value is not echoed twice.
-            await this.service.execute(code);
+            // This RPC result is attributable to this submission. onLog is a
+            // shared stream without a request id; consumers must not guess its
+            // ownership from arrival time. Empty output is a successful result.
+            return this.service.execute(code);
         });
     }
 

@@ -1,0 +1,88 @@
+/* STM32 panel content: outer platform tabs belong to the workbench. */
+.nodu-ep { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; color: var(--theia-foreground); background: var(--theia-editor-background); font-size: 12px; }
+.nodu-ep button, .nodu-ep select { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; height: 28px; box-sizing: border-box; margin: 0; padding: 0 10px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 4px; color: var(--theia-foreground); background: var(--theia-input-background); font: inherit; text-align: center; text-align-last: center; white-space: nowrap; cursor: pointer; }
+.nodu-ep input, .nodu-ep textarea { height: 28px; box-sizing: border-box; min-width: 80px; padding: 0 9px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 4px; background: var(--theia-input-background); color: var(--theia-input-foreground); font: inherit; }
+.nodu-ep button:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-ep button:focus-visible, .nodu-ep select:focus-visible, .nodu-ep input:focus-visible, .nodu-ep textarea:focus-visible, .nodu-ep-log:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-ep button:disabled, .nodu-ep select:disabled { color: var(--theia-disabledForeground); cursor: default; opacity: .65; }
+.nodu-ep .nodu-ep-primary { color: var(--theia-button-foreground); background: var(--theia-button-background); border-color: transparent; }
+.nodu-ep .nodu-ep-primary:hover:not(:disabled) { background: var(--theia-button-hoverBackground); }
+.nodu-ep-context { display: flex; flex: 0 0 auto; align-items: center; gap: 6px; height: 40px; padding: 0 12px; border-bottom: 1px solid var(--theia-panel-border); overflow-x: auto; scrollbar-width: thin; }
+.nodu-ep-context-note { min-width: 80px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--theia-descriptionForeground); }
+.nodu-ep-separator { margin: 0 8px; }
+.nodu-ep-segment { display: inline-flex; flex: 0 0 auto; align-items: center; }
+.nodu-ep-segment button { border-radius: 0; min-width: 46px; }
+.nodu-ep-segment button:first-child { border-radius: 4px 0 0 4px; }
+.nodu-ep-segment button:last-child { border-radius: 0 4px 4px 0; margin-left: -1px; }
+.nodu-ep-segment button[aria-pressed="true"] { background: var(--theia-list-activeSelectionBackground); color: var(--theia-list-activeSelectionForeground); }
+.nodu-ep-actions { display: inline-flex; flex: 0 0 auto; margin-left: auto; gap: 2px; }
+.nodu-ep .nodu-ep-icon { height: 28px; width: 28px; padding: 0; border-color: transparent; background: transparent; }
+.nodu-ep .nodu-ep-icon[aria-pressed="true"] { color: var(--theia-textLink-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-ep .nodu-ep-icon.nodu-ep-primary { background: var(--theia-button-background); color: var(--theia-button-foreground); }
+.nodu-ep .codicon { font-size: 16px; }
+.nodu-ep-state { padding-inline: 0; }
+
+.nodu-c-panel .nodu-ep-send > .nodu-ep-send-action { width: 28px; min-width: 28px; padding: 0; }
+.nodu-ep .nodu-ep-port { width: 190px; max-width: 240px; text-overflow: ellipsis; }
+.nodu-ep .nodu-ep-baud { width: 88px; }
+.nodu-ep-state { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 5px; padding: 0; color: var(--theia-descriptionForeground); }
+.nodu-ep-state > span { width: 6px; height: 6px; border-radius: 50%; background: var(--theia-descriptionForeground); }
+.nodu-ep-state-open > span { background: var(--theia-scope-ok, #228555); }
+.nodu-ep-state-lent > span, .nodu-ep-state-disconnected > span { background: var(--theia-scope-warn, #a5681f); }
+.nodu-ep-log { flex: 1; min-height: 0; overflow: auto; padding: 10px 16px; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--theia-code-font-family, monospace); line-height: 1.6; tab-size: 4; }
+.nodu-ep-record { display: grid; grid-template-columns: 66px 30px minmax(0, 1fr); gap: 10px; min-height: 20px; }
+.nodu-ep-time { color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-ep-direction { color: var(--theia-textLink-foreground); font-size: 11px; }
+.nodu-ep-record-TX .nodu-ep-direction { color: var(--theia-scope-ok, #228555); }
+.nodu-ep-record-SYS { color: var(--theia-descriptionForeground); }
+.nodu-ep-record-SYS .nodu-ep-direction { color: inherit; }
+.nodu-ep-data { min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.nodu-ep-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; height: 100%; min-height: 100px; color: var(--theia-descriptionForeground); text-align: center; font-family: var(--theia-ui-font-family); white-space: normal; }
+.nodu-ep-empty strong { color: var(--theia-foreground); font-weight: 500; }
+.nodu-ep-send { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; height: 54px; padding: 0 12px; border-top: 1px solid var(--theia-panel-border); overflow-x: auto; }
+.nodu-ep-send textarea { resize: none; line-height: 20px; padding-top: 3px; padding-bottom: 3px; flex: 1; min-width: 140px; }
+.nodu-ep-send > button { min-width: 64px; }
+.nodu-ep-notice, .nodu-ep-send-error, .nodu-ep-retention { display: flex; align-items: center; gap: 12px; padding: 7px 12px; line-height: 1.5; color: var(--theia-descriptionForeground); background: var(--theia-editorWidget-background); border-bottom: 1px solid var(--theia-panel-border); }
+.nodu-ep-notice span { flex: 1; }
+.nodu-ep-send-error { color: var(--theia-errorForeground); }
+.nodu-ep-retention { font-family: var(--theia-ui-font-family); margin-bottom: 8px; }
+.nodu-ep-search { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--theia-panel-border); overflow: auto; }
+.nodu-ep-search input { flex: 1; min-width: 100px; }
+.nodu-ep-search span { white-space: nowrap; color: var(--theia-descriptionForeground); }
+.nodu-ep mark { background: var(--theia-editor-findMatchHighlightBackground); color: inherit; outline: 1px solid var(--theia-editor-findMatchHighlightBorder, transparent); }
+.nodu-ep-diagnostics { flex: 1; min-height: 0; overflow: auto; padding: 8px 16px; }
+/* Explicit widths override the workbench's full-width form controls. */
+.nodu-c-panel .nodu-ep-context > select:not(.nodu-ep-port):not(.nodu-ep-baud) { width: 80px; max-width: 80px; }
+.nodu-c-panel .nodu-ep-send > select { width: 80px; min-width: 80px; max-width: 80px; }
+.nodu-c-panel .nodu-ep-send > textarea { width: 0; flex: 1 1 0; min-width: 80px; max-width: none; font-family: var(--theia-code-font-family, monospace); }
+.nodu-c-panel .nodu-ep-log { padding: 10px 12px; font-size: 13px; line-height: 20px; }
+.nodu-panel-narrow .nodu-ep-context { padding-inline: 8px; }
+.nodu-panel-narrow .nodu-ep-send { padding-inline: 8px; gap: 6px; }
+.nodu-panel-narrow .nodu-ep-send > select { width: 70px; min-width: 70px; max-width: 70px; }
+.nodu-panel-narrow .nodu-ep-send > button { min-width: 54px; padding-inline: 8px; }
+.nodu-c-panel .nodu-ep-send { height: auto; min-height: 54px; padding-block: 12px; }
+.nodu-c-panel .nodu-ep-send > textarea { height: auto; min-height: 28px; max-height: 88px; }
+.nodu-c-panel { container: nodu-embedded / inline-size; }
+.nodu-ep-connection-controls, .nodu-ep-serial-status-tools, .nodu-ep-monitor-desktop, .nodu-ep-display-options { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.nodu-ep-connection-controls { flex: 1 1 auto; }
+.nodu-ep-connection-controls .nodu-ep-port { flex: 1 1 190px; min-width: 90px; max-width: 190px; }
+.nodu-ep-serial-status-tools { flex: 0 0 auto; }
+.nodu-c-panel .nodu-ep-display-options > select { width: 80px; min-width: 80px; max-width: 80px; }
+.nodu-ep-display-options { flex: 0 0 auto; }
+.nodu-ep-monitor-more { display: none; position: relative; }
+.nodu-ep-monitor-more > summary { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; list-style: none; cursor: pointer; }
+.nodu-ep-monitor-more > summary::-webkit-details-marker { display: none; }
+.nodu-ep-monitor-more > summary:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-ep-monitor-menu { position: absolute; top: 28px; right: 0; z-index: 20; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; width: 220px; padding: 8px; border: 1px solid var(--theia-panel-border); border-radius: 4px; background: var(--theia-menu-background); box-shadow: 0 3px 10px var(--theia-widget-shadow); }
+@container nodu-embedded (max-width: 699px) {
+    .nodu-ep-serial-context { height: 40px; overflow: visible; }
+    .nodu-ep-connection-controls { flex: 1 1 auto; }
+    .nodu-ep-connection-controls .nodu-ep-port { max-width: none; }
+    .nodu-ep-serial-status-tools { flex: 0 0 auto; }
+    .nodu-ep-monitor-desktop { display: none; }
+    .nodu-ep-monitor-more { display: block; }
+    .nodu-ep-empty { min-height: 0; gap: 4px; justify-content: flex-start; }
+    .nodu-ep-empty > span:last-child { display: none; }
+}
+
+.nodu-ep-state-open { color: var(--theia-scope-ok); }

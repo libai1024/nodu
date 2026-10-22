@@ -8,10 +8,11 @@ import { inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR } from '@theia/core/lib/common';
 import { MessageService } from '@theia/core/lib/common/message-service';
 import { QuickPickService } from '@theia/core/lib/common/quick-pick-service';
-import { FrontendApplicationContribution, KeybindingContribution, KeybindingRegistry } from '@theia/core/lib/browser';
+import { ApplicationShell, FrontendApplicationContribution, KeybindingContribution, KeybindingRegistry } from '@theia/core/lib/browser';
 import { ReactDialog } from '@theia/core/lib/browser/dialogs/react-dialog';
 import { DialogProps } from '@theia/core/lib/browser/dialogs';
 import { isOSX } from '@theia/core/lib/common/os';
+import { ContextKeyService } from '@theia/core/lib/browser/context-key-service';
 import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
 import { SerialPortInfo } from '../common/nodu-device-protocol';
 import { NoduDeviceModel } from './nodu-device-client';
@@ -167,6 +168,8 @@ export class NoduTerminalContribution implements CommandContribution, MenuContri
     @inject(QuickPickService) protected readonly quickPick!: QuickPickService;
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
+    @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    @inject(ContextKeyService) protected readonly contextKeys!: ContextKeyService;
 
     registerCommands(registry: CommandRegistry): void {
         registry.registerCommand({ id: 'scope.open-terminal', label: '新终端', category: '见微 Nodu' }, {
@@ -176,11 +179,11 @@ export class NoduTerminalContribution implements CommandContribution, MenuContri
         // not IDE run/stop. Only while a terminal has focus.
         registry.registerCommand({ id: 'scope.terminal-control-r', label: '终端：发送 Ctrl-R', category: '见微 Nodu' }, {
             execute: () => this.terminals.currentTerminal?.sendText('\x12'),
-            isEnabled: () => !!this.terminals.currentTerminal,
+            isEnabled: () => this.terminals.currentTerminal?.kind === 'nodu-raw',
         });
         registry.registerCommand({ id: 'scope.terminal-control-e', label: '终端：发送 Ctrl-E', category: '见微 Nodu' }, {
             execute: () => this.terminals.currentTerminal?.sendText('\x05'),
-            isEnabled: () => !!this.terminals.currentTerminal,
+            isEnabled: () => this.terminals.currentTerminal?.kind === 'nodu-raw',
         });
     }
 
@@ -191,18 +194,23 @@ export class NoduTerminalContribution implements CommandContribution, MenuContri
     }
 
     registerKeybindings(keys: KeybindingRegistry): void {
-        keys.registerKeybinding({ command: 'scope.terminal-control-r', keybinding: 'ctrlcmd+r', when: 'terminalFocus' });
-        keys.registerKeybinding({ command: 'scope.terminal-control-e', keybinding: 'ctrlcmd+e', when: 'terminalFocus' });
+        keys.registerKeybinding({ command: 'scope.terminal-control-r', keybinding: 'ctrlcmd+r', when: 'terminalFocus && nodu.rawTerminalFocus' });
+        keys.registerKeybinding({ command: 'scope.terminal-control-e', keybinding: 'ctrlcmd+e', when: 'terminalFocus && nodu.rawTerminalFocus' });
         if (isOSX) {
             // On macOS ctrlcmd is Cmd; the original terminal also used the
             // physical Ctrl key for these bytes.
-            keys.registerKeybinding({ command: 'scope.terminal-control-r', keybinding: 'ctrl+r', when: 'terminalFocus' });
-            keys.registerKeybinding({ command: 'scope.terminal-control-e', keybinding: 'ctrl+e', when: 'terminalFocus' });
+            keys.registerKeybinding({ command: 'scope.terminal-control-r', keybinding: 'ctrl+r', when: 'terminalFocus && nodu.rawTerminalFocus' });
+            keys.registerKeybinding({ command: 'scope.terminal-control-e', keybinding: 'ctrl+e', when: 'terminalFocus && nodu.rawTerminalFocus' });
         }
     }
 
     /** Launcher `-open_*_terminal` flags arrive once via the backend env. */
     async onStart(): Promise<void> {
+        const raw = this.contextKeys.createKey<boolean>('nodu.rawTerminalFocus', false);
+        const refresh = (): void => raw.set(this.terminals.currentTerminal?.kind === 'nodu-raw');
+        this.shell.onDidChangeCurrentWidget(refresh);
+        this.shell.onDidChangeActiveWidget(refresh);
+        refresh();
         const requests = await this.device.takeStartupTerminals().catch(() => []);
         for (const args of requests) {
             await this.spawnTerminal(this.startupTitle(args), args)
@@ -236,7 +244,7 @@ export class NoduTerminalContribution implements CommandContribution, MenuContri
     private async spawnTerminal(title: string, args: string[]): Promise<void> {
         const shellPath = await this.device.getTerminalExecutable();
         const terminal = await this.terminals.newTerminal({
-            title, shellPath, shellArgs: args, destroyTermOnClose: true, useServerTitle: false,
+            title, shellPath, shellArgs: args, kind: 'nodu-raw', destroyTermOnClose: true, useServerTitle: false,
         });
         try {
             await terminal.start();

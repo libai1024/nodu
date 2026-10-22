@@ -30,17 +30,41 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     private sequence = 0;
     private readonly pending = new Map<number, Pending>();
     private readonly clients = new Set<EmbeddedClient>();
+    private readonly clientMonitors = new Map<EmbeddedClient, { owner: string; session: string }>();
     private clangd?: ChildProcessWithoutNullStreams;
     private lspBuffer = Buffer.alloc(0);
 
     addClient(client: EmbeddedClient): () => void {
         this.clients.add(client);
-        return () => { this.clients.delete(client); };
+        return () => this.removeClient(client);
+    }
+
+    private removeClient(client: EmbeddedClient): void {
+        this.clients.delete(client);
+        const monitor = this.clientMonitors.get(client);
+        this.clientMonitors.delete(client);
+        // Release only this connection's session; another window may already own a newer one.
+        if (monitor) { void this.call('closeMonitor', monitor).catch(() => undefined); }
+    }
+
+    async callForClient(client: EmbeddedClient, method: EmbeddedMethod, args: Record<string, unknown>): Promise<CallOutcome> {
+        const result = await this.call(method, args);
+        if (method === 'openMonitor' && result.ok) {
+            const state = result.result as { open?: boolean; owner?: string; session?: string };
+            if (state.open && typeof state.owner === 'string' && typeof state.session === 'string') {
+                const monitor = { owner: state.owner, session: state.session };
+                if (this.clients.has(client)) { this.clientMonitors.set(client, monitor); }
+                else { await this.call('closeMonitor', monitor).catch(() => undefined); }
+            }
+        } else if (method === 'closeMonitor' && result.ok && this.clientMonitors.get(client)?.session === args.session) {
+            this.clientMonitors.delete(client);
+        }
+        return result;
     }
 
     private publish(event: string, data: unknown): void {
         for (const client of this.clients) {
-            try { Promise.resolve(client.onEvent(event, data)).catch(() => this.clients.delete(client)); } catch { this.clients.delete(client); }
+            try { Promise.resolve(client.onEvent(event, data)).catch(() => this.removeClient(client)); } catch { this.removeClient(client); }
         }
     }
 

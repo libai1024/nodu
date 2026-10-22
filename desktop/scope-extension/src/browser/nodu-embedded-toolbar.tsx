@@ -64,7 +64,7 @@ function BootGuide({ model, exec }: Pick<CToolbarProps, 'model' | 'exec'>): Reac
         {enter && <p className={model.romDetected ? 'nodu-c-ok-text' : 'nodu-c-muted'}>{model.romDetected ? '已检测到芯片，正在写入…' : '正在等待芯片应答（最多 60 秒）…'}</p>}
         <div className="nodu-c-guide-actions">
             {enter ? <button className="theia-button secondary" onClick={() => exec(C_COMMANDS.stop)}>停止</button>
-                : <button className="theia-button main" onClick={() => exec(C_COMMANDS.finishBoot)}>完成，打开串口监视器</button>}
+                : <button className="theia-button main" onClick={() => exec(C_COMMANDS.finishBoot)}>已恢复 BOOT 并复位</button>}
         </div>
     </div>;
 }
@@ -117,7 +117,7 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
         <div className="scope-toolbar-center"><TaskStrip model={model} exec={exec} setDeviceOpen={props.setDeviceOpen} /></div>
         <div className="scope-toolbar-end">
             <button className="scope-action scope-toolbar-icon scope-toolbar-files" aria-label="文件列表" aria-pressed={props.filesVisible} onClick={() => exec('scope.toggle-files')} title={props.filesVisible ? '隐藏文件列表' : '显示文件列表'}><i className={`codicon codicon-layout-sidebar-left${props.filesVisible ? '' : '-off'}`} aria-hidden="true"/></button>
-            <button className={`scope-action scope-toolbar-icon nodu-c-panel-toggle${errors ? ' nodu-has-error' : ''}`} aria-label={`问题与串口监视器${errors ? ` · ${errors} 个错误` : ''}`} aria-pressed={props.panelVisible} onClick={() => exec(C_COMMANDS.togglePanel)} title={props.panelVisible ? '隐藏问题与串口监视器' : '显示问题与串口监视器'}>
+            <button className={`scope-action scope-toolbar-icon nodu-c-panel-toggle${errors ? ' nodu-has-error' : ''}`} aria-label={`STM32 开发面板${errors ? ` · ${errors} 个错误` : ''}`} aria-pressed={props.panelVisible} onClick={() => exec(C_COMMANDS.togglePanel)} title={props.panelVisible ? '收起 STM32 开发面板' : '显示 STM32 开发面板'}>
                 <i className={`codicon codicon-layout-panel${props.panelVisible ? '' : '-off'}`} aria-hidden="true"/>{errors ? <span className="nodu-c-badge" aria-hidden="true">{errors > 99 ? '99+' : errors}</span> : null}
             </button>
             {props.tutorButton}

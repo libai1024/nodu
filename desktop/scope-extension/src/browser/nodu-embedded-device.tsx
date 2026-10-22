@@ -101,8 +101,8 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput }: { model
         {method === 'stlink' && <Section title="串口监视器" icon="output">
             <div className="nodu-device-field">
                 <label htmlFor="nodu-c-monitor-port">串口</label>
-                <select id="nodu-c-monitor-port" value={model.monitorPort} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                    <option value="">运行后不打开</option>{portOptions}
+                <select id="nodu-c-monitor-port" value={model.monitorPort} disabled={locked || model.monitor.open || model.monitorBusy} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
+                    <option value="">选择串口（手动连接）</option>{portOptions}
                 </select>
             </div>
             {uart && <p className="nodu-c-muted">{uart.instance}：TX {uart.tx}，RX {uart.rx} · {uart.via}</p>}

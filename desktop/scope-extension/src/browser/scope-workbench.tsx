@@ -27,7 +27,7 @@ import { NoduDeviceModel } from './nodu-device-client';
 import { copyImageParameters } from './nodu-image-clipboard';
 import { ScopeLayoutState } from './scope-layout-state';
 import { NoduDevicePanel } from './nodu-device-panel';
-import { NoduConsoleWidget } from './nodu-console-widget';
+import { NoduBottomPanelWidget } from './nodu-bottom-panel';
 import { NoduBoardFilesContribution } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS } from './nodu-tutor-hints';
@@ -76,9 +76,9 @@ export class ScopeDeviceContribution extends AbstractViewContribution<ScopeDevic
 }
 
 @injectable()
-export class ScopeConsoleContribution extends AbstractViewContribution<NoduConsoleWidget> {
+export class ScopeConsoleContribution extends AbstractViewContribution<NoduBottomPanelWidget> {
     constructor() {
-        super({ widgetId: NoduConsoleWidget.ID, widgetName: NoduConsoleWidget.LABEL,
+        super({ widgetId: NoduBottomPanelWidget.ID, widgetName: NoduBottomPanelWidget.LABEL,
             defaultWidgetOptions: { area: 'bottom', rank: 50 } });
     }
 }
@@ -165,7 +165,7 @@ export class ScopeToolbar extends ReactWidget {
             <div className="scope-toolbar-end">
             {/* Position-named toggles (left / bottom / right) avoid clashing with the 文件 menu. */}
             <button className="scope-action scope-toolbar-icon scope-toolbar-files" aria-label="文件列表" aria-pressed={filesVisible} onClick={() => void this.commands.executeCommand('scope.toggle-files')} title={filesVisible ? '隐藏文件列表' : '显示文件列表'}><i className={`codicon codicon-layout-sidebar-left${filesVisible ? '' : '-off'}`} aria-hidden="true"/></button>
-            <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="串行终端" aria-pressed={consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title={consoleVisible ? '隐藏串行终端' : '显示串行终端'}><i className={`codicon codicon-layout-panel${consoleVisible ? '' : '-off'}`} aria-hidden="true"/></button>
+            <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="开发面板" aria-pressed={consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title={consoleVisible ? '收起开发面板' : '显示开发面板'}><i className={`codicon codicon-layout-panel${consoleVisible ? '' : '-off'}`} aria-hidden="true"/></button>
             {/* Teaching projects only; 帧缓冲 stays the rightmost panel toggle. */}
             {this.tutor.plan && <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="教学步骤" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title={this.tutor.panelVisible ? '隐藏教学步骤' : '显示教学步骤'}><i className="codicon codicon-mortar-board" aria-hidden="true"/></button>}
             <button className="scope-action scope-toolbar-icon scope-toolbar-vision" aria-label="帧缓冲" aria-pressed={visionVisible} onClick={() => void this.commands.executeCommand('scope.toggle-vision')} title={visionVisible ? '隐藏帧缓冲' : '显示帧缓冲'}><i className={`codicon codicon-layout-sidebar-right${visionVisible ? '' : '-off'}`} aria-hidden="true"/></button>
@@ -236,7 +236,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private tracebackTail = '';
     private tracebackDecorations: string[] = [];
     private readonly panelProfiles = {
-        simple: { files: false, console: false, vision: false },
+        simple: { files: false, console: true, vision: false },
         pro: { files: true, console: true, vision: true }
     };
 
@@ -258,7 +258,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         const vision = this.vision.tryGetWidget();
         const console = this.consoleView.tryGetWidget();
         this.layoutState.setPanels(!!files?.isVisible && this.shell.getAreaFor(files) === 'left',
-            this.layoutState.mode === 'simple' ? !!console?.isVisible && this.shell.getAreaFor(console) === 'bottom' : !this.shell.bottomPanel.isHidden,
+            !!console?.isVisible && this.shell.getAreaFor(console) === 'bottom' && !this.shell.bottomPanel.isHidden,
             !!vision?.isVisible && this.shell.getAreaFor(vision) === 'right' && right.tabBar.currentTitle?.owner === vision);
         const geometry = `${this.layoutState.mode}:${left.dockPanel.isHidden}:${right.dockPanel.isHidden}`;
         if (geometry !== this.geometry) {
@@ -346,11 +346,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     async initializeLayout(): Promise<void> {
         await this.navigator.openView({ activate: false });
         await this.vision.openView({ activate: false });
-        await this.outputView.openView({ activate: false });
-        this.output.getChannel('Nodu · 设备').show({ preserveFocus: true });
+        await this.consoleView.openView({ activate: false });
         this.shell.resize(220, 'left');
         this.shell.resize(420, 'right');
-        this.shell.resize(160, 'bottom');
+        (await this.consoleView.widget).restoreHeight();
         const root = (await this.workspace.roots)[0];
         if (root) {
             // Only open files that exist; never create or overwrite a user's project on startup.
@@ -425,13 +424,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     private async showConsole(activate: boolean): Promise<void> {
-        if (this.layoutState.mode === 'simple') {
-            await this.ensureSimplePanel(await this.consoleView.widget, 'bottom');
-            await this.consoleView.openView({ area: 'bottom', reveal: true, activate });
-        } else {
-            this.output.getChannel('Nodu · 设备').show({ preserveFocus: !activate });
-            await this.outputView.openView({ reveal: true, activate });
-        }
+        const widget = await this.consoleView.widget;
+        await this.ensureSimplePanel(widget, 'bottom');
+        await this.consoleView.openView({ area: 'bottom', reveal: true, activate });
+        if (widget.node.clientHeight < 180) { widget.restoreHeight(); }
     }
 
     /** 示例 / 最近的文件 live under the 文件 menu (NoduFileDocsContribution); link, never copy. */
@@ -501,7 +497,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         });
         const panel = (id: string, label: string, execute: () => Promise<void>, visible: () => boolean) => registry.registerCommand({ id, label, category: '见微 Nodu' }, { execute: () => this.serializeLayout(execute), isToggled: visible });
         panel('scope.toggle-files', '文件列表', () => this.toggleFiles(), () => this.layoutState.filesVisible);
-        panel('scope.toggle-console', '串行终端', () => this.toggleConsole(), () => this.layoutState.consoleVisible);
+        panel('scope.toggle-console', '开发面板', () => this.toggleConsole(), () => this.layoutState.consoleVisible);
         panel('scope.toggle-vision', '帧缓冲', () => this.toggleVision(), () => this.layoutState.visionVisible);
         command('scope.show-files', '显示项目文件', () => this.serializeLayout(async () => { await this.ensureSimplePanel(this.filesWidget(), 'left'); await this.navigator.openView({ activate: true }); await this.settlePanels(); }));
         command('scope.show-vision', '显示帧缓冲', () => this.serializeLayout(async () => { await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right'); await this.vision.openView({ activate: true }); await this.settlePanels(); }));

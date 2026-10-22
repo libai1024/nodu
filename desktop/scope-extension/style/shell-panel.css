@@ -1,0 +1,117 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-shell-panel {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    container: nodu-shell / inline-size;
+    color: var(--theia-foreground);
+    background: var(--theia-terminal-background, var(--theia-editor-background));
+}
+.nodu-shell-toolbar { min-height: 28px; max-height: 28px; overflow: hidden; }
+.nodu-shell-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    box-shadow: inset 0 -1px var(--theia-panel-border);
+    background: var(--theia-panel-background);
+    font-size: 12px;
+}
+.nodu-shell-context-icon { flex: none; font-size: 14px; color: var(--theia-descriptionForeground); }
+.nodu-shell-select {
+    flex: 0 1 200px;
+    min-width: 76px;
+    max-width: 240px;
+    height: 24px;
+    padding: 0 4px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--theia-foreground);
+    background: var(--theia-panel-background);
+    font: inherit;
+    text-align: center;
+    text-align-last: center;
+    text-overflow: ellipsis;
+}
+.nodu-shell-select:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-shell-context {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--theia-descriptionForeground);
+}
+.nodu-shell-context.nodu-shell-failure { color: var(--theia-errorForeground); }
+.nodu-shell-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; flex: none; }
+.nodu-shell-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--theia-foreground);
+    font: inherit;
+    cursor: pointer;
+}
+.nodu-shell-action > .codicon { font-size: 16px; }
+.nodu-shell-action:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-shell-action:disabled, .nodu-shell-select:disabled { opacity: .45; cursor: default; }
+.nodu-shell-action:focus-visible, .nodu-shell-select:focus-visible, .nodu-shell-create:focus-visible {
+    outline: 2px solid var(--theia-focusBorder);
+    outline-offset: -2px;
+}
+.nodu-shell-stack, .nodu-shell-split, .nodu-shell-empty-widget {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+.nodu-shell-split > .lm-SplitPanel-handle { background: var(--theia-panel-border); }
+.nodu-shell-split > .terminal-container { min-width: 0; min-height: 0; }
+.nodu-shell-empty {
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: var(--theia-descriptionForeground);
+}
+.nodu-shell-empty > p { max-width: 100%; margin: 0; line-height: 1.6; overflow-wrap: anywhere; }
+.nodu-shell-empty-error { color: var(--theia-errorForeground); }
+.nodu-shell-create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 26px;
+    min-width: 80px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 3px;
+    font: inherit;
+    color: var(--theia-button-foreground);
+    background: var(--theia-button-background);
+    cursor: pointer;
+}
+.nodu-shell-create:hover:not(:disabled) { background: var(--theia-button-hoverBackground); }
+.nodu-shell-create:disabled { opacity: .45; cursor: default; }
+@container nodu-shell (max-width: 580px) {
+    .nodu-shell-context:not(.nodu-shell-failure) { display: none; }
+    .nodu-shell-select { flex: 1 1 auto; max-width: none; }
+}
+@container nodu-shell (max-width: 360px) {
+    .nodu-shell-context-icon { display: none; }
+    .nodu-shell-bar { gap: 3px; padding-inline: 4px; }
+}

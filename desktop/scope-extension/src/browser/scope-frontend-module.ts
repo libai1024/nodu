@@ -35,7 +35,10 @@ import '../../style/tutor.css';
 import '../../style/embedded.css';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduEmbeddedPanel } from './nodu-embedded-panel';
-import { NoduEmbeddedContribution, NoduEmbeddedPanelContribution } from './nodu-embedded-contribution';
+import { NoduEmbeddedContribution } from './nodu-embedded-contribution';
+import { NoduBottomPanelWidget, NoduBottomPanelContribution } from './nodu-bottom-panel';
+import { NoduShellPanelWidget } from './nodu-shell-panel';
+import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-creation-handler';
 import { NoduClangdClient } from './nodu-clangd-client';
 
 export default new ContainerModule(bind => {
@@ -43,8 +46,13 @@ export default new ContainerModule(bind => {
     // STM32 C workbench (0.2.1): inert until a folder with nodu.json kind stm32-hal is open.
     bind(NoduEmbeddedModel).toSelf().inSingletonScope();
     bind(NoduEmbeddedPanel).toSelf();
-    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduEmbeddedPanel.ID, createWidget: () => ctx.container.get(NoduEmbeddedPanel) })).inSingletonScope();
-    bindViewContribution(bind, NoduEmbeddedPanelContribution);
+    bind(NoduShellPanelWidget).toSelf().inSingletonScope();
+    bind(NoduBottomPanelWidget).toSelf().inSingletonScope();
+    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduBottomPanelWidget.ID, createWidget: () => ctx.container.get(NoduBottomPanelWidget) })).inSingletonScope();
+    bind(NoduBottomPanelContribution).toSelf().inSingletonScope();
+    for (const contribution of [CommandContribution, MenuContribution, TerminalCreationHandler]) {
+        bind(contribution).toService(NoduBottomPanelContribution);
+    }
     bind(NoduEmbeddedContribution).toSelf().inSingletonScope();
     for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution]) {
         bind(contribution).toService(NoduEmbeddedContribution);
@@ -62,7 +70,6 @@ export default new ContainerModule(bind => {
     bindViewContribution(bind, NoduBoardGuideContribution);
     bind(WidgetFactory).toDynamicValue(ctx => ({ id: ScopeVisionWidget.ID, createWidget: () => ctx.container.get(ScopeVisionWidget) })).inSingletonScope();
     bind(WidgetFactory).toDynamicValue(ctx => ({ id: ScopeDeviceWidget.ID, createWidget: () => ctx.container.get(ScopeDeviceWidget) })).inSingletonScope();
-    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduConsoleWidget.ID, createWidget: () => ctx.container.get(NoduConsoleWidget) })).inSingletonScope();
     bindViewContribution(bind, ScopeVisionContribution);
     bind(ScopeVisionToolbarContribution).toSelf().inSingletonScope();
     bind(CommandContribution).toService(ScopeVisionToolbarContribution);

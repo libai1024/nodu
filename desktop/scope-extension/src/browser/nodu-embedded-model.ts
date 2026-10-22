@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: MIT
+import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
+import { SerialTextDecoder, serialBase64, serialBytes } from '../common/nodu-serial-data';
 import { Emitter } from '@theia/core/lib/common/event';
 import { URI } from '@theia/core/lib/common/uri';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
@@ -10,12 +12,12 @@ import { ProblemManager } from '@theia/markers/lib/browser/problem/problem-manag
 import { Diagnostic as LspDiagnostic } from '@theia/core/shared/vscode-languageserver-protocol';
 import {
     BackupRecord, BuildResult, CallOutcome, CatalogBoard, ChipIdentity, Diagnostic, EmbeddedClient, EmbeddedFailure,
-    EmbeddedMethod, FlashResult, NODU_EMBEDDED_PATH, NoduEmbeddedService, PortInfo, ProbeInfo, ProjectStatus
+    EmbeddedMethod, FlashResult, MonitorSnapshot, MonitorWriteResult, NODU_EMBEDDED_PATH, NoduEmbeddedService, PortInfo, ProbeInfo, ProjectStatus
 } from '../common/nodu-embedded-protocol';
 
 export type Tone = 'busy' | 'ok' | 'error' | 'warn';
 export interface TaskStrip { text: string; tone: Tone; steps?: { id: string; label: string; state: string }[]; target?: 'problems' | 'output' | 'device' | 'monitor'; at: number }
-export interface MonitorLine { text: string; kind: 'data' | 'separator' | 'system' }
+export interface MonitorLine { text: string; kind: 'data' | 'separator' | 'system'; bytes?: Uint8Array; direction?: 'RX' | 'TX'; at: number }
 export type PanelTab = 'problems' | 'monitor' | 'output';
 
 /** Thrown by `call` with the sidecar's stable code and tool output. */
@@ -65,18 +67,25 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     backups: BackupRecord[] = [];
     probe = '';
     monitorPort = '';
-    monitor = { open: false, port: '', baud: 115200, state: 'closed', message: '' as string | undefined };
+    monitor: MonitorSnapshot = { open: false, port: '', baud: 115200, state: 'closed' };
+    monitorBusy = false;
+    monitorSending = false;
+    monitorSendError = '';
+    private readonly monitorOwner = crypto.randomUUID();
+    private monitorBytes = 0;
+    monitorTrimmed = false;
     readonly monitorLines: MonitorLine[] = [];
     readonly output: string[] = [];
-    panelTab: PanelTab = 'problems';
+    panelTab: PanelTab = 'output';
     runCount = 0;
-    private partial = '';
-    private decoder: TextDecoder | undefined;
+    private decoder = new SerialTextDecoder();
     private buildId = '';
     private runId = '';
     private markerUris = new Set<string>();
     /** Workspace root as the editor sees it; the sidecar reports the canonical (symlink-free) path. */
     private localRoot = '';
+    private projectEpoch = 0;
+    private monitorOpenEpoch = -1;
 
     toLocal(path: string): string {
         const root = this.project?.path;
@@ -112,6 +121,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     /** A folder is a C project when its nodu.json says `kind: stm32-hal`. */
     async detect(root: URI | undefined): Promise<void> {
+        const epoch = ++this.projectEpoch;
         let project: ProjectStatus | undefined;
         if (root) {
             try {
@@ -123,22 +133,36 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                     }
                 }
             } catch (error) {
+                if (epoch !== this.projectEpoch) { return; }
                 this.setTask(`STM32 工程无法打开：${error instanceof Error ? error.message : String(error)}`, 'error');
             }
         }
+        if (epoch !== this.projectEpoch) { return; }
         const switched = project?.path !== this.project?.path;
         this.localRoot = root?.path.fsPath() ?? '';
         this.project = project;
         this.cProjectKey.set(!!project);
-        if (switched) { this.clearMarkers(); this.lastBuild = undefined; this.identity = undefined; this.projectChanged.fire(project); }
+        if (switched) {
+            this.clearMarkers(); this.lastBuild = undefined; this.identity = undefined;
+            this.output.length = 0; this.buildId = ''; this.runId = '';
+            // A project switch cannot inherit permission to send on a prior session.
+            if (this.monitor.open && this.monitor.session) {
+                void this.call('closeMonitor', { owner: this.monitorOwner, session: this.monitor.session }).catch(() => undefined);
+                this.monitor = { ...this.monitor, open: false, state: 'closed' };
+                this.pushMonitor('工程已切换；串口需要手动连接。', 'system');
+            }
+            this.projectChanged.fire(project);
+        }
         if (project) { void this.refreshDevices(); }
         this.fire();
     }
 
     async reload(): Promise<void> {
-        if (!this.project) { return; }
-        this.project = await this.call<ProjectStatus>('openProject', { path: this.project.path });
-        this.fire();
+        const project = this.project, epoch = this.projectEpoch;
+        if (!project) { return; }
+        const next = await this.call<ProjectStatus>('openProject', { path: project.path });
+        if (epoch !== this.projectEpoch) { return; }
+        this.project = next; this.fire();
     }
 
     setTask(text: string, tone: Tone, extra: Partial<TaskStrip> = {}): void {
@@ -193,17 +217,31 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             case 'flash.detected':
                 if (d.runId === this.runId) { this.romDetected = true; this.fire(); }
                 break;
-            case 'monitor.state':
-                this.monitor = { open: d.state === 'open' || d.state === 'disconnected' || d.state === 'lent', port: String(d.port || ''), baud: Number(d.baud || this.monitor.baud), state: String(d.state), message: d.message as string | undefined };
-                if (d.state === 'closed') { this.monitor.open = false; }
+            case 'monitor.state': {
+                if (d.owner !== this.monitorOwner) { break; }
+                const port = String(d.port || '');
+                const state = String(d.state) as MonitorSnapshot['state'];
+                if (state === 'open' && this.monitorOpenEpoch !== this.projectEpoch) { break; }
+                if (state !== 'open' && this.monitor.session && d.session && d.session !== this.monitor.session) { break; }
+                if (state !== 'open') { this.finishDecoder(); }
+                this.monitor = { open: state === 'open', port, baud: Number(d.baud || this.monitor.baud), state,
+                    session: d.session as string | undefined, owner: this.monitorOwner, message: d.message as string | undefined };
                 if (d.message) { this.pushMonitor(String(d.message), 'system'); }
                 this.fire();
                 break;
+            }
             case 'monitor.data':
-                this.decode(String(d.data || ''));
+                if (this.monitor.open && d.port === this.monitor.port && d.session === this.monitor.session) {
+                    this.decode(String(d.data || ''));
+                }
                 break;
             case 'service.state':
-                if (d.running === false) { this.building = false; this.flashing = false; this.setTask(String(d.message || 'STM32 服务已停止'), 'error'); }
+                if (d.running === false) {
+                    this.building = false; this.flashing = false;
+                    this.finishDecoder();
+                    this.monitor = { ...this.monitor, open: false, state: 'disconnected', message: '服务已停止，请手动重新连接。' };
+                    this.setTask(String(d.message || 'STM32 服务已停止'), 'error');
+                }
                 break;
         }
     }
@@ -246,26 +284,50 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     // ── serial monitor ──
     private decode(base64: string): void {
-        const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
-        const encoding = this.project?.manifest.monitor?.encoding === 'gbk' ? 'gbk' : 'utf-8';
-        if (!this.decoder || this.decoder.encoding !== (encoding === 'gbk' ? 'gbk' : 'utf-8')) { this.decoder = new TextDecoder(encoding); }
-        const text = this.partial + this.decoder.decode(bytes, { stream: true });
-        const lines = text.split(/\r?\n/);
-        this.partial = lines.pop() ?? '';
-        for (const line of lines) { this.pushMonitor(line.replace(/\r/g, ''), 'data', false); }
+        try {
+            const bytes = serialBytes(base64);
+            this.addMonitorRecord({ bytes, text: this.decoder.push(bytes), direction: 'RX', kind: 'data', at: Date.now() });
+        } catch { this.pushMonitor('收到的数据格式无效。', 'system'); }
+    }
+
+    private finishDecoder(): void {
+        const tail = this.decoder.finish();
+        if (tail) {
+            const last = [...this.monitorLines].reverse().find(line => line.direction === 'RX' && line.bytes);
+            if (last) { last.text += tail; this.monitorChanged.fire(); }
+        }
+    }
+
+    private addMonitorRecord(record: MonitorLine): void {
+        this.monitorLines.push(record);
+        this.monitorBytes += record.bytes?.length ?? record.text.length * 2;
+        while (this.monitorLines.length > MAX_LINES || this.monitorBytes > 1024 * 1024) {
+            const removed = this.monitorLines.shift()!;
+            this.monitorBytes -= removed.bytes?.length ?? removed.text.length * 2;
+            this.monitorTrimmed = true;
+        }
         this.monitorChanged.fire();
     }
 
-    get monitorPartial(): string { return this.partial; }
-
-    pushMonitor(text: string, kind: MonitorLine['kind'], notify = true): void {
-        if (kind !== 'data' && this.partial) { this.monitorLines.push({ text: this.partial, kind: 'data' }); this.partial = ''; }
-        this.monitorLines.push({ text, kind });
-        if (this.monitorLines.length > MAX_LINES) { this.monitorLines.splice(0, this.monitorLines.length - MAX_LINES); }
-        if (notify) { this.monitorChanged.fire(); }
+    pushMonitor(text: string, kind: MonitorLine['kind']): void {
+        this.addMonitorRecord({ text, kind, at: Date.now() });
     }
 
-    clearMonitor(): void { this.monitorLines.length = 0; this.partial = ''; this.monitorChanged.fire(); }
+    clearMonitor(): void {
+        this.monitorLines.length = 0; this.monitorBytes = 0; this.monitorTrimmed = false;
+        this.decoder = new SerialTextDecoder(this.project?.manifest.monitor?.encoding === 'gbk' ? 'gbk' : 'utf-8');
+        this.monitorChanged.fire();
+    }
+
+    /** Re-render retained raw RX bytes with a fresh stream decoder after an encoding change. */
+    private redecodeMonitor(): void {
+        this.decoder = new SerialTextDecoder(this.project?.manifest.monitor?.encoding === 'gbk' ? 'gbk' : 'utf-8');
+        for (const line of this.monitorLines) {
+            if (line.direction === 'RX' && line.bytes) { line.text = this.decoder.push(line.bytes); }
+            else if (line.kind !== 'data') { this.decoder.finish(); }
+        }
+        this.monitorChanged.fire();
+    }
 
     // ── device lists ──
     async refreshDevices(): Promise<void> {
@@ -274,7 +336,6 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             this.probes = probes;
             this.ports = ports;
             if (this.probe && !probes.some(p => p.serial === this.probe)) { this.probe = ''; }
-            if (!this.monitorPort && ports.length === 1) { this.monitorPort = ports[0].path; }
         } catch { /* the toolbar shows "未检测到" */ }
         this.fire();
     }
@@ -284,7 +345,10 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.fire();
     }
 
-    setMonitorPort(port: string): void { this.monitorPort = port; localStorage.setItem('nodu.stm32.monitor-port', port); this.fire(); }
+    setMonitorPort(port: string): void {
+        if (this.monitor.open || this.monitorBusy || this.monitor.state === 'lent') { return; }
+        this.monitorPort = port; localStorage.setItem('nodu.stm32.monitor-port', port); this.fire();
+    }
 
     catalog(): Promise<{ boards: CatalogBoard[] }> { return this.call('catalog'); }
 
@@ -313,7 +377,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     async build(clean = false): Promise<BuildResult | undefined> {
-        const project = this.project;
+        const project = this.project, epoch = this.projectEpoch;
         if (!project || this.building || this.flashing) { return undefined; }
         this.building = true;
         this.lastError = undefined;
@@ -321,6 +385,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.setTask('编译中', 'busy', { target: 'output' });
         try {
             const result = await this.call<BuildResult>('build', { path: project.path, clean });
+            if (epoch !== this.projectEpoch) { return undefined; }
             this.lastBuild = result;
             this.setDiagnostics(result.diagnostics);
             if (!result.ok) {
@@ -337,6 +402,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             await this.reload().catch(() => undefined);
             return result;
         } catch (error) {
+            if (epoch !== this.projectEpoch) { return undefined; }
             if (error instanceof EmbeddedError && error.code === 'untrusted') { throw error; }
             this.fail(error, '编译');
             return undefined;
@@ -347,42 +413,43 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         }
     }
 
-    /** 运行: build if needed, download, start, show serial output (F1). */
+    /** Build and download. UART monitoring is an independent, manual action. */
     async run(): Promise<boolean> {
-        const project = this.project;
+        const project = this.project, epoch = this.projectEpoch;
         if (!project || this.busy) { return false; }
+        const method = project.flashMethod, selectedPort = this.monitorPort, probe = this.probe;
+        const targetUnchanged = (): boolean => epoch === this.projectEpoch && this.project?.flashMethod === method && this.monitorPort === selectedPort && this.probe === probe;
         const built = await this.build();
-        if (!built?.ok || built.stale || !built.artifact) { return false; }
-        const method = this.project?.flashMethod ?? project.flashMethod;
-        const port = method === 'uart' ? this.monitorPort : '';
+        if (!targetUnchanged() || !built?.ok || built.stale || !built.artifact) { return false; }
+        const port = method === 'uart' ? selectedPort : '';
         if (method === 'uart' && !port) {
             this.settle('串口下载需要先选择串口', 'error', { target: 'device' });
             this.lastError = { code: 'noPort', message: '串口下载需要先在设备弹层中选择 USB 转串口。' };
             return false;
         }
-        // ST-LINK leaves the serial port free: open the monitor first to catch the first lines.
-        if (method === 'stlink') { await this.ensureMonitor().catch(() => undefined); }
-        this.runCount += 1;
-        this.pushMonitor(`── 运行 #${this.runCount} · ${new Date().toLocaleTimeString()} · ${built.artifact.bundleSha256.slice(0, 7)} ──`, 'separator');
+        const releaseMonitor = await this.confirmMonitorRelease(method, port);
+        if (releaseMonitor === undefined || !targetUnchanged()) { return false; }
         this.flashing = true;
         this.flashSteps = {};
         this.lastError = undefined;
         this.setTask('识别开发板', 'busy', { steps: this.steps(method), target: 'output' });
         try {
-            const result = await this.call<FlashResult>('flash', { path: project.path, bundle: built.artifact.bundleSha256, method, probe: this.probe || undefined, port: port || undefined });
+            const result = await this.call<FlashResult>('flash', { path: project.path, bundle: built.artifact.bundleSha256, method, probe: probe || undefined, port: port || undefined, releaseMonitor, monitorOwner: this.monitorOwner, monitorSession: this.monitor.session });
+            if (epoch !== this.projectEpoch) { return false; }
             this.lastFlash = result;
             this.identity = { ...result.identity, matches: null, hasBackup: true };
             if (result.backup) { this.appendOutput(`已备份出厂程序：${result.backup.id}（${formatBytes(result.backup.bytes)}）`); }
             if (result.needsBootRestore) {
                 this.awaitUser = 'exitBoot';
-                this.settle('已写入并校验 · 把 BOOT0 接回 0，再按复位键', 'ok', { target: 'monitor' });
+                this.settle('已写入并校验 · 把 BOOT0 接回 0，再按复位键', 'ok', { target: 'output' });
             } else {
-                const running = result.running === false ? '程序没有运行（心跳未变化）' : '运行中';
-                this.settle(`${running}${this.monitor.open ? ' · 串口已连接' : ''} · 写入 ${result.erase.label}`, result.running === false ? 'warn' : 'ok', { target: 'monitor' });
+                const running = result.running === true ? '运行状态已确认' : result.running === false ? '程序没有运行（心跳未变化）' : '下载完成 · 运行状态未确认';
+                this.settle(`${running}${this.monitor.open ? ' · 串口已连接' : ''} · 写入 ${result.erase.label}`, result.running === false ? 'warn' : 'ok', { target: 'output' });
             }
             void this.loadBackups();
             return true;
         } catch (error) {
+            if (epoch !== this.projectEpoch) { return false; }
             this.fail(error, '下载');
             return false;
         } finally {
@@ -401,31 +468,75 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         if (this.awaitUser === 'exitBoot') { this.awaitUser = undefined; this.fire(); }
     }
 
-    /** The user moved BOOT0 back and pressed reset (serial ISP, page 2 of the guide). */
+    /** User acknowledgement only: no assertion that firmware ran, and no serial side effect. */
     async finishBoot(): Promise<void> {
         this.awaitUser = undefined;
-        this.fire();
-        await this.ensureMonitor().catch(error => this.fail(error, '打开串口'));
+        this.settle('已确认恢复 BOOT 配置并复位 · 串口监视请手动连接', 'ok', { target: 'output' });
     }
 
+    private async confirmMonitorRelease(method: string, port: string): Promise<boolean | undefined> {
+        if (method !== 'uart' || !this.monitor.open || this.monitor.port !== port) { return false; }
+        const session = this.monitor.session;
+        const yes = await new ConfirmDialog({ title: '将串口交给下载',
+            msg: `${port} 正在监视。继续会断开监视并暂停发送；日志和输入保留。下载后恢复 BOOT 配置并复位，再手动连接串口。`,
+            ok: '断开并下载', cancel: '取消' }).open();
+        return yes === true && session === this.monitor.session && this.monitor.open ? true : undefined;
+    }
+
+    /** Called only by an explicit Connect action. */
     async ensureMonitor(): Promise<void> {
-        const port = this.monitorPort;
-        if (!this.project || !port || (this.monitor.open && this.monitor.port === port)) { return; }
-        await this.call('openMonitor', { port, baud: this.project.manifest.monitor?.baud ?? 115200 });
+        const port = this.monitorPort, epoch = this.projectEpoch;
+        if (!this.project || !port || this.monitor.open || this.monitorBusy || this.monitor.state === 'lent' || this.awaitUser === 'exitBoot') { return; }
+        this.monitorBusy = true;
+        this.monitorOpenEpoch = epoch;
+        this.monitorSendError = '';
+        this.monitor = { ...this.monitor, port, session: undefined, state: 'connecting', message: undefined };
+        this.fire();
+        try {
+            this.finishDecoder();
+            this.decoder = new SerialTextDecoder(this.project.manifest.monitor?.encoding === 'gbk' ? 'gbk' : 'utf-8');
+            const status = await this.call<MonitorSnapshot>('openMonitor', { port, baud: this.project.manifest.monitor?.baud ?? 115200, owner: this.monitorOwner });
+            if (epoch !== this.projectEpoch) {
+                if (status.session) { await this.call('closeMonitor', { owner: this.monitorOwner, session: status.session }).catch(() => undefined); }
+                this.monitor = { ...this.monitor, open: false, state: 'closed' };
+                return;
+            }
+            // A disconnect event may have overtaken the RPC response.
+            if (this.monitor.state === 'connecting' || this.monitor.state === 'open') {
+                this.monitor = { ...status, state: status.open ? 'open' : 'disconnected' };
+            }
+            if (this.monitor.open) { this.pushMonitor(`已连接 ${port} · ${status.baud}`, 'system'); }
+        } catch (error) {
+            this.monitor = { ...this.monitor, open: false, state: 'disconnected', message: error instanceof Error ? error.message : String(error) };
+            this.pushMonitor(this.monitor.message!, 'system');
+        } finally { this.monitorBusy = false; this.fire(); }
     }
 
     async toggleMonitor(): Promise<void> {
-        try {
-            if (this.monitor.open) { await this.call('closeMonitor'); } else { await this.ensureMonitor(); }
-        } catch (error) { this.fail(error, '串口监视器'); }
+        if (this.monitorBusy || this.monitor.state === 'lent') { return; }
+        if (!this.monitor.open) { await this.ensureMonitor(); return; }
+        this.monitorBusy = true; this.fire();
+        try { await this.call('closeMonitor', { owner: this.monitorOwner, session: this.monitor.session }); this.finishDecoder(); this.monitor = { ...this.monitor, open: false, state: 'closed' }; }
+        catch (error) { this.fail(error, '断开串口'); }
+        finally { this.monitorBusy = false; this.fire(); }
     }
 
-    async sendMonitor(text: string): Promise<void> {
-        const bytes = new TextEncoder().encode(text);
-        let binary = '';
-        bytes.forEach(b => { binary += String.fromCharCode(b); });
-        try { await this.call('writeMonitor', { data: btoa(binary) }); } catch (error) { this.fail(error, '发送'); }
+    async sendMonitorBytes(bytes: Uint8Array): Promise<boolean> {
+        if (!this.monitor.open || this.monitorSending || this.monitorBusy || this.monitorOpenEpoch !== this.projectEpoch) { return false; }
+        if (!bytes.length || bytes.length > 64 * 1024) { this.monitorSendError = '一次发送 1–65536 字节。'; this.fire(); return false; }
+        this.monitorSending = true; this.monitorSendError = ''; this.fire();
+        try {
+            const result = await this.call<MonitorWriteResult>('writeMonitor', { data: serialBase64(bytes), owner: this.monitorOwner, session: this.monitor.session });
+            if (result.sent !== bytes.length) { throw new Error('写入长度未确认，请检查设备状态后再决定是否重试。'); }
+            this.addMonitorRecord({ text: new TextDecoder().decode(bytes), bytes: bytes.slice(), direction: 'TX', kind: 'data', at: Date.now() });
+            return true;
+        } catch (error) {
+            this.monitorSendError = `${error instanceof Error ? error.message : String(error)} 可能已发送部分字节；输入已保留，不会自动重试。`;
+            return false;
+        } finally { this.monitorSending = false; this.fire(); }
     }
+
+    async sendMonitor(text: string): Promise<boolean> { return this.sendMonitorBytes(new TextEncoder().encode(text)); }
 
     async identify(): Promise<void> {
         if (!this.project || this.busy || this.project.flashMethod !== 'stlink') { return; }
@@ -453,22 +564,29 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     async setOption(key: string, value: unknown): Promise<void> {
-        if (!this.project) { return; }
-        try { this.project = await this.call<ProjectStatus>('setProjectOption', { path: this.project.path, key, value }); this.fire(); } catch (error) { this.fail(error, '保存设置'); }
+        const project = this.project, epoch = this.projectEpoch;
+        if (!project || (key === 'monitorBaud' && (this.monitor.open || this.monitorBusy))) { return; }
+        try { const next = await this.call<ProjectStatus>('setProjectOption', { path: project.path, key, value }); if (epoch !== this.projectEpoch) { return; } this.project = next; if (key === 'monitorEncoding') { this.redecodeMonitor(); } this.fire(); } catch (error) { this.fail(error, '保存设置'); }
     }
 
     async restore(backup: BackupRecord): Promise<void> {
-        const project = this.project;
+        const project = this.project, epoch = this.projectEpoch;
+        const port = this.monitorPort, probe = this.probe;
         if (!project || this.busy) { return; }
+        const releaseMonitor = await this.confirmMonitorRelease(project.flashMethod, this.monitorPort);
+        if (releaseMonitor === undefined || epoch !== this.projectEpoch || port !== this.monitorPort || probe !== this.probe || project.flashMethod !== this.project?.flashMethod) { return; }
         this.flashing = true;
         this.flashSteps = {};
         this.setTask('恢复备份', 'busy', { steps: this.steps(project.flashMethod) });
         try {
-            await this.call('restore', { path: project.path, backup: backup.id, probe: this.probe || undefined, port: this.monitorPort || undefined });
-            this.settle(`已恢复 ${backup.createdAt.slice(0, 10)} 的备份，读回一致`, 'ok');
+            const result = await this.call<FlashResult>('restore', { path: project.path, backup: backup.id, method: project.flashMethod, probe: probe || undefined, port: port || undefined, releaseMonitor, monitorOwner: this.monitorOwner, monitorSession: this.monitor.session });
+            if (epoch !== this.projectEpoch) { return; }
+            if (result.needsBootRestore) { this.awaitUser = 'exitBoot'; }
+            this.settle(`已恢复 ${backup.createdAt.slice(0, 10)} 的备份，读回一致${result.needsBootRestore ? ' · 恢复 BOOT 配置并复位后手动连接串口' : ''}`, 'ok', { target: 'output' });
             // The restored program is not this project's build.
             this.lastFlash = undefined;
         } catch (error) {
+            if (epoch !== this.projectEpoch) { return; }
             this.fail(error, '恢复');
         } finally {
             this.flashing = false;
