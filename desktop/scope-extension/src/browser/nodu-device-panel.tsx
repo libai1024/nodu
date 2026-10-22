@@ -7,8 +7,9 @@ import { NoduDeviceModel } from './nodu-device-client';
 import { NoduBoardFiles } from './nodu-board-files';
 import { MAIXPY_RELEASES_URL } from './nodu-file-docs';
 import { NoduFirmwarePanel } from './nodu-firmware-panel';
+import { NoduBoardPicker } from './nodu-board-picker';
 
-interface Props { model: NoduDeviceModel; files: FileService; dialogs: FileDialogService; editors: EditorManager; showLogs: () => void; showBoardGuide?: () => void; compact?: boolean; }
+interface Props { model: NoduDeviceModel; files: FileService; dialogs: FileDialogService; editors: EditorManager; showLogs: () => void; showBoardGuide?: () => void; compact?: boolean; onConnected?: () => void; }
 
 /** Device controls retain their values when the shell changes density or layout. */
 // Original MaixPy IDE 0.2.5 board menu order (see docs/0.1.3 evidence §2).
@@ -24,14 +25,23 @@ export const BOARD_IDS = [
     'T-Watch',
 ];
 
-export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, showBoardGuide, compact = false }: Props): React.ReactElement {
+export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, showBoardGuide, compact = false, onConnected }: Props): React.ReactElement {
     const [code, setCode] = React.useState('print("Hello, Nodu")');
+    // Simple mode leads with the board picker; the full form stays mounted behind 手动设置.
+    const [manual, setManual] = React.useState(false);
     const state = model.state;
     const blocked = model.busy;
     const replOutput = model.logs.filter(log => log.stream !== 'system').slice(-12).map(log => log.text).join('').slice(-8000);
 
     return <div className="scope-device-panel">
-        <section className="scope-device-section" aria-label="硬件设备">
+        {compact && <section className="scope-device-section nodu-picker-section" aria-label="选择开发板" hidden={manual}>
+            <div className="scope-section-heading"><h2><i className="codicon codicon-circuit-board" aria-hidden="true" />开发板</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`} role="status"><i aria-hidden="true" />{model.statusLabel}</span></div>
+            <NoduBoardPicker model={model} onConnected={onConnected} showBoardGuide={showBoardGuide} />
+            {model.error && <div className="nodu-device-error" role="alert"><p>{model.error}</p><button className="scope-text-button" onClick={() => model.clearError()}>收起错误</button></div>}
+            {!model.connected && <button className="scope-text-button nodu-picker-manual" onClick={() => setManual(true)}>手动设置串口与复位方式…</button>}
+        </section>}
+        <section className="scope-device-section" aria-label="硬件设备" hidden={compact && !manual}>
+            {compact && <button className="scope-text-button nodu-picker-manual nodu-picker-back" onClick={() => setManual(false)}><i className="codicon codicon-arrow-left" aria-hidden="true" />按开发板连接</button>}
             <div className="scope-section-heading"><h2><i className="codicon codicon-circuit-board" aria-hidden="true" />硬件设备</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`} role="status"><i aria-hidden="true" />{model.statusLabel}</span></div>
             <div className="nodu-device-field"><label htmlFor="nodu-serial-port">串口</label><div className="nodu-input-action"><select id="nodu-serial-port" value={model.selectedPort} disabled={blocked || model.connected} onChange={event => model.selectPort(event.currentTarget.value)}><option value="">{model.ports.length ? '选择串口' : '扫描后选择串口'}</option>{model.ports.map(port => <option value={port.path} key={port.path}>{port.path} · {port.description}</option>)}</select><button className="theia-button secondary" disabled={blocked || model.connected} onClick={() => void model.scanPorts()} title="重新扫描本机串口"><i className="codicon codicon-refresh" aria-hidden="true" />扫描</button></div></div>
             <div className="nodu-device-field"><label htmlFor="nodu-board-profile">相机适配</label><select id="nodu-board-profile" value={model.boardProfile} disabled={blocked || model.connected} onChange={event => model.selectProfile(event.currentTarget.value as typeof model.boardProfile)}><option value="embedfire-cam-gc2145">野火 K210 CAM · GC2145</option><option value="generic-k210">通用 K210</option></select></div>

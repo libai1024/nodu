@@ -7,6 +7,7 @@ import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/w
 import { LocalStorageService } from '@theia/core/lib/browser/storage-service';
 import { BoardInspection, ConnectOptions, DeviceBackup, DeviceClient, DeviceFrame, DeviceLog, DeviceState, FirmwarePlan, FirmwareResult, NODU_DEVICE_PATH, NoduDeviceService, RecordingStatus, RemoteFile, SerialPortInfo } from '../common/nodu-device-protocol';
 import { BOARD_DEFINITIONS } from '../common/nodu-board-data';
+import { BoardPreset, RememberedBoard, presetById } from '../common/nodu-board-presets';
 
 export const NODU_FILE_LIMIT = 2 * 1024 * 1024;
 
@@ -35,6 +36,8 @@ export class NoduDeviceModel implements DeviceClient {
     boardProfile: ConnectOptions['boardProfile'] = 'embedfire-cam-gc2145';
     /** Original MaixPy IDE board id 0–8 (reset sequence); persisted locally. */
     boardId = 2;
+    /** Last board + port connected from the simple-mode picker; per user. */
+    remembered: RememberedBoard | undefined;
     frame: DeviceFrame | undefined;
     logs: DeviceLog[] = [];
     error = '';
@@ -74,12 +77,20 @@ export class NoduDeviceModel implements DeviceClient {
 
     /** Per-user board selection (original persisted /boardconfig.txt). */
     private async restoreSelection(): Promise<void> {
-        const [savedId, savedProfile] = await Promise.all([
+        const [savedId, savedProfile, savedBoard] = await Promise.all([
             this.storage.getData<number>('nodu.board-id').catch(() => undefined),
             this.storage.getData<string>('nodu.board-profile').catch(() => undefined),
+            this.storage.getData<RememberedBoard>('nodu.simple-board').catch(() => undefined),
         ]);
         if (this.disposed) { return; }
         let changed = false;
+        if (savedBoard && typeof savedBoard === 'object' && presetById(savedBoard.preset) && typeof savedBoard.port === 'string' && savedBoard.port.length <= 512
+            && (savedBoard.serialNumber === undefined || typeof savedBoard.serialNumber === 'string')) {
+            this.remembered = { preset: savedBoard.preset, port: savedBoard.port, ...(savedBoard.serialNumber ? { serialNumber: savedBoard.serialNumber } : {}) };
+            // Shown on the toolbar chip; a scan replaces it when the port is gone.
+            if (!this.selectedPort) { this.selectedPort = savedBoard.port; }
+            changed = true;
+        }
         if (typeof savedId === 'number' && Number.isInteger(savedId) && savedId >= 0 && savedId <= 8) {
             this.boardId = savedId;
             changed = true;
@@ -112,12 +123,19 @@ export class NoduDeviceModel implements DeviceClient {
     }
     /** Toolbar caption: catalog label only for a declared match; never a measured identity. */
     get boardLabel(): string {
-        if (!this.connected) { return '选择开发板'; }
+        if (!this.connected) { return this.rememberedPreset?.label ?? '选择开发板'; }
         if (this.boardInspection?.status === 'declared' && this.boardInspection.boardId) {
             const board = BOARD_DEFINITIONS.find(entry => entry.id === this.boardInspection!.boardId);
             if (board) { return board.label; }
         }
-        return 'K210 · 未识别';
+        return this.connectedPreset?.label ?? 'K210 · 未识别';
+    }
+    get rememberedPreset(): BoardPreset | undefined { return presetById(this.remembered?.preset); }
+    /** The picker's board for this connection: same port, profile and reset id as remembered. */
+    get connectedPreset(): BoardPreset | undefined {
+        if (!this.connected || !this.remembered || this.remembered.port !== this.state.port) { return undefined; }
+        const preset = presetById(this.remembered.preset);
+        return preset && preset.profile === this.state.boardProfile && preset.boardId === this.state.boardId ? preset : undefined;
     }
 
     init(): Promise<void> {
@@ -200,6 +218,24 @@ export class NoduDeviceModel implements DeviceClient {
                 await this.readBoardInspection();
             }
         });
+    }
+
+    /**
+     * Simple-mode picker: one click sets profile, reset id and port, then
+     * connects. Only an explicit user choice ever calls this; the pick is
+     * remembered only once the connection succeeded.
+     */
+    async connectPreset(preset: BoardPreset, port: SerialPortInfo): Promise<void> {
+        if (this.connected || this.busy || this.flashing) { return; }
+        this.selectProfile(preset.profile);
+        this.selectBoardId(preset.boardId);
+        this.selectPort(port.path);
+        await this.connect();
+        if (this.connected && this.state.port === port.path) {
+            this.remembered = { preset: preset.id, port: port.path, ...(port.serialNumber ? { serialNumber: port.serialNumber } : {}) };
+            void this.storage.setData('nodu.simple-board', this.remembered);
+            this.changed.fire();
+        }
     }
 
     /** Read-only; failures surface in the inspection state, not device.error. */

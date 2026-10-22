@@ -88,3 +88,23 @@
 .nodu-firmware-log-heading { min-height: 34px !important; margin-top: 12px; }
 .nodu-firmware-log-heading h3 { margin: 0; }
 .nodu-firmware-log { margin-top: 0; }
+
+/* Simple-mode board picker: one list of boards, then (only when needed) ports. */
+.nodu-picker-hint { margin: 0 0 8px; color: var(--theia-descriptionForeground); font-size: 12px; line-height: 1.5; }
+.nodu-picker-empty { margin: 4px 0 12px; font-size: 12px; line-height: 1.5; }
+.nodu-picker-list { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; }
+.scope-widget .nodu-picker-item { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 30px; padding: 4px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-foreground); text-align: left; font-size: 12px; }
+.scope-widget .nodu-picker-item:hover:not(:disabled) { background: var(--theia-list-hoverBackground); }
+.scope-widget .nodu-picker-item:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.nodu-picker-item > .codicon { flex: none; color: var(--theia-descriptionForeground); }
+.nodu-picker-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-picker-meta { flex: none; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-picker-tag { flex: none; padding: 0 6px; border-radius: 9px; background: var(--theia-badge-background); color: var(--theia-badge-foreground); font-size: 10px; line-height: 16px; }
+.nodu-picker-step { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; font-weight: 600; }
+.nodu-picker-step .scope-text-button, .nodu-picker-back { display: inline-flex; align-items: center; gap: 4px; font-weight: 400; }
+.nodu-picker-manual { font-size: 11px; margin-top: 2px; }
+.nodu-picker-back { margin-bottom: 8px; }
+.nodu-picker-connected { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+.nodu-picker-current { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.nodu-picker-current > span { display: flex; flex-direction: column; min-width: 0; }
+.nodu-picker-current .scope-mono { color: var(--theia-descriptionForeground); font-size: 11px; }
