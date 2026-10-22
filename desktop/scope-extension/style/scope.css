@@ -40,14 +40,18 @@
 }
 
 .scope-brand { flex-shrink: 0; gap: 8px; }
-.scope-brand-mark { color: var(--theia-scope-accent); width: 24px; height: 24px; }
-.scope-brand-name { width: 55px; height: 21px; }
+/* Brand v2: bare lamp on dark themes, small ink tile on light themes (Blink Yellow only sits on Chip Ink). */
+.scope-brand-mark { color: var(--theia-foreground); width: 24px; height: 24px; }
+.scope-brand-mark-tile { display: none; }
+body.theia-light .scope-brand-mark-lamp, body.theia-hcLight .scope-brand-mark-lamp { display: none; }
+body.theia-light .scope-brand-mark-tile, body.theia-hcLight .scope-brand-mark-tile { display: block; }
+.scope-brand-name { width: 51px; height: 21px; }
 .scope-brand-subtitle { color: var(--theia-scope-mutedForeground); font-size: 11px; letter-spacing: .08em; }
 .scope-project { min-width: 0; flex: 1; gap: 10px; }
 .scope-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .scope-project-caption { color: var(--theia-scope-mutedForeground); font-size: 11px; white-space: nowrap; }
 .scope-demo-target { gap: 7px; color: var(--theia-scope-mutedForeground); white-space: nowrap; font-size: 12px; }
-.scope-status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.scope-status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--theia-scope-ok); }
 
 .scope-action {
     box-sizing: border-box;

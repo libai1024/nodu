@@ -1,13 +1,13 @@
 @font-face {
   font-family: Plex;
-  src: url('../desktop/scope-extension/style/fonts/plex-sans.woff2') format('woff2');
+  src: url('../../../desktop/scope-extension/style/fonts/plex-sans.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: PlexMono;
-  src: url('../desktop/scope-extension/style/fonts/plex-mono.woff2') format('woff2');
+  src: url('../../../desktop/scope-extension/style/fonts/plex-mono.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }

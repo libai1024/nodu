@@ -14,6 +14,7 @@ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
 import { DeviceFrame } from '../common/nodu-device-protocol';
 import { NoduDeviceModel } from './nodu-device-client';
+import { NODU_COLORS } from './nodu-brand';
 import { NoduImageTools } from './nodu-image-tools';
 import { NoduImageToolState } from './nodu-image-state';
 import { ScopeLayoutState } from './scope-layout-state';
@@ -63,7 +64,7 @@ function SyntheticFrame({ snapshot }: { snapshot: ScopeSnapshot }): React.ReactE
                 ctx.strokeStyle = '#173b30'; ctx.lineWidth = 1;
                 ctx.strokeRect(x - 3, y - 3, width + 6, height + 6);
                 ctx.fillStyle = '#173b30'; ctx.fillRect(x - 3, y - 19, 72, 16);
-                ctx.fillStyle = '#edf8ef'; ctx.font = '10px monospace';
+                ctx.fillStyle = '#FFFFFF'; ctx.font = '10px monospace';
                 ctx.fillText(`0${object.id} GREEN`, x + 2, y - 8);
                 const cx = x + width / 2, cy = y + height / 2;
                 ctx.beginPath(); ctx.moveTo(cx - 4, cy); ctx.lineTo(cx + 4, cy); ctx.moveTo(cx, cy - 4); ctx.lineTo(cx, cy + 4); ctx.stroke();
@@ -71,8 +72,9 @@ function SyntheticFrame({ snapshot }: { snapshot: ScopeSnapshot }): React.ReactE
         }
         ctx.fillStyle = '#51624f'; ctx.font = '9px monospace';
         ctx.fillText('Nodu / SYNTHETIC TEST PATTERN', 12, 222);
-        ctx.fillStyle = '#263c30'; ctx.fillRect(0, 230, 320, 10);
-        ctx.fillStyle = '#e6eee5'; ctx.font = '6px monospace';
+        // Scene colours above are sample content; the demo watermark band is UI chrome and uses Chip Ink.
+        ctx.fillStyle = NODU_COLORS.dark.ink; ctx.fillRect(0, 230, 320, 10);
+        ctx.fillStyle = NODU_COLORS.dark.text; ctx.font = '6px monospace';
         ctx.fillText('LOCAL DEMO  /  SYNTHETIC IMAGE', 8, 237);
     }, [snapshot]);
     return <canvas ref={ref} width={640} height={480} role="img" aria-label={`合成测试帧 ${snapshot.frame}，${syntheticDetections(snapshot).length} 个示例检测目标`} />;

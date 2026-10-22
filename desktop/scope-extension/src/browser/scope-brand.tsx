@@ -1,18 +1,35 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
+import { NODU_LOGO, NODU_MARK_SMALL, NODU_TOOLBAR_GLYPH, NODU_WORDMARK, NoduGlyph } from './nodu-brand';
 
-/** Geometry mirrors brand/assets/mark.svg and wordmark.svg. */
+/** The lamp's strokes: Blink Yellow dome, legs in `legs` (currentColor follows the toolbar text). */
+function Lamp({ glyph, legs }: { glyph: NoduGlyph; legs: string }): React.ReactElement {
+    return <>
+        <path d={glyph.dome} fill="none" stroke={NODU_LOGO.dome} strokeWidth={glyph.sw} strokeLinecap="butt"/>
+        <path d={glyph.legs} fill="none" stroke={legs} strokeWidth={glyph.sw} strokeLinecap="butt"/>
+        {glyph.caps.map(([cx, cy, r], i) => <circle key={i} cx={cx} cy={cy} r={r} fill={legs}/>)}
+    </>;
+}
+
+/**
+ * Brand v2 mark (brand/assets/mark-toolbar.svg, mark-small.svg) and wordmark, from generated geometry.
+ * Dark themes show the bare lamp; light themes show the small ink tile, because Blink Yellow
+ * must always sit on Chip Ink (see brand/README.md). Theia sets theia-<type> on <body>.
+ */
 export function NoduBrand(): React.ReactElement {
     return <div className="scope-brand" role="img" aria-label="见微 Nodu">
-        <svg className="scope-brand-mark" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" focusable="false">
-            <path d="M18 80V22H35V30C40 24 48 20 58 20C75 20 84 31 84 49V57H66V49C66 40 62 36 54 36C43 36 36 44 36 55V80Z"/>
-            <circle cx="75" cy="75" r="9"/>
+        <svg className="scope-brand-mark scope-brand-mark-lamp" viewBox={NODU_TOOLBAR_GLYPH.viewBox} aria-hidden="true" focusable="false">
+            <Lamp glyph={NODU_TOOLBAR_GLYPH.glyph} legs="currentColor"/>
         </svg>
-        <svg className="scope-brand-name" viewBox="0 0 268 100" fill="currentColor" aria-hidden="true" focusable="false">
-            <path d="M0 90V32H14V39C19 33 26 30 35 30C50 30 58 40 58 55V90H43V57C43 48 39 43 31 43S15 48 15 58V90Z"/>
-            <path fillRule="evenodd" d="M96 30C115 30 127 42 127 61S115 92 96 92S65 80 65 61S77 30 96 30ZM96 44C86 44 80 50 80 61S86 78 96 78S112 72 112 61S106 44 96 44Z"/>
-            <path fillRule="evenodd" d="M183 6H198V90H184V83C179 89 172 92 163 92C146 92 135 80 135 61S146 30 163 30C171 30 178 33 183 38ZM166 44C156 44 150 50 150 61S156 78 166 78S183 72 183 61S176 44 166 44Z"/>
-            <path d="M211 32H226V66C226 75 230 79 238 79C247 79 253 73 253 64V32H268V90H254V83C249 89 242 92 232 92C218 92 211 82 211 67Z"/>
+        <svg className="scope-brand-mark scope-brand-mark-tile" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <path d={NODU_MARK_SMALL.tile} fill={NODU_LOGO.tile}/>
+            <g transform={NODU_MARK_SMALL.transform}><Lamp glyph={NODU_MARK_SMALL.glyph} legs={NODU_LOGO.legs}/></g>
+        </svg>
+        <svg className="scope-brand-name" viewBox={NODU_WORDMARK.viewBox} aria-hidden="true" focusable="false"
+            fill="none" stroke="currentColor" strokeWidth={NODU_WORDMARK.strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+            {NODU_WORDMARK.elements.map((e, i) => e.type === 'circle'
+                ? <circle key={i} cx={e.cx} cy={e.cy} r={e.r}/>
+                : <path key={i} d={e.d} transform={e.transform}/>)}
         </svg>
         <span className="scope-brand-subtitle">见微</span>
     </div>;

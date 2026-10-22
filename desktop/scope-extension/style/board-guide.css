@@ -8,7 +8,7 @@
 .nodu-board-headline .scope-state { margin: 0; }
 .nodu-board-catalog { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
 .nodu-board-guide .scope-error { margin: 2px 0 6px; }
-.nodu-status-declared { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.nodu-status-declared { color: var(--theia-scope-ok); }
 .nodu-status-unknown { color: var(--theia-descriptionForeground); }
 .nodu-status-error { color: var(--theia-errorForeground); }
 .nodu-status-busy { color: var(--theia-descriptionForeground); }

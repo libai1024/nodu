@@ -36,10 +36,13 @@
 .scope-device-chip { max-width: 310px; height: 30px; min-height: 30px; gap: 7px; padding: 0 9px; }
 .scope-device-chip-board, .scope-device-chip-port { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .scope-device-chip-port { max-width: 140px; color: var(--theia-descriptionForeground); font-size: 11px; }
-.scope-device-chip .scope-status-dot { background: var(--theia-descriptionForeground); }
-.scope-device-chip.nodu-chip-connecting .scope-status-dot { background: var(--theia-editorWarning-foreground); }
-.scope-device-chip.nodu-chip-connected .scope-status-dot { background: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+/* Status dots (brand v2): idle grey, connecting = primary-family pulse, connected green, error red. Amber is reserved for risk. */
+.scope-device-chip .scope-status-dot { background: var(--theia-scope-idle); }
+.scope-device-chip.nodu-chip-connecting .scope-status-dot { background: var(--theia-scope-busy); animation: nodu-busy-pulse 1.6s ease-out infinite; }
+.scope-device-chip.nodu-chip-connected .scope-status-dot { background: var(--theia-scope-ok); }
 .scope-device-chip.nodu-chip-error .scope-status-dot { background: var(--theia-errorForeground); }
+@keyframes nodu-busy-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--theia-scope-busy) 70%, transparent); } 80%, 100% { box-shadow: 0 0 0 6px transparent; } }
+@media (prefers-reduced-motion: reduce) { .scope-device-chip.nodu-chip-connecting .scope-status-dot { animation: none; } }
 .scope-device-chip.nodu-chip-disconnected { border-style: dashed; border-color: var(--theia-input-border); }
 .scope-device-chip.nodu-has-error, .scope-toolbar-console.nodu-has-error { color: var(--theia-errorForeground); }
 .scope-device-popover { position: absolute; top: calc(100% + 8px); left: 0; width: min(410px, calc(100vw - 40px)); max-height: min(720px, calc(100vh - 110px)); overflow: auto; background: var(--theia-panel-background); border: 1px solid var(--theia-panel-border); border-radius: 5px; box-shadow: 0 8px 24px #0004; color: var(--theia-foreground); }

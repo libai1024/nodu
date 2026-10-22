@@ -30,10 +30,10 @@
 .scope-mono, .scope-channel code, .scope-range-row output, .scope-frame-counter { font-family: var(--theia-code-font-family, monospace); font-variant-numeric: tabular-nums; }
 .scope-state { display: inline-flex; align-items: center; gap: 6px; color: var(--theia-descriptionForeground); font-size: 11px; white-space: nowrap; }
 .scope-state i { display: inline-block; height: 5px; width: 5px; border-radius: 50%; background: currentColor; }
-.scope-state-active { color: var(--theia-gitDecoration-addedResourceForeground, var(--theia-foreground)); }
+.scope-state-active { color: var(--theia-scope-ok, var(--theia-foreground)); }
 .scope-frame-stage { position: relative; background: #d9dfd4; overflow: hidden; border-radius: 3px; }
 .scope-frame-stage canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; }
-.scope-frame-badge { position: absolute; top: 10px; left: 10px; color: #edf8ef; background: #263c30; font-size: 10px; line-height: 1.5; padding: 2px 6px; border-radius: 2px; }
+.scope-frame-badge { position: absolute; top: 10px; left: 10px; color: #FFFFFF; background: rgb(0 0 0 / .62); font-size: 10px; line-height: 1.5; padding: 2px 6px; border-radius: 2px; }
 .scope-frame-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0 8px; font-size: 11px; }
 .scope-check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 .scope-frame-tools > .scope-mono { color: var(--theia-descriptionForeground); }
@@ -59,7 +59,7 @@
 .scope-results-table td { padding: 8px 0; white-space: nowrap; }
 .scope-results-table th:last-child, .scope-results-table td:last-child { text-align: right; }
 .scope-results-table td + td { padding-left: 7px; }
-.scope-result-dot { display: inline-block; width: 5px; height: 5px; background: var(--theia-gitDecoration-addedResourceForeground, var(--theia-foreground)); border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.scope-result-dot { display: inline-block; width: 5px; height: 5px; background: var(--theia-scope-ok, var(--theia-foreground)); border-radius: 50%; margin-right: 6px; vertical-align: middle; }
 .scope-empty-result { display: flex; flex-direction: column; gap: 4px; padding: 8px 0 12px; }
 .scope-empty-result strong { font-size: 12px; font-weight: 500; }
 .scope-empty-result span { font-size: 11px; color: var(--theia-descriptionForeground); }

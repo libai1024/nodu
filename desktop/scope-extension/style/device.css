@@ -27,7 +27,7 @@
 .nodu-firmware .nodu-firmware-link { color: var(--theia-textLink-foreground); text-underline-offset: 3px; }
 .nodu-firmware .nodu-firmware-link:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
 .nodu-firmware .nodu-capabilities { display: flex; gap: 7px; font-size: 11px; }
-.nodu-capability-yes { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.nodu-capability-yes { color: var(--theia-scope-ok); }
 .scope-widget .nodu-code-input { font-family: var(--theia-code-font-family, monospace); font-size: 12px; resize: vertical; min-height: 64px; max-height: 300px; }
 .nodu-repl-output { white-space: pre-wrap; overflow-wrap: anywhere; overflow-y: auto; max-height: 220px; min-height: 64px; margin: 10px 0 0; padding: 8px; border-radius: 3px; background: var(--theia-editor-background); color: var(--theia-editor-foreground); font-family: var(--theia-code-font-family, monospace); font-size: 11px; line-height: 1.6; scrollbar-color: var(--theia-scrollbarSlider-background) transparent; }
 .nodu-repl-output:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
@@ -50,8 +50,8 @@
 .scope-vision-widget .scope-device-actions { align-items: center; gap: 12px; padding-top: 10px; }
 .scope-vision-widget .nodu-device-field { gap: 6px; margin: 12px 0 0; }
 .nodu-toolbar-device .scope-status-dot { background: var(--theia-descriptionForeground); }
-.nodu-toolbar-device.nodu-is-connected .scope-status-dot { background: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
-.nodu-toolbar-device.nodu-is-connected { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.nodu-toolbar-device.nodu-is-connected .scope-status-dot { background: var(--theia-scope-ok); }
+.nodu-toolbar-device.nodu-is-connected { color: var(--theia-scope-ok); }
 .scope-action.nodu-toolbar-stop { gap: 5px; }
 @media (max-width: 1000px) {
     .nodu-toolbar-device { max-width: 90px; font-size: 11px; }
@@ -64,7 +64,7 @@
     .nodu-toolbar-device { display: none; }
 }
 
-.scope-device-widget .scope-state-active, .scope-vision-widget .scope-state-active { color: var(--theia-terminal-ansiBrightGreen, #64C5AC); }
+.scope-device-widget .scope-state-active, .scope-vision-widget .scope-state-active { color: var(--theia-scope-ok); }
 .nodu-firmware-disclosure { font-size: 12px; }
 .nodu-firmware-disclosure > summary { display: list-item; cursor: pointer; min-height: 44px; padding: 12px 0; font-weight: 600; }
 .nodu-firmware-disclosure > summary:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }

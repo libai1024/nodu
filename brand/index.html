@@ -1,164 +1,497 @@
 <!doctype html>
-<html lang="zh-CN" data-palette="blue">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#F3F3EE">
-    <meta name="description" content="见微 Nodu 品牌资产：一个面向初学者的嵌入式开发工具，从第一行代码，开始做硬件。">
-    <title>Nodu · 见微 — 品牌与主色</title>
-    <link rel="icon" href="assets/blue/app-icon.svg" data-palette-file="app-icon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="site.css">
-    <script src="site.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">跳到品牌内容</a>
-    <header class="site-header page-width">
-      <a class="brand-home" href="#main" aria-label="Nodu 见微品牌首页">
-        <span class="mark brand-home-mark" aria-hidden="true"></span>
-        <span>见微 <span class="brand-divider" aria-hidden="true">/</span> Nodu</span>
-      </a>
-      <nav aria-label="品牌页面导航">
-        <a href="#colors">配色</a>
-        <a href="#assets">资产</a>
-        <a href="#explore">六个方向</a>
-        <a href="#application">应用</a>
-        <a href="#position">定位</a>
-      </nav>
-      <a class="header-download" href="assets/brand-kit.zip" download>
-        <span>下载品牌包</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg>
-      </a>
+<html lang="zh-CN" data-theme="light" data-cvd="none">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nodu · 见微 品牌规范 v2</title>
+<meta name="description" content="Nodu · 见微品牌规范 v2：点亮标志、电路板配色、色阶、深浅工作台、状态色、组件、代码与对比度。">
+<link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brand.css">
+<script src="tokens.js" defer></script>
+<script src="brand.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<!-- Icon sprite and colour-vision filters (Machado 2009, severity 1.0, linear RGB). -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M8 4h6l4 4v10.5A1.5 1.5 0 0 1 16.5 20h-9A1.5 1.5 0 0 1 6 18.5v-13A1.5 1.5 0 0 1 7.5 4zM14 4v4h4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 6.5 17.5 12l-9 5.5z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10l2.5 2L8 14M12.5 15H16"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4.5 8.5h3l1.8-2.5h5.4l1.8 2.5h3v10h-15z"/><circle cx="12" cy="13.2" r="3.2"/></symbol>
+  <symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path fill="currentColor" stroke="none" d="M12 5a7 7 0 0 1 0 14z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5.5 12.5l4 4 9-9"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3z"/><path d="M12 10v4.5M12 17v.3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6A1.5 1.5 0 0 0 14 4.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H10l2 2h6.5A1.5 1.5 0 0 1 20 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/></symbol>
+  <symbol id="i-py" viewBox="0 0 24 24"><path d="M8 4.5h8l3.5 3.5v11.5H8z"/><path d="M11 13h5M11 16h3"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8 15a6 6 0 1 1 8 0c-.8.7-1 1.6-1 2.5h-6c0-.9-.2-1.8-1-2.5zM9.5 20.5h5"/></symbol>
+  <filter id="cvd-protanopia" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="0.152286 1.052583 -0.204868 0 0  0.114503 0.786281 0.099216 0 0  -0.003882 -0.048116 1.051998 0 0  0 0 0 1 0"/></filter>
+  <filter id="cvd-deuteranopia" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="0.367322 0.860646 -0.227968 0 0  0.280085 0.672501 0.047413 0 0  -0.011820 0.042940 0.968881 0 0  0 0 0 1 0"/></filter>
+  <filter id="cvd-tritanopia" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="1.255528 -0.076749 -0.178779 0 0  -0.078411 0.930809 0.147602 0 0  0.004733 0.691367 0.303900 0 0  0 0 0 1 0"/></filter>
+  <filter id="cvd-achromatopsia"><feColorMatrix type="saturate" values="0"/></filter>
+</svg>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top" aria-label="Nodu · 见微 配色预览，回到顶部">
+      <span class="brand-logo" data-logo="lockup" data-decorative></span>
+      <span class="brand-tag">配色预览</span>
+    </a>
+    <nav class="toc" aria-label="页面目录">
+      <a href="#logo">标志</a><a href="#core">核心色</a><a href="#ramps">色阶</a><a href="#workbench">工作台</a>
+      <a href="#status">状态</a><a href="#components">组件</a><a href="#code">代码</a><a href="#contrast">对比度</a>
+      <a href="#rules">规则</a><a href="#export">导出</a>
+    </nav>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="主题">
+        <button type="button" data-set-theme="light" aria-pressed="true">浅色</button>
+        <button type="button" data-set-theme="dark" aria-pressed="false">深色</button>
+      </div>
+      <label class="select-label">
+        <span>色觉</span>
+        <select id="cvd" aria-label="色觉模拟">
+          <option value="none">正常</option>
+          <option value="protanopia">红色盲</option>
+          <option value="deuteranopia">绿色盲</option>
+          <option value="tritanopia">蓝色盲</option>
+          <option value="achromatopsia">全色盲</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <span id="top"></span>
+
+  <!-- Hero -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <div class="hero-text">
+      <p class="overline">品牌规范 v2 · 方向 02 点亮 · 电路板配色 · 2026-10-21</p>
+      <h1 id="hero-title">从第一行代码，<br>到第一次点亮。</h1>
+      <p class="lead">Nodu · 见微是面向 STM32、K210、ESP32 等主流 MCU 的嵌入式入门学习 IDE。标志是一颗被点亮的 LED：金色灯罩，长短不同的两条引脚，长脚为正。</p>
+      <p class="lead small">蓝色写代码，黄色是被点亮的那一刻。主色负责所有操作，点亮黄只留给品牌时刻。</p>
+      <p class="palette-summary" id="palette-summary" aria-live="polite"></p>
+    </div>
+    <div class="hero-mark">
+      <div class="hero-icon" id="hero-icon" data-logo="appIcon" data-decorative></div>
+      <button type="button" class="btn secondary" id="led-toggle" aria-pressed="true">
+        <svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>熄灭</span>
+      </button>
+    </div>
+    <div class="core-strip" id="core-strip" aria-label="核心色，点击复制色值"></div>
+  </section>
+
+  <!-- Logo -->
+  <section id="logo" class="section" aria-labelledby="logo-title">
+    <header class="section-head">
+      <p class="overline">01 标志</p>
+      <h2 id="logo-title">一颗被点亮的 LED</h2>
+      <p>n 的拱形是 LED 的灯罩，两条腿是引脚，左边的长脚为正极。灯罩只用点亮黄，并且始终放在芯片墨上。</p>
     </header>
+    <div class="logo-grid">
+      <figure class="logo-card on-paper wide">
+        <div class="logo-art lockup" data-logo="lockupLight" data-decorative></div>
+        <figcaption>横向组合 · 浅底</figcaption>
+      </figure>
+      <figure class="logo-card on-ink wide">
+        <div class="logo-art lockup" data-logo="lockupDark" data-decorative></div>
+        <figcaption>横向组合 · 深底（板体加 2 px 描边）</figcaption>
+      </figure>
+      <figure class="logo-card on-page wide">
+        <div class="logo-art bilingual" data-logo="bilingual" data-decorative></div>
+        <figcaption>中英组合 · 字标随文字颜色</figcaption>
+      </figure>
+      <figure class="logo-card on-page sizes">
+        <div class="size-row on-paper">
+          <span data-logo="appIcon" data-decorative style="--s:96px"></span>
+          <span data-logo="appIcon" data-decorative style="--s:64px"></span>
+          <span data-logo="markSmall" data-decorative style="--s:32px"></span>
+          <span data-logo="markSmall" data-decorative style="--s:24px"></span>
+          <span data-logo="markSmall" data-decorative style="--s:16px"></span>
+        </div>
+        <div class="size-row on-taskbar">
+          <span data-logo="appIcon" data-decorative style="--s:96px"></span>
+          <span data-logo="appIcon" data-decorative style="--s:64px"></span>
+          <span data-logo="markSmall" data-decorative style="--s:32px"></span>
+          <span data-logo="markSmall" data-decorative style="--s:24px"></span>
+          <span data-logo="markSmall" data-decorative style="--s:16px"></span>
+        </div>
+        <figcaption>应用图标 96 / 64 px；16–32 px 使用加粗的小尺寸母版</figcaption>
+      </figure>
+      <figure class="logo-card on-page">
+        <div class="mono-row">
+          <span class="mono-chip paper"><span data-logo="mono" data-decorative></span></span>
+          <span class="mono-chip blue"><span data-logo="mono" data-decorative></span></span>
+          <span class="mono-chip ink"><span data-logo="mono" data-decorative></span></span>
+        </div>
+        <figcaption>单色：印刷、压印、开发板丝印</figcaption>
+      </figure>
+      <figure class="logo-card on-page">
+        <div class="toolbar-stack">
+          <div class="toolbar-demo dark"><span class="tb-glyph" data-logo="toolbar" data-decorative></span><span>文件</span><span class="demo-run">运行</span></div>
+          <div class="toolbar-demo light"><span class="tb-mark" data-logo="markSmall" data-decorative></span><span>文件</span><span class="demo-run">运行</span></div>
+        </div>
+        <figcaption>工具栏：深色主题用裸灯，浅色主题用小板体</figcaption>
+      </figure>
+    </div>
+    <div class="dont-grid" role="list" aria-label="错误用法">
+      <figure class="dont" role="listitem"><div class="dont-art on-paper" data-logo="misuseOnPaper" data-decorative></div>
+        <figcaption><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>点亮黄直接放在浅底上（1.5:1，看不清）</figcaption></figure>
+      <figure class="dont" role="listitem"><div class="dont-art on-paper" data-logo="misuseGreen" data-decorative></div>
+        <figcaption><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>把灯罩换成绿色（会被读成“已连接”）</figcaption></figure>
+      <figure class="dont" role="listitem"><div class="dont-art on-paper" data-logo="misuseGlow" data-decorative></div>
+        <figcaption><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>给标志加发光、阴影或描边特效</figcaption></figure>
+    </div>
+  </section>
 
-    <main id="main" class="page-width">
-      <section class="identity-section" id="assets" aria-label="Nodu 主品牌资产">
-        <div class="palette-switch">
-          <div class="palette-switch-copy"><strong>品牌配色</strong><span>蓝色已确定为正式主色。</span></div>
-          <div class="palette-controls" role="group" aria-label="查看正式主色与对照配色">
-            <button type="button" class="palette-control" data-color-option="blue" aria-pressed="true"><span class="color-dot color-blue" aria-hidden="true"></span><span>蓝色</span><small>主色</small></button>
-            <button type="button" class="palette-control" data-color-option="orange" aria-pressed="false"><span class="color-dot color-orange" aria-hidden="true"></span><span>暖橙</span></button>
-            <button type="button" class="palette-control" data-color-option="violet" aria-pressed="false"><span class="color-dot color-violet" aria-hidden="true"></span><span>紫色</span></button>
-          </div>
-        </div>
-        <div class="identity-board">
-          <div class="wordmark-stage">
-            <img class="hero-lockup" src="assets/blue/logo-dark.svg" data-palette-src="logo-dark.svg" alt="nodu" width="540" height="150">
-            <div class="wordmark-caption"><span>见微，向动手迈一步。</span><span lang="en">Start small.<br>Build real.</span></div>
-          </div>
-          <div class="symbol-stage">
-            <span class="mark hero-mark" role="img" aria-label="Nodu 起点标识，字母 n 与一枚光点"></span>
-            <div class="symbol-caption"><span>起点 · 主标识</span><span data-palette-caption>蓝色 · 正式主色</span></div>
-          </div>
-        </div>
-        <div class="identity-intro">
-          <h1>从第一行代码，<br>开始做硬件。</h1>
-          <div class="name-story">
-            <p class="name-pronunciation"><strong>Nodu</strong><span lang="en">/ˈnoʊduː/</span><span>四个字母，一次开始。</span></p>
-            <p>取意于 <span lang="en">Node</span> 与 <span lang="en">Do</span>。连接代码与硬件，也把想法变成第一次动手。中文仍是「见微」，英文统一使用 <span lang="en">Nodu</span>，标识使用小写 <span lang="en">nodu</span>。</p>
-          </div>
-        </div>
-        <div class="asset-downloads" aria-label="主品牌资产下载">
-          <a class="button button-primary" href="assets/brand-kit.zip" download>下载完整品牌包<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg></a>
-          <a class="text-link" href="assets/blue/logo-dark.svg" data-palette-file="logo-dark.svg" download="nodu-blue-logo-dark.svg">标准组合 <span>SVG</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-          <a class="text-link" href="assets/mark.svg" download="nodu-mark.svg">独立标识 <span>SVG</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-          <a class="text-link" href="assets/blue/app-icon-1024.png" data-palette-file="app-icon-1024.png" download="nodu-blue-app-icon-1024.png">应用图标 <span>PNG</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-        </div>
-      </section>
+  <!-- Core colours -->
+  <section id="core" class="section" aria-labelledby="core-title">
+    <header class="section-head">
+      <p class="overline">02 核心色</p>
+      <h2 id="core-title">四个颜色，来自一块真实的开发板</h2>
+      <p>蓝色负责所有操作，点亮黄只留给标志和学习里程碑，芯片墨与丝印白承载深浅两套工作台。点击色块复制色值。</p>
+    </header>
+    <div class="core-grid" id="core-grid"></div>
+  </section>
 
-      <section class="color-comparison" id="colors" aria-labelledby="colors-title">
-        <div class="color-comparison-heading"><div><h2 id="colors-title">蓝色，作为新的起点。</h2><p>蓝色是 Nodu 的正式主色。暖橙与紫色保留为对照，点击可查看同一枚标识的不同表现。</p></div><a class="text-link" href="assets/palette-comparison.png" download>下载三色对比图<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg></a></div>
-        <div class="color-options" role="group" aria-label="正式蓝色与两种对照配色的应用图标">
-          <button class="color-card color-card-blue" type="button" data-color-option="blue" aria-pressed="true">
-            <span class="color-card-art"><img src="assets/blue/app-icon.svg" alt="蓝色 Nodu 应用图标" width="144" height="144"></span>
-            <span class="color-card-copy"><span class="color-card-title">蓝色<small>正式主色</small><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span><span class="color-card-reason">清楚、可靠，带一点探索感。适合长时间使用的开发工具，也容易延伸到不同芯片。</span><span class="color-card-value">#4F7CFF<span>查看蓝色应用</span></span></span>
-          </button>
-          <button class="color-card color-card-orange" type="button" data-color-option="orange" aria-pressed="false">
-            <span class="color-card-art"><img src="assets/orange/app-icon.svg" alt="暖橙 Nodu 应用图标" width="144" height="144"></span>
-            <span class="color-card-copy"><span class="color-card-title">暖橙<small>对照方案</small><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span><span class="color-card-reason">像点亮的灯，温暖而有行动感。更突出初学者第一次动手、第一次做出结果的体验。</span><span class="color-card-value">#E98A42<span>查看暖橙应用</span></span></span>
-          </button>
-          <button class="color-card color-card-violet" type="button" data-color-option="violet" aria-pressed="false">
-            <span class="color-card-art"><img src="assets/violet/app-icon.svg" alt="紫色 Nodu 应用图标" width="144" height="144"></span>
-            <span class="color-card-copy"><span class="color-card-title">紫色<small>对照方案</small><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span><span class="color-card-reason">安静，但有鲜明的创造感。让工具更像个人工作室，适合强调探索与作品表达。</span><span class="color-card-value">#8B78E6<span>查看紫色应用</span></span></span>
-          </button>
-        </div>
-        <p class="color-comparison-note"><span id="palette-status">当前显示：蓝色 · 正式主色。</span> 暖橙与紫色仅供对照。</p>
-        <p id="palette-announcement" class="visually-hidden" role="status" aria-live="polite"></p>
-      </section>
+  <!-- Ramps -->
+  <section id="ramps" class="section" aria-labelledby="ramps-title">
+    <header class="section-head">
+      <p class="overline">03 色阶</p>
+      <h2 id="ramps-title">色阶与中性色</h2>
+      <p>每格标出白字和墨字的对比度。点亮黄 500 及更深的色阶已接近琥珀，只用于印刷和插画，不能当作界面状态。</p>
+    </header>
+    <div class="ramps" id="ramp-list"></div>
+  </section>
 
-      <section class="exploration-section section-space" id="explore" aria-labelledby="exploration-title">
-        <div class="section-heading">
-          <h2 id="exploration-title">六种起笔，<br>同一个动手的念头。</h2>
-          <p>从字母、积木到连接，探索六种独立的图形语言。<br class="desktop-break">选一个方向，放大看看它。</p>
+  <!-- Workbench -->
+  <section id="workbench" class="section" aria-labelledby="wb-title">
+    <header class="section-head">
+      <p class="overline">04 工作台</p>
+      <h2 id="wb-title">放进 IDE 里</h2>
+      <p>切换上方的主题，看整套颜色在工作台里的表现。示意图中的数据为演示，不是运行截图。</p>
+    </header>
+    <figure class="wb-figure">
+      <div class="wb" aria-hidden="true">
+        <div class="wb-menubar"><span>文件</span><span>编辑</span><span>选择</span><span>查看</span><span>转到</span><span>工具</span><span>终端</span><span>窗口</span><span>帮助</span></div>
+        <div class="wb-toolbar">
+          <span class="wb-logo"><span class="tb-glyph" data-logo="toolbar" data-decorative></span><span class="tb-mark" data-logo="markSmall" data-decorative></span></span>
+          <span class="wb-btn"><svg class="ico"><use href="#i-file"/></svg>文件</span>
+          <span class="wb-btn primary"><svg class="ico"><use href="#i-play"/></svg>运行</span>
+          <span class="wb-icon stop"><svg class="ico"><use href="#i-stop"/></svg></span>
+          <span class="chip ok"><i class="dot"></i><b>野火 K210 CAM</b><span class="mono">usbserial-3110</span></span>
+          <span class="wb-spacer"></span>
+          <span class="wb-icon on"><svg class="ico"><use href="#i-term"/></svg></span>
+          <span class="wb-icon on"><svg class="ico"><use href="#i-cam"/></svg></span>
+          <span class="wb-sep"></span>
+          <span class="wb-icon"><svg class="ico"><use href="#i-theme"/></svg></span>
+          <span class="wb-seg"><span>简</span><span class="on">专</span></span>
         </div>
-        <div class="exploration-workspace">
-          <div class="concept-list" role="group" aria-label="选择标识设计方向">
-            <button class="concept-choice is-selected" type="button" data-concept="01" aria-pressed="true" aria-controls="concept-preview">
-              <span class="concept-mini" style="--concept-url: url('assets/exploration-01.svg')" aria-hidden="true"></span><span class="concept-title">起点<small>字母与光点</small></span><span class="concept-status">主方案</span><svg class="choice-check icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-            </button>
-            <button class="concept-choice" type="button" data-concept="02" aria-pressed="false" aria-controls="concept-preview">
-              <span class="concept-mini" style="--concept-url: url('assets/exploration-02.svg')" aria-hidden="true"></span><span class="concept-title">台阶<small>从小步到进阶</small></span><svg class="choice-check icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-            </button>
-            <button class="concept-choice" type="button" data-concept="03" aria-pressed="false" aria-controls="concept-preview">
-              <span class="concept-mini" style="--concept-url: url('assets/exploration-03.svg')" aria-hidden="true"></span><span class="concept-title">积木<small>从点构成可能</small></span><svg class="choice-check icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-            </button>
-            <button class="concept-choice" type="button" data-concept="04" aria-pressed="false" aria-controls="concept-preview">
-              <span class="concept-mini" style="--concept-url: url('assets/exploration-04.svg')" aria-hidden="true"></span><span class="concept-title">路径<small>让思路连起来</small></span><svg class="choice-check icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-            </button>
-            <button class="concept-choice" type="button" data-concept="05" aria-pressed="false" aria-controls="concept-preview">
-              <span class="concept-mini" style="--concept-url: url('assets/exploration-05.svg')" aria-hidden="true"></span><span class="concept-title">起跑门<small>欢迎第一次尝试</small></span><svg class="choice-check icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-            </button>
-            <button class="concept-choice" type="button" data-concept="06" aria-pressed="false" aria-controls="concept-preview">
-              <span class="concept-mini" style="--concept-url: url('assets/exploration-06.svg')" aria-hidden="true"></span><span class="concept-title">汇合<small>代码与硬件相遇</small></span><svg class="choice-check icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-            </button>
+        <div class="wb-body">
+          <div class="wb-tree">
+            <div class="wb-pane-title">资源管理器</div>
+            <div class="tree-row folder"><svg class="ico"><use href="#i-chevron"/></svg>blink</div>
+            <div class="tree-row file selected"><svg class="ico"><use href="#i-py"/></svg>main.py</div>
+            <div class="tree-row file"><svg class="ico"><use href="#i-py"/></svg>board.py</div>
+            <div class="tree-row folder"><svg class="ico"><use href="#i-chevron"/></svg>green-tracker</div>
+            <div class="tree-row file hover"><svg class="ico"><use href="#i-py"/></svg>thresholds.py</div>
+            <div class="tree-row file"><svg class="ico"><use href="#i-py"/></svg>camera.py</div>
+            <div class="tree-row folder"><svg class="ico"><use href="#i-chevron"/></svg>示例</div>
           </div>
-          <div class="concept-preview" id="concept-preview" data-theme="dark">
-            <div class="preview-toolbar"><span>标识预览</span><div class="theme-toggle" role="group" aria-label="预览背景颜色"><button type="button" data-preview-theme="light" aria-pressed="false">浅色</button><button type="button" data-preview-theme="dark" aria-pressed="true">深色</button></div></div>
-            <div class="preview-art"><span id="selected-mark" class="concept-mark" style="--concept-url: url('assets/exploration-01.svg')" role="img" aria-label="起点标识"></span></div>
-            <div class="preview-detail">
-              <div><h3 id="concept-name">起点<span id="concept-type">字母与光点</span></h3><p id="concept-rationale">以小写 n 为骨架，一枚独立圆点落在右下方。像第一次点亮的 LED，也像一次动手得到的结果；厚实而开放的轮廓，让工具显得亲近、可上手。</p></div>
-              <a id="concept-download" class="preview-download" href="assets/exploration-01.svg" download="nodu-start.svg" aria-label="下载起点标识 SVG"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg><span>SVG</span></a>
+          <div class="wb-editor">
+            <div class="wb-tabs"><span class="tab active">main.py</span><span class="tab dirty">board.py</span><span class="tab">thresholds.py</span></div>
+            <pre class="code wb-code"><span class="ln">1</span><span class="t-comment"># 第一次点亮：让板载 LED 闪烁</span>
+<span class="ln">2</span><span class="t-keyword">import</span> <span class="t-variable">time</span>
+<span class="ln">3</span><span class="t-keyword">from</span> <span class="t-variable">fpioa_manager</span> <span class="t-keyword">import</span> <span class="t-variable">fm</span>
+<span class="ln">4</span><span class="t-keyword">from</span> <span class="t-variable">Maix</span> <span class="t-keyword">import</span> <span class="t-type">GPIO</span>
+<span class="ln">5</span>
+<span class="ln">6</span><span class="t-variable">LED_PIN</span> <span class="t-punctuation">=</span> <span class="t-number">17</span>        <span class="t-comment"># 野火 K210 CAM 的 USER_LED</span>
+<span class="ln">7</span><span class="t-variable">INTERVAL_MS</span> <span class="t-punctuation">=</span> <span class="t-number">500</span>   <span class="t-comment"># 改成 150，再运行一次</span>
+<span class="ln">8</span>
+<span class="ln current">9</span><span class="current-line"><span class="t-variable">fm</span><span class="t-punctuation">.</span><span class="t-function">register</span><span class="t-punctuation">(</span><span class="t-variable">LED_PIN</span><span class="t-punctuation">,</span> <span class="t-variable">fm</span><span class="t-punctuation">.</span><span class="t-variable">fpioa</span><span class="t-punctuation">.</span><span class="t-variable sel">GPIO0</span><span class="t-punctuation">)</span><span class="caret"></span></span>
+<span class="ln">10</span><span class="t-variable">led</span> <span class="t-punctuation">=</span> <span class="t-type">GPIO</span><span class="t-punctuation">(</span><span class="t-type">GPIO</span><span class="t-punctuation">.</span><span class="t-variable">GPIO0</span><span class="t-punctuation">,</span> <span class="t-type">GPIO</span><span class="t-punctuation">.</span><span class="t-variable">OUT</span><span class="t-punctuation">)</span>
+<span class="ln">11</span>
+<span class="ln">12</span><span class="t-keyword">for</span> <span class="t-variable">i</span> <span class="t-keyword">in</span> <span class="t-function">range</span><span class="t-punctuation">(</span><span class="t-number">8</span><span class="t-punctuation">):</span>
+<span class="ln">13</span>    <span class="t-variable">led</span><span class="t-punctuation">.</span><span class="t-function">value</span><span class="t-punctuation">(</span><span class="t-variable">i</span> <span class="t-punctuation">%</span> <span class="t-number">2</span><span class="t-punctuation">)</span>
+<span class="ln">14</span>    <span class="t-function">print</span><span class="t-punctuation">(</span><span class="t-string">"blink"</span><span class="t-punctuation">,</span> <span class="t-variable">i</span><span class="t-punctuation">)</span>
+<span class="ln">15</span>    <span class="t-variable">time</span><span class="t-punctuation">.</span><span class="t-function">sleep_ms</span><span class="t-punctuation">(</span><span class="t-variable">INTERVAL_MS</span><span class="t-punctuation">)</span></pre>
+          </div>
+          <div class="wb-vision">
+            <div class="wb-pane-title">视觉调试</div>
+            <div class="wb-seg full"><span class="on">设备相机</span><span>示例</span></div>
+            <div class="frame">
+              <span class="frame-obj a"></span><span class="frame-obj b"></span><span class="frame-box"></span>
+              <span class="frame-badge">#43 · 320 × 240 · LAB</span>
             </div>
+            <div class="lab-row"><span>L</span><span class="range"><i style="--lo:25%;--hi:85%"></i></span><span class="mono">25 … 85</span></div>
+            <div class="lab-row"><span>A</span><span class="range"><i style="--lo:25%;--hi:44%"></i></span><span class="mono">−65 … −15</span></div>
+            <div class="lab-row"><span>B</span><span class="range"><i style="--lo:46%;--hi:70%"></i></span><span class="mono">−10 … 50</span></div>
+            <span class="wb-btn small">复制参数</span>
           </div>
         </div>
-        <p class="selection-announcement visually-hidden" id="selection-announcement" role="status" aria-live="polite"></p>
-        <noscript><p class="no-script-note">开启 JavaScript 可切换放大预览。六个方向的独立 SVG 均包含在完整品牌包中。</p></noscript>
-      </section>
-
-      <section class="application-section section-space" id="application" aria-labelledby="application-title">
-        <div class="section-heading">
-          <h2 id="application-title">放进工具里，<br>也认得出来。</h2>
-          <p>从桌面上的一个图标，到编辑器中的一处签名。<br class="desktop-break">主标识在大小、深浅之间保持同一个性格。</p>
+        <div class="wb-console">
+          <div class="wb-console-head"><span class="console-tab active">控制台</span><span class="console-tab">终端</span><span class="wb-spacer"></span><span class="mono muted">跟随输出</span></div>
+          <pre class="term wb-term"><span class="a-8">&gt;&gt;&gt;</span> 1/0
+<span class="stderr">Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+ZeroDivisionError: divide by zero</span>
+<span class="a-8">&gt;&gt;&gt;</span> <span class="a-4">运行 main.py（RAM）</span>
+blink 0
+blink 1
+blink 2</pre>
         </div>
-        <div class="application-board">
-          <div class="app-icon-sample">
-            <img src="assets/blue/app-icon.svg" data-palette-src="app-icon.svg" width="176" height="176" alt="Nodu 桌面应用图标">
-            <span>Nodu</span>
-          </div>
-          <div class="toolbar-sample">
-            <p class="sample-caption">IDE 品牌应用示意 · <span data-palette-name>蓝色</span></p>
-            <div class="ide-sample" aria-label="Nodu IDE 顶栏的品牌应用示意，不是运行截图">
-              <div class="ide-titlebar"><img src="assets/blue/logo-light.svg" data-palette-src="logo-light.svg" alt="Nodu" width="92" height="25"><span class="ide-project">my-first-project</span><svg class="layout-icon" viewBox="0 0 24 24" aria-label="工作区布局图标" role="img"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg></div>
-              <div class="ide-filebar"><span class="file-dot" aria-hidden="true"></span><span>main.py</span><span class="ide-file-state">已保存</span></div>
-              <div class="ide-code" aria-label="两行代码示例"><span class="line-number">1</span><code><span class="code-comment"># 从一个小想法开始。</span></code><span class="line-number">2</span><code><span class="code-function">print</span>(<span class="code-string">"Hello, Nodu."</span>)</code></div>
-              <div class="ide-status"><span><span class="status-dot" aria-hidden="true"></span>本地项目</span><span>UTF-8 <span class="ide-language">Python</span></span></div>
-            </div>
-            <p class="sample-note">品牌落位示意 · 保留右上角工作区布局入口。</p>
-          </div>
+        <div class="wb-status">
+          <span class="st-item"><i class="dot ok"></i>已连接</span>
+          <span class="st-item"><svg class="ico"><use href="#i-x"/></svg>0 <svg class="ico"><use href="#i-alert"/></svg>0</span>
+          <span class="wb-spacer"></span>
+          <span class="st-item">行 9，列 41</span><span class="st-item">LF</span><span class="st-item">UTF-8</span><span class="st-item">Python</span>
+          <span class="st-item">固件版本：0.6.3</span><span class="st-item">串行端口：usbserial-3110</span><span class="st-item">FPS：9.0</span>
         </div>
-        <div class="size-and-colors">
-          <div class="size-section"><h3>小到一个图标</h3><p>主标识按实际像素显示。</p><div class="size-row" aria-label="主标识不同显示尺寸"><div><span class="mark" style="--mark-size:16px" role="img" aria-label="16 像素主标识"></span><span>16 px</span></div><div><span class="mark" style="--mark-size:24px" role="img" aria-label="24 像素主标识"></span><span>24 px</span></div><div><span class="mark" style="--mark-size:32px" role="img" aria-label="32 像素主标识"></span><span>32 px</span></div><div><span class="mark" style="--mark-size:64px" role="img" aria-label="64 像素主标识"></span><span>64 px</span></div></div></div>
-          <div class="palette-section"><h3>工作台配色</h3><p>正式蓝色搭配石墨与暖白；色值随当前展示同步。</p><div class="palette"><div class="swatch swatch-graphite"><span>石墨</span><code>#181D20</code></div><div class="swatch swatch-mint"><span data-palette-name>蓝色</span><code id="palette-brand-value">#4F7CFF</code></div><div class="swatch swatch-paper"><span>暖白</span><code>#F3F3EE</code></div><div class="swatch swatch-green"><span>深色文字</span><code id="palette-deep-value">#244BB0</code></div></div></div>
+      </div>
+      <figcaption>界面示意 · 数据为演示。当前只有 K210（野火 CAM · GC2145）完成真板验证，STM32 与 ESP32 为规划范围。</figcaption>
+    </figure>
+  </section>
+
+  <!-- Status -->
+  <section id="status" class="section" aria-labelledby="status-title">
+    <header class="section-head">
+      <p class="overline">05 状态</p>
+      <h2 id="status-title">状态色：每个颜色只说一件事</h2>
+      <p>连接中改用主色脉冲，琥珀只表示风险。所有状态都同时有文字，切换上方的色觉模拟也能分辨。</p>
+    </header>
+    <div class="status-grid">
+      <div class="panel">
+        <h3>设备 chip</h3>
+        <dl class="chip-list">
+          <dt><span class="chip idle"><i class="dot"></i>未连接 · 选择开发板</span></dt><dd>灰点 + 虚线边框，点击打开设备浮层</dd>
+          <dt><span class="chip busy"><i class="dot pulse"></i>连接中…</span></dt><dd>主色脉冲（新）：原来的琥珀留给风险</dd>
+          <dt><span class="chip ok"><i class="dot"></i>已连接 · 运行中</span></dt><dd>绿点；运行中按钮另显示旋转图标</dd>
+          <dt><span class="chip warn"><i class="dot"></i>写入中 · 勿断电</span></dt><dd>琥珀：只在写入 Flash 等有风险时出现</dd>
+          <dt><span class="chip error"><i class="dot"></i>连接出错</span></dt><dd>红点：设备级错误；用户代码报错只进控制台</dd>
+        </dl>
+      </div>
+      <div class="panel">
+        <h3>提示条</h3>
+        <div class="banner busy"><svg class="ico" aria-hidden="true"><use href="#i-info"/></svg><div><b>正在连接开发板</b><p>保持 USB 连接，大约需要 3 秒。</p></div></div>
+        <div class="banner ok"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><div><b>已连接</b><p>野火 K210 CAM · 固件 0.6.3</p></div></div>
+        <div class="banner warn"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><div><b>写入中，请勿断电</b><p>拔线可能导致开发板无法启动。</p></div></div>
+        <div class="banner error"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg><div><b>串口被占用</b><p>关闭其他串口程序后重试。</p></div></div>
+      </div>
+      <div class="panel wide">
+        <h3>固件写入：校验通过不等于已经写入</h3>
+        <ol class="flash-steps">
+          <li class="busy"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><div><b>镜像校验通过</b><span>尚未写入</span></div></li>
+          <li class="idle"><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg><div><b>计划写入</b><span class="mono">0x000000 – 0x204AE5</span></div></li>
+          <li class="warn"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><div><b>写入中 · 勿断电</b><span class="progress warn"><i style="width:62%"></i></span><span class="mono">62%</span></div></li>
+          <li class="ok"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><div><b>已写入并回读校验</b><span>21 个用户文件未改变</span></div></li>
+        </ol>
+        <div class="banner warn compact"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg><div><b>已阻止写入</b><p>Flash 容量未认证，完整备份通过后才能写入。</p></div></div>
+      </div>
+      <div class="panel">
+        <h3>学习里程碑（点亮黄）</h3>
+        <div class="toast-demo">
+          <span class="toast-led" aria-hidden="true"></span>
+          <div><b>第一次点亮</b><p>LED 亮了，程序正在板上运行。</p><a href="#code" class="link">下一步：把闪烁间隔改成 150 ms</a></div>
         </div>
-        <div class="formats-row"><span><span data-palette-name>蓝色</span>资产下载</span><a href="assets/blue/app-icon.svg" data-palette-file="app-icon.svg" download="nodu-blue-app-icon.svg">图标 SVG</a><a href="assets/blue/Nodu.icns" data-palette-file="Nodu.icns" download="nodu-blue.icns">macOS ICNS</a><a href="assets/blue/Nodu.ico" data-palette-file="Nodu.ico" download="nodu-blue.ico">Windows ICO</a><a href="assets/blue/app-icon-1024.png" data-palette-file="app-icon-1024.png" download="nodu-blue-app-icon-1024.png">图标 1024 px</a><a href="assets/blue/app-icon-256.png" data-palette-file="app-icon-256.png" download="nodu-blue-app-icon-256.png">图标 256 px</a><a href="assets/blue/app-icon-512.png" data-palette-file="app-icon-512.png" download="nodu-blue-app-icon-512.png">512 px</a><a href="assets/blue/app-icon-64.png" data-palette-file="app-icon-64.png" download="nodu-blue-app-icon-64.png">64 px</a><a href="assets/blue/app-icon-32.png" data-palette-file="app-icon-32.png" download="nodu-blue-app-icon-32.png">32 px</a><a href="assets/blue/app-icon-16.png" data-palette-file="app-icon-16.png" download="nodu-blue-app-icon-16.png">16 px</a><a href="assets/blue/mark-dark.svg" data-palette-file="mark-dark.svg" download="nodu-blue-mark-dark.svg">独立标识 SVG</a><a href="assets/blue/logo-light.svg" data-palette-file="logo-light.svg" download="nodu-blue-logo-light.svg">浅色组合 SVG</a><a href="assets/blue/logo-dark-2040.png" data-palette-file="logo-dark-2040.png" download="nodu-blue-logo-dark-2040.png">组合 PNG</a></div>
-      </section>
+        <p class="note">运行状态本身仍由绿色状态点表达；点亮黄只庆祝学习进度。</p>
+      </div>
+      <div class="panel">
+        <h3>兼容性标签</h3>
+        <div class="pill-row">
+          <span class="pill ok">已验证</span><span class="pill warn">部分支持</span><span class="pill idle">未验证</span>
+          <span class="pill plain">规划中</span><span class="pill demo">模拟演示</span>
+        </div>
+        <table class="compat">
+          <tbody>
+            <tr><th scope="row">K210 · 野火 CAM</th><td><span class="pill ok">已验证</span></td></tr>
+            <tr><th scope="row">K210 · 其他 MaixPy 板</th><td><span class="pill idle">未验证</span></td></tr>
+            <tr><th scope="row">STM32F103C8T6</th><td><span class="pill plain">规划中</span></td></tr>
+            <tr><th scope="row">ESP32-C3 / S3</th><td><span class="pill plain">规划中</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-      <details class="brand-history section-space"><summary><span>初版青绿应用概念</span><span>展开查看历史方案</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><figure class="brand-mockup"><img src="assets/nodu-brand-showcase.png" alt="初版青绿配色：Nodu 在纸面、石墨应用标题栏与黑白贴纸上的品牌应用概念" width="1536" height="1024" loading="lazy"><figcaption>初版青绿应用概念 · 使用 AI 生成，生产素材以可编辑 SVG 为准。<a href="assets/nodu-brand-showcase.png" download>下载初版展示图</a></figcaption></figure><div class="history-downloads"><span>初版青绿图标</span><a href="assets/archive-green/Nodu.icns" download>macOS ICNS</a><a href="assets/archive-green/Nodu.ico" download>Windows ICO</a><a href="assets/archive-green/app-icon-1024.png" download>1024 px PNG</a><a href="assets/archive-green/app-icon.svg" download>SVG</a></div></details>
+  <!-- Components -->
+  <section id="components" class="section" aria-labelledby="comp-title">
+    <header class="section-head">
+      <p class="overline">06 组件</p>
+      <h2 id="comp-title">组件状态</h2>
+      <p>状态矩阵是静态样本；下方一行是真实控件，可以用键盘 Tab 检查焦点环。</p>
+    </header>
+    <div class="panel">
+      <table class="state-matrix">
+        <thead><tr><th scope="col">按钮</th><th scope="col">默认</th><th scope="col">悬停</th><th scope="col">按下</th><th scope="col">禁用</th><th scope="col">焦点</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">主要</th><td><span class="btn primary">运行</span></td><td><span class="btn primary is-hover">运行</span></td><td><span class="btn primary is-active">运行</span></td><td><span class="btn primary is-disabled">运行</span></td><td><span class="btn primary is-focus">运行</span></td></tr>
+          <tr><th scope="row">次要</th><td><span class="btn secondary">文件</span></td><td><span class="btn secondary is-hover">文件</span></td><td><span class="btn secondary is-active">文件</span></td><td><span class="btn secondary is-disabled">文件</span></td><td><span class="btn secondary is-focus">文件</span></td></tr>
+          <tr><th scope="row">幽灵</th><td><span class="btn ghost">取消</span></td><td><span class="btn ghost is-hover">取消</span></td><td><span class="btn ghost is-active">取消</span></td><td><span class="btn ghost is-disabled">取消</span></td><td><span class="btn ghost is-focus">取消</span></td></tr>
+          <tr><th scope="row">危险</th><td><span class="btn danger">停止</span></td><td><span class="btn danger is-hover">停止</span></td><td><span class="btn danger is-active">停止</span></td><td><span class="btn danger is-disabled">停止</span></td><td><span class="btn danger is-focus">停止</span></td></tr>
+        </tbody>
+      </table>
+      <div class="live-row" aria-label="可操作的控件">
+        <button type="button" class="btn primary"><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg>运行</button>
+        <button type="button" class="btn secondary">文件</button>
+        <button type="button" class="btn ghost">取消</button>
+        <button type="button" class="btn danger">停止</button>
+        <button type="button" class="btn primary" disabled>运行中…</button>
+        <a class="link" href="#rules">查看使用规则</a>
+      </div>
+    </div>
+    <div class="comp-grid">
+      <div class="panel">
+        <h3>输入</h3>
+        <label class="field"><span>串口</span><input type="text" value="/dev/cu.usbserial-3110"></label>
+        <label class="field"><span>开发板</span>
+          <select><option>野火 K210 CAM · GC2145</option><option>通用 K210</option></select></label>
+        <label class="field invalid"><span>板端路径</span><input type="text" value="flash/main.py" aria-invalid="true" aria-describedby="path-err"><small id="path-err">请输入以 / 开头的绝对路径</small></label>
+        <label class="field"><span>波特率（禁用）</span><input type="text" value="115200" disabled></label>
+      </div>
+      <div class="panel">
+        <h3>选择</h3>
+        <label class="check"><input type="checkbox" checked> 我已完成完整备份</label>
+        <label class="check"><input type="checkbox"> 写入后自动重连</label>
+        <fieldset class="radios"><legend>运行方式</legend>
+          <label class="check"><input type="radio" name="run" checked> 临时运行（RAM）</label>
+          <label class="check"><input type="radio" name="run"> 保存为 boot.py</label>
+        </fieldset>
+        <label class="switch"><input type="checkbox" role="switch" checked><span class="track" aria-hidden="true"></span>跟随输出</label>
+        <div class="seg demo" role="group" aria-label="布局模式（示例）">
+          <button type="button" aria-pressed="false">简</button><button type="button" aria-pressed="true">专</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>列表与标签页</h3>
+        <div class="tabs-demo" role="presentation"><span class="tab active">main.py</span><span class="tab">board.py</span><span class="tab">thresholds.py</span></div>
+        <div class="list-demo">
+          <div class="list-row">gc2145-camera</div>
+          <div class="list-row hover">green-tracker（悬停）</div>
+          <div class="list-row selected">blink（选中）</div>
+          <div class="list-row inactive">board-api（失焦选中）</div>
+          <div class="list-row focus">nodu_board.py（键盘焦点）</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>进度与数值</h3>
+        <label class="field"><span>L 下限 <output class="mono" id="range-out">50</output></span>
+          <input type="range" min="0" max="100" value="50" id="range-demo"></label>
+        <div class="progress-block"><span>下载固件</span><span class="progress"><i style="width:72%"></i></span></div>
+        <div class="progress-block"><span>连接中</span><span class="progress indeterminate"><i></i></span></div>
+        <div class="progress-block"><span>写入 Flash</span><span class="progress warn"><i style="width:38%"></i></span></div>
+        <p class="kbd-row"><kbd>⌘</kbd><kbd>Enter</kbd> 运行到设备 · <span class="badge">3</span> 个新示例</p>
+      </div>
+    </div>
+  </section>
 
-      <section class="position-section section-space" id="position" aria-labelledby="position-title">
-        <div class="position-intro"><h2 id="position-title">一个轻一点的名字，<br>留给更广的硬件世界。</h2><p>Nodu 是面向初学者的嵌入式开发工具。名字不绑定某一颗芯片，先让编辑、保存和理解代码变得清楚，再逐步连接真实硬件。</p><p class="position-signature">看见微小，做出真实。</p></div>
-        <div class="product-boundaries"><h3>名字向前，能力如实。</h3><dl><div><dt>当前可用</dt><dd>文件编辑、保存、本机终端、合成演示<span>基于 Theia / Electron 的桌面工作台。</span></dd></div><div><dt>首个接入目标</dt><dd>K210<span>硬件连接与运行流程仍在接入计划中。</span></dd></div><div><dt>后续拓展</dt><dd>STM32F103C8T6 · ESP32-C3 / S3<span>跨芯片的项目体验是拓展方向。</span></dd></div><div><dt>项目协作</dt><dd>搭芯 / DACIR<span>作为未来项目协作方向，目前尚未集成。</span></dd></div></dl></div>
-      </section>
-    </main>
+  <!-- Code -->
+  <section id="code" class="section" aria-labelledby="code-title">
+    <header class="section-head">
+      <p class="overline">07 代码与终端</p>
+      <h2 id="code-title">语法色保持自己的含义</h2>
+      <p>语法、终端 ANSI 和直方图通道色不随品牌色替换，只把注释和正文调到新的中性色上。每个颜色都标出它在编辑区或终端背景上的对比度。</p>
+    </header>
+    <div class="code-grid">
+      <div class="panel flush">
+        <pre class="code editor-sample"><span class="ln">1</span><span class="t-comment"># 每 0.5 秒切换一次 LED</span>
+<span class="ln">2</span><span class="t-keyword">from</span> <span class="t-variable">Maix</span> <span class="t-keyword">import</span> <span class="t-type">GPIO</span>
+<span class="ln">3</span><span class="t-keyword">import</span> <span class="t-variable">time</span>
+<span class="ln">4</span>
+<span class="ln">5</span><span class="t-keyword">def</span> <span class="t-function">blink</span><span class="t-punctuation">(</span><span class="t-variable">led</span><span class="t-punctuation">,</span> <span class="t-variable">times</span><span class="t-punctuation">=</span><span class="t-number">8</span><span class="t-punctuation">,</span> <span class="t-variable">ms</span><span class="t-punctuation">=</span><span class="t-number">500</span><span class="t-punctuation">):</span>
+<span class="ln">6</span>    <span class="t-keyword">for</span> <span class="t-variable">i</span> <span class="t-keyword">in</span> <span class="t-function">range</span><span class="t-punctuation">(</span><span class="t-variable">times</span><span class="t-punctuation">):</span>
+<span class="ln">7</span>        <span class="t-variable">led</span><span class="t-punctuation">.</span><span class="t-function">value</span><span class="t-punctuation">(</span><span class="t-variable">i</span> <span class="t-punctuation">%</span> <span class="t-number">2</span><span class="t-punctuation">)</span>
+<span class="ln">8</span>        <span class="t-function">print</span><span class="t-punctuation">(</span><span class="t-string">f"blink {i}"</span><span class="t-punctuation">)</span>
+<span class="ln">9</span>        <span class="t-variable">time</span><span class="t-punctuation">.</span><span class="t-function">sleep_ms</span><span class="t-punctuation">(</span><span class="t-variable">ms</span><span class="t-punctuation">)</span>
+<span class="ln">10</span>    <span class="t-keyword">return</span> <span class="t-keyword">True</span></pre>
+      </div>
+      <div class="panel">
+        <h3>语法色</h3>
+        <table class="token-table" id="syntax-table"><thead><tr><th scope="col">用途</th><th scope="col">样例</th><th scope="col">色值</th><th scope="col">对比度</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="panel flush wide">
+        <pre class="term term-sample"><span class="a-8">$</span> <span class="a-4">nodu</span> run main.py <span class="a-8">--port</span> <span class="a-6">/dev/cu.usbserial-3110</span>
+<span class="a-2">✓</span> 已连接 <span class="a-8">·</span> 野火 K210 CAM <span class="a-8">·</span> MaixPy <span class="a-3">0.6.3</span>
+<span class="a-4">→</span> 发送 main.py <span class="a-8">(412 B)</span> 到 RAM
+blink 0
+blink 1
+<span class="a-3">!</span> 帧尾不完整，已丢弃第 <span class="a-5">43</span> 帧并重新同步
+<span class="a-1">✗</span> <span class="a-1">OSError: Reset Failed</span>
+<span class="a-10">✓</span> <span class="a-15">已停止，连接保持</span></pre>
+      </div>
+      <div class="panel wide">
+        <h3>终端 ANSI</h3>
+        <div class="ansi-grid" id="ansi-grid"></div>
+      </div>
+    </div>
+  </section>
 
-    <footer class="site-footer page-width"><a class="footer-brand" href="#main"><span class="mark" aria-hidden="true"></span><span>Nodu · 见微</span></a><p>公开命名初筛，不代表商标或域名可用性。<a href="../docs/brand-name-research.md">查看命名调研<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></p><span class="footer-date">品牌提案 · 2026</span></footer>
-  </body>
+  <!-- Contrast -->
+  <section id="contrast" class="section" aria-labelledby="contrast-title">
+    <header class="section-head">
+      <p class="overline">08 对比度</p>
+      <h2 id="contrast-title">对比度检查</h2>
+      <p>文字按 WCAG 2.x AA 的 4.5:1，图标、边框、焦点环等界面元素按 3:1。表格随当前配色和主题重新计算。</p>
+    </header>
+    <div class="contrast-grid">
+      <div class="panel">
+        <h3 id="check-summary">当前组合</h3>
+        <div class="table-scroll"><table class="check-table" id="check-table"><thead><tr><th scope="col">组合</th><th scope="col">样例</th><th scope="col">对比度</th><th scope="col">目标</th></tr></thead><tbody></tbody></table></div>
+      </div>
+      <div class="panel checker">
+        <h3>自选检查</h3>
+        <label class="field"><span>前景</span><select id="fg-select"></select></label>
+        <label class="field"><span>背景</span><select id="bg-select"></select></label>
+        <div class="checker-sample" id="checker-sample"><b>运行到设备</b><span>Aa 示例文字 0123</span></div>
+        <p class="checker-ratio" id="checker-ratio" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules -->
+  <section id="rules" class="section" aria-labelledby="rules-title">
+    <header class="section-head">
+      <p class="overline">09 规则</p>
+      <h2 id="rules-title">使用规则</h2>
+    </header>
+    <ol class="rules">
+      <li><span class="rule-swatch" style="background:var(--nd-primary)"></span><div><b>主色只表示“可以操作”</b><p>主按钮、焦点环、选中、进度条、活动标记。不用来装饰。</p></div></li>
+      <li><span class="rule-swatch" style="background:var(--nd-signal)"></span><div><b>点亮黄只属于品牌</b><p>标志灯罩、首次点亮等学习里程碑。不做按钮，不表示警告，不放在浅底上。</p></div></li>
+      <li><span class="rule-swatch" style="background:var(--nd-warn)"></span><div><b>琥珀只表示风险</b><p>写入中勿断电、需要确认的操作。“连接中”改用主色脉冲。</p></div></li>
+      <li><span class="rule-swatch" style="background:var(--nd-ok)"></span><div><b>绿色只表示成功或已连接</b><p>“镜像校验通过”用主色，因为它还没有写入；写入并回读后才用绿色。</p></div></li>
+      <li><span class="rule-swatch" style="background:var(--nd-error)"></span><div><b>红色只表示错误或停止</b><p>用户代码的报错只出现在控制台，不让设备 chip 变红。</p></div></li>
+      <li><span class="rule-swatch split"></span><div><b>状态永远配文字</b><p>颜色之外始终有文字或图标，色觉差异的学生也能分辨。</p></div></li>
+      <li><span class="rule-swatch code"></span><div><b>代码颜色独立</b><p>语法、终端 ANSI、RGB 直方图通道色不随品牌色替换。</p></div></li>
+    </ol>
+  </section>
+
+  <!-- Export -->
+  <section id="export" class="section" aria-labelledby="export-title">
+    <header class="section-head">
+      <p class="overline">10 导出</p>
+      <h2 id="export-title">取用色值</h2>
+      <p>当前主题的 CSS 变量。两种主题的完整令牌见 <a class="link" href="tokens.css" download>tokens.css</a> 与 <a class="link" href="tokens.json" download>tokens.json</a>；矢量母版与图标在 <a class="link" href="assets/">assets/</a>。</p>
+    </header>
+    <div class="panel flush export">
+      <div class="export-head"><span class="mono" id="export-label"></span><button type="button" class="btn secondary small" id="copy-css"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg>复制 CSS</button></div>
+      <pre class="code export-code" id="export-code"></pre>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>Nodu · 见微品牌规范 v2 · 方向 02「点亮」· 电路板配色 · 2026-10-21。规范正文见 <a class="link" href="README.md">README.md</a>，色值来源 <code>brand/src/tokens.cjs</code>。</p>
+  <p>标志与字标为原创矢量几何；“见微”暂用系统字体排版，印刷前换成开源字体（思源黑体）并转曲。界面示意不代表已实现的设备能力。v1 蓝色方案归档于 <a class="link" href="archive/2026-10-19-blue/">archive/2026-10-19-blue</a>。</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="noscript">这个页面需要 JavaScript 才能切换主题和显示色值。</p></noscript>
+</body>
 </html>

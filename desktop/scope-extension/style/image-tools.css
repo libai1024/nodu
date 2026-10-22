@@ -8,9 +8,9 @@
 .nodu-image-viewport { max-height: 380px; overflow: auto; background: var(--theia-editor-background); border-radius: 3px; scrollbar-color: var(--theia-scrollbarSlider-background) transparent; }
 .nodu-image-raster { position: relative; line-height: 0; }
 .nodu-image-raster canvas { display: block; cursor: crosshair; touch-action: none; image-rendering: pixelated; aspect-ratio: auto; }
-.nodu-image-raster canvas:focus-visible { outline: 1px solid #4f7cff; outline-offset: -1px; }
+.nodu-image-raster canvas:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
 .nodu-image-roi-overlay { pointer-events: none; position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
-.nodu-image-roi-overlay rect { fill: #4f7cff14; stroke: #fff; stroke-width: 1.5; stroke-dasharray: 4 3; filter: drop-shadow(0 1px 1px #101729); }
+.nodu-image-roi-overlay rect { fill: color-mix(in srgb, var(--theia-focusBorder) 8%, transparent); stroke: #fff; stroke-width: 1.5; stroke-dasharray: 4 3; filter: drop-shadow(0 1px 1px rgb(0 0 0 / .75)); }
 .nodu-image-pixel { display: flex; gap: 8px; align-items: center; padding: 7px 0 11px; min-height: 54px; }
 .nodu-image-swatch { width: 24px; height: 24px; border: 1px solid var(--theia-panel-border); border-radius: 3px; flex-shrink: 0; }
 .nodu-image-pixel > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }

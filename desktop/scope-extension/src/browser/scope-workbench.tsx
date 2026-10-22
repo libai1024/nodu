@@ -344,7 +344,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
             return;
         }
         const fw = this.device.state.firmware ? ` · ${this.device.state.firmware.split(' ').slice(0, 2).join(' ')}` : '';
-        void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}${fw}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-terminal-ansiBrightGreen, #64C5AC)' : undefined });
+        void this.status.setElement('scope:device', { text: `$(${this.device.connected ? 'plug' : 'debug-disconnect'}) ${this.device.statusLabel}${this.device.state.port ? ` · ${this.device.state.port}` : ''}${fw}`, alignment: StatusBarAlignment.LEFT, priority: 1000, command: 'scope.show-devices', tooltip: this.device.error || '管理设备', color: this.device.connected ? 'var(--theia-scope-ok)' : undefined });
         void this.status.setElement('scope:firmware', { text: firmwareStatusText(this.device.state.firmware), alignment: StatusBarAlignment.RIGHT, priority: 100, command: 'scope.firmware-releases', tooltip: '点击查看最新的固件版本及说明', accessibilityInformation: { label: `固件版本 ${this.device.state.firmware ?? '无'}`, role: 'button' } });
         void this.status.setElement('scope:serial-port', { text: serialPortStatusText(this.device.state.port), alignment: StatusBarAlignment.RIGHT, priority: 90, tooltip: '开发板串口', accessibilityInformation: { label: `串行端口 ${this.device.state.port || '无'}`, role: 'status' } });
         if (this.session.running) {

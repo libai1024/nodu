@@ -5,342 +5,44 @@ import { ColorRegistry } from '@theia/core/lib/browser/color-registry';
 import { FrontendApplicationContribution } from '@theia/core/lib/browser/frontend-application-contribution';
 import { ThemeService } from '@theia/core/lib/browser/theming';
 import { MonacoThemeRegistry } from '@theia/monaco/lib/browser/textmate/monaco-theme-registry';
+import { editorTokenRules, scopeColorDefaults, workbenchColors } from './nodu-theme-colors';
 
+// Theme IDs stay unchanged for existing user settings; the visible names follow brand v2.
 export const SCOPE_THEME_ID = 'scope-dark';
 export const SCOPE_LIGHT_THEME_ID = 'scope-light';
 
-/** Theme colors use supported workbench IDs, so native Theia widgets retain their layout. */
-const colors: Record<string, string> = {
-    'foreground': '#E8ECE9',
-    'descriptionForeground': '#A9B7B9',
-    'disabledForeground': '#85969B',
-    'focusBorder': '#8EACFF',
-    'errorForeground': '#E99893',
-    'textLink.foreground': '#8EACFF',
-    'textLink.activeForeground': '#E8EEFF',
-    'textBlockQuote.background': '#20272B',
-    'textBlockQuote.border': '#344047',
-    'textCodeBlock.background': '#20272B',
-    'textPreformat.foreground': '#AAC78C',
-    'textSeparator.foreground': '#344047',
-    'icon.foreground': '#A9B7B9',
-    'widget.shadow': '#00000040',
-    'activityBar.background': '#181D20',
-    'activityBar.foreground': '#E8ECE9',
-    'activityBar.inactiveForeground': '#85969B',
-    'activityBar.border': '#344047',
-    'activityBar.activeBorder': '#4F7CFF',
-    'activityBarBadge.background': '#4F7CFF',
-    'activityBarBadge.foreground': '#101827',
-    'sideBar.background': '#1C2226',
-    'sideBar.foreground': '#C6D0CD',
-    'sideBar.border': '#344047',
-    'sideBarTitle.foreground': '#E8ECE9',
-    'sideBarSectionHeader.background': '#20272B',
-    'sideBarSectionHeader.foreground': '#C6D0CD',
-    'sideBarSectionHeader.border': '#344047',
-    'editor.background': '#181D20',
-    'editor.foreground': '#E8ECE9',
-    'editor.selectionBackground': '#4F7CFF40',
-    'editor.inactiveSelectionBackground': '#2A383D',
-    'editor.selectionHighlightBackground': '#4F7CFF26',
-    'editor.lineHighlightBackground': '#20272B',
-    'editor.lineHighlightBorder': '#20272B',
-    'editorCursor.foreground': '#8EACFF',
-    'editorLineNumber.foreground': '#75868B',
-    'editorLineNumber.activeForeground': '#C6D0CD',
-    'editorIndentGuide.background1': '#293338',
-    'editorIndentGuide.activeBackground1': '#526461',
-    'editorWhitespace.foreground': '#344047',
-    'editorGutter.background': '#181D20',
-    'editorBracketMatch.background': '#4F7CFF26',
-    'editorBracketMatch.border': '#8EACFF',
-    'editor.findMatchBackground': '#5A5735',
-    'editor.findMatchHighlightBackground': '#5A573580',
-    'editorGroup.border': '#344047',
-    'editorGroupHeader.tabsBackground': '#1C2226',
-    'editorGroupHeader.tabsBorder': '#344047',
-    'editorWidget.background': '#20272B',
-    'editorWidget.foreground': '#E8ECE9',
-    'editorWidget.border': '#344047',
-    'tab.activeBackground': '#181D20',
-    'tab.activeForeground': '#E8ECE9',
-    'tab.inactiveBackground': '#1C2226',
-    'tab.inactiveForeground': '#A9B7B9',
-    'tab.border': '#344047',
-    'tab.activeBorderTop': '#4F7CFF',
-    'tab.unfocusedActiveBorderTop': '#4F7CFF80',
-    'tab.hoverBackground': '#293338',
-    'panel.background': '#1C2226',
-    'panel.border': '#344047',
-    'panelTitle.activeForeground': '#E8ECE9',
-    'panelTitle.activeBorder': '#4F7CFF',
-    'panelTitle.inactiveForeground': '#A9B7B9',
-    'panelSectionHeader.background': '#20272B',
-    'titleBar.activeBackground': '#20272B',
-    'titleBar.activeForeground': '#E8ECE9',
-    'titleBar.inactiveBackground': '#1C2226',
-    'titleBar.inactiveForeground': '#A9B7B9',
-    'titleBar.border': '#344047',
-    'menubar.selectionBackground': '#293338',
-    'menubar.selectionForeground': '#E8ECE9',
-    'menu.background': '#20272B',
-    'menu.foreground': '#E8ECE9',
-    'menu.border': '#344047',
-    'menu.selectionBackground': '#2A383D',
-    'menu.selectionForeground': '#E8ECE9',
-    'menu.separatorBackground': '#344047',
-    'statusBar.background': '#20272B',
-    'statusBar.foreground': '#C6D0CD',
-    'statusBar.border': '#344047',
-    'statusBar.noFolderBackground': '#20272B',
-    'statusBar.debuggingBackground': '#244BB040',
-    'statusBarItem.hoverBackground': '#303C41',
-    'statusBarItem.prominentBackground': '#4F7CFF26',
-    'statusBarItem.remoteBackground': '#4F7CFF26',
-    'statusBarItem.remoteForeground': '#8EACFF',
-    'list.activeSelectionBackground': '#2A383D',
-    'list.activeSelectionForeground': '#E8ECE9',
-    'list.inactiveSelectionBackground': '#293338',
-    'list.inactiveSelectionForeground': '#C6D0CD',
-    'list.focusBackground': '#2A383D',
-    'list.focusForeground': '#E8ECE9',
-    'list.focusOutline': '#8EACFF',
-    'list.hoverBackground': '#293338',
-    'list.hoverForeground': '#E8ECE9',
-    'list.highlightForeground': '#8EACFF',
-    'list.dropBackground': '#4F7CFF26',
-    'tree.indentGuidesStroke': '#344047',
-    'input.background': '#181D20',
-    'input.foreground': '#E8ECE9',
-    'input.border': '#526068',
-    'input.placeholderForeground': '#A9B7B9',
-    'inputOption.activeBackground': '#4F7CFF26',
-    'inputOption.activeBorder': '#8EACFF',
-    'inputOption.activeForeground': '#E8ECE9',
-    'dropdown.background': '#20272B',
-    'dropdown.foreground': '#E8ECE9',
-    'dropdown.border': '#526068',
-    'button.background': '#4F7CFF',
-    'button.foreground': '#101827',
-    'button.hoverBackground': '#8EACFF',
-    'button.secondaryBackground': '#293338',
-    'button.secondaryForeground': '#E8ECE9',
-    'button.secondaryHoverBackground': '#303C41',
-    'badge.background': '#293338',
-    'badge.foreground': '#E8ECE9',
-    'progressBar.background': '#4F7CFF',
-    'quickInput.background': '#20272B',
-    'quickInput.foreground': '#E8ECE9',
-    'quickInputTitle.background': '#293338',
-    'notificationCenterHeader.background': '#293338',
-    'notifications.background': '#20272B',
-    'notifications.foreground': '#E8ECE9',
-    'notifications.border': '#344047',
-    'scrollbarSlider.background': '#A9B7B930',
-    'scrollbarSlider.hoverBackground': '#A9B7B950',
-    'scrollbarSlider.activeBackground': '#A9B7B970',
-    'terminal.background': '#1C2226',
-    'terminal.foreground': '#C6D0CD',
-    'terminalCursor.foreground': '#8EACFF',
-    'terminal.selectionBackground': '#4F7CFF40',
-    'terminal.ansiGreen': '#AAC78C',
-    'terminal.ansiBrightGreen': '#64C5AC',
-    'terminal.ansiBlue': '#84B7DB',
-    'terminal.ansiCyan': '#64C5AC',
-    'terminal.ansiYellow': '#D4A47C',
-    'terminal.ansiRed': '#E99893'
-};
+const THEMES = [
+    {
+        id: SCOPE_THEME_ID, type: 'dark' as const, base: 'vs-dark' as const,
+        label: '见微 Nodu · 芯片墨', description: 'Nodu 的芯片墨工作台与 Nodu 蓝主题。'
+    },
+    {
+        id: SCOPE_LIGHT_THEME_ID, type: 'light' as const, base: 'vs' as const,
+        label: '见微 Nodu · 丝印白', description: 'Nodu 的丝印白阅读面与 Nodu 蓝主题。'
+    }
+];
 
-/** Light counterpart of `colors`: same keys, warm-white reading surface and the deep brand blue. */
-const lightColors: Record<string, string> = {
-    'foreground': '#2B3439',
-    'descriptionForeground': '#50645C',
-    'disabledForeground': '#A8B3AD',
-    'focusBorder': '#244BB0',
-    'errorForeground': '#B3362B',
-    'textLink.foreground': '#244BB0',
-    'textLink.activeForeground': '#4F7CFF',
-    'textBlockQuote.background': '#E9E7DC',
-    'textBlockQuote.border': '#D5D2C4',
-    'textCodeBlock.background': '#E9E7DC',
-    'textPreformat.foreground': '#35703E',
-    'textSeparator.foreground': '#D5D2C4',
-    'icon.foreground': '#5E6B66',
-    'widget.shadow': '#00000026',
-    'activityBar.background': '#E4E2D8',
-    'activityBar.foreground': '#2B3439',
-    'activityBar.inactiveForeground': '#9AA59E',
-    'activityBar.border': '#D3CFC0',
-    'activityBar.activeBorder': '#244BB0',
-    'activityBarBadge.background': '#244BB0',
-    'activityBarBadge.foreground': '#FFFFFF',
-    'sideBar.background': '#EBE9DF',
-    'sideBar.foreground': '#3A4548',
-    'sideBar.border': '#D3CFC0',
-    'sideBarTitle.foreground': '#2B3439',
-    'sideBarSectionHeader.background': '#E1DFD5',
-    'sideBarSectionHeader.foreground': '#3A4548',
-    'sideBarSectionHeader.border': '#D3CFC0',
-    'editor.background': '#F3F3EE',
-    'editor.foreground': '#2B3439',
-    'editor.selectionBackground': '#4F7CFF2E',
-    'editor.inactiveSelectionBackground': '#E0DFD3',
-    'editor.selectionHighlightBackground': '#4F7CFF1F',
-    'editor.lineHighlightBackground': '#EAE9E0',
-    'editor.lineHighlightBorder': '#E0DFD3',
-    'editorCursor.foreground': '#244BB0',
-    'editorLineNumber.foreground': '#A8B0A6',
-    'editorLineNumber.activeForeground': '#5E6B66',
-    'editorIndentGuide.background1': '#E0DFD3',
-    'editorIndentGuide.activeBackground1': '#C6C4B5',
-    'editorWhitespace.foreground': '#D8D5C7',
-    'editorGutter.background': '#F3F3EE',
-    'editorBracketMatch.background': '#4F7CFF1F',
-    'editorBracketMatch.border': '#244BB0',
-    'editor.findMatchBackground': '#F0C365',
-    'editor.findMatchHighlightBackground': '#E9D8A6',
-    'editorGroup.border': '#D3CFC0',
-    'editorGroupHeader.tabsBackground': '#E4E2D8',
-    'editorGroupHeader.tabsBorder': '#D3CFC0',
-    'editorWidget.background': '#E9E7DC',
-    'editorWidget.foreground': '#2B3439',
-    'editorWidget.border': '#D3CFC0',
-    'tab.activeBackground': '#F3F3EE',
-    'tab.activeForeground': '#2B3439',
-    'tab.inactiveBackground': '#E4E2D8',
-    'tab.inactiveForeground': '#7C877F',
-    'tab.border': '#D3CFC0',
-    'tab.activeBorderTop': '#244BB0',
-    'tab.unfocusedActiveBorderTop': '#244BB080',
-    'tab.hoverBackground': '#EDECE3',
-    'panel.background': '#EBE9DF',
-    'panel.border': '#D3CFC0',
-    'panelTitle.activeForeground': '#2B3439',
-    'panelTitle.activeBorder': '#244BB0',
-    'panelTitle.inactiveForeground': '#7C877F',
-    'panelSectionHeader.background': '#E1DFD5',
-    'titleBar.activeBackground': '#E4E2D8',
-    'titleBar.activeForeground': '#2B3439',
-    'titleBar.inactiveBackground': '#E9E7DD',
-    'titleBar.inactiveForeground': '#7C877F',
-    'titleBar.border': '#D3CFC0',
-    'menubar.selectionBackground': '#DCDACE',
-    'menubar.selectionForeground': '#2B3439',
-    'menu.background': '#E9E7DC',
-    'menu.foreground': '#2B3439',
-    'menu.border': '#C9C5B4',
-    'menu.selectionBackground': '#DCDACE',
-    'menu.selectionForeground': '#2B3439',
-    'menu.separatorBackground': '#D3CFC0',
-    'statusBar.background': '#E4E2D8',
-    'statusBar.foreground': '#3A4548',
-    'statusBar.border': '#D3CFC0',
-    'statusBar.noFolderBackground': '#E4E2D8',
-    'statusBar.debuggingBackground': '#4F7CFF26',
-    'statusBarItem.hoverBackground': '#D8D6C9',
-    'statusBarItem.prominentBackground': '#4F7CFF1F',
-    'statusBarItem.remoteBackground': '#4F7CFF1F',
-    'statusBarItem.remoteForeground': '#244BB0',
-    'list.activeSelectionBackground': '#C9D5F2',
-    'list.activeSelectionForeground': '#22304A',
-    'list.inactiveSelectionBackground': '#E3E1D5',
-    'list.inactiveSelectionForeground': '#3A4548',
-    'list.focusBackground': '#C9D5F2',
-    'list.focusForeground': '#22304A',
-    'list.focusOutline': '#244BB0',
-    'list.hoverBackground': '#E3E1D5',
-    'list.hoverForeground': '#2B3439',
-    'list.highlightForeground': '#244BB0',
-    'list.dropBackground': '#4F7CFF1F',
-    'tree.indentGuidesStroke': '#D3CFC0',
-    'input.background': '#FCFCF8',
-    'input.foreground': '#2B3439',
-    'input.border': '#B9B5A3',
-    'input.placeholderForeground': '#9AA59E',
-    'inputOption.activeBackground': '#4F7CFF1F',
-    'inputOption.activeBorder': '#244BB0',
-    'inputOption.activeForeground': '#2B3439',
-    'dropdown.background': '#EBE9DF',
-    'dropdown.foreground': '#2B3439',
-    'dropdown.border': '#B9B5A3',
-    'button.background': '#244BB0',
-    'button.foreground': '#FFFFFF',
-    'button.hoverBackground': '#4F7CFF',
-    'button.secondaryBackground': '#E1DFD3',
-    'button.secondaryForeground': '#2B3439',
-    'button.secondaryHoverBackground': '#D6D4C7',
-    'badge.background': '#DCDAD0',
-    'badge.foreground': '#3A4548',
-    'progressBar.background': '#244BB0',
-    'quickInput.background': '#E9E7DC',
-    'quickInput.foreground': '#2B3439',
-    'quickInputTitle.background': '#DCDAD0',
-    'notificationCenterHeader.background': '#DCDAD0',
-    'notifications.background': '#E9E7DC',
-    'notifications.foreground': '#2B3439',
-    'notifications.border': '#C9C5B4',
-    'scrollbarSlider.background': '#3A454830',
-    'scrollbarSlider.hoverBackground': '#3A45484D',
-    'scrollbarSlider.activeBackground': '#3A454873',
-    'terminal.background': '#F8F8F3',
-    'terminal.foreground': '#3A4548',
-    'terminalCursor.foreground': '#244BB0',
-    'terminal.selectionBackground': '#4F7CFF2E',
-    'terminal.ansiGreen': '#2F7D42',
-    'terminal.ansiBrightGreen': '#1E8A5F',
-    'terminal.ansiBlue': '#244BB0',
-    'terminal.ansiCyan': '#1E8A8A',
-    'terminal.ansiYellow': '#9A6A1F',
-    'terminal.ansiRed': '#B3362B'
-};
-
+/** Every colour comes from brand tokens (nodu-brand.ts, generated from brand/src/tokens.cjs). */
 @injectable()
 export class ScopeThemeContribution implements FrontendApplicationContribution {
     @inject(ThemeService) protected readonly themes!: ThemeService;
     @inject(MonacoThemeRegistry) protected readonly editorThemes!: MonacoThemeRegistry;
 
     initialize(): void {
-        this.editorThemes.register({
-            name: '见微 Nodu · 石墨',
-            colors,
-            tokenColors: [
-                { scope: ['comment', 'comment.line', 'comment.block'], settings: { foreground: '#85969B' } },
-                { scope: ['keyword', 'storage', 'storage.type'], settings: { foreground: '#84B7DB' } },
-                { scope: ['string', 'string.quoted'], settings: { foreground: '#AAC78C' } },
-                { scope: ['constant.numeric', 'constant.language'], settings: { foreground: '#D4A47C' } },
-                { scope: ['entity.name.function', 'support.function'], settings: { foreground: '#99DBC9' } },
-                { scope: ['entity.name.type', 'support.type'], settings: { foreground: '#84B7DB' } },
-                { scope: ['variable', 'variable.parameter'], settings: { foreground: '#E8ECE9' } }
-            ]
-        }, undefined, SCOPE_THEME_ID, 'vs-dark');
-        this.themes.register({
-            id: SCOPE_THEME_ID,
-            type: 'dark',
-            label: '见微 Nodu · 石墨',
-            description: 'Nodu 的石墨工作台与品牌蓝主题。',
-            editorTheme: SCOPE_THEME_ID
-        });
-        this.editorThemes.register({
-            name: '见微 Nodu · 暖白',
-            colors: lightColors,
-            tokenColors: [
-                { scope: ['comment', 'comment.line', 'comment.block'], settings: { foreground: '#7A8A80' } },
-                { scope: ['keyword', 'storage', 'storage.type'], settings: { foreground: '#244BB0' } },
-                { scope: ['string', 'string.quoted'], settings: { foreground: '#3D7A44' } },
-                { scope: ['constant.numeric', 'constant.language'], settings: { foreground: '#9A6A1F' } },
-                { scope: ['entity.name.function', 'support.function'], settings: { foreground: '#1F7A63' } },
-                { scope: ['entity.name.type', 'support.type'], settings: { foreground: '#244BB0' } },
-                { scope: ['variable', 'variable.parameter'], settings: { foreground: '#2B3439' } }
-            ]
-        }, undefined, SCOPE_LIGHT_THEME_ID, 'vs');
-        this.themes.register({
-            id: SCOPE_LIGHT_THEME_ID,
-            type: 'light',
-            label: '见微 Nodu · 暖白',
-            description: 'Nodu 的暖白阅读面与深品牌蓝主题。',
-            editorTheme: SCOPE_LIGHT_THEME_ID
-        });
+        for (const theme of THEMES) {
+            this.editorThemes.register({
+                name: theme.label,
+                colors: workbenchColors(theme.type),
+                tokenColors: editorTokenRules(theme.type)
+            }, undefined, theme.id, theme.base);
+            this.themes.register({
+                id: theme.id,
+                type: theme.type,
+                label: theme.label,
+                description: theme.description,
+                editorTheme: theme.id
+            });
+        }
     }
 }
 
@@ -348,27 +50,6 @@ export class ScopeThemeContribution implements FrontendApplicationContribution {
 @injectable()
 export class ScopeColorContribution implements ColorContribution {
     registerColors(registry: ColorRegistry): void {
-        registry.register(
-            {
-                id: 'scope.accent',
-                description: 'Nodu 工作台的强调色。',
-                defaults: { dark: '#8EACFF', light: '#244BB0', hcDark: '#8EACFF', hcLight: '#244BB0' }
-            },
-            {
-                id: 'scope.accentBackground',
-                description: 'Nodu 状态与选中项的背景。',
-                defaults: { dark: '#4F7CFF26', light: '#E8EEFF', hcDark: '#244BB0', hcLight: '#E8EEFF' }
-            },
-            {
-                id: 'scope.mutedForeground',
-                description: 'Nodu 面板的次要文字。',
-                defaults: { dark: '#A9B7B9', light: '#50645C', hcDark: '#FFFFFF', hcLight: '#242424' }
-            },
-            {
-                id: 'scope.canvasBackground',
-                description: 'Nodu 合成帧的画布背景。',
-                defaults: { dark: '#111719', light: '#E3E9E1', hcDark: '#000000', hcLight: '#FFFFFF' }
-            }
-        );
+        registry.register(...scopeColorDefaults());
     }
 }

@@ -9,6 +9,7 @@ import { BinaryBuffer } from '@theia/core/lib/common/buffer';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { MAX_IMAGE_FILE_BYTES, OrbInfo, editOrb, orbInfo } from './nodu-imaging';
+import { NODU_COLORS } from './nodu-brand';
 import { pickBinaryFile } from './nodu-vision-files';
 
 const ORB_LIMIT = 2 * 1024 * 1024;
@@ -98,11 +99,11 @@ function KeypointsEditor({ initial, files, dialogs }: { initial: OrbDoc } & Deps
         canvas.height = Math.max(1, Math.round(extent.height * scale));
         const context = canvas.getContext('2d')!;
         const styles = getComputedStyle(canvas);
-        context.fillStyle = styles.getPropertyValue('--theia-editor-background').trim() || '#20272B';
+        context.fillStyle = styles.getPropertyValue('--theia-editor-background').trim() || NODU_COLORS.dark.editor;
         context.fillRect(0, 0, canvas.width, canvas.height);
         if (background) { context.drawImage(background, 0, 0, canvas.width, canvas.height); }
-        const brand = styles.getPropertyValue('--theia-focusBorder').trim() || '#4F7CFF';
-        const plain = styles.getPropertyValue('--theia-editor-foreground').trim() || '#E8ECE9';
+        const brand = styles.getPropertyValue('--theia-focusBorder').trim() || NODU_COLORS.dark.focus;
+        const plain = styles.getPropertyValue('--theia-editor-foreground').trim() || NODU_COLORS.dark.text;
         doc.info.points.forEach((point, index) => {
             if (!visible(index)) { return; }
             const [cx, cy] = toView(point[0], point[1]);

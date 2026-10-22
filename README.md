@@ -30,7 +30,7 @@ npm run start:electron
 | --- | --- |
 | `desktop/` | 实际应用、设备服务、测试与示例 |
 | `docs/0.1.4/` | 当前交接、计划、验收表、遗留与证据；0.1.1 / 0.1.2 / 0.1.3 保留历史记录 |
-| `brand/` | 蓝色品牌页和 SVG / PNG / ICNS / ICO 资产 |
+| `brand/` | 品牌规范 v2（「点亮」标志、电路板配色）：单一来源 `src/`、生成脚本、规范页与 SVG / PNG / ICNS / ICO 资产；v1 归档于 `archive/` |
 | `tools/flash-probe/` | 固定来源 RAM reader、构建与许可审查材料 |
 | `artifacts/`、`.impeccable/review/` | 分阶段验收证据；原始 UI 文本与日志仅本地保留 |
 | `.spec/` | 历史实施记录；最新完成状态按 0.1.4 交接与证据核对 |

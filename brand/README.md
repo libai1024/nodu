@@ -1,66 +1,88 @@
-# Nodu · 见微
+# Nodu · 见微 品牌规范 v2
 
-品牌规范 v1.0 · 2026-10-19
+2026-10-21 · 标志方向 02「点亮」· 主色「电路板」。取代 [v1 蓝色方案](archive/2026-10-19-blue/README.md)。
 
-用户已于 2026-10-19 确认蓝色为正式主色。根目录生产素材与 `assets/blue/` 均为蓝色；暖橙、紫色保留为对照，初版青绿素材归档于 `assets/archive-green/`。
+Nodu · 见微是面向 STM32、K210、ESP32 等主流 MCU 的嵌入式入门学习 IDE。品牌只表达“入门”和“第一次成功”，不绑定任何芯片厂商；具体芯片放在开发板选择里。当前只有 K210（野火 CAM · GC2145）完成真板验证，STM32 与 ESP32 是规划范围，对外文案不能写成已支持。
 
-**Nodu** 是面向嵌入式初学者的独立 IDE 品牌。名称用四个字母连接 `node` 与 `do`，建议读作 NOH-doo（诺度）。这是为本产品设计的含义，不是英语词典释义。中文保留「见微」。
+**从第一行代码，到第一次点亮。**
 
-**从第一行代码，开始做硬件。**
-**Start small. Build real.**
+规范页：在仓库根目录运行 `python3 -m http.server 4190 --bind 127.0.0.1`，打开 <http://127.0.0.1:4190/brand/>。页面可切换深浅主题和色觉模拟，所有色值、对比度与标志都由下文的单一来源生成。
 
-产品方向从 K210 视觉开发扩展到多芯片入门：K210 是首个设备接入目标，STM32F103C8T6、ESP32-C3 / S3 为后续计划。0.1.2 已完成 Theia / Electron 编辑工作区、精简布局修订及 K210 串口、REPL、文件和真实相机；固件容量认证 / 烧写仍被 DE/E7 阻塞，多芯片编译工具链尚未接入。当前交接见 [0.1.2](../docs/0.1.2/HANDOFF.md)。产品是组织编辑、构建与下载流程的 IDE；各芯片的实际编译器属于后续接入的工具链。
+## 单一来源
 
-## 标志与字标
+| 文件 | 作用 |
+| --- | --- |
+| `src/tokens.cjs` | 全部颜色：核心色、色阶、深浅中性色、状态色、语法与终端色、标志色、对比度目标 |
+| `src/geometry.cjs` | 原创矢量几何：点亮标志（常规与小尺寸母版）、nodu 字标、组合与应用图标 |
+| `scripts/build.cjs` | 生成 `assets/*.svg`、`tokens.css`、`tokens.json`、`tokens.js` 与 IDE 模块 `desktop/scope-extension/src/browser/nodu-brand.ts`；任一对比度不达标即失败 |
+| `scripts/rasterize.cjs` | 用仓库自带的 Electron 导出 PNG、`Nodu.ico`、`Nodu.iconset` 与 `Nodu.icns`（macOS） |
+| `desktop/scripts/check-brand.cjs` | 守卫：生成物与来源一致、对比度达标、栅格图不过期、界面源码没有旧色或硬编码品牌色；CI 见 `.github/workflows/brand-check.yml` |
 
-主标「起点」以小写 n 的入口形态搭配一个独立圆点。开口代表开始，圆点代表第一次点亮的可见结果。它不绑定摄像头、特定芯片或编程语言。
+改色或改标志的步骤：
 
-`assets/mark.svg` 是单色主标，`assets/wordmark.svg` 是原创路径绘制的 nodu 字标。二者不依赖安装字体。`assets/logo.svg` 是横向组合；`logo-dark.svg` 用于浅底，`logo-light.svg` 用于深底。所有探索稿均有独立 SVG，主标选用 `exploration-01.svg`。
+```sh
+node brand/scripts/build.cjs
+desktop/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron brand/scripts/rasterize.cjs   # 标志或图标有变化时
+cd desktop && npm run compile --workspace @scope/studio-extension
+node --test scope-extension/test/brand-theme.cjs && npm run check:brand
+```
+
+生成的文件不要手改，改 `src/` 后重新生成并一起提交。
+
+## 标志
+
+主标是一颗被点亮的 LED。n 的拱形是灯罩，用点亮黄；两条腿是引脚，左边的长脚为正极，这是初学者装 LED 时会学到的真实细节。灯罩底边平切，与引脚之间留一道间隔，单色使用时仍能读出“灯罩 + 引脚”。
 
 | 用途 | 文件 |
 | --- | --- |
-| 可编辑矢量主标 | `assets/mark.svg` |
-| 深 / 浅底组合标志 | `assets/logo-dark.svg` / `assets/logo-light.svg` |
-| 透明组合标志 PNG | `assets/logo-dark-2040.png` / `assets/logo-light-2040.png` |
-| 深色 / 浅蓝应用图标 | `assets/app-icon.svg` / `assets/app-icon-light.svg` |
-| 应用图标 PNG | `assets/app-icon-{16,24,32,64,128,256,512,1024}.png` |
-| 平台图标 | `assets/Nodu.icns` / `assets/Nodu.ico` |
-| 精确矢量品牌展示板 | `assets/identity-board.svg` / `.png` |
-| AI 应用概念图 | `assets/nodu-brand-showcase.png`，旁有提示词及来源记录 |
-| 六方向与说明 | `assets/explorations.json`、`assets/exploration-01.svg` 至 `06.svg` |
-| 下载包 | `assets/brand-kit.zip` |
+| 主标（芯片墨板体） | `assets/mark.svg`；16–32 px 用 `assets/mark-small.svg` |
+| 单色主标 | `assets/mark-mono.svg`（`currentColor`） |
+| 深色工具栏（不带板体） | `assets/mark-toolbar.svg`（引脚随文字色） |
+| 字标 | `assets/wordmark.svg`（单线圆端，`currentColor`） |
+| 横向组合 | `assets/logo-on-light.svg` / `logo-on-dark.svg` / `logo.svg`；PNG 见 `logo-on-*.png` |
+| 中英组合 | `assets/logo-bilingual-on-light.svg` / `-on-dark.svg` |
+| 应用图标 | `assets/app-icon.svg`（Windows / Web）、`app-icon-macos.svg`（1024 画布、824 板体）；`Nodu.icns`、`Nodu.ico`、`app-icon-{16…1024}.png` |
 
-## 使用约定
+- 灯罩永远是点亮黄 `#FFC23D`，并且永远放在芯片墨 `#14171C` 上：彩色标志自带墨色板体；深色背景上可以去掉板体（工具栏），浅色背景上必须保留板体。
+- 横向组合必须带板体。不带板体的灯放在 nodu 旁边，会被读成多出来的字母 n。
+- 16–32 px 一律用小尺寸母版（线宽 17.5、间隔 4.5、描边 3 px），48 px 以上用常规母版。
+- 板体在深色程序坞上靠 2 px 描边 `#2A2F38`（小尺寸 3 px `#3A404B`）保持轮廓，不另加阴影。
+- 单独主标最小 16 px，组合最小 96 px 宽；四周留白不少于灯罩线宽的两倍。
+- 不改灯罩颜色（尤其不能用绿色，会被读成“已连接”），不加发光、阴影、渐变或描边特效，不拉伸，不旋转。
+- “见微”用思源黑体 SC 设置，印刷或制作位图前转曲；Nodu 正文写作 Nodu，字标固定小写 nodu。
 
-- 英文正文写 **Nodu**，图形字标固定小写 **nodu**；完整中文组合写 **Nodu · 见微**。
-- 单独主标最小显示 16 px；工具栏建议 24 px。组合标志建议至少 120 px 宽，避免勉强把字标压进小图标。
-- 四周至少保留相当于主标圆点直径的空白。应用图标自带平台画布留白，无需叠加第二个圆角外框。
-- 保留原始纵横比、n 的断口和独立圆点，不加发光、阴影描边、机械引脚或 Arduino 无限符号。
-- 正式品牌蓝为 `#4F7CFF`。石墨 `#181D20` 用于深色工作区，浅蓝 `#8EACFF` 用于深底标志，深蓝 `#244BB0` 用于浅底标志和高对比按钮，柔和蓝 `#E8EEFF` 用于选择底色，暖白 `#F3F3EE` 用于阅读表面。
-- UI 中图标可继承 `currentColor`；外部 `<img>` 无法继承父页面颜色，浅深背景应选对应的实体配色文件。
+## 色彩
 
-## 正式主色与对照配色
+| 名称 | 色值 | 用途 |
+| --- | --- | --- |
+| Nodu 蓝 | `#2F5BFF` | 主要动作、焦点、选中、进度、活动标记；白字 5.2:1，两套主题共用同一个主按钮 |
+| 点亮黄 | `#FFC23D` | 标志灯罩与学习里程碑；只放在芯片墨上（浅底只有 1.5:1） |
+| 芯片墨 | `#14171C` | 标志板体、深色工作台、浅底文字 |
+| 丝印白 | `#F6F5F0` | 浅色工作台、文档与官网阅读面、深底文字 |
 
-三种配色复用完全相同的主标与字标几何，只改变品牌色及其明暗适配。蓝色应用于实际 IDE 的品牌与交互强调；展示页中的对照切换不会修改桌面 IDE 设置。
+角色色值（链接、焦点、悬停、选中底、中性色阶）以 `src/tokens.cjs` 与 [tokens.css](tokens.css) 为准。深色主题的链接和焦点用 `#8FA8FF`，浅色主题用 `#2449DB`；点亮黄 500 及更深的色阶接近琥珀，只用于印刷和插画。
 
-| 配色 | 标准品牌色 | 深底标志色 | 浅底 / 按钮深色 | 柔和底色 | 倾向 |
-| --- | --- | --- | --- | --- | --- |
-| 蓝色，正式主色 | `#4F7CFF` | `#8EACFF` | `#244BB0` | `#E8EEFF` | 清楚、可靠、适合长期使用的开发工具 |
-| 暖橙 | `#E98A42` | `#FFB477` | `#9C4B1F` | `#F8E9DC` | 亲切、动手制作、入门教学 |
-| 紫色 | `#8B78E6` | `#B6A8FF` | `#5C43A8` | `#EEE9FB` | 年轻、创作、较强辨识度 |
+**每个颜色只说一件事：**
 
-每套素材在 `assets/blue/`、`assets/orange/`、`assets/violet/`，均提供 SVG、透明 PNG、多尺寸应用图标、ICNS 和 ICO。`assets/palette-comparison.png` 是精确矢量导出的三色对比；`scripts/build-palettes.cjs` 为生成来源。浅底文字与按钮使用对应深色，深底标志使用较明亮的适配色，不能把一枚十六进制颜色机械用于所有背景。
+- 主色表示“可以操作”：主按钮、焦点环、选中、进度条、活动标记，不做装饰。
+- 点亮黄只属于品牌：标志和学习里程碑（例如“第一次点亮”）。不做按钮，不表示警告。
+- 琥珀只表示风险：写入 Flash 勿断电、需要确认的操作。
+- 绿色只表示成功或已连接。“镜像校验通过”用主色，因为它还没有写入；写入并回读校验后才用绿色。
+- 红色只表示错误或停止。用户代码的报错只进控制台，不让设备 chip 变红。
+- “连接中 / 进行中”用主色族（深色 `#5F82FF`、浅色 `#2449DB`）加脉冲，不再用琥珀。
+- 状态永远同时有文字或图标；规范页的色觉模拟里也要能分辨。
+- 代码语法、终端 ANSI、RGB 直方图通道色和样例画面保持自己的含义，不随品牌色替换。
 
-## 品牌关系与演进
+**对比度：** 文字不低于 WCAG 2.x AA 4.5:1，图标、边框、焦点环与大字不低于 3:1。`build.cjs` 与 `check-brand.cjs` 会逐项计算两套主题的 55 组组合，任何一项不达标都会失败。
 
-Nodu 是独立 IDE 的主品牌。「视觉调试」作为一种工作能力保留；K210、STM32、ESP32 进入开发板或平台选择，不进入主 Logo。与搭芯 / DACIR 的项目、设备或仿真协作是后续集成方向，当前不使用“已打通”或“官方附属产品”等说法。
+## 在 IDE 里
 
-现有工程内部的 `scope-*` 包名、命令 ID 和设置目录作为兼容标识保留。历史 SCOPE 设计图与静态设计网站保留原貌，当前应用可见品牌改为 Nodu。
+- 主题 ID 保持 `scope-dark` / `scope-light`，可见名称为“见微 Nodu · 芯片墨 / 丝印白”。颜色映射在 `desktop/scope-extension/src/browser/nodu-theme-colors.ts`，全部引用生成的 `NODU_COLORS`。
+- 自定义面板用 `--theia-scope-*` 变量：`accent`、`accentBackground`、`mutedForeground`、`canvasBackground`、`idle`、`busy`、`ok`、`warn`、`signal`；按钮、焦点、错误等用 Theia 自带变量。不要借用 `terminal.ansiBrightGreen` 之类无关的 ID。
+- `desktop/scope-extension/src` 与 `style` 里不写品牌色值；TS 里需要兜底色时引用 `NODU_COLORS`。
+- 工具栏左侧：深色主题是不带板体的小灯，浅色主题是小板体（`scope-brand.tsx`，按 `body.theia-light` 切换）。
+- 应用图标由 `desktop/scripts/apply-app-icon.cjs`（开发）和 `package-electron.cjs`（打包）读取 `assets/Nodu.icns` / `Nodu.ico`；Electron 窗口底色是深色编辑区色 `#14171C`。
 
-## 预览、来源与重建
+## 来源与许可
 
-在项目根目录运行 `python3 -m http.server 4190 --bind 127.0.0.1`，打开 `http://127.0.0.1:4190/brand/`。页面可比较三种配色与六个标志方向、切换深浅背景并下载素材。
-
-`scripts/build-assets.cjs` 是 SVG 主资产与 PNG 导出的可复现来源，需要 Node.js 与 sharp。字标、标志和探索稿为本项目原创矢量几何；应用展示概念图使用内置 image_gen，准确生产形状以 SVG 为准。新增源码及原创矢量沿用仓库 MIT 许可。
-
-英文名已作公开网页初筛，发现其他领域同名使用。[命名研究](../docs/brand-name-research.md)记录候选与来源；这里不作商标、域名或包名可用性承诺。
+标志、字标与全部 SVG 是本仓库原创矢量几何，沿用仓库 MIT 许可；PNG、ICO、ICNS 由 SVG 确定性导出。英文名初筛见 [brand-name-research](../docs/0.1.1/brand-name-research.md)，不构成商标、域名或包名可用性结论。评审过程（三个方向、三套配色、预览页）保留在 [proposals/2026-10-21](proposals/2026-10-21/)。
