@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "alientek-explorer-f407",
+  "version": 1,
+  "name": "正点原子 探索者 F407",
+  "mcu": "STM32F407ZGTx",
+  "description": "探索者 STM32F407ZGT6 开发板。时钟暂用内部 HSI 倍频到 168 MHz，外部 8 MHz 晶振待实物核对。",
+  "revisions": [],
+  "clock": {
+    "source": "HSI/16 × 336 / 2",
+    "sysclk": 168000000,
+    "hse": 8000000,
+    "verified": null
+  },
+  "debugUart": {
+    "instance": "USART1",
+    "tx": "PA9",
+    "rx": "PA10",
+    "baud": 115200,
+    "via": "板载 USB 转串口",
+    "verified": "2026-10-22 芯片事实：USART1 复用功能 AF7 在 PA9 / PA10（STM32F407 数据手册）",
+    "note": "板载 USB 转串口需要用跳线帽连到 PA9 / PA10，跳线位置待实物核对"
+  },
+  "leds": [],
+  "ledHint": "看板上 LED0 旁的丝印或原理图（探索者 F407 的 LED 引脚尚未经 Nodu 核对）。",
+  "boot": {
+    "boot0": "跳线帽",
+    "boot1": "跳线帽",
+    "verified": null
+  },
+  "flash": {
+    "stlink": {
+      "speedKhz": 1800,
+      "resetConfig": "none",
+      "wiring": "ST-LINK 接板上的 SWD / JTAG 口"
+    },
+    "uart": {
+      "port": "debugUart",
+      "baud": 115200,
+      "autoBoot": null
+    }
+  },
+  "templates": [
+    "empty",
+    "uart-hello",
+    "blink"
+  ],
+  "sources": [
+    {
+      "title": "探索者 F407 原理图",
+      "revision": "待填",
+      "note": "M0 实物核对"
+    }
+  ]
+}

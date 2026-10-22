@@ -32,6 +32,10 @@ import { NoduBoardFilesContribution } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS } from './nodu-tutor-hints';
 import { NoduBrand } from './scope-brand';
+import { NoduEmbeddedModel } from './nodu-embedded-model';
+import { NoduCToolbar } from './nodu-embedded-toolbar';
+import { C_COMMANDS } from './nodu-embedded-commands';
+import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { SCOPE_LIGHT_THEME_ID, SCOPE_THEME_ID } from './scope-theme';
 import { OpenerService, open } from '@theia/core/lib/browser/opener-service';
 import { URI } from '@theia/core/lib/common/uri';
@@ -92,12 +96,15 @@ export class ScopeToolbar extends ReactWidget {
     @inject(ThemeService) protected readonly themes!: ThemeService;
     @inject(ContextMenuRenderer) protected readonly contextMenu!: ContextMenuRenderer;
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
+    @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
+    @inject(CommandRegistry) protected readonly commandRegistry!: CommandRegistry;
 
     @postConstruct()
     protected init(): void {
         this.id = 'scope:toolbar';
         this.addClass('scope-toolbar-widget');
         this.toDispose.push(this.device.onDidChange(() => this.update()));
+        this.toDispose.push(this.embedded.onDidChange(() => this.update()));
         this.toDispose.push(this.layoutState.onDidChange(() => this.update()));
         this.toDispose.push(this.themes.onDidColorThemeChange(() => this.update()));
         // Hint and anchor changes fire often; the toolbar only shows whether a plan exists and the panel is open.
@@ -124,6 +131,8 @@ export class ScopeToolbar extends ReactWidget {
     }
 
     protected render(): React.ReactNode {
+        // STM32 C projects get their own buttons (UI-DESIGN §3); K210 projects keep this toolbar.
+        if (this.embedded.isC) { return this.renderC(); }
         const simple = this.layoutState.mode === 'simple';
         const { phase } = this.device.state;
         // Beginner code faults (REPL/RAM script) are not device failures; they stay in the console.
@@ -164,6 +173,17 @@ export class ScopeToolbar extends ReactWidget {
             <button className="scope-action scope-toolbar-icon nodu-toolbar-more" aria-label={`更多 · 当前${simple ? '简洁' : '专业'}模式`} aria-haspopup="menu" title="主题、布局模式与设置" onClick={event => this.openMenu(NODU_MORE_MENU, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
             </div>
         </header>;
+    }
+
+    private renderC(): React.ReactNode {
+        const tutor = this.tutor.plan ? <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="教学步骤" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title={this.tutor.panelVisible ? '隐藏教学步骤' : '显示教学步骤'}><i className="codicon codicon-mortar-board" aria-hidden="true"/></button> : undefined;
+        return <NoduCToolbar model={this.embedded} simple={this.layoutState.mode === 'simple'} project={this.layoutState.project}
+            deviceOpen={this.layoutState.deviceOpen} filesVisible={this.layoutState.filesVisible}
+            panelVisible={this.commandRegistry.isToggled(C_COMMANDS.togglePanel)}
+            setDeviceOpen={open => this.layoutState.setDeviceOpen(open)} exec={id => void this.commands.executeCommand(id)}
+            openMenu={(path, anchor) => this.openMenu(path, anchor)} projectMenu={NODU_PROJECT_MENU} moreMenu={NODU_MORE_MENU}
+            confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(v => v === true)}
+            tutorButton={tutor} />;
     }
 
     /** Toolbar dropdowns are ordinary Theia menus anchored under their button. */
@@ -580,10 +600,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     registerKeybindings(keys: KeybindingRegistry): void {
-        keys.registerKeybinding({ command: 'scope.run-current', keybinding: 'ctrlcmd+enter', when: 'editorTextFocus' });
+        keys.registerKeybinding({ command: 'scope.run-current', keybinding: 'ctrlcmd+enter', when: 'editorTextFocus && !nodu.cProject' });
         // Inside a terminal these keys forward raw bytes instead (terminalFocus).
-        keys.registerKeybinding({ command: 'scope.toggle-run', keybinding: 'ctrlcmd+r', when: '!terminalFocus' });
-        keys.registerKeybinding({ command: 'scope.toggle-connect', keybinding: 'ctrlcmd+e', when: '!terminalFocus' });
+        keys.registerKeybinding({ command: 'scope.toggle-run', keybinding: 'ctrlcmd+r', when: '!terminalFocus && !nodu.cProject' });
+        keys.registerKeybinding({ command: 'scope.toggle-connect', keybinding: 'ctrlcmd+e', when: '!terminalFocus && !nodu.cProject' });
         if (environment.electron.is()) {
             // Original 窗口 ▸ 最小化 accelerator (⌘M on macOS).
             keys.registerKeybinding({ command: 'scope.window-minimize', keybinding: 'ctrlcmd+m' });

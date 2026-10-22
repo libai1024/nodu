@@ -1,0 +1,236 @@
+{
+  "date": "2026-10-22",
+  "host": "macOS 26 (Darwin 25.3) arm64, Mac mini",
+  "hardware": "STM32F103C8T6 minimum board + ST-LINK/V2 (V2J37S7, 0483:3748); no USB-serial adapter connected",
+  "toolkit": "desktop/.tools/stm32/darwin, profile dev (2026.11.0-dev), built by scripts/build-toolkit.cjs",
+  "how": "nodu-embedded sidecar driven by scripts/stm32-cli.cjs from the terminal panel; the blink-f103 run was started from the 运行 button of the browser app (port 4198)",
+  "runs": [
+    {
+      "project": "hello-f103",
+      "runId": "r-20261022-095531-c96b62",
+      "startedAt": "2026-10-22T09:55:31Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 8160,
+      "bundle": "737ce29267ba5e4b3577fd3d3e2d0e22798db894bd9ff19825cf40f439c22173",
+      "result": "running",
+      "ms": 3052,
+      "readbackSha256": "21c465b1354b7f955008535d8268a7f3d7af5db3d52daa79dccd2706d4e11ad6",
+      "backupSkipped": null,
+      "error": null,
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "readProtected": false,
+        "voltage": 4.850451,
+        "probe": "STLINK V2J37S7"
+      }
+    },
+    {
+      "project": "hello-f103",
+      "runId": "r-20261022-095820-052715",
+      "startedAt": "2026-10-22T09:58:20Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 8160,
+      "bundle": "737ce29267ba5e4b3577fd3d3e2d0e22798db894bd9ff19825cf40f439c22173",
+      "result": "running",
+      "ms": 1756,
+      "readbackSha256": "21c465b1354b7f955008535d8268a7f3d7af5db3d52daa79dccd2706d4e11ad6",
+      "backupSkipped": null,
+      "error": null,
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "readProtected": false,
+        "voltage": 4.848048,
+        "probe": "STLINK V2J37S7"
+      }
+    },
+    {
+      "project": "hello-f103",
+      "runId": "r-20261022-095938-da0c34",
+      "startedAt": "2026-10-22T09:59:38Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 8160,
+      "bundle": "737ce29267ba5e4b3577fd3d3e2d0e22798db894bd9ff19825cf40f439c22173",
+      "result": "running",
+      "ms": 1822,
+      "readbackSha256": "21c465b1354b7f955008535d8268a7f3d7af5db3d52daa79dccd2706d4e11ad6",
+      "backupSkipped": null,
+      "error": null,
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "readProtected": false,
+        "voltage": 4.848048,
+        "probe": "STLINK V2J37S7"
+      }
+    },
+    {
+      "project": "hello-f103",
+      "runId": "r-20261022-100147-56de7e",
+      "startedAt": "2026-10-22T10:01:47Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 8160,
+      "bundle": "737ce29267ba5e4b3577fd3d3e2d0e22798db894bd9ff19825cf40f439c22173",
+      "result": "running",
+      "ms": 1756,
+      "readbackSha256": "21c465b1354b7f955008535d8268a7f3d7af5db3d52daa79dccd2706d4e11ad6",
+      "backupSkipped": null,
+      "error": null,
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "readProtected": false,
+        "voltage": 4.848048,
+        "probe": "STLINK V2J37S7"
+      }
+    },
+    {
+      "project": "hello-f103",
+      "runId": "r-20261022-111917-45c73c",
+      "startedAt": "2026-10-22T11:19:17Z",
+      "method": "stlink",
+      "restore": true,
+      "bytes": 65536,
+      "bundle": null,
+      "result": "running",
+      "ms": 4417,
+      "readbackSha256": "9ca0bbc9cb5998e0d352b0f92b7b03d32e4b22aae415c8bc64dd208bba1a3650",
+      "backupSkipped": null,
+      "error": null,
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "readProtected": false,
+        "voltage": 4.848048,
+        "probe": "STLINK V2J37S7"
+      }
+    },
+    {
+      "project": "f407",
+      "runId": "r-20261022-095820-00633d",
+      "startedAt": "2026-10-22T09:58:20Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 9472,
+      "bundle": "8634c1a48c2a07e844c1a7dc65d6639fc34f98edad57d4ab1fd30c77f528fa4b",
+      "result": "failed",
+      "ms": 195,
+      "readbackSha256": null,
+      "backupSkipped": null,
+      "error": {
+        "code": "openocd",
+        "message": "下载器操作失败。展开详情查看 OpenOCD 输出。"
+      },
+      "target": {
+        "deviceIdHex": null,
+        "flashKiB": null,
+        "uid": null,
+        "readProtected": null,
+        "voltage": null,
+        "probe": null
+      }
+    },
+    {
+      "project": "f407",
+      "runId": "r-20261022-095938-e5c6b2",
+      "startedAt": "2026-10-22T09:59:38Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 9472,
+      "bundle": "8634c1a48c2a07e844c1a7dc65d6639fc34f98edad57d4ab1fd30c77f528fa4b",
+      "result": "failed",
+      "ms": 192,
+      "readbackSha256": null,
+      "backupSkipped": null,
+      "error": {
+        "code": "openocd",
+        "message": "下载器操作失败。展开详情查看 OpenOCD 输出。"
+      },
+      "target": {
+        "deviceIdHex": null,
+        "flashKiB": null,
+        "uid": null,
+        "readProtected": null,
+        "voltage": null,
+        "probe": null
+      }
+    },
+    {
+      "project": "f407",
+      "runId": "r-20261022-100146-9f8b17",
+      "startedAt": "2026-10-22T10:01:46Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 9472,
+      "bundle": "8634c1a48c2a07e844c1a7dc65d6639fc34f98edad57d4ab1fd30c77f528fa4b",
+      "result": "failed",
+      "ms": 143,
+      "readbackSha256": null,
+      "backupSkipped": null,
+      "error": {
+        "code": "wrongChip",
+        "message": "板上是 STM32F103（中容量，如 C8 / CB）（设备 ID 0x410），工程的目标是 STM32F407ZGT6。没有写入。请换板，或为这块板新建工程。"
+      },
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": null,
+        "uid": null,
+        "readProtected": null,
+        "voltage": 4.848048,
+        "probe": "STLINK V2J37S7"
+      }
+    },
+    {
+      "project": "blink-f103",
+      "runId": "r-20261022-110233-bbe555",
+      "startedAt": "2026-10-22T11:02:33Z",
+      "method": "stlink",
+      "restore": false,
+      "bytes": 8204,
+      "bundle": "be82f4b8dad46359d05cb7382927b9da87b6d7120b1dcbf2e971a105c2ae0107",
+      "result": "running",
+      "ms": 1873,
+      "readbackSha256": "5f3db8c38a8ad3893faa45b00b8979886ded2e337baf96b4072c7271fb6d3923",
+      "backupSkipped": null,
+      "error": null,
+      "target": {
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "readProtected": false,
+        "voltage": 4.850451,
+        "probe": "STLINK V2J37S7"
+      }
+    }
+  ],
+  "backups": [
+    {
+      "schema": 1,
+      "createdAt": "2026-10-22T09:55:32Z",
+      "deviceId": 1040,
+      "deviceName": "STM32F103（中容量，如 C8 / CB）",
+      "uid": "0671ff373634574e431e5512",
+      "flashKiB": 64,
+      "bytes": 65536,
+      "sha256": "9ca0bbc9cb5998e0d352b0f92b7b03d32e4b22aae415c8bc64dd208bba1a3650",
+      "method": "stlink",
+      "factory": true
+    }
+  ],
+  "notes": [
+    "F407 project on the F103 board: refused with wrongChip before any erase (device ID 0x410 read with CPUTAPID 0).",
+    "First write to UID 0671ff37… made a 64 KB backup; later writes made none.",
+    "restore wrote the backup back (64 pages) and the read-back matched; the board was left running its original program.",
+    "Raw flash images stay in ~/.nodu/stm32/backups and are not committed."
+  ]
+}

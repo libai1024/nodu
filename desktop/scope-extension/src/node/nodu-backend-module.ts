@@ -8,6 +8,8 @@ import { NoduZhCnLocalizationContribution } from './nodu-localization';
 import { NoduResourcesServer } from './nodu-resources-server';
 import { NODU_RESOURCES_PATH, NoduResourcesService, ResourcesClient } from '../common/nodu-resources-protocol';
 import { NoduDeviceServer } from './nodu-device-server';
+import { NoduEmbeddedServer } from './nodu-embedded-server';
+import { EmbeddedClient, NODU_EMBEDDED_PATH, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
 
 export default new ContainerModule(bind => {
     bind(NoduDeviceServer).toSelf().inSingletonScope();
@@ -40,5 +42,17 @@ export default new ContainerModule(bind => {
         const facade = Object.create(null);
         for (const name of names) { facade[name] = server[name].bind(server); }
         return facade as NoduDeviceService;
+    })).inSingletonScope();
+    // STM32 HAL service (0.2.1): only whitelisted entry points reach the sidecar.
+    bind(NoduEmbeddedServer).toSelf().inSingletonScope();
+    bind(BackendApplicationContribution).toService(NoduEmbeddedServer);
+    bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler<EmbeddedClient>(NODU_EMBEDDED_PATH, client => {
+        const server = ctx.container.get(NoduEmbeddedServer);
+        const remove = server.addClient(client);
+        client.onDidCloseConnection(() => remove());
+        const names: (keyof NoduEmbeddedService)[] = ['call', 'homeDirectory', 'clangdStart', 'clangdSend', 'clangdStop'];
+        const facade = Object.create(null);
+        for (const name of names) { facade[name] = server[name].bind(server); }
+        return facade as NoduEmbeddedService;
     })).inSingletonScope();
 });

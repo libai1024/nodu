@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "id": "generic-f103c8",
+  "version": 1,
+  "name": "STM32F103C8 最小系统板",
+  "mcu": "STM32F103C8Tx",
+  "description": "通用 F103C8T6 小板（常见的“蓝色小板”等）。时钟使用内部 HSI，不依赖外部晶振。",
+  "clock": {
+    "source": "HSI/2 × 16",
+    "sysclk": 64000000,
+    "hse": null,
+    "verified": "2026-10-22 Nodu 0.2.1 开发：内部时钟不依赖板上元件"
+  },
+  "debugUart": {
+    "instance": "USART1",
+    "tx": "PA9",
+    "rx": "PA10",
+    "baud": 115200,
+    "via": "外接 USB 转 TTL 串口（3.3 V）",
+    "verified": "2026-10-22 芯片事实：USART1 默认引脚 PA9 / PA10（RM0008，无重映射）",
+    "note": "TX（PA9）接转换器 RX，RX（PA10）接转换器 TX，GND 相连"
+  },
+  "leds": [],
+  "ledHint": "看 LED 旁的丝印或原理图。很多 F103C8 小板的 LED 接在 PC13、低电平点亮，但不同厂家并不一致。",
+  "boot": {
+    "boot0": "跳线帽",
+    "note": "串口下载时 BOOT0 接 1（BOOT1 接 0），按复位；下载后 BOOT0 接回 0 再按复位",
+    "verified": null
+  },
+  "flash": {
+    "stlink": {
+      "speedKhz": 1000,
+      "resetConfig": "none",
+      "wiring": "ST-LINK 的 SWDIO、SWCLK、GND、3.3V 分别接板上同名引脚"
+    },
+    "uart": {
+      "port": "debugUart",
+      "baud": 115200,
+      "autoBoot": null
+    }
+  },
+  "templates": [
+    "empty",
+    "uart-hello",
+    "blink"
+  ],
+  "sources": [
+    {
+      "title": "RM0008 参考手册（时钟树、USART1 引脚）",
+      "note": "板上 LED 与串口转换器因厂家而异，未核对"
+    }
+  ]
+}

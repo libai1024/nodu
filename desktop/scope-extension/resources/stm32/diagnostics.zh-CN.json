@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "rules": [
+    {
+      "id": "hal-module-disabled",
+      "pattern": "implicit declaration of function '(?P<f>HAL_(?P<mod>[A-Z0-9]+)_\\w*)'",
+      "check": "halModuleDisabled",
+      "title": "HAL 的 {mod} 模块没有启用",
+      "explain": "{f} 属于 HAL 的 {mod} 模块，但这个模块在 {conf} 中被注释掉了，所以编译器看不到它的声明。",
+      "fix": "打开 Core/Inc/{conf}，把 /* #define HAL_{mod}_MODULE_ENABLED */ 改成 #define HAL_{mod}_MODULE_ENABLED，再编译。"
+    },
+    {
+      "id": "implicit-declaration",
+      "pattern": "implicit declaration of function '(?P<f>[^']+)'",
+      "title": "使用 {f} 之前没有看到它的声明",
+      "explain": "C 语言要求先声明、后使用。编译器在这一行之前没有找到 {f} 的声明。",
+      "fix": "检查函数名的拼写和大小写；如果是自己写的函数，把声明放进头文件并 #include，或者把定义移到调用之前。"
+    },
+    {
+      "id": "undeclared",
+      "pattern": "'(?P<x>[^']+)' undeclared",
+      "title": "{x} 没有定义",
+      "explain": "编译器不认识 {x}：它没有在这里或已包含的头文件中定义。",
+      "fix": "检查拼写和大小写（C 区分大小写）；HAL 的宏通常以 GPIO_、RCC_、UART_ 等开头。"
+    },
+    {
+      "id": "missing-semicolon",
+      "pattern": "expected ';' before",
+      "title": "可能缺少分号",
+      "explain": "上一条语句的末尾可能缺少分号 ;。这个错误常常报在下一行。",
+      "fix": "看一看报错行的上一行，在语句末尾补上 ;。"
+    },
+    {
+      "id": "expected-token",
+      "pattern": "expected '(?P<t>[^']+)' (?:before|at end of input)",
+      "title": "缺少 {t}",
+      "explain": "代码在这里需要一个 {t}。常见原因是括号或花括号没有成对。",
+      "fix": "从报错位置往上检查 ( ) 和 { } 是否一一对应。"
+    },
+    {
+      "id": "undefined-reference",
+      "pattern": "undefined reference to [`'](?P<sym>[^'`]+)'",
+      "title": "找到了 {sym} 的声明，但没有找到它的实现",
+      "explain": "链接时没有任何 .c 文件提供 {sym} 的定义。",
+      "fix": "如果 {sym} 是自己写的函数，确认它所在的 .c 文件放在 Core/Src、App 或 Board 下；如果是 HAL 函数，检查 hal_conf.h 中对应的模块是否启用。"
+    },
+    {
+      "id": "multiple-definition",
+      "pattern": "multiple definition of [`'](?P<sym>[^'`]+)'",
+      "title": "{sym} 被定义了两次",
+      "explain": "同一个函数或全局变量在两个 .c 文件中都有定义。",
+      "fix": "头文件里只放声明；全局变量在头文件中写 extern，只在一个 .c 文件中定义。"
+    },
+    {
+      "id": "flash-overflow",
+      "pattern": "region [`']FLASH' overflowed by (?P<n>\\d+) bytes",
+      "title": "程序比芯片 Flash 大 {n} 字节",
+      "explain": "编译出的程序放不进芯片的 Flash。",
+      "fix": "检查大数组是否应该加 const，或是否开启了 printf 浮点支持；也可以在 nodu.json 中把 build.preset 改为 release（-Os）。"
+    },
+    {
+      "id": "ram-overflow",
+      "pattern": "region [`']RAM' overflowed by (?P<n>\\d+) bytes",
+      "title": "变量和栈超出 RAM {n} 字节",
+      "explain": "全局变量、堆和栈加起来超过了芯片的 RAM。",
+      "fix": "把只读的大数组改为 const（会放进 Flash），或缩小数组。"
+    },
+    {
+      "id": "include-not-found",
+      "pattern": "(?P<h>[^\\s:]+\\.h): No such file or directory",
+      "title": "找不到头文件 {h}",
+      "explain": "#include 的文件不在包含路径中。",
+      "fix": "自己的头文件放在 Core/Inc、App 或 Board；HAL 的头文件由 main.h 统一包含，不需要单独写。"
+    },
+    {
+      "id": "conflicting-types",
+      "pattern": "conflicting types for '(?P<f>[^']+)'",
+      "title": "{f} 的声明与定义不一致",
+      "explain": "函数的参数或返回值类型在两处写得不一样，或者使用前没有声明，编译器按默认的 int 类型推断了一次。",
+      "fix": "让声明和定义完全一致，并把声明放在第一次使用之前。"
+    },
+    {
+      "id": "int-pointer",
+      "pattern": "makes (?:integer from pointer|pointer from integer) without a cast|incompatible pointer type",
+      "title": "指针和整数混用",
+      "explain": "需要地址的地方传了数值，或者需要数值的地方传了地址。",
+      "fix": "HAL 函数需要地址时，传 &变量 或数组名；需要数值时不要加 &。"
+    },
+    {
+      "id": "too-few-arguments",
+      "pattern": "too (?P<k>few|many) arguments to function '(?P<f>[^']+)'",
+      "title": "调用 {f} 的参数个数不对",
+      "explain": "调用时给的参数与函数声明的参数个数不一致。",
+      "fix": "按住 ⌘ 点击函数名查看声明，按声明补齐或删掉参数。"
+    },
+    {
+      "id": "unused-variable",
+      "pattern": "unused variable '(?P<x>[^']+)'",
+      "title": "变量 {x} 定义了但没有使用",
+      "explain": "这是一条警告，不影响下载。",
+      "fix": "删除这个变量，或者检查是不是忘了使用它。"
+    },
+    {
+      "id": "unused-function",
+      "pattern": "'(?P<f>[^']+)' defined but not used",
+      "title": "{f} 定义了但没有被调用",
+      "explain": "这是一条警告，不影响下载。",
+      "fix": "删除这个函数，或者在需要的地方调用它。"
+    },
+    {
+      "id": "assign-in-condition",
+      "pattern": "suggest parentheses around assignment used as truth value",
+      "title": "条件里用了 = 而不是 ==",
+      "explain": "if 或 while 的条件里写了赋值 =。比较是否相等要用 ==。",
+      "fix": "如果想比较，改成 ==；如果确实要赋值，用一对括号包起来表明是有意的。"
+    }
+  ]
+}

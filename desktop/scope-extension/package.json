@@ -13,15 +13,16 @@
     "resources"
   ],
   "dependencies": {
-    "color-convert": "2.0.1",
     "@theia/core": "1.76.0",
     "@theia/editor": "1.76.0",
     "@theia/filesystem": "1.76.0",
+    "@theia/markers": "1.76.0",
     "@theia/monaco": "1.76.0",
     "@theia/navigator": "1.76.0",
     "@theia/output": "1.76.0",
     "@theia/terminal": "1.76.0",
-    "@theia/workspace": "1.76.0"
+    "@theia/workspace": "1.76.0",
+    "color-convert": "2.0.1"
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json"

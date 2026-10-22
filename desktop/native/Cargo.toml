@@ -1,5 +1,7 @@
 [workspace]
 members = ["crates/*"]
+# Tool-created dot directories (for example `.claude`) are not crates.
+exclude = ["crates/.claude"]
 resolver = "3"
 
 [workspace.package]

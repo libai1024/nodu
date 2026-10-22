@@ -19,7 +19,7 @@ if (platform === 'win32' && process.arch !== 'x64') {
         `build-native: Windows build requires x64 Node, got ${process.arch}`);
     process.exit(1);
 }
-const names = ['nodu-device', 'nodu-terminal', 'nodu-resources'];
+const names = ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded'];
 const exe = name => (platform === 'win32' ? `${name}.exe` : name);
 // Rust target triples per staging dir; Windows always builds the explicit
 // MSVC target so the output directory can never be misread as the host
@@ -56,7 +56,7 @@ const env = {
 // `mock` is a nodu-device feature — qualified form so the multi-package
 // build does not look for it on nodu-resources.
 const cargoArgs =
-    '--release --locked -p nodu-device -p nodu-resources --features nodu-device/mock --bins';
+    '--release --locked -p nodu-device -p nodu-resources -p nodu-embedded --features nodu-device/mock --bins';
 for (const dir of buildDirs) {
     const target = TARGETS[dir];
     const targetArg = target ? ` --target ${target}` : '';

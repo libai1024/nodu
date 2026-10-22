@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "id": "STM32F407ZGTx",
+  "name": "STM32F407ZGT6",
+  "family": "f4",
+  "series": "STM32F4xx",
+  "define": "STM32F407xx",
+  "core": "Cortex-M4F",
+  "cpuFlags": [
+    "-mcpu=cortex-m4",
+    "-mfpu=fpv4-sp-d16",
+    "-mfloat-abi=hard"
+  ],
+  "sdk": {
+    "id": "stm32cube-f4",
+    "dir": "cube-f4",
+    "version": "1.28.3"
+  },
+  "startup": "startup_stm32f407xx.s",
+  "flash": {
+    "base": 134217728,
+    "size": 1048576,
+    "eraseUnit": "扇区 4×16 KB + 64 KB + 7×128 KB",
+    "sectors": [
+      16384,
+      16384,
+      16384,
+      16384,
+      65536,
+      131072,
+      131072,
+      131072,
+      131072,
+      131072,
+      131072,
+      131072
+    ]
+  },
+  "ram": {
+    "base": 536870912,
+    "size": 131072,
+    "ccm": {
+      "base": 268435456,
+      "size": 65536
+    }
+  },
+  "deviceId": 1043,
+  "registers": {
+    "idcode": 3758366720,
+    "flashSize": 536836642,
+    "uid": 536836624,
+    "rdp": {
+      "address": 1073888276,
+      "mask": 65280,
+      "level0": 43520
+    }
+  },
+  "openocdTarget": "target/stm32f4x.cfg",
+  "bootUart": {
+    "instance": "USART1",
+    "tx": "PA9",
+    "rx": "PA10"
+  },
+  "notes": "CCM 64 KB 不能用于 DMA，默认链接脚本不使用。",
+  "gpioPorts": "ABCDEFGH",
+  "elfCpu": "7E-M",
+  "ramKiB": 128
+}

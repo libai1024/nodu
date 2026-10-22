@@ -32,9 +32,25 @@ import '../../style/layout.css';
 import '../../style/device.css';
 import '../../style/board-guide.css';
 import '../../style/tutor.css';
+import '../../style/embedded.css';
+import { NoduEmbeddedModel } from './nodu-embedded-model';
+import { NoduEmbeddedPanel } from './nodu-embedded-panel';
+import { NoduEmbeddedContribution, NoduEmbeddedPanelContribution } from './nodu-embedded-contribution';
+import { NoduClangdClient } from './nodu-clangd-client';
 
 export default new ContainerModule(bind => {
     bind(NoduDeviceModel).toSelf().inSingletonScope();
+    // STM32 C workbench (0.2.1): inert until a folder with nodu.json kind stm32-hal is open.
+    bind(NoduEmbeddedModel).toSelf().inSingletonScope();
+    bind(NoduEmbeddedPanel).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduEmbeddedPanel.ID, createWidget: () => ctx.container.get(NoduEmbeddedPanel) })).inSingletonScope();
+    bindViewContribution(bind, NoduEmbeddedPanelContribution);
+    bind(NoduEmbeddedContribution).toSelf().inSingletonScope();
+    for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution]) {
+        bind(contribution).toService(NoduEmbeddedContribution);
+    }
+    bind(NoduClangdClient).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(NoduClangdClient);
     bind(ScopeSession).toSelf().inSingletonScope();
     bind(ScopeLayoutState).toSelf().inSingletonScope();
     bind(ScopeToolbar).toSelf().inSingletonScope();
