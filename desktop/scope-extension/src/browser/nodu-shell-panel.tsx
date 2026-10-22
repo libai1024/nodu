@@ -11,6 +11,7 @@ import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-servi
 import { TerminalWidget } from '@theia/terminal/lib/browser/base/terminal-widget';
 import { ShellTerminalServerProxy } from '@theia/terminal/lib/common/shell-terminal-protocol';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
+import { NoduSelect } from './nodu-select';
 import '../../style/shell-panel.css';
 
 export type TerminalOpenerOptions = WidgetOpenerOptions;
@@ -367,17 +368,13 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
         const sessions = this.sessions.filter(session => session.workspaceUri === this.workspaceUri || session === this.selected);
         return <div className="nodu-shell-bar" role="toolbar" aria-label="终端会话操作">
             <i className="codicon codicon-terminal nodu-shell-context-icon" aria-hidden="true"/>
-            <select className="nodu-shell-select" aria-label="终端会话" value={this.selected?.id ?? ''}
-                disabled={!sessions.length} onChange={event => {
-                    const session = sessions.find(item => item.id === event.currentTarget.value);
+            <NoduSelect className="nodu-shell-select" aria-label="终端会话" value={this.selected?.id ?? ''}
+                disabled={!sessions.length} onChange={value => {
+                    const session = sessions.find(item => item.id === value);
                     if (session) { this.selectSession(session); }
-                }}>
-                {!sessions.length && <option value="">本机终端</option>}
-                {sessions.map((session, index) => <option key={session.id} value={session.id}>
-                    {sessions.length > 1 ? `${index + 1} · ` : ''}{session.active.title.label}
-                    {session.terminals.length > 1 ? ` · ${session.terminals.length} 个分屏` : ''}
-                </option>)}
-            </select>
+                }} options={sessions.length ? sessions.map((session, index) => ({ value: session.id,
+                    label: `${sessions.length > 1 ? `${index + 1} · ` : ''}${session.active.title.label}${session.terminals.length > 1 ? ` · ${session.terminals.length} 个分屏` : ''}`,
+                })) : [{ value: '', label: '本机终端' }]}/>
             <span className={`nodu-shell-context${this.failure ? ' nodu-shell-failure' : ''}`}
                 title={this.failure || this.selected?.workspace || this.workspaceName} role={this.failure ? 'alert' : undefined}>
                 {this.failure || (busy ? '正在启动…' : this.selected?.workspace ?? this.workspaceName)}

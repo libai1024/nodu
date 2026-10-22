@@ -20,12 +20,12 @@
     font-size: 12px;
 }
 .nodu-shell-context-icon { flex: none; font-size: 14px; color: var(--theia-descriptionForeground); }
-.nodu-shell-select {
+.nodu-shell-bar .nodu-select.nodu-shell-select {
     flex: 0 1 200px;
     min-width: 76px;
     max-width: 240px;
     height: 24px;
-    padding: 0 4px;
+    padding: 0 24px 0 8px;
     border: 1px solid transparent;
     border-radius: 3px;
     color: var(--theia-foreground);
@@ -109,7 +109,7 @@
 .nodu-shell-create:disabled { opacity: .45; cursor: default; }
 @container nodu-shell (max-width: 580px) {
     .nodu-shell-context:not(.nodu-shell-failure) { display: none; }
-    .nodu-shell-select { flex: 1 1 auto; max-width: none; }
+    .nodu-shell-bar .nodu-select.nodu-shell-select { flex: 1 1 auto; max-width: none; }
 }
 @container nodu-shell (max-width: 360px) {
     .nodu-shell-context-icon { display: none; }

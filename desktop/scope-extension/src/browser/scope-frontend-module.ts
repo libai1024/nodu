@@ -33,6 +33,7 @@ import '../../style/device.css';
 import '../../style/board-guide.css';
 import '../../style/tutor.css';
 import '../../style/embedded.css';
+import '../../style/select.css';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduEmbeddedPanel } from './nodu-embedded-panel';
 import { NoduEmbeddedContribution } from './nodu-embedded-contribution';

@@ -64,6 +64,16 @@ Node 测试文件：[console-state](../../../desktop/scripts/nodu-console-state.
 
 当前实际界面截图：[STM32 Electron 构建页面](../../../.impeccable/review/stm32-electron-build.png)、[STM32 浅色专业 1440](../../../.impeccable/review/stm32-light-pro-1440.png)、[1100](../../../.impeccable/review/stm32-light-pro-1100.png)、[980](../../../.impeccable/review/stm32-light-pro-980.png)、[980 串口选项](../../../.impeccable/review/stm32-light-pro-980-options.png)、[980 页面菜单](../../../.impeccable/review/stm32-light-pro-980-pages.png)、[K210 深色简洁 1134](../../../.impeccable/review/k210-dark-simple-1134.png)、[K210 Shell](../../../.impeccable/review/k210-shell.png)。截图不包含实板收发或下载成功证据；本目录 SVG/PNG 线框仍为设计示例。
 
+## 追加：统一自定义下拉框
+
+2026-10-22，底部串口监视的端口、波特率、接收编码、发送格式、行尾，终端会话，以及 K210/STM32 设备连接面板的六处选择框，共 12 处已改用共享 `NoduSelect`，不新增组件依赖。触发器、列表、选中勾选和主题颜色由同一套 DOM/CSS 渲染；无关页面的原生选择框不在此次迁移范围内。
+
+组件支持方向键、Home/End、快速输入定位、Enter/空格确认、Escape 取消、Tab 移动焦点、禁用选项、长文本省略及 tooltip。菜单挂在窗口 body，按可用空间上下展开并约束在视口内。设备弹层内点击选项保持外层展开，第一下 Escape 关闭选择菜单，第二下关闭设备弹层；选串口仍不触发连接。后台输出滚动不会关闭菜单，只有锚点祖先滚动、面板尺寸变化等导致定位失效的事件会关闭。
+
+本次验证：TypeScript 编译、Browser/Electron bundle 通过；实际 macOS Electron 验证波特率预览/取消/提交、快速定位、HEX 行尾禁用、底部行尾向上展开、设备弹层选择与两级 Escape、多终端会话选择。浏览器浅色/深色及 340 px 窄面板验证通过，波特率保留完整 88 px，Tab 关闭菜单并移到下一可用控件，窄面板“更多”内编码菜单可用。独立复核发现的日志滚动误关闭、终端箭头留白和波特率收缩问题已修正。Windows/Linux 系统未做实机验证。
+
+截图：[340 px 面板自定义菜单](../../../.impeccable/review/custom-select-stm32-340.png)、[Electron 自定义菜单](../../../.impeccable/review/custom-select-electron.png)。
+
 ## 后续项与验收边界
 
 统一的当前缓冲导出、时间戳开关和 STM32 新输出计数列为后续项。

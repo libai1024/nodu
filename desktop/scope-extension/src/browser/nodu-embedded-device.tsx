@@ -2,6 +2,7 @@
 import * as React from '@theia/core/shared/react';
 import { EmbeddedFailure } from '../common/nodu-embedded-protocol';
 import { NoduEmbeddedModel, formatBytes } from './nodu-embedded-model';
+import { NoduSelect } from './nodu-select';
 
 type Confirm = (title: string, message: string, ok: string) => Promise<boolean>;
 
@@ -60,7 +61,18 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput }: { model
     const identity = model.identity;
     const locked = model.busy;
     const uart = project.board.debugUart;
-    const portOptions = model.ports.map(port => <option key={port.path} value={port.path}>{port.path.replace('/dev/', '')}{port.description && port.description !== port.path ? ` · ${port.description}` : ''}</option>);
+    const portOptions = model.ports.map(port => ({
+        value: port.path,
+        label: `${port.path.replace('/dev/', '')}${port.description && port.description !== port.path ? ` · ${port.description}` : ''}`,
+    }));
+    const probeOptions = !model.probes.length
+        ? [{ value: '', label: '未检测到 ST-LINK' }]
+        : model.probes.length === 1
+            ? [{ value: '', label: `${model.probes[0].model}${model.probes[0].serial ? ` · ${model.probes[0].serial.slice(0, 12)}` : ''}` }]
+            : [{ value: '', label: '请选择下载器' }, ...model.probes.map(probe => ({
+                value: probe.serial,
+                label: `${probe.model} · ${probe.serial ? probe.serial.slice(0, 12) : '无序列号'}`,
+            }))];
     const restore = async (id: string): Promise<void> => {
         const backup = model.backups.find(b => b.id === id);
         if (!backup) { return; }
@@ -81,19 +93,10 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput }: { model
             </div>
             {method === 'stlink' ? <div className="nodu-device-field">
                 <label htmlFor="nodu-c-probe">下载器</label>
-                <select id="nodu-c-probe" value={model.probe} disabled={locked} onChange={event => { model.probe = event.currentTarget.value; model.fire(); }}>
-                    {!model.probes.length && <option value="">未检测到 ST-LINK</option>}
-                    {model.probes.length === 1 && <option value="">{model.probes[0].model}{model.probes[0].serial ? ` · ${model.probes[0].serial.slice(0, 12)}` : ''}</option>}
-                    {model.probes.length > 1 && <>
-                        <option value="">请选择下载器</option>
-                        {model.probes.map(p => <option key={p.serial} value={p.serial}>{p.model} · {p.serial ? p.serial.slice(0, 12) : '无序列号'}</option>)}
-                    </>}
-                </select>
+                <NoduSelect id="nodu-c-probe" aria-label="下载器" value={model.probe} disabled={locked} options={probeOptions} onChange={value => { model.probe = value; model.fire(); }}/>
             </div> : <div className="nodu-device-field">
                 <label htmlFor="nodu-c-isp-port">串口</label>
-                <select id="nodu-c-isp-port" value={model.monitorPort} disabled={locked} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                    <option value="">选择 USB 转串口</option>{portOptions}
-                </select>
+                <NoduSelect id="nodu-c-isp-port" aria-label="ISP 串口" value={model.monitorPort} disabled={locked} options={[{ value: '', label: '选择 USB 转串口' }, ...portOptions]} onChange={value => model.setMonitorPort(value)}/>
             </div>}
             {model.probes.some(p => p.driver === 'missing') && <p className="nodu-c-warn">检测到 ST-LINK，但 Windows 没有为它安装驱动。从 st.com 下载 STSW-LINK009 驱动并安装后重新插拔。</p>}
             {method === 'uart' && project.board.boot?.note && <p className="nodu-c-muted">{project.board.boot.note}</p>}
@@ -101,9 +104,7 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput }: { model
         {method === 'stlink' && <Section title="串口监视器" icon="output">
             <div className="nodu-device-field">
                 <label htmlFor="nodu-c-monitor-port">串口</label>
-                <select id="nodu-c-monitor-port" value={model.monitorPort} disabled={locked || model.monitor.open || model.monitorBusy} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                    <option value="">选择串口（手动连接）</option>{portOptions}
-                </select>
+                <NoduSelect id="nodu-c-monitor-port" aria-label="监视器串口" value={model.monitorPort} disabled={locked || model.monitor.open || model.monitorBusy} options={[{ value: '', label: '选择串口（手动连接）' }, ...portOptions]} onChange={value => model.setMonitorPort(value)}/>
             </div>
             {uart && <p className="nodu-c-muted">{uart.instance}：TX {uart.tx}，RX {uart.rx} · {uart.via}</p>}
         </Section>}

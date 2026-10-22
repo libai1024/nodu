@@ -10,6 +10,7 @@ import { URI } from '@theia/core/lib/common/uri';
 import { Diagnostic } from '../common/nodu-embedded-protocol';
 import { parseSerialDraft, serialHex, SerialEnding, SerialFormat } from '../common/nodu-serial-data';
 import { NoduEmbeddedModel, PanelTab, MonitorLine, formatBytes } from './nodu-embedded-model';
+import { NoduSelect } from './nodu-select';
 import '../../style/embedded-panel.css';
 
 /** Content only: the workbench owns platform navigation and the real shell terminal. */
@@ -161,6 +162,7 @@ export class NoduEmbeddedPanel extends ReactWidget {
     private readonly onPanelKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         const native = event.nativeEvent as KeyboardEvent;
         if (native.isComposing || native.keyCode === 229) { return; }
+        if (event.key === 'Escape' && event.target instanceof Element && event.target.closest('.nodu-select[aria-expanded="true"]')) { return; }
         if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 'f') {
             event.preventDefault(); event.stopPropagation(); this.openSearch();
         } else if (event.key === 'Escape' && this.searching) {
@@ -247,16 +249,16 @@ export class NoduEmbeddedPanel extends ReactWidget {
         const action = model.monitor.open ? '断开串口' : '连接串口';
         return <div className="nodu-ep-context nodu-ep-serial-context">
             <div className="nodu-ep-connection-controls">
-            <select className="nodu-ep-port" aria-label="手动选择串口" value={model.monitorPort} disabled={locked} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                <option value="">选择串口</option>
-                {model.monitorPort && !available && <option value={model.monitorPort}>{model.monitorPort.replace('/dev/', '')} · 未检测到</option>}
-                {model.ports.map(port => <option key={port.path} value={port.path}>{port.description ? `${port.description} · ` : ''}{port.path.replace('/dev/', '')}</option>)}
-            </select>
+            <NoduSelect className="nodu-ep-port" aria-label="手动选择串口" value={model.monitorPort} disabled={locked}
+                onChange={value => model.setMonitorPort(value)} options={[
+                    { value: '', label: '选择串口' },
+                    ...(model.monitorPort && !available ? [{ value: model.monitorPort, label: `${model.monitorPort.replace('/dev/', '')} · 未检测到` }] : []),
+                    ...model.ports.map(port => ({ value: port.path, label: `${port.description ? `${port.description} · ` : ''}${port.path.replace('/dev/', '')}` })),
+                ]}/>
             {this.icon('refresh', '刷新串口列表', () => void model.refreshDevices())}
-            <select className="nodu-ep-baud" aria-label="波特率" value={model.project?.manifest.monitor?.baud ?? 115200} disabled={locked}
-                onChange={event => void model.setOption('monitorBaud', Number(event.currentTarget.value))}>
-                {Array.from(new Set([9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600, model.project?.manifest.monitor?.baud ?? 115200])).sort((a, b) => a - b).map(baud => <option key={baud} value={baud}>{baud}</option>)}
-            </select>
+            <NoduSelect className="nodu-ep-baud" aria-label="波特率" value={model.project?.manifest.monitor?.baud ?? 115200} disabled={locked}
+                onChange={value => void model.setOption('monitorBaud', Number(value))}
+                options={Array.from(new Set([9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600, model.project?.manifest.monitor?.baud ?? 115200])).sort((a, b) => a - b).map(baud => ({ value: baud, label: String(baud) }))}/>
             <button className={`nodu-ep-icon ${model.monitor.open ? '' : 'nodu-ep-primary'}`} aria-label={action} title={action} disabled={model.monitorBusy || model.monitor.state === 'lent' || (!model.monitor.open && (!model.monitorPort || model.awaitUser === 'exitBoot'))}
                 onClick={() => void model.toggleMonitor()}><i className={`codicon codicon-${model.monitorBusy ? 'loading codicon-modifier-spin' : model.monitor.open ? 'debug-disconnect' : 'plug'}`} aria-hidden="true"/></button>
             </div>
@@ -278,9 +280,8 @@ export class NoduEmbeddedPanel extends ReactWidget {
                 <button aria-pressed={this.receiveFormat === 'text'} onClick={() => { this.receiveFormat = 'text'; this.update(); }}>TEXT</button>
                 <button aria-pressed={this.receiveFormat === 'hex'} onClick={() => { this.receiveFormat = 'hex'; this.update(); }}>HEX</button>
             </div>
-            <select aria-label="接收文本编码" title="接收文本编码；文本发送使用 UTF-8" value={model.project?.manifest.monitor?.encoding ?? 'utf-8'} disabled={this.receiveFormat === 'hex'} onChange={event => void model.setOption('monitorEncoding', event.currentTarget.value)}>
-                <option value="utf-8">UTF-8</option><option value="gbk">GBK</option>
-            </select>
+            <NoduSelect aria-label="接收文本编码" title="接收文本编码；文本发送使用 UTF-8" value={model.project?.manifest.monitor?.encoding ?? 'utf-8'} disabled={this.receiveFormat === 'hex'}
+                onChange={value => void model.setOption('monitorEncoding', value)} options={[{ value: 'utf-8', label: 'UTF-8' }, { value: 'gbk', label: 'GBK' }]}/>
         </div>;
     }
 
@@ -320,15 +321,14 @@ export class NoduEmbeddedPanel extends ReactWidget {
         return <>
             {error && <div className="nodu-ep-send-error" role="alert">{error}</div>}
             <div className="nodu-ep-send">
-                <select aria-label="发送格式" value={this.sendFormat} onChange={event => { this.sendFormat = event.currentTarget.value as SerialFormat; this.sendError = ''; this.update(); }}>
-                    <option value="text">TEXT</option><option value="hex">HEX</option>
-                </select>
+                <NoduSelect aria-label="发送格式" value={this.sendFormat} onChange={value => { this.sendFormat = value as SerialFormat; this.sendError = ''; this.update(); }}
+                    options={[{ value: 'text', label: 'TEXT' }, { value: 'hex', label: 'HEX' }]}/>
                 <textarea rows={Math.min(4, this.draft.split('\n').length)} aria-label="发送到串口" value={this.draft} placeholder={this.sendFormat === 'hex' ? '01 FF 0A' : '固件命令…'} title="Enter 发送；Shift+Enter 换行；文本使用 UTF-8" disabled={model.monitorSending}
                     onChange={event => { this.draft = event.currentTarget.value; this.sendError = ''; this.update(); }}
                     onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !(event.nativeEvent as KeyboardEvent).isComposing && model.monitor.open) { event.preventDefault(); void this.send(); } }}/>
-                <select aria-label="发送行尾" title={this.sendFormat === 'hex' ? 'HEX 仅发送输入字节，不追加文本行尾' : '发送行尾'} value={this.sendFormat === 'hex' ? 'none' : this.lineEnding} disabled={this.sendFormat === 'hex'} onChange={event => { this.lineEnding = event.currentTarget.value as SerialEnding; this.update(); }}>
-                    <option value="none">无行尾</option><option value="lf">LF</option><option value="cr">CR</option><option value="crlf">CR LF</option>
-                </select>
+                <NoduSelect aria-label="发送行尾" title={this.sendFormat === 'hex' ? 'HEX 仅发送输入字节，不追加文本行尾' : '发送行尾'} value={this.sendFormat === 'hex' ? 'none' : this.lineEnding} disabled={this.sendFormat === 'hex'}
+                    onChange={value => { this.lineEnding = value as SerialEnding; this.update(); }}
+                    options={[{ value: 'none', label: '无行尾' }, { value: 'lf', label: 'LF' }, { value: 'cr', label: 'CR' }, { value: 'crlf', label: 'CR LF' }]}/>
                 <button className="nodu-ep-primary nodu-ep-send-action" aria-label="发送" title="发送（Enter）" disabled={!model.monitor.open || model.monitorBusy || model.monitorSending || !this.draft} onClick={() => void this.send()}><i className={`codicon codicon-${model.monitorSending ? 'loading codicon-modifier-spin' : 'send'}`} aria-hidden="true"/></button>
             </div>
         </>;

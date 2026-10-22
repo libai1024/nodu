@@ -114,12 +114,18 @@ export class ScopeToolbar extends ReactWidget {
             if (next !== tutorState) { tutorState = next; this.update(); }
         }));
         const outside = (event: PointerEvent): void => {
-            if (this.layoutState.deviceOpen && event.target instanceof Node && !this.node.querySelector('.scope-device-picker')?.contains(event.target)) {
+            const picker = this.node.querySelector('.scope-device-picker');
+            const target = event.target;
+            const selectOwner = target instanceof Element ? target.closest<HTMLElement>('[data-nodu-select-trigger]')?.dataset.noduSelectTrigger : undefined;
+            const belongsToPicker = selectOwner && picker?.contains(this.node.ownerDocument.getElementById(selectOwner));
+            if (this.layoutState.deviceOpen && target instanceof Node && !picker?.contains(target) && !belongsToPicker) {
                 this.layoutState.setDeviceOpen(false);
             }
         };
         const escape = (event: KeyboardEvent): void => {
             if (event.key === 'Escape' && this.layoutState.deviceOpen) {
+                // The first Escape cancels the nested selector; the next closes the device popover.
+                if (this.node.querySelector('.scope-device-picker .nodu-select[aria-expanded="true"]')) { return; }
                 event.preventDefault(); event.stopPropagation(); this.layoutState.setDeviceOpen(false);
                 this.node.querySelector<HTMLButtonElement>('.scope-device-chip')?.focus();
             }
