@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "chip-f103c8",
+  "version": 1,
+  "name": "STM32F103C8T6",
+  "mcu": "STM32F103C8Tx",
+  "description": "",
+  "clock": {
+    "source": "HSI/2 × 16",
+    "sysclk": 64000000,
+    "hse": null,
+    "verified": "内部 HSI 时钟，不依赖外部晶振"
+  },
+  "debugUart": {
+    "instance": "USART1",
+    "tx": "PA9",
+    "rx": "PA10",
+    "baud": 115200,
+    "via": "PA9 / PA10",
+    "verified": "2026-10-22 芯片事实：USART1 默认引脚 PA9 / PA10（RM0008，无重映射）",
+    "note": "TX=PA9，RX=PA10"
+  },
+  "leds": [],
+  "boot": {
+    "boot0": "BOOT0",
+    "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+  },
+  "flash": {
+    "stlink": {
+      "speedKhz": 1000,
+      "resetConfig": "none",
+      "wiring": "SWDIO=PA13，SWCLK=PA14，GND 共地"
+    },
+    "uart": {
+      "port": "debugUart",
+      "baud": 115200,
+      "autoBoot": null
+    }
+  },
+  "templates": [
+    "empty",
+    "uart-hello"
+  ],
+  "sources": [
+    {
+      "title": "STM32 芯片默认配置",
+      "note": "使用芯片内部时钟及 USART1 默认引脚；不假定开发板外设。"
+    }
+  ]
+}

@@ -112,7 +112,7 @@ impl Service {
 impl Inner {
     fn handle(inner: &Arc<Self>, id: Value, method: &str, args: Value) {
         let queue = match method {
-            "build" | "configure" => Some(Queue::Build),
+            "build" | "configure" | "checkToolkit" => Some(Queue::Build),
             "identify" | "flash" | "reset" | "restore" => Some(Queue::Device),
             _ => None,
         };
@@ -188,6 +188,7 @@ impl Inner {
             _ => true,
         };
         let mut summary = project.summary();
+        summary["lockedToolkitVersion"] = read_json(&project.root.join("nodu.lock.json")).ok().and_then(|v| v.pointer("/toolkit/version").cloned()).unwrap_or(Value::Null);
         summary["trusted"] = json!(self.trust.is_trusted(&project.root));
         summary["currentBuild"] = current.unwrap_or(Value::Null);
         summary["buildStale"] = json!(stale);
@@ -202,6 +203,7 @@ impl Inner {
         match method {
             "ping" => Ok(json!({"version": env!("CARGO_PKG_VERSION")})),
             "catalog" => self.catalog.listing(),
+            "readToolkitLicense" => Toolkit::open(&self.toolkit_root)?.license_text(arg_str(args, "file")?),
             "checkToolkit" => {
                 let full = arg_bool(args, "full");
                 let toolkit = Toolkit::open(&self.toolkit_root)?;
@@ -209,7 +211,7 @@ impl Inner {
                     toolkit::cached_full_check(&self.check_cache(), &toolkit).map_or_else(|| toolkit.check(false, None), |mut cached| {
                         // Sizes are re-checked every time; hashes come from the cached full check.
                         let quick = toolkit.check(false, None);
-                        if quick["ok"] != json!(true) { quick } else { cached["fullCheckedAt"] = cached["checkedAt"].clone(); cached }
+                        if quick["ok"] != json!(true) { quick } else { cached["fullCheckedAt"] = cached["checkedAt"].clone(); cached["inventory"] = quick["inventory"].clone(); cached }
                     })
                 } else {
                     toolkit.check(true, Some(&self.check_cache()))
@@ -234,9 +236,24 @@ impl Inner {
                 let project = Project::open(&root, &self.catalog)?;
                 Ok(self.project_status(&project))
             }
+            "detectExternal" => crate::exchange::detect(Path::new(arg_str(args, "path")?), &self.catalog),
+            "importExternal" => {
+                let root = crate::exchange::import(Path::new(arg_str(args, "path")?), arg_str(args, "board")?, &self.catalog)?;
+                Ok(self.project_status(&Project::open(&root, &self.catalog)?))
+            }
+            "exportProject" => crate::exchange::export(&self.project(args)?, &self.toolkit()?, Path::new(arg_str(args, "destination")?)),
+            "acceptToolkit" => {
+                let project = self.project(args)?;
+                crate::exchange::accept_toolkit(&project, &self.toolkit()?)?;
+                Ok(self.project_status(&project))
+            }
             "openProject" => {
                 let project = self.project(args)?;
                 Ok(self.project_status(&project))
+            }
+            "createModule" => {
+                if self.build_busy.load(Ordering::Acquire) { return Err(Failure::new("buildBusy", "编译结束后再创建模块。")); }
+                project::create_module(&self.project(args)?, arg_str(args, "name")?)
             }
             "trustProject" => {
                 let project = self.project(args)?;
@@ -251,11 +268,32 @@ impl Inner {
                     "monitorBaud" if value.as_u64().is_some_and(|b| (1200..=4_000_000).contains(&b)) => ("/monitor/baud", value),
                     "monitorEncoding" if value == "utf-8" || value == "gbk" => ("/monitor/encoding", value),
                     "printfFloat" if value.is_boolean() => ("/build/printfFloat", value),
+                    "chipVendor" if value == "st" || value == "compatible" => ("/target/vendor", value),
                     "preset" if value == "debug" || value == "release" => ("/build/preset", value),
                     "uartPort" if value.is_string() || value.is_null() => ("/flash/port", value),
                     _ => return Err(Failure::new("badRequest", "不支持的工程选项。")),
                 };
                 project.set_manifest(pointer, value)?;
+                Ok(self.project_status(&project))
+            }
+            "setProjectOptions" => {
+                if self.build_busy.load(Ordering::Acquire) || self.device_busy.load(Ordering::Acquire) {
+                    return Err(Failure::new("busy", "任务结束后再保存工程设置。"));
+                }
+                let mut project = self.project(args)?;
+                let options = args["options"].as_object().ok_or_else(|| Failure::new("badRequest", "工程设置无效。"))?;
+                let mut values = Vec::new();
+                for (key, value) in options {
+                    let pointer = match key.as_str() {
+                        "autoBoot" => { crate::auto_boot::AutoBoot::parse(value, project.chip.id())?; "/flash/autoBoot" },
+                        "printfFloat" if value.is_boolean() => "/build/printfFloat",
+                        "preset" if value == "debug" || value == "release" => "/build/preset",
+                        "chipVendor" if value == "st" || value == "compatible" => "/target/vendor",
+                        _ => return Err(Failure::new("badRequest", "不支持的工程设置。")),
+                    };
+                    values.push((pointer, value.clone()));
+                }
+                project.set_manifests(&values)?;
                 Ok(self.project_status(&project))
             }
             "cancel" => {
@@ -285,10 +323,14 @@ impl Inner {
                 let port = arg_str(args, "port")?;
                 let baud = args.get("baud").and_then(Value::as_u64).unwrap_or(115_200) as u32;
                 let mut monitor = self.monitor.lock().map_err(|_| Failure::new("internal", "监视器不可用"))?;
-                monitor.open(&self.out, port, baud)
+                let profile = if args["path"].is_string() { let project = self.project(args)?;
+                    crate::auto_boot::AutoBoot::parse(&project.manifest["flash"]["autoBoot"], project.chip.id())?
+                } else { None };
+                monitor.open(&self.out, port, baud, profile)
             }
             "closeMonitor" => {
                 if let Ok(mut monitor) = self.monitor.lock() {
+                    monitor.available()?;
                     monitor.close(&self.out);
                 }
                 Ok(json!({"open": false}))
@@ -323,6 +365,7 @@ impl Inner {
     }
 
     fn job(&self, method: &str, args: &Value) -> Outcome<Value> {
+        if method == "checkToolkit" { return self.quick(method, args); }
         let toolkit = self.toolkit()?;
         let project = self.project(args)?;
         match method {
@@ -371,6 +414,7 @@ impl Inner {
     }
 
     fn download(&self, method: &str, args: &Value, toolkit: &Toolkit, project: &Project) -> Outcome<Value> {
+        check_compatible(&project.manifest, args)?;
         let image = if method == "restore" {
             let (record, file) = self.backups.get(arg_str(args, "backup")?)?;
             Image {
@@ -393,6 +437,7 @@ impl Inner {
                 restore_uid: None,
             }
         };
+        let profile = crate::auto_boot::AutoBoot::parse(&project.manifest["flash"]["autoBoot"], project.chip.id())?;
         let method_name = arg_opt_str(args, "method").unwrap_or(project.flash_method()).to_string();
         let port = arg_opt_str(args, "port")
             .or_else(|| crate::util::str_field(&project.manifest, &["flash", "port"]))
@@ -420,8 +465,7 @@ impl Inner {
             let mut monitor = self.monitor.lock().map_err(|_| Failure::new("internal", "监视器不可用"))?;
             if monitor.is_on(&port) {
                 let baud = monitor.status()["baud"].as_u64().unwrap_or(115_200) as u32;
-                let (name, lock) = monitor.suspend().ok_or_else(|| Failure::new("internal", "监视器交接失败"))?;
-                self.out.event("monitor.state", json!({"port": name, "state": "lent", "message": "串口暂时交给下载使用"}));
+                let (name, lock) = monitor.lend(&self.out).ok_or_else(|| Failure::new("internal", "监视器交接失败"))?;
                 resume = Some((name, baud));
                 Some(lock)
             } else {
@@ -433,7 +477,7 @@ impl Inner {
         let result = flash::run(&ctx, &target, &image, &run_id);
         if let (Some((name, baud)), Some(lock)) = (resume, port_lock) {
             if let Ok(mut monitor) = self.monitor.lock() {
-                monitor.resume(&self.out, &name, baud, lock);
+                monitor.resume(&self.out, &name, baud, lock, profile);
             }
         }
         let done = match &result {
@@ -443,4 +487,11 @@ impl Inner {
         self.out.event("flash.done", done);
         result
     }
+}
+
+fn check_compatible(manifest: &Value, args: &Value) -> Outcome<()> {
+    if manifest.pointer("/target/vendor").and_then(Value::as_str) == Some("compatible") && !arg_bool(args, "compatibleConfirmed") {
+        return Err(Failure::new("compatibilityConfirmation", "兼容芯片尚未验证，请确认具体型号后再下载。"));
+    }
+    Ok(())
 }

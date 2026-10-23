@@ -1,0 +1,23 @@
+✔ download status uses actual phases and clears stale percent (0.444958ms)
+✔ help command and menu are isolated from model and hardware calls (1.997125ms)
+✔ real model events update progress and reset percent between stages without RPC (11.774ms)
+✔ source edits invalidate diagnostics; generated and unrelated files do not (0.85625ms)
+✔ unsaved edits during build stay stale; next fresh build replaces diagnostics (0.241625ms)
+✔ timestamped text and HEX exports preserve partial text and original bytes (0.713375ms)
+✔ pause freezes display/export while reception continues; resume and clear work independently (1.807709ms)
+✔ compatible-chip UI cancellation prevents download and acceptance passes a one-shot confirmation (1.133583ms)
+✔ hotplug suggests the sole USB port without replacing the user or active port (0.360209ms)
+✔ hex display preserves actual wire bytes, including invalid text and line endings (0.469625ms)
+✔ raw receive buffer retains only its bounded newest bytes (0.06475ms)
+✔ send encoding produces exact UTF-8/GBK bytes and retains line endings (5.311ms)
+✔ ROM noise is not treated as application startup output (0.44725ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.158083ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.085958ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56.420958

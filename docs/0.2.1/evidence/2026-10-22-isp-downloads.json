@@ -1,0 +1,83 @@
+{
+  "backup": {
+    "schema": 1,
+    "createdAt": "2026-10-22T15:02:11Z",
+    "deviceId": 1040,
+    "deviceName": "STM32F103（中容量，如 C8 / CB）",
+    "uid": "0671ff373634574e431e5512",
+    "flashKiB": 64,
+    "bytes": 65536,
+    "sha256": "bb030999f966a24ca645ffb4e369785cecf55d2bd1821c7d04481a2da2249bcf",
+    "method": "uart",
+    "factory": true,
+    "nodu": "0.2.1"
+  },
+  "backupPrefixEqualsPreviousTestFirmware": true,
+  "imageSha256": "0ffc0b8a0d48d363c24b6fb76c678c38825bdb0d33f567d6aa9bd014a04359a2",
+  "bytes": 10088,
+  "runs": [
+    {
+      "runId": "r-20261022-150200-f86e1c",
+      "startedAt": "2026-10-22T15:02:01Z",
+      "bundle": "b76115de751d98006878589e811e7c8c3ca86ffb952c8315e3f51e53a14ece12",
+      "method": "uart",
+      "bytes": 10088,
+      "restore": false,
+      "steps": [],
+      "target": {
+        "method": "uart",
+        "deviceId": 1040,
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+        "readProtected": false
+      },
+      "ms": 15708,
+      "result": "awaitingBootRestore",
+      "readbackSha256": "0ffc0b8a0d48d363c24b6fb76c678c38825bdb0d33f567d6aa9bd014a04359a2"
+    },
+    {
+      "runId": "r-20261022-150250-f2cbcf",
+      "startedAt": "2026-10-22T15:02:50Z",
+      "bundle": "b76115de751d98006878589e811e7c8c3ca86ffb952c8315e3f51e53a14ece12",
+      "method": "uart",
+      "bytes": 10088,
+      "restore": false,
+      "steps": [],
+      "target": {
+        "method": "uart",
+        "deviceId": 1040,
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+        "readProtected": false
+      },
+      "ms": 6787,
+      "result": "awaitingBootRestore",
+      "readbackSha256": "0ffc0b8a0d48d363c24b6fb76c678c38825bdb0d33f567d6aa9bd014a04359a2"
+    },
+    {
+      "runId": "r-20261022-150657-0f4cba",
+      "startedAt": "2026-10-22T15:06:57Z",
+      "bundle": "b76115de751d98006878589e811e7c8c3ca86ffb952c8315e3f51e53a14ece12",
+      "method": "uart",
+      "bytes": 10088,
+      "restore": false,
+      "steps": [],
+      "target": {
+        "method": "uart",
+        "deviceId": 1040,
+        "deviceIdHex": "0x410",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+        "readProtected": false
+      },
+      "ms": 6797,
+      "result": "awaitingBootRestore",
+      "readbackSha256": "0ffc0b8a0d48d363c24b6fb76c678c38825bdb0d33f567d6aa9bd014a04359a2"
+    }
+  ]
+}

@@ -79,6 +79,7 @@ if (!fs.existsSync(workspace)) {
 
 const managed = [
     '--hostname=127.0.0.1',
+    `--plugins=local-dir:${path.join(__dirname, 'plugins')}`,
     '--port=0',
     `--electronUserData=${userData}`,
 ];

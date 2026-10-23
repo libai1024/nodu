@@ -1,0 +1,25 @@
+Open On-Chip Debugger 0.12.0
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+Info : auto-selecting first available session transport "hla_swd". To override use 'transport select <transport>'.
+Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
+none separate
+
+adapter speed: 1000 kHz
+
+Info : clock speed 1000 kHz
+Info : STLINK V2J37S7 (API v2) VID:PID 0483:3748
+Info : Target voltage: 4.848048
+Info : [stm32f1x.cpu] Cortex-M3 r1p1 processor detected
+Info : [stm32f1x.cpu] target has 6 breakpoints, 4 watchpoints
+Info : gdb port disabled
+before_nodu_loop_count=0x257
+before_uwTick=0xec32
+after_nodu_loop_count=0x25c
+after_uwTick=0xee2a
+reset_nodu_loop_count=0x4
+reset_uwTick=0x133
+reset_after_nodu_loop_count=0x9
+reset_after_uwTick=0x32b
+shutdown command invoked

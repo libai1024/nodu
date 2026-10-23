@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-22",
+  "project": "/Users/wangwei/Model/k210-studio/artifacts/f103-ui-20261022/projects/f103-e2e",
+  "transport": "ST-LINK/V2",
+  "chip": "STM32F103C8T6",
+  "binaryBytes": 2648,
+  "binarySha256": "112a5a2e904a96e100a6bedb63e0412eb8521b69fc843df1771c7279facd795c",
+  "backup": {
+    "path": "/Users/wangwei/Model/k210-studio/artifacts/f103-ui-20261022/device-state/stm32/backups/410-0671ff373634574e431e5512/20261022-141421/flash.bin",
+    "bytes": 65536,
+    "sha256": "9ca0bbc9cb5998e0d352b0f92b7b03d32e4b22aae415c8bc64dd208bba1a3650"
+  },
+  "runs": [
+    {
+      "runId": "r-20261022-141421-1ada8e",
+      "startedAt": "2026-10-22T14:14:21Z",
+      "bundle": "c1919b0c18b038e0f14142644cbff1364335c838a74eec5ece16fc37e1d30730",
+      "method": "stlink",
+      "bytes": 2648,
+      "restore": false,
+      "steps": [],
+      "target": {
+        "method": "stlink",
+        "deviceId": 1040,
+        "deviceIdHex": "0x410",
+        "revisionId": "0x0000",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+        "readProtected": false,
+        "voltage": 4.850451,
+        "probe": "STLINK V2J37S7"
+      },
+      "ms": 2456,
+      "result": "running",
+      "readbackSha256": "112a5a2e904a96e100a6bedb63e0412eb8521b69fc843df1771c7279facd795c"
+    },
+    {
+      "runId": "r-20261022-141703-22631e",
+      "startedAt": "2026-10-22T14:17:03Z",
+      "bundle": "c1919b0c18b038e0f14142644cbff1364335c838a74eec5ece16fc37e1d30730",
+      "method": "stlink",
+      "bytes": 2648,
+      "restore": false,
+      "steps": [],
+      "target": {
+        "method": "stlink",
+        "deviceId": 1040,
+        "deviceIdHex": "0x410",
+        "revisionId": "0x0000",
+        "flashKiB": 64,
+        "uid": "0671ff373634574e431e5512",
+        "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+        "readProtected": false,
+        "voltage": 4.848048,
+        "probe": "STLINK V2J37S7"
+      },
+      "ms": 1280,
+      "result": "running",
+      "readbackSha256": "112a5a2e904a96e100a6bedb63e0412eb8521b69fc843df1771c7279facd795c"
+    }
+  ],
+  "ramReadback": {
+    "loopBefore": 599,
+    "loopAfter": 604,
+    "tickBefore": 60466,
+    "tickAfter": 60970,
+    "resetLoopBefore": 4,
+    "resetLoopAfter": 9,
+    "resetTickBefore": 307,
+    "resetTickAfter": 811
+  },
+  "serialTest": "not performed: user confirmed ST-LINK only",
+  "tests": {
+    "rustPassed": 30,
+    "nodePassed": 15,
+    "skipped": 0,
+    "typescript": "passed",
+    "browserBuild": "passed",
+    "electronBuild": "passed"
+  }
+}

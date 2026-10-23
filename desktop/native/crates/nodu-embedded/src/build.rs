@@ -125,11 +125,24 @@ fn ensure_configured(env: &Env<'_>, project: &Project, clean: bool, parser: &mut
         let _ = fs::remove_dir_all(build_dir.join("CMakeFiles"));
     }
     env.out.event("build.progress", json!({"buildId": build_id, "phase": "configure", "done": 0, "total": 0, "file": ""}));
-    let args = vec![
+    let mut args = vec![
         "--preset".to_string(),
         project.preset().to_string(),
         format!("-DNODU_PRINTF_FLOAT={}", if project.printf_float() { "ON" } else { "OFF" }),
     ];
+    if project.is_external() {
+        let own_toolchain = project.root.join("cmake/gcc-arm-none-eabi.cmake");
+        let toolchain = if own_toolchain.is_file() { own_toolchain } else {
+            let path = project.state_dir().join("arm-gcc.cmake");
+            fs::write(&path, include_str!("../../../../scope-extension/resources/stm32/templates/common/cmake/arm-gcc.cmake"))
+                .map_err(|e| Failure::io("准备外部工程工具链", &e))?;
+            path
+        };
+        args = vec!["-S".into(), project.root.display().to_string(), "-B".into(), build_dir.display().to_string(),
+            "-G".into(), "Ninja".into(), format!("-DCMAKE_TOOLCHAIN_FILE={}", toolchain.display()),
+            format!("-DCMAKE_BUILD_TYPE={}", if project.preset() == "release" { "Release" } else { "Debug" }),
+            "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON".into()];
+    }
     let done = run_tool(env, project, &args, CONFIGURE_TIMEOUT, parser, "configure", build_id)?;
     if done.ok() {
         write_json(&stamp_path, &stamp)?;
@@ -173,6 +186,10 @@ pub fn build(env: &Env<'_>, project: &Project, clean: bool, build_id: &str) -> O
             return Ok(failed(parser, &output, "configure"));
         }
     }
+    if project.is_external() {
+        // Never normalize an ELF left by an earlier, differently named target.
+        for name in FILES { let _ = fs::remove_file(project.build_dir().join(name)); }
+    }
     let args = vec!["--build".to_string(), project.build_dir().display().to_string()];
     let done = run_tool(env, project, &args, BUILD_TIMEOUT, &mut parser, "build", build_id)?;
     output.push_str(&done.output);
@@ -188,6 +205,7 @@ pub fn build(env: &Env<'_>, project: &Project, clean: bool, build_id: &str) -> O
     }
     let digest_after = project.input_digest(env.toolkit);
     let stale = digest_after != digest_before;
+    if project.is_external() { normalize_external_artifacts(env.toolkit, project)?; }
     let artifact = store_artifact(env.toolkit, project, &digest_before, &capacity, build_id)?;
     if !stale {
         write_json(&current_path, &json!({
@@ -202,6 +220,27 @@ pub fn build(env: &Env<'_>, project: &Project, clean: bool, build_id: &str) -> O
         "capacity": capacity, "artifact": artifact, "ms": started.elapsed().as_millis() as u64,
         "output": process::tail(&output, 16_000),
     }))
+}
+
+// CubeMX names its ELF after the project. Normalize only generated output.
+fn normalize_external_artifacts(toolkit: &Toolkit, project: &Project) -> Outcome<()> {
+    let dir = project.build_dir();
+    let elfs: Vec<PathBuf> = fs::read_dir(&dir).map_err(|e| Failure::io("读取外部工程产物", &e))?
+        .filter_map(Result::ok).map(|e| e.path()).filter(|p| p.extension().is_some_and(|e| e == "elf") && p.file_name().is_some_and(|n| n != "firmware.elf")).collect();
+    if elfs.len() > 1 { return Err(Failure::new("ambiguousArtifact", "外部工程生成了多个 ELF，无法确定下载目标。")); }
+    let elf = elfs.first().cloned().unwrap_or_else(|| dir.join("firmware.elf"));
+    if !elf.is_file() { return Err(Failure::new("missingArtifact", "外部工程没有生成 ELF 文件。")); }
+    if elf != dir.join("firmware.elf") { fs::copy(&elf, dir.join("firmware.elf")).map_err(|e| Failure::io("复制 ELF", &e))?; }
+    for (format, extension) in [("binary", "bin"), ("ihex", "hex")] {
+        let result = std::process::Command::new(toolkit.gcc_tool("objcopy"))
+            .arg("-O").arg(format).arg(&elf).arg(dir.join(format!("firmware.{extension}")))
+            .env_clear().envs(toolkit.child_env()).output().map_err(|e| Failure::io("转换外部工程产物", &e))?;
+        if !result.status.success() { return Err(Failure::new("objcopy", String::from_utf8_lossy(&result.stderr).to_string())); }
+    }
+    let map = elf.with_extension("map");
+    if map.is_file() && map != dir.join("firmware.map") { fs::copy(map, dir.join("firmware.map")).map_err(|e| Failure::io("复制 MAP", &e))?; }
+    if !dir.join("firmware.map").is_file() { return Err(Failure::new("missingArtifact", "请在外部工程链接选项中启用 -Wl,-Map=<工程名>.map 后重新编译。")); }
+    Ok(())
 }
 
 /// Same digest P0 used: SHA-256 of Python's `json.dumps(hashes, sort_keys=True)`.

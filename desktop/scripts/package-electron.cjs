@@ -98,9 +98,11 @@ if (host === 'win32' && targetArch !== 'x64') {
 // ------------------------------------------------------ input validation
 
 function requireInputs(arch) {
+    const stm32 = require('./package-stm32.cjs');
+    stm32.validateToolkit(stm32.toolkitSource(desktop, host, arch));
     const required = [];
     if (host === 'darwin') {
-        for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources',
+        for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded',
             'ffmpeg', 'ffprobe', 'ffplay', 'libSDL2-2.0.0.dylib']) {
             required.push(`scope-extension/resources/bin/darwin-${arch}/${name}`);
         }
@@ -109,7 +111,7 @@ function requireInputs(arch) {
         required.push('scripts/package-entitlements.plist');
     } else {
         for (const name of ['nodu-device.exe', 'nodu-terminal.exe',
-            'nodu-resources.exe', 'ffmpeg.exe', 'ffprobe.exe', 'ffplay.exe',
+            'nodu-resources.exe', 'nodu-embedded.exe', 'ffmpeg.exe', 'ffprobe.exe', 'ffplay.exe',
             'SDL2.dll']) {
             required.push(`scope-extension/resources/bin/win32-${arch}/${name}`);
         }
@@ -117,6 +119,7 @@ function requireInputs(arch) {
         required.push('scope-extension/resources/licenses/ffmpeg/win32-x64/metadata.json');
     }
     required.push('scope-extension/resources/nodu-resources/examples');
+    required.push('plugins/vscode-clangd/package.json');
     required.push('scripts/launch.cjs');
     required.push('scripts/packaged-entry.cjs');
     required.push('electron-app/package.json');
@@ -779,6 +782,7 @@ function buildAppInput(arch, workDesktop, universal) {
     // first), while APFS happened to yield `bin` first and masked this.
     fs.mkdirSync(resDest, { recursive: true });
     for (const entry of fs.readdirSync(resSrc, { withFileTypes: true })) {
+        if (entry.name === 'toolkits') { continue; }
         if (entry.name === 'bin') {
             for (const archDir of keepBinDirs(arch, universal)) {
                 const dir = path.join(resSrc, 'bin', archDir);
@@ -803,6 +807,9 @@ function buildAppInput(arch, workDesktop, universal) {
             path.join(resDest, 'licenses', 'ffmpeg', 'metadata.json'));
     }
 
+    const stm32 = require('./package-stm32.cjs');
+    stm32.copyToolkit(stm32.toolkitSource(desktop, host, arch), resDest, host, arch);
+    copyRes(path.join(desktop, 'plugins'), path.join(appInput, 'plugins'));
     copyRuntimePackages(workDesktop, appInput);
     return appInput;
 }
@@ -924,6 +931,7 @@ function signAppDarwin(appPath) {
         execFileSync('codesign', ['-s', '-', '-f',
             '--preserve-metadata=entitlements,flags', file]);
     }
+    require('./package-stm32.cjs').refreshManifests(appPath);
     const nestedApps = [];
     const findApps = dir => {
         for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -1064,6 +1072,7 @@ async function packageMacUniversal() {
             fail(`thin ${arch} app missing at ${thinApps[arch]}`);
         }
     }
+    require('./package-stm32.cjs').prepareUniversal(thinApps.arm64, thinApps.x64);
     canonizeJsForMerge(
         path.join(thinApps.arm64, 'Contents', 'Resources', 'app'),
         path.join(thinApps.x64, 'Contents', 'Resources', 'app'));

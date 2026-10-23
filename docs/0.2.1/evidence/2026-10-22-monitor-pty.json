@@ -1,0 +1,7 @@
+{
+  "host": "macOS POSIX PTY",
+  "physicalHardware": false,
+  "status": "unsupported",
+  "reason": "无法打开串口 /dev/ttys023：Not a typewriter",
+  "note": "serialport uses hardware modem ioctls that macOS PTYs do not implement; use real USB serial hardware"
+}

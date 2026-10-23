@@ -19,3 +19,7 @@ pub mod stlink;
 pub mod toolkit;
 pub mod uart;
 pub mod util;
+
+pub mod exchange;
+
+pub mod auto_boot;

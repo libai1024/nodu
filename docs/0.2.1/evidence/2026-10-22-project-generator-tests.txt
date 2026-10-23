@@ -1,0 +1,11 @@
+✔ chip projects create portable K210 and every ESP32 target without a board (72.867709ms)
+✔ reject traversal, reserved names, unknown chips and templates before writing (0.359792ms)
+✔ same-name concurrent creates have one winner (1.469125ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.106

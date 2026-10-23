@@ -1,0 +1,52 @@
+{
+  "viewport": [
+    634,
+    876
+  ],
+  "checks": [
+    {
+      "name": "menu bottom group separated from operations",
+      "passed": true
+    },
+    {
+      "name": "status icon Enter opens help",
+      "passed": true
+    },
+    {
+      "name": "Esc returns focus to status icon",
+      "passed": true
+    },
+    {
+      "name": "menu arrow keys and Enter open help",
+      "passed": true
+    },
+    {
+      "name": "close button restores menu-trigger focus",
+      "passed": true
+    },
+    {
+      "name": "hover help fits viewport without horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "Space opens help",
+      "passed": true
+    },
+    {
+      "name": "header close works with Enter",
+      "passed": true
+    },
+    {
+      "name": "help preserves current UART method",
+      "passed": true
+    },
+    {
+      "name": "634px dialog has no horizontal overflow; footer stays visible and content scrolls",
+      "passed": true
+    },
+    {
+      "name": "Tab loops through close and scrollable content; End reaches final FAQ",
+      "passed": true
+    }
+  ]
+}

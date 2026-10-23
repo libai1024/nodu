@@ -1,0 +1,24 @@
+✔ plugin is lazy, serializes switches, filters SDK diagnostics, disposes old client (1.341125ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.482791ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.0915ms)
+✔ release rejects development kits, altered content and missing sources; signing refreshes digests (4.894583ms)
+✔ chip projects create portable K210 and every ESP32 target without a board (54.447209ms)
+✔ reject traversal, reserved names, unknown chips and templates before writing (0.350416ms)
+✔ same-name concurrent creates have one winner (1.551833ms)
+▶ STM32 real-toolchain workflows
+  ✔ unknown LED is hidden and RPC cannot bypass verification (110.774125ms)
+  ✔ f103: build/export/standalone build yields identical BIN (1439.94575ms)
+  ✔ f407: build/export/standalone build yields identical BIN (1430.472917ms)
+  ✔ accepting toolkit version preserves template metadata (28.731625ms)
+  ✔ CubeMX import preserves CMake; configure requires trust (1225.766708ms)
+  ✔ source changed during build invalidates artifact (1504.580459ms)
+  ✔ cancel real Ninja child process and release build lock (573.272083ms)
+✔ STM32 real-toolchain workflows (6371.141791ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6415.095333

@@ -1,0 +1,25 @@
+{
+  "scope": "Development bundles; backend listen time only, not full UI startup or installer delta",
+  "samples": {
+    "baseline": [
+      2162.1174579999997,
+      643.197666,
+      672.656167000001
+    ],
+    "plugin": [
+      789.7444580000001,
+      706.0870839999998,
+      789.9220420000001
+    ]
+  },
+  "bytes": {
+    "baseline": {
+      "raw": 92837813,
+      "gzip": 21205212
+    },
+    "plugin": {
+      "raw": 129155748,
+      "gzip": 28087561
+    }
+  }
+}

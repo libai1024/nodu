@@ -41,3 +41,6 @@ backups/
 
 # STM32 P0 local tools, SDKs, builds and device backups.
 /.local/stm32-p0/
+
+# Pinned VSIX unpacked by build-clangd-plugin.cjs.
+/desktop/plugins/

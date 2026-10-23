@@ -8,7 +8,7 @@
 
 | 阶段 | 内容 | 前置 | 退出标准 |
 | --- | --- | --- | --- |
-| **M0 硬件与工具基线** | 完成 P0 剩余的 R1–R3：F407 ST-LINK 写入、读回、运行；F103 ST-LINK；两颗芯片串口 ISP。核对探索者 F407 的 LED、调试串口跳线、BOOT 跳线、HSE；确认用户的 F103 板型（D6）。排查 P0 中 F407 写入前 `reset device failed` | 用户提供硬件（§4） | macOS 上四条路径各有备份、写入、读回比对、运行证据；板卡包的事实全部有核对记录 |
+| **M0 硬件与工具基线** | 完成 P0 剩余的 R1–R3：F407 ST-LINK 写入、读回、运行；F103 ST-LINK；两颗芯片串口 ISP。按 STM32F103C8T6 / STM32F407ZGT6 默认芯片工程验收。指定开发板 LED、板型和跳线包不再是本期前置条件。排查 P0 中 F407 写入前 `reset device failed` | 用户提供硬件（§4） | macOS 上四条路径各有备份、写入、读回比对、运行证据；实际测试的芯片型号、接线与时钟配置有记录 |
 | **M1 工具包** | `scripts/build-toolkit.cjs`：各平台组件的获取或构建（OpenOCD、stm32flash 自建）、按 [TOOLKIT-DISTRIBUTION §3](TOOLKIT-DISTRIBUTION.md#3-实测体积macos-arm64) 裁剪、`toolkit.json`、许可与 GPL 源码；`package-electron.cjs` 把工具包放进安装包，macOS 按 §5.3 处理 universal 合并与签名 | M0 确认工具组合；D3 | 三个安装包（macOS universal、macOS arm64、Windows x64）在干净主机上解压后，不联网完成一次 CLI 编译与下载；体积实测写回 TOOLKIT-DISTRIBUTION §3 |
 | **M2 clangd 原型** | 插件宿主 + vscode-clangd 接入 Theia 1.76；测体积、启动时间、内存；隐藏扩展界面 | 无（可与 M0、M1 并行） | 按 [FUNCTIONAL-DESIGN §6.1](FUNCTIONAL-DESIGN.md#61-接入方式d4) 的四条做出 A / B 决定（D4） |
 | **M3 工程与编译** | `nodu-embedded` 侧车骨架与协议；`openProject` / `configure` / `build`；模板（empty、uart-hello、blink）×两颗芯片；诊断解析与中文规则；容量；产物库；Node 服务；编辑器接入 clangd | M1 的工具包可用；M2 决定 | 不接板完成新建、补全、编译；P0 五个负样本移植为测试并通过；断网重复编译 |
@@ -78,3 +78,9 @@ M2 与 M0、M1 互不依赖，可以同时开始。M5 的静态画面（开始�
 - 状态值沿用 0.1.4：`not_started`、`passed_host`（只在主机或模拟环境通过）、`passed_board`（实物通过）、`partial`、`blocked`。`passed_host` 不能当作实物通过。
 - 模拟结果只证明状态机与错误处理；硬件路径以实物记录为准。
 - macOS 的工具包可执行文件需要至少 ad-hoc 签名才能在 Apple Silicon 上运行；打包脚本先逐个签名工具包里的 Mach-O 文件，再签整个应用（TOOLKIT-DISTRIBUTION §5.3）。Developer ID 签名与公证仍是 0.1.4 遗留问题，0.2.1 不解决，交接中注明。
+
+## 2026-10-23 范围校正
+
+按用户最新决定，以芯片型号创建默认项目。H1.6/H1.7 的指定开发板核对由新范围替代，不计为待补功能；LED 模板只有另行确认实际引脚时才考虑。F407 实物下载、Windows 平台等尚未验证的路径仍保留待测状态。
+
+本轮功能补齐与睡醒后测试清单见 [FUNCTIONAL-FIXES-2026-10-23.md](FUNCTIONAL-FIXES-2026-10-23.md)。非 ST 兼容芯片和 DTR/RTS 电路已补软件流程及模拟测试，尚不能标记为实物验证完成。断点调试、AI 教学、串口绘图继续留在后续阶段。

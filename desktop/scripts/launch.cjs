@@ -169,7 +169,7 @@ async function main() {
         }
     }
 
-    const launchArgs = ['start', fs.realpathSync(workspace), ...args, '--hostname=127.0.0.1', `--port=${target === 'browser' ? 4188 : 4189}`];
+    const launchArgs = ['start', fs.realpathSync(workspace), `--plugins=local-dir:${path.join(root, 'plugins')}`, ...args, '--hostname=127.0.0.1', `--port=${target === 'browser' ? 4188 : 4189}`];
     require('./refresh-native-artifacts.cjs').refreshNativeArtifacts(appDirectory);
     if (target === 'electron') {
         if (require('./apply-app-icon.cjs').applyAppIcon(root)) {

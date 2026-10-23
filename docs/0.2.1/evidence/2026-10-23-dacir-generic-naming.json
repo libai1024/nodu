@@ -1,0 +1,10 @@
+{
+  "templates": 3,
+  "renamedLibraryFilesPerTemplate": 63,
+  "renamedIdentifiers": 75,
+  "oldIdentifiersInCode": 0,
+  "unresolvedLocalIncludes": 0,
+  "uniqueHeaderGuardsPerTemplate": 33,
+  "originalLicenseFilesByteIdentical": true,
+  "codeFilesVerifiedAsNamingOnly": 206
+}

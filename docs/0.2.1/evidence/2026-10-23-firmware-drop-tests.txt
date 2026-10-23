@@ -1,0 +1,2 @@
+PASS: actual ray hits select the exact MCU, independent of list order; sensor, empty space and removed target rejected.
+PASS: real drop handlers preserve target/file, reject non-MCU, multiple files and busy state, suppress navigation, and detach listeners.

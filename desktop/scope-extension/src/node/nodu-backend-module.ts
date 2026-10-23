@@ -50,7 +50,7 @@ export default new ContainerModule(bind => {
         const server = ctx.container.get(NoduEmbeddedServer);
         const remove = server.addClient(client);
         client.onDidCloseConnection(() => remove());
-        const names: (keyof NoduEmbeddedService)[] = ['call', 'homeDirectory', 'clangdStart', 'clangdSend', 'clangdStop'];
+        const names: (keyof NoduEmbeddedService)[] = ['call', 'homeDirectory'];
         const facade = Object.create(null);
         for (const name of names) { facade[name] = server[name].bind(server); }
         return facade as NoduEmbeddedService;

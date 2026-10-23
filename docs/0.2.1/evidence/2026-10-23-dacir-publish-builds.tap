@@ -1,0 +1,13 @@
+▶ three DACIR templates build through the real Nodu pipeline
+  ✔ temperature-humidity (1764.329959ms)
+  ✔ warehouse (1568.847125ms)
+  ✔ esp8266 (1585.1245ms)
+✔ three DACIR templates build through the real Nodu pipeline (4972.418958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5021.976917

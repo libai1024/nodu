@@ -1,0 +1,166 @@
+[
+  {
+    "format": "bin",
+    "engine": "qemu",
+    "firmware": {
+      "id": "f5b41264348c46259d36677a24540176",
+      "projectId": "bf3c70be-2469-45a6-8fd3-dee0f2d0ba49",
+      "targetId": "mcu",
+      "name": "温度 校准.bin",
+      "format": "bin",
+      "chip": "STM32F103C8T6",
+      "loadAddress": 134217728,
+      "bytes": 20348,
+      "originalSHA256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e",
+      "flashSHA256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e",
+      "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+      "importedAt": "2026-10-23T03:50:41.639376+00:00"
+    },
+    "runId": "aee5eaf875da43419324c69d9325df98",
+    "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+    "firstSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 1,
+      "uptime_ms": 1033,
+      "temperature_tenths": 260,
+      "humidity_tenths": 550,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "changedSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 2,
+      "uptime_ms": 2067,
+      "temperature_tenths": 330,
+      "humidity_tenths": 650,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "status": "PASS"
+  },
+  {
+    "format": "bin",
+    "engine": "renode",
+    "firmware": {
+      "id": "f5b41264348c46259d36677a24540176",
+      "projectId": "bf3c70be-2469-45a6-8fd3-dee0f2d0ba49",
+      "targetId": "mcu",
+      "name": "温度 校准.bin",
+      "format": "bin",
+      "chip": "STM32F103C8T6",
+      "loadAddress": 134217728,
+      "bytes": 20348,
+      "originalSHA256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e",
+      "flashSHA256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e",
+      "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+      "importedAt": "2026-10-23T03:50:41.639376+00:00"
+    },
+    "runId": "4b3cda493234403fb4d94c34205ea9a7",
+    "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+    "firstSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 1,
+      "uptime_ms": 1023,
+      "temperature_tenths": 260,
+      "humidity_tenths": 550,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "changedSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 2,
+      "uptime_ms": 2046,
+      "temperature_tenths": 330,
+      "humidity_tenths": 650,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "status": "PASS"
+  },
+  {
+    "format": "hex",
+    "engine": "qemu",
+    "firmware": {
+      "id": "ff51b0cfbc28487e8f483255656530e1",
+      "projectId": "bf3c70be-2469-45a6-8fd3-dee0f2d0ba49",
+      "targetId": "mcu",
+      "name": "温度 校准.hex",
+      "format": "hex",
+      "chip": "STM32F103C8T6",
+      "loadAddress": 134217728,
+      "bytes": 20348,
+      "originalSHA256": "3ed71ac7209db5dade66ccb2f36beb003c34dc7bd559b74739c67c6862deb714",
+      "flashSHA256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e",
+      "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+      "importedAt": "2026-10-23T03:50:56.329115+00:00"
+    },
+    "runId": "f3a074bceaa344aa9ecd27525deab8aa",
+    "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+    "firstSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 1,
+      "uptime_ms": 1033,
+      "temperature_tenths": 260,
+      "humidity_tenths": 550,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "changedSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 2,
+      "uptime_ms": 2067,
+      "temperature_tenths": 330,
+      "humidity_tenths": 650,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "status": "PASS"
+  },
+  {
+    "format": "hex",
+    "engine": "renode",
+    "firmware": {
+      "id": "ff51b0cfbc28487e8f483255656530e1",
+      "projectId": "bf3c70be-2469-45a6-8fd3-dee0f2d0ba49",
+      "targetId": "mcu",
+      "name": "温度 校准.hex",
+      "format": "hex",
+      "chip": "STM32F103C8T6",
+      "loadAddress": 134217728,
+      "bytes": 20348,
+      "originalSHA256": "3ed71ac7209db5dade66ccb2f36beb003c34dc7bd559b74739c67c6862deb714",
+      "flashSHA256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e",
+      "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+      "importedAt": "2026-10-23T03:50:56.329115+00:00"
+    },
+    "runId": "d43edfdd90d047cfa62e0b18c8990d74",
+    "elfSHA256": "4f66793f8555af141d6df613ab08dcbd75639a1751bbaa89f8fb05c6ee377a2a",
+    "firstSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 1,
+      "uptime_ms": 1023,
+      "temperature_tenths": 260,
+      "humidity_tenths": 550,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "changedSample": {
+      "case": "demo_climate",
+      "event": "sample",
+      "sample": 2,
+      "uptime_ms": 2046,
+      "temperature_tenths": 330,
+      "humidity_tenths": 650,
+      "dht_status": 0,
+      "oled_status": 0
+    },
+    "status": "PASS"
+  }
+]

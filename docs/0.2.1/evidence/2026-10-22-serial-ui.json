@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-22",
+  "port": "/dev/cu.usbserial-31230",
+  "hardware": "STM32F103C8T6 USART1 PA9/PA10",
+  "checks": [
+    {
+      "test": "ASCII PING/PONG via UI",
+      "passed": true
+    },
+    {
+      "test": "UTF-8 Chinese send and receive",
+      "passed": true
+    },
+    {
+      "test": "GBK Chinese send/receive and LF",
+      "passed": true
+    },
+    {
+      "test": "unrepresentable GBK rejects and preserves draft",
+      "passed": true
+    },
+    {
+      "test": "no line ending",
+      "passed": true
+    },
+    {
+      "test": "wire bytes hex includes NUL/CR/LF/invalid UTF-8",
+      "passed": true
+    },
+    {
+      "test": "copy hex",
+      "passed": true
+    },
+    {
+      "test": "clear hex buffer",
+      "passed": true
+    },
+    {
+      "test": "UI baud changed to 9600 and PING roundtrip",
+      "passed": true
+    },
+    {
+      "test": "fragmented UTF-8 decoded in UI",
+      "passed": true
+    },
+    {
+      "test": "fragmented GBK decoded in UI",
+      "passed": true
+    },
+    {
+      "test": "invalid bytes replaced and unfinished line copied",
+      "passed": true
+    },
+    {
+      "test": "UI displays 1000 ordered serial lines",
+      "passed": true
+    },
+    {
+      "test": "auto-follow continuous receive",
+      "passed": true
+    },
+    {
+      "test": "manual scroll holds position while receiving",
+      "passed": true
+    },
+    {
+      "test": "reload syncs native monitor connection",
+      "passed": true
+    },
+    {
+      "test": "ST-LINK download while UART open receives startup",
+      "passed": true
+    },
+    {
+      "test": "three consecutive downloads preserve separators and startup lines",
+      "passed": true
+    },
+    {
+      "test": "physical USB unplug/replug updates list and automatically reconnects",
+      "passed": true
+    }
+  ]
+}

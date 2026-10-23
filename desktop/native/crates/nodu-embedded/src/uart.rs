@@ -58,8 +58,12 @@ pub fn sync(link: &mut dyn ReadWrite) -> bool {
 }
 
 fn expect_ack(link: &mut dyn ReadWrite, what: &str) -> Outcome<()> {
+    expect_ack_timeout(link, what, Duration::from_secs(1))
+}
+
+fn expect_ack_timeout(link: &mut dyn ReadWrite, what: &str, timeout: Duration) -> Outcome<()> {
     let mut byte = [0u8; 1];
-    read_exact(link, &mut byte, Duration::from_secs(1)).map_err(|_| protocol(&format!("{what} 无应答")))?;
+    read_exact(link, &mut byte, timeout).map_err(|_| protocol(&format!("{what} 无应答")))?;
     match byte[0] {
         ACK => Ok(()),
         NACK => Err(Failure::new("romNack", format!("串口引导程序拒绝了 {what}。"))),
@@ -138,9 +142,11 @@ pub fn open_rom(port: &str, baud: u32) -> Outcome<Box<dyn serialport::SerialPort
 
 /// Poll for the bootloader until it answers, the user stops, or 60 s pass.
 pub fn wait_for_rom(port: &str, baud: u32, cancel: &AtomicBool) -> Outcome<Box<dyn serialport::SerialPort>> {
+    if cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
     let started = Instant::now();
     let mut link = open_rom(port, baud)?;
     loop {
+        if cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
         let _ = link.clear(serialport::ClearBuffer::Input);
         if sync(&mut link) {
             return Ok(link);
@@ -158,17 +164,72 @@ pub fn wait_for_rom(port: &str, baud: u32, cancel: &AtomicBool) -> Outcome<Box<d
     }
 }
 
+/// GET advertises erase support; do not guess bootloader versions.
+pub fn commands(link: &mut dyn ReadWrite) -> Outcome<Vec<u8>> {
+    command(link, 0x00, "GET")?;
+    let mut n = [0]; read_exact(link, &mut n, Duration::from_secs(1)).map_err(|_| protocol("GET 长度"))?;
+    let mut data = vec![0; n[0] as usize + 1];
+    read_exact(link, &mut data, Duration::from_secs(1)).map_err(|_| protocol("GET 数据"))?;
+    expect_ack(link, "GET 结束")?;
+    Ok(data[1..].to_vec())
+}
+
+fn packet(link: &mut dyn ReadWrite, data: &[u8]) -> Outcome<()> {
+    link.write_all(data).and_then(|()| link.write_all(&[data.iter().fold(0, |a, b| a ^ b)]))
+        .map_err(|e| Failure::io("写串口", &e))
+}
+
+/// Only medium-density F103 page geometry is accepted by the caller.
+pub fn erase_f103(link: &mut dyn ReadWrite, supported: &[u8], bytes: usize) -> Outcome<()> {
+    let pages = bytes.div_ceil(1024);
+    if pages == 0 || pages > 64 { return Err(Failure::new("tooLarge", "自动 ISP 仅支持 F103C8 的 64 KiB Flash。")); }
+    let mut data;
+    if supported.contains(&0x44) {
+        command(link, 0x44, "EXTENDED_ERASE")?;
+        data = ((pages - 1) as u16).to_be_bytes().to_vec();
+        for page in 0..pages { data.extend_from_slice(&(page as u16).to_be_bytes()); }
+    } else if supported.contains(&0x43) {
+        command(link, 0x43, "ERASE")?;
+        data = vec![(pages - 1) as u8]; data.extend((0..pages).map(|p| p as u8));
+    } else { return Err(Failure::new("romProtocol", "该 Bootloader 不支持所需的擦除命令。")); }
+    packet(link, &data)?;
+    expect_ack_timeout(link, "擦除", Duration::from_secs(30))
+}
+
+pub fn write_memory(link: &mut dyn ReadWrite, address: u32, bytes: &[u8]) -> Outcome<()> {
+    if bytes.is_empty() || bytes.len() > 256 || !address.is_multiple_of(4) {
+        return Err(Failure::new("badRequest", "写入地址需 4 字节对齐，每次写入 1–256 字节。"));
+    }
+    let mut padded = bytes.to_vec(); padded.resize(bytes.len().div_ceil(4) * 4, 0xff);
+    command(link, 0x31, "WRITE_MEMORY")?;
+    packet(link, &address.to_be_bytes())?; expect_ack(link, "写入地址")?;
+    let mut data = vec![(padded.len() - 1) as u8]; data.extend_from_slice(&padded);
+    packet(link, &data)?; expect_ack(link, "写入数据")
+}
+
+pub fn wait_on_link(link: &mut dyn ReadWrite, cancel: &AtomicBool) -> Outcome<()> {
+    let start = Instant::now();
+    loop {
+        if cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
+        if sync(link) { return Ok(()); }
+        if start.elapsed() >= Duration::from_secs(5) { return Err(Failure::new("romTimeout", "自动进入 Bootloader 失败，请检查 DTR/RTS 接线与极性，或关闭自动下载后手动复位。")); }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+}
+
 /// One stm32flash call; progress percentages become `flash.progress` events.
-pub fn stm32flash(toolkit: &Toolkit, args: &[String], out: &Output, run_id: &str, step: &str) -> Outcome<()> {
+pub fn stm32flash(toolkit: &Toolkit, args: &[String], out: &Output, run_id: &str, step: &str, cancel: &AtomicBool) -> Outcome<()> {
     let percent = Regex::new(r"\((\d+(?:\.\d+)?)%\)").expect("regex");
-    let never = || false;
+    // A backup is read-only and can stop immediately; programming and its
+    // verification must finish together rather than leave a partial image.
+    let cancelled = || step == "backup" && cancel.load(Ordering::Relaxed);
     let done = process::run(
         &toolkit.stm32flash(),
         args,
         &toolkit.root,
         &toolkit.child_env(),
         Duration::from_secs(300),
-        &never,
+        &cancelled,
         &mut |line| {
             if let Some(c) = percent.captures(line) {
                 out.event("flash.progress", json!({"runId": run_id, "step": step, "percent": c[1].parse::<f64>().unwrap_or(0.0)}));
@@ -193,6 +254,7 @@ pub fn stm32flash(toolkit: &Toolkit, args: &[String], out: &Output, run_id: &str
 
 pub fn read_args(baud: u32, file: &Path, base: u64, len: u64, port: &str) -> Vec<String> {
     vec![
+        "-c".into(),
         "-b".into(), baud.to_string(), "-m".into(), "8e1".into(),
         "-r".into(), file.display().to_string(),
         "-S".into(), format!("0x{base:08x}:{len}"), port.into(),
@@ -201,6 +263,7 @@ pub fn read_args(baud: u32, file: &Path, base: u64, len: u64, port: &str) -> Vec
 
 pub fn write_args(baud: u32, file: &Path, base: u64, len: u64, port: &str) -> Vec<String> {
     vec![
+        "-c".into(),
         "-b".into(), baud.to_string(), "-m".into(), "8e1".into(),
         "-w".into(), file.display().to_string(), "-v".into(),
         "-S".into(), format!("0x{base:08x}:{len}"), port.into(),
@@ -211,6 +274,43 @@ pub fn write_args(baud: u32, file: &Path, base: u64, len: u64, port: &str) -> Ve
 mod tests {
     use super::*;
     use std::collections::VecDeque;
+
+    struct Transcript { reads: std::io::Cursor<Vec<u8>>, writes: Vec<u8> }
+    impl Transcript { fn new(reads: Vec<u8>) -> Self { Self { reads: std::io::Cursor::new(reads), writes: vec![] } } }
+    impl Read for Transcript { fn read(&mut self, bytes: &mut [u8]) -> io::Result<usize> { self.reads.read(bytes) } }
+    impl Write for Transcript {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> { self.writes.extend(bytes); Ok(bytes.len()) }
+        fn flush(&mut self) -> io::Result<()> { Ok(()) }
+    }
+    #[test] fn advertised_commands_and_page_erase_packets() {
+        let mut link = Transcript::new(vec![ACK, 4, 0x22, 0x00, 0x11, 0x31, 0x43, ACK]);
+        assert_eq!(commands(&mut link).unwrap(), [0x00, 0x11, 0x31, 0x43]);
+        assert_eq!(link.writes, [0x00, 0xff]);
+        let mut link = Transcript::new(vec![ACK, ACK]);
+        erase_f103(&mut link, &[0x43], 1025).unwrap(); assert_eq!(link.writes, [0x43, 0xbc, 1, 0, 1, 0]);
+        let mut link = Transcript::new(vec![ACK, ACK]);
+        erase_f103(&mut link, &[0x44], 1025).unwrap(); assert_eq!(link.writes, [0x44, 0xbb, 0, 1, 0, 0, 0, 1, 0]);
+        let mut link = Transcript::new(vec![]);
+        assert!(erase_f103(&mut link, &[0x43], 65537).is_err());
+        assert!(erase_f103(&mut link, &[], 1024).is_err()); assert!(link.writes.is_empty());
+    }
+    #[test] fn write_packet_pads_to_four_and_rejects_nack_or_invalid_input() {
+        let mut link = Transcript::new(vec![ACK, ACK, ACK]);
+        write_memory(&mut link, 0x08000000, &[1, 2, 3]).unwrap();
+        assert_eq!(link.writes, [0x31, 0xce, 8, 0, 0, 0, 8, 3, 1, 2, 3, 0xff, 0xfc]);
+        let mut link = Transcript::new(vec![NACK]);
+        assert_eq!(write_memory(&mut link, 0x08000000, &[1, 2, 3, 4]).unwrap_err().code, "romNack");
+        assert_eq!(link.writes, [0x31, 0xce]);
+        let mut link = Transcript::new(vec![]);
+        assert!(write_memory(&mut link, 0x08000001, &[1]).is_err());
+        assert!(write_memory(&mut link, 0x08000000, &[]).is_err());
+        assert!(write_memory(&mut link, 0x08000000, &[0;257]).is_err()); assert!(link.writes.is_empty());
+    }
+    #[test] fn automatic_sync_cancelled_before_writing() {
+        let mut link = Transcript::new(vec![]);
+        assert_eq!(wait_on_link(&mut link, &AtomicBool::new(true)).unwrap_err().code, "cancelled");
+        assert!(link.writes.is_empty());
+    }
 
     /// Minimal ROM bootloader: sync, GET_ID and READ_MEMORY over a byte stream.
     struct FakeRom {
@@ -336,6 +436,14 @@ mod tests {
         let args = write_args(115_200, Path::new("/a/firmware.bin"), 0x0800_0000, 2624, "/dev/cu.usbserial-1");
         assert!(args.windows(2).any(|w| w[0] == "-S" && w[1] == "0x08000000:2624"));
         assert!(args.contains(&"-v".to_string()));
+        assert!(args.contains(&"-c".to_string()));
+        assert!(read_args(115_200, Path::new("backup.bin"), 0x0800_0000, 65_536, "COM1").contains(&"-c".to_string()));
         assert!(!args.iter().any(|a| a == "-e" || a == "-s" || a == "-i" || a == "-g"));
+    }
+
+    #[test]
+    fn cancellation_before_wait_does_not_open_a_port() {
+        let cancel = AtomicBool::new(true);
+        assert_eq!(wait_for_rom("does-not-exist", 115_200, &cancel).unwrap_err().code, "cancelled");
     }
 }

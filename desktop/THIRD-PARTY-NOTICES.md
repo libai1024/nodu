@@ -114,3 +114,23 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
+
+## DACIR project templates
+
+`scope-extension/resources/daxin/` contains a versioned source snapshot of the
+user-owned DACIR / 搭芯 project, with provenance and SHA-256 recorded in
+`manifest.json`. This is template source data, not the DACIR desktop application
+or simulator. Original C/header sources and embedded notices are preserved.
+
+The teaching templates, NUN_DX driver sources and support files originating in
+`firmware/library/`, plus `hal_timebase.c`, retain AGPL-3.0-only notices. The
+original repository MIT license covers the applicable `firmware/src/runtime.c`
+and linker-script support. Glyph notices and licenses remain in each template's
+`drivers/nun-dx/licenses/`. See `resources/daxin/licenses/NOTICE.md`,
+`DACIR-MIT.txt`, `NUN-DX-AGPL.txt` and the per-template driver LICENSE files.
+The Nodu CMake adapter is MIT; STM32 HAL/CMSIS remain in the separately licensed
+STM32 toolkit. Nodu's own license does not replace these licenses.
+
+The upstream NUN_DX library source URL and exact driver commit are retained in
+DACIR's driver history; the bundled template manifest records that commit. The
+source repository is https://gitee.com/yang-changzhi11/NUN_DX_STM32F1c8t6__-open-source-library.git.

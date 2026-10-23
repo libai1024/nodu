@@ -7,7 +7,7 @@
 //! service can end them when its own stdin closes.
 
 use std::collections::{BTreeMap, HashSet};
-use std::io::{BufRead, BufReader, Read};
+use std::io::{BufReader, Read};
 use std::path::Path;
 use std::process::{Child, Command, Stdio};
 use std::sync::mpsc::{self, RecvTimeoutError};
@@ -67,15 +67,22 @@ fn spawn_reader(stream: impl Read + Send + 'static, tx: mpsc::Sender<String>) {
     thread::spawn(move || {
         let mut reader = BufReader::new(stream);
         let mut buffer = Vec::new();
+        let mut chunk = [0u8; 4096];
         loop {
-            buffer.clear();
-            match reader.read_until(b'\n', &mut buffer) {
-                Ok(0) | Err(_) => break,
-                Ok(_) => {
-                    let line = String::from_utf8_lossy(&buffer);
-                    let line = line.trim_end_matches(['\n', '\r']).to_string();
-                    if tx.send(line).is_err() {
-                        break;
+            match reader.read(&mut chunk) {
+                Ok(0) | Err(_) => {
+                    if !buffer.is_empty() { let _ = tx.send(String::from_utf8_lossy(&buffer).into_owned()); }
+                    break;
+                }
+                Ok(n) => {
+                    for byte in &chunk[..n] {
+                        // stm32flash updates progress with CR, without LF.
+                        if *byte == b'\r' || *byte == b'\n' {
+                            if !buffer.is_empty() {
+                                if tx.send(String::from_utf8_lossy(&buffer).into_owned()).is_err() { return; }
+                                buffer.clear();
+                            }
+                        } else { buffer.push(*byte); }
                     }
                 }
             }
@@ -228,6 +235,19 @@ mod tests {
             &|| cancel.load(Ordering::Relaxed),
             &mut |_| Control::Continue,
         )
+    }
+
+    #[test]
+    fn carriage_return_progress_arrives_before_process_exit() {
+        let mut env = BTreeMap::new();
+        env.insert("PATH".into(), "/usr/bin:/bin".into());
+        let started = Instant::now();
+        let mut lines = Vec::new();
+        let error = run(Path::new("/bin/sh"), &["-c".into(), "printf '10%%\\r'; sleep 10".into()], Path::new("/"),
+            &env, Duration::from_secs(15), &|| false, &mut |line| { lines.push(line.to_string()); Control::Stop }).unwrap_err();
+        assert_eq!(error.code, "stopped");
+        assert_eq!(lines, vec!["10%"]);
+        assert!(started.elapsed() < Duration::from_secs(3));
     }
 
     #[test]

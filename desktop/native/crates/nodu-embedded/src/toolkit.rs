@@ -118,6 +118,35 @@ impl Toolkit {
             .unwrap_or_default()
     }
 
+    pub fn inventory(&self) -> Vec<Value> {
+        let files = self.files();
+        ["components", "sdk"].iter().flat_map(|group| {
+            self.manifest[*group].as_object().into_iter().flat_map(|map| map.iter()).map(|(id, component)| {
+                let prefix = format!("{}/", component["path"].as_str().unwrap_or(id));
+                let members: Vec<_> = files.iter().filter(|(p, _, _)| p.starts_with(&prefix)).collect();
+                let licenses: Vec<_> = members.iter().filter(|(p, _, _)| {
+                    let name = p.rsplit('/').next().unwrap_or_default().to_ascii_uppercase();
+                    name.starts_with("LICENSE") || name.starts_with("COPYING") || name.starts_with("NOTICE")
+                }).map(|(p, _, _)| p).collect();
+                let bytes: u64 = members.iter().filter_map(|(p, _, _)| std::fs::metadata(self.root.join(p)).ok().map(|m| m.len())).sum();
+                json!({"id": id, "version": component["version"], "license": component["license"],
+                    "bytes": bytes, "files": members.len(), "licenses": licenses})
+            }).collect::<Vec<_>>()
+        }).collect()
+    }
+
+    pub fn license_text(&self, relative: &str) -> Outcome<Value> {
+        let allowed = self.inventory().iter().any(|c| c["licenses"].as_array().is_some_and(|a| a.iter().any(|p| p == relative)));
+        if !allowed { return Err(Failure::new("badRequest", "不是工具包中的许可文件。")); }
+        let root = std::fs::canonicalize(&self.root).map_err(|e| Failure::io("检查工具包路径", &e))?;
+        let path = std::fs::canonicalize(self.root.join(relative)).map_err(|e| Failure::io("检查许可路径", &e))?;
+        if !path.starts_with(root) || !path.is_file() { return Err(Failure::new("badRequest", "许可文件不在工具包中。")); }
+        if std::fs::metadata(&path).map_err(|e| Failure::io("检查许可大小", &e))?.len() > 1024 * 1024 { return Err(Failure::new("badRequest", "许可文件超过 1 MiB。")); }
+        let bytes = std::fs::read(&path).map_err(|e| Failure::io("读取许可", &e))?;
+        if bytes.len() > 1024 * 1024 { return Err(Failure::new("badRequest", "许可文件超过 1 MiB。")); }
+        Ok(json!({"text": String::from_utf8_lossy(&bytes)}))
+    }
+
     /// Existence and size of every file. `full` also hashes them.
     pub fn check(&self, full: bool, cache: Option<&Path>) -> Value {
         let files = self.files();
@@ -146,6 +175,7 @@ impl Toolkit {
             "totalBytes": self.manifest.get("totalBytes").cloned().unwrap_or(Value::Null),
             "components": self.manifest.get("components").cloned().unwrap_or(Value::Null),
             "sdk": self.manifest.get("sdk").cloned().unwrap_or(Value::Null),
+            "inventory": self.inventory(),
             "missing": missing.iter().take(50).collect::<Vec<_>>(),
             "damaged": damaged.iter().take(50).collect::<Vec<_>>(),
             "problemCount": missing.len() + damaged.len(),

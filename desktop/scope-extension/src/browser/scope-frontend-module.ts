@@ -36,6 +36,7 @@ import '../../style/embedded.css';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduEmbeddedPanel } from './nodu-embedded-panel';
 import { NoduEmbeddedContribution, NoduEmbeddedPanelContribution } from './nodu-embedded-contribution';
+import { NoduStartPage, NoduStartContribution } from './nodu-start-page';
 import { NoduClangdClient } from './nodu-clangd-client';
 
 export default new ContainerModule(bind => {
@@ -49,6 +50,10 @@ export default new ContainerModule(bind => {
     for (const contribution of [FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution]) {
         bind(contribution).toService(NoduEmbeddedContribution);
     }
+    bind(NoduStartPage).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduStartPage.ID, createWidget: () => ctx.container.get(NoduStartPage) })).inSingletonScope();
+    bindViewContribution(bind, NoduStartContribution);
+    bind(FrontendApplicationContribution).toService(NoduStartContribution);
     bind(NoduClangdClient).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(NoduClangdClient);
     bind(ScopeSession).toSelf().inSingletonScope();

@@ -1,0 +1,33 @@
+✔ plugin is lazy, serializes switches, filters SDK diagnostics, disposes old client (1.754667ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.554209ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.092042ms)
+✔ canonical JS accepts comment and whitespace-only differences (90.960666ms)
+✔ canonical JS rejects literal and keyword differences (2.476709ms)
+✔ canonical JS rejects an ASI semantic split (1.357ms)
+✔ canonical JS preserves loop slots and literal whitespace (2.382458ms)
+✔ native module normalization touches generated metadata keys only (1.048958ms)
+✔ generated native labels normalize identically for both architectures (0.498958ms)
+✔ packaged bootstrap keeps one binary prefix and sets the profile (2.185875ms)
+✔ dev (unpackaged) bootstrap keeps two binary prefix entries (0.780584ms)
+✔ npm-cli resolves under the POSIX and Windows Node layouts (1.190167ms)
+✔ release rejects development kits, altered content and missing sources; signing refreshes digests (5.744041ms)
+✔ chip projects create portable K210 and every ESP32 target without a board (55.153708ms)
+✔ reject traversal, reserved names, unknown chips and templates before writing (0.346542ms)
+✔ same-name concurrent creates have one winner (2.146792ms)
+▶ STM32 real-toolchain workflows
+  ✔ unknown LED is hidden and RPC cannot bypass verification (1352.021167ms)
+  ✔ f103: build/export/standalone build yields identical BIN (1751.969834ms)
+  ✔ f407: build/export/standalone build yields identical BIN (1726.034625ms)
+  ✔ accepting toolkit version preserves template metadata (25.778959ms)
+  ✔ CubeMX import preserves CMake; configure requires trust (1276.41225ms)
+  ✔ source changed during build invalidates artifact (1567.418583ms)
+  ✔ cancel real Ninja child process and release build lock (589.728334ms)
+✔ STM32 real-toolchain workflows (8354.146875ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8418.462458

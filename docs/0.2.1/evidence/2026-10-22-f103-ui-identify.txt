@@ -1,0 +1,16 @@
+→ identify {"path":"/Users/wangwei/Model/k210-studio/artifacts/f103-ui-20261022/projects/f103-e2e"}
+{
+  "method": "stlink",
+  "deviceId": 1040,
+  "deviceIdHex": "0x410",
+  "revisionId": "0x0000",
+  "flashKiB": 64,
+  "uid": "0671ff373634574e431e5512",
+  "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+  "readProtected": false,
+  "voltage": 4.850451,
+  "probe": "STLINK V2J37S7",
+  "matches": null,
+  "deviceName": "STM32F103（中容量，如 C8 / CB）",
+  "hasBackup": false
+}

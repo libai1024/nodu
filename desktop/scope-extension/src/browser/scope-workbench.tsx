@@ -133,6 +133,7 @@ export class ScopeToolbar extends ReactWidget {
     protected render(): React.ReactNode {
         // STM32 C projects get their own buttons (UI-DESIGN §3); K210 projects keep this toolbar.
         if (this.embedded.isC) { return this.renderC(); }
+        if (this.embedded.isEsp) { return this.renderEsp(); }
         const simple = this.layoutState.mode === 'simple';
         const { phase } = this.device.state;
         // Beginner code faults (REPL/RAM script) are not device failures; they stay in the console.
@@ -175,6 +176,22 @@ export class ScopeToolbar extends ReactWidget {
         </header>;
     }
 
+    private renderEsp(): React.ReactNode {
+        return <header className="scope-workspace-bar" aria-label="Nodu 工具栏">
+            <div className="scope-toolbar-start">
+                <NoduBrand />
+                <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单 · ${this.layoutState.project}`} aria-haspopup="menu" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span>{this.layoutState.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                <button className="scope-action scope-action-primary" onClick={() => void this.commands.executeCommand('task:run:build')}><i className="codicon codicon-tools" aria-hidden="true"/>编译</button>
+                <button className="scope-action" onClick={() => void this.commands.executeCommand('task:run')}>任务</button>
+                <span className="scope-device-chip-board">{this.embedded.espChip.toUpperCase().replace(/^ESP32(?=.)/, 'ESP32-')}</span>
+            </div>
+            <div className="scope-toolbar-end">
+                <button className="scope-action scope-toolbar-icon" aria-label="文件列表" aria-pressed={this.layoutState.filesVisible} onClick={() => void this.commands.executeCommand('scope.toggle-files')}><i className="codicon codicon-layout-sidebar-left" aria-hidden="true"/></button>
+                <button className="scope-action scope-toolbar-icon" aria-label="更多" aria-haspopup="menu" onClick={event => this.openMenu(NODU_MORE_MENU, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
+            </div>
+        </header>;
+    }
+
     private renderC(): React.ReactNode {
         const tutor = this.tutor.plan ? <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="教学步骤" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title={this.tutor.panelVisible ? '隐藏教学步骤' : '显示教学步骤'}><i className="codicon codicon-mortar-board" aria-hidden="true"/></button> : undefined;
         return <NoduCToolbar model={this.embedded} simple={this.layoutState.mode === 'simple'} project={this.layoutState.project}
@@ -200,6 +217,7 @@ export class ScopeToolbar extends ReactWidget {
 
 @injectable()
 export class ScopeWorkbenchContribution implements FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution {
+    @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     @inject(ScopeToolbar) protected readonly toolbar!: ScopeToolbar;
     @inject(ScopeSession) protected readonly session!: ScopeSession;
@@ -354,7 +372,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         const root = (await this.workspace.roots)[0];
         if (root) {
             // Only open files that exist; never create or overwrite a user's project on startup.
-            for (const file of ['thresholds.py', 'camera.py', 'main.py']) {
+            for (const file of ['thresholds.py', 'camera.py', 'main.py', 'main/main.c']) {
                 const uri = root.resource.resolve(file);
                 if (await this.files.exists(uri)) { await this.editors.open(uri, { mode: 'activate' }); }
             }
@@ -492,7 +510,11 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     registerCommands(registry: CommandRegistry): void {
-        const command = (id: string, label: string, execute: () => unknown, proOnly = false) => registry.registerCommand({ id, label, category: '见微 Nodu' }, { execute, isVisible: () => !proOnly || this.layoutState.mode === 'pro', isEnabled: () => !proOnly || this.layoutState.mode === 'pro' });
+        const deviceCommands = new Set(['scope.run-current', 'scope.stop-device', 'scope.toggle-run', 'scope.toggle-connect', 'scope.reset-device', 'scope.show-devices']);
+        const command = (id: string, label: string, execute: () => unknown, proOnly = false) => {
+            const available = () => (!proOnly || this.layoutState.mode === 'pro') && (!deviceCommands.has(id) || (!this.embedded.isC && !this.embedded.isEsp));
+            return registry.registerCommand({ id, label, category: '见微 Nodu' }, { execute, isVisible: available, isEnabled: available });
+        };
         registry.registerCommand({ id: 'scope.layout.simple', label: '简洁模式', category: '见微 Nodu' }, {
             execute: () => this.serializeLayout(() => this.applyLayout('simple')), isToggled: () => this.layoutState.mode === 'simple',
         });
@@ -600,10 +622,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     registerKeybindings(keys: KeybindingRegistry): void {
-        keys.registerKeybinding({ command: 'scope.run-current', keybinding: 'ctrlcmd+enter', when: 'editorTextFocus && !nodu.cProject' });
+        keys.registerKeybinding({ command: 'scope.run-current', keybinding: 'ctrlcmd+enter', when: 'editorTextFocus && !nodu.cProject && !nodu.espProject' });
         // Inside a terminal these keys forward raw bytes instead (terminalFocus).
-        keys.registerKeybinding({ command: 'scope.toggle-run', keybinding: 'ctrlcmd+r', when: '!terminalFocus && !nodu.cProject' });
-        keys.registerKeybinding({ command: 'scope.toggle-connect', keybinding: 'ctrlcmd+e', when: '!terminalFocus && !nodu.cProject' });
+        keys.registerKeybinding({ command: 'scope.toggle-run', keybinding: 'ctrlcmd+r', when: '!terminalFocus && !nodu.cProject && !nodu.espProject' });
+        keys.registerKeybinding({ command: 'scope.toggle-connect', keybinding: 'ctrlcmd+e', when: '!terminalFocus && !nodu.cProject && !nodu.espProject' });
         if (environment.electron.is()) {
             // Original 窗口 ▸ 最小化 accelerator (⌘M on macOS).
             keys.registerKeybinding({ command: 'scope.window-minimize', keybinding: 'ctrlcmd+m' });

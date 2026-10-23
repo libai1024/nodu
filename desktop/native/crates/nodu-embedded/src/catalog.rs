@@ -203,19 +203,20 @@ impl Catalog {
                     let needs: Vec<&str> = t.get("needs").and_then(Value::as_array)
                         .map(|n| n.iter().filter_map(Value::as_str).collect()).unwrap_or_default();
                     let mut available = true;
-                    let mut needs_input = Vec::new();
+                    let needs_input: Vec<String> = Vec::new();
                     let mut reason = Value::Null;
                     if needs.contains(&"debugUart") && !board.has_debug_uart() {
                         available = false;
                         reason = json!("板卡包没有调试串口");
                     }
                     if needs.contains(&"led") && board.verified_led().is_none() {
-                        needs_input.push("led");
+                        available = false;
                         reason = json!(board.value.get("ledHint").cloned().unwrap_or(json!("需要填写 LED 引脚")));
                     }
                     json!({"id": t["id"], "name": t["name"], "description": t["description"],
                            "available": available, "needsInput": needs_input, "reason": reason})
                 })
+                .filter(|t| t["available"] == true)
                 .collect();
             boards.push(json!({
                 "id": board.id(), "version": board.version(), "reference": board.reference(),
@@ -246,10 +247,9 @@ mod tests {
         let boards = listing["boards"].as_array().expect("boards");
         assert!(boards.iter().any(|b| b["mcu"] == "STM32F103C8Tx"));
         assert!(boards.iter().any(|b| b["mcu"] == "STM32F407ZGTx"));
-        // No board pack ships an unverified LED, so blink always asks for the pin.
+        // Unknown board wiring must never be guessed by the wizard.
         for board in boards {
-            let blink = board["templates"].as_array().unwrap().iter().find(|t| t["id"] == "blink").unwrap();
-            assert_eq!(blink["needsInput"], json!(["led"]));
+            assert!(!board["templates"].as_array().unwrap().iter().any(|t| t["id"] == "blink"));
         }
     }
 

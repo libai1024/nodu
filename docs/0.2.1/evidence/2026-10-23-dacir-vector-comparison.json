@@ -1,0 +1,20 @@
+[
+  {
+    "template": "temperature-humidity",
+    "vectorEntries": 67,
+    "relocatedVectorTargets": 17,
+    "sameHandlerNames": true
+  },
+  {
+    "template": "warehouse",
+    "vectorEntries": 67,
+    "relocatedVectorTargets": 16,
+    "sameHandlerNames": true
+  },
+  {
+    "template": "esp8266",
+    "vectorEntries": 67,
+    "relocatedVectorTargets": 14,
+    "sameHandlerNames": true
+  }
+]

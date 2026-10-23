@@ -1,53 +1,53 @@
 id,area,feature,trigger,expected_result,requirement,phase,status,evidence
 H1.1,hardware,F407 ST-LINK 识别,verify_swd 只读,读到设备 ID 0x413、1024 KiB、唯一 ID、目标电压,F2,M0,passed_board,P0 evidence/f407-swd-target.txt（未提交工作树）
 H1.2,hardware,F407 ST-LINK 写入运行,P0 --execute,备份、写入、读回 SHA-256 一致、复位后 RAM 心跳增加,F4 F5,M0,blocked,P0 写入前 reset device failed；探针随后从 USB 消失
-H1.3,hardware,F103 ST-LINK 写入运行,P0 --execute,同 H1.2；记录 F103 设备 ID 与 Flash 容量寄存器实际值,F2–F5,M0,passed_board,evidence/2026-10-22-f103-stlink.json：F103C8 设备 ID 0x410、Flash 寄存器 64 KB；首次备份 64 KB、写入、读回 SHA-256 一致、uwTick 增加。经 nodu-embedded，非 P0 脚本
+H1.3,hardware,F103 ST-LINK 写入运行,P0 --execute,同 H1.2；记录 F103 设备 ID 与 Flash 容量寄存器实际值,F2–F5,M0,passed_board,芯片默认包 chip-f103c8；界面两次写入读回一致；64 KB 备份；主循环和复位心跳实测。evidence/2026-10-22-f103-ui-acceptance.json
 H1.4,hardware,F407 串口 ISP,手动 BOOT0 + 复位,ROM 应答、GET_ID、备份、写入 -v、读回一致、恢复 BOOT0 后运行,F6,M0,not_started,
-H1.5,hardware,F103 串口 ISP,手动 BOOT0 + 复位,同 H1.4；USART1 PA9/PA10,F6,M0,not_started,
-H1.6,hardware,探索者 F407 板卡事实,原理图与实物,LED0 引脚与极性、调试串口跳线、BOOT 跳线、HSE 8 MHz 均有核对记录,4.1,M0,not_started,
-H1.7,hardware,F103 板型,用户提供,确定板型；决定是否新增板卡包与 LED 模板,D6,M0,not_started,
+H1.5,hardware,F103 串口 ISP,手动 BOOT0 + 复位,同 H1.4；USART1 PA9/PA10,F6,M0,passed_hardware,F103C8 UART ISP 三次写入回读一致；BOOT0 恢复后启动和双向通信通过。ISP-TEST-2026-10-22.md
+H1.6,hardware,探索者 F407 板卡事实,原理图与实物,按芯片型号创建默认工程；指定开发板 LED 与板型核对不作为本期必选验收,4.1,M0,superseded,2026-10-23 按用户最新范围修订；保留芯片下载与运行验收。FUNCTIONAL-FIXES-2026-10-23.md
+H1.7,hardware,F103 板型,用户提供,按芯片型号创建默认工程；指定开发板 LED 与板型核对不作为本期必选验收,D6,M0,superseded,2026-10-23 按用户最新范围修订；保留芯片下载与运行验收。FUNCTIONAL-FIXES-2026-10-23.md
 T1.1,toolkit,随安装包提供,新安装 Nodu 后不联网新建 C 工程,没有下载或安装步骤；编译成功,T2,M1,not_started,
 T1.2,toolkit,完整性检查,删除或篡改工具包内任一文件,第一次使用的完整校验发现问题；编辑可用、编译不可用；提示重新安装或检查杀毒软件,T3,M3,passed_host,移走工具包中 1 个文件：编辑可用、编译被拒并提示重新安装；完整校验恢复后通过
 T1.3,toolkit,离线安装,无网络 Windows 主机从 U 盘安装,安装后完成 S1,T4,M6,not_started,
-T1.4,toolkit,版本锁,打开锁定其他工具包版本的工程,提示一次；确认后用内置版本编译并更新锁文件,T5,M3,not_started,
+T1.4,toolkit,版本锁,打开锁定其他工具包版本的工程,提示一次；确认后用内置版本编译并更新锁文件,T5,M3,passed_host,真实工具链回归通过，见 evidence/2026-10-22-functional-host.tap；界面和实物未覆盖项见 FUNCTIONAL-FIXES-2026-10-23.md
 T1.5,toolkit,中文路径,中文用户名的 Windows 账户,安装在含中文的路径下可编译与下载；不能时自动复制到 %PUBLIC% 后可用,T6,M6,not_started,
 T1.6,toolkit,体积,三个安装包,工具包使单架构包增加 ≤ 90 MB、universal ≤ 160 MB；安装后单架构 ≤ 300 MB、universal ≤ 450 MB,PRD §6,M1,not_started,开发版工具包（macOS arm64，clangd 用 Xcode 版代替）安装后 241.8 MB、3696 个文件；未打安装包
 T1.7,toolkit,ST-LINK 驱动缺失,Windows 无驱动,检测到 VID 0483 但无驱动时给出官方驱动说明；不静默安装,T9,M6,not_started,
 T1.8,toolkit,universal 合并与签名,打包 macOS universal,合并成功；工具在 arm64 与 x64 主机上都能运行；每个 Mach-O 文件已签名,TOOLKIT-DISTRIBUTION §5.3,M1,not_started,
 T1.9,toolkit,许可与源码,检查安装包与下载位置,各组件许可文件齐全；GPL 组件的对应源码与安装包在同一下载位置,PRD §6,M7,not_started,
-P1.1,project,新建向导,开始页 → 新建项目,三列选择；未核对事实的模板不显示；名称校验；生成后打开 main.c,P1 P3,M5,partial,浏览器版向导：三列选择、名称校验、位置；未核对 LED 引脚的板卡包改为让学生填写引脚，而不是隐藏模板（与原设计不同）
-P1.2,project,工程结构,新建 blink-f407,含 nodu.json、nodu.lock.json、Core/Startup/Linker/Board；无本机绝对路径,P2 P3,M3,passed_host,生成 nodu.json、nodu.lock.json、Core/Startup/Linker/Board；工程文件中没有本机绝对路径
+P1.1,project,新建向导,开始页 → 新建项目,紧凑双栏按芯片选择；系列折叠；名称校验；生成后打开 main.c,P1 P3,M5,passed_host,02 紧凑双栏按芯片选择并折叠系列；默认项目；非法名称/同名保护；创建后自动打开 main.c。见 IMPLEMENTATION-TEST-2026-10-22.md
+P1.2,project,工程结构,新建 STM32F103 / STM32F407 默认项目,含 nodu.json、nodu.lock.json、Core/Startup/Linker/Board；无本机绝对路径,P2 P3,M3,passed_host,生成 nodu.json、nodu.lock.json、Core/Startup/Linker/Board；工程文件中没有本机绝对路径
 P1.3,project,自动收集源文件,在 App 下新建 led.c,下次编译自动参与，不改 CMakeLists,P4,M3,passed_host,在 App 下新建 led.c，下次编译自动参与（compile_commands.json 可见）
 P1.4,project,按类型切换界面,打开 C 工程与 K210 项目,工具栏与面板随项目类型切换；编辑缓冲区与连接保留,P5 K1,M5,passed_host,同一构建：含 nodu.json 的文件夹显示 C 工具栏；K210 工作区工具栏与 0.1.4 一致
-P1.5,project,导出独立工程,项目 ▾ → 导出,在无 Nodu 的机器上 cmake --preset debug && cmake --build 通过,P7,M3,not_started,
-P1.6,project,外部工程信任,打开 CubeMX 生成的工程,未信任时不执行 CMake；信任后可编译,P8 §11,M3,partial,未信任的工程不执行 CMake，编译前要求确认信任；CubeMX 外部工程的识别未实现
-E1.1,editor,HAL 补全,输入 HAL_GPIO_,补全列表含 HAL_GPIO_TogglePin 等并显示签名；不自动插入 #include,E2 E5,M3,partial,自写 LSP 桥（方案 B）。对生成的工程直接发 LSP 请求：HAL_GPIO_Tog 补全为 HAL_GPIO_TogglePin，未自动插入 #include（--header-insertion=never）。浏览器内的补全弹窗无法用模拟按键触发，未在界面中确认
-E1.2,editor,跳转到 HAL 源码,F12 于 HAL_Delay,打开只读 HAL 文件；标签标明只读与版本,E2 E4,M3,partial,LSP definition 对 HAL_Delay 返回 sdk/cube-f1/…/stm32f1xx_hal.c；SDK 文件在编辑器中设为只读并提示 HAL 版本；界面中的 F12 未实测
+P1.5,project,导出独立工程,项目 ▾ → 导出,在无 Nodu 的机器上 cmake --preset debug && cmake --build 通过,P7,M3,passed_host,真实工具链回归通过，见 evidence/2026-10-22-functional-host.tap；界面和实物未覆盖项见 FUNCTIONAL-FIXES-2026-10-23.md
+P1.6,project,外部工程信任,打开 CubeMX 生成的工程,未信任时不执行 CMake；信任后可编译,P8 §11,M3,passed_host,真实工具链回归通过，见 evidence/2026-10-22-functional-host.tap；界面和实物未覆盖项见 FUNCTIONAL-FIXES-2026-10-23.md
+E1.1,editor,HAL 补全,输入 HAL_GPIO_,补全列表含 HAL_GPIO_TogglePin 等并显示签名；不自动插入 #include,E2 E5,M3,passed_host,vscode-clangd 插件方案 A；界面 HAL_GPIO_ 补全含 TogglePin 与签名；恢复后源码仅原 include。evidence/2026-10-22-f103-ui-completion.png
+E1.2,editor,跳转到 HAL 源码,F12 于 HAL_Delay,打开只读 HAL 文件；标签标明只读与版本,E2 E4,M3,passed_host,界面 F12 跳到 HAL_Delay 实现第 371 行，标签只读与 HAL 1.8.7。evidence/2026-10-22-f103-ui-definition.png
 E1.3,editor,断网补全,断网后打开未编译过的工程,10 s 内补全可用,E6 PRD §6,M3,not_started,
 E1.4,editor,clangd 不执行 CMake,未信任工程,clangd 只做单文件分析；无 CMake 进程启动,§6.2,M3,passed_host,clangd 只读取 compile_commands.json；未信任工程不生成编译数据库
 B1.1,build,一键编译,⌘B,自动保存；增量编译；容量报告；改一行 ≤ 3 s,B1 B2 B6,M3,passed_host,浏览器版 ⌘B / 编译按钮：自动保存、增量编译 70–230 ms、Flash 与 RAM 容量报告
 B1.2,build,问题与中文解释,注入 12 类典型错误,定位到行列；匹配规则显示中文解释与原文；SDK 内部警告不显示,B3 B4,M3,partial,16 条规则；实测注入 HAL 模块未启用、未声明、缺分号、未定义引用、未使用变量，并在问题面板显示中文解释与原文；未覆盖 12 类全部
 B1.3,build,失败即失效,先成功后改出错再运行,运行拒绝使用旧产物,B7,M3,passed_host,编译失败后 flash 返回 noBuild；编译后修改文件返回 staleBuild
-B1.4,build,编译中修改文件,编译期间保存另一文件,结果标为过期；不能下载,§5.1,M3,partial,编译前后比对输入摘要，不一致时标为过期且不更新当前产物；未做编译中修改的注入测试
+B1.4,build,编译中修改文件,编译期间保存另一文件,结果标为过期；不能下载,§5.1,M3,passed_host,真实工具链回归通过，见 evidence/2026-10-22-functional-host.tap；界面和实物未覆盖项见 FUNCTIONAL-FIXES-2026-10-23.md
 B1.5,build,产物身份,同 BIN 不同 ELF / 篡改 ELF,分别存为不同产物 / 拒绝下载,B8,M3,passed_host,篡改产物 ELF 后下载被拒（tampered）；产物摘要与 P0 bundleSha256 算法一致（单元测试）
-B1.6,build,取消编译,编译中按停止,所有编译器子进程结束；无残留写入,B7 PRD §6,M3,partial,进程组终止的单元测试（超时、取消）；未在真实 ninja 编译中按停止验证
+B1.6,build,取消编译,编译中按停止,所有编译器子进程结束；无残留写入,B7 PRD §6,M3,passed_host,真实工具链回归通过，见 evidence/2026-10-22-functional-host.tap；界面和实物未覆盖项见 FUNCTIONAL-FIXES-2026-10-23.md
 B1.7,build,中文列号,含中文注释的行出错,波浪线位置正确,§5.3,M3,passed_host,diag 单元测试：含中文注释行的字节列换算为 UTF-16 列
-F1.1,flash,一键运行 ST-LINK,运行,编译 → 识别 → 写入 → 读回 → 复位 → 打开串口监视器；无对话框,F1,M4,partial,evidence/2026-10-22-f103-stlink.json blink-f103：浏览器版点“运行”完成编译→识别→写入→读回→复位，1.9 s；未接 USB 转串口，串口输出未验证
+F1.1,flash,一键运行 ST-LINK,运行,编译 → 识别 → 写入 → 读回 → 复位 → 打开串口监视器；无对话框,F1,M4,passed_hardware,F103C8 ST-LINK 新建编译下载复位运行及已连接串口监视器通过。IMPLEMENTATION-TEST-2026-10-22.md / SERIAL-TEST-2026-10-22.md
 F1.2,flash,芯片核对,F407 工程接 F103 板,写入前拒绝并说明差异,F3,M4,passed_board,evidence/2026-10-22-f103-stlink.json：F407 工程接 F103 板，擦除前拒绝并说明“板上是 STM32F103（设备 ID 0x410）”
-F1.3,flash,首次备份,新芯片首次运行,先备份整片 Flash；跳过需二次确认,F4,M4,passed_board,evidence/2026-10-22-f103-stlink.json：首次写入前备份整片 64 KB，之后不再备份；界面不提供跳过
+F1.3,flash,首次备份,新芯片首次运行,先备份整片 Flash；跳过需二次确认,F4,M4,passed_board,本轮首次写入前备份 65536 字节并复算 SHA-256；再次写入不重复备份。evidence/2026-10-22-f103-ui-acceptance.json
 F1.4,flash,写入范围,16 KB 程序写 F407,只擦除第 0 扇区；界面显示范围,F5,M4,passed_host,catalog 单元测试：F407 3592 B 只擦第 0 扇区；F103 实物 8160 B 擦 8 页，任务条显示范围
-F1.5,flash,串口 ISP 引导,下载方式为串口,引导卡；检测到 ROM 应答后自动写入；第 2 页恢复 BOOT0；看到输出后关闭,F6,M4,partial,ROM 协议（同步、GET_ID、读内存、读保护）用模拟 ROM 单元测试；引导卡已实现；缺 USB 转串口，未实物验证
-F1.6,flash,恢复备份,设备 → 恢复出厂程序,只列出同唯一 ID 的备份；写回后读回一致,F7,M4,passed_board,evidence/2026-10-22-f103-stlink.json：按唯一 ID 列出备份；整片写回 64 KB 后读回一致
+F1.5,flash,串口 ISP 引导,下载方式为串口,引导卡；检测到 ROM 应答后自动写入；第 2 页恢复 BOOT0；看到输出后关闭,F6,M4,passed_hardware,ROM 引导、首次备份、重复下载、复位后自动收起引导通过。ISP-TEST-2026-10-22.md
+F1.6,flash,恢复备份,设备 → 备份与恢复,只列出同唯一 ID 的备份；写回后读回一致,F7,M4,passed_board,evidence/2026-10-22-f103-stlink.json：按唯一 ID 列出备份；整片写回 64 KB 后读回一致
 F1.7,flash,读保护,开启 1 级读保护的测试板,停止并说明；不解除,F8,M4,passed_host,flash 单元测试：读保护时擦除前停止；ROM 读保护返回 readProtected，不解除
 F1.8,flash,诊断,无下载器 / 无供电 / 未接线 / BOOT0 未设,每种情况的第一项失败检查与说明正确,F9,M4,partial,stlink::classify 单元测试（无下载器、无供电、未接线、错芯片）；诊断卡已实现；仅错芯片做了实物
 F1.9,flash,写入中断,写入中拔 USB / 按停止,提示程序不完整；锁释放；重插后可重试,F13 PRD §6,M4,not_started,
-F1.10,flash,兼容芯片,非 ST 原厂 F103,提示并默认拒绝；确认后可写,F11,M4,not_started,
+F1.10,flash,兼容芯片,工程设置声明兼容芯片后下载或恢复,每次写入前确认；取消不下载；后端拒绝缺少确认；保留 ID、容量、保护和 UID 检查,F11,M4,passed_host_pending_hardware,前后端确认门禁测试通过；无法仅凭重复设备 ID 自动判定厂商；非 ST 实物待测。FUNCTIONAL-FIXES-2026-10-23.md
 F1.11,flash,下载器互斥,两个窗口同时运行同一板,第二个提示被占用,§9,M4,passed_host,locks 单元测试：probe-<serial>.lock 与串口锁同目录、第二个占用者被拒并显示占用者
-M1.1,monitor,运行分隔,连续运行三次,每次插入分隔行；输出不丢,M2,M4,partial,每次运行在监视器插入分隔行（浏览器版可见）；缺 USB 转串口，输出未验证
-M1.2,monitor,编码,GBK 输出与非法字节,正确显示；非法字节为替代符,M3,M4,not_started,
-M1.3,monitor,串口交接,串口 ISP 下载,监视器让出串口并在完成后自动重开,M4,M4,not_started,
+M1.1,monitor,运行分隔,连续运行三次,每次插入分隔行；输出不丢,M2,M4,passed_hardware,F103 ST-LINK 三次真实下载均收到 UART READY；三条分隔与历史保留；SERIAL-TEST-2026-10-22.md
+M1.2,monitor,编码,GBK 输出与非法字节,正确显示；非法字节为替代符,M3,M4,passed_hardware,UTF-8/GBK 逐字节中文及非法字节实测；双向编码和 HEX 原始字节通过；SERIAL-TEST-2026-10-22.md
+M1.3,monitor,串口交接,串口 ISP 下载,监视器让出串口并在完成后自动重开,M4,M4,passed_hardware,串口借出互斥、取消和 60 秒超时恢复、下载后自动打开与切换监视器通过。ISP-TEST-2026-10-22.md
 M1.4,monitor,串口互斥,K210 已连接同一串口,提示占用者；不同时打开,M4 K2,M4,passed_host,串口锁与 nodu-device PortLock 路径一致（tty/cu 共用一把锁），单元测试
-M1.5,monitor,自动重连,拔插 USB 转串口,提示断开；重插后自动重连且保留输出,M6,M4,not_started,
+M1.5,monitor,自动重连,拔插 USB 转串口,提示断开；重插后自动重连且保留输出,M6,M4,passed_hardware,用户物理拔插 CH340 同一 USB 口；列表自动更新及重连 PING/PONG 通过；路径改变未覆盖；SERIAL-TEST-2026-10-22.md
 U1.1,ui,工具栏数量,C 工程简洁模式,可见控件 9 个,U2,M5,not_started,
 U1.2,ui,品牌令牌,检查组件样式,新组件只引用语义令牌；无写死色值,U1,M5,passed_host,npm run check:brand 通过；embedded.css 只用 Theia 与品牌变量
 U1.3,ui,键盘完成 S1,只用键盘,新建 → 编译 → 运行 → 看到串口输出,U8,M5,not_started,
@@ -58,3 +58,10 @@ K1.1,k210,K210 回归,0.1.4 已通过项抽查,连接、运行、文件、帧缓
 K1.2,k210,未打开 C 工程时启动,只打开 K210 项目,不启动 nodu-embedded 与 clangd；启动时间与 0.1.4 相差 ≤ 0.5 s,K3,M6,partial,K210 工作区不启动 nodu-embedded 与 clangd（仅检测到 nodu.json 时才调用）；启动时间未测
 X1.1,platform,八条实物路径,两芯片 × 两方式 × macOS / Windows,每条有备份、写入、读回、运行、串口输出记录,PRD §8,M6,not_started,
 X1.2,platform,强退恢复,编译中 / 写入中强退应用,重启后无残留进程与端口占用,PRD §6,M6,not_started,
+P1.7,project,新建 C 模块,项目菜单 → 新建 C 模块,一次生成 App/name.c 和 .h；不覆盖；下次编译自动收集,2026-10-22 用户问题清单,M5,passed_host,FUNCTIONAL-FIXES-2026-10-23.md
+P1.8,project,工程设置,项目菜单 → 工程设置,构建配置与 printf 浮点保存；真实工具链生效,2026-10-22 用户问题清单,M5,passed_host,FUNCTIONAL-FIXES-2026-10-23.md
+T1.10,toolkit,工具包信息页,项目菜单 → STM32 工具包,组件版本、许可声明及可用正文、文件占用、完整检查,2026-10-22 用户问题清单,M5,passed_host,FUNCTIONAL-FIXES-2026-10-23.md
+M1.6,monitor,串口辅助工具,时间戳 / 暂停 / 保存日志,暂停只冻结显示；持续接收；复制保存当前视图；HEX 保留原字节,2026-10-22 用户问题清单,M5,passed_host,FUNCTIONAL-FIXES-2026-10-23.md
+B1.8,build,旧诊断过期,编译后编辑源码（含未保存）,显示已过期；撤销旧编译标记和计数；新编译替换结果,2026-10-22 用户问题清单,M5,passed_host,FUNCTIONAL-FIXES-2026-10-23.md
+F1.12,flash,DTR/RTS 自动 ISP,核对 F103C8 电路并显式启用,默认关闭；信号极性可配；同一端口完成备份写入校验后请求复位运行；失败不请求运行,2026-10-22 用户问题清单,M5,passed_host_pending_hardware,FUNCTIONAL-FIXES-2026-10-23.md
+U1.7,ui,设备面板与备份措辞,打开设备面板,无中点拼接解释；首次备份不称出厂程序；目标以芯片显示,2026-10-22 用户问题清单,M5,passed_host,FUNCTIONAL-FIXES-2026-10-23.md

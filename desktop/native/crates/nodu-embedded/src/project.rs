@@ -15,6 +15,38 @@ use crate::proto::{Failure, Outcome};
 use crate::toolkit::Toolkit;
 use crate::util::{hex, iso_now, read_json, sha256_file, str_field, write_json};
 
+/// Create a source/header pair without overwriting either file or following App outside the project.
+pub fn create_module(project: &Project, name: &str) -> Outcome<Value> {
+    use std::io::Write;
+    let valid = Regex::new(r"^[A-Za-z][A-Za-z0-9_]{0,63}$").expect("regex");
+    let upper = name.to_ascii_uppercase();
+    if !valid.is_match(name) || ["CON", "PRN", "AUX", "NUL"].contains(&upper.as_str())
+        || Regex::new(r"^(COM|LPT)[0-9]$").expect("regex").is_match(&upper) {
+        return Err(Failure::new("badRequest", "名称须以字母开头，只含字母、数字或下划线，最多 64 字符。"));
+    }
+    if project.is_external() { return Err(Failure::new("externalProject", "外部 CMake 工程请在源文件目录中创建模块并加入构建。")); }
+    let dir = project.root.join("App");
+    fs::create_dir_all(&dir).map_err(|e| Failure::io("创建 App 目录", &e))?;
+    let dir = fs::canonicalize(&dir).map_err(|e| Failure::io("检查 App 目录", &e))?;
+    if !dir.starts_with(&project.root) { return Err(Failure::new("badRequest", "App 目录不能指向工程外。")); }
+    let c = dir.join(format!("{name}.c")); let h = dir.join(format!("{name}.h"));
+    let mut source = fs::OpenOptions::new().write(true).create_new(true).open(&c)
+        .map_err(|e| Failure::io("创建源文件（不覆盖已有文件）", &e))?;
+    let result = (|| {
+        let mut header = fs::OpenOptions::new().write(true).create_new(true).open(&h)
+            .map_err(|e| Failure::io("创建头文件（不覆盖已有文件）", &e))?;
+        let written = (|| {
+            source.write_all(format!("#include \"{name}.h\"\n").as_bytes())?;
+            header.write_all(format!("#ifndef NODU_APP_{upper}_H\n#define NODU_APP_{upper}_H\n\n#ifdef __cplusplus\nextern \"C\" {{\n#endif\n\n\n#ifdef __cplusplus\n}}\n#endif\n\n#endif\n").as_bytes())?;
+            source.sync_all()?; header.sync_all()
+        })();
+        if let Err(e) = written { drop(header); let _ = fs::remove_file(&h); return Err(Failure::io("写入模块", &e)); }
+        Ok(json!({"source": c, "header": h}))
+    })();
+    if result.is_err() { drop(source); let _ = fs::remove_file(&c); }
+    result
+}
+
 #[derive(Debug, Clone)]
 pub struct Project {
     pub root: PathBuf,
@@ -49,6 +81,7 @@ impl Project {
     pub fn name(&self) -> &str {
         str_field(&self.manifest, &["name"]).unwrap_or("firmware")
     }
+    pub fn is_external(&self) -> bool { self.manifest.pointer("/build/external").and_then(Value::as_bool).unwrap_or(false) }
     pub fn preset(&self) -> &str {
         match str_field(&self.manifest, &["build", "preset"]) {
             Some("release") => "release",
@@ -88,7 +121,12 @@ impl Project {
 
     /// Update one manifest field (download method, monitor settings) in place.
     pub fn set_manifest(&mut self, pointer: &str, value: Value) -> Outcome<()> {
+        self.set_manifests(&[(pointer, value)])
+    }
+
+    pub fn set_manifests(&mut self, values: &[(&str, Value)]) -> Outcome<()> {
         let mut manifest = self.manifest.clone();
+        for (pointer, value) in values {
         let mut node = &mut manifest;
         let keys: Vec<&str> = pointer.trim_start_matches('/').split('/').collect();
         for key in &keys[..keys.len() - 1] {
@@ -97,7 +135,8 @@ impl Project {
             }
             node = &mut node[*key];
         }
-        node[keys[keys.len() - 1]] = value;
+        node[keys[keys.len() - 1]] = value.clone();
+        }
         write_json(&self.root.join("nodu.json"), &manifest)?;
         self.manifest = manifest;
         Ok(())
@@ -106,7 +145,8 @@ impl Project {
     /// Digest of every project input (§5.1), excluding generated directories.
     pub fn input_digest(&self, toolkit: &Toolkit) -> String {
         let mut files = Vec::new();
-        collect_inputs(&self.root, Path::new(""), &mut files);
+        let dacir = str_field(&self.manifest, &["build", "adapter"]) == Some("dacir-directory-v1");
+        collect_inputs(&self.root, Path::new(""), &mut files, dacir);
         files.sort();
         let mut hasher = Sha256::new();
         hasher.update(format!("toolkit={}\n", toolkit.version()).as_bytes());
@@ -120,7 +160,7 @@ impl Project {
 
 const SKIP_DIRS: [&str; 6] = ["build", ".nodu", ".cache", ".git", ".theia", ".vscode"];
 
-fn collect_inputs(root: &Path, rel: &Path, out: &mut Vec<PathBuf>) {
+fn collect_inputs(root: &Path, rel: &Path, out: &mut Vec<PathBuf>, dacir: bool) {
     let Ok(entries) = fs::read_dir(root.join(rel)) else { return };
     for entry in entries.flatten() {
         let name = entry.file_name();
@@ -128,11 +168,12 @@ fn collect_inputs(root: &Path, rel: &Path, out: &mut Vec<PathBuf>) {
         let child = rel.join(&*name);
         let Ok(kind) = entry.file_type() else { continue };
         if kind.is_dir() {
-            if rel.as_os_str().is_empty() && SKIP_DIRS.contains(&name.as_ref()) {
+            if rel.as_os_str().is_empty()
+                && (SKIP_DIRS.contains(&name.as_ref()) || (dacir && [".studio", "runs"].contains(&name.as_ref()))) {
                 continue;
             }
             if out.len() < 20_000 {
-                collect_inputs(root, &child, out);
+                collect_inputs(root, &child, out, dacir);
             }
         } else if kind.is_file() && name != ".DS_Store" {
             out.push(child);
@@ -181,7 +222,7 @@ pub struct NewProject<'a> {
     pub name: &'a str,
     pub board: &'a str,
     pub template: &'a str,
-    /// For `blink`: `{port: "C", pin: 13, activeLow: true}` when the board pack has no verified LED.
+    /// Legacy input retained for protocol compatibility; board facts remain authoritative.
     pub led: Option<&'a Value>,
     pub method: &'a str,
 }
@@ -204,9 +245,9 @@ struct Led {
     active_low: bool,
 }
 
-fn parse_led(chip: &Chip, board: &Board, given: Option<&Value>) -> Outcome<Led> {
-    let source = board.verified_led().or(given).ok_or_else(|| {
-        Failure::new("needLed", "LED 闪烁模板需要知道 LED 接在哪个引脚。")
+fn parse_led(chip: &Chip, board: &Board, _given: Option<&Value>) -> Outcome<Led> {
+    let source = board.verified_led().ok_or_else(|| {
+        Failure::new("needLed", "板卡包尚未核对 LED，不能使用闪烁模板。请先使用空工程或串口示例。")
     })?;
     let (port, pin) = if let Some(text) = source.get("pin").and_then(Value::as_str) {
         let mut chars = text.trim().trim_start_matches('P').chars();
@@ -426,6 +467,34 @@ pub fn create(request: &NewProject<'_>, catalog: &Catalog, toolkit: &Toolkit) ->
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn dacir_runtime_outputs_do_not_invalidate_build_inputs() {
+        let temp = tempfile::tempdir().unwrap();
+        let root = temp.path();
+        for name in ["src/main.c", "include/config.h", "drivers/runs/driver.c", ".studio/firmware/a.bin", "runs/latest.json"] {
+            let file = root.join(name);
+            fs::create_dir_all(file.parent().unwrap()).unwrap();
+            fs::write(file, "initial").unwrap();
+        }
+        let snapshot = |dacir| {
+            let mut files = Vec::new();
+            collect_inputs(root, Path::new(""), &mut files, dacir);
+            files.sort();
+            files.into_iter().map(|path| {
+                let hash = sha256_file(&root.join(&path)).unwrap();
+                (path, hash)
+            }).collect::<Vec<_>>()
+        };
+        let before = snapshot(true);
+        assert_eq!(before.len(), 3);
+        assert_eq!(snapshot(false).len(), 5);
+        fs::write(root.join("runs/latest.json"), "changed run").unwrap();
+        fs::write(root.join(".studio/firmware/a.bin"), "changed import").unwrap();
+        assert_eq!(snapshot(true), before);
+        fs::write(root.join("src/main.c"), "changed source").unwrap();
+        assert_ne!(snapshot(true), before);
+    }
 
     #[test]
     fn names() {

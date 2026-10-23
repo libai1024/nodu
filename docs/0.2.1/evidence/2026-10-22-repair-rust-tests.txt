@@ -1,0 +1,52 @@
+   Compiling nodu-embedded v0.2.1 (/Users/wangwei/Model/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.98s
+     Running unittests src/lib.rs (desktop/native/target/debug/deps/nodu_embedded-754ca71da3d745ae)
+
+running 30 tests
+test catalog::tests::rejects_path_like_ids ... ok
+test diag::tests::utf16_columns_skip_chinese_bytes ... ok
+test build::tests::bundle_digest_matches_p0_record ... ok
+test catalog::tests::erase_plans ... ok
+test locks::tests::tty_and_cu_share_a_lock ... ok
+test flash::tests::identity_checks_reject_before_erase ... ok
+test locks::tests::port_lock_excludes_second_owner_and_names_holder ... ok
+test catalog::tests::shipped_packs_load_and_list ... ok
+test diag::tests::memory_usage_table ... ok
+test probes::tests::ioreg_finds_stlink_with_empty_serial ... ok
+test probes::tests::pnp_reports_missing_driver ... ok
+test project::tests::hal_conf_keeps_disabled_modules_as_comments ... ok
+test project::tests::names ... ok
+test stlink::tests::classification_order ... ok
+test stlink::tests::words_and_paths ... ok
+test flash::tests::short_backup_is_discarded ... ok
+test uart::tests::identifies_f103_over_rom_protocol ... ok
+test uart::tests::read_protection_is_reported_not_bypassed ... ok
+test uart::tests::stm32flash_arguments_carry_exact_length ... ok
+test exchange::tests::copy_excludes_machine_state_and_rejects_links ... ok
+test util::tests::civil_dates ... ok
+test process::tests::collects_both_streams_and_exit_code ... ok
+test diag::tests::enabled_module_falls_back_to_generic_rule ... ok
+test diag::tests::cmake_error_block ... ok
+test diag::tests::linker_errors ... ok
+test flash::tests::backups_seal_list_and_verify ... ok
+test diag::tests::compiler_lines_with_notes_and_flags ... ok
+test uart::tests::already_synced_rom_answers_nack_and_counts_as_present ... ok
+test process::tests::cancel_flag_stops_the_run ... ok
+test process::tests::timeout_ends_the_process_group ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.64s
+
+     Running unittests src/main.rs (desktop/native/target/debug/deps/nodu_embedded-d3f9de98247f4525)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nodu_embedded
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Checking nodu-embedded v0.2.1 (/Users/wangwei/Model/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s

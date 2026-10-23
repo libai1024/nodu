@@ -1,0 +1,169 @@
+{
+  "components": [
+    {
+      "id": "mcu",
+      "type": "stm32f103",
+      "position": [
+        -2.5,
+        0,
+        0
+      ],
+      "rotation": 0,
+      "properties": {}
+    },
+    {
+      "id": "dht",
+      "type": "dht11",
+      "position": [
+        1.8,
+        0,
+        -1.8
+      ],
+      "rotation": 0,
+      "properties": {
+        "temperature": 24,
+        "humidity": 55
+      }
+    },
+    {
+      "id": "oled",
+      "type": "ssd1306",
+      "position": [
+        2,
+        0,
+        1.5
+      ],
+      "rotation": 180,
+      "properties": {
+        "address": 60
+      }
+    },
+    {
+      "id": "uart",
+      "type": "uart",
+      "position": [
+        -1.8,
+        0,
+        -3
+      ],
+      "rotation": 0,
+      "properties": {
+        "baud": 115200
+      }
+    },
+    {
+      "id": "key_page",
+      "type": "button",
+      "position": [
+        -0.3,
+        0,
+        3
+      ],
+      "rotation": 0,
+      "properties": {
+        "pressed": false
+      }
+    },
+    {
+      "id": "led_alarm",
+      "type": "led",
+      "position": [
+        3.3,
+        0,
+        -1
+      ],
+      "rotation": 0,
+      "properties": {}
+    },
+    {
+      "id": "r_alarm",
+      "type": "resistor",
+      "position": [
+        3.4,
+        0,
+        -2.6
+      ],
+      "rotation": 0,
+      "properties": {
+        "resistance_ohms": 330
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "wire-001",
+      "from": "mcu.3V3",
+      "to": "dht.VCC"
+    },
+    {
+      "id": "wire-002",
+      "from": "mcu.GND",
+      "to": "dht.GND"
+    },
+    {
+      "id": "wire-003",
+      "from": "mcu.PB1",
+      "to": "dht.DATA"
+    },
+    {
+      "id": "wire-004",
+      "from": "mcu.3V3",
+      "to": "oled.VCC"
+    },
+    {
+      "id": "wire-005",
+      "from": "mcu.GND",
+      "to": "oled.GND"
+    },
+    {
+      "id": "wire-006",
+      "from": "mcu.PB6",
+      "to": "oled.SCL"
+    },
+    {
+      "id": "wire-007",
+      "from": "mcu.PB7",
+      "to": "oled.SDA"
+    },
+    {
+      "id": "wire-008",
+      "from": "mcu.PA9",
+      "to": "uart.RX"
+    },
+    {
+      "id": "wire-009",
+      "from": "mcu.PA10",
+      "to": "uart.TX"
+    },
+    {
+      "id": "wire-010",
+      "from": "mcu.GND",
+      "to": "uart.GND"
+    },
+    {
+      "id": "wire-011",
+      "from": "mcu.PB0",
+      "to": "key_page.A"
+    },
+    {
+      "id": "wire-012",
+      "from": "mcu.GND",
+      "to": "key_page.B"
+    },
+    {
+      "id": "wire-013",
+      "from": "mcu.PB15",
+      "to": "r_alarm.A"
+    },
+    {
+      "id": "wire-014",
+      "from": "r_alarm.B",
+      "to": "led_alarm.A"
+    },
+    {
+      "id": "wire-015",
+      "from": "led_alarm.K",
+      "to": "mcu.GND"
+    }
+  ]
+}

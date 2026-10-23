@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/libai1024/dacir-templates",
+  "visibility": "public",
+  "tag": "v0.1.0",
+  "commit": "3ccb83d143175c5085b87c6bb553b3fd669cea83",
+  "packVersion": "snapshot-1e24a8feb72827e2",
+  "packSha256": "1e24a8feb72827e2414245aa6b98eee006ccd401c5f6340cd236a1f685cfe9bf",
+  "trackedFiles": 265,
+  "anonymousHttpsClone": true,
+  "knownPreviousOwnerPatternsFound": false,
+  "manifestCheck": "passed",
+  "firmwareBuilds": "3 passed",
+  "copyrightAndLicenseNotices": "retained"
+}

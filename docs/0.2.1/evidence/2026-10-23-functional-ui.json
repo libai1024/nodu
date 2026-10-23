@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-23",
+  "workspace": "functional-review",
+  "viewportWidths": [
+    634,
+    837
+  ],
+  "checks": [
+    {
+      "check": "项目菜单模块/设置/工具包入口",
+      "result": "passed"
+    },
+    {
+      "check": "Enter 创建 sensor.c 和 sensor.h 并打开源文件",
+      "result": "passed"
+    },
+    {
+      "check": "printf 浮点保存并真实编译通过",
+      "result": "passed"
+    },
+    {
+      "check": "自动下载默认关闭，未确认接线不能保存",
+      "result": "passed"
+    },
+    {
+      "check": "工程设置 Tab 循环、Esc 关闭、焦点回项目菜单",
+      "result": "passed"
+    },
+    {
+      "check": "工具包组件表、许可正文、完整检查通过",
+      "result": "passed"
+    },
+    {
+      "check": "真实错误编译后编辑未保存源码显示已过期",
+      "result": "passed"
+    },
+    {
+      "check": "修正源码再编译清除旧诊断与过期标记",
+      "result": "passed"
+    },
+    {
+      "check": "设备面板无中点拼接且首次备份不称出厂程序",
+      "result": "passed"
+    },
+    {
+      "check": "时间戳与暂停按钮键盘可用，HEX 时禁用文本时间戳",
+      "result": "passed"
+    },
+    {
+      "check": "保存串口日志界面实际生成 0 字节文件",
+      "result": "passed"
+    },
+    {
+      "check": "帮助 Enter 打开、Esc 关闭、焦点恢复信息图标、方式未变",
+      "result": "passed"
+    }
+  ],
+  "hardwareTouched": false,
+  "serialLogUiTest": "empty snapshot; non-empty/HEX/partial data covered by unit tests",
+  "lastOriginalProjectRun": "r-20261022-150657-0f4cba.json",
+  "pending": [
+    "DTR/RTS 实物电路",
+    "非 ST 实物芯片",
+    "新增串口工具的实机持续输出回归",
+    "更窄窗口和屏幕阅读器"
+  ]
+}

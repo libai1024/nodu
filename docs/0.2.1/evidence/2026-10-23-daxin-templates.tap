@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: templates are F103C8-only; existing default stays first
+ok 1 - templates are F103C8-only; existing default stays first
+  ---
+  duration_ms: 0.620333
+  type: 'test'
+  ...
+# Subtest: all templates preserve upstream source/circuit bytes and lock independent copies
+ok 2 - all templates preserve upstream source/circuit bytes and lock independent copies
+  ---
+  duration_ms: 562.876959
+  type: 'test'
+  ...
+# Subtest: corrupt or symlinked template pack fails before creating a project
+ok 3 - corrupt or symlinked template pack fails before creating a project
+  ---
+  duration_ms: 151.02875
+  type: 'test'
+  ...
+# Subtest: concurrent creation has one winner without deleting its files
+ok 4 - concurrent creation has one winner without deleting its files
+  ---
+  duration_ms: 82.353167
+  type: 'test'
+  ...
+# Subtest: release sync detects changes and never alters existing projects
+ok 5 - release sync detects changes and never alters existing projects
+  ---
+  duration_ms: 468.917541
+  type: 'test'
+  ...
+# Subtest: upstream version upgrade changes new projects only; invalid upstream leaves the pack intact
+ok 6 - upstream version upgrade changes new projects only; invalid upstream leaves the pack intact
+  ---
+  duration_ms: 566.899
+  type: 'test'
+  ...
+# Subtest: chip projects create portable K210 and every ESP32 target without a board
+ok 7 - chip projects create portable K210 and every ESP32 target without a board
+  ---
+  duration_ms: 46.583792
+  type: 'test'
+  ...
+# Subtest: reject traversal, reserved names, unknown chips and templates before writing
+ok 8 - reject traversal, reserved names, unknown chips and templates before writing
+  ---
+  duration_ms: 0.309709
+  type: 'test'
+  ...
+# Subtest: same-name concurrent creates have one winner
+ok 9 - same-name concurrent creates have one winner
+  ---
+  duration_ms: 1.992334
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1876.1605

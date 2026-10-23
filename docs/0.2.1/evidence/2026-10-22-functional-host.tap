@@ -1,0 +1,21 @@
+▶ STM32 real-toolchain workflows
+  ✔ unknown LED is hidden and RPC cannot bypass verification (52.847792ms)
+  ✔ f103: build/export/standalone build yields identical BIN (1235.351916ms)
+  ✔ f407: build/export/standalone build yields identical BIN (1380.44625ms)
+  ✔ C module pair is atomic, path-safe, and included in the real build (235.009791ms)
+  ✔ project settings persist atomically and printf float links in the real toolchain (652.836042ms)
+  ✔ compatible chip and automatic boot require explicit confirmation before hardware access (42.173042ms)
+  ✔ toolkit inventory, licenses, byte totals and active full check (8911.606917ms)
+  ✔ accepting toolkit version preserves template metadata (23.426125ms)
+  ✔ CubeMX import preserves CMake; configure requires trust (1192.970334ms)
+  ✔ source changed during build invalidates artifact (1498.378708ms)
+  ✔ cancel real Ninja child process and release build lock (561.267709ms)
+✔ STM32 real-toolchain workflows (15863.671334ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15903.812542

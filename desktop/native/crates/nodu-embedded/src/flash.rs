@@ -5,7 +5,7 @@
 
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::AtomicBool;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Instant;
 
 use regex::Regex;
@@ -127,7 +127,7 @@ impl Backups {
             "schema": 1, "createdAt": iso_now(), "deviceId": identity["deviceId"], "deviceName": device_name(identity["deviceId"].as_u64().unwrap_or(0)),
             "uid": identity["uid"], "flashKiB": identity["flashKiB"], "bytes": size,
             "sha256": sha256_file(&file).map_err(|e| Failure::io("读取备份", &e))?,
-            "method": method, "factory": factory, "nodu": env!("CARGO_PKG_VERSION"),
+            "method": method, "firstBackup": factory, "factory": false, "nodu": env!("CARGO_PKG_VERSION"),
         });
         write_json(&dir.join("backup.json"), &record)?;
         let mut record = record;
@@ -205,7 +205,8 @@ pub fn run(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str) -> O
     record["ms"] = json!(started.elapsed().as_millis() as u64);
     match &result {
         Ok(value) => {
-            record["result"] = json!(if value["running"] == json!(false) { "notRunning" } else { "running" });
+            record["result"] = json!(if value["needsBootRestore"] == json!(true) { "awaitingBootRestore" }
+                else if value["running"] == json!(false) { "notRunning" } else if value["autoBoot"] == json!(true) { "runRequested" } else { "running" });
             record["readbackSha256"] = value["readbackSha256"].clone();
         }
         Err(failure) => {
@@ -266,6 +267,9 @@ fn run_stlink(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, r
 }
 
 fn run_uart(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, readback: &Path, record: &mut Value) -> Outcome<Value> {
+    if let Some(profile) = crate::auto_boot::AutoBoot::parse(&ctx.project.manifest["flash"]["autoBoot"], ctx.project.chip.id())? {
+        return run_uart_auto(ctx, target, image, run_id, readback, record, profile);
+    }
     let chip = &ctx.project.chip;
     let port = target.port;
     if port.is_empty() {
@@ -284,6 +288,7 @@ fn run_uart(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, rea
     check_restore(image, &identity)?;
     step(ctx.out, run_id, "identify", "done");
     let base = chip.flash_base();
+    if ctx.cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
 
     let mut backup = Value::Null;
     if image.restore_uid.is_none() && !ctx.backups.has(&identity) {
@@ -294,7 +299,7 @@ fn run_uart(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, rea
             let dir = ctx.backups.new_slot(&identity)?;
             let bytes = identity["flashKiB"].as_u64().unwrap_or(0) * 1024;
             let args = uart::read_args(target.baud, &dir.join("flash.bin"), base, bytes, port);
-            if let Err(failure) = uart::stm32flash(ctx.toolkit, &args, ctx.out, run_id, "backup") {
+            if let Err(failure) = uart::stm32flash(ctx.toolkit, &args, ctx.out, run_id, "backup", ctx.cancel) {
                 let _ = fs::remove_dir_all(&dir);
                 return Err(failure);
             }
@@ -305,10 +310,12 @@ fn run_uart(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, rea
     if crate::util::sha256_file(&image.file).ok().as_deref() != Some(image.sha256.as_str()) {
         return Err(Failure::new("tampered", "要写入的文件在下载前被修改，已停止。重新编译。"));
     }
+    if ctx.cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
     step(ctx.out, run_id, "program", "running");
-    uart::stm32flash(ctx.toolkit, &uart::write_args(target.baud, &image.file, base, image.bytes, port), ctx.out, run_id, "program")?;
+    uart::stm32flash(ctx.toolkit, &uart::write_args(target.baud, &image.file, base, image.bytes, port), ctx.out, run_id, "program", ctx.cancel)?;
+    step(ctx.out, run_id, "program", "done");
     step(ctx.out, run_id, "verify", "running");
-    uart::stm32flash(ctx.toolkit, &uart::read_args(target.baud, readback, base, image.bytes, port), ctx.out, run_id, "verify")?;
+    uart::stm32flash(ctx.toolkit, &uart::read_args(target.baud, readback, base, image.bytes, port), ctx.out, run_id, "verify", ctx.cancel)?;
     let digest = compare_readback(readback, image)?;
     step(ctx.out, run_id, "verify", "done");
     ctx.out.event("flash.awaitUser", json!({"runId": run_id, "kind": "exitBoot", "port": port,
@@ -320,6 +327,82 @@ fn run_uart(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, rea
     }))
 }
 
+/// Keep one serial handle from reset through readback: reopening an external tool could change DTR/RTS.
+fn run_uart_auto(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, readback: &Path, record: &mut Value, profile: crate::auto_boot::AutoBoot) -> Outcome<Value> {
+    if ctx.cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
+    if image.bytes == 0 || image.bytes > 65536 { return Err(Failure::new("tooLarge", "自动 ISP 仅支持 64 KiB 以内的 F103C8 固件。")); }
+    let mut link = uart::open_rom(target.port, target.baud)?;
+    run_uart_auto_link(ctx, target, image, run_id, readback, record, profile, &mut link)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn run_uart_auto_link(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, readback: &Path, record: &mut Value, profile: crate::auto_boot::AutoBoot, mut link: &mut dyn crate::auto_boot::BootPort) -> Outcome<Value> {
+    let mut programming = false;
+    let result = (|| {
+        step(ctx.out, run_id, "identify", "running");
+        crate::auto_boot::pulse(link, profile, true)?;
+        uart::wait_on_link(&mut link, ctx.cancel)?;
+        ctx.out.event("flash.detected", json!({"runId": run_id}));
+        let chip = &ctx.project.chip;
+        let identity = uart::identify(&mut link, chip.reg("flashSize"), chip.reg("uid"))?;
+        record["target"] = identity.clone(); check_identity(chip, &identity, image.bytes)?; check_restore(image, &identity)?;
+        if identity["flashKiB"].as_u64() != Some(64) { return Err(Failure::new("wrongChip", "自动 ISP 需要 64 KiB 的 STM32F103C8T6。")); }
+        let supported = uart::commands(&mut link)?;
+        if ![0x11, 0x31].iter().all(|cmd| supported.contains(cmd)) || !supported.iter().any(|cmd| *cmd == 0x43 || *cmd == 0x44) {
+            return Err(Failure::new("romProtocol", "Bootloader 缺少读取、写入或擦除命令。"));
+        }
+        step(ctx.out, run_id, "identify", "done");
+        let read = |link: &mut dyn uart::ReadWrite, length: usize, stage: &str, cancellable: bool| -> Outcome<Vec<u8>> {
+            let mut bytes = Vec::with_capacity(length);
+            while bytes.len() < length {
+                if cancellable && ctx.cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
+                bytes.extend(uart::read_memory(link, chip.flash_base() as u32 + bytes.len() as u32, (length - bytes.len()).min(256))?);
+                ctx.out.event("flash.progress", json!({"runId":run_id,"step":stage,"percent":100.0 * bytes.len() as f64 / length as f64}));
+            }
+            Ok(bytes)
+        };
+        let mut backup = Value::Null;
+        if image.restore_uid.is_none() && !ctx.backups.has(&identity) {
+            if target.skip_backup { record["backupSkipped"] = json!(true); }
+            else {
+                step(ctx.out, run_id, "backup", "running");
+                let bytes = read(&mut link, 65536, "backup", true)?;
+                let dir = ctx.backups.new_slot(&identity)?;
+                if let Err(e) = fs::write(dir.join("flash.bin"), bytes) { let _ = fs::remove_dir_all(&dir); return Err(Failure::io("保存首次备份", &e)); }
+                backup = ctx.backups.seal(&dir, &identity, "uart", true)?;
+                step(ctx.out, run_id, "backup", "done");
+            }
+        }
+        let bytes = fs::read(&image.file).map_err(|e| Failure::io("读取固件", &e))?;
+        if bytes.len() as u64 != image.bytes || crate::util::sha256_hex(&bytes) != image.sha256 {
+            return Err(Failure::new("tampered", "固件在下载前被修改，已停止。"));
+        }
+        if ctx.cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
+        // Once erasure begins, complete writing and readback without cancellation.
+        step(ctx.out, run_id, "program", "running");
+        programming = true;
+        uart::erase_f103(&mut link, &supported, bytes.len())?;
+        for (index, chunk) in bytes.chunks(256).enumerate() {
+            uart::write_memory(&mut link, chip.flash_base() as u32 + (index * 256) as u32, chunk)?;
+            ctx.out.event("flash.progress", json!({"runId":run_id,"step":"program","percent":100.0 * ((index * 256 + chunk.len()) as f64) / bytes.len() as f64}));
+        }
+        step(ctx.out, run_id, "program", "done"); step(ctx.out, run_id, "verify", "running");
+        fs::write(readback, read(&mut link, bytes.len(), "verify", false)?).map_err(|e| Failure::io("保存读回文件", &e))?;
+        let digest = compare_readback(readback, image)?;
+        step(ctx.out, run_id, "verify", "done"); step(ctx.out, run_id, "run", "running");
+        crate::auto_boot::pulse(link, profile, false)?;
+        step(ctx.out, run_id, "run", "done");
+        Ok(json!({"ok":true,"method":"uart","identity":identity,"backup":backup,"erase":chip.erase_plan(image.bytes),
+            "bytes":image.bytes,"readbackSha256":digest,"running":Value::Null,"needsBootRestore":false,"autoBoot":true}))
+    })();
+    // Do not reset into a partially written image on failure. Only release the reset line.
+    if result.is_err() { let _ = link.rts(profile.idle_rts()); }
+    result.map_err(|mut error: Failure| {
+        if programming { error.message = format!("{} 程序可能不完整，未请求运行；修复连接后重新下载。", error.message); }
+        error
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -329,6 +412,58 @@ mod tests {
         Catalog::new(&Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../scope-extension/resources/stm32"))
             .chip("STM32F407ZGTx")
             .unwrap()
+    }
+
+    struct AutoPort { reads: std::io::Cursor<Vec<u8>>, writes: Vec<u8>, pins: Vec<String> }
+    impl std::io::Read for AutoPort { fn read(&mut self, b: &mut [u8]) -> std::io::Result<usize> { std::io::Read::read(&mut self.reads, b) } }
+    impl std::io::Write for AutoPort {
+        fn write(&mut self, b: &[u8]) -> std::io::Result<usize> { self.writes.extend(b); Ok(b.len()) }
+        fn flush(&mut self) -> std::io::Result<()> { Ok(()) }
+    }
+    impl crate::auto_boot::Signals for AutoPort {
+        fn dtr(&mut self, b: bool) -> Outcome<()> { self.pins.push(format!("dtr:{b}")); Ok(()) }
+        fn rts(&mut self, b: bool) -> Outcome<()> { self.pins.push(format!("rts:{b}")); Ok(()) }
+        fn delay(&mut self, _: u64) {}
+    }
+    #[test]
+    fn automatic_isp_backs_up_programs_verifies_and_only_then_resets() {
+        let catalog = Catalog::new(&Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../scope-extension/resources/stm32"));
+        for corrupt in [false, true] {
+            let dir = tempfile::tempdir().unwrap();
+            let project = Project { root: dir.path().to_path_buf(), manifest: json!({}), chip: catalog.chip("STM32F103C8Tx").unwrap(), board: catalog.board("chip-f103c8").unwrap() };
+            let toolkit = Toolkit { root: dir.path().to_path_buf(), manifest: json!({}) };
+            let backups = Backups::new(dir.path()); let out = Output::new(Box::new(Vec::<u8>::new())); let cancel = AtomicBool::new(false);
+            let ctx = Ctx { project: &project, toolkit: &toolkit, backups: &backups, out: &out, cancel: &cancel };
+            let target = Target { method: "uart", port: "simulated", probe: "", baud: 115200, skip_backup: false };
+            let bytes = vec![1, 2, 3, 4, 5, 6, 7, 8]; let file = dir.path().join("firmware.bin"); fs::write(&file, &bytes).unwrap();
+            let image = Image { file, bytes: 8, sha256: crate::util::sha256_hex(&bytes), bundle: None, tick: None, restore_uid: None };
+            let profile = crate::auto_boot::AutoBoot { enabled: true, confirmed: true, boot0_high_dtr: false, reset_active_rts: true };
+            let a = uart::ACK;
+            let mut replies = vec![a, a, 1, 4, 0x10, a]; // SYNC and GET_ID
+            replies.extend([a,a,a,64,0]); // Flash size
+            replies.extend([a,a,a]); replies.extend([0x12;12]); // UID
+            replies.extend([a,4,0x22,0x00,0x11,0x31,0x43,a]); // GET
+            for _ in 0..256 { replies.extend([a,a,a]); replies.extend([0x55;256]); } // Full first backup
+            replies.extend([a,a]); // Erase one page
+            replies.extend([a,a,a]); // Write
+            replies.extend([a,a,a]); replies.extend(if corrupt { vec![0;8] } else { bytes.clone() }); // Readback
+            let mut port = AutoPort { reads: std::io::Cursor::new(replies), writes: vec![], pins: vec![] };
+            let result = run_uart_auto_link(&ctx, &target, &image, "simulated", &dir.path().join("readback.bin"), &mut json!({}), profile, &mut port);
+            assert_eq!(port.reads.position() as usize, port.reads.get_ref().len());
+            let records = backups.list(None); assert_eq!(records.len(), 1);
+            assert_eq!(records[0]["firstBackup"], true); assert_eq!(records[0]["factory"], false);
+            assert_eq!(records[0]["bytes"], 65536);
+            assert_eq!(records[0]["sha256"], crate::util::sha256_hex(&vec![0x55;65536]));
+            assert!(port.writes.windows(4).any(|b| b == [0x43, 0xbc, 0, 0]));
+            if corrupt {
+                assert_eq!(result.unwrap_err().code, "verifyFailed");
+                assert_eq!(port.pins, ["rts:true","dtr:false","rts:false","rts:false"]); // No run pulse
+            } else {
+                let result = result.unwrap(); assert_eq!(result["needsBootRestore"], false); assert_eq!(result["autoBoot"], true);
+                assert_eq!(result["readbackSha256"], image.sha256);
+                assert_eq!(port.pins, ["rts:true","dtr:false","rts:false","rts:true","dtr:true","rts:false"]);
+            }
+        }
     }
 
     #[test]

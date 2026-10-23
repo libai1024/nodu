@@ -22,7 +22,8 @@
     "@theia/output": "1.76.0",
     "@theia/terminal": "1.76.0",
     "@theia/workspace": "1.76.0",
-    "color-convert": "2.0.1"
+    "color-convert": "2.0.1",
+    "iconv-lite": "0.6.3"
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json"

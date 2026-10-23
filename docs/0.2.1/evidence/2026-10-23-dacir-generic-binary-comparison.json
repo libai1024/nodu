@@ -1,0 +1,92 @@
+[
+  {
+    "template": "temperature-humidity",
+    "newLibrary": "drivers/embedded",
+    "validation": {
+      "flash_address": "0x08000000",
+      "flash_bytes_used": 20296,
+      "ram_bytes_reserved": 3920,
+      "initial_sp": "0x20005000",
+      "reset_handler": "0x08000e61",
+      "elf_entry": "0x08000e61",
+      "elf_bin_hex_consistent": true
+    },
+    "artifacts": {
+      "firmware.bin": {
+        "generic": "d54e9219d0f7355b9eec67922f77fdf51dca8afae6b4e45ec29f7b183a4f9e79",
+        "legacy": "5fee2c17e2b34a9ac9f20bac7fe2091f728140741b014f7cb37a54a90b3c52cf",
+        "identical": false
+      },
+      "firmware.hex": {
+        "generic": "257955d4868a55c5b643415e5d0b050e3b28de70d4588b50c4ddedb68f9c990e",
+        "legacy": "271e935edf052f8977e5d24eb3d91c5d9289d0debb063462034e8a160e11be1f",
+        "identical": false
+      },
+      "firmware.elf": {
+        "generic": "def4268af9d843cc2295aa25bb20b1df7d78abc78337e1644d8988eb535fcb9a",
+        "legacy": "7cf5ac17093db6b99b1dd9170bfda78d3e4e8a379cfe457f63093057b88d2e0e",
+        "identical": false
+      }
+    }
+  },
+  {
+    "template": "warehouse",
+    "newLibrary": "drivers/embedded",
+    "validation": {
+      "flash_address": "0x08000000",
+      "flash_bytes_used": 21588,
+      "ram_bytes_reserved": 4528,
+      "initial_sp": "0x20005000",
+      "reset_handler": "0x08001291",
+      "elf_entry": "0x08001291",
+      "elf_bin_hex_consistent": true
+    },
+    "artifacts": {
+      "firmware.bin": {
+        "generic": "1c032e1312f92b9884fc2a53c65c22633b7737315781ce63d49772caf6fabe23",
+        "legacy": "887675b1fb4a1516375995464ce3a3cf19a545409b7d203c77138b7d1580fd79",
+        "identical": false
+      },
+      "firmware.hex": {
+        "generic": "d55681f94c37ed712b28b6c69fd3506ea0c6f944d51b4ff2a455a7b9795b3209",
+        "legacy": "9b99bd545914bd11341a0524a3febc8494b871d084157819f8fac3d45daf0852",
+        "identical": false
+      },
+      "firmware.elf": {
+        "generic": "9d6a5e7950de7a08665b28906663ae0400266dc30eaf5054e0da2c13c141f60a",
+        "legacy": "7886f3a5966101b9c04727da51db4bf408a4822647672b8db85bf08894047f5b",
+        "identical": false
+      }
+    }
+  },
+  {
+    "template": "esp8266",
+    "newLibrary": "drivers/embedded",
+    "validation": {
+      "flash_address": "0x08000000",
+      "flash_bytes_used": 11364,
+      "ram_bytes_reserved": 6168,
+      "initial_sp": "0x20005000",
+      "reset_handler": "0x08001ded",
+      "elf_entry": "0x08001ded",
+      "elf_bin_hex_consistent": true
+    },
+    "artifacts": {
+      "firmware.bin": {
+        "generic": "b2b4becf5a6c411533af466b1ed409c6f15b985c867a0c8d7583bf9ddb41a2fa",
+        "legacy": "75e802c3591687196975d28b939bcdc18cc60024a90b813d39592cfbfe822b15",
+        "identical": false
+      },
+      "firmware.hex": {
+        "generic": "13f635f0593147315bacd331ecdc93546e68b0a3f7b9b47d23a7169ab4ad658d",
+        "legacy": "8103eeeababd1765a9a181c159f5cb517bef235461ce46eb22e413abc5e11e37",
+        "identical": false
+      },
+      "firmware.elf": {
+        "generic": "4936f0aa8389b5246a49c221d2d70b57eb0fff86222dd3fa0b2ee0befb7152c3",
+        "legacy": "84b3ddf5892d0d3d9d22ad259bf1d161cf36b507091ef4099f72c84c4a55e276",
+        "identical": false
+      }
+    }
+  }
+]

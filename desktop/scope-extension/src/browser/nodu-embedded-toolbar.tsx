@@ -58,13 +58,13 @@ function BootGuide({ model, exec }: Pick<CToolbarProps, 'model' | 'exec'>): Reac
             <li>把 <strong>BOOT0</strong> 跳线接到 <strong>1</strong>（BOOT1 保持 0）。</li>
             <li>按一下开发板上的<strong>复位键</strong>。</li>
         </ol> : <ol>
-            <li>程序已写入并校验一致。</li>
-            <li>把 <strong>BOOT0</strong> 接回 <strong>0</strong>，再按一下<strong>复位键</strong>，程序开始运行。</li>
+            <li>把 <strong>BOOT0</strong> 接回 <strong>0</strong>。</li>
+            <li>按一下<strong>复位键</strong>。</li>
         </ol>}
-        {enter && <p className={model.romDetected ? 'nodu-c-ok-text' : 'nodu-c-muted'}>{model.romDetected ? '已检测到芯片，正在写入…' : '正在等待芯片应答（最多 60 秒）…'}</p>}
+        {enter && <p className="nodu-c-muted">等待芯片应答</p>}
         <div className="nodu-c-guide-actions">
             {enter ? <button className="theia-button secondary" onClick={() => exec(C_COMMANDS.stop)}>停止</button>
-                : <button className="theia-button main" onClick={() => exec(C_COMMANDS.finishBoot)}>完成，打开串口监视器</button>}
+                : <button className="theia-button main" onClick={() => exec(C_COMMANDS.finishBoot)}>已复位</button>}
         </div>
     </div>;
 }
@@ -79,7 +79,7 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
     const port = model.monitorPort.replace(/^\/dev\/(cu\.|tty\.)?/, '');
     let chip: 'disconnected' | 'connecting' | 'connected' | 'error' | 'writing' = 'disconnected';
     let chipText = method === 'stlink' ? (probe ? 'ST-LINK' : '未检测到下载器') : (port || '未选择串口');
-    if (model.flashing && (model.flashSteps.program === 'running' || model.flashSteps.verify === 'running')) { chip = 'writing'; chipText = '写入中 · 勿断电'; }
+    if (model.flashing && (model.flashSteps.program === 'running' || model.flashSteps.verify === 'running')) { chip = 'writing'; chipText = '写入中，请勿断电'; }
     else if (model.busy) { chip = 'connecting'; chipText = model.building ? chipText : '检测中'; }
     else if (model.lastError && !model.flashing && ['wrongChip', 'noProbe', 'noPower', 'noTarget', 'romTimeout', 'portBusy', 'portOpen'].includes(model.lastError.code)) { chip = 'error'; }
     else if (model.identity && model.identity.matches) { chip = 'error'; chipText = '芯片不一致'; }
@@ -94,35 +94,35 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
     return <header className="scope-workspace-bar nodu-c-toolbar" aria-label="Nodu 工具栏">
         <div className="scope-toolbar-start">
             <NoduBrand />
-            <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单 · ${props.project}`} aria-haspopup="menu" title="新建、打开与最近的项目" onClick={event => props.openMenu(props.projectMenu, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span className="nodu-toolbar-project-name">{props.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
-            <button className="scope-action nodu-c-build" disabled={model.flashing} aria-busy={model.building || undefined} onClick={() => exec(C_COMMANDS.build)} title="编译，不需要接开发板 · Ctrl / ⌘ B">
+            <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单，${props.project}`} aria-haspopup="menu" title="新建、打开与最近的项目" onClick={event => props.openMenu(props.projectMenu, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span className="nodu-toolbar-project-name">{props.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+            <button className="scope-action nodu-c-build" disabled={model.flashing} aria-busy={model.building || undefined} onClick={() => exec(C_COMMANDS.build)} title="编译（Ctrl / ⌘ B）">
                 <i className={`codicon ${model.building ? 'codicon-loading codicon-modifier-spin' : 'codicon-tools'}`} aria-hidden="true"/>{model.building ? '编译中' : '编译'}
             </button>
             <div className="nodu-run-split" role="group" aria-label="运行">
-                <button className={`scope-action scope-action-primary scope-toolbar-run${running ? ' nodu-is-running' : ''}`} disabled={model.busy} aria-busy={running || undefined} onClick={() => exec(C_COMMANDS.run)} title={`编译并下载到开发板（${method === 'stlink' ? 'ST-LINK' : '串口'}） · Ctrl / ⌘ R`}>
+                <button className={`scope-action scope-action-primary scope-toolbar-run${running ? ' nodu-is-running' : ''}`} disabled={model.busy} aria-busy={running || undefined} onClick={() => exec(C_COMMANDS.run)} title="编译并下载（Ctrl / ⌘ R）">
                     <i className={`codicon ${running ? 'codicon-loading codicon-modifier-spin' : 'codicon-play'}`} aria-hidden="true"/>{running ? '下载中' : '运行'}
                 </button>
                 <button className="scope-action scope-action-primary nodu-run-more" aria-label="更多运行方式" aria-haspopup="menu" title="下载方式、复位开发板、重新编译" onClick={event => props.openMenu(NODU_C_RUN_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
             </div>
             <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${model.busy || model.awaitUser ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!model.busy && !model.awaitUser} onClick={() => exec(C_COMMANDS.stop)} title={model.flashSteps.program === 'running' ? '写入完成后停止' : '停止'}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
             <div className="scope-device-picker">
-                <button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与下载器 · ${shortBoard} · ${chipText}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={props.deviceOpen} aria-pressed={props.deviceOpen} onClick={toggleDevice} title={model.lastError?.message || `${project.board.name} · ${project.chip.name}`}>
+                <button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与下载器，${shortBoard}，${chipText}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={props.deviceOpen} aria-pressed={props.deviceOpen} onClick={toggleDevice} title={model.lastError?.message || project.chip.name}>
                     <span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{shortBoard}</span><span className="scope-device-chip-port">{chipText}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
                 </button>
                 <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="开发板与下载" hidden={!props.deviceOpen}>
-                    <NoduCDevicePanel model={model} simple={simple} confirm={props.confirm} showOutput={() => { props.setDeviceOpen(false); exec(C_COMMANDS.showOutput); }} />
+                    <NoduCDevicePanel exec={id => { props.setDeviceOpen(false); exec(id); }} model={model} simple={simple} confirm={props.confirm} showOutput={() => { props.setDeviceOpen(false); exec(C_COMMANDS.showOutput); }} />
                 </div>
             </div>
         </div>
         <div className="scope-toolbar-center"><TaskStrip model={model} exec={exec} setDeviceOpen={props.setDeviceOpen} /></div>
         <div className="scope-toolbar-end">
             <button className="scope-action scope-toolbar-icon scope-toolbar-files" aria-label="文件列表" aria-pressed={props.filesVisible} onClick={() => exec('scope.toggle-files')} title={props.filesVisible ? '隐藏文件列表' : '显示文件列表'}><i className={`codicon codicon-layout-sidebar-left${props.filesVisible ? '' : '-off'}`} aria-hidden="true"/></button>
-            <button className={`scope-action scope-toolbar-icon nodu-c-panel-toggle${errors ? ' nodu-has-error' : ''}`} aria-label={`问题与串口监视器${errors ? ` · ${errors} 个错误` : ''}`} aria-pressed={props.panelVisible} onClick={() => exec(C_COMMANDS.togglePanel)} title={props.panelVisible ? '隐藏问题与串口监视器' : '显示问题与串口监视器'}>
+            <button className={`scope-action scope-toolbar-icon nodu-c-panel-toggle${errors ? ' nodu-has-error' : ''}`} aria-label={`问题与串口监视器${errors ? `，${errors} 个错误` : ''}`} aria-pressed={props.panelVisible} onClick={() => exec(C_COMMANDS.togglePanel)} title={props.panelVisible ? '隐藏问题与串口监视器' : '显示问题与串口监视器'}>
                 <i className={`codicon codicon-layout-panel${props.panelVisible ? '' : '-off'}`} aria-hidden="true"/>{errors ? <span className="nodu-c-badge" aria-hidden="true">{errors > 99 ? '99+' : errors}</span> : null}
             </button>
             {props.tutorButton}
             <span className="scope-toolbar-divider" aria-hidden="true"/>
-            <button className="scope-action scope-toolbar-icon nodu-toolbar-more" aria-label={`更多 · 当前${simple ? '简洁' : '专业'}模式`} aria-haspopup="menu" title="主题、布局模式与设置" onClick={event => props.openMenu(props.moreMenu, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
+            <button className="scope-action scope-toolbar-icon nodu-toolbar-more" aria-label={`更多，当前${simple ? '简洁' : '专业'}模式`} aria-haspopup="menu" title="主题、布局模式与设置" onClick={event => props.openMenu(props.moreMenu, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
         </div>
         <BootGuide model={model} exec={exec} />
     </header>;

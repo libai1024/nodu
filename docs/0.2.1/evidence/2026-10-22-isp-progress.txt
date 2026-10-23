@@ -1,0 +1,79 @@
+── 编译，23:06:57 ──
+[0/2] Re-checking globbed directories...
+ninja: no work to do.
+── 下载，10 页（10 KB），23:06:57 ──
+stm32flash 0.7
+http://stm32flash.sourceforge.net/
+Using Parser : Raw BINARY
+Location     : 0x8000000
+Size         : 10088
+Interface serial_posix: 115200 8E1
+Version      : 0x10
+Option 1     : 0x00
+Option 2     : 0x00
+Device ID    : 0x0410 (STM32F10xxx Medium-density)
+- RAM        : Up to 20KiB  (512b reserved by bootloader)
+- Flash      : Up to 128KiB (size first sector: 4x1024)
+- Option RAM : 16b
+- System RAM : 2KiB
+Write to memory
+Erasing memory
+Wrote and verified address 0x08000100 (2.54%) 
+Wrote and verified address 0x08000200 (5.08%) 
+Wrote and verified address 0x08000300 (7.61%) 
+Wrote and verified address 0x08000400 (10.15%) 
+Wrote and verified address 0x08000500 (12.69%) 
+Wrote and verified address 0x08000600 (15.23%) 
+Wrote and verified address 0x08000700 (17.76%) 
+Wrote and verified address 0x08000800 (20.30%) 
+Wrote and verified address 0x08000900 (22.84%) 
+Wrote and verified address 0x08000a00 (25.38%) 
+Wrote and verified address 0x08000b00 (27.91%) 
+Wrote and verified address 0x08000c00 (30.45%) 
+Wrote and verified address 0x08000d00 (32.99%) 
+Wrote and verified address 0x08000e00 (35.53%) 
+Wrote and verified address 0x08000f00 (38.07%) 
+Wrote and verified address 0x08001000 (40.60%) 
+Wrote and verified address 0x08001100 (43.14%) 
+Wrote and verified address 0x08001200 (45.68%) 
+Wrote and verified address 0x08001300 (48.22%) 
+Wrote and verified address 0x08001400 (50.75%) 
+Wrote and verified address 0x08001500 (53.29%) 
+Wrote and verified address 0x08001600 (55.83%) 
+Wrote and verified address 0x08001700 (58.37%) 
+Wrote and verified address 0x08001800 (60.90%) 
+Wrote and verified address 0x08001900 (63.44%) 
+Wrote and verified address 0x08001a00 (65.98%) 
+Wrote and verified address 0x08001b00 (68.52%) 
+Wrote and verified address 0x08001c00 (71.05%) 
+Wrote and verified address 0x08001d00 (73.59%) 
+Wrote and verified address 0x08001e00 (76.13%) 
+Wrote and verified address 0x08001f00 (78.67%) 
+Wrote and verified address 0x08002000 (81.21%) 
+Wrote and verified address 0x08002100 (83.74%) 
+Wrote and verified address 0x08002200 (86.28%) 
+Wrote and verified address 0x08002300 (88.82%) 
+Wrote and verified address 0x08002400 (91.36%) 
+Wrote and verified address 0x08002500 (93.89%) 
+Wrote and verified address 0x08002600 (96.43%) 
+Wrote and verified address 0x08002700 (98.97%) 
+Wrote and verified address 0x08002768 (100.00%) Done.
+stm32flash 0.7
+http://stm32flash.sourceforge.net/
+Interface serial_posix: 115200 8E1
+Version      : 0x10
+Option 1     : 0x00
+Option 2     : 0x00
+Device ID    : 0x0410 (STM32F10xxx Medium-density)
+- RAM        : Up to 20KiB  (512b reserved by bootloader)
+- Flash      : Up to 128KiB (size first sector: 4x1024)
+- Option RAM : 16b
+- System RAM : 2KiB
+Memory read
+Read address 0x08000100 (2.54%) 
+Read address 0x08000200 (5.08%) 
+Read address 0x08000300 (7.61%) 
+Read address 0x08000400 (10.15%) 
+Read address 0x08000500 (12.69%) 
+Read address 0x08000600 (15.23%) 
+Read address 0x08000700 (17.76%) 

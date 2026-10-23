@@ -156,12 +156,13 @@ test('packaged bootstrap keeps one binary prefix and sets the profile', () => {
     });
     assert.equal(captured.argv[0], '/Applications/Nodu.app/Contents/MacOS/Nodu');
     assert.equal(captured.argv[1], workspace);
-    assert.equal(captured.argv.length, 5,
-        'bin + workspace + 3 managed args only — executable must not '
+    assert.equal(captured.argv.length, 6,
+        'bin + workspace + 4 managed args only — executable must not '
         + 'appear as an extra argument');
     assert.ok(captured.argv.includes('--hostname=127.0.0.1'));
     assert.ok(captured.argv.includes('--port=0'));
-    assert.ok(captured.argv[4].startsWith('--electronUserData='));
+    assert.ok(captured.argv.some(arg => arg.startsWith('--electronUserData=')));
+    assert.ok(captured.argv.some(arg => arg.startsWith('--plugins=local-dir:')));
     assert.equal(captured.updateResources, '1');
     assert.equal(captured.userData, path.join(profile, 'electron'));
 });

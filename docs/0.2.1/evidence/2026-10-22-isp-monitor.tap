@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: hotplug suggests the sole USB port without replacing the user or active port
+ok 1 - hotplug suggests the sole USB port without replacing the user or active port
+  ---
+  duration_ms: 0.358
+  type: 'test'
+  ...
+# Subtest: hex display preserves actual wire bytes, including invalid text and line endings
+ok 2 - hex display preserves actual wire bytes, including invalid text and line endings
+  ---
+  duration_ms: 0.520875
+  type: 'test'
+  ...
+# Subtest: raw receive buffer retains only its bounded newest bytes
+ok 3 - raw receive buffer retains only its bounded newest bytes
+  ---
+  duration_ms: 0.124083
+  type: 'test'
+  ...
+# Subtest: send encoding produces exact UTF-8/GBK bytes and retains line endings
+ok 4 - send encoding produces exact UTF-8/GBK bytes and retains line endings
+  ---
+  duration_ms: 5.229708
+  type: 'test'
+  ...
+# Subtest: ROM noise is not treated as application startup output
+ok 5 - ROM noise is not treated as application startup output
+  ---
+  duration_ms: 0.433083
+  type: 'test'
+  ...
+# Subtest: UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement
+ok 6 - UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement
+  ---
+  duration_ms: 0.156417
+  type: 'test'
+  ...
+# Subtest: changing encoding flushes incomplete bytes; clear discards previous stream
+ok 7 - changing encoding flushes incomplete bytes; clear discards previous stream
+  ---
+  duration_ms: 0.083792
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49.503959

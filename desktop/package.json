@@ -12,7 +12,7 @@
     "electron-app"
   ],
   "scripts": {
-    "compile": "npm run build:imaging && npm run compile --workspace @scope/studio-extension",
+    "compile": "npm run build:plugins && npm run build:imaging && npm run compile --workspace @scope/studio-extension",
     "build:browser": "npm run build:native && npm run compile && npm run build --workspace @scope/browser-app",
     "build:electron": "npm run build:native && npm run build:media && npm run compile && npm run build --workspace @scope/electron-app",
     "start:browser": "npm run start --workspace @scope/browser-app",
@@ -29,7 +29,10 @@
     "build:models": "node scripts/build-models.cjs",
     "check:licenses": "node scripts/check-licenses.cjs",
     "check:brand": "node scripts/check-brand.cjs",
-    "package:electron": "node scripts/package-electron.cjs"
+    "package:electron": "node scripts/package-electron.cjs",
+    "build:plugins": "node scripts/build-clangd-plugin.cjs",
+    "templates:daxin:check": "node scripts/sync-daxin-templates.cjs --check",
+    "templates:daxin:sync": "node scripts/sync-daxin-templates.cjs --write"
   },
   "devDependencies": {
     "@electron/packager": "20.3.0",

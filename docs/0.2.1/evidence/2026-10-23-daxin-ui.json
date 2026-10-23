@@ -1,0 +1,15 @@
+{
+  "testedAt": "2026-10-23",
+  "url": "http://127.0.0.1:4216",
+  "checks": {
+    "templatesOnlyInExistingSelect": true,
+    "f103Only": true,
+    "f407ResetsTemplate": true,
+    "nameAndLocationPreserved": true,
+    "keyboardCreate": true,
+    "existingBuildButton": true,
+    "problemsEmpty": true
+  },
+  "hardwareOperationsPerformed": false,
+  "scope": "browser auxiliary verification; no desktop runtime or simulation acceptance"
+}

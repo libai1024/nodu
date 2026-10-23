@@ -1,0 +1,2 @@
+    Checking nodu-embedded v0.2.1 (/Users/wangwei/Model/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.55s
