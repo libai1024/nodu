@@ -15,26 +15,24 @@ function MessageText({ text }: { text: string }): React.ReactElement {
         ? <pre key={i} tabIndex={0}><code>{part.replace(/^```[^\n]*\n?/, '').replace(/```$/, '')}</code></pre>
         : <span key={i}>{part}</span>)}</>;
 }
-export function ProviderSettings({ tutor, close }: { tutor: NoduTutorModel; close(): void }): React.ReactElement {
-    const [key, setKey] = React.useState('');
-    const [model, setModel] = React.useState(tutor.provider?.model ?? 'glm-5.3');
-    const [error, setError] = React.useState('');
-    const [saving, setSaving] = React.useState(false);
-    const save = async (): Promise<void> => {
-        setSaving(true); setError('');
-        try { await tutor.configure(key, model); setKey(''); close(); }
-        catch { setError('GLM 配置未保存'); } finally { setSaving(false); }
-    };
-    return <form className="nodu-ai-settings" aria-label="AI 设置" onSubmit={e => { e.preventDefault(); void save(); }}>
-        <label>服务商<input value="GLM Coding Plan" readOnly /></label>
-        <label>模型<select value={model} onChange={e => setModel(e.target.value)}>{['glm-5.3','glm-5.3-flash','glm-4.7','glm-4.6'].map(m => <option key={m}>{m}</option>)}</select></label>
-        <label>API Key<input autoComplete="off" type="password" value={key} placeholder={tutor.provider?.configured ? '已配置' : ''} onChange={e => setKey(e.target.value)} /></label>
-        {tutor.provider?.storage === 'session' && <div role="status">系统钥匙串不可用，仅本次会话有效</div>}
-        <label className="nodu-ai-checkbox"><input type="checkbox" checked={tutor.autoReview} onChange={e => tutor.setDisplay('autoReview', e.target.checked)} />逐行 AI 检查（发送当前文件）</label>
-        {error && <div className="scope-error" role="alert">{error}</div>}
-        <div className="nodu-ai-actions"><button type="button" className="theia-button secondary" onClick={close}>取消</button><button className="theia-button" disabled={saving}>保存</button>
-            {tutor.provider?.configured && <button type="button" className="scope-text-button" onClick={() => void tutor.forgetCredential().catch(() => setError('系统凭证未删除'))}>删除密钥</button>}</div>
-    </form>;
+/** Composer model picker: enabled models from every enabled provider, plus a shortcut to settings. */
+function ModelPicker({ tutor, openSettings }: { tutor: NoduTutorModel; openSettings(anchor: HTMLElement): void }): React.ReactElement {
+    const settings = tutor.settings;
+    const current = settings?.selection ? `${settings.selection.providerId}\u0000${settings.selection.modelId}` : '';
+    const groups = (settings?.providers ?? []).filter(p => p.enabled && p.models.some(m => m.enabled));
+    const ref = React.useRef<HTMLSelectElement>(null);
+    return <label className="nodu-ai-model" title="选择模型">
+        <select ref={ref} aria-label="模型" value={current} onChange={e => {
+            if (e.target.value === '__settings') { openSettings(ref.current!); return; }
+            const [providerId, modelId] = e.target.value.split('\u0000');
+            void tutor.selectModel({ providerId, modelId }).catch(() => undefined);
+        }}>
+            {!current && <option value="">选择模型</option>}
+            {groups.map(p => <optgroup key={p.id} label={p.name}>{p.models.filter(m => m.enabled).map(m => <option key={m.id} value={`${p.id}\u0000${m.id}`}>{m.id}</option>)}</optgroup>)}
+            <option value="__settings">管理模型…</option>
+        </select>
+        <i className="codicon codicon-chevron-down" aria-hidden="true"/>
+    </label>;
 }
 function Migration({ tutor }: { tutor: NoduTutorModel }): React.ReactElement {
     const [mcu, setMcu] = React.useState(''); const [sdkId, setSdk] = React.useState(''); const [sdkDigest, setDigest] = React.useState(''); const [error, setError] = React.useState('');
@@ -118,8 +116,8 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                 onChange={e => { tutor.drafts[tutor.mode] = e.target.value; redraw(); }}
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }} />
             <div className="nodu-ai-composer-bar">
-                <button type="button" className="nodu-ai-model" title="模型与密钥" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>{tutor.provider?.model ?? 'GLM'}<i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
-                {tutor.provider && !tutor.provider.configured && <button type="button" className="nodu-ai-warn" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>配置密钥</button>}
+                <ModelPicker tutor={tutor} openSettings={anchor => run(TUTOR_COMMANDS.settings, anchor)} />
+                {tutor.settings && !tutor.configured && <button type="button" className="nodu-ai-warn" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>配置密钥</button>}
                 <label className="nodu-ai-mode-select" title="对话模式">
                     <i className={`codicon codicon-${tutor.mode === 'teach' ? 'mortar-board' : 'comment-discussion'}`} aria-hidden="true"/>
                     <select aria-label="对话模式" value={tutor.mode} onChange={e => tutor.setMode(e.target.value as typeof tutor.mode)}>

@@ -1,0 +1,220 @@
+// SPDX-License-Identifier: MIT
+import * as React from '@theia/core/shared/react';
+import {
+    API_FORMATS, TutorApiFormat, TutorInputType, TutorModelConfig, TutorProviderConfig, TutorProviderView,
+    allowsNoKey, formatTokens, modelDefaults, resolveEndpoint,
+} from '../common/tutor/tutor-ai-config';
+import type { TutorRemoteModel } from '../common/tutor/tutor-ai-protocol';
+import { NoduTutorModel } from './nodu-tutor-model';
+
+const message = (error: unknown): string => error instanceof Error ? error.message : String(error);
+const INPUT_LABELS: Record<TutorInputType, string> = { text: '文本', image: '图片', video: '视频', pdf: 'PDF' };
+
+function Switch({ checked, label, disabled, onChange }: { checked: boolean; label: string; disabled?: boolean; onChange(value: boolean): void }): React.ReactElement {
+    return <button type="button" role="switch" aria-checked={checked} aria-label={label} title={label} disabled={disabled}
+        className={`nodu-ai-switch${checked ? ' nodu-ai-switch-on' : ''}`} onClick={() => onChange(!checked)}><span/></button>;
+}
+function Help({ text }: { text: string }): React.ReactElement {
+    return <i className="codicon codicon-question nodu-ai-help" title={text} aria-label={text} tabIndex={0}/>;
+}
+/** Green: usable. Orange: needs an API key. Grey: disabled. */
+function statusOf(p: TutorProviderView): 'ok' | 'warn' | 'off' {
+    if (!p.enabled) { return 'off'; }
+    return p.hasKey || allowsNoKey(p.baseUrl) ? 'ok' : 'warn';
+}
+
+/** ZCode-style provider manager: provider list on the left, endpoint, key and models on the right. */
+export function AISettingsPanel({ tutor }: { tutor: NoduTutorModel }): React.ReactElement {
+    const settings = tutor.settings;
+    const [selected, setSelected] = React.useState<string | undefined>(settings?.selection?.providerId ?? settings?.providers[0]?.id);
+    const [error, setError] = React.useState('');
+    if (!settings) { return <div className="nodu-ai-empty-settings">正在读取 AI 设置…</div>; }
+    const provider = settings.providers.find(p => p.id === selected) ?? settings.providers[0];
+    const addProvider = async (): Promise<void> => {
+        const id = `custom-${Math.random().toString(36).slice(2, 8)}`;
+        try {
+            setError('');
+            await tutor.saveProvider({ id, name: '新供应商', kind: 'custom', enabled: true, baseUrl: 'https://api.example.com/v1', apiFormat: 'chat-completions', models: [] });
+            setSelected(id);
+        } catch (e) { setError(message(e)); }
+    };
+    const group = (title: string, items: TutorProviderView[]) => items.length ? <div className="nodu-ai-provider-group">
+        <div className="nodu-ai-provider-group-title">{title}</div>
+        {items.map(p => <button key={p.id} type="button" className={`nodu-ai-provider-item${p.id === provider?.id ? ' nodu-ai-provider-item-on' : ''}`}
+            aria-current={p.id === provider?.id} onClick={() => { setSelected(p.id); setError(''); }}>
+            <i className={`codicon codicon-${p.kind === 'builtin' ? 'sparkle' : 'package'}`} aria-hidden="true"/>
+            <span className="nodu-ai-provider-name">{p.name}</span>
+            <span className={`nodu-ai-dot nodu-ai-dot-${statusOf(p)}`} aria-label={statusOf(p) === 'ok' ? '可用' : statusOf(p) === 'warn' ? '缺少 API Key' : '已停用'}/>
+        </button>)}
+    </div> : null;
+    return <div className="nodu-ai-settings-layout">
+        <nav className="nodu-ai-provider-list" aria-label="模型供应商">
+            {group('内置', settings.providers.filter(p => p.kind === 'builtin'))}
+            {group('自定义供应商', settings.providers.filter(p => p.kind === 'custom'))}
+            <button type="button" className="nodu-ai-provider-add" onClick={() => void addProvider()}><i className="codicon codicon-add" aria-hidden="true"/>添加供应商</button>
+            {/* Reserved for the account system: a signed-in account brings a default relay and model configuration. */}
+            <div className="nodu-ai-provider-group nodu-ai-account">
+                <div className="nodu-ai-provider-group-title">账号</div>
+                <div className="nodu-ai-account-note"><i className="codicon codicon-account" aria-hidden="true"/>登录后自动使用默认中转站（即将推出）</div>
+            </div>
+        </nav>
+        <section className="nodu-ai-provider-detail">
+            {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
+            {settings.storage === 'session' && <div className="nodu-ai-form-note" role="status">系统钥匙串不可用，API Key 仅在本次运行中有效</div>}
+            {provider && <ProviderDetail key={provider.id} tutor={tutor} provider={provider} onDeleted={() => setSelected(undefined)} />}
+        </section>
+    </div>;
+}
+
+function ProviderDetail({ tutor, provider, onDeleted }: { tutor: NoduTutorModel; provider: TutorProviderView; onDeleted(): void }): React.ReactElement {
+    const locked = provider.kind === 'builtin';
+    const [name, setName] = React.useState(provider.name);
+    const [baseUrl, setBaseUrl] = React.useState(provider.baseUrl);
+    const [format, setFormat] = React.useState<TutorApiFormat>(provider.apiFormat);
+    const [key, setKey] = React.useState('');
+    const [showKey, setShowKey] = React.useState(false);
+    const [busy, setBusy] = React.useState('');
+    const [error, setError] = React.useState('');
+    const [tests, setTests] = React.useState<Record<string, { ok: boolean; message: string } | 'running'>>({});
+    const [editing, setEditing] = React.useState<TutorModelConfig | 'new' | undefined>();
+    const [remote, setRemote] = React.useState<TutorRemoteModel[]>([]);
+    const dirty = name !== provider.name || baseUrl !== provider.baseUrl || format !== provider.apiFormat;
+    const selection = tutor.settings?.selection;
+    const config = (patch: Partial<TutorProviderConfig> = {}): TutorProviderConfig => ({ id: provider.id, name, kind: provider.kind, enabled: provider.enabled,
+        baseUrl, apiFormat: format, models: provider.models, ...patch });
+    const run = async (label: string, work: () => Promise<unknown>): Promise<void> => {
+        setBusy(label); setError('');
+        try { await work(); } catch (e) { setError(message(e)); } finally { setBusy(''); }
+    };
+    let endpoint = provider.endpoint;
+    try { endpoint = resolveEndpoint(baseUrl, format); } catch { /* shown after save */ }
+    const saveModels = (models: TutorModelConfig[]) => run('models', () => tutor.saveProvider(config({ models })));
+    const test = async (model: TutorModelConfig): Promise<void> => {
+        setTests(t => ({ ...t, [model.id]: 'running' }));
+        const result = await tutor.testModel(provider.id, model.id).catch(e => ({ ok: false, message: message(e) }));
+        setTests(t => ({ ...t, [model.id]: result }));
+    };
+    const fetchRemote = () => run('remote', async () => { setRemote(await tutor.listRemoteModels(provider.id)); setEditing('new'); });
+    return <div className="nodu-ai-provider-form">
+        <header className="nodu-ai-provider-head">
+            <i className={`codicon codicon-${locked ? 'sparkle' : 'package'}`} aria-hidden="true"/>
+            {locked ? <h3>{provider.name}</h3> : <input className="nodu-ai-provider-title" aria-label="供应商名称" value={name} maxLength={40} onChange={e => setName(e.target.value)}/>}
+            <Switch checked={provider.enabled} label={provider.enabled ? '停用供应商' : '启用供应商'} onChange={enabled => void run('enable', () => tutor.saveProvider(config({ enabled })))}/>
+            {!locked && <button type="button" className="nodu-ai-icon" aria-label="删除供应商" title="删除供应商"
+                onClick={() => void run('remove', async () => { await tutor.removeProvider(provider.id); onDeleted(); })}><i className="codicon codicon-trash" aria-hidden="true"/></button>}
+        </header>
+        <label className="nodu-ai-field"><span>Base URL{locked && <Help text="内置套餐使用固定地址，密钥不会发送到其他服务器"/>}</span>
+            <input value={baseUrl} readOnly={locked} spellCheck={false} placeholder="https://api.example.com/v1" onChange={e => setBaseUrl(e.target.value)}/></label>
+        <label className="nodu-ai-field"><span>API 格式<Help text="中转站兼容的接口格式。多数 OpenAI 兼容中转站使用 Chat Completions"/></span>
+            <select value={format} disabled={locked} onChange={e => setFormat(e.target.value as TutorApiFormat)}>
+                {API_FORMATS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
+            </select></label>
+        <div className="nodu-ai-endpoint" title="实际请求地址">{endpoint}</div>
+        {dirty && <div className="nodu-ai-form-actions">
+            <button type="button" className="theia-button secondary" onClick={() => { setName(provider.name); setBaseUrl(provider.baseUrl); setFormat(provider.apiFormat); }}>还原</button>
+            <button type="button" className="theia-button" disabled={!!busy} onClick={() => void run('save', () => tutor.saveProvider(config()))}>保存</button>
+        </div>}
+        <label className="nodu-ai-field"><span>API Key{allowsNoKey(provider.baseUrl) && <Help text="本机服务可以不填"/>}</span>
+            <div className="nodu-ai-key-row">
+                <input type={showKey ? 'text' : 'password'} autoComplete="off" spellCheck={false} value={key} placeholder={provider.hasKey ? '已保存在系统钥匙串，输入新值可替换' : '输入 API Key'}
+                    onChange={e => setKey(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && key) { e.preventDefault(); void run('key', async () => { await tutor.setProviderKey(provider.id, key); setKey(''); }); } }}/>
+                <button type="button" className="nodu-ai-icon" aria-label={showKey ? '隐藏' : '显示'} title={showKey ? '隐藏' : '显示'} onClick={() => setShowKey(!showKey)}><i className={`codicon codicon-${showKey ? 'eye-closed' : 'eye'}`} aria-hidden="true"/></button>
+                {key && <button type="button" className="theia-button" disabled={!!busy} onClick={() => void run('key', async () => { await tutor.setProviderKey(provider.id, key); setKey(''); })}>保存</button>}
+                {!key && provider.hasKey && <button type="button" className="scope-text-button" onClick={() => void run('key', () => tutor.deleteProviderKey(provider.id))}>删除</button>}
+            </div></label>
+        {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
+        <div className="nodu-ai-models-head">
+            <span>模型列表</span>
+            <button type="button" className="scope-text-button" disabled={!!busy} title="从供应商读取可用模型 ID" onClick={() => void fetchRemote()}>{busy === 'remote' ? '读取中…' : '获取模型'}</button>
+            <button type="button" className="nodu-ai-chip" onClick={() => setEditing('new')}><i className="codicon codicon-add" aria-hidden="true"/>添加模型</button>
+        </div>
+        <ul className="nodu-ai-models" aria-label="模型列表">
+            {!provider.models.length && <li className="nodu-ai-models-empty">还没有模型，点击“添加模型”</li>}
+            {provider.models.map((m, index) => {
+                const current = selection?.providerId === provider.id && selection.modelId === m.id;
+                const result = tests[m.id];
+                return <li key={m.id} className={`nodu-ai-model-row${m.enabled ? '' : ' nodu-ai-model-off'}`}>
+                    <button type="button" className={`nodu-ai-model-use${current ? ' nodu-ai-model-use-on' : ''}`} disabled={!m.enabled || !provider.enabled}
+                        aria-label={current ? '当前使用的模型' : '使用此模型'} title={current ? '当前使用的模型' : '使用此模型'}
+                        onClick={() => void run('select', () => tutor.selectModel({ providerId: provider.id, modelId: m.id }))}><i className={`codicon codicon-${current ? 'pass-filled' : 'circle-large-outline'}`} aria-hidden="true"/></button>
+                    <code className="nodu-ai-model-id" title={m.id}>{m.id}</code>
+                    {m.contextWindow && <span className="nodu-ai-badge" title="上下文窗口">{formatTokens(m.contextWindow)}</span>}
+                    {m.inputs.includes('image') && <span className="nodu-ai-badge">视觉</span>}
+                    {m.reasoningLevels.length > 0 && <span className="nodu-ai-badge" title={m.reasoningLevels.join(' / ')}>推理</span>}
+                    {result && result !== 'running' && <span className={`nodu-ai-test ${result.ok ? 'nodu-ai-test-ok' : 'nodu-ai-test-fail'}`} title={result.message}>{result.ok ? result.message : '失败'}</span>}
+                    <span className="nodu-ai-model-actions">
+                        <button type="button" className="nodu-ai-icon" aria-label="测试连接" title={result && result !== 'running' && !result.ok ? result.message : '测试连接'} disabled={result === 'running'} onClick={() => void test(m)}>
+                            <i className={`codicon codicon-${result === 'running' ? 'loading codicon-modifier-spin' : 'plug'}`} aria-hidden="true"/></button>
+                        <button type="button" className="nodu-ai-icon" aria-label="编辑模型" title="编辑模型" onClick={() => setEditing(m)}><i className="codicon codicon-edit" aria-hidden="true"/></button>
+                        <button type="button" className="nodu-ai-icon" aria-label="删除模型" title="删除模型" onClick={() => void saveModels(provider.models.filter((_, i) => i !== index))}><i className="codicon codicon-trash" aria-hidden="true"/></button>
+                        <Switch checked={m.enabled} label={m.enabled ? '停用模型' : '启用模型'} onChange={enabled => void saveModels(provider.models.map((x, i) => i === index ? { ...x, enabled } : x))}/>
+                    </span>
+                </li>;
+            })}
+        </ul>
+        {editing && <ModelDialog initial={editing === 'new' ? undefined : editing} remote={remote} taken={provider.models.map(m => m.id)}
+            onClose={() => setEditing(undefined)}
+            onSave={async model => {
+                const models = editing === 'new' ? [...provider.models, model] : provider.models.map(m => m.id === editing.id ? model : m);
+                await tutor.saveProvider(config({ models }));
+                setEditing(undefined);
+            }}/>}
+    </div>;
+}
+
+function ModelDialog({ initial, remote, taken, onSave, onClose }: { initial?: TutorModelConfig; remote: TutorRemoteModel[]; taken: string[];
+    onSave(model: TutorModelConfig): Promise<void>; onClose(): void }): React.ReactElement {
+    const [model, setModel] = React.useState<TutorModelConfig>(initial ?? modelDefaults(''));
+    const [smart, setSmart] = React.useState(!initial);
+    const [advanced, setAdvanced] = React.useState(!!initial);
+    const [level, setLevel] = React.useState('');
+    const [error, setError] = React.useState('');
+    const [saving, setSaving] = React.useState(false);
+    const set = (patch: Partial<TutorModelConfig>) => setModel(m => ({ ...m, ...patch }));
+    const number = (value: string): number | undefined => value.trim() ? Math.max(0, Math.floor(Number(value))) || undefined : undefined;
+    const pickId = (id: string): void => {
+        const found = smart ? remote.find(r => r.id === id) : undefined;
+        // Smart config fills what the provider reports and leaves the rest to the user.
+        set({ id, ...(found?.contextWindow ? { contextWindow: found.contextWindow } : {}), ...(smart && /vision|vl|4o|gpt-5|gemini|claude/i.test(id) ? { inputs: ['text', 'image'] as TutorInputType[] } : {}) });
+    };
+    const toggleInput = (input: TutorInputType) => set({ inputs: model.inputs.includes(input) ? model.inputs.filter(i => i !== input) : [...model.inputs, input] });
+    const addLevel = () => { const v = level.trim(); if (v && !model.reasoningLevels.includes(v)) { set({ reasoningLevels: [...model.reasoningLevels, v] }); } setLevel(''); };
+    const save = async (): Promise<void> => {
+        if (!model.id.trim()) { setError('请输入模型 ID'); return; }
+        if (model.id !== initial?.id && taken.includes(model.id.trim())) { setError('该模型 ID 已存在'); return; }
+        setSaving(true); setError('');
+        try { await onSave({ ...model, id: model.id.trim() }); } catch (e) { setError(message(e)); } finally { setSaving(false); }
+    };
+    return <div className="nodu-ai-dialog-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) { onClose(); } }}>
+        <div className="nodu-ai-dialog" role="dialog" aria-label={initial ? '编辑模型' : '添加模型'} onKeyDown={e => { if (e.key === 'Escape') { e.stopPropagation(); onClose(); } }}>
+            <header><h3>{initial ? '编辑模型' : '添加模型'}</h3><button type="button" className="nodu-ai-icon" aria-label="关闭" onClick={onClose}><i className="codicon codicon-close" aria-hidden="true"/></button></header>
+            <div className="nodu-ai-dialog-body">
+                <div className="nodu-ai-field-inline"><span>智能配置<Help text="从供应商返回的模型列表自动填写上下文窗口等信息，其余项可手动修改"/></span><Switch checked={smart} label="智能配置" onChange={setSmart}/></div>
+                <label className="nodu-ai-field"><span>模型 ID</span>
+                    <input autoFocus list="nodu-ai-remote-models" value={model.id} spellCheck={false} placeholder="模型 ID" onChange={e => pickId(e.target.value)}/>
+                    <datalist id="nodu-ai-remote-models">{remote.filter(r => !taken.includes(r.id)).map(r => <option key={r.id} value={r.id}/>)}</datalist></label>
+                <label className="nodu-ai-field"><span>上下文窗口<Help text="模型一次可处理的上下文容量，单位为 Token。Nodu 据此控制发送的代码量。请勿超过模型的实际上限"/></span>
+                    <input inputMode="numeric" value={model.contextWindow ?? ''} placeholder="例如 128000" onChange={e => set({ contextWindow: number(e.target.value) })}/></label>
+                <label className="nodu-ai-field"><span>最大输出 Tokens<Help text="单次回复的最大长度，默认 2048，最大 8192"/></span>
+                    <input inputMode="numeric" value={model.maxOutputTokens ?? ''} placeholder="2048" onChange={e => set({ maxOutputTokens: number(e.target.value) })}/></label>
+                <button type="button" className="nodu-ai-disclosure" aria-expanded={advanced} onClick={() => setAdvanced(!advanced)}><i className={`codicon codicon-chevron-${advanced ? 'down' : 'right'}`} aria-hidden="true"/>高级配置</button>
+                {advanced && <>
+                    <div className="nodu-ai-field"><span>输入类型<Help text="模型可以接收的内容类型。文本始终开启"/></span>
+                        <div className="nodu-ai-checks">{(Object.keys(INPUT_LABELS) as TutorInputType[]).map(i => <label key={i} className={`nodu-ai-check${model.inputs.includes(i) ? ' nodu-ai-check-on' : ''}`}>
+                            <input type="checkbox" checked={model.inputs.includes(i)} disabled={i === 'text'} onChange={() => toggleInput(i)}/>{INPUT_LABELS[i]}{i === 'text' && <i className="codicon codicon-lock" aria-hidden="true"/>}</label>)}</div></div>
+                    <div className="nodu-ai-field"><span>模型能力<Help text="模型支持的特性。不确定时保持关闭"/></span>
+                        <div className="nodu-ai-checks">{([['structuredOutput', '结构化输出'], ['webSearch', '原生联网搜索'], ['systemInConversation', '对话中系统消息']] as const).map(([k, label]) =>
+                            <label key={k} className={`nodu-ai-check${model[k] ? ' nodu-ai-check-on' : ''}`}><input type="checkbox" checked={model[k]} onChange={e => set({ [k]: e.target.checked })}/>{label}</label>)}</div></div>
+                    <div className="nodu-ai-field"><span>推理等级（从低到高）<Help text="模型支持的推理强度名称，例如 low、medium、high。留空表示不支持"/></span>
+                        <div className="nodu-ai-levels">
+                            {model.reasoningLevels.map(l => <span key={l} className="nodu-ai-level">{l}<button type="button" aria-label={`移除 ${l}`} onClick={() => set({ reasoningLevels: model.reasoningLevels.filter(x => x !== l) })}><i className="codicon codicon-close" aria-hidden="true"/></button></span>)}
+                            <input value={level} placeholder="添加" aria-label="添加推理等级" onChange={e => setLevel(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addLevel(); } }}/>
+                            <button type="button" className="nodu-ai-icon" aria-label="添加推理等级" disabled={!level.trim()} onClick={addLevel}><i className="codicon codicon-add" aria-hidden="true"/></button>
+                        </div></div>
+                </>}
+                {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
+            </div>
+            <footer><button type="button" className="theia-button secondary" onClick={onClose}>取消</button><button type="button" className="theia-button" disabled={saving} onClick={() => void save()}>{initial ? '保存' : '添加'}</button></footer>
+        </div>
+    </div>;
+}

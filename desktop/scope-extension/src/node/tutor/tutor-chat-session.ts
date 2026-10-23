@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 import { TutorAIClient, TutorAIResult, TutorAnswer, TutorBuffer, TutorChatRequest, TutorMode } from '../../common/tutor/tutor-ai-protocol';
-import { TutorModelMessage, TutorModelProvider } from './tutor-glm-provider';
+import { TutorModelMessage, TutorModelProvider } from './tutor-model-gateway';
 const ID = /^[A-Za-z0-9_-]{8,96}$/;
 interface Presentation { epoch: number; mode: TutorMode; paused: boolean; }
 /** Line reviews run beside conversation so a student can ask while the editor is being checked. */

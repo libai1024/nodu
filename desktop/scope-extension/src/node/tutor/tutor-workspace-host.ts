@@ -13,7 +13,9 @@ export class TutorWorkspaceHost {
     private sequence = 0;
     private grants: { id: string; uri: string; root: string }[] = [];
     private pending: Promise<void> = Promise.resolve();
-    constructor(private readonly storage: TutorStorageConnection, private readonly revokeChat: (id: string) => void) { }
+    constructor(private readonly storage: TutorStorageConnection, private readonly revokeChat: (id: string) => void,
+        /** Tells the window its grants changed, so it never has to race the workspace-open RPC. */
+        private readonly changed: () => void = () => undefined) { }
     async select(uri: string): Promise<void> {
         if (typeof uri !== 'string' || uri.length > 8192) { throw new Error('工程地址无效'); }
         if (uri === this.current) { return this.pending; }
@@ -21,7 +23,7 @@ export class TutorWorkspaceHost {
         const sequence = ++this.sequence;
         for (const grant of this.grants) { this.storage.revokeWorkspace(grant.id); this.revokeChat(grant.id); }
         this.grants = [];
-        this.pending = this.resolve(uri, sequence);
+        this.pending = this.resolve(uri, sequence).finally(() => { if (sequence === this.sequence) { this.changed(); } });
         return this.pending;
     }
     private async resolve(uri: string, sequence: number): Promise<void> {

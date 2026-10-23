@@ -5,7 +5,8 @@ import URI from '@theia/core/lib/common/uri';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
-import { TutorAIClient, TutorAIResult, TutorAnswer, TutorBuffer, TutorChatRequest, TutorMode, TutorProviderState, TutorService, TUTOR_SERVICE_PATH } from '../common/tutor/tutor-ai-protocol';
+import { TutorAIClient, TutorAIResult, TutorAnswer, TutorBuffer, TutorChatRequest, TutorMode, TutorModelTest, TutorRemoteModel, TutorService, TUTOR_SERVICE_PATH } from '../common/tutor/tutor-ai-protocol';
+import { TutorAISettingsView, TutorModelSelection, TutorProviderConfig, TutorProviderView, allowsNoKey } from '../common/tutor/tutor-ai-config';
 import { TutorCourseTarget, TutorCourseV2 } from '../common/tutor/tutor-course';
 import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tutor-learning-state';
 import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
@@ -15,6 +16,8 @@ import { ScopeLayoutState } from './scope-layout-state';
 export type TutorChatStatus = 'pending' | 'done' | 'stopped' | 'failed';
 export interface TutorChatItem { id: string; role: 'user' | 'assistant'; text: string; status: TutorChatStatus; note?: string; }
 export interface TutorPresentation { buffer: TutorBuffer; answer: TutorAnswer; }
+/** file: URIs from the host and from Theia may differ in encoding and trailing slashes. */
+const sameUri = (a: string, b: URI | undefined): boolean => !!b && new URI(a).path.toString().replace(/\/+$/, '') === b.path.toString().replace(/\/+$/, '');
 const stored = (key: string, fallback: boolean): boolean => { try { const v = localStorage.getItem(`nodu.tutor.${key}`); return v === null ? fallback : v === 'true'; } catch { return fallback; } };
 
 @injectable()
@@ -49,7 +52,8 @@ export class NoduTutorModel {
     includeCode = true;
     buffer?: TutorBuffer;
     presentation?: TutorPresentation;
-    provider?: TutorProviderState;
+    /** Providers, key presence and this window's model; never the keys themselves. */
+    settings?: TutorAISettingsView;
     /** Conversation lane: chat and step checks, owned by the composer. */
     busy?: { id: string; mode: TutorMode; kind: TutorChatRequest['kind'] };
     /** Line-review lane, independent of the composer so asking never waits for the editor. */
@@ -70,7 +74,8 @@ export class NoduTutorModel {
     available(id: string): boolean { return !!this.plan?.steps.find(s => s.id === id)?.dependsOn.every(d => d.mode === 'advisory' || !!this.progress.steps[d.stepId]); }
     @postConstruct()
     protected init(): void {
-        const proxy = this.connections.createProxy<TutorService>(TUTOR_SERVICE_PATH, { onDidChange: event => this.onStorageChange(event), onChatDelta: event => this.onChatDelta(event) } satisfies TutorAIClient);
+        const proxy = this.connections.createProxy<TutorService>(TUTOR_SERVICE_PATH, { onDidChange: event => this.onStorageChange(event), onChatDelta: event => this.onChatDelta(event),
+            onWorkspacesChanged: () => { void this.onWorkspacesChanged(); }, onAISettingsChanged: () => { void this.refreshSettings(); } } satisfies TutorAIClient);
         this.service = proxy;
         this.toDispose.push(proxy.onDidOpenConnection(() => { void this.workspace.ready.then(() => this.load()); }));
         this.toDispose.push(this.workspace.onWorkspaceChanged(() => void this.load()));
@@ -97,8 +102,8 @@ export class NoduTutorModel {
             const grants = await this.service.workspaces();
             if (generation !== this.loading) { return; }
             this.rootUri = root;
-            this.workspaceId = grants.find(g => new URI(g.uri).toString() === root?.toString())?.id;
-            this.provider = await this.service.providerState();
+            this.workspaceId = grants.find(g => sameUri(g.uri, root))?.id;
+            this.settings = await this.service.aiSettings();
             if (this.workspaceId) {
                 const session = this.unwrap(await this.service.openSession(this.workspaceId));
                 if (generation !== this.loading) { return; }
@@ -193,8 +198,32 @@ export class NoduTutorModel {
         try { localStorage.setItem(`nodu.tutor.${storage[key]}`, String(value)); } catch { /* Display settings can remain in memory. */ }
         this.notify();
     }
-    async configure(key: string, model: string): Promise<void> { this.provider = await this.service.configureProvider(key, model); this.notify(); }
-    async forgetCredential(): Promise<void> { this.cancelAll(); await this.service.forgetCredential(); this.provider = await this.service.providerState(); this.notify(); }
+    get selectedProvider(): TutorProviderView | undefined {
+        const selection = this.settings?.selection;
+        return selection && this.settings!.providers.find(p => p.id === selection.providerId);
+    }
+    get modelLabel(): string { return this.settings?.selection?.modelId ?? '选择模型'; }
+    /** The selected provider can be called: it has a key, or it is a local server that needs none. */
+    get configured(): boolean { const p = this.selectedProvider; return !!p && (p.hasKey || allowsNoKey(p.baseUrl)); }
+    async refreshSettings(): Promise<void> {
+        try { this.settings = await this.service.aiSettings(); this.notify(); } catch { /* The next load retries. */ }
+    }
+    private async apply(change: Promise<TutorAISettingsView>): Promise<void> { this.settings = await change; this.notify(); }
+    saveProvider(provider: TutorProviderConfig): Promise<void> { return this.apply(this.service.saveProvider(provider)); }
+    removeProvider(id: string): Promise<void> { return this.apply(this.service.removeProvider(id)); }
+    setProviderKey(id: string, key: string): Promise<void> { return this.apply(this.service.setProviderKey(id, key)); }
+    async deleteProviderKey(id: string): Promise<void> { if (this.selectedProvider?.id === id) { this.cancelAll(); } await this.apply(this.service.deleteProviderKey(id)); }
+    selectModel(selection: TutorModelSelection): Promise<void> { return this.apply(this.service.selectModel(selection)); }
+    testModel(providerId: string, modelId: string): Promise<TutorModelTest> { return this.service.testModel(providerId, modelId); }
+    listRemoteModels(providerId: string): Promise<TutorRemoteModel[]> { return this.service.listRemoteModels(providerId); }
+    /** The host pushes grant changes, so a window that loaded before the grant still connects. */
+    private async onWorkspacesChanged(): Promise<void> {
+        try {
+            const root = (await this.workspace.roots)[0]?.resource;
+            const id = (await this.service.workspaces()).find(g => sameUri(g.uri, root))?.id;
+            if (id !== this.workspaceId) { await this.load(); }
+        } catch { /* Reconnect reloads. */ }
+    }
     cancel(): void {
         const busy = this.busy; if (!busy) { return; }
         this.busy = undefined;

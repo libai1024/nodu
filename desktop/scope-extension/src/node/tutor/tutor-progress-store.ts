@@ -281,7 +281,8 @@ export class TutorProgressStore {
                 await this.ensureDirectory(directory);
                 await this.flushDirectory(root);
                 await this.flushDirectory(dirname(root));
-                return work(directory);
+                const release = await TutorProgressStore.lock(directory);
+                try { return await work(directory); } finally { await release(); }
             });
             TutorProgressStore.queues.set(directory, next);
             try { return await next; } finally { if (TutorProgressStore.queues.get(directory) === next) { TutorProgressStore.queues.delete(directory); } }
@@ -289,6 +290,39 @@ export class TutorProgressStore {
             if (error instanceof CourseRepositoryError) { throw error; }
             throw failure('无法读取或保存学习记录');
         }
+    }
+    /**
+     * Inter-process lock held for one read or write. The queue above already serializes this
+     * process; the lock file stops a second Nodu backend from interleaving appends.
+     */
+    static async lock(directory: string, timeoutMs = 3000): Promise<() => Promise<void>> {
+        const path = join(directory, '.write.lock');
+        const owner = JSON.stringify({ pid: process.pid, at: Date.now(), id: randomUUID() });
+        const deadline = Date.now() + timeoutMs;
+        for (;;) {
+            try {
+                const handle = await fs.open(path, 'wx', 0o600);
+                try { await handle.writeFile(owner, 'utf8'); } finally { await handle.close(); }
+                return async () => {
+                    const current = await fs.readFile(path, 'utf8').catch(() => '');
+                    if (current === owner) { await fs.unlink(path).catch(() => undefined); }
+                };
+            } catch (error) { if (!code(error, 'EEXIST')) { throw error; } }
+            if (await TutorProgressStore.staleLock(path)) { await fs.unlink(path).catch(() => undefined); continue; }
+            if (Date.now() > deadline) { throw new CourseRepositoryError('storageUnavailable', '学习记录正被另一个 Nodu 窗口写入，请稍后重试'); }
+            await new Promise(resolve => setTimeout(resolve, 40));
+        }
+    }
+    /** A lock whose process has exited, or that is far older than any write, is left over from a crash. */
+    private static async staleLock(path: string): Promise<boolean> {
+        let text: string;
+        try { text = await fs.readFile(path, 'utf8'); } catch (error) { return code(error, 'ENOENT'); }
+        let held: { pid?: unknown; at?: unknown };
+        try { held = JSON.parse(text); } catch { held = {}; }
+        const at = typeof held.at === 'number' ? held.at : 0;
+        if (Date.now() - at > 60_000) { return true; }
+        if (typeof held.pid !== 'number' || held.pid === process.pid) { return typeof held.pid !== 'number' && Date.now() - at > 5000; }
+        try { process.kill(held.pid, 0); return false; } catch (error) { return code(error, 'ESRCH'); }
     }
     private async ensureDirectory(path: string): Promise<void> {
         await fs.mkdir(path, { mode: 0o700 }).catch(error => { if (!code(error, 'EEXIST')) { throw error; } });

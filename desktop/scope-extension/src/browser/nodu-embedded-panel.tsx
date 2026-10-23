@@ -214,7 +214,8 @@ export class NoduEmbeddedPanel extends ReactWidget {
             this.sending = false; this.update();
         };
         return <div className="nodu-c-monitor">
-            {!this.hosted && <div className="nodu-c-monitor-bar">{this.connection()}</div>}
+            {/* Hosted: shown only when the panel is too narrow for the header row (CSS container query). */}
+            <div className={`nodu-c-monitor-bar${this.hosted ? ' nodu-c-monitor-bar-hosted' : ''}`}>{this.connection()}</div>
             {model.monitorError && <div className="nodu-c-monitor-error" role="alert">{model.monitorError}</div>}
             <pre ref={this.monitorRef} className="nodu-c-log nodu-c-monitor-log" tabIndex={0} aria-label="串口输出" aria-live="off" onScroll={this.onScroll}>
                 {this.hex ? snapshot.hex : <>

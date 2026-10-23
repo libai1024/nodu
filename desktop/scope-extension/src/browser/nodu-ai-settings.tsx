@@ -7,7 +7,7 @@ import { SidebarBottomMenuWidget } from '@theia/core/lib/browser/shell/sidebar-b
 import { CommandContribution, CommandRegistry, DisposableCollection, MenuPath } from '@theia/core/lib/common';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS } from './nodu-tutor-hints';
-import { ProviderSettings } from './nodu-tutor-widget';
+import { AISettingsPanel } from './nodu-ai-provider-settings';
 
 /** Marker path for the left sidebar AI button; it opens a popover instead of a context menu. */
 export const AI_SETTINGS_MENU: MenuPath = ['nodu-ai-settings-menu'];
@@ -61,7 +61,8 @@ export class NoduAiSettingsPopover {
         window.addEventListener('resize', reposition);
         this.listeners.push({ dispose: () => { document.removeEventListener('pointerdown', outside, true); window.removeEventListener('resize', reposition); } });
         this.listeners.push(this.tutor.onDidChange(() => this.render()));
-        requestAnimationFrame(() => host.querySelector<HTMLElement>('input:not([readonly]), select, button')?.focus());
+        void this.tutor.refreshSettings();
+        requestAnimationFrame(() => host.querySelector<HTMLElement>('.nodu-ai-provider-item-on, input:not([readonly]), button')?.focus());
     }
 
     private render(): void {
@@ -70,21 +71,26 @@ export class NoduAiSettingsPopover {
                 <span><i className="codicon codicon-sparkle" aria-hidden="true"/>AI 设置</span>
                 <button type="button" className="nodu-ai-icon" aria-label="关闭" title="关闭 · Esc" onClick={() => this.close()}><i className="codicon codicon-close" aria-hidden="true"/></button>
             </div>
-            <ProviderSettings tutor={this.tutor} close={() => this.close()} />
+            <AISettingsPanel tutor={this.tutor} />
+            <label className="nodu-ai-popover-foot"><input type="checkbox" checked={this.tutor.autoReview} onChange={e => this.tutor.setDisplay('autoReview', e.target.checked)}/>逐行 AI 检查（完成一行后发送当前文件给所选模型）</label>
         </div>);
     }
 
     /** Beside the left sidebar button, or above an in-panel anchor such as the composer model picker. */
     private place(host: HTMLDivElement, anchor?: HTMLElement): void {
-        const width = 320, margin = 8;
+        // A hidden or not-yet-laid-out window can report 0; fall back to the document size.
+        const vw = window.innerWidth || document.documentElement.clientWidth || 1280;
+        const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+        const margin = 8, width = Math.max(320, Math.min(760, vw - margin * 2));
         const rect = anchor?.getBoundingClientRect();
         host.style.width = `${width}px`;
-        if (!rect) { host.style.left = '56px'; host.style.bottom = '16px'; return; }
+        if (!rect || (!rect.width && !rect.height)) { host.style.left = '56px'; host.style.bottom = '16px'; host.style.maxHeight = `${Math.max(320, vh - 32)}px`; return; }
         const beside = rect.left < 80;
         const left = beside ? rect.right + margin : rect.left;
-        host.style.left = `${Math.max(margin, Math.min(left, window.innerWidth - width - margin))}px`;
-        host.style.bottom = `${Math.max(margin, window.innerHeight - (beside ? rect.bottom : rect.top - 6))}px`;
-        host.style.maxHeight = `${Math.max(240, (beside ? rect.bottom : rect.top) - margin * 2)}px`;
+        const top = beside ? rect.bottom : rect.top - 6;
+        host.style.left = `${Math.max(margin, Math.min(left, vw - width - margin))}px`;
+        host.style.bottom = `${Math.max(margin, vh - top)}px`;
+        host.style.maxHeight = `${Math.max(320, top - margin * 2)}px`;
     }
 }
 
