@@ -367,7 +367,7 @@ export class ScopeVisionToolbarContribution implements TabBarToolbarContribution
                 { pressed: paused, disabled: model.busy || !state.capabilities.framebuffer || (!state.preview && !model.frame) }));
             items.push(button('snapshot', 'device-camera', '保存截图…', () => widget.exportFrame(), { disabled: !model.frame || widget.exportBusy }));
         }
-        return <div className="nodu-fb-actions" role="toolbar" aria-label="帧缓冲操作">{items}</div>;
+        return <div key="nodu-fb-actions" className="nodu-fb-actions" role="toolbar" aria-label="帧缓冲操作">{items}</div>;
     }
 }
 
