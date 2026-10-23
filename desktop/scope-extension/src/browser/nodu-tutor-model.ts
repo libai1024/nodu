@@ -1,270 +1,237 @@
 // SPDX-License-Identifier: MIT
-// Plan and progress shared by the step panel and the in-editor hints (T1,
-// docs/0.2/AI-TUTOR-DESIGN.md §13). No model is involved: the plan is a
-// hand-written course file and steps are completed by the student.
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { DisposableCollection, Emitter } from '@theia/core/lib/common';
 import URI from '@theia/core/lib/common/uri';
-import { FileService } from '@theia/filesystem/lib/browser/file-service';
+import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
-import {
-    DEFAULT_HINT_LEVEL, HintLevel, REFERENCE_LEVEL, StepState, TestReminder, TUTOR_PLAN_PATH, TutorPlan, TutorStep,
-    maxHintLevel, nextStepId, parseTutorPlan, stepStates, testReminders,
-} from '../common/nodu-tutor-plan';
+import { FileService } from '@theia/filesystem/lib/browser/file-service';
+import { TutorAIClient, TutorAIResult, TutorAnswer, TutorBuffer, TutorChatRequest, TutorMode, TutorProviderState, TutorService, TUTOR_SERVICE_PATH } from '../common/tutor/tutor-ai-protocol';
+import { TutorCourseTarget, TutorCourseV2 } from '../common/tutor/tutor-course';
+import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tutor-learning-state';
+import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
 
-/** Plans are small hand-written files; anything larger is rejected unread. */
-const PLAN_SIZE_LIMIT = 512 * 1024;
-const LOG_LIMIT = 500;
-const HINTS_VISIBLE_KEY = 'nodu.tutor.hints-visible';
-
-export type AnchorReport = { line: number } | 'missing' | 'ambiguous';
-/** `closed`: no editor shows the anchor file, so its buffer has not been checked. */
-export type AnchorStatus = { kind: 'ok'; line: number } | { kind: 'missing' } | { kind: 'ambiguous' } | { kind: 'closed' } | { kind: 'none' };
-
-/** Learning record: stays in this machine's local storage (§10). */
-interface TutorProgress {
-    completed: string[];
-    current?: string;
-    levels: Record<string, HintLevel>;
-    references: string[];
-    decisions: Record<string, string>;
-    log: { at: number; step: string; event: string }[];
-}
-
-const emptyProgress = (): TutorProgress => ({ completed: [], levels: {}, references: [], decisions: {}, log: [] });
+/** Every assistant item leaves `pending`; a stopped or superseded request must never stay "thinking". */
+export type TutorChatStatus = 'pending' | 'done' | 'stopped' | 'failed';
+export interface TutorChatItem { id: string; role: 'user' | 'assistant'; text: string; status: TutorChatStatus; note?: string; }
+export interface TutorPresentation { buffer: TutorBuffer; answer: TutorAnswer; }
+const stored = (key: string, fallback: boolean): boolean => { try { const v = localStorage.getItem(`nodu.tutor.${key}`); return v === null ? fallback : v === 'true'; } catch { return fallback; } };
 
 @injectable()
 export class NoduTutorModel {
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
     @inject(FileService) protected readonly files!: FileService;
+    @inject(WebSocketConnectionProvider) protected readonly connections!: WebSocketConnectionProvider;
+    private service!: TutorService;
     private readonly changed = new Emitter<void>();
     readonly onDidChange = this.changed.event;
-    protected readonly toDispose = new DisposableCollection(this.changed);
-    plan: TutorPlan | undefined;
-    /** Why the workspace plan could not be used; undefined when there is no plan file at all. */
-    error: string | undefined;
-    rootUri: URI | undefined;
-    hintsVisible = localStorage.getItem(HINTS_VISIBLE_KEY) !== 'false';
-    panelVisible = false;
-    private progress: TutorProgress = emptyProgress();
-    private states: StepState[] = [];
-    /** Marker lookups per step, keyed by the editor URI that produced them. */
-    private readonly anchors = new Map<string, Map<string, AnchorReport>>();
-    private loadSeq = 0;
-    /** Resolves after the first workspace plan lookup. */
+    private readonly invalidated = new Emitter<void>();
+    readonly onDidInvalidate = this.invalidated.event;
+    private readonly toDispose = new DisposableCollection(this.changed, this.invalidated);
     ready: Promise<void> = Promise.resolve();
-
+    rootUri?: URI;
+    workspaceId?: string;
+    session?: TutorSessionSnapshot;
+    error?: string;
+    mode: TutorMode = 'teach';
+    paused = false;
+    panelVisible = false;
+    epoch = 0;
+    hintsVisible = stored('ghost', true);
+    highlightsVisible = stored('highlight', true);
+    annotationsVisible = stored('annotations', true);
+    floatVisible = stored('float', false);
+    autoReview = stored('auto-review', true);
+    includeCode = true;
+    buffer?: TutorBuffer;
+    presentation?: TutorPresentation;
+    provider?: TutorProviderState;
+    /** Conversation lane: chat and step checks, owned by the composer. */
+    busy?: { id: string; mode: TutorMode; kind: TutorChatRequest['kind'] };
+    /** Line-review lane, independent of the composer so asking never waits for the editor. */
+    reviewing?: { id: string };
+    readonly drafts: Record<TutorMode, string> = { teach: '', ask: '' };
+    readonly messages: Record<TutorMode, TutorChatItem[]> = { teach: [], ask: [] };
+    migration?: CourseMigrationPreview;
+    private loading = 0;
+    private sync: Promise<void> = Promise.resolve();
+    get plan(): TutorCourseV2 | undefined { return this.session?.plan.kind === 'course' ? this.session.plan.course : undefined; }
+    get progress() { return this.session?.learning?.snapshot.progress ?? emptyLearningProgress(); }
+    get teaching(): boolean { return this.mode === 'teach' && !this.paused; }
+    currentStep() {
+        return this.plan?.steps.find(s => s.id === this.progress.current) ?? this.plan?.steps.find(s => !this.progress.steps[s.id] && this.available(s.id));
+    }
+    available(id: string): boolean { return !!this.plan?.steps.find(s => s.id === id)?.dependsOn.every(d => d.mode === 'advisory' || !!this.progress.steps[d.stepId]); }
     @postConstruct()
     protected init(): void {
+        const proxy = this.connections.createProxy<TutorService>(TUTOR_SERVICE_PATH, { onDidChange: event => this.onStorageChange(event), onChatDelta: event => this.onChatDelta(event) } satisfies TutorAIClient);
+        this.service = proxy;
+        this.toDispose.push(proxy.onDidOpenConnection(() => { void this.workspace.ready.then(() => this.load()); }));
         this.toDispose.push(this.workspace.onWorkspaceChanged(() => void this.load()));
         this.toDispose.push(this.files.onDidFilesChange(event => {
-            const uri = this.planUri();
-            if (uri && event.contains(uri)) { void this.load(); }
+            if (this.rootUri && event.contains(this.rootUri.resolve('.nodu-tutor/plan.json'))) { void this.refresh(); }
         }));
         this.ready = this.workspace.ready.then(() => this.load());
     }
-
-    dispose(): void { this.toDispose.dispose(); }
-
-    planUri(): URI | undefined { return this.rootUri?.resolve(TUTOR_PLAN_PATH); }
-
+    dispose(): void { this.cancelAll(); this.toDispose.dispose(); }
+    notify(): void { this.changed.fire(); }
+    private unwrap<T>(value: TutorStorageOutcome<T>): T { if (!value.ok) { throw new Error(value.error.message); } return value.value; }
     async load(): Promise<void> {
-        const seq = ++this.loadSeq;
-        const root = (await this.workspace.roots)[0]?.resource;
-        let plan: TutorPlan | undefined;
-        let error: string | undefined;
-        if (root) {
-            const uri = root.resolve(TUTOR_PLAN_PATH);
-            try {
-                if (await this.files.exists(uri)) {
-                    const content = await this.files.read(uri, { limits: { size: PLAN_SIZE_LIMIT } });
-                    const result = parseTutorPlan(content.value);
-                    plan = result.plan;
-                    if (!plan) { error = result.errors.slice(0, 5).join('；'); }
-                }
-            } catch (cause) {
-                error = `读取教学计划失败：${cause instanceof Error ? cause.message : String(cause)}`;
-            }
-        }
-        // A newer load (workspace switch, plan edit) supersedes this one.
-        if (seq !== this.loadSeq) { return; }
-        this.rootUri = root;
-        this.plan = plan;
-        this.error = error;
-        this.progress = plan ? this.readProgress(plan) : emptyProgress();
-        this.recompute();
-        this.changed.fire();
-    }
-
-    private storageKey(plan: TutorPlan): string { return `nodu.tutor:${this.rootUri?.toString() ?? ''}:${plan.id}`; }
-
-    private readProgress(plan: TutorPlan): TutorProgress {
-        const ids = new Set(plan.steps.map(step => step.id));
+        const generation = ++this.loading;
+        this.cancelAll(); this.invalidate();
+        const old = this.session?.sessionId;
+        this.session = undefined; this.workspaceId = undefined; this.buffer = undefined; this.error = undefined; this.migration = undefined;
+        this.messages.teach.length = 0; this.messages.ask.length = 0;
         try {
-            const raw = JSON.parse(localStorage.getItem(this.storageKey(plan)) || 'null') as Partial<TutorProgress> | null;
-            if (!raw || typeof raw !== 'object') { return emptyProgress(); }
-            // Drop entries for steps a revised plan no longer has.
-            const keep = <T>(record: unknown, valid: (value: unknown) => value is T): Record<string, T> => Object.fromEntries(
-                Object.entries(record && typeof record === 'object' ? record : {}).filter(([id, value]) => ids.has(id) && valid(value)));
-            return {
-                completed: (Array.isArray(raw.completed) ? raw.completed : []).filter(id => ids.has(id)),
-                current: typeof raw.current === 'string' && ids.has(raw.current) ? raw.current : undefined,
-                levels: keep(raw.levels, (value): value is HintLevel => value === 0 || value === 1 || value === 2 || value === 3),
-                references: (Array.isArray(raw.references) ? raw.references : []).filter(id => ids.has(id)),
-                decisions: keep(raw.decisions, (value): value is string => typeof value === 'string'),
-                log: Array.isArray(raw.log) ? raw.log.slice(-LOG_LIMIT) : [],
-            };
+            if (old) { await this.service.closeSession(old); }
+            const root = (await this.workspace.roots)[0]?.resource;
+            const grants = await this.service.workspaces();
+            if (generation !== this.loading) { return; }
+            this.rootUri = root;
+            this.workspaceId = grants.find(g => new URI(g.uri).toString() === root?.toString())?.id;
+            this.provider = await this.service.providerState();
+            if (this.workspaceId) {
+                const session = this.unwrap(await this.service.openSession(this.workspaceId));
+                if (generation !== this.loading) { return; }
+                this.session = session;
+                await this.importLegacy();
+                await this.syncPresentation();
+            } else if (root) { this.error = '教学工作区尚未连接，请重新打开工程'; }
+        } catch (error) { if (generation === this.loading) { this.error = error instanceof Error ? error.message : '教学连接失败'; } }
+        if (generation === this.loading) { this.notify(); }
+    }
+    private async importLegacy(): Promise<void> {
+        const state = this.session?.learning?.snapshot;
+        if (!state || state.legacyImported || !this.plan || state.progress.log.length) { return; }
+        let raw: string | null = null;
+        try { raw = localStorage.getItem(`nodu.tutor:${this.rootUri?.toString()}:${this.plan.id}`); } catch { return; }
+        if (!raw) { return; }
+        const next = this.unwrap(await this.service.importLegacyProgress(this.session!.sessionId, state.sequence, state.planHash, crypto.randomUUID(), JSON.parse(raw)));
+        this.session!.learning = { snapshot: next };
+        // Keep the original until the user chooses to clear old browser data.
+    }
+    async refresh(): Promise<void> {
+        const sessionId = this.session?.sessionId;
+        if (!sessionId) { return; }
+        try {
+            const next = this.unwrap(await this.service.getSnapshot(sessionId));
+            if (sessionId !== this.session?.sessionId) { return; }
+            if (next.learning?.snapshot.planHash !== this.session.learning?.snapshot.planHash) { this.invalidate(); }
+            this.session = next; this.notify();
+        } catch (error) { this.error = error instanceof Error ? error.message : '学习记录读取失败'; this.notify(); }
+    }
+    onStorageChange(event: { sessionId: string; sequence: number }): void {
+        if (event.sessionId === this.session?.sessionId && event.sequence > (this.session.learning?.snapshot.sequence ?? 0)) { void this.refresh(); }
+    }
+    onChatDelta(event: { id: string; epoch: number; text: string }): void {
+        if (this.busy?.id !== event.id || this.epoch !== event.epoch || this.mode !== 'ask') { return; }
+        const item = this.messages.ask.find(m => m.id === event.id);
+        if (item) { item.text += event.text; this.notify(); }
+    }
+    async action(action: TutorLearningAction): Promise<void> {
+        const session = this.session, state = session?.learning?.snapshot;
+        if (!session || !state) { return; }
+        try {
+            const next = this.unwrap(await this.service.recordAction(session.sessionId, state.sequence, state.planHash, crypto.randomUUID(), action));
+            if (session.sessionId === this.session?.sessionId) { this.session.learning = { snapshot: next }; this.invalidate(); }
+        } catch (error) { this.error = error instanceof Error ? error.message : '学习记录保存失败'; await this.refresh(); }
+        this.notify();
+    }
+    async previewMigration(target: TutorCourseTarget): Promise<void> {
+        if (!this.session) { return; }
+        this.migration = this.unwrap(await this.service.previewMigration(this.session.sessionId, target)); this.notify();
+    }
+    async acceptMigration(): Promise<void> {
+        if (!this.session || !this.migration) { return; }
+        this.session = this.unwrap(await this.service.acceptMigration(this.session.sessionId, this.migration.id, this.migration.sourceDigest));
+        this.migration = undefined; await this.importLegacy(); this.invalidate(); this.notify();
+    }
+    private invalidate(): void { this.presentation = undefined; this.invalidated.fire(); }
+    updateBuffer(buffer?: TutorBuffer): void {
+        const before = this.buffer;
+        this.buffer = buffer;
+        if (before?.path !== buffer?.path || before?.version !== buffer?.version || before?.text !== buffer?.text) { this.invalidate(); }
+        // The panel only shows the file and gates step checks on its presence; redraw on that, not on every keystroke.
+        if (before?.path !== buffer?.path) { this.notify(); }
+    }
+    setMode(mode: TutorMode): void {
+        if (mode === this.mode) { return; }
+        this.mode = mode; this.transition();
+    }
+    setPaused(paused: boolean): void { if (paused !== this.paused) { this.paused = paused; this.transition(); } }
+    private transition(): void { this.cancelAll(); this.invalidate(); void this.syncPresentation(); this.notify(); }
+    private syncPresentation(): Promise<void> {
+        const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = this.paused;
+        this.sync = this.sync.catch(() => undefined).then(async () => {
+            if (workspace) { await this.service.setPresentation(workspace, epoch, mode, paused); }
+        });
+        return this.sync.catch(error => { this.error = error instanceof Error ? error.message : '教学会话更新失败'; this.notify(); });
+    }
+    setPanelVisible(visible: boolean): void { this.panelVisible = visible; this.notify(); }
+    setDisplay(key: 'hintsVisible' | 'highlightsVisible' | 'annotationsVisible' | 'floatVisible' | 'autoReview', value: boolean): void {
+        this[key] = value;
+        const storage = { hintsVisible: 'ghost', highlightsVisible: 'highlight', annotationsVisible: 'annotations', floatVisible: 'float', autoReview: 'auto-review' };
+        try { localStorage.setItem(`nodu.tutor.${storage[key]}`, String(value)); } catch { /* Display settings can remain in memory. */ }
+        this.notify();
+    }
+    async configure(key: string, model: string): Promise<void> { this.provider = await this.service.configureProvider(key, model); this.notify(); }
+    async forgetCredential(): Promise<void> { this.cancelAll(); await this.service.forgetCredential(); this.provider = await this.service.providerState(); this.notify(); }
+    cancel(): void {
+        const busy = this.busy; if (!busy) { return; }
+        this.busy = undefined;
+        void this.service.cancelChat(busy.id).catch(() => undefined);
+        this.settle(busy.mode, busy.id, 'stopped'); this.notify();
+    }
+    cancelReview(): void {
+        const review = this.reviewing; if (!review) { return; }
+        this.reviewing = undefined;
+        void this.service.cancelChat(review.id).catch(() => undefined); this.notify();
+    }
+    cancelAll(): void { this.cancel(); this.cancelReview(); }
+    private settle(mode: TutorMode, id: string, status: Exclude<TutorChatStatus, 'pending'>, note?: string): void {
+        const item = this.messages[mode].find(m => m.id === id);
+        if (item?.status === 'pending') { item.status = status; if (note) { item.note = note; } }
+    }
+    async clearChat(): Promise<void> { this.cancel(); if (this.workspaceId) { await this.service.clearChat(this.workspaceId, this.mode); } this.messages[this.mode].length = 0; this.notify(); }
+    async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer): Promise<TutorAIResult | undefined> {
+        const review = kind === 'line';
+        const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
+        if (laneBusy() || !this.workspaceId || (this.mode === 'teach' && this.paused)) { return; }
+        const mode = this.mode;
+        const prompt = kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
+        if (!prompt) { return; }
+        await this.sync;
+        if (laneBusy() || mode !== this.mode || !this.workspaceId || (mode === 'teach' && this.paused)) { return; }
+        const context = buffer ?? (this.includeCode ? this.buffer : undefined);
+        const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: this.workspaceId, epoch: this.epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
+        const current = (): boolean => review ? this.reviewing?.id === request.id : this.busy?.id === request.id;
+        if (review) { this.reviewing = { id: request.id }; } else { this.busy = { id: request.id, mode, kind }; }
+        const assistant: TutorChatItem = { id: request.id, role: 'assistant', text: '', status: 'pending' };
+        if (!review) {
+            this.messages[mode].push({ id: crypto.randomUUID(), role: 'user', text: prompt, status: 'done' }, assistant);
+            if (this.messages[mode].length > 100) { this.messages[mode].splice(0, 2); }
+            if (kind === 'chat') { this.drafts[mode] = ''; }
+        }
+        this.notify();
+        try {
+            const result = await this.service.chat(request);
+            if (!current() || request.epoch !== this.epoch || request.workspaceId !== this.workspaceId) {
+                this.settle(mode, request.id, 'stopped');
+                return { ok: false, error: '已停止', cancelled: true };
+            }
+            if (result.ok) {
+                assistant.text = result.answer.text; assistant.status = 'done';
+                if (mode === 'teach' && context && this.buffer?.path === context.path && this.buffer.version === context.version && this.buffer.text === context.text) {
+                    this.presentation = { buffer: { ...context }, answer: result.answer };
+                }
+            } else if (result.cancelled) { this.settle(mode, request.id, 'stopped'); }
+            else { this.settle(mode, request.id, 'failed', result.error); }
+            return result;
         } catch {
-            return emptyProgress();
+            this.settle(mode, request.id, 'failed', 'AI 连接已断开');
+            return { ok: false, error: 'AI 连接已断开' };
+        } finally {
+            if (current()) { if (review) { this.reviewing = undefined; } else { this.busy = undefined; } }
+            this.notify();
         }
-    }
-
-    private save(step: string, event: string): void {
-        if (!this.plan) { return; }
-        this.progress.log.push({ at: Date.now(), step, event });
-        this.progress.log = this.progress.log.slice(-LOG_LIMIT);
-        try { localStorage.setItem(this.storageKey(this.plan), JSON.stringify(this.progress)); } catch { /* Storage full: progress stays in memory. */ }
-    }
-
-    private recompute(): void {
-        if (!this.plan) { this.states = []; return; }
-        this.states = stepStates(this.plan, new Set(this.progress.completed));
-        const current = this.states.find(state => state.step.id === this.progress.current);
-        if (!current || current.status === 'locked') { this.progress.current = nextStepId(this.states); }
-    }
-
-    private update(step: string, event: string): void {
-        this.recompute();
-        this.save(step, event);
-        this.changed.fire();
-    }
-
-    stepStates(): readonly StepState[] { return this.states; }
-    state(id: string): StepState | undefined { return this.states.find(state => state.step.id === id); }
-    currentStep(): TutorStep | undefined { return this.state(this.progress.current ?? '')?.step; }
-    completedCount(): number { return this.progress.completed.length; }
-    level(id: string): HintLevel { return this.progress.levels[id] ?? DEFAULT_HINT_LEVEL; }
-    viewedReference(id: string): boolean { return this.progress.references.includes(id); }
-    decision(id: string): string | undefined { return this.progress.decisions[id]; }
-    /** Nothing recorded yet for this plan: the panel opens once by itself. */
-    isFresh(): boolean { return !!this.plan && !this.progress.log.length; }
-    markSeen(): void { if (this.isFresh()) { this.save('', 'panel'); } }
-    reminders(): TestReminder[] { return this.plan ? testReminders(this.plan, this.progress.completed) : []; }
-
-    stepUri(step: TutorStep): URI | undefined {
-        return step.anchor && this.rootUri ? this.rootUri.resolve(step.anchor.file) : undefined;
-    }
-
-    /** Untested prerequisites behind the 上游未验证 flag. */
-    untestedDependencies(step: TutorStep): TutorStep[] {
-        const done = new Set(this.progress.completed);
-        return step.dependsOn.map(id => this.state(id)?.step).filter((dep): dep is TutorStep => !!dep && dep.kind === 'test' && !done.has(dep.id));
-    }
-
-    /** Non-test prerequisites that keep a step locked. */
-    blockingDependencies(step: TutorStep): TutorStep[] {
-        const done = new Set(this.progress.completed);
-        return step.dependsOn.map(id => this.state(id)?.step).filter((dep): dep is TutorStep => !!dep && dep.kind !== 'test' && !done.has(dep.id));
-    }
-
-    select(id: string): void {
-        const state = this.state(id);
-        if (!state || state.status === 'locked' || this.progress.current === id) { return; }
-        this.progress.current = id;
-        this.update(id, 'select');
-    }
-
-    /** L0–L2 only; the reference level goes through {@link showReference}. */
-    setLevel(id: string, level: HintLevel): void {
-        const step = this.state(id)?.step;
-        if (!step || level >= REFERENCE_LEVEL) { return; }
-        const next = Math.min(level, maxHintLevel(step)) as HintLevel;
-        if (next === this.level(id)) { return; }
-        this.progress.levels[id] = next;
-        this.update(id, `level:${next}`);
-    }
-
-    /** Called after the student confirmed; recorded so teachers can see it. */
-    showReference(id: string): void {
-        const step = this.state(id)?.step;
-        if (!step || maxHintLevel(step) < REFERENCE_LEVEL) { return; }
-        this.progress.levels[id] = REFERENCE_LEVEL;
-        if (!this.progress.references.includes(id)) { this.progress.references.push(id); }
-        this.update(id, 'reference');
-    }
-
-    complete(id: string): void {
-        const state = this.state(id);
-        if (!state || state.status !== 'available') { return; }
-        this.progress.completed.push(id);
-        this.progress.current = undefined;
-        this.update(id, 'complete');
-    }
-
-    decide(id: string, optionId: string): void {
-        const step = this.state(id)?.step;
-        if (!step?.options?.some(option => option.id === optionId && option.available)) { return; }
-        this.progress.decisions[id] = optionId;
-        this.update(id, `decide:${optionId}`);
-        this.complete(id);
-    }
-
-    /**
-     * Completed steps that reopening `id` also reopens: everything that builds
-     * on it through non-test dependencies. Dependencies point backwards, so
-     * one pass in plan order is transitive.
-     */
-    reopenImpact(id: string): string[] {
-        const reopened = new Set([id]);
-        for (const step of this.plan?.steps ?? []) {
-            if (step.dependsOn.some(dep => reopened.has(dep) && this.state(dep)?.step.kind !== 'test')) { reopened.add(step.id); }
-        }
-        reopened.delete(id);
-        return [...reopened].filter(other => this.progress.completed.includes(other));
-    }
-
-    reopen(id: string): void {
-        if (!this.progress.completed.includes(id)) { return; }
-        const reopened = new Set([id, ...this.reopenImpact(id)]);
-        this.progress.completed = this.progress.completed.filter(done => !reopened.has(done));
-        this.progress.current = id;
-        this.update(id, 'reopen');
-    }
-
-    resetProgress(): void {
-        if (!this.plan) { return; }
-        this.progress = emptyProgress();
-        this.update('', 'reset');
-    }
-
-    setHintsVisible(visible: boolean): void {
-        if (this.hintsVisible === visible) { return; }
-        this.hintsVisible = visible;
-        localStorage.setItem(HINTS_VISIBLE_KEY, String(visible));
-        this.changed.fire();
-    }
-
-    setPanelVisible(visible: boolean): void {
-        if (this.panelVisible !== visible) { this.panelVisible = visible; this.changed.fire(); }
-    }
-
-    reportAnchor(editorUri: string, stepId: string, report: AnchorReport | undefined): void {
-        const reports = this.anchors.get(editorUri) ?? new Map<string, AnchorReport>();
-        const before = JSON.stringify(reports.get(stepId));
-        if (report) { reports.set(stepId, report); } else { reports.delete(stepId); }
-        if (reports.size) { this.anchors.set(editorUri, reports); } else { this.anchors.delete(editorUri); }
-        if (before !== JSON.stringify(report)) { this.changed.fire(); }
-    }
-
-    forgetEditor(editorUri: string): void {
-        if (this.anchors.delete(editorUri)) { this.changed.fire(); }
-    }
-
-    anchorStatus(step: TutorStep): AnchorStatus {
-        const uri = this.stepUri(step)?.toString();
-        if (!uri) { return { kind: 'none' }; }
-        const report = this.anchors.get(uri)?.get(step.id);
-        if (!report) { return { kind: 'closed' }; }
-        return report === 'missing' ? { kind: 'missing' } : report === 'ambiguous' ? { kind: 'ambiguous' } : { kind: 'ok', line: report.line };
     }
 }

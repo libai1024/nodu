@@ -1,273 +1,121 @@
 // SPDX-License-Identifier: MIT
-// 教学步骤 panel (docs/0.2/AI-TUTOR-DESIGN.md §3, §7, §8). It carries the same
-// hint text as the in-editor ghost zone, reachable by keyboard and screen
-// readers, plus the step list, test reminders and completion conditions.
-// T1 has no checker: the student reviews the conditions and confirms.
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { CommandRegistry, CommandService, MenuModelRegistry } from '@theia/core/lib/common';
-import { CommonMenus, FrontendApplicationContribution, ReactWidget } from '@theia/core/lib/browser';
+import { CommonMenus, ReactWidget } from '@theia/core/lib/browser';
 import { AbstractViewContribution } from '@theia/core/lib/browser/shell/view-contribution';
-import { TabBarToolbarContribution, TabBarToolbarRegistry } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS } from './nodu-tutor-hints';
-import { HINT_LEVEL_LABELS, HintLevel, LAYER_LABELS, REFERENCE_LEVEL, STEP_KIND_LABELS, StepState, TutorCheckType, TutorStep, hintSections, markerFor, maxHintLevel } from '../common/nodu-tutor-plan';
 
-const PANEL_HINT_MAX: HintLevel = 2;
-const CHECK_LABELS: Record<TutorCheckType, string> = {
-    compiles: '编译', calls: '调用', checksReturn: '返回值', noCallIn: '分层', hostTest: '主机测试', serialMatch: '串口', review: '审阅', manual: '自查',
-};
-
+function MessageText({ text }: { text: string }): React.ReactElement {
+    return <>{text.split(/(```[\s\S]*?```)/g).map((part, i) => part.startsWith('```')
+        ? <pre key={i} tabIndex={0}><code>{part.replace(/^```[^\n]*\n?/, '').replace(/```$/, '')}</code></pre>
+        : <span key={i}>{part}</span>)}</>;
+}
+function ProviderSettings({ tutor, close }: { tutor: NoduTutorModel; close(): void }): React.ReactElement {
+    const [key, setKey] = React.useState('');
+    const [model, setModel] = React.useState(tutor.provider?.model ?? 'glm-5.3');
+    const [error, setError] = React.useState('');
+    const [saving, setSaving] = React.useState(false);
+    const save = async (): Promise<void> => {
+        setSaving(true); setError('');
+        try { await tutor.configure(key, model); setKey(''); close(); }
+        catch { setError('GLM 配置未保存'); } finally { setSaving(false); }
+    };
+    return <form className="nodu-ai-settings" aria-label="AI 设置" onSubmit={e => { e.preventDefault(); void save(); }}>
+        <label>服务商<input value="GLM Coding Plan" readOnly /></label>
+        <label>模型<select value={model} onChange={e => setModel(e.target.value)}>{['glm-5.3','glm-5.3-flash','glm-4.7','glm-4.6'].map(m => <option key={m}>{m}</option>)}</select></label>
+        <label>API Key<input autoComplete="off" type="password" value={key} placeholder={tutor.provider?.configured ? '已配置' : ''} onChange={e => setKey(e.target.value)} /></label>
+        {tutor.provider?.storage === 'session' && <div role="status">系统钥匙串不可用，仅本次会话有效</div>}
+        <label className="nodu-ai-checkbox"><input type="checkbox" checked={tutor.autoReview} onChange={e => tutor.setDisplay('autoReview', e.target.checked)} />逐行 AI 检查（发送当前文件）</label>
+        {error && <div className="scope-error" role="alert">{error}</div>}
+        <div className="nodu-ai-actions"><button type="button" className="theia-button secondary" onClick={close}>取消</button><button className="theia-button" disabled={saving}>保存</button>
+            {tutor.provider?.configured && <button type="button" className="scope-text-button" onClick={() => void tutor.forgetCredential().catch(() => setError('系统凭证未删除'))}>删除密钥</button>}</div>
+    </form>;
+}
+function Migration({ tutor }: { tutor: NoduTutorModel }): React.ReactElement {
+    const [mcu, setMcu] = React.useState(''); const [sdkId, setSdk] = React.useState(''); const [sdkDigest, setDigest] = React.useState(''); const [error, setError] = React.useState('');
+    const run = async (accept: boolean): Promise<void> => { try { setError(''); if (accept) { await tutor.acceptMigration(); } else { await tutor.previewMigration({ mcu, sdkId, sdkDigest }); } } catch (e) { setError(e instanceof Error ? e.message : '迁移失败'); } };
+    return <details className="nodu-ai-details"><summary>迁移旧课程</summary><div className="nodu-ai-settings">
+        {!tutor.migration ? <><label>芯片<input value={mcu} onChange={e => setMcu(e.target.value)} /></label><label>SDK<input value={sdkId} onChange={e => setSdk(e.target.value)} /></label><label>SDK SHA-256<input value={sdkDigest} onChange={e => setDigest(e.target.value)} /></label><button className="theia-button secondary" onClick={() => void run(false)}>预览迁移</button></>
+            : <><strong>{tutor.migration.course.title}</strong><p>{tutor.migration.course.target.mcu}</p><p>{tutor.migration.course.steps.length} 个步骤，旧完成记录转为自查。原计划会备份。</p><button className="theia-button" onClick={() => void run(true)}>确认迁移</button></>}
+        {error && <div role="alert" className="scope-error">{error}</div>}
+    </div></details>;
+}
+function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string): void }): React.ReactElement {
+    const [settings, setSettings] = React.useState(false);
+    const [, redraw] = React.useReducer(n => n + 1, 0);
+    const log = React.useRef<HTMLDivElement>(null);
+    const following = React.useRef(true);
+    React.useEffect(() => { if (following.current) { log.current?.scrollTo(0, log.current.scrollHeight); } });
+    const step = tutor.currentStep();
+    const isBusy = !!tutor.busy;
+    const reset = async (): Promise<void> => {
+        if (await new ConfirmDialog({ title: '重置进度', msg: '清除本课程的学习记录？', ok: '重置', cancel: '取消' }).open()) { await tutor.action({ type: 'reset' }); }
+    };
+    return <div className="nodu-ai-panel">
+        <div className="nodu-ai-modebar"><div className="nodu-ai-modes" role="group" aria-label="对话模式">
+            <button aria-pressed={tutor.mode === 'teach'} onClick={() => tutor.setMode('teach')}>教学</button><button aria-pressed={tutor.mode === 'ask'} onClick={() => tutor.setMode('ask')}>提问</button></div>
+            <button className="nodu-ai-icon" aria-label={tutor.paused ? '继续教学' : '暂停教学'} aria-pressed={tutor.paused} title={tutor.paused ? '继续教学' : '暂停教学'} onClick={() => tutor.setPaused(!tutor.paused)}><i className={`codicon codicon-${tutor.paused ? 'play' : 'debug-pause'}`} /></button>
+            <button className="nodu-ai-icon" aria-label="清空对话" title="清空对话" onClick={() => void tutor.clearChat()}><i className="codicon codicon-clear-all" /></button>
+            <button className="nodu-ai-icon" aria-label="AI 设置" aria-expanded={settings} title="AI 设置" onClick={() => setSettings(!settings)}><i className="codicon codicon-settings-gear" /></button></div>
+        {settings && <ProviderSettings tutor={tutor} close={() => setSettings(false)} />}
+        {tutor.error && <div className="nodu-ai-error" role="alert">{tutor.error}<button className="scope-text-button" onClick={() => void tutor.load()}>重连</button></div>}
+        {tutor.mode === 'teach' && <>
+            {tutor.session?.plan.kind === 'legacy' && <Migration tutor={tutor} />}
+            {tutor.plan && <div className="nodu-ai-course">
+                <div className="nodu-ai-stepbar"><select aria-label="当前步骤" value={step?.id ?? ''} onChange={e => void tutor.action({ type: 'select', stepId: e.target.value })}>
+                    {!step && <option value="">已自查全部步骤</option>}{tutor.plan.steps.map(s => <option key={s.id} value={s.id} disabled={!tutor.available(s.id)}>{s.title}{tutor.progress.steps[s.id] ? ' ✓' : ''}</option>)}</select>
+                    <button className="theia-button secondary" disabled={!step || isBusy || tutor.paused || !tutor.buffer} onClick={() => void tutor.send('step')}>检查本步</button></div>
+                {step && <details className="nodu-ai-details"><summary>{step.goal}</summary><div className="nodu-ai-step-body">
+                    <p>{step.why}</p><ul>{step.requirements.map(r => <li key={r.id}>{r.text}</li>)}</ul>
+                    {step.options?.map(o => <button key={o.id} className="theia-button secondary" disabled={!o.available} onClick={() => void tutor.action({ type: 'decide', stepId: step.id, optionId: o.id })}>{o.label}</button>)}
+                    {step.guidance?.map(g => <pre key={g.id} tabIndex={0}>{g.lines.join('\n')}</pre>)}
+                    <button className="scope-text-button" onClick={() => run(TUTOR_COMMANDS.revealStep)}>定位代码</button>
+                    {step.kind !== 'decide' && <button className="scope-text-button" onClick={() => void tutor.action({ type: tutor.progress.steps[step.id] ? 'reopen' : 'manualCheck', stepId: step.id })}>{tutor.progress.steps[step.id] ? '重新练习' : '自查完成'}</button>}
+                    <button className="scope-text-button" onClick={() => void reset()}>重置进度</button>
+                </div></details>}
+            </div>}
+        </>}
+        <div className="nodu-ai-log" ref={log} role="log" aria-label="AI 对话" onScroll={() => { const n = log.current; following.current = !n || n.scrollHeight - n.scrollTop - n.clientHeight < 32; }}>
+            {tutor.messages[tutor.mode].length === 0 && <div className="nodu-ai-empty"><i className="codicon codicon-sparkle" /><span>{tutor.mode === 'teach' ? '从当前代码开始' : '提问代码问题'}</span></div>}
+            {tutor.messages[tutor.mode].map(m => <article key={m.id} className={`nodu-ai-message nodu-ai-${m.role}`} aria-label={m.role === 'user' ? '你' : 'AI'} aria-busy={m.status === 'pending'}>
+                {m.text ? <MessageText text={m.text} /> : m.status === 'pending' && <span className="nodu-ai-status">正在思考…</span>}
+                {m.status === 'stopped' && <div className="nodu-ai-status">已停止</div>}
+                {m.status === 'failed' && <div className="nodu-ai-failed" role="alert">{m.note ?? 'AI 请求失败'}</div>}
+            </article>)}
+        </div>
+        <form className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); following.current = true; void tutor.send(); }}>
+            {tutor.buffer && <label className="nodu-ai-context"><input type="checkbox" checked={tutor.includeCode} onChange={e => { tutor.includeCode = e.target.checked; redraw(); }} /><span title={tutor.buffer.path}>{tutor.buffer.path}</span></label>}
+            <textarea aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} rows={3} placeholder={tutor.mode === 'teach' ? '一起写这段代码…' : '想了解什么？'} value={tutor.drafts[tutor.mode]} onChange={e => { tutor.drafts[tutor.mode] = e.target.value; redraw(); }} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (!isBusy) { void tutor.send(); } } }} />
+            <div className="nodu-ai-composer-actions"><button type="button" className="scope-text-button" onClick={() => setSettings(true)}>{tutor.provider?.model ?? 'GLM'}</button>
+                {tutor.mode === 'teach' && tutor.paused && <span>教学已暂停</span>}
+                {isBusy ? <button type="button" className="theia-button secondary" onClick={() => tutor.cancel()}>停止</button> : <button className="theia-button" disabled={!tutor.workspaceId || !tutor.drafts[tutor.mode].trim() || (tutor.mode === 'teach' && tutor.paused)}>发送</button>}</div>
+        </form>
+    </div>;
+}
 @injectable()
 export class NoduTutorWidget extends ReactWidget {
-    static readonly ID = 'nodu:tutor';
-    static readonly LABEL = '教学步骤';
+    static readonly ID = 'nodu:tutor'; static readonly LABEL = 'AI';
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(CommandService) protected readonly commands!: CommandService;
-    /** Decision drafts: an option is only recorded when the student confirms it. */
-    private readonly drafts = new Map<string, string>();
-
-    @postConstruct()
-    protected init(): void {
-        this.id = NoduTutorWidget.ID;
-        this.title.label = NoduTutorWidget.LABEL;
-        this.title.caption = 'Nodu · 教学步骤与代码提示';
-        this.title.iconClass = 'codicon codicon-mortar-board';
-        this.title.closable = true;
-        this.addClass('scope-widget');
-        this.addClass('nodu-tutor-widget');
-        this.node.tabIndex = 0;
+    @postConstruct() protected init(): void {
+        this.id = NoduTutorWidget.ID; this.title.label = 'AI'; this.title.caption = 'AI'; this.title.iconClass = 'codicon codicon-sparkle'; this.title.closable = true;
+        this.addClass('scope-widget'); this.addClass('nodu-tutor-widget'); this.node.tabIndex = -1;
         this.toDispose.push(this.tutor.onDidChange(() => this.update()));
-        this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible)));
-        this.update();
+        this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible))); this.update();
     }
-
-    protected onActivateRequest(): void { this.node.focus(); }
-
-    private run(command: string, ...args: unknown[]): void { void this.commands.executeCommand(command, ...args); }
-
-    private async askReference(step: TutorStep): Promise<void> {
-        const confirmed = await new ConfirmDialog({
-            title: '查看参考实现',
-            msg: `${step.id}「${step.title}」的参考实现会记入学习记录。先试着按骨架自己写，写不出来再看。`,
-            ok: '查看参考实现', cancel: '再试试',
-        }).open();
-        if (confirmed) { this.tutor.showReference(step.id); }
-    }
-
-    protected render(): React.ReactNode {
-        const { plan, error } = this.tutor;
-        if (!plan) {
-            return <div className="nodu-tutor-content">
-                <div className="nodu-preview-empty"><i className="codicon codicon-mortar-board" aria-hidden="true" />
-                    <strong>当前项目没有教学计划</strong>
-                    {error && <p className="scope-error" role="alert">{error}</p>}
-                </div>
-            </div>;
-        }
-        const states = this.tutor.stepStates();
-        const current = this.tutor.currentStep();
-        const done = this.tutor.completedCount();
-        const reminders = this.tutor.reminders();
-        return <div className="nodu-tutor-content">
-            <header className="nodu-tutor-head">
-                <h2>{plan.title}</h2>
-                <p className="scope-helper">{plan.goal}</p>
-                <div className="nodu-tutor-progress" role="progressbar" aria-label="完成进度" aria-valuemin={0} aria-valuemax={states.length} aria-valuenow={done}>
-                    <span style={{ width: `${Math.round(done / states.length * 100)}%` }} />
-                </div>
-                <p className="scope-caption">已完成 {done} / {states.length}{plan.source === 'generated' ? ' · 生成计划' : ''}</p>
-            </header>
-            {reminders.length > 0 && <section className="nodu-tutor-reminders" aria-label="测试提醒">
-                {reminders.map(reminder => <div key={reminder.stepId} className="nodu-tutor-reminder" role="status">
-                    <i className="codicon codicon-beaker" aria-hidden="true" /><span>{reminder.text}</span>
-                    {current?.id !== reminder.stepId && <button className="scope-text-button" onClick={() => this.tutor.select(reminder.stepId)}>去做 {reminder.stepId}</button>}
-                </div>)}
-            </section>}
-            {current ? this.renderStep(this.tutor.state(current.id)!) : <section className="nodu-tutor-step"><p><strong>全部步骤已完成。</strong></p></section>}
-            <section className="nodu-tutor-list" aria-label="全部步骤">
-                <h3>全部步骤</h3>
-                <ol>{states.map(state => this.renderListItem(state, state.step.id === current?.id))}</ol>
-                <button className="scope-text-button" onClick={() => void this.resetProgress()}>重置进度</button>
-            </section>
-        </div>;
-    }
-
-    /** Reopening only changes completion records; code is never touched. Cascades are confirmed. */
-    private async reopen(step: TutorStep): Promise<void> {
-        const impact = this.tutor.reopenImpact(step.id);
-        if (impact.length) {
-            const confirmed = await new ConfirmDialog({
-                title: '重新打开步骤',
-                msg: `后面的 ${impact.join('、')} 都建立在 ${step.id} 之上，会一起改回未完成。代码文件不会改动。`,
-                ok: '重新打开', cancel: '取消',
-            }).open();
-            if (!confirmed) { return; }
-        }
-        this.tutor.reopen(step.id);
-    }
-
-    private async resetProgress(): Promise<void> {
-        const confirmed = await new ConfirmDialog({
-            title: '重置进度', msg: '清除本机记录的完成状态、提示级别和学习记录？代码文件不会改动。', ok: '重置', cancel: '取消',
-        }).open();
-        if (confirmed) { this.tutor.resetProgress(); }
-    }
-
-    private renderStep(state: StepState): React.ReactNode {
-        const { step, status } = state;
-        const untested = this.tutor.untestedDependencies(step);
-        const rules = step.rules.map(id => this.tutor.plan!.rules.find(rule => rule.id === id)).filter(rule => !!rule);
-        return <section className="nodu-tutor-step" aria-labelledby="nodu-tutor-step-title">
-            <div className="nodu-tutor-step-meta">
-                <span className="scope-mono">{step.id}</span>
-                <span className="nodu-tutor-tag">{STEP_KIND_LABELS[step.kind]}</span>
-                {step.layer && <span className="nodu-tutor-tag">{LAYER_LABELS[step.layer]}</span>}
-                {status === 'passed' && <span className="nodu-tutor-tag nodu-tutor-tag-done">已完成</span>}
-            </div>
-            <h3 id="nodu-tutor-step-title">{step.title}</h3>
-            <p className="nodu-tutor-goal">{step.goal}</p>
-            <p className="scope-helper"><strong>为什么现在做</strong> {step.why}</p>
-            {untested.length > 0 && status !== 'passed' && <p className="nodu-tutor-warn" role="note">
-                <i className="codicon codicon-warning" aria-hidden="true" />上游未验证：{untested.map(dep => `${dep.id}「${dep.title}」`).join('、')}还没有测试</p>}
-            {step.kind === 'decide' ? this.renderDecision(step, status === 'passed') : <>
-                {this.renderAnchor(step)}
-                {step.hints && this.renderHints(step)}
-            </>}
-            {step.contract.length > 0 && <div className="nodu-tutor-block">
-                <h4>完成条件 · 自查</h4>
-                <ul className="nodu-tutor-contract">{step.contract.map((check, index) => <li key={index}>
-                    <span className="nodu-tutor-tag">{CHECK_LABELS[check.type]}</span><span>{check.text}</span></li>)}</ul>
-            </div>}
-            {rules.length > 0 && <details className="nodu-tutor-rules">
-                <summary>工程实践 · {rules.length}</summary>
-                {rules.map(rule => <div key={rule!.id}><strong>{rule!.title}</strong><p>{rule!.why}</p></div>)}
-            </details>}
-            {step.kind !== 'decide' && <div className="nodu-tutor-actions">{status === 'passed'
-                ? <button className="theia-button secondary" onClick={() => void this.reopen(step)}>重新打开</button>
-                : <button className="theia-button" onClick={() => this.tutor.complete(step.id)}><i className="codicon codicon-check" aria-hidden="true" />完成这一步</button>}
-            </div>}
-        </section>;
-    }
-
-    private renderAnchor(step: TutorStep): React.ReactNode {
-        const anchor = this.tutor.anchorStatus(step);
-        if (anchor.kind === 'none' || !step.anchor) { return null; }
-        const file = step.anchor.file;
-        const open = (label: string): React.ReactNode => <button className="scope-text-button" onClick={() => this.run(TUTOR_COMMANDS.revealStep, step.id)}>
-            <i className="codicon codicon-file-code" aria-hidden="true" /> {label}</button>;
-        switch (anchor.kind) {
-            case 'ok': return <div className="nodu-tutor-anchor">{open(`${file}:${anchor.line}`)}</div>;
-            case 'closed': return <div className="nodu-tutor-anchor">{open(`打开 ${file}`)}</div>;
-            case 'ambiguous': return <div className="nodu-tutor-anchor nodu-tutor-warn" role="note">
-                <span>{file} 中有多处 {markerFor(step.id)}，请只保留一处</span>{open('打开文件')}</div>;
-            case 'missing': return <div className="nodu-tutor-anchor nodu-tutor-warn" role="note">
-                <span>{file} 中找不到 {markerFor(step.id)}，提示不会显示在编辑器里</span>
-                <button className="scope-text-button" onClick={() => this.run(TUTOR_COMMANDS.insertMarker, step.id)}>在光标处放置标记</button></div>;
-        }
-    }
-
-    private renderHints(step: TutorStep): React.ReactNode {
-        const level = this.tutor.level(step.id);
-        const max = maxHintLevel(step);
-        const tabs = Array.from({ length: Math.min(PANEL_HINT_MAX, max) + 1 }, (_, index) => index as HintLevel);
-        return <div className="nodu-tutor-block">
-            <div className="nodu-tutor-levels" role="group" aria-label="提示级别">
-                {tabs.map(index => <button key={index} aria-pressed={level === index} onClick={() => this.tutor.setLevel(step.id, index)}>
-                    {`L${index} ${HINT_LEVEL_LABELS[index]}`}</button>)}
-                {max >= REFERENCE_LEVEL && <button aria-pressed={level === REFERENCE_LEVEL}
-                    onClick={() => { if (level !== REFERENCE_LEVEL) { void this.askReference(step); } }}>L3 参考实现</button>}
-            </div>
-            <div className="nodu-tutor-hints" aria-live="polite">{hintSections(step, level).map(section => <div key={section.level} className="nodu-tutor-hint">
-                <div className="nodu-tutor-hint-label">{section.level === REFERENCE_LEVEL ? '参考实现 · 已记入学习记录' : section.label}</div>
-                {section.level >= 2 ? <pre className="nodu-tutor-code" tabIndex={0}>{section.text}</pre> : <p>{section.text}</p>}
-            </div>)}</div>
-        </div>;
-    }
-
-    private renderDecision(step: TutorStep, decided: boolean): React.ReactNode {
-        const chosen = this.tutor.decision(step.id);
-        const draft = this.drafts.get(step.id) ?? chosen ?? step.options?.find(option => option.available)?.id;
-        return <div className="nodu-tutor-block">
-            <fieldset className="nodu-tutor-options" disabled={decided}>
-                <legend className="scope-visually-hidden">{step.title}</legend>
-                {step.options?.map(option => <label key={option.id} className={`scope-target${draft === option.id ? ' scope-target-selected' : ''}`}>
-                    <input type="radio" name={`nodu-tutor-${step.id}`} value={option.id} checked={draft === option.id} disabled={!option.available}
-                        onChange={() => { this.drafts.set(step.id, option.id); this.update(); }} />
-                    <span><strong>{option.label}{!option.available && ' · 暂无步骤'}</strong>{option.note && <span>{option.note}</span>}</span>
-                </label>)}
-            </fieldset>
-            <div className="nodu-tutor-actions">{decided
-                ? <button className="theia-button secondary" onClick={() => void this.reopen(step)}>重新选择</button>
-                : <button className="theia-button" disabled={!draft} onClick={() => draft && this.tutor.decide(step.id, draft)}>确定方案</button>}
-            </div>
-        </div>;
-    }
-
-    private renderListItem(state: StepState, isCurrent: boolean): React.ReactNode {
-        const { step, status } = state;
-        const blocking = status === 'locked' ? this.tutor.blockingDependencies(step).map(dep => dep.id).join('、') : '';
-        const icon = status === 'passed' ? 'codicon-pass-filled' : status === 'locked' ? 'codicon-lock' : isCurrent ? 'codicon-circle-filled' : 'codicon-circle-large-outline';
-        return <li key={step.id}>
-            <button className={`nodu-tutor-item nodu-tutor-${status}`} aria-current={isCurrent ? 'step' : undefined} disabled={status === 'locked'}
-                title={blocking ? `先完成 ${blocking}` : undefined} onClick={() => this.tutor.select(step.id)}>
-                <i className={`codicon ${icon}`} aria-hidden="true" />
-                <span className="nodu-tutor-item-id scope-mono">{step.id}</span>
-                <span className="nodu-tutor-item-title">{step.title}</span>
-                <span className="nodu-tutor-tag">{STEP_KIND_LABELS[step.kind]}</span>
-                {state.unverified && status !== 'passed' && <span className="nodu-tutor-tag nodu-tutor-tag-warn">上游未验证</span>}
-                {this.tutor.viewedReference(step.id) && <span className="nodu-tutor-tag">看过参考</span>}
-                <span className="scope-visually-hidden">{status === 'passed' ? '已完成' : status === 'locked' ? `未解锁，先完成 ${blocking}` : ''}</span>
-            </button>
-        </li>;
-    }
+    protected onActivateRequest(): void { this.node.querySelector<HTMLTextAreaElement>('textarea')?.focus(); }
+    protected render(): React.ReactNode { return <TutorPanel tutor={this.tutor} run={id => void this.commands.executeCommand(id)} />; }
 }
-
 @injectable()
-export class NoduTutorViewContribution extends AbstractViewContribution<NoduTutorWidget> implements FrontendApplicationContribution, TabBarToolbarContribution {
-    @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
-    constructor() {
-        // Right area, before 帧缓冲: the vision toggle stays the rightmost control.
-        super({ widgetId: NoduTutorWidget.ID, widgetName: NoduTutorWidget.LABEL, defaultWidgetOptions: { area: 'right', rank: 50 } });
-    }
-
-    /** Runs after the workbench applied its layout, so the startup collapse does not hide the panel again. */
-    async onDidInitializeLayout(): Promise<void> {
-        await this.tutor.ready;
-        if (this.tutor.isFresh()) {
-            await this.openView({ reveal: true, activate: false });
-            this.tutor.markSeen();
-        }
-    }
-
+export class NoduTutorViewContribution extends AbstractViewContribution<NoduTutorWidget> {
+    constructor() { super({ widgetId: NoduTutorWidget.ID, widgetName: 'AI', defaultWidgetOptions: { area: 'right', rank: 50 } }); }
     override registerCommands(commands: CommandRegistry): void {
         super.registerCommands(commands);
-        const hasPlan = (): boolean => !!this.tutor.plan;
-        commands.registerCommand({ id: TUTOR_COMMANDS.openPanel, label: NoduTutorWidget.LABEL, category: '见微 Nodu' }, {
-            execute: () => this.openView({ reveal: true, activate: true }),
-            isEnabled: hasPlan, isVisible: hasPlan,
-        });
-        commands.registerCommand({ id: TUTOR_COMMANDS.togglePanel, label: NoduTutorWidget.LABEL, category: '见微 Nodu' }, {
-            execute: () => this.openView({ toggle: true, activate: true }),
-            isEnabled: hasPlan, isVisible: hasPlan, isToggled: () => this.tutor.panelVisible,
-        });
+        commands.registerCommand({ id: TUTOR_COMMANDS.openPanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ reveal: true, activate: true }) });
+        commands.registerCommand({ id: TUTOR_COMMANDS.togglePanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ toggle: true, activate: true }) });
     }
-
-    /** The side panel's own title row carries the hint toggle, so the panel draws no second header. */
-    registerToolbarItems(toolbar: TabBarToolbarRegistry): void {
-        toolbar.registerItem({
-            id: 'nodu.tutor.panel-toggle-hints',
-            command: TUTOR_COMMANDS.toggleHints,
-            icon: () => `codicon ${this.tutor.hintsVisible ? 'codicon-eye' : 'codicon-eye-closed'}`,
-            tooltip: '显示 / 隐藏编辑器内代码提示 · Ctrl / ⌘ K, H',
-            isVisible: widget => widget instanceof NoduTutorWidget && !!this.tutor.plan,
-            onDidChange: this.tutor.onDidChange,
-        });
-    }
-
-    override registerMenus(menus: MenuModelRegistry): void {
-        menus.registerMenuAction(CommonMenus.VIEW_LAYOUT, { commandId: TUTOR_COMMANDS.togglePanel, order: '0_nodu_5' });
-        menus.registerMenuAction(CommonMenus.VIEW_LAYOUT, { commandId: TUTOR_COMMANDS.toggleHints, order: '0_nodu_6' });
-    }
+    override registerMenus(menus: MenuModelRegistry): void { menus.registerMenuAction(CommonMenus.VIEW_LAYOUT, { commandId: TUTOR_COMMANDS.togglePanel, order: '0_nodu_5' }); }
 }

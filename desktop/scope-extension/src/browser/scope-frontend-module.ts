@@ -115,10 +115,8 @@ export default new ContainerModule(bind => {
     bind(NoduTutorWidget).toSelf();
     bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduTutorWidget.ID, createWidget: () => ctx.container.get(NoduTutorWidget) })).inSingletonScope();
     bindViewContribution(bind, NoduTutorViewContribution);
-    bind(FrontendApplicationContribution).toService(NoduTutorViewContribution);
-    bind(TabBarToolbarContribution).toService(NoduTutorViewContribution);
     bind(NoduTutorHintsContribution).toSelf().inSingletonScope();
-    for (const contribution of [FrontendApplicationContribution, CommandContribution, KeybindingContribution]) {
+    for (const contribution of [FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution]) {
         bind(contribution).toService(NoduTutorHintsContribution);
     }
 });

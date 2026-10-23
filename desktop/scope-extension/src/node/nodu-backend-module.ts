@@ -11,7 +11,10 @@ import { NoduDeviceServer } from './nodu-device-server';
 import { NoduEmbeddedServer } from './nodu-embedded-server';
 import { EmbeddedClient, NODU_EMBEDDED_PATH, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
 
+import { bindTutorBackend } from './tutor/tutor-backend-binding';
+
 export default new ContainerModule(bind => {
+    bindTutorBackend(bind);
     bind(NoduDeviceServer).toSelf().inSingletonScope();
     bind(BackendApplicationContribution).toService(NoduDeviceServer);
     bind(NoduResourcesServer).toSelf().inSingletonScope();

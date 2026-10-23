@@ -30,7 +30,7 @@ import { NoduDevicePanel } from './nodu-device-panel';
 import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBoardFilesContribution } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
-import { TUTOR_COMMANDS } from './nodu-tutor-hints';
+import { TUTOR_COMMANDS, TUTOR_MENU } from './nodu-tutor-hints';
 import { NoduBrand } from './scope-brand';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduCToolbar } from './nodu-embedded-toolbar';
@@ -108,11 +108,7 @@ export class ScopeToolbar extends ReactWidget {
         this.toDispose.push(this.layoutState.onDidChange(() => this.update()));
         this.toDispose.push(this.themes.onDidColorThemeChange(() => this.update()));
         // Hint and anchor changes fire often; the toolbar only shows whether a plan exists and the panel is open.
-        let tutorState = '';
-        this.toDispose.push(this.tutor.onDidChange(() => {
-            const next = `${!!this.tutor.plan}:${this.tutor.panelVisible}`;
-            if (next !== tutorState) { tutorState = next; this.update(); }
-        }));
+        this.toDispose.push(this.tutor.onDidChange(() => this.update()));
         const outside = (event: PointerEvent): void => {
             if (this.layoutState.deviceOpen && event.target instanceof Node && !this.node.querySelector('.scope-device-picker')?.contains(event.target)) {
                 this.layoutState.setDeviceOpen(false);
@@ -168,7 +164,7 @@ export class ScopeToolbar extends ReactWidget {
             <button className="scope-action scope-toolbar-icon scope-toolbar-files" aria-label="文件列表" aria-pressed={filesVisible} onClick={() => void this.commands.executeCommand('scope.toggle-files')} title={filesVisible ? '隐藏文件列表' : '显示文件列表'}><i className={`codicon codicon-layout-sidebar-left${filesVisible ? '' : '-off'}`} aria-hidden="true"/></button>
             <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="串行终端" aria-pressed={consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title={consoleVisible ? '隐藏串行终端' : '显示串行终端'}><i className={`codicon codicon-layout-panel${consoleVisible ? '' : '-off'}`} aria-hidden="true"/></button>
             {/* Teaching projects only; 帧缓冲 stays the rightmost panel toggle. */}
-            {this.tutor.plan && <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="教学步骤" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title={this.tutor.panelVisible ? '隐藏教学步骤' : '显示教学步骤'}><i className="codicon codicon-mortar-board" aria-hidden="true"/></button>}
+            {this.renderAI()}
             <button className="scope-action scope-toolbar-icon scope-toolbar-vision" aria-label="帧缓冲" aria-pressed={visionVisible} onClick={() => void this.commands.executeCommand('scope.toggle-vision')} title={visionVisible ? '隐藏帧缓冲' : '显示帧缓冲'}><i className={`codicon codicon-layout-sidebar-right${visionVisible ? '' : '-off'}`} aria-hidden="true"/></button>
             <span className="scope-toolbar-divider" aria-hidden="true"/>
             <button className="scope-action scope-toolbar-icon nodu-toolbar-more" aria-label={`更多 · 当前${simple ? '简洁' : '专业'}模式`} aria-haspopup="menu" title="主题、布局模式与设置" onClick={event => this.openMenu(NODU_MORE_MENU, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
@@ -186,14 +182,22 @@ export class ScopeToolbar extends ReactWidget {
                 <span className="scope-device-chip-board">{this.embedded.espChip.toUpperCase().replace(/^ESP32(?=.)/, 'ESP32-')}</span>
             </div>
             <div className="scope-toolbar-end">
+                {this.renderAI()}
                 <button className="scope-action scope-toolbar-icon" aria-label="文件列表" aria-pressed={this.layoutState.filesVisible} onClick={() => void this.commands.executeCommand('scope.toggle-files')}><i className="codicon codicon-layout-sidebar-left" aria-hidden="true"/></button>
                 <button className="scope-action scope-toolbar-icon" aria-label="更多" aria-haspopup="menu" onClick={event => this.openMenu(NODU_MORE_MENU, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
             </div>
         </header>;
     }
 
+    private renderAI(): React.ReactNode {
+        return <div className="nodu-ai-split" role="group" aria-label="AI">
+            <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="AI 侧栏" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title="AI 侧栏"><i className="codicon codicon-sparkle" aria-hidden="true" /></button>
+            <button className="scope-action nodu-ai-more" aria-label="AI 显示设置" aria-haspopup="menu" title="AI 显示设置" onClick={event => this.openMenu(TUTOR_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true" /></button>
+        </div>;
+    }
+
     private renderC(): React.ReactNode {
-        const tutor = this.tutor.plan ? <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="教学步骤" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title={this.tutor.panelVisible ? '隐藏教学步骤' : '显示教学步骤'}><i className="codicon codicon-mortar-board" aria-hidden="true"/></button> : undefined;
+        const tutor = this.renderAI();
         return <NoduCToolbar model={this.embedded} simple={this.layoutState.mode === 'simple'} project={this.layoutState.project}
             deviceOpen={this.layoutState.deviceOpen} filesVisible={this.layoutState.filesVisible}
             panelVisible={this.commandRegistry.isToggled(C_COMMANDS.togglePanel)}
