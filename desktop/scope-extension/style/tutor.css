@@ -81,3 +81,16 @@
 .nodu-tutor-step-float { display: flex; align-items: center; gap: 8px; max-width: 300px; padding: 7px 10px; color: var(--theia-foreground); background: var(--theia-editorWidget-background); border: 1px solid var(--theia-editorWidget-border); border-radius: 5px; box-shadow: 0 2px 8px #0002; }
 .nodu-tutor-step-float span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nodu-tutor-step-float button { flex-shrink: 0; margin: 0; }
+
+/* Mode switch and new chat in the side panel title row (one header line, like Cursor). */
+.nodu-ai-titlebar { display: flex; align-items: center; gap: 2px; }
+.theia-sidepanel-toolbar .nodu-ai-titlebar .nodu-ai-modes { margin-right: 4px; }
+/* AI settings popover anchored to the left sidebar button or the composer model picker. */
+.nodu-ai-popover { position: fixed; z-index: 5000; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); border-radius: 8px; background: var(--theia-editorWidget-background, var(--theia-menu-background)); color: var(--theia-foreground); box-shadow: 0 8px 24px var(--theia-widget-shadow, #0003); font-size: 13px; }
+.nodu-ai-popover-card { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
+.nodu-ai-popover-head { display: flex; align-items: center; justify-content: space-between; height: 34px; padding: 0 6px 0 12px; flex: none; border-bottom: 1px solid var(--theia-panel-border); font-weight: 600; }
+.nodu-ai-popover-head > span { display: inline-flex; align-items: center; gap: 6px; }
+.nodu-ai-popover-head .codicon-sparkle { color: var(--theia-scope-accent, var(--theia-focusBorder)); }
+.nodu-ai-popover .nodu-ai-settings { max-height: none; border-bottom: 0; }
+.nodu-ai-warn { padding: 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.nodu-ai-warn:hover { text-decoration: underline; }

@@ -25,7 +25,9 @@ import { ScopeConsoleContribution } from './scope-workbench';
 import { NoduBoardFilesContribution, NoduBoardFilesWidget } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { NoduTutorHintsContribution } from './nodu-tutor-hints';
-import { NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
+import { NoduTutorToolbarContribution, NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
+import { NoduAiSettingsContribution, NoduAiSettingsPopover, NoduSidebarBottomMenuWidget } from './nodu-ai-settings';
+import { SidebarBottomMenuWidget } from '@theia/core/lib/browser/shell/sidebar-bottom-menu-widget';
 import '../../style/scope.css';
 import '../../style/widgets.css';
 import '../../style/layout.css';
@@ -44,7 +46,7 @@ import { NoduProblemsPanel } from './nodu-problems-panel';
 import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-creation-handler';
 import { NoduClangdClient } from './nodu-clangd-client';
 
-export default new ContainerModule(bind => {
+export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bind(NoduDeviceModel).toSelf().inSingletonScope();
     // STM32 C workbench (0.2.1): inert until a folder with nodu.json kind stm32-hal is open.
     bind(NoduEmbeddedModel).toSelf().inSingletonScope();
@@ -125,6 +127,15 @@ export default new ContainerModule(bind => {
     bind(NoduTutorWidget).toSelf();
     bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduTutorWidget.ID, createWidget: () => ctx.container.get(NoduTutorWidget) })).inSingletonScope();
     bindViewContribution(bind, NoduTutorViewContribution);
+    bind(NoduTutorToolbarContribution).toSelf().inSingletonScope();
+    bind(TabBarToolbarContribution).toService(NoduTutorToolbarContribution);
+    // AI settings live above the left sidebar gear and open as a popover.
+    bind(NoduAiSettingsPopover).toSelf().inSingletonScope();
+    bind(NoduAiSettingsContribution).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(NoduAiSettingsContribution);
+    bind(CommandContribution).toService(NoduAiSettingsContribution);
+    bind(NoduSidebarBottomMenuWidget).toSelf();
+    rebind(SidebarBottomMenuWidget).toService(NoduSidebarBottomMenuWidget);
     bind(NoduTutorHintsContribution).toSelf().inSingletonScope();
     for (const contribution of [FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution]) {
         bind(contribution).toService(NoduTutorHintsContribution);

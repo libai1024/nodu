@@ -13,7 +13,7 @@ import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 export const TUTOR_MENU = ['nodu-ai-controls'];
 export const TUTOR_COMMANDS = {
     openPanel: 'nodu.tutor.open-panel', togglePanel: 'nodu.tutor.toggle-panel', toggleHints: 'nodu.tutor.toggle-hints',
-    revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
+    revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', settings: 'nodu.tutor.settings', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
 } as const;
 interface LineTask { decoration: string; text: string; status: 'pending' | 'ok' | 'needs-work' | 'context' | 'stale' | 'unavailable'; note: string; version?: number; }
 let count = 0;

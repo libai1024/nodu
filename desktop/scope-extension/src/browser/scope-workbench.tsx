@@ -204,7 +204,7 @@ export class ScopeToolbar extends ReactWidget {
         return <div className="nodu-ai-split" role="group" aria-label="AI">
             <button className={`scope-action scope-toolbar-icon nodu-toolbar-tutor${on ? ' nodu-ai-on' : ''}`} aria-label="AI 编辑指导" aria-pressed={on}
                 onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.guidance)}
-                title={on ? 'AI 编辑指导已开启，点击关闭（不影响 AI 对话）' : 'AI 编辑指导已关闭，点击开启'}><i className={`codicon codicon-${on ? 'sparkle-filled' : 'sparkle'}`} aria-hidden="true" /></button>
+                title={on ? 'AI 编辑指导：已开启（虚影、高光、逐行检查）。点击关闭，不影响右侧 AI 对话' : 'AI 编辑指导：已关闭。点击开启'}><i className={`codicon codicon-${on ? 'lightbulb-sparkle' : 'lightbulb'}`} aria-hidden="true" /></button>
             <button className="scope-action nodu-ai-more" aria-label="AI 菜单" aria-haspopup="menu" title="AI 对话与显示设置" onClick={event => this.openMenu(TUTOR_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true" /></button>
         </div>;
     }
