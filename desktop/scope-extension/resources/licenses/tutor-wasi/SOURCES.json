@@ -2,8 +2,8 @@
   "wasiSdk": "https://github.com/WebAssembly/wasi-sdk/tree/wasi-sdk-34",
   "llvmCommit": "895aa2c896ada719451be2e3673c83da8ddf1141",
   "wasmtime": "https://github.com/bytecodealliance/wasmtime/tree/v50.0.0",
-  "libeditLicenseSource": "https://thrysoee.dk/editline/libedit-20250104-3.1.tar.gz",
-  "libeditLicenseSourceSha256": "23792701694550a53720630cd1cd6167101b5773adddcb4104f7345b73a568ac",
+  "libeditLicenseSource": "https://thrysoee.dk/editline/libedit-20251016-3.1.tar.gz",
+  "libeditLicenseSourceSha256": "21362b00653bbfc1c71f71a7578da66b5b5203559d43134d2dd7719e313ce041",
   "licenses": [
     {
       "file": "LLVM-LICENSE",
@@ -18,5 +18,7 @@
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
     }
   ],
-  "note": "WASI SDK archive includes libedit.0.dylib without its exact source revision. Upstream libedit COPYING retained; public distribution requires provenance review."
+  "note": "libedit source version and archive SHA256 match the WASI SDK 34 official build recipe. COPYING is extracted from that pinned source archive. This is source provenance, not a reproducible-build attestation; LLVM additional third-party notices remain under review.",
+  "libeditBuildRecipe": "https://github.com/WebAssembly/wasi-sdk/blob/wasi-sdk-34/cmake/wasi-sdk-toolchain.cmake#L127-L129",
+  "libeditVersion": "20251016-3.1"
 }

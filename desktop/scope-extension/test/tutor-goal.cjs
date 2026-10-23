@@ -182,3 +182,66 @@ test('missing context is explained once and never converted into fabricated guid
  const unavailable=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{syntax:'unavailable',note:'检查器忙'}}),f.authorize);t.after(()=>unavailable.dispose());
  const failed=await unavailable.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer});assert.equal(failed.ok,false);assert.equal(failed.error,'检查器忙');assert.equal(f.calls.length,2);
 });
+
+async function workspaceFixture(t) {
+ const parent=await fs.realpath(await fs.mkdtemp(join(tmpdir(),'nodu-grant-boundary-')));t.after(()=>fs.rm(parent,{recursive:true,force:true}));
+ const root=join(parent,'project');await fs.mkdir(root);await fs.writeFile(join(root,'main.c'),buffer.text);
+ let next=0;const revoked=[],cancelled=[],live=new Map();
+ const storage={authorizeWorkspace:async path=>{const id=`workspace-${++next}`;live.set(id,path);return id;},revokeWorkspace:id=>{revoked.push(id);live.delete(id);},dispose(){live.clear();}};
+ const host=new TutorWorkspaceHost(storage,id=>cancelled.push(id));t.after(()=>host.dispose());
+ return {parent,root,host,storage,revoked,cancelled,live};
+}
+test('failed workspace selection can retry the same path or return to an empty workbench',async t=>{
+ const f=await workspaceFixture(t),missing=join(f.parent,'later'),uri=pathToFileURL(missing).href;
+ await assert.rejects(()=>f.host.select(uri));await f.host.select('');assert.deepEqual(await f.host.list(),[]);
+ await assert.rejects(()=>f.host.select(uri));await fs.mkdir(missing);await f.host.select(uri);assert.equal((await f.host.list()).length,1);
+});
+test('a failed multi-root selection revokes all partial grants before retry',async t=>{
+ const f=await workspaceFixture(t),workspace=join(f.parent,'test.code-workspace');
+ await fs.writeFile(workspace,JSON.stringify({folders:[{path:'project'},{path:'missing'}]}));
+ await assert.rejects(()=>f.host.select(pathToFileURL(workspace).href));assert.equal(f.live.size,0);assert.equal(f.revoked.length,1);assert.equal(f.cancelled.length,1);
+ await fs.mkdir(join(f.parent,'missing'));await f.host.select(pathToFileURL(workspace).href);assert.equal((await f.host.list()).length,2);
+});
+test('replacing a directory revokes model, reference and execution access until explicitly reopened',async t=>{
+ const f=await workspaceFixture(t),uri=pathToFileURL(f.root).href;await f.host.select(uri);const [{id}]=await f.host.list();
+ await fs.rename(f.root,join(f.parent,'previous'));await fs.mkdir(f.root);await fs.writeFile(join(f.root,'main.c'),'int replacement;');
+ await assert.rejects(()=>f.host.authorize(id),/目录已改变/);assert.ok(f.revoked.includes(id));assert.ok(f.cancelled.includes(id));
+ await assert.rejects(()=>f.host.context(id));await assert.rejects(()=>f.host.reference(id,'main.c',1));assert.equal(f.live.size,0);
+ await f.host.select(uri);const [fresh]=await f.host.list();assert.notEqual(fresh.id,id);assert.equal((await f.host.context(fresh.id)).files[0],'main.c');
+});
+test('replacement by a symlink does not inherit the original project grant',async t=>{
+ const f=await workspaceFixture(t);await f.host.select(pathToFileURL(f.root).href);const [{id}]=await f.host.list();
+ await fs.rename(f.root,join(f.parent,'old'));await fs.symlink(join(f.parent,'old'),f.root);
+ await assert.rejects(()=>f.host.context(id));assert.equal(f.live.size,0);
+});
+test('overlapping selections cannot revoke the final selection through a reused backend grant',async t=>{
+ const f=await workspaceFixture(t),other=join(f.parent,'other');await fs.mkdir(other);
+ let release,entered;const started=new Promise(r=>entered=r),gate=new Promise(r=>release=r);let count=0;
+ f.storage.authorizeWorkspace=async path=>{count++;const existing=[...f.live].find(([,p])=>p===path);const id=existing?.[0]??`workspace-${count}`;f.live.set(id,path);if(count===1){entered();await gate;}return id;};
+ const first=f.host.select(pathToFileURL(f.root).href);await started;
+ const middle=f.host.select(pathToFileURL(other).href),last=f.host.select(pathToFileURL(f.root).href);release();await Promise.all([first,middle,last]);
+ const grants=await f.host.list();assert.equal(grants.length,1);assert.ok(f.live.has(grants[0].id));assert.equal(count,2);assert.equal(f.live.size,1);
+});
+test('project revocation during context collection prevents returning old context',async t=>{
+ const f=await workspaceFixture(t);await fs.writeFile(join(f.root,'nodu.json'),JSON.stringify({target:{mcu:'STM32F103C8T6'}}));
+ f.host.buildStatus=async()=>{await f.host.select('');return {status:'none',scope:'saved-project'};};
+ await f.host.select(pathToFileURL(f.root).href);const [{id}]=await f.host.list();await assert.rejects(()=>f.host.context(id));assert.deepEqual(await f.host.list(),[]);
+});
+test('metadata FIFO is ignored without blocking and oversized code is not read', {skip:process.platform==='win32'},async t=>{
+ const f=await workspaceFixture(t);require('node:child_process').execFileSync('mkfifo',[join(f.root,'nodu.json')]);
+ await f.host.select(pathToFileURL(f.root).href);const [{id}]=await f.host.list();const data=await f.host.context(id);assert.equal(data.mcu,'未知');
+ await fs.writeFile(join(f.root,'large.c'),'x'.repeat(32001));await assert.rejects(()=>f.host.reference(id,'large.c',1),/大小限制/);
+});
+test('growing code is read with a fixed byte budget and rejected instead of exporting a partial file',async t=>{
+ const f=await workspaceFixture(t),target=join(f.root,'main.c');await f.host.select(pathToFileURL(f.root).href);const [{id}]=await f.host.list();
+ const open=fs.open;let biggest=0,grew=false,closed=false;
+ fs.open=async function(file,...args){const handle=await open.call(fs,file,...args);if(file===target){const read=handle.read.bind(handle),close=handle.close.bind(handle);handle.read=async(...values)=>{biggest=Math.max(biggest,values[2]);if(!grew){grew=true;await fs.appendFile(target,'x'.repeat(100000));}return read(...values);};handle.close=async()=>{closed=true;return close();};}return handle;};
+ try{await assert.rejects(()=>f.host.reference(id,'main.c',1),/大小限制/);}finally{fs.open=open;}
+ assert.equal(biggest,32001);assert.equal(closed,true);
+});
+test('a file replaced between lstat and open is refused without reading its content',async t=>{
+ const f=await workspaceFixture(t),target=join(f.root,'main.c');await f.host.select(pathToFileURL(f.root).href);const [{id}]=await f.host.list();
+ const open=fs.open;let replaced=false,reads=0;
+ fs.open=async function(file,...args){if(file===target&&!replaced){replaced=true;await fs.rename(target,join(f.root,'original.c'));await fs.writeFile(target,'int replaced;');}const handle=await open.call(fs,file,...args);const read=handle.read.bind(handle);handle.read=async(...values)=>{reads++;return read(...values);};return handle;};
+ try{await assert.rejects(()=>f.host.reference(id,'main.c',1),/已改变/);}finally{fs.open=open;}assert.equal(reads,0);
+});

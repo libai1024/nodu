@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-import importlib.util,unittest,tempfile,pathlib,tarfile,io,hashlib
+import importlib.util,unittest,tempfile,pathlib,tarfile,io,hashlib,json
 spec=importlib.util.spec_from_file_location('prepare',pathlib.Path(__file__).with_name('prepare-tutor-tools.py'));prepare=importlib.util.module_from_spec(spec);spec.loader.exec_module(prepare)
 class Boundaries(unittest.TestCase):
     def test_archive_digest_and_offline(self):
@@ -31,4 +31,25 @@ class Boundaries(unittest.TestCase):
             prepare.extract(archive,dest,'sdk');prepare.copy_inside(dest/'sdk','bin/clang',root/'copy')
             self.assertEqual((root/'copy').read_bytes(),b'abc');self.assertFalse((root/'copy').is_symlink())
             with self.assertRaisesRegex(ValueError,'Destination exists'):prepare.prepare('darwin-arm64',root,dest,True)
+    def test_installed_license_inputs_must_match_current_source(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=pathlib.Path(temp);out=root/'installed';out.mkdir()
+            sources=root/'scope-extension/resources/licenses/tutor-wasi';sources.mkdir(parents=True)
+            names=['WASI-SDK-LICENSE','LLVM-LICENSE','Libedit-COPYING','Wasmtime-LICENSE','SOURCES.json']
+            paths=['sdk/bin/clang','sdk/bin/wasm-ld','runtime/wasmtime']+['licenses/'+name for name in names]
+            files=[]
+            for relative in paths:
+                p=out/relative;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'fixture')
+                files.append({'path':relative,'size':7,'sha256':prepare.digest(p)})
+            for name in names:(sources/name).write_bytes(b'fixture')
+            target='darwin-arm64'
+            manifest={'schema':1,'version':prepare.LOCK['version'],'platform':target,'archives':prepare.LOCK['platforms'][target],'files':files,'totalBytes':7*len(files)}
+            (out/'toolkit.json').write_text(json.dumps(manifest))
+            desktop=prepare.DESKTOP;prepare.DESKTOP=root
+            try:
+                self.assertEqual(prepare.verify_existing(out,target)['totalBytes'],7*len(files))
+                (sources/'SOURCES.json').write_bytes(b'updated provenance')
+                with self.assertRaisesRegex(ValueError,'license material is stale'):prepare.verify_existing(out,target)
+                self.assertEqual((out/'licenses/SOURCES.json').read_bytes(),b'fixture')
+            finally:prepare.DESKTOP=desktop
 if __name__=='__main__':unittest.main()

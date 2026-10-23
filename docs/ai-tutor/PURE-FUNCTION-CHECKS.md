@@ -24,9 +24,9 @@ CRC 有 193 个固定测试，换算有 3 个。仅出现一个已实现函数�
 
 构建期运行 `npm run prepare:tutor-tools --prefix desktop`，按 `desktop/scripts/tutor-tools.lock.json` 的官方归档大小/SHA256 下载或读取离线缓存，验证后解包最小编译器、链接器、动态库及运行时。应用运行时不会下载。默认资源目录包含 `toolkit.json`，启动执行前校验全量文件摘要、路径、平台、版本与额外文件；摘要是完整性检查，不是发布者签名。
 
-本机 macOS arm64 已实际安装 11 个文件、176147897 字节，真实执行测试不再依赖临时环境变量。构建脚本包含 macOS x64 官方锁定条目，但未在 x64 机器执行。打包按架构复制，codesign 修改二进制后重新生成库存摘要；未制作或发布正式安装包。Windows 仍因进程树回收未接入而不可用，Linux 分发未完成。
+本机 macOS arm64 已实际安装 11 个文件、176148161 字节（第十一批更新许可来源记录后），真实执行测试不再依赖临时环境变量。构建脚本包含 macOS x64 官方锁定条目，但未在 x64 机器执行。打包按架构复制，codesign 修改二进制后重新生成库存摘要；未制作或发布正式安装包。Windows 仍因进程树回收未接入而不可用，Linux 分发未完成。
 
-许可证目录保留 WASI SDK、对应 LLVM 提交、Wasmtime 和 libedit 的原始许可。SDK 官方归档未给出所含 libedit 的精确源版本；`SOURCES.json` 明确记录此不确定性。正式公开分发前仍需核实该来源及 LLVM 所列附加第三方通知，不能把基本许可证扫描通过等同完整许可审计。
+许可证目录保留 WASI SDK、对应 LLVM 提交、Wasmtime 和 libedit 的原始许可。第十一批已从 [WASI SDK 34 官方构建配方](https://github.com/WebAssembly/wasi-sdk/blob/wasi-sdk-34/cmake/wasi-sdk-toolchain.cmake#L127-L129) 核实 libedit 为20251016-3.1，下载源码归档并校验配方固定的SHA256；COPYING与先前保留文本一致，SOURCES.json已修正版本与摘要。此结果确认构建配方的来源，不是二进制可重现构建证明。安装器会检测许可来源记录是否落后于仓库，保留旧目录并拒绝静默复用。正式公开分发前仍需审阅LLVM附加第三方通知，不能把基本许可证扫描通过等同完整许可审计。
 
 ```sh
 npm run prepare:tutor-tools --prefix desktop -- --offline --archive-dir /absolute/path/to/verified-archives

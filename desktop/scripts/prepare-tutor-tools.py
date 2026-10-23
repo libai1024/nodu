@@ -69,6 +69,8 @@ def verify_existing(out,target):
     if any(p.is_symlink() for p in out.rglob('*')) or actual!=seen|{'toolkit.json'} or total!=m['totalBytes']: raise ValueError('Installed toolkit contains unexpected files')
     required={'sdk/bin/clang','sdk/bin/wasm-ld','runtime/wasmtime','licenses/WASI-SDK-LICENSE','licenses/LLVM-LICENSE','licenses/Libedit-COPYING','licenses/Wasmtime-LICENSE','licenses/SOURCES.json'}
     if not required<=seen: raise ValueError('Installed toolkit missing tools or licenses')
+    for source in (DESKTOP/'scope-extension/resources/licenses/tutor-wasi').iterdir():
+        if source.is_file() and digest(source)!=digest(out/'licenses'/source.name): raise ValueError('Installed toolkit license material is stale: '+source.name)
     return m
 
 def prepare(target, cache, out, offline=False):

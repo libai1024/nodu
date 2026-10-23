@@ -1,0 +1,22 @@
+✔ desktop starts at workbench, explicit paths and browser default are retained (0.426458ms)
+✔ launcher URL never becomes a recent project; malformed fragments are rejected (0.200583ms)
+✔ recent projects are deduplicated, bounded and moved to front without deleting missing paths (0.567708ms)
+✔ startup settings parse comments without corrupting URL strings (0.199292ms)
+✔ recent store serializes simultaneous windows, handles missing folders and removes Theia recents (6.949708ms)
+✔ example copies are isolated under concurrent creation and omit symlinks and build state (4.412709ms)
+✔ concurrent welcome requests create one window (103.438208ms)
+✔ project routing focuses an existing window and waits before closing the welcome window (5.346125ms)
+✔ failed project opening leaves the welcome window available (3.382458ms)
+✔ packaged courses are filtered, fingerprinted and found through the resource seam (81.149416ms)
+✔ packaged Rust checker parses actual C and scopes call rules (6.676333ms)
+✔ real AST prevents an older persisted top-level call ghost from reappearing (14.744ms)
+{"good":{"suite":"sht30-pure-v1","sourceDigest":"43f7ed323ac3fc765a476a9ac04a2c3299b959b422f129f8fb7aa8ef7ba68b28","status":"passed","passed":196,"total":196,"note":"纯函数测试 196/196，不代表固件或传感器运行"},"wrong":{"suite":"sht30-pure-v1","sourceDigest":"896d6fc7c49794315a152a2f13e80a877295bd58589e430cb00da96f51f446b1","status":"failed","passed":35,"total":196,"note":"纯函数测试 35/196，不代表固件或传感器运行"},"loop":{"suite":"sht30-pure-v1","sourceDigest":"31a43b651018ee68c5b299cddb224717ee4d0a388ba6d9325f8495cb15e4271b","status":"failed","passed":0,"total":193,"note":"纯函数执行失败或超过运行预算"},"memory":{"suite":"sht30-pure-v1","sourceDigest":"0c14f96b7a9aee6f381b79fe58e5cea526a413e453c6b03e0fbfeb6fff35adbc","status":"failed","passed":0,"total":193,"note":"纯函数执行失败或超过运行预算"},"context":{"suite":"sht30-pure-v1","sourceDigest":"ac4b403d6429a55dc4d67ed53748a1f8755de18a7aa88581277efeee7d3e3f00","status":"unavailable","passed":0,"total":193,"note":"纯函数无法独立编译，检查函数签名、常量或外部依赖"}}
+✔ actual WASI compiler and runtime distinguish correct, wrong and nonterminating course algorithms (917.947125ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 961.545708
