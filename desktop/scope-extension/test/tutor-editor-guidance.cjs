@@ -13,7 +13,7 @@ function methods(file, className, names, dependencies = {}) {
     const js = ts.transpile(`class Subject { ${members} }`, { target: ts.ScriptTarget.ES2022 });
     return new Function(...Object.keys(dependencies), js + '; return Subject;')(...Object.values(dependencies));
 }
-const Model = methods('nodu-tutor-model.ts', 'NoduTutorModel', ['updateBuffer', 'invalidate', 'notify'], helpers);
+const Model = methods('nodu-tutor-model.ts', 'NoduTutorModel', ['updateBuffer', 'invalidate', 'notify', 'restoreGoalGuidance', 'autoCheckFragment'], helpers);
 const Controller = methods('nodu-tutor-hints.ts', 'TutorEditorController', ['edit', 'render', 'enabled', 'enqueue'], {
     ...helpers, monaco: { Range: class { constructor(line, col, endLine, endCol) { Object.assign(this, {startLineNumber:line,startColumn:col,endLineNumber:endLine,endColumn:endCol}); } }, editor: { InjectedTextCursorStops: {None:0}, TrackedRangeStickiness: {NeverGrowsWhenTypingAtEdges:0} } }
 });
@@ -64,4 +64,23 @@ test('completed history does not consume the pending queue budget', () => {
     assert.equal(c.tasks.size,21);
     for(const task of c.tasks.values()) task.status='pending';
     t.notify=()=>{}; c.enqueue(22); assert.equal(c.tasks.size,21);
+});
+
+
+test('accepted goal restores its fragment after editor reopen without trusting old annotation evidence', () => {
+    const t=model();t.guidance=undefined;t.paused=false;
+    t.goalState={status:'active',revision:4,fragment:{source:{path:'main.c',text:'',line:1,version:1},answer:{text:'write',annotations:[],guidance:{anchorLine:1,lines:['int x = 1;']}}}};
+    t.updateBuffer({path:'main.c',text:'int',line:1,version:20});
+    assert.deepEqual(t.guidance.lines,['int x = 1;']);assert.equal(t.presentation,undefined);
+    t.goalState.status='paused';t.guidance=undefined;t.updateBuffer({path:'main.c',text:'int x',line:1,version:21});assert.equal(t.guidance,undefined);
+});
+test('completed fragment schedules one semantic check and partial typing schedules none', () => {
+    const t=model();t.goalState={status:'active',revision:4,fragment:{source:{path:'main.c',text:'',line:1,version:1},answer:{guidance:{anchorLine:1,lines:['int x = 1;']}}}};
+    const calls=[];t.goalAction=action=>calls.push(action);
+    t.buffer={path:'main.c',text:'int',line:1,version:2};t.autoCheckFragment();assert.equal(calls.length,0);
+    t.buffer={path:'main.c',text:'int x = 1;\n',line:2,version:3};t.autoCheckFragment();t.autoCheckFragment();assert.deepEqual(calls,['check']);
+});
+test('editing while a fragment is being checked cancels the stale request', () => {
+    const t=model();t.busy={goal:'check'};let cancelled=false;t.cancel=()=>{cancelled=true;t.busy=undefined;};
+    t.updateBuffer({path:'main.c',text:'changed',version:2,line:1});assert.equal(cancelled,true);
 });

@@ -11,6 +11,7 @@ import { TutorCourseTarget, TutorCourseV2 } from '../common/tutor/tutor-course';
 import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tutor-learning-state';
 import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
 import { guidanceEditMatches } from '../common/tutor/tutor-guidance';
+import { emptyGoal, TutorGoalRequest, TutorGoalState } from '../common/tutor/tutor-goal';
 import { ScopeLayoutState } from './scope-layout-state';
 
 /** Every assistant item leaves `pending`; a stopped or superseded request must never stay "thinking". */
@@ -54,10 +55,12 @@ export class NoduTutorModel {
     buffer?: TutorBuffer;
     presentation?: TutorPresentation;
     guidance?: { source: TutorBuffer; anchorLine: number; lines: string[] };
+    goalState: TutorGoalState = emptyGoal();
     /** Providers, key presence and this window's model; never the keys themselves. */
     settings?: TutorAISettingsView;
     /** Conversation lane: chat and step checks, owned by the composer. */
-    busy?: { id: string; mode: TutorMode; kind: TutorChatRequest['kind'] };
+    busy?: { id: string; mode: TutorMode; kind: TutorChatRequest['kind']; goal?: TutorGoalRequest['action'] };
+    private lastAutoFragment = '';
     /** Line-review lane, independent of the composer so asking never waits for the editor. */
     reviewing?: { id: string };
     readonly drafts: Record<TutorMode, string> = { teach: '', ask: '' };
@@ -77,7 +80,8 @@ export class NoduTutorModel {
     @postConstruct()
     protected init(): void {
         const proxy = this.connections.createProxy<TutorService>(TUTOR_SERVICE_PATH, { onDidChange: event => this.onStorageChange(event), onChatDelta: event => this.onChatDelta(event),
-            onWorkspacesChanged: () => { void this.onWorkspacesChanged(); }, onAISettingsChanged: () => { void this.refreshSettings(); } } satisfies TutorAIClient);
+            onWorkspacesChanged: () => { void this.onWorkspacesChanged(); }, onAISettingsChanged: () => { void this.refreshSettings(); },
+            onGoalsChanged: () => { void this.refreshGoal(); } } satisfies TutorAIClient);
         this.service = proxy;
         this.toDispose.push(proxy.onDidOpenConnection(() => { void this.workspace.ready.then(() => this.load()); }));
         this.toDispose.push(this.workspace.onWorkspaceChanged(() => void this.load()));
@@ -97,6 +101,7 @@ export class NoduTutorModel {
         this.cancelAll(); this.invalidate();
         const old = this.session?.sessionId;
         this.session = undefined; this.workspaceId = undefined; this.buffer = undefined; this.error = undefined; this.migration = undefined;
+        this.goalState = emptyGoal();
         this.messages.teach.length = 0; this.messages.ask.length = 0;
         try {
             if (old) { await this.service.closeSession(old); }
@@ -110,6 +115,7 @@ export class NoduTutorModel {
                 const session = this.unwrap(await this.service.openSession(this.workspaceId));
                 if (generation !== this.loading) { return; }
                 this.session = session;
+                await this.refreshGoal();
                 await this.importLegacy();
                 await this.syncPresentation();
             } else if (root) { this.error = '教学工作区尚未连接，请重新打开工程'; }
@@ -167,12 +173,81 @@ export class NoduTutorModel {
         const before = this.buffer;
         this.buffer = buffer;
         if (before?.path !== buffer?.path || before?.version !== buffer?.version || before?.text !== buffer?.text) {
+            if (this.busy?.goal === 'fragment' || this.busy?.goal === 'check') { this.cancel(); }
             const guidance = this.guidance;
             this.invalidate();
             if (guidance && buffer && guidanceEditMatches(guidance.source, buffer, guidance.anchorLine, guidance.lines.length)) { this.guidance = guidance; }
+            this.restoreGoalGuidance();
         }
         // The panel only shows the file and gates step checks on its presence; redraw on that, not on every keystroke.
         if (before?.path !== buffer?.path) { this.notify(); }
+    }
+    private restoreGoalGuidance(): void {
+        const fragment = this.goalState?.fragment, buffer = this.buffer;
+        if (this.goalState?.status !== 'active' || !fragment?.answer.guidance || !buffer || this.paused) { return; }
+        const g = fragment.answer.guidance;
+        if (guidanceEditMatches(fragment.source, buffer, g.anchorLine, g.lines.length)) {
+            this.guidance = { source: fragment.source, anchorLine: g.anchorLine, lines: [...g.lines] };
+        }
+    }
+    async refreshGoal(): Promise<void> {
+        const workspace = this.workspaceId;
+        if (!workspace) { return; }
+        try {
+            const next = await this.service.goalSnapshot(workspace);
+            if (workspace === this.workspaceId && next.revision >= this.goalState.revision) {
+                if (next.revision !== this.goalState.revision) { this.invalidate(); }
+                this.goalState = next; this.restoreGoalGuidance(); this.notify();
+            }
+        } catch (error) { this.error = error instanceof Error ? error.message : '教学进度读取失败'; this.notify(); }
+    }
+    async resolveReference(path: string, line = 1): Promise<{ path: string; line: number }> {
+        if (!this.workspaceId) { throw new Error('请先打开工程'); }
+        return this.service.resolveReference(this.workspaceId, path, line);
+    }
+    async goalAction(action: TutorGoalRequest['action'], prompt?: string): Promise<void> {
+        if (!this.enabled || this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
+        await this.sync;
+        if (this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
+        const workspace = this.workspaceId, epoch = this.epoch, id = crypto.randomUUID(), previousStep = this.goalState.current;
+        this.busy = { id, mode: 'teach', kind: 'chat', goal: action }; this.error = undefined; this.notify();
+        let advance = false;
+        try {
+            const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action,
+                ...(prompt ? { prompt } : {}), ...((action === 'fragment' || action === 'check' || (action === 'propose' && this.includeCode)) && this.buffer ? { buffer: { ...this.buffer } } : {}) });
+            if (this.busy?.id !== id || workspace !== this.workspaceId || epoch !== this.epoch) { return; }
+            if (!result.ok) { if (!result.cancelled) { this.error = result.error; } await this.refreshGoal(); return; }
+            advance = action === 'confirm' || (action === 'check' && result.state.current > previousStep);
+            this.invalidate(); this.goalState = result.state; this.restoreGoalGuidance();
+            if (action === 'propose') {
+                this.messages.teach.push({ id: crypto.randomUUID(), role: 'user', text: prompt ?? '', status: 'done' });
+                this.drafts.teach = '';
+            }
+            const text = result.state.feedback;
+            if (text && ['fragment','check'].includes(action)) { this.messages.teach.push({ id, role: 'assistant', text, status: 'done' }); }
+            const step = result.state.steps[result.state.current];
+            if (advance && step) { this.messages.teach.push({ id: crypto.randomUUID(), role: 'assistant', text: `${step.goal}\n[${step.path}](${step.path}#L1)`, status: 'done' }); }
+            if (result.presentation && this.buffer?.path === result.presentation.source.path && this.buffer.text === result.presentation.source.text) {
+                this.presentation = { buffer: { ...this.buffer }, answer: result.presentation.answer };
+            }
+            if (this.messages.teach.length > 100) { this.messages.teach.splice(0, this.messages.teach.length - 100); }
+        } catch (error) { this.error = error instanceof Error ? error.message : '教学连接已断开'; }
+        finally {
+            if (this.busy?.id === id) { this.busy = undefined; }
+            this.notify();
+            if (advance && this.goalState.status === 'active' && this.goalState.steps[this.goalState.current]?.path === this.buffer?.path
+                && !this.buffer.text.split('\n')[this.buffer.line - 1]?.trim()) { void this.goalAction('fragment'); }
+        }
+    }
+    private autoCheckFragment(): void {
+        const fragment = this.goalState.fragment, buffer = this.buffer, g = fragment?.answer.guidance;
+        if (!this.teaching || this.goalState.status !== 'active' || this.busy || !fragment || !buffer || !g || fragment.source.path !== buffer.path) { return; }
+        const lines = buffer.text.split('\n').slice(g.anchorLine - 1, g.anchorLine - 1 + g.lines.length);
+        if (!g.lines.every((line, i) => line.trim() === lines[i]?.trim())) { return; }
+        const key = `${this.goalState.revision}:${buffer.path}:${buffer.text}`;
+        if (key === this.lastAutoFragment) { return; }
+        this.lastAutoFragment = key;
+        void this.goalAction('check');
     }
     setMode(mode: TutorMode): void {
         if (mode === this.mode) { return; }
@@ -183,9 +258,10 @@ export class NoduTutorModel {
         if (paused === this.paused) { return; }
         this.paused = paused;
         try { localStorage.setItem('nodu.tutor.guidance-off', String(paused)); } catch { /* In-memory only. */ }
-        this.cancelReview(); this.invalidate(); this.notify();
+        if (this.busy?.goal) { this.cancel(); }
+        this.cancelReview(); this.invalidate(); this.restoreGoalGuidance(); this.notify();
     }
-    private transition(): void { this.cancelAll(); this.invalidate(); void this.syncPresentation(); this.notify(); }
+    private transition(): void { this.cancelAll(); this.invalidate(); this.restoreGoalGuidance(); void this.syncPresentation(); this.notify(); }
     private syncPresentation(): Promise<void> {
         const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = !this.enabled;
         this.sync = this.sync.catch(() => undefined).then(async () => {
@@ -248,6 +324,10 @@ export class NoduTutorModel {
     }
     async clearChat(): Promise<void> { this.cancel(); if (this.workspaceId) { await this.service.clearChat(this.workspaceId, this.mode); } this.messages[this.mode].length = 0; this.notify(); }
     async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer): Promise<TutorAIResult | undefined> {
+        if (this.mode === 'teach' && !this.plan && kind === 'chat' && ['none','draft','cancelled','complete'].includes(this.goalState.status)) {
+            await this.goalAction('propose', this.drafts.teach.trim()); return;
+        }
+        if (this.mode === 'teach' && kind === 'step' && this.goalState.status === 'active') { await this.goalAction('check'); return; }
         const review = kind === 'line';
         const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
         if (!this.enabled || laneBusy() || !this.workspaceId || (review && this.paused)) { return; }
@@ -288,6 +368,7 @@ export class NoduTutorModel {
         } finally {
             if (current()) { if (review) { this.reviewing = undefined; } else { this.busy = undefined; } }
             this.notify();
+            if (review) { this.autoCheckFragment(); }
         }
     }
 }

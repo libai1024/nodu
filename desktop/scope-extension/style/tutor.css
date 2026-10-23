@@ -178,3 +178,7 @@
 .nodu-ai-level { display: inline-flex; align-items: center; gap: 2px; height: 24px; padding: 0 4px 0 8px; border: 1px solid var(--theia-panel-border); border-radius: 12px; font-size: 12px; }
 .nodu-ai-level button { display: inline-grid; place-items: center; width: 16px; height: 16px; padding: 0; border: 0; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
 @media (max-width: 640px) { .nodu-ai-settings-layout { grid-template-columns: 1fr; } .nodu-ai-provider-list { border-right: 0; border-bottom: 1px solid var(--theia-panel-border); max-height: 160px; } }
+.nodu-ai-goal-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-ai-goal-steps { margin: 8px 0; padding-left: 24px; max-height: 240px; overflow: auto; }
+.nodu-ai-goal-steps li { padding: 3px 0; }
+.nodu-ai-file-link { display: inline; padding: 0; color: var(--theia-textLink-foreground); text-decoration: underline; }

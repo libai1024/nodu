@@ -27,7 +27,7 @@
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json",
-    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs",
+    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs test/tutor-goal.cjs",
     "test:launcher": "npm run compile && node --test test/launcher.cjs"
   },
   "theiaExtensions": [

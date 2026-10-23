@@ -12,6 +12,7 @@ import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 
 export const TUTOR_MENU = ['nodu-ai-controls'];
 export const TUTOR_COMMANDS = {
+    openReference: 'nodu.tutor.open-reference',
     openPanel: 'nodu.tutor.open-panel', togglePanel: 'nodu.tutor.toggle-panel', toggleHints: 'nodu.tutor.toggle-hints',
     revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', settings: 'nodu.tutor.settings', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
 } as const;
@@ -200,6 +201,15 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
     }
     registerCommands(commands: CommandRegistry): void {
         const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
+        commands.registerCommand({ id: TUTOR_COMMANDS.openReference }, { execute: async (path: string, line = 1) => {
+            try {
+                const root = this.tutor.rootUri, reference = await this.tutor.resolveReference(path, line);
+                if (!root || root !== this.tutor.rootUri) { return; }
+                const widget = await this.editors.open(root.resolve(reference.path), { mode: 'activate' });
+                const control = MonacoEditor.get(widget)?.getControl();
+                control?.setPosition({ lineNumber: reference.line, column: 1 }); control?.revealLineInCenterIfOutsideViewport(reference.line); control?.focus();
+            } catch (error) { this.tutor.error = error instanceof Error ? error.message : '无法打开代码文件'; this.tutor.notify(); }
+        }, ...available });
         const toggle = (id: string, label: string, key: 'hintsVisible' | 'highlightsVisible' | 'annotationsVisible' | 'floatVisible'): void => {
             commands.registerCommand({ id, label, category: 'Nodu' }, { execute: () => this.tutor.setDisplay(key, !this.tutor[key]), isToggled: () => this.tutor[key], ...available });
         };

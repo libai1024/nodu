@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 import type { TutorStorageService } from './tutor-storage-protocol';
 import type { TutorAISettingsView, TutorModelSelection, TutorProviderConfig } from './tutor-ai-config';
+import type { TutorGoalRequest, TutorGoalResult, TutorGoalState } from './tutor-goal';
 export const TUTOR_SERVICE_PATH = '/services/nodu-tutor';
 export type TutorMode = 'teach' | 'ask';
 export interface TutorBuffer {
@@ -25,6 +26,7 @@ export interface TutorAIClient {
     onWorkspacesChanged(): void;
     /** Another window changed providers, keys or the default model. */
     onAISettingsChanged(): void;
+    onGoalsChanged(): void;
 }
 export type TutorAIResult = { ok: true; answer: TutorAnswer } | { ok: false; error: string; cancelled?: boolean };
 export interface TutorService extends TutorStorageService {
@@ -42,4 +44,7 @@ export interface TutorService extends TutorStorageService {
     chat(request: TutorChatRequest): Promise<TutorAIResult>;
     cancelChat(id: string): Promise<void>;
     clearChat(workspaceId: string, mode: TutorMode): Promise<void>;
+    goalSnapshot(workspaceId: string): Promise<TutorGoalState>;
+    goal(request: TutorGoalRequest): Promise<TutorGoalResult>;
+    resolveReference(workspaceId: string, path: string, line: number): Promise<{ path: string; line: number }>;
 }

@@ -3,6 +3,8 @@ import * as fs from 'node:fs/promises';
 import { constants } from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { TutorProgressStore } from './tutor-progress-store';
+import type { TutorProjectContext } from '../../common/tutor/tutor-goal';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
 import { TutorStorageConnection } from './tutor-storage-server';
@@ -55,6 +57,48 @@ export class TutorWorkspaceHost {
         }
     }
     async list(): Promise<{ id: string; uri: string }[]> { await this.pending; return this.grants.map(({ id, uri }) => ({ id, uri })); }
+    async context(id: string): Promise<TutorProjectContext> {
+        await this.authorize(id);
+        const grant = this.grants.find(g => g.id === id)!;
+        const files: string[] = [];
+        let visited = 0, pathBytes = 0;
+        const walk = async (relative: string, depth: number): Promise<void> => {
+            if (depth > 5 || visited > 3000 || files.length >= 200 || pathBytes >= 8000) { return; }
+            for (const entry of await fs.readdir(path.join(grant.root, relative), { withFileTypes: true })) {
+                if (++visited > 3000 || files.length >= 200 || pathBytes >= 8000) { break; }
+                if (entry.name.startsWith('.') || /^(node_modules|build|target|Drivers|Middlewares|vendor)$/i.test(entry.name) || entry.isSymbolicLink()) { continue; }
+                const name = relative ? `${relative}/${entry.name}` : entry.name;
+                if (entry.isDirectory()) { await walk(name, depth + 1); }
+                else if (entry.isFile() && /\.(c|h|cpp|hpp|cc)$/i.test(name) && name.length <= 240) { files.push(name); pathBytes += name.length; }
+            }
+        };
+        await walk('', 0);
+        let mcu = '未知', sdk = '未知';
+        try {
+            const file = await fs.open(path.join(grant.root, 'nodu.json'), constants.O_RDONLY | constants.O_NOFOLLOW);
+            try {
+                if ((await file.stat()).size <= 32000) {
+                    const data = JSON.parse(await file.readFile('utf8'));
+                    if (typeof data?.target?.mcu === 'string') { mcu = data.target.mcu.slice(0, 80); }
+                    if (typeof data?.sdk === 'string') { sdk = data.sdk.slice(0, 80); }
+                }
+            } finally { await file.close(); }
+        } catch { /* Missing metadata is explicitly unknown, never inferred from a board name. */ }
+        if (!this.grants.includes(grant)) { throw new Error('工程授权已失效'); }
+        return { key: await TutorProgressStore.projectKey(grant.root), mcu, sdk, files: files.sort() };
+    }
+    async reference(id: string, relative: string, line: number): Promise<{ path: string; line: number }> {
+        await this.authorize(id, { path: relative, text: '', version: 1, line: 1 });
+        const grant = this.grants.find(g => g.id === id)!;
+        const file = await fs.open(path.join(grant.root, relative), constants.O_RDONLY | constants.O_NOFOLLOW);
+        try {
+            if ((await file.stat()).size > 32000) { throw new Error('教学代码文件超过32 KB'); }
+            const text = await file.readFile('utf8');
+            if (!Number.isInteger(line) || line < 1 || line > text.split('\n').length) { throw new Error('代码行号无效'); }
+            await this.authorize(id, { path: relative, text, version: 1, line });
+            return { path: relative, line };
+        } finally { await file.close(); }
+    }
     async authorize(id: string, buffer?: TutorBuffer): Promise<void> {
         await this.pending;
         const grant = this.grants.find(g => g.id === id);
