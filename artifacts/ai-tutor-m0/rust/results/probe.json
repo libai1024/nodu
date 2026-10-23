@@ -1,0 +1,185 @@
+{
+  "cases": [
+    {
+      "callCount": 1,
+      "id": "direct-guard",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 33,
+        "startUtf16": 18
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "reversed-guard",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 41,
+        "startUtf16": 26
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "success-branch",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 33,
+        "startUtf16": 18
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "multiline-call",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 39,
+        "startUtf16": 19
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "assigned-guard",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 41,
+        "startUtf16": 26
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "renamed-status",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 37,
+        "startUtf16": 22
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "ignored-return",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 30,
+        "startUtf16": 15
+      },
+      "verdict": "unchecked"
+    },
+    {
+      "callCount": 0,
+      "id": "comment-not-call",
+      "parserHasError": false,
+      "sourceRange": null,
+      "verdict": "missing"
+    },
+    {
+      "callCount": 0,
+      "id": "string-not-call",
+      "parserHasError": false,
+      "sourceRange": null,
+      "verdict": "missing"
+    },
+    {
+      "callCount": 0,
+      "id": "similar-name",
+      "parserHasError": false,
+      "sourceRange": null,
+      "verdict": "missing"
+    },
+    {
+      "callCount": 0,
+      "id": "macro-wrapper",
+      "parserHasError": false,
+      "sourceRange": null,
+      "verdict": "unknown"
+    },
+    {
+      "callCount": 0,
+      "id": "function-pointer",
+      "parserHasError": false,
+      "sourceRange": null,
+      "verdict": "unknown"
+    },
+    {
+      "callCount": 1,
+      "id": "incomplete-block",
+      "parserHasError": true,
+      "sourceRange": {
+        "endUtf16": 33,
+        "startUtf16": 18
+      },
+      "verdict": "unknown"
+    },
+    {
+      "callCount": 1,
+      "id": "return-propagation",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 37,
+        "startUtf16": 22
+      },
+      "verdict": "unknown"
+    },
+    {
+      "callCount": 1,
+      "id": "overwritten-status",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 41,
+        "startUtf16": 26
+      },
+      "verdict": "unknown"
+    },
+    {
+      "callCount": 1,
+      "id": "unknown-comparison",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 33,
+        "startUtf16": 18
+      },
+      "verdict": "unknown"
+    },
+    {
+      "callCount": 2,
+      "id": "two-calls-one-unchecked",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 33,
+        "startUtf16": 18
+      },
+      "verdict": "unchecked"
+    },
+    {
+      "callCount": 1,
+      "id": "utf8-label",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 43,
+        "startUtf16": 28
+      },
+      "verdict": "checked"
+    },
+    {
+      "callCount": 1,
+      "id": "ordinary-buffer-pointer",
+      "parserHasError": false,
+      "sourceRange": {
+        "endUtf16": 48,
+        "startUtf16": 33
+      },
+      "verdict": "checked"
+    }
+  ],
+  "grammar": "0.24.2",
+  "grammarAbi": 15,
+  "meaning": "checked confirms only bounded syntactic observation; never semantic or course completion",
+  "treeSitter": "0.27.1",
+  "tsRs": "11.1.0",
+  "typescript": "type Verdict = \"checked\" | \"unchecked\" | \"missing\" | \"unknown\";\ntype SliceRange = { startUtf16: number, endUtf16: number, };\ntype ResultRow = { id: string, verdict: Verdict, parserHasError: boolean, callCount: number, sourceRange: SliceRange | null, };\n"
+}

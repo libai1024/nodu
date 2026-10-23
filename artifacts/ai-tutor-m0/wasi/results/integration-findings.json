@@ -1,0 +1,25 @@
+{
+  "defaultUnityBuild": "WASI setjmp header rejects build without Wasm EH/SJLJ",
+  "withoutLibsetjmp": "Undefined __wasm_longjmp/__wasm_setjmp symbols",
+  "legacyEH": "Wasmtime 50.0.0 rejects legacy try instruction",
+  "workingCompileFlags": [
+    "--target=wasm32-wasip1",
+    "-mexception-handling",
+    "-mllvm",
+    "-wasm-enable-sjlj",
+    "-mllvm",
+    "-wasm-use-legacy-eh=false",
+    "-lsetjmp"
+  ],
+  "workingRuntimeFlags": [
+    "-W",
+    "fuel=10000000",
+    "-W",
+    "max-memory-size=67108864",
+    "-W",
+    "exceptions=y"
+  ],
+  "wallClockTimeoutSeconds": 5,
+  "compilerTimeoutSeconds": 60,
+  "scope": "CLI probe only; Rust runner, app signing, Windows/x64 runtime not tested"
+}

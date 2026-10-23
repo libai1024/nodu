@@ -1,10 +1,10 @@
 # AI 侧边栏开源复用选型
 
-核查：2026-10-23。结论：有可复用组件，但没有核验过可直接安装、同时满足 Nodu 教学需求的现成插件。本次只核对官方源码、文档和发布元数据，没有安装插件或接入模型。
+核查：2026-10-23。结论：有可复用组件，但没有核验过可直接安装、同时满足 Nodu 教学需求的现成插件。现已补做固定发布包隔离探针；不改产品依赖、不接入真实模型，结果见 [M0 AI 探针](M0-AI-PROBE.md)。
 
 ## 1. 推荐路线
 
-**Theia AI 负责会话与模型基础，Nodu 负责教学交互。聊天展示优先评估同版本 Theia UI 复用，同时保留 Cline 独立聊天组件作为候选。** 不整装 Continue/Cline 的自动编程工作流，不让第三方默认布局决定教学 UI。
+**采用 Nodu 自定义薄 UI，加 Theia 的受控 AI 服务。** Theia 聊天输入与 change-set、模型能力等内部状态耦合；Cline UI 0.1.0 仅提供消息展示，没有 composer。两者都仍需要 Nodu 的输入、模式和教学状态适配，因此首批不新增聊天 UI 包。保留隔离样例作为后续复用依据，不整装 Continue/Cline 的自动编程工作流。
 
 此前方案把 `ai-chat-ui` 整包排除；本轮修订为“可评估组件复用，但不能原样启用默认贡献”。选择 UI 组件与选择 AI 运行时是两件事：使用 Cline 展示组件也不意味着必须使用 Cline SDK。
 
@@ -13,8 +13,8 @@
 | 选项 | 可复用部分 | 需要适配的部分 | 当前判断 |
 | --- | --- | --- | --- |
 | Theia AI `ai-core` / `ai-chat` | 模型、Agent、会话与消息基础 | Nodu 网关、教学状态、上下文、行检查 | 基础首选，与当前 Theia 1.76.0 一致 |
-| Theia `ai-chat-ui` 1.76.0 | 输入、会话列表、消息与响应渲染等宿主组件 | 默认入口、DI 依赖、工具按钮、双模式、教学头部 | 同源 UI 首选探针；裁剪成本待测 |
-| Cline `@cline/ui` | 独立 React 聊天展示组件 | Nodu 样式映射、消息映射、传输与状态 | 有价值的 UI 候选，不要求同时引入 Cline Agent |
+| Theia `ai-chat-ui` 1.76.0 | 输入、会话列表、消息与响应渲染等宿主组件 | 默认入口、DI 依赖、工具按钮、双模式、教学头部 | 已探查，首批不加入；宿主耦合与完整集成待评估 |
+| Cline `@cline/ui` | 独立 React 聊天展示组件 | Nodu 样式映射、消息映射、传输与状态 | 隔离页面渲染可用；首批不为消息列表单独加入依赖 |
 | Cline VS Code 扩展 | 完整聊天和自动编程操作界面 | Webview/扩展 API、源码编辑与命令工作流裁剪、教学联动 | 不作为首期教学侧栏基础 |
 | Continue VS Code 扩展 / GUI | 聊天、上下文、补全等界面源码 | 宿主消息桥、多个入口、教学状态与权限裁剪 | 不建议新建长期依赖 |
 
@@ -22,7 +22,7 @@
 
 ## 3. Theia 具体能复用什么
 
-本地应用已使用 Theia 1.76.0，尚无 ai-*。同版本 [ai-chat-ui 清单](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/package.json) 存在；[ChatViewWidget](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/src/browser/chat-view-widget.tsx) 组合输入与消息视图，[AIChatInputWidget](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/src/browser/chat-input-widget.tsx) 提供丰富输入能力。
+本地应用已使用 Theia 1.76.0；`ai-core` / `ai-mcp` 由 plugin-ext 间接带入，尚未直接接入 Nodu 教学。`ai-chat` / `ai-chat-ui` 未加入产品依赖。同版本 [ai-chat-ui 清单](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/package.json) 存在；[ChatViewWidget](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/src/browser/chat-view-widget.tsx) 组合输入与消息视图，[AIChatInputWidget](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/src/browser/chat-input-widget.tsx) 提供丰富输入能力。
 
 复用不能只理解成 npm 安装后换颜色。[默认前端模块](https://github.com/eclipse-theia/theia/blob/v1.76.0/packages/ai-chat-ui/src/browser/ai-chat-ui-frontend-module.ts) 注册视图、工具栏、输入配置和代码插入动作等，包清单也声明自动加载的 Theia 模块。M0 需要确认这些贡献能否通过适配、DI 重绑定或 [Contribution Filter](https://theia-ide.org/docs/contribution_filter/) 收敛到唯一入口；仅 CSS 隐藏按钮不能作为能力隔离。
 
@@ -69,4 +69,4 @@ M0 使用假模型，不改正式应用默认功能。用同一份教学布局�
 
 通过标准：现有 React/Monaco 不重复；无多余顶级入口；输入法、键盘、流式滚动、深浅主题可用；只读引用不出现源码应用按钮；显示与暂停状态可控；构建产物与依赖增量可记录；browser/Electron 均能打包。还需记录适配层代码量、升级表面与实际维护负担。
 
-若两者都需大量绕过内部实现，则采用 Theia AI 核心加 Nodu 自定义薄 UI。UI 交互仍按评审稿实现，不随候选库默认设计变化。本轮仅输出这些验证方案，没有运行上述兼容试验。
+若两者都需大量绕过内部实现，则采用 Theia AI 核心加 Nodu 自定义薄 UI。UI 交互仍按评审稿实现，不随候选库默认设计变化。M0 已执行受控 Provider 和 Cline 独立渲染探针；完整宿主、输入法、无障碍及 Electron 打包仍待前端集成验收，不把探针结果当作全部兼容通过。

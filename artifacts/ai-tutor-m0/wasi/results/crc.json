@@ -1,0 +1,45 @@
+{
+  "unityCommit": "b6763fbd9cedfacaa89e2ad9fd00d615a234e355",
+  "sources": [
+    {
+      "file": "src/unity.c",
+      "url": "https://raw.githubusercontent.com/ThrowTheSwitch/Unity/b6763fbd9cedfacaa89e2ad9fd00d615a234e355/src/unity.c",
+      "sha256": "a6cc4b143075a03317d72c760b5ed67a4a12eeda1242f575464ad23f34042275"
+    },
+    {
+      "file": "src/unity.h",
+      "url": "https://raw.githubusercontent.com/ThrowTheSwitch/Unity/b6763fbd9cedfacaa89e2ad9fd00d615a234e355/src/unity.h",
+      "sha256": "b30ba4db1e0be1a1f6c862d359d73c91025a114977e41d3dad17103363804334"
+    },
+    {
+      "file": "src/unity_internals.h",
+      "url": "https://raw.githubusercontent.com/ThrowTheSwitch/Unity/b6763fbd9cedfacaa89e2ad9fd00d615a234e355/src/unity_internals.h",
+      "sha256": "35bffad23ebc533977291e7a848c646027513572268fbfa9bd03d5ec21ee818a"
+    },
+    {
+      "file": "LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/ThrowTheSwitch/Unity/b6763fbd9cedfacaa89e2ad9fd00d615a234e355/LICENSE.txt",
+      "sha256": "ec6cf55f05ba2aa538b9677b2481b9ac14a87c63594fce8a0677d4f71c583980"
+    }
+  ],
+  "tests": [
+    {
+      "name": "correct",
+      "expectedExit": 0,
+      "exitCode": 0,
+      "stdout": "crc_test.c:31:datasheet_vector:PASS\ncrc_test.c:32:damaged_data_rejected:PASS\n\n-----------------------\n2 Tests 0 Failures 0 Ignored \nOK\n",
+      "stderr": "",
+      "wasmBytes": 64849,
+      "sha256": "5e74da767e804f1274a83c37185081103a917ac55579a5bb0d9564505c2ebd6a"
+    },
+    {
+      "name": "wrong-polynomial",
+      "expectedExit": 1,
+      "exitCode": 1,
+      "stdout": "crc_test.c:23:datasheet_vector:FAIL: Expected 0x92 Was 0xCD\ncrc_test.c:32:damaged_data_rejected:PASS\n\n-----------------------\n2 Tests 1 Failures 0 Ignored \nFAIL\n",
+      "stderr": "",
+      "wasmBytes": 64858,
+      "sha256": "0c551dae3017a3d6da55a6b131d8bfd6216e6a305d13dd0de07b1f36dfeb1629"
+    }
+  ]
+}

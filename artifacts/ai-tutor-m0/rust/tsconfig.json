@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": [],
+    "target": "ES2022"
+  },
+  "files": [
+    "results/generated.ts"
+  ]
+}

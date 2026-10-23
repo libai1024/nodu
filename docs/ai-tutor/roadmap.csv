@@ -1,12 +1,12 @@
 id,stage,layer,task,depends_on,acceptance,status
 D01,Design,docs,完整实施方案与交互稿,,文档和原型检查完成,designed
-M0-01,M0,frontend-backend,Theia AI固定包与受控Provider探针,,无默认多余入口且网关可拦截请求,planned
-M0-02,M0,rust,tree-sitter规则与类型生成探针,,合法替代写法和未知边界明确,planned
-M0-03,M0,toolkit,WASI平台资产与CRC最小验证,,三平台资产清单和兼容缺口记录,planned
-M0-04,M0,ui,紧凑右栏与协议冻结,M0-01;M0-02;M0-03;M0-05,教学提问高光批注浮窗暂停和过期流程评审,planned
-M0-05,M0,frontend,聊天展示组件复用对比,M0-01,Theia与Cline固定发布包探针不增加入口且记录主题打包升级成本,planned
-M1-01,M1,common,schema2和schema1迁移,M0-04,自查不升级成已验证且保留备份,planned
-M1-02,M1,backend,Store和多窗口事务,M1-01,CAS冲突和断电恢复通过,planned
+M0-01,M0,frontend-backend,Theia AI固定包与受控Provider探针,,无默认多余入口且网关可拦截请求,probe_passed
+M0-02,M0,rust,tree-sitter规则与类型生成探针,,合法替代写法和未知边界明确,probe_passed
+M0-03,M0,toolkit,WASI平台资产与CRC最小验证,,三平台资产清单和兼容缺口记录,probe_passed
+M0-04,M0,ui,紧凑右栏与协议冻结,M0-01;M0-02;M0-03;M0-05,教学提问高光批注浮窗暂停和过期流程评审,in_progress
+M0-05,M0,frontend,聊天展示组件复用对比,M0-01,Theia与Cline固定发布包探针不增加入口且记录主题打包升级成本,probe_passed
+M1-01,M1,common,schema2和schema1迁移,M0-04,自查不升级成已验证且保留备份,implemented_core
+M1-02,M1,backend,Store和多窗口事务,M1-01,CAS冲突和断电恢复通过,in_progress
 M1-03,M1,frontend,教学提问面板与唯一AI入口,M1-02,双模式均可对话且小窗口键盘深浅主题通过,planned
 M1-04,M1,frontend,代码虚影跟写与符号锚点,M1-01,真实代码后缀与输入分离且锚点不猜测,planned
 M1-05,M1,frontend,完成行事件与输入法边界,M1-04,Enter离行和粘贴逐行记录且不阻塞编辑,planned

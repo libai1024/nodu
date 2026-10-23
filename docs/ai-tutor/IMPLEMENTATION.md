@@ -381,7 +381,7 @@ Rust 只提供可核对源码范围、语句边界和规则事实；高光配色
 
 ## 10. 主机纯函数测试方案
 
-旧方案希望 Unity 主机测试，但 Arm GCC 不能生成本机可执行文件，clangd 也不等于带链接器和 libc 的主机工具链。首期选定 **按需测试包：WASI SDK + Unity + Rust Wasmtime 执行器**，将纯 C 编译成 `wasm32-wasip1`，在统一受限运行环境验证 CRC、换算和状态机。它是电脑上的逻辑测试，不是 STM32 CPU/外设仿真。[WASI SDK](https://github.com/WebAssembly/wasi-sdk)、[Unity](https://github.com/ThrowTheSwitch/Unity)。
+旧方案希望 Unity 主机测试，但 Arm GCC 不能生成本机可执行文件，clangd 也不等于带链接器和 libc 的主机工具链。首期选定 **按需测试包：WASI SDK + Unity + Rust Wasmtime 执行器**，将纯 C 编译成 `wasm32-wasip1`，在统一受限运行环境验证 CRC、换算和状态机。它是电脑上的逻辑测试，不是 STM32 CPU/外设仿真。 M0 已验证 WASI SDK 34 + Unity 2.7.0 + Wasmtime 50 的 macOS arm64 正反例；Unity 的 setjmp 必须使用 `-mexception-handling -mllvm -wasm-enable-sjlj -mllvm -wasm-use-legacy-eh=false`，链接 `-lsetjmp`，执行器启用 exceptions。Windows/x64 执行、Rust runner 与资源超限回归仍属于 M4。[WASI SDK](https://github.com/WebAssembly/wasi-sdk)、[Unity](https://github.com/ThrowTheSwitch/Unity)。
 
 具体流程：用户点击“测试” → 选择已签名/受信任课程 suiteId → 确定相关源码是否已保存（首期测试已保存快照） → 拷贝允许文件至临时目录 → 固定参数调用受管 clang → 校验产物为 Wasm → 启动测试进程 → 捕获结果与摘要 → 删除临时文件 → 使旧版本结果失效。
 
@@ -513,16 +513,16 @@ SHT30 的具体命令、地址、测量时序和接线在课程资料审阅时�
 
 ## 15. 依赖与打包决策
 
-**本轮未安装任何包。** 下表的版本是当前基线或待验证候选；新增依赖在 M0/M4/M5 分别以锁文件、编译和许可证扫描冻结，不直接使用 `latest`。现有 Rust 工具链为 1.98.1，Node 24，Theia 1.76.0，React 19，TS 5.9。[核查来源](SOURCES.md)。
+**产品依赖与 lockfile 尚未更改。** M0 已在隔离目录验证固定包与工具链，见 [AI 探针](M0-AI-PROBE.md)和 [Rust/WASI 探针](M0-RUST-PROBE.md)。`ai-core` 1.76.0 原已由 plugin-ext 间接带入，不等于 Nodu 已接通聊天服务。新增直接依赖在后续集成时按锁文件、编译和许可核验冻结，不使用 `latest`。现有 Rust 工具链为 1.98.1，Node 24，Theia 1.76.0，React 19，TS 5.9。
 
 | 包/组件 | 层/阶段 | 用途与选择 |
 | --- | --- | --- |
 | `@theia/core/editor/monaco/workspace/filesystem/markers` | 已有 | Widget、DI、RPC、编辑器、诊断；统一 1.76.0 |
 | React、TypeScript | 已有 | 复用 shared React；不增加 UI 框架或另一份 React |
-| `ajv` 8.x | Node/前端 M1 | JSON Schema draft-07 校验；已有传递依赖不能代替显式依赖，锁定通过验证的 8.x patch；strict、禁止远程 `$ref` |
+| Schema 2 校验 | Node/前端 M1 | 当前使用共用 draft-07 schema 的有界关键词校验器；Ajv 仅用于独立对照测试。若后续扩充 schema 关键词，必须同步校验器和对照测试；不解析远程 `$ref` |
 | `@theia/ai-core`、`@theia/ai-chat` | M5 必需 | 固定 1.76.0；只接基础服务与自定义 Agent/UI |
 | `@theia/ai-openai` | M5 首个协议适配 | 固定 1.76.0，传递 SDK 按 lockfile；凭证和请求仍经过 Nodu 网关 |
-| `@theia/ai-chat-ui` 1.76.0 / `@cline/ui` 0.1.0 | M0 UI 候选，尚未选定 | 比较受控聊天组件复用；固定版本，不启用多余入口、写入动作或全局主题 |
+| `@theia/ai-chat-ui` 1.76.0 / `@cline/ui` 0.1.0 | M0 已探查，首批不引入 | 采用 Nodu 薄 UI 加 Theia 受控服务；现有消息/按钮样式继续复用，候选包仅保留探针 |
 | `ai-ide`、`ai-code-completion`、Cline SDK / 完整 VSIX | 不加入首期 | 不为聊天 UI 增加通用自动编程工作流 |
 | `serde/serde_json` | Rust 已有 | 有类型请求/结果；复用 workspace |
 | `sha2`、`regex`、`tempfile`、`ts-rs` | Rust 复用 | 摘要、安全匹配、临时目录、类型生成；现有分别 0.10、1、3、11 系列 |

@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-23",
+  "packageSource": "npm fixed official releases; SHA512 verified",
+  "packages": [
+    {
+      "name": "@theia/ai-core",
+      "version": "1.76.0",
+      "registry": "https://registry.npmjs.org/@theia%2fai-core/1.76.0",
+      "integrity": "sha512-eAYdhG3pXW2uKkslIouuzE+shg2+LiMES8ONRAq4n6JiuKdy0ycWg86yg+bNaUXmju78MMeq9mdXGp1a5ENV/w==",
+      "tarGzipBytes": 506277,
+      "unpackedBytes": 2855971,
+      "files": 558,
+      "license": "EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+    },
+    {
+      "name": "@theia/ai-chat",
+      "version": "1.76.0",
+      "registry": "https://registry.npmjs.org/@theia%2fai-chat/1.76.0",
+      "integrity": "sha512-JSz0W1WHvNPA141Qi3FM+iEgGpKbvU3ZZTCNSztEgEoJ2bT8NBmGjanuqKoq9BM3VbVaTNDKQjC8TtLqSOsuWA==",
+      "tarGzipBytes": 466695,
+      "unpackedBytes": 2805604,
+      "files": 442,
+      "license": "EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+    },
+    {
+      "name": "@theia/ai-chat-ui",
+      "version": "1.76.0",
+      "registry": "https://registry.npmjs.org/@theia%2fai-chat-ui/1.76.0",
+      "integrity": "sha512-YeXNX0oCP3iuWhJs3wZppzSw7TfbSjC3eS8YJ4LTHbGdksIXAE9E9vcxg/T9AT2WODs35nW3VID492C7sWRzPA==",
+      "tarGzipBytes": 517447,
+      "unpackedBytes": 2739513,
+      "files": 507,
+      "license": "EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+    },
+    {
+      "name": "@theia/ai-openai",
+      "version": "1.76.0",
+      "registry": "https://registry.npmjs.org/@theia%2fai-openai/1.76.0",
+      "integrity": "sha512-I/iiLUkPI7kZnpT2mGVXi7Nsxgfs1q/Kbaad0oHlMgBfaTirEFk6dv24Xvd+TELCycj/RfNvyJ4mnb13LDK3qw==",
+      "tarGzipBytes": 117541,
+      "unpackedBytes": 667168,
+      "files": 102,
+      "license": "EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+    },
+    {
+      "name": "@cline/ui",
+      "version": "0.1.0",
+      "registry": "https://registry.npmjs.org/@cline%2fui/0.1.0",
+      "integrity": "sha512-iJnJn0UxuKUzEbi5BkfDmzJM3fe22H+IKDvMK9yIb4DgFbojQnizQ6cLsWCLkBIO4RNIj93U+GR3nuZljz+DNw==",
+      "tarGzipBytes": 23049,
+      "unpackedBytes": 100035,
+      "files": 13,
+      "license": "Apache-2.0"
+    }
+  ],
+  "bundle": {
+    "node": "v24.21.0",
+    "react": "19.3.1",
+    "reactRoots": [
+      "desktop"
+    ],
+    "monacoInputs": [],
+    "previewJsBytes": 229264,
+    "uiOnlyMinifiedBytes": 7926,
+    "uiOnlyGzipBytes": 2757,
+    "cssBytes": 8207
+  },
+  "boundary": {
+    "tests": 11,
+    "fakeProviderCalls": 2,
+    "networkRequests": 0,
+    "hardwareOperations": 0
+  },
+  "browser": [
+    "350px message rendering",
+    "Enter submits controlled textarea",
+    "HTML-like input remains visible text",
+    "teaching/question wrapper switching",
+    "dark/light token mapping",
+    "mock stream rendering",
+    "stop control returns idle"
+  ],
+  "notTested": [
+    "full Theia chat-ui runtime",
+    "real model request",
+    "Electron integration",
+    "IME composition via OS",
+    "final app bundle delta",
+    "scroll stickiness under manual scrolling"
+  ]
+}

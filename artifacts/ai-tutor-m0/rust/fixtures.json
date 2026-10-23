@@ -1,0 +1,97 @@
+[
+  {
+    "id": "direct-guard",
+    "code": "int read(void){if(receive(data,6)!=HAL_OK)return -1;return 0;}",
+    "expected": "checked"
+  },
+  {
+    "id": "reversed-guard",
+    "code": "int read(void){if(HAL_OK!=receive(data,6))return -1;return 0;}",
+    "expected": "checked"
+  },
+  {
+    "id": "success-branch",
+    "code": "int read(void){if(receive(data,6)==HAL_OK)return 0;return -1;}",
+    "expected": "checked"
+  },
+  {
+    "id": "multiline-call",
+    "code": "int read(void){if(\nreceive(\n data,\n 6\n) != HAL_OK)\n return -1;\n return 0;}",
+    "expected": "checked"
+  },
+  {
+    "id": "assigned-guard",
+    "code": "int read(void){int status=receive(data,6);if(status!=HAL_OK)return -1;return 0;}",
+    "expected": "checked"
+  },
+  {
+    "id": "renamed-status",
+    "code": "int read(void){int rc=receive(data,6);if(HAL_OK!=rc)return -1;return 0;}",
+    "expected": "checked"
+  },
+  {
+    "id": "ignored-return",
+    "code": "int read(void){receive(data,6);return 0;}",
+    "expected": "unchecked"
+  },
+  {
+    "id": "comment-not-call",
+    "code": "int read(void){/* receive(data,6); */return 0;}",
+    "expected": "missing"
+  },
+  {
+    "id": "string-not-call",
+    "code": "int read(void){puts(\"receive(data,6)\");return 0;}",
+    "expected": "missing"
+  },
+  {
+    "id": "similar-name",
+    "code": "int read(void){receive_async(data,6);return 0;}",
+    "expected": "missing"
+  },
+  {
+    "id": "macro-wrapper",
+    "code": "#define RECEIVE(d,n) receive(d,n)\nint read(void){if(RECEIVE(data,6)!=HAL_OK)return -1;return 0;}",
+    "expected": "unknown"
+  },
+  {
+    "id": "function-pointer",
+    "code": "int (*rx)(void*,int); int read(void){if(rx(data,6)!=HAL_OK)return -1;return 0;}",
+    "expected": "unknown"
+  },
+  {
+    "id": "incomplete-block",
+    "code": "int read(void){if(receive(data,6)!=HAL_OK){",
+    "expected": "unknown"
+  },
+  {
+    "id": "return-propagation",
+    "code": "int read(void){return receive(data,6);}",
+    "expected": "unknown"
+  },
+  {
+    "id": "overwritten-status",
+    "code": "int read(void){int status=receive(data,6);status=0;if(status!=HAL_OK)return -1;return 0;}",
+    "expected": "unknown"
+  },
+  {
+    "id": "unknown-comparison",
+    "code": "int read(void){if(receive(data,6)!=1234)return -1;return 0;}",
+    "expected": "unknown"
+  },
+  {
+    "id": "two-calls-one-unchecked",
+    "code": "int read(void){if(receive(data,6)!=HAL_OK)return -1;receive(data,6);return 0;}",
+    "expected": "unchecked"
+  },
+  {
+    "id": "utf8-label",
+    "code": "int read(void){/* 温度😀 */if(receive(data,6)!=HAL_OK)return -1;return 0;}",
+    "expected": "checked"
+  },
+  {
+    "id": "ordinary-buffer-pointer",
+    "code": "int read(unsigned char *data){if(receive(data,6)!=HAL_OK)return -1;return 0;}",
+    "expected": "checked"
+  }
+]

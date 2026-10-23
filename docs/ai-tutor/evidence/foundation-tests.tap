@@ -1,0 +1,43 @@
+✔ preview is read-only; accepted course and exact backup are independent from source files (51.503167ms)
+✔ changed source and mismatched preview identity never overwrite the current plan (8.057708ms)
+✔ two windows accept the same source once (58.276917ms)
+✔ malformed JSON, invalid UTF-8 and oversized files are rejected (26.299667ms)
+✔ schema2 content hash is verified against file contents (14.048375ms)
+✔ migration size limit includes final whitespace (54.108625ms)
+✔ symlink plan and backup directories cannot redirect migration (3.8865ms)
+✔ an inconsistent existing backup is never overwritten (8.402625ms)
+✔ interrupted backup writes leave the old plan and permit retry (35.584667ms)
+✔ backup publication is flushed before the active plan is moved (33.544625ms)
+✔ a late external save in the read-to-move gap is restored and preserved (36.630958ms)
+✔ external recreation after source move is not overwritten by publication (35.526208ms)
+✔ an editor holding the old file open writes to recovery, not the new course or immutable backup (42.928ms)
+✔ schema 2 parses object and text without retaining input references (2.026917ms)
+✔ runtime and independent draft-07 validator agree on structural cases (31.507542ms)
+✔ rejects unknown keys at every structured boundary (2.448375ms)
+✔ accepts forward DAG dependencies and rejects unknown, duplicate and cyclic dependencies (0.969458ms)
+✔ paths remain project relative on POSIX and Windows (2.644541ms)
+✔ typed requirements have explicit parameters and cannot carry commands or regex (1.009958ms)
+✔ rule and decision references must resolve without duplicate ids (0.42175ms)
+✔ guidance is explicit code, has a known anchor and bounded individual lines (0.929292ms)
+✔ target needs explicit chip and pinned digests; wiring id and digest are paired (1.585625ms)
+✔ bounded inputs reject invalid JSON, non-JSON values and resource exhaustion (5.524625ms)
+✔ canonical content ignores only its hash and is stable across object key order (0.60525ms)
+✔ bundled SHT30 migration preserves authored content and never infers executable checks or chip (11.724042ms)
+✔ migration rejects data that the old parser would silently discard (9.832542ms)
+✔ all legacy step kinds remain self-checked, never verified or executable (10.578167ms)
+✔ bundled course parses and every anchor has exactly one marker in the starter project (3.864583ms)
+✔ bundled course: every implement step authors the reference, and L3 only appears at level 3 (0.852833ms)
+✔ rejects unsafe anchors, forward or unknown dependencies, duplicates and unknown rule cards (0.372333ms)
+✔ decide steps need an available option (0.089292ms)
+✔ markers: S1 never matches S10, and duplicates are reported (0.059833ms)
+✔ hint region runs to the next top-level marker; indented markers stay inside (0.134167ms)
+✔ test dependencies only flag 上游未验证; implementation dependencies lock (0.106708ms)
+✔ reminders: a step with a direct test, a finished layer, and an untested streak (1.21125ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 464.324375
