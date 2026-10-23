@@ -10,6 +10,8 @@ import { NODU_RESOURCES_PATH, NoduResourcesService, ResourcesClient } from '../c
 import { NoduDeviceServer } from './nodu-device-server';
 import { NoduEmbeddedServer } from './nodu-embedded-server';
 import { EmbeddedClient, NODU_EMBEDDED_PATH, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
+import { NODU_PROJECTS_PATH, NoduProjectsService } from '../common/nodu-launcher-protocol';
+import { NoduProjectsServer } from './nodu-projects-server';
 
 import { bindTutorBackend } from './tutor/tutor-backend-binding';
 
@@ -57,5 +59,14 @@ export default new ContainerModule(bind => {
         const facade = Object.create(null);
         for (const name of names) { facade[name] = server[name].bind(server); }
         return facade as NoduEmbeddedService;
+    })).inSingletonScope();
+    // Desktop launcher: recent projects and examples (the browser app never connects).
+    bind(NoduProjectsServer).toSelf().inSingletonScope();
+    bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler(NODU_PROJECTS_PATH, () => {
+        const server = ctx.container.get(NoduProjectsServer);
+        const names: (keyof NoduProjectsService)[] = ['recent', 'touch', 'remove', 'examples', 'copyExample', 'projectsDir'];
+        const facade = Object.create(null);
+        for (const name of names) { facade[name] = server[name].bind(server); }
+        return facade as NoduProjectsService;
     })).inSingletonScope();
 });

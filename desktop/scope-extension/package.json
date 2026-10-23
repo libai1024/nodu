@@ -3,7 +3,7 @@
   "version": "0.1.4",
   "private": true,
   "license": "MIT",
-  "description": "见微 SCOPE vision workspace for Eclipse Theia",
+  "description": "\u89c1\u5fae SCOPE vision workspace for Eclipse Theia",
   "keywords": [
     "theia-extension"
   ],
@@ -27,13 +27,18 @@
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json",
-    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs"
+    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs",
+    "test:launcher": "npm run compile && node --test test/launcher.cjs"
   },
   "theiaExtensions": [
     {
       "frontend": "lib/browser/scope-frontend-module",
       "frontendPreload": "lib/browser/nodu-i18n-preload",
       "backend": "lib/node/nodu-backend-module"
+    },
+    {
+      "frontendElectron": "lib/electron-browser/nodu-launcher-module",
+      "electronMain": "lib/electron-main/nodu-electron-main-module"
     }
   ]
 }

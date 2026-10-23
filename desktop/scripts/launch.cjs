@@ -84,6 +84,11 @@ function extractLauncherFlags(args) {
     return { args: rest, terminals, timeouts };
 }
 
+function resolveLaunchWorkspace(target, argument, invocationDirectory) {
+    if (argument) { return path.resolve(invocationDirectory, argument); }
+    return target === 'electron' ? undefined : path.join(root, 'examples/green-tracker');
+}
+
 async function main() {
     if (!['browser', 'electron'].includes(target)) {
         fail('Usage: node scripts/launch.cjs <browser|electron> [workspace] [Theia options]');
@@ -91,7 +96,7 @@ async function main() {
     }
     let args = suppliedArgs[0] === '--' ? suppliedArgs.slice(1) : [...suppliedArgs];
     if (args.includes('--help') || args.includes('-h')) {
-        console.log(`Nodu ${target} launcher\nUsage: npm run start:${target} -- [workspace] [Theia options]\nDefault workspace: examples/green-tracker\nAddress: http://127.0.0.1:${target === 'browser' ? 4188 : 4189}\nProfile: ${path.join(os.homedir(), '.scope-studio')}\n\nOriginal OpenMV IDE flags (consumed by the launcher, not Theia):\n  -open_serial_terminal <port:baud>        open a serial terminal\n  -open_tcp_client_terminal <host:port>    open a TCP client terminal\n  -open_tcp_server_terminal <port>         open a TCP server terminal\n  -open_udp_client_terminal <host:port>    open a UDP client terminal\n  -open_udp_server_terminal <port>         open a UDP server terminal\n  -override_read_timeout <ms>              IDE reply deadline, 1-60000 (unset keeps each operation's default)\n  -override_read_stall_timeout <ms>        stalled-reply bound, 1-60000 (unset adds no bound)\n  -update_resources                        reset user resources to the bundled baseline\n\nExample: npm run start:electron -- -open_udp_server_terminal 9000\nNode.js 24 and a completed build are required.`);
+        console.log(`Nodu ${target} launcher\nUsage: npm run start:${target} -- [workspace] [Theia options]\nDefault: ${target === 'electron' ? 'workbench' : 'examples/green-tracker'}\nAddress: http://127.0.0.1:${target === 'browser' ? 4188 : 4189}\nProfile: ${path.join(os.homedir(), '.scope-studio')}\n\nOriginal OpenMV IDE flags (consumed by the launcher, not Theia):\n  -open_serial_terminal <port:baud>        open a serial terminal\n  -open_tcp_client_terminal <host:port>    open a TCP client terminal\n  -open_tcp_server_terminal <port>         open a TCP server terminal\n  -open_udp_client_terminal <host:port>    open a UDP client terminal\n  -open_udp_server_terminal <port>         open a UDP server terminal\n  -override_read_timeout <ms>              IDE reply deadline, 1-60000 (unset keeps each operation's default)\n  -override_read_stall_timeout <ms>        stalled-reply bound, 1-60000 (unset adds no bound)\n  -update_resources                        reset user resources to the bundled baseline\n\nExample: npm run start:electron -- -open_udp_server_terminal 9000\nNode.js 24 and a completed build are required.`);
         return;
     }
     let extracted;
@@ -109,13 +114,13 @@ async function main() {
 
     const workspaceArgument = args[0] && !args[0].startsWith('-') ? args.shift() : undefined;
     const invocationDirectory = process.env.INIT_CWD || process.cwd();
-    const workspace = path.resolve(workspaceArgument ? invocationDirectory : root, workspaceArgument || 'examples/green-tracker');
-    if (!fs.existsSync(workspace)) {
+    const workspace = resolveLaunchWorkspace(target, workspaceArgument, invocationDirectory);
+    if (workspace && !fs.existsSync(workspace)) {
         fail(`Workspace does not exist: ${workspace}`);
         return;
     }
     // These options belong to the local application profile, not arbitrary forwarded backend flags.
-    if (args.some(argument => /^(?:--(?:hostname|port|electronUserData)|-h|-p)(?:=|$)/.test(argument))) {
+    if (args.some(argument => /^(?:--(?:hostname|port|electronUserData|user-data-dir)|-h|-p)(?:=|$)/.test(argument))) {
         fail('The launcher manages hostname, port and electronUserData. Use other Theia options after the workspace path.');
         return;
     }
@@ -143,7 +148,9 @@ async function main() {
         return;
     }
 
-    const profile = path.join(os.homedir(), '.scope-studio');
+    const profile = path.resolve(process.env.NODU_PROFILE_DIR || path.join(os.homedir(), '.scope-studio'));
+    const port = Number(process.env.NODU_PORT || (target === 'browser' ? 4188 : 4189));
+    if (!Number.isInteger(port) || port < 1 || port > 65535) { fail('NODU_PORT must be between 1 and 65535.'); return; }
     const env = { ...process.env, THEIA_CONFIG_DIR: path.join(profile, 'config') };
     // Inherited from Electron-hosted terminals (e.g. IDE-integrated shells);
     // it would make the Electron binary run the app as plain Node.
@@ -169,15 +176,18 @@ async function main() {
         }
     }
 
-    const launchArgs = ['start', fs.realpathSync(workspace), `--plugins=local-dir:${path.join(root, 'plugins')}`, ...args, '--hostname=127.0.0.1', `--port=${target === 'browser' ? 4188 : 4189}`];
+    const launchArgs = ['start', ...(workspace ? [fs.realpathSync(workspace)] : []), `--plugins=local-dir:${path.join(root, 'plugins')}`, ...args, '--hostname=127.0.0.1', `--port=${port}`];
     require('./refresh-native-artifacts.cjs').refreshNativeArtifacts(appDirectory);
     if (target === 'electron') {
         if (require('./apply-app-icon.cjs').applyAppIcon(root)) {
             console.log('Nodu: applied the Nodu application icon');
         }
-        launchArgs.push('--electronUserData', path.join(profile, 'electron'));
+        const electronData = path.join(profile, 'electron');
+        fs.mkdirSync(electronData, { recursive: true });
+        // Chromium initializes its network sandbox before Theia parses electronUserData.
+        launchArgs.push(`--user-data-dir=${electronData}`, '--electronUserData', electronData);
     }
-    console.log(`Nodu: opening ${workspace}`);
+    console.log(`Nodu: opening ${workspace || 'workbench'}`);
     process.exitCode = await run(cli, launchArgs, appDirectory, env);
 }
 
@@ -190,7 +200,7 @@ for (const signal of ['SIGINT', 'SIGTERM']) {
 }
 
 // Exportable for unit tests; only run when invoked directly.
-module.exports = { extractLauncherFlags, TERMINAL_FLAGS, READ_TIMEOUT_FLAGS, SWITCH_FLAGS };
+module.exports = { resolveLaunchWorkspace, extractLauncherFlags, TERMINAL_FLAGS, READ_TIMEOUT_FLAGS, SWITCH_FLAGS };
 
 if (require.main === module) {
     main().catch(error => fail(error instanceof Error ? error.message : String(error)));
