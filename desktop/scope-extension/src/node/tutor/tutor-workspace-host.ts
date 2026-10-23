@@ -69,7 +69,7 @@ export class TutorWorkspaceHost {
             if (depth > 5 || visited > 3000 || files.length >= 200 || pathBytes >= 8000) { return; }
             for (const entry of await fs.readdir(path.join(grant.root, relative), { withFileTypes: true })) {
                 if (++visited > 3000 || files.length >= 200 || pathBytes >= 8000) { break; }
-                if (entry.name.startsWith('.') || /^(node_modules|build|target|Drivers|Middlewares|vendor)$/i.test(entry.name) || entry.isSymbolicLink()) { continue; }
+                if (entry.name.startsWith('.') || /^(node_modules|build|target|Drivers|Middlewares|vendor|reference)$/i.test(entry.name) || entry.isSymbolicLink()) { continue; }
                 const name = relative ? `${relative}/${entry.name}` : entry.name;
                 if (entry.isDirectory()) { await walk(name, depth + 1); }
                 else if (entry.isFile() && /\.(c|h|cpp|hpp|cc)$/i.test(name) && name.length <= 240) { files.push(name); pathBytes += name.length; }

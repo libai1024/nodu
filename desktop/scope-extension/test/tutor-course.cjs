@@ -35,7 +35,7 @@ const accept = raw => {
     assert.ok(result.course);
     return result.course;
 };
-const legacyText = () => readFileSync(join(__dirname, '../../examples/stm32-sht30-tutor/.nodu-tutor/plan.json'), 'utf8');
+const legacyText = () => readFileSync(join(__dirname, 'fixtures/sht30-schema1.json'), 'utf8');
 const legacy = () => JSON.parse(legacyText());
 const migrate = raw => {
     const result = migrateLegacyCourse(raw, target());

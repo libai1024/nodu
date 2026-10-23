@@ -1,6 +1,6 @@
 #ifndef BSP_I2C_H
 #define BSP_I2C_H
-#include "board.h"
+#include "tutor_board.h"
 
 /* 配置并初始化传感器 I2C。 */
 HAL_StatusTypeDef bsp_i2c_init(void);

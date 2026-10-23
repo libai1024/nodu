@@ -1,0 +1,3 @@
+Startup/*.s -whitespace
+Core/Src/system_*.c -whitespace
+Core/Inc/*hal_conf.h -whitespace

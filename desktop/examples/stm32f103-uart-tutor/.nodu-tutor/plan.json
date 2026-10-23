@@ -1,0 +1,180 @@
+{
+  "schema": 2,
+  "id": "stm32f103-uart",
+  "revision": 1,
+  "title": "STM32F103 串口入门",
+  "goal": "亲自编写每秒串口输出的C程序，并编译验证。",
+  "target": {
+    "mcu": "STM32F103C8Tx",
+    "sdkId": "stm32cube-f1@1.8.7",
+    "sdkDigest": "f8c6643686285390be7018b5fd99bff0ca0152b7cbea16d5d2b382ed5cb451d2"
+  },
+  "source": "course",
+  "decisions": [],
+  "rules": [],
+  "steps": [
+    {
+      "id": "UART_INIT",
+      "kind": "implement",
+      "title": "初始化 USART1",
+      "goal": "在主循环前初始化调试串口。",
+      "why": "发送前要完成外设初始化。",
+      "dependsOn": [],
+      "anchors": [
+        {
+          "id": "init",
+          "path": "Core/Src/main.c",
+          "symbol": "main",
+          "marker": "TUTOR(UART_INIT)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "init-call",
+          "type": "calls",
+          "anchorId": "init",
+          "callee": "Board_DebugUartInit",
+          "text": "main 调用串口初始化",
+          "severity": "required"
+        }
+      ],
+      "rules": [],
+      "guidance": [
+        {
+          "id": "init-code",
+          "anchorId": "init",
+          "lines": [
+            "    Board_DebugUartInit(BOARD_DEBUG_BAUD);"
+          ],
+          "context": "USART1，115200 8N1。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
+      ]
+    },
+    {
+      "id": "UART_SEND",
+      "kind": "implement",
+      "title": "每秒输出",
+      "goal": "在循环中发送一行文本。",
+      "why": "使用数组大小发送，避免手算长度越界。",
+      "dependsOn": [
+        {
+          "stepId": "UART_INIT",
+          "mode": "required"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "send",
+          "path": "Core/Src/main.c",
+          "symbol": "main",
+          "marker": "TUTOR(UART_SEND)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "send-call",
+          "type": "calls",
+          "anchorId": "send",
+          "callee": "Board_DebugWrite",
+          "text": "发送字符串",
+          "severity": "required"
+        },
+        {
+          "id": "delay-call",
+          "type": "calls",
+          "anchorId": "send",
+          "callee": "HAL_Delay",
+          "text": "限制输出频率",
+          "severity": "required"
+        }
+      ],
+      "rules": [],
+      "guidance": [
+        {
+          "id": "send-code",
+          "anchorId": "send",
+          "lines": [
+            "        const char message[] = \"NODU_F103_TUTOR\\r\\n\";",
+            "        Board_DebugWrite(message, sizeof(message) - 1);",
+            "        HAL_Delay(1000);"
+          ],
+          "context": "USB串口 RXD 接 PA9，GND 共地，3.3V TTL。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
+      ]
+    },
+    {
+      "id": "BUILD",
+      "kind": "test",
+      "title": "编译工程",
+      "goal": "保存后编译，检查当前固件。",
+      "why": "语法结构检查不代替编译链接。",
+      "dependsOn": [
+        {
+          "stepId": "UART_SEND",
+          "mode": "required"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "main",
+          "path": "Core/Src/main.c",
+          "symbol": "main"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "build",
+          "type": "compiles",
+          "text": "当前保存内容编译成功",
+          "severity": "required"
+        }
+      ],
+      "rules": []
+    },
+    {
+      "id": "RUN",
+      "kind": "test",
+      "title": "验证串口",
+      "goal": "明确选择 F103 下载，并观察新的串口输出。",
+      "why": "模型不能代替物理接线与运行证据。",
+      "dependsOn": [
+        {
+          "stepId": "BUILD",
+          "mode": "required"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "main",
+          "path": "Core/Src/main.c",
+          "symbol": "main"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "serial",
+          "type": "serialMatch",
+          "captureProfileId": "usart1-115200-8n1",
+          "matcher": {
+            "kind": "literal",
+            "value": "NODU_F103_TUTOR"
+          },
+          "text": "本次下载后的串口日志",
+          "severity": "required"
+        },
+        {
+          "id": "wiring",
+          "type": "manual",
+          "text": "确认STM32F103C8T6、供电及接线",
+          "severity": "required"
+        }
+      ],
+      "rules": []
+    }
+  ],
+  "contentHash": "f91cd96f958f896865c0881668d5f547afe0a8ecc185637fe37f0676f38ff398"
+}

@@ -1,5 +1,5 @@
-/* 程序入口。时钟、引脚复用和外设实例由板卡包生成（board.c），这里只调用应用层。 */
-#include "board.h"
+/* STM32F407ZGT6 课程入口。目标初始化见 Support/tutor_target.c。 */
+#include "tutor_board.h"
 #include "app.h"
 
 int main(void)

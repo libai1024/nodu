@@ -158,3 +158,25 @@ test('persistent history validates corruption, never replays pending calls, and 
     const unavailable=new TutorLineHistoryCache({setItem(){throw Error('quota');},getItem(){throw Error('unavailable');},removeItem(){}});
     unavailable.save('x','int a;',[{line:1,text:'int a;',status:'ok',note:'ok'}]);assert.equal(unavailable.restore('x','int a;').length,1);
 });
+
+test('static course ghost continues through incomplete constructs and comments without waiting on model review', () => {
+    const t=model('',{});t.guidance=undefined;t.hintsVisible=true;
+    t.currentStep=()=>({anchors:[{id:'s',path:'main.c',marker:'// STEP'}],guidance:[{anchorId:'s',requiredSymbols:[],lines:['void sample(void)','{','// setup','int x = 1;','}']}]});
+    const {c,state}=editor(t,['// STEP','void sample(void)','{','// setup','i'],5);
+    c.render();assert.equal(state.decorations.find(d=>d.options.after)?.options.after.content,'nt x = 1;');
+    state.lines[1]='void different(void)';c.render();assert.equal(state.decorations.some(d=>d.options.after),false);
+});
+
+test('course navigation authorizes files and abandons a location after switching projects', async () => {
+    const commands={openReference:'ref',toggleHints:'h',highlight:'hi',annotations:'a',float:'f',guidance:'g',check:'c',revealStep:'reveal'};
+    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['registerCommands'],{TUTOR_COMMANDS:commands,MonacoEditor:{get:w=>w},...helpers});
+    const handlers=new Map(),step={anchors:[{path:'drivers/sensor.c',marker:'// STEP'}]},root={resolve:p=>p};
+    let opens=0,position;const control={getModel:()=>({getLinesContent:()=>['// STEP',''],getLineCount:()=>2}),setPosition:p=>position=p,revealLineInCenterIfOutsideViewport(){},focus(){}};
+    const tutor={enabled:true,rootUri:root,currentStep:()=>step,notify(){},resolveReference:async()=>{throw Error('outside project');}};
+    const subject=Object.assign(new Subject(),{tutor,editors:{open:async()=>{opens++;return {getControl:()=>control};}}});
+    subject.registerCommands({registerCommand:(c,h)=>handlers.set(c.id,h)});
+    await handlers.get('reveal').execute();assert.equal(opens,0);assert.match(tutor.error,/outside/);
+    tutor.resolveReference=async()=>({path:'drivers/sensor.c',line:1});await handlers.get('reveal').execute();assert.equal(opens,1);assert.equal(position.lineNumber,2);
+    tutor.resolveReference=async()=>{tutor.rootUri={resolve:p=>p};return {path:'drivers/sensor.c',line:1};};
+    await handlers.get('reveal').execute();assert.equal(opens,1);
+});

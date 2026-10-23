@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "board.h"
+#include "tutor_board.h"
 #include "bsp_i2c.h"
 #include "bsp_log.h"
 

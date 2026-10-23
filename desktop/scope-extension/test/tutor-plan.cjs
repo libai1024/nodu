@@ -12,7 +12,7 @@ const {
 
 const COURSE = join(__dirname, '..', '..', 'examples', 'stm32-sht30-tutor');
 const coursePlan = () => {
-    const result = parseTutorPlan(readFileSync(join(COURSE, TUTOR_PLAN_PATH), 'utf-8'));
+    const result = parseTutorPlan(readFileSync(join(__dirname, 'fixtures/sht30-schema1.json'), 'utf-8'));
     assert.deepEqual(result.errors, []);
     return result.plan;
 };

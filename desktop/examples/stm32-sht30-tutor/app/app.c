@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "board.h"
+#include "tutor_board.h"
 #include "app.h"
 #include "alarm.h"
 #include "bsp_log.h"

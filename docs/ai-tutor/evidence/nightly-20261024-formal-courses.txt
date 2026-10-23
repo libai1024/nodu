@@ -1,0 +1,26 @@
+{
+  "kind": "offline-course-acceptance",
+  "hardware": false,
+  "results": [
+    {
+      "name": "stm32f103-uart-tutor",
+      "variant": "starter",
+      "build": "✓ build ok=true errors=0 warnings=0 453 ms FLASH 2588/65536 RAM 2576/20480 bundle eb9e47641578 bin 2588 B"
+    },
+    {
+      "name": "stm32f103-uart-tutor",
+      "variant": "reference",
+      "build": "✓ build ok=true errors=0 warnings=0 451 ms FLASH 4224/65536 RAM 2648/20480 bundle 365c68c968fb bin 4224 B"
+    },
+    {
+      "name": "stm32-sht30-tutor",
+      "variant": "starter",
+      "build": "✓ build ok=true errors=0 warnings=0 665 ms FLASH 4752/1048576 RAM 2736/131072 bundle acf898c6529f bin 4752 B"
+    },
+    {
+      "name": "stm32-sht30-tutor",
+      "variant": "reference",
+      "build": "✓ build ok=true errors=0 warnings=0 691 ms FLASH 12388/1048576 RAM 2856/131072 bundle bd20e37745f7 bin 12388 B"
+    }
+  ]
+}

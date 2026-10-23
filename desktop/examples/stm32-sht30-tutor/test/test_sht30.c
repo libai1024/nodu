@@ -6,7 +6,8 @@
 #include "alarm.h"
 
 static int failures;
-#define CHECK(cond) do { if (!(cond)) { printf("FAIL %s:%d  %s\n", __FILE__, __LINE__, #cond); failures++; } } while (0)
+static int checks;
+#define CHECK(cond) do { checks++; if (!(cond)) { printf("FAIL %s:%d  %s\n", __FILE__, __LINE__, #cond); failures++; } } while (0)
 /* 浮点数不能用 == 比较：误差在 0.01 以内视为相等。 */
 #define NEAR(a, b) ((a) - (b) < 0.01f && (b) - (a) < 0.01f)
 
@@ -19,6 +20,7 @@ static int failures;
 int main(void)
 {
     /* 每写完一组测试，就在这里调用它。 */
+    if (!checks) { puts("尚未执行任何测试"); return 2; }
     if (failures) {
         printf("%d 项失败\n", failures);
         return 1;

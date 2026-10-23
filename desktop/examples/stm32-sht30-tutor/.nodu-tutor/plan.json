@@ -1,12 +1,16 @@
 {
-  "schema": 1,
+  "schema": 2,
   "id": "stm32f407-sht30-monitor",
-  "version": 1,
+  "revision": 2,
   "title": "STM32F407 温湿度监测",
   "goal": "用 SHT30 每秒读取一次温湿度并通过串口输出，温度过高时报警；传感器断开后能自己恢复。",
-  "board": "atk-explorer-f407",
-  "sdk": "STM32CubeF4 v1.28.3",
+  "target": {
+    "mcu": "STM32F407ZGTx",
+    "sdkId": "stm32cube-f4@1.28.3",
+    "sdkDigest": "987088bd6a835484f3f2753584d6801c9314e21d257287cc1d313a3fcd079ba4"
+  },
   "source": "course",
+  "decisions": [],
   "rules": [
     {
       "id": "check-return",
@@ -77,205 +81,243 @@
       "goal": "确定用哪个传感器、通过什么接口读取，后面的步骤据此展开。",
       "why": "先定需求和方案，再写代码；方案变了，后面的步骤也要跟着变。",
       "dependsOn": [],
+      "anchors": [],
+      "requirements": [],
       "options": [
         {
           "id": "sht30-i2c",
-          "label": "SHT30 · I2C",
+          "label": "SHT30 I2C",
           "available": true,
           "note": "数字输出、带 CRC 校验，适合练习 HAL 的 I2C 接口。"
         },
         {
           "id": "dht11-gpio",
-          "label": "DHT11 · 单总线",
+          "label": "DHT11 单总线",
           "available": false,
           "note": "需要微秒级 GPIO 时序与定时器，对应的步骤计划尚未提供。"
         }
       ],
-      "contract": [],
       "rules": []
     },
     {
       "id": "S1",
       "kind": "implement",
-      "layer": "app",
       "title": "应用骨架",
       "goal": "写出空的 app_init() 和 app_loop()，让程序结构完整。",
       "why": "自顶而下：先定好模块接口和调用关系，再逐个填充内容。",
+      "layer": "app",
       "dependsOn": [
-        "S0"
+        {
+          "stepId": "S0",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "app/app.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "app/app.c",
+          "marker": "TODO(S1)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "编译通过",
+          "severity": "required",
+          "legacyType": "compiles"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "函数签名与 app/app.h 中的声明一致",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "在这里写出 app_init() 和 app_loop() 两个函数，函数体暂时留空。",
         "api": "函数原型在 app/app.h；main.c 先调用 app_init()，再在循环里反复调用 app_loop()。这一步不需要任何 HAL 调用。",
-        "skeleton": [
-          "void app_init(void)",
-          "{",
-          "    /* 暂时留空 */",
-          "}",
-          "",
-          "void /* 函数名? */(void)",
-          "{",
-          "}"
-        ],
-        "reference": [
-          "void app_init(void)",
-          "{",
-          "    /* 后续步骤在这里初始化日志、I2C 和传感器 */",
-          "}",
-          "",
-          "void app_loop(void)",
-          "{",
-          "    /* 后续步骤在这里周期采样 */",
-          "}"
-        ]
+        "skeleton": "void app_init(void)\n{\n    /* 暂时留空 */\n}\n\nvoid /* 函数名? */(void)\n{\n}",
+        "reference": "void app_init(void)\n{\n    /* 后续步骤在这里初始化日志、I2C 和传感器 */\n}\n\nvoid app_loop(void)\n{\n    /* 后续步骤在这里周期采样 */\n}"
       },
-      "contract": [
+      "rules": [],
+      "guidance": [
         {
-          "type": "compiles",
-          "text": "编译通过"
-        },
-        {
-          "type": "manual",
-          "text": "函数签名与 app/app.h 中的声明一致"
+          "id": "S1-write",
+          "anchorId": "legacy",
+          "lines": [
+            "void app_init(void)",
+            "{",
+            "    /* 后续步骤在这里初始化日志、I2C 和传感器 */",
+            "}",
+            "",
+            "void app_loop(void)",
+            "{",
+            "    /* 后续步骤在这里周期采样 */",
+            "}"
+          ],
+          "context": "写出空的 app_init() 和 app_loop()，让程序结构完整。",
+          "requiredSymbols": [],
+          "citationIds": []
         }
-      ],
-      "rules": []
+      ]
     },
     {
       "id": "S2",
       "kind": "implement",
-      "layer": "bsp",
       "title": "串口日志",
       "goal": "实现 log_line()，并在 app_init() 里打印一行启动信息。",
       "why": "先建立观察手段：之后每一步的结果都要靠串口日志确认。",
+      "layer": "bsp",
       "dependsOn": [
-        "S1"
-      ],
-      "anchor": {
-        "file": "bsp/bsp_log.c"
-      },
-      "hints": {
-        "intent": "实现 log_line()：把一行文字和换行发到日志串口。写完后在 app_init() 中调用 log_line(\"sht30-tutor start\")。",
-        "api": "HAL_UART_Transmit(&board_log_uart, 数据, 长度, 超时毫秒)，返回 HAL_StatusTypeDef。长度用 strlen() 计算，参数类型是 uint16_t；换行发送 \"\\r\\n\"。串口已由 board_init() 初始化，见 bsp/board.h。",
-        "skeleton": [
-          "int log_line(const char *text)",
-          "{",
-          "    size_t len = strlen(text);",
-          "    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)text, /* 长度? */, /* 超时? */) != HAL_OK) {",
-          "        return -1;",
-          "    }",
-          "    /* 再发送 \"\\r\\n\" */",
-          "    return 0;",
-          "}"
-        ],
-        "reference": [
-          "#define LOG_TIMEOUT_MS 100u  /* 115200 波特下 100 ms 约可发送 1 KB */",
-          "",
-          "int log_line(const char *text)",
-          "{",
-          "    size_t len = strlen(text);",
-          "    if (len > UINT16_MAX) {",
-          "        return -1;",
-          "    }",
-          "    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)text, (uint16_t)len, LOG_TIMEOUT_MS) != HAL_OK) {",
-          "        return -1;",
-          "    }",
-          "    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)\"\\r\\n\", 2, LOG_TIMEOUT_MS) != HAL_OK) {",
-          "        return -1;",
-          "    }",
-          "    return 0;",
-          "}"
-        ]
-      },
-      "contract": [
         {
-          "type": "checksReturn",
-          "text": "检查 HAL_UART_Transmit 的返回值"
-        },
-        {
-          "type": "calls",
-          "text": "超时是有限的毫秒数，不是 HAL_MAX_DELAY"
-        },
-        {
-          "type": "serialMatch",
-          "text": "上电后串口出现 app_init() 打印的启动信息"
+          "stepId": "S1",
+          "mode": "required"
         }
       ],
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "bsp/bsp_log.c",
+          "marker": "TODO(S2)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "检查 HAL_UART_Transmit 的返回值",
+          "severity": "required",
+          "legacyType": "checksReturn"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "超时是有限的毫秒数，不是 HAL_MAX_DELAY",
+          "severity": "required",
+          "legacyType": "calls"
+        },
+        {
+          "id": "check-3",
+          "type": "manual",
+          "text": "上电后串口出现 app_init() 打印的启动信息",
+          "severity": "required",
+          "legacyType": "serialMatch"
+        }
+      ],
+      "hints": {
+        "intent": "实现 log_line()：把一行文字和换行发到日志串口。写完后在 app_init() 中调用 log_line(\"sht30-tutor start\")。",
+        "api": "HAL_UART_Transmit(&board_log_uart, 数据, 长度, 超时毫秒)，返回 HAL_StatusTypeDef。长度用 strlen() 计算，参数类型是 uint16_t；换行发送 \"\\r\\n\"。串口已由 board_init() 初始化，见 bsp/tutor_board.h。",
+        "skeleton": "int log_line(const char *text)\n{\n    size_t len = strlen(text);\n    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)text, /* 长度? */, /* 超时? */) != HAL_OK) {\n        return -1;\n    }\n    /* 再发送 \"\\r\\n\" */\n    return 0;\n}",
+        "reference": "#define LOG_TIMEOUT_MS 100u  /* 115200 波特下 100 ms 约可发送 1 KB */\n\nint log_line(const char *text)\n{\n    size_t len = strlen(text);\n    if (len > UINT16_MAX) {\n        return -1;\n    }\n    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)text, (uint16_t)len, LOG_TIMEOUT_MS) != HAL_OK) {\n        return -1;\n    }\n    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)\"\\r\\n\", 2, LOG_TIMEOUT_MS) != HAL_OK) {\n        return -1;\n    }\n    return 0;\n}"
+      },
       "rules": [
         "observe-first",
         "check-return",
         "finite-timeout"
+      ],
+      "guidance": [
+        {
+          "id": "S2-write",
+          "anchorId": "legacy",
+          "lines": [
+            "#define LOG_TIMEOUT_MS 100u  /* 115200 波特下 100 ms 约可发送 1 KB */",
+            "",
+            "int log_line(const char *text)",
+            "{",
+            "    size_t len = strlen(text);",
+            "    if (len > UINT16_MAX) {",
+            "        return -1;",
+            "    }",
+            "    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)text, (uint16_t)len, LOG_TIMEOUT_MS) != HAL_OK) {",
+            "        return -1;",
+            "    }",
+            "    if (HAL_UART_Transmit(&board_log_uart, (const uint8_t *)\"\\r\\n\", 2, LOG_TIMEOUT_MS) != HAL_OK) {",
+            "        return -1;",
+            "    }",
+            "    return 0;",
+            "}"
+          ],
+          "context": "实现 log_line()，并在 app_init() 里打印一行启动信息。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
       "id": "S3",
       "kind": "implement",
-      "layer": "config",
       "title": "I2C 初始化",
       "goal": "填写传感器 I2C 的初始化参数并初始化，失败时打印并返回错误。",
       "why": "外设先单独起来并确认初始化成功，再在它上面通信。",
+      "layer": "config",
       "dependsOn": [
-        "S2"
-      ],
-      "anchor": {
-        "file": "bsp/bsp_i2c.c"
-      },
-      "hints": {
-        "intent": "填写 board_sensor_i2c.Init 的各项参数，调用 HAL_I2C_Init()；写完后在 app_init() 中调用 bsp_i2c_init()。",
-        "api": "I2C_InitTypeDef：ClockSpeed 标准模式为 100000；DutyCycle 用 I2C_DUTYCYCLE_2；作主机时 OwnAddress1 填 0；AddressingMode 用 I2C_ADDRESSINGMODE_7BIT；DualAddressMode、GeneralCallMode、NoStretchMode 都选 DISABLE。Instance 和引脚已由板卡包设置，不要修改。参见 UM1725（STM32F4 HAL 手册）I2C 一章。",
-        "skeleton": [
-          "HAL_StatusTypeDef bsp_i2c_init(void)",
-          "{",
-          "    board_sensor_i2c.Init.ClockSpeed = /* 速率? */;",
-          "    board_sensor_i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;",
-          "    board_sensor_i2c.Init.OwnAddress1 = 0;",
-          "    board_sensor_i2c.Init.AddressingMode = /* 地址模式? */;",
-          "    board_sensor_i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;",
-          "    board_sensor_i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;",
-          "    board_sensor_i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;",
-          "    HAL_StatusTypeDef status = /* 初始化? */;",
-          "    if (status != HAL_OK) {",
-          "        /* 打印错误 */",
-          "    }",
-          "    return status;",
-          "}"
-        ],
-        "reference": [
-          "#define SENSOR_I2C_SPEED_HZ 100000u  /* 标准模式 */",
-          "",
-          "HAL_StatusTypeDef bsp_i2c_init(void)",
-          "{",
-          "    board_sensor_i2c.Init.ClockSpeed = SENSOR_I2C_SPEED_HZ;",
-          "    board_sensor_i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;",
-          "    board_sensor_i2c.Init.OwnAddress1 = 0;",
-          "    board_sensor_i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;",
-          "    board_sensor_i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;",
-          "    board_sensor_i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;",
-          "    board_sensor_i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;",
-          "    HAL_StatusTypeDef status = HAL_I2C_Init(&board_sensor_i2c);",
-          "    if (status != HAL_OK) {",
-          "        log_line(\"i2c: init failed\");",
-          "    }",
-          "    return status;",
-          "}"
-        ]
-      },
-      "contract": [
         {
-          "type": "compiles",
-          "text": "编译通过"
-        },
-        {
-          "type": "checksReturn",
-          "text": "检查 HAL_I2C_Init 的返回值"
+          "stepId": "S2",
+          "mode": "required"
         }
       ],
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "bsp/bsp_i2c.c",
+          "marker": "TODO(S3)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "编译通过",
+          "severity": "required",
+          "legacyType": "compiles"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "检查 HAL_I2C_Init 的返回值",
+          "severity": "required",
+          "legacyType": "checksReturn"
+        }
+      ],
+      "hints": {
+        "intent": "填写 board_sensor_i2c.Init 的各项参数，调用 HAL_I2C_Init()；写完后在 app_init() 中调用 bsp_i2c_init()。",
+        "api": "I2C_InitTypeDef：ClockSpeed 标准模式为 100000；DutyCycle 用 I2C_DUTYCYCLE_2；作主机时 OwnAddress1 填 0；AddressingMode 用 I2C_ADDRESSINGMODE_7BIT；DualAddressMode、GeneralCallMode、NoStretchMode 都选 DISABLE。Instance 和引脚已由 Support/tutor_target.c 设置，不要修改。参见 UM1725（STM32F4 HAL 手册）I2C 一章。",
+        "skeleton": "HAL_StatusTypeDef bsp_i2c_init(void)\n{\n    board_sensor_i2c.Init.ClockSpeed = /* 速率? */;\n    board_sensor_i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;\n    board_sensor_i2c.Init.OwnAddress1 = 0;\n    board_sensor_i2c.Init.AddressingMode = /* 地址模式? */;\n    board_sensor_i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;\n    board_sensor_i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;\n    board_sensor_i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;\n    HAL_StatusTypeDef status = /* 初始化? */;\n    if (status != HAL_OK) {\n        /* 打印错误 */\n    }\n    return status;\n}",
+        "reference": "#define SENSOR_I2C_SPEED_HZ 100000u  /* 标准模式 */\n\nHAL_StatusTypeDef bsp_i2c_init(void)\n{\n    board_sensor_i2c.Init.ClockSpeed = SENSOR_I2C_SPEED_HZ;\n    board_sensor_i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;\n    board_sensor_i2c.Init.OwnAddress1 = 0;\n    board_sensor_i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;\n    board_sensor_i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;\n    board_sensor_i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;\n    board_sensor_i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;\n    HAL_StatusTypeDef status = HAL_I2C_Init(&board_sensor_i2c);\n    if (status != HAL_OK) {\n        log_line(\"i2c: init failed\");\n    }\n    return status;\n}"
+      },
       "rules": [
         "check-return",
         "datasheet"
+      ],
+      "guidance": [
+        {
+          "id": "S3-write",
+          "anchorId": "legacy",
+          "lines": [
+            "#define SENSOR_I2C_SPEED_HZ 100000u  /* 标准模式 */",
+            "",
+            "HAL_StatusTypeDef bsp_i2c_init(void)",
+            "{",
+            "    board_sensor_i2c.Init.ClockSpeed = SENSOR_I2C_SPEED_HZ;",
+            "    board_sensor_i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;",
+            "    board_sensor_i2c.Init.OwnAddress1 = 0;",
+            "    board_sensor_i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;",
+            "    board_sensor_i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;",
+            "    board_sensor_i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;",
+            "    board_sensor_i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;",
+            "    HAL_StatusTypeDef status = HAL_I2C_Init(&board_sensor_i2c);",
+            "    if (status != HAL_OK) {",
+            "        log_line(\"i2c: init failed\");",
+            "    }",
+            "    return status;",
+            "}"
+          ],
+          "context": "填写传感器 I2C 的初始化参数并初始化，失败时打印并返回错误。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
@@ -285,57 +327,40 @@
       "goal": "扫描总线并打印应答地址，确认传感器接线正确、地址与预期一致。",
       "why": "先确认硬件，再写驱动：扫不到设备时，驱动写得再对也读不出数据。",
       "dependsOn": [
-        "S3"
+        {
+          "stepId": "S3",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "bsp/bsp_i2c.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "bsp/bsp_i2c.c",
+          "marker": "TODO(S4)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "串口出现 i2c: 0x44（ADDR 接 VDD 时为 0x45）",
+          "severity": "required",
+          "legacyType": "serialMatch"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "地址按 HAL 要求左移 1 位",
+          "severity": "required",
+          "legacyType": "calls"
+        }
+      ],
       "hints": {
         "intent": "实现 bsp_i2c_scan()：对 7 位地址 0x08–0x77 逐个探测，打印有应答的地址。写完后在 app_init() 中、bsp_i2c_init() 成功后调用一次。",
         "api": "HAL_I2C_IsDeviceReady(&board_sensor_i2c, 地址, 重试次数, 超时毫秒)，返回 HAL_OK 表示有应答。HAL 的地址参数要求 7 位地址左移 1 位。0x00–0x07 和 0x78–0x7F 是保留地址，不用扫描。用 snprintf() 格式化后交给 log_line()。",
-        "skeleton": [
-          "void bsp_i2c_scan(void)",
-          "{",
-          "    char line[24];",
-          "    for (uint8_t addr = 0x08; addr <= 0x77; addr++) {",
-          "        if (HAL_I2C_IsDeviceReady(&board_sensor_i2c, /* 地址格式? */, 1, /* 超时? */) == HAL_OK) {",
-          "            snprintf(line, sizeof line, \"i2c: 0x%02X\", addr);",
-          "            log_line(line);",
-          "        }",
-          "    }",
-          "    /* 一个都没扫到时也要打印，否则无法区分“没扫到”和“没运行” */",
-          "}"
-        ],
-        "reference": [
-          "#define I2C_SCAN_TIMEOUT_MS 2u",
-          "",
-          "void bsp_i2c_scan(void)",
-          "{",
-          "    char line[24];",
-          "    int found = 0;",
-          "    for (uint8_t addr = 0x08; addr <= 0x77; addr++) {",
-          "        if (HAL_I2C_IsDeviceReady(&board_sensor_i2c, (uint16_t)(addr << 1), 1, I2C_SCAN_TIMEOUT_MS) == HAL_OK) {",
-          "            snprintf(line, sizeof line, \"i2c: 0x%02X\", addr);",
-          "            log_line(line);",
-          "            found++;",
-          "        }",
-          "    }",
-          "    if (!found) {",
-          "        log_line(\"i2c: no device\");",
-          "    }",
-          "}"
-        ]
+        "skeleton": "void bsp_i2c_scan(void)\n{\n    char line[24];\n    for (uint8_t addr = 0x08; addr <= 0x77; addr++) {\n        if (HAL_I2C_IsDeviceReady(&board_sensor_i2c, /* 地址格式? */, 1, /* 超时? */) == HAL_OK) {\n            snprintf(line, sizeof line, \"i2c: 0x%02X\", addr);\n            log_line(line);\n        }\n    }\n    /* 一个都没扫到时也要打印，否则无法区分“没扫到”和“没运行” */\n}",
+        "reference": "#define I2C_SCAN_TIMEOUT_MS 2u\n\nvoid bsp_i2c_scan(void)\n{\n    char line[24];\n    int found = 0;\n    for (uint8_t addr = 0x08; addr <= 0x77; addr++) {\n        if (HAL_I2C_IsDeviceReady(&board_sensor_i2c, (uint16_t)(addr << 1), 1, I2C_SCAN_TIMEOUT_MS) == HAL_OK) {\n            snprintf(line, sizeof line, \"i2c: 0x%02X\", addr);\n            log_line(line);\n            found++;\n        }\n    }\n    if (!found) {\n        log_line(\"i2c: no device\");\n    }\n}"
       },
-      "contract": [
-        {
-          "type": "serialMatch",
-          "text": "串口出现 i2c: 0x44（ADDR 接 VDD 时为 0x45）"
-        },
-        {
-          "type": "calls",
-          "text": "地址按 HAL 要求左移 1 位"
-        }
-      ],
       "rules": [
         "bring-up",
         "datasheet"
@@ -344,64 +369,75 @@
     {
       "id": "S5",
       "kind": "implement",
-      "layer": "driver",
       "title": "CRC-8 校验",
       "goal": "实现 sht30_crc8()，用于校验传感器每 2 字节数据后附带的 CRC。",
       "why": "与硬件无关的逻辑先写成纯函数，可以在电脑上马上测试。",
+      "layer": "driver",
       "dependsOn": [
-        "S1"
+        {
+          "stepId": "S1",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "drivers/sht30_calc.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "drivers/sht30_calc.c",
+          "marker": "TODO(S5)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "编译通过",
+          "severity": "required",
+          "legacyType": "compiles"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "只依赖输入数据，不调用 HAL",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "实现 sht30_crc8()：按数据手册的算法，对 len 个字节计算 CRC-8。",
         "api": "SHT3x 数据手册 Checksum Calculation 一节：多项式 0x31（x^8 + x^5 + x^4 + 1），初值 0xFF，输入输出都不反射，结果不再异或。做法：每个字节先异或进 crc，再处理 8 位，最高位为 1 时左移后异或多项式，否则只左移。",
-        "skeleton": [
-          "uint8_t sht30_crc8(const uint8_t *data, uint8_t len)",
-          "{",
-          "    uint8_t crc = /* 初值? */;",
-          "    for (uint8_t i = 0; i < len; i++) {",
-          "        crc ^= data[i];",
-          "        for (int bit = 0; bit < 8; bit++) {",
-          "            /* 最高位为 1：左移后异或多项式；否则只左移 */",
-          "        }",
-          "    }",
-          "    return crc;",
-          "}"
-        ],
-        "reference": [
-          "#define SHT30_CRC_POLY 0x31u  /* x^8 + x^5 + x^4 + 1，数据手册 Checksum Calculation */",
-          "#define SHT30_CRC_INIT 0xFFu",
-          "",
-          "uint8_t sht30_crc8(const uint8_t *data, uint8_t len)",
-          "{",
-          "    uint8_t crc = SHT30_CRC_INIT;",
-          "    for (uint8_t i = 0; i < len; i++) {",
-          "        crc ^= data[i];",
-          "        for (int bit = 0; bit < 8; bit++) {",
-          "            crc = (crc & 0x80u) ? (uint8_t)((crc << 1) ^ SHT30_CRC_POLY) : (uint8_t)(crc << 1);",
-          "        }",
-          "    }",
-          "    return crc;",
-          "}"
-        ]
+        "skeleton": "uint8_t sht30_crc8(const uint8_t *data, uint8_t len)\n{\n    uint8_t crc = /* 初值? */;\n    for (uint8_t i = 0; i < len; i++) {\n        crc ^= data[i];\n        for (int bit = 0; bit < 8; bit++) {\n            /* 最高位为 1：左移后异或多项式；否则只左移 */\n        }\n    }\n    return crc;\n}",
+        "reference": "#define SHT30_CRC_POLY 0x31u  /* x^8 + x^5 + x^4 + 1，数据手册 Checksum Calculation */\n#define SHT30_CRC_INIT 0xFFu\n\nuint8_t sht30_crc8(const uint8_t *data, uint8_t len)\n{\n    uint8_t crc = SHT30_CRC_INIT;\n    for (uint8_t i = 0; i < len; i++) {\n        crc ^= data[i];\n        for (int bit = 0; bit < 8; bit++) {\n            crc = (crc & 0x80u) ? (uint8_t)((crc << 1) ^ SHT30_CRC_POLY) : (uint8_t)(crc << 1);\n        }\n    }\n    return crc;\n}"
       },
-      "contract": [
-        {
-          "type": "compiles",
-          "text": "编译通过"
-        },
-        {
-          "type": "manual",
-          "text": "只依赖输入数据，不调用 HAL"
-        }
-      ],
       "rules": [
         "fixed-width",
         "pure-function",
         "datasheet",
         "named-constant"
+      ],
+      "guidance": [
+        {
+          "id": "S5-write",
+          "anchorId": "legacy",
+          "lines": [
+            "#define SHT30_CRC_POLY 0x31u  /* x^8 + x^5 + x^4 + 1，数据手册 Checksum Calculation */",
+            "#define SHT30_CRC_INIT 0xFFu",
+            "",
+            "uint8_t sht30_crc8(const uint8_t *data, uint8_t len)",
+            "{",
+            "    uint8_t crc = SHT30_CRC_INIT;",
+            "    for (uint8_t i = 0; i < len; i++) {",
+            "        crc ^= data[i];",
+            "        for (int bit = 0; bit < 8; bit++) {",
+            "            crc = (crc & 0x80u) ? (uint8_t)((crc << 1) ^ SHT30_CRC_POLY) : (uint8_t)(crc << 1);",
+            "        }",
+            "    }",
+            "    return crc;",
+            "}"
+          ],
+          "context": "实现 sht30_crc8()，用于校验传感器每 2 字节数据后附带的 CRC。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
@@ -411,42 +447,40 @@
       "goal": "在电脑上用数据手册的测试向量验证 sht30_crc8()。",
       "why": "CRC 算错时，后面每一次读数都会被判为错误；在电脑上测比在板子上排查快得多。",
       "dependsOn": [
-        "S5"
+        {
+          "stepId": "S5",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "test/test_sht30.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "test/test_sht30.c",
+          "marker": "TODO(S6)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "test_sht30 输出“全部通过”",
+          "severity": "required",
+          "legacyType": "hostTest"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "包含数据手册测试向量 0xBE 0xEF → 0x92",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "写 test_crc8()，用数据手册给出的测试向量检查 sht30_crc8()，并在 main() 开头调用它。",
         "api": "数据手册示例：数据 0xBE 0xEF 的 CRC 为 0x92。按同一算法，0x00 0x00 的 CRC 为 0x81，可作为第二组。使用文件顶部的 CHECK() 宏；编译运行命令见文件开头注释。",
-        "skeleton": [
-          "static void test_crc8(void)",
-          "{",
-          "    const uint8_t sample[2] = { /* 数据手册示例? */ };",
-          "    CHECK(sht30_crc8(sample, 2) == /* 期望值? */);",
-          "}"
-        ],
-        "reference": [
-          "static void test_crc8(void)",
-          "{",
-          "    const uint8_t sample[2] = { 0xBE, 0xEF };  /* 数据手册示例 */",
-          "    CHECK(sht30_crc8(sample, 2) == 0x92);",
-          "    const uint8_t zero[2] = { 0x00, 0x00 };",
-          "    CHECK(sht30_crc8(zero, 2) == 0x81);",
-          "}",
-          "/* 并在 main() 开头调用 test_crc8(); */"
-        ]
+        "skeleton": "static void test_crc8(void)\n{\n    const uint8_t sample[2] = { /* 数据手册示例? */ };\n    CHECK(sht30_crc8(sample, 2) == /* 期望值? */);\n}",
+        "reference": "static void test_crc8(void)\n{\n    const uint8_t sample[2] = { 0xBE, 0xEF };  /* 数据手册示例 */\n    CHECK(sht30_crc8(sample, 2) == 0x92);\n    const uint8_t zero[2] = { 0x00, 0x00 };\n    CHECK(sht30_crc8(zero, 2) == 0x81);\n}\n/* 并在 main() 开头调用 test_crc8(); */"
       },
-      "contract": [
-        {
-          "type": "hostTest",
-          "text": "test_sht30 输出“全部通过”"
-        },
-        {
-          "type": "manual",
-          "text": "包含数据手册测试向量 0xBE 0xEF → 0x92"
-        }
-      ],
       "rules": [
         "pure-function"
       ]
@@ -454,143 +488,179 @@
     {
       "id": "S7",
       "kind": "implement",
-      "layer": "driver",
       "title": "读取原始数据",
       "goal": "实现 sht30_read_raw()：发起一次测量，读回温湿度原始值并校验。",
       "why": "驱动层只负责“拿到可信的原始数据”，换算和判断交给其他层。",
+      "layer": "driver",
       "dependsOn": [
-        "S3",
-        "S4",
-        "S5",
-        "S6"
+        {
+          "stepId": "S3",
+          "mode": "required"
+        },
+        {
+          "stepId": "S4",
+          "mode": "advisory"
+        },
+        {
+          "stepId": "S5",
+          "mode": "required"
+        },
+        {
+          "stepId": "S6",
+          "mode": "advisory"
+        }
       ],
-      "anchor": {
-        "file": "drivers/sht30.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "drivers/sht30.c",
+          "marker": "TODO(S7)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "检查 HAL_I2C_Master_Transmit 与 HAL_I2C_Master_Receive 的返回值",
+          "severity": "required",
+          "legacyType": "checksReturn"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "地址为 SHT30_ADDR_7BIT << 1，超时是有限的毫秒数",
+          "severity": "required",
+          "legacyType": "calls"
+        },
+        {
+          "id": "check-3",
+          "type": "manual",
+          "text": "发命令后的等待不短于数据手册的最长测量时间",
+          "severity": "required",
+          "legacyType": "manual"
+        },
+        {
+          "id": "check-4",
+          "type": "manual",
+          "text": "温度和湿度两组数据都校验 CRC",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "实现 sht30_read_raw()：发送单次测量命令，等待测量完成，读回 6 字节，分别校验温度和湿度的 CRC。",
         "api": "单次测量、高重复性、不使用时钟延展的命令是 0x2400，高字节先发（数据手册单次测量命令表）。等待时间不能短于数据手册的高重复性最长测量时间（约 15 ms，请对照手册核对）。读回顺序：温度高字节、低字节、CRC，湿度高字节、低字节、CRC。HAL_I2C_Master_Transmit / HAL_I2C_Master_Receive 的地址参数是 7 位地址左移 1 位。",
-        "skeleton": [
-          "#define SHT30_I2C_TIMEOUT_MS 10u",
-          "",
-          "sht30_status_t sht30_read_raw(sht30_raw_t *out)",
-          "{",
-          "    uint8_t cmd[2] = { /* 命令高字节? */, /* 低字节? */ };",
-          "    uint8_t rx[6];",
-          "    if (HAL_I2C_Master_Transmit(&board_sensor_i2c, /* 地址? */, cmd, sizeof cmd, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {",
-          "        return SHT30_ERR_BUS;",
-          "    }",
-          "    HAL_Delay(/* 等多久? */);",
-          "    /* 读 6 字节，失败返回 SHT30_ERR_BUS */",
-          "    /* 校验 rx[0..1] 与 rx[2]、rx[3..4] 与 rx[5]，不符返回 SHT30_ERR_CRC */",
-          "    out->temperature = (uint16_t)((rx[0] << 8) | rx[1]);",
-          "    out->humidity = /* ? */;",
-          "    return SHT30_OK;",
-          "}"
-        ],
-        "reference": [
-          "#define SHT30_CMD_SINGLE_HIGH 0x2400u  /* 单次测量，高重复性，不使用时钟延展 */",
-          "#define SHT30_MEASURE_WAIT_MS 20u      /* 不短于最长测量时间，留出余量 */",
-          "#define SHT30_I2C_TIMEOUT_MS  10u",
-          "#define SHT30_I2C_ADDR        (SHT30_ADDR_7BIT << 1)  /* HAL 使用左移后的地址 */",
-          "",
-          "sht30_status_t sht30_read_raw(sht30_raw_t *out)",
-          "{",
-          "    uint8_t cmd[2] = { (uint8_t)(SHT30_CMD_SINGLE_HIGH >> 8), (uint8_t)(SHT30_CMD_SINGLE_HIGH & 0xFFu) };",
-          "    uint8_t rx[6];",
-          "    if (HAL_I2C_Master_Transmit(&board_sensor_i2c, SHT30_I2C_ADDR, cmd, sizeof cmd, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {",
-          "        return SHT30_ERR_BUS;",
-          "    }",
-          "    HAL_Delay(SHT30_MEASURE_WAIT_MS);  /* 1 秒采样一次时，20 ms 的等待可以接受 */",
-          "    if (HAL_I2C_Master_Receive(&board_sensor_i2c, SHT30_I2C_ADDR, rx, sizeof rx, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {",
-          "        return SHT30_ERR_BUS;",
-          "    }",
-          "    if (sht30_crc8(&rx[0], 2) != rx[2] || sht30_crc8(&rx[3], 2) != rx[5]) {",
-          "        return SHT30_ERR_CRC;",
-          "    }",
-          "    out->temperature = (uint16_t)((rx[0] << 8) | rx[1]);",
-          "    out->humidity = (uint16_t)((rx[3] << 8) | rx[4]);",
-          "    return SHT30_OK;",
-          "}"
-        ]
+        "skeleton": "#define SHT30_I2C_TIMEOUT_MS 10u\n\nsht30_status_t sht30_read_raw(sht30_raw_t *out)\n{\n    uint8_t cmd[2] = { /* 命令高字节? */, /* 低字节? */ };\n    uint8_t rx[6];\n    if (HAL_I2C_Master_Transmit(&board_sensor_i2c, /* 地址? */, cmd, sizeof cmd, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {\n        return SHT30_ERR_BUS;\n    }\n    HAL_Delay(/* 等多久? */);\n    /* 读 6 字节，失败返回 SHT30_ERR_BUS */\n    /* 校验 rx[0..1] 与 rx[2]、rx[3..4] 与 rx[5]，不符返回 SHT30_ERR_CRC */\n    out->temperature = (uint16_t)((rx[0] << 8) | rx[1]);\n    out->humidity = /* ? */;\n    return SHT30_OK;\n}",
+        "reference": "#define SHT30_CMD_SINGLE_HIGH 0x2400u  /* 单次测量，高重复性，不使用时钟延展 */\n#define SHT30_MEASURE_WAIT_MS 20u      /* 不短于最长测量时间，留出余量 */\n#define SHT30_I2C_TIMEOUT_MS  10u\n#define SHT30_I2C_ADDR        (SHT30_ADDR_7BIT << 1)  /* HAL 使用左移后的地址 */\n\nsht30_status_t sht30_read_raw(sht30_raw_t *out)\n{\n    uint8_t cmd[2] = { (uint8_t)(SHT30_CMD_SINGLE_HIGH >> 8), (uint8_t)(SHT30_CMD_SINGLE_HIGH & 0xFFu) };\n    uint8_t rx[6];\n    if (HAL_I2C_Master_Transmit(&board_sensor_i2c, SHT30_I2C_ADDR, cmd, sizeof cmd, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {\n        return SHT30_ERR_BUS;\n    }\n    HAL_Delay(SHT30_MEASURE_WAIT_MS);  /* 1 秒采样一次时，20 ms 的等待可以接受 */\n    if (HAL_I2C_Master_Receive(&board_sensor_i2c, SHT30_I2C_ADDR, rx, sizeof rx, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {\n        return SHT30_ERR_BUS;\n    }\n    if (sht30_crc8(&rx[0], 2) != rx[2] || sht30_crc8(&rx[3], 2) != rx[5]) {\n        return SHT30_ERR_CRC;\n    }\n    out->temperature = (uint16_t)((rx[0] << 8) | rx[1]);\n    out->humidity = (uint16_t)((rx[3] << 8) | rx[4]);\n    return SHT30_OK;\n}"
       },
-      "contract": [
-        {
-          "type": "checksReturn",
-          "text": "检查 HAL_I2C_Master_Transmit 与 HAL_I2C_Master_Receive 的返回值"
-        },
-        {
-          "type": "calls",
-          "text": "地址为 SHT30_ADDR_7BIT << 1，超时是有限的毫秒数"
-        },
-        {
-          "type": "manual",
-          "text": "发命令后的等待不短于数据手册的最长测量时间"
-        },
-        {
-          "type": "manual",
-          "text": "温度和湿度两组数据都校验 CRC"
-        }
-      ],
       "rules": [
         "check-return",
         "finite-timeout",
         "datasheet",
         "validate-input",
         "named-constant"
+      ],
+      "guidance": [
+        {
+          "id": "S7-write",
+          "anchorId": "legacy",
+          "lines": [
+            "#define SHT30_CMD_SINGLE_HIGH 0x2400u  /* 单次测量，高重复性，不使用时钟延展 */",
+            "#define SHT30_MEASURE_WAIT_MS 20u      /* 不短于最长测量时间，留出余量 */",
+            "#define SHT30_I2C_TIMEOUT_MS  10u",
+            "#define SHT30_I2C_ADDR        (SHT30_ADDR_7BIT << 1)  /* HAL 使用左移后的地址 */",
+            "",
+            "sht30_status_t sht30_read_raw(sht30_raw_t *out)",
+            "{",
+            "    uint8_t cmd[2] = { (uint8_t)(SHT30_CMD_SINGLE_HIGH >> 8), (uint8_t)(SHT30_CMD_SINGLE_HIGH & 0xFFu) };",
+            "    uint8_t rx[6];",
+            "    if (HAL_I2C_Master_Transmit(&board_sensor_i2c, SHT30_I2C_ADDR, cmd, sizeof cmd, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {",
+            "        return SHT30_ERR_BUS;",
+            "    }",
+            "    HAL_Delay(SHT30_MEASURE_WAIT_MS);  /* 1 秒采样一次时，20 ms 的等待可以接受 */",
+            "    if (HAL_I2C_Master_Receive(&board_sensor_i2c, SHT30_I2C_ADDR, rx, sizeof rx, SHT30_I2C_TIMEOUT_MS) != HAL_OK) {",
+            "        return SHT30_ERR_BUS;",
+            "    }",
+            "    if (sht30_crc8(&rx[0], 2) != rx[2] || sht30_crc8(&rx[3], 2) != rx[5]) {",
+            "        return SHT30_ERR_CRC;",
+            "    }",
+            "    out->temperature = (uint16_t)((rx[0] << 8) | rx[1]);",
+            "    out->humidity = (uint16_t)((rx[3] << 8) | rx[4]);",
+            "    return SHT30_OK;",
+            "}"
+          ],
+          "context": "实现 sht30_read_raw()：发起一次测量，读回温湿度原始值并校验。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
       "id": "S8",
       "kind": "implement",
-      "layer": "driver",
       "title": "换算成温湿度",
       "goal": "实现 sht30_convert()：把原始值换算成摄氏度和相对湿度。",
       "why": "换算与通信分开：通信出错和公式写错可以分别排查，公式也能在电脑上测试。",
+      "layer": "driver",
       "dependsOn": [
-        "S1"
+        {
+          "stepId": "S1",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "drivers/sht30_calc.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "drivers/sht30_calc.c",
+          "marker": "TODO(S8)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "编译通过",
+          "severity": "required",
+          "legacyType": "compiles"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "只依赖输入数据，不调用 HAL",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "实现 sht30_convert()：按数据手册公式，把 16 位原始值换算成 °C 和 %RH。",
         "api": "SHT3x 数据手册 Conversion of Signal Output 一节：T = -45 + 175 × S_T / (2^16 - 1)，RH = 100 × S_RH / (2^16 - 1)。先把原始值转成 float 再乘除，避免整数除法把小数截掉。",
-        "skeleton": [
-          "sht30_reading_t sht30_convert(sht30_raw_t raw)",
-          "{",
-          "    sht30_reading_t r;",
-          "    r.celsius = /* 温度公式? */;",
-          "    r.percent_rh = /* 湿度公式? */;",
-          "    return r;",
-          "}"
-        ],
-        "reference": [
-          "#define SHT30_RAW_FULL_SCALE 65535.0f  /* 2^16 - 1 */",
-          "",
-          "sht30_reading_t sht30_convert(sht30_raw_t raw)",
-          "{",
-          "    sht30_reading_t r;",
-          "    r.celsius = -45.0f + 175.0f * (float)raw.temperature / SHT30_RAW_FULL_SCALE;",
-          "    r.percent_rh = 100.0f * (float)raw.humidity / SHT30_RAW_FULL_SCALE;",
-          "    return r;",
-          "}"
-        ]
+        "skeleton": "sht30_reading_t sht30_convert(sht30_raw_t raw)\n{\n    sht30_reading_t r;\n    r.celsius = /* 温度公式? */;\n    r.percent_rh = /* 湿度公式? */;\n    return r;\n}",
+        "reference": "#define SHT30_RAW_FULL_SCALE 65535.0f  /* 2^16 - 1 */\n\nsht30_reading_t sht30_convert(sht30_raw_t raw)\n{\n    sht30_reading_t r;\n    r.celsius = -45.0f + 175.0f * (float)raw.temperature / SHT30_RAW_FULL_SCALE;\n    r.percent_rh = 100.0f * (float)raw.humidity / SHT30_RAW_FULL_SCALE;\n    return r;\n}"
       },
-      "contract": [
-        {
-          "type": "compiles",
-          "text": "编译通过"
-        },
-        {
-          "type": "manual",
-          "text": "只依赖输入数据，不调用 HAL"
-        }
-      ],
       "rules": [
         "pure-function",
         "datasheet",
         "named-constant"
+      ],
+      "guidance": [
+        {
+          "id": "S8-write",
+          "anchorId": "legacy",
+          "lines": [
+            "#define SHT30_RAW_FULL_SCALE 65535.0f  /* 2^16 - 1 */",
+            "",
+            "sht30_reading_t sht30_convert(sht30_raw_t raw)",
+            "{",
+            "    sht30_reading_t r;",
+            "    r.celsius = -45.0f + 175.0f * (float)raw.temperature / SHT30_RAW_FULL_SCALE;",
+            "    r.percent_rh = 100.0f * (float)raw.humidity / SHT30_RAW_FULL_SCALE;",
+            "    return r;",
+            "}"
+          ],
+          "context": "实现 sht30_convert()：把原始值换算成摄氏度和相对湿度。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
@@ -600,46 +670,40 @@
       "goal": "在电脑上验证 sht30_convert() 的中间值和两端极值。",
       "why": "公式里的常数和括号写错很常见，单元测试能马上发现。",
       "dependsOn": [
-        "S8"
+        {
+          "stepId": "S8",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "test/test_sht30.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "test/test_sht30.c",
+          "marker": "TODO(S9)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "test_sht30 输出“全部通过”",
+          "severity": "required",
+          "legacyType": "hostTest"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "覆盖典型值和两端极值",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "写 test_convert()，检查典型值和两端极值，并在 main() 中调用它。",
         "api": "按公式计算：温度原始值 0x6666 → 25.0 °C，0x0000 → -45.0 °C；湿度原始值 0x8000 → 约 50.0 %RH，0xFFFF → 100.0 %RH。浮点结果用文件顶部的 NEAR() 比较，不要用 ==。",
-        "skeleton": [
-          "static void test_convert(void)",
-          "{",
-          "    sht30_reading_t r = sht30_convert((sht30_raw_t){ 0x6666, 0x8000 });",
-          "    CHECK(NEAR(r.celsius, /* 期望值? */));",
-          "    CHECK(NEAR(r.percent_rh, /* 期望值? */));",
-          "    /* 再测两端极值 */",
-          "}"
-        ],
-        "reference": [
-          "static void test_convert(void)",
-          "{",
-          "    sht30_reading_t r = sht30_convert((sht30_raw_t){ 0x6666, 0x8000 });",
-          "    CHECK(NEAR(r.celsius, 25.0f));",
-          "    CHECK(NEAR(r.percent_rh, 50.0f));",
-          "    r = sht30_convert((sht30_raw_t){ 0x0000, 0xFFFF });",
-          "    CHECK(NEAR(r.celsius, -45.0f));",
-          "    CHECK(NEAR(r.percent_rh, 100.0f));",
-          "}",
-          "/* 并在 main() 中调用 test_convert(); */"
-        ]
+        "skeleton": "static void test_convert(void)\n{\n    sht30_reading_t r = sht30_convert((sht30_raw_t){ 0x6666, 0x8000 });\n    CHECK(NEAR(r.celsius, /* 期望值? */));\n    CHECK(NEAR(r.percent_rh, /* 期望值? */));\n    /* 再测两端极值 */\n}",
+        "reference": "static void test_convert(void)\n{\n    sht30_reading_t r = sht30_convert((sht30_raw_t){ 0x6666, 0x8000 });\n    CHECK(NEAR(r.celsius, 25.0f));\n    CHECK(NEAR(r.percent_rh, 50.0f));\n    r = sht30_convert((sht30_raw_t){ 0x0000, 0xFFFF });\n    CHECK(NEAR(r.celsius, -45.0f));\n    CHECK(NEAR(r.percent_rh, 100.0f));\n}\n/* 并在 main() 中调用 test_convert(); */"
       },
-      "contract": [
-        {
-          "type": "hostTest",
-          "text": "test_sht30 输出“全部通过”"
-        },
-        {
-          "type": "manual",
-          "text": "覆盖典型值和两端极值"
-        }
-      ],
       "rules": [
         "pure-function"
       ]
@@ -647,91 +711,64 @@
     {
       "id": "S10",
       "kind": "implement",
-      "layer": "app",
       "title": "周期采样",
       "goal": "每秒读取一次传感器并打印温湿度；主循环不阻塞。",
       "why": "应用逻辑最后写，只依赖驱动接口；用时间戳安排采样，主循环还能处理别的事。",
+      "layer": "app",
       "dependsOn": [
-        "S2",
-        "S7",
-        "S8",
-        "S9"
+        {
+          "stepId": "S2",
+          "mode": "required"
+        },
+        {
+          "stepId": "S7",
+          "mode": "required"
+        },
+        {
+          "stepId": "S8",
+          "mode": "required"
+        },
+        {
+          "stepId": "S9",
+          "mode": "advisory"
+        }
       ],
-      "anchor": {
-        "file": "app/app.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "app/app.c",
+          "marker": "TODO(S10)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "主循环中没有长时间 HAL_Delay",
+          "severity": "required",
+          "legacyType": "calls"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "应用层不直接调用 HAL_I2C_*",
+          "severity": "required",
+          "legacyType": "noCallIn"
+        },
+        {
+          "id": "check-3",
+          "type": "manual",
+          "text": "串口每秒输出一行温湿度",
+          "severity": "required",
+          "legacyType": "serialMatch"
+        }
+      ],
       "hints": {
         "intent": "写 sample_once()：读取、换算并打印一次。再在 app_loop() 中用 HAL_GetTick() 判断是否到了采样时间。",
         "api": "HAL_GetTick() 返回上电后的毫秒数（uint32_t）。用 now - last >= 周期 判断，无符号减法在计数回绕后依然正确。工程使用 newlib-nano，snprintf 默认不支持 %f：把温度乘 10 转成整数再打印，负温度单独处理符号。",
-        "skeleton": [
-          "#define SAMPLE_PERIOD_MS 1000u",
-          "static uint32_t last_sample_ms;",
-          "",
-          "static void sample_once(void)",
-          "{",
-          "    sht30_raw_t raw;",
-          "    if (/* 读取失败? */) {",
-          "        log_line(\"sht30: read failed\");",
-          "        return;",
-          "    }",
-          "    sht30_reading_t r = sht30_convert(raw);",
-          "    /* 用 snprintf 格式化后 log_line() */",
-          "}",
-          "",
-          "/* app_loop() 里：",
-          "    uint32_t now = HAL_GetTick();",
-          "    if (now - last_sample_ms >= SAMPLE_PERIOD_MS) { ... }",
-          "*/"
-        ],
-        "reference": [
-          "#define SAMPLE_PERIOD_MS 1000u",
-          "static uint32_t last_sample_ms;",
-          "",
-          "static void print_reading(sht30_reading_t r)",
-          "{",
-          "    char line[40];",
-          "    int t = (int)(r.celsius * 10.0f);  /* 以 0.1 °C 为单位 */",
-          "    int h = (int)(r.percent_rh * 10.0f);",
-          "    snprintf(line, sizeof line, \"t=%s%d.%d C rh=%d.%d %%\", t < 0 ? \"-\" : \"\", abs(t) / 10, abs(t) % 10, h / 10, h % 10);",
-          "    log_line(line);",
-          "}",
-          "",
-          "static void sample_once(void)",
-          "{",
-          "    sht30_raw_t raw;",
-          "    if (sht30_read_raw(&raw) != SHT30_OK) {",
-          "        log_line(\"sht30: read failed\");",
-          "        return;",
-          "    }",
-          "    print_reading(sht30_convert(raw));",
-          "}",
-          "",
-          "/* app_loop() 改为：",
-          "void app_loop(void)",
-          "{",
-          "    uint32_t now = HAL_GetTick();",
-          "    if (now - last_sample_ms >= SAMPLE_PERIOD_MS) {",
-          "        last_sample_ms = now;",
-          "        sample_once();",
-          "    }",
-          "}",
-          "*/"
-        ]
+        "skeleton": "#define SAMPLE_PERIOD_MS 1000u\nstatic uint32_t last_sample_ms;\n\nstatic void sample_once(void)\n{\n    sht30_raw_t raw;\n    if (/* 读取失败? */) {\n        log_line(\"sht30: read failed\");\n        return;\n    }\n    sht30_reading_t r = sht30_convert(raw);\n    /* 用 snprintf 格式化后 log_line() */\n}\n\n/* app_loop() 里：\n    uint32_t now = HAL_GetTick();\n    if (now - last_sample_ms >= SAMPLE_PERIOD_MS) { ... }\n*/",
+        "reference": "#define SAMPLE_PERIOD_MS 1000u\nstatic uint32_t last_sample_ms;\n\nstatic void print_reading(sht30_reading_t r)\n{\n    char line[40];\n    int t = (int)(r.celsius * 10.0f);  /* 以 0.1 °C 为单位 */\n    int h = (int)(r.percent_rh * 10.0f);\n    snprintf(line, sizeof line, \"t=%s%d.%d C rh=%d.%d %%\", t < 0 ? \"-\" : \"\", abs(t) / 10, abs(t) % 10, h / 10, h % 10);\n    log_line(line);\n}\n\nstatic void sample_once(void)\n{\n    sht30_raw_t raw;\n    if (sht30_read_raw(&raw) != SHT30_OK) {\n        log_line(\"sht30: read failed\");\n        return;\n    }\n    print_reading(sht30_convert(raw));\n}\n\n/* app_loop() 改为：\nvoid app_loop(void)\n{\n    uint32_t now = HAL_GetTick();\n    if (now - last_sample_ms >= SAMPLE_PERIOD_MS) {\n        last_sample_ms = now;\n        sample_once();\n    }\n}\n*/"
       },
-      "contract": [
-        {
-          "type": "calls",
-          "text": "主循环中没有长时间 HAL_Delay"
-        },
-        {
-          "type": "noCallIn",
-          "text": "应用层不直接调用 HAL_I2C_*"
-        },
-        {
-          "type": "serialMatch",
-          "text": "串口每秒输出一行温湿度"
-        }
-      ],
       "rules": [
         "non-blocking",
         "layering",
@@ -745,76 +782,98 @@
       "goal": "第一次端到端验证：串口读数合理，并随环境变化。",
       "why": "单元测试证明公式对，板上测试证明接线、驱动和应用串起来也对。",
       "dependsOn": [
-        "S10"
+        {
+          "stepId": "S10",
+          "mode": "required"
+        }
+      ],
+      "anchors": [],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "串口每秒一行读数",
+          "severity": "required",
+          "legacyType": "serialMatch"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "哈气时湿度上升，手捂时温度上升",
+          "severity": "required",
+          "legacyType": "manual"
+        }
       ],
       "hints": {
         "intent": "下载运行，观察串口：室温下温度和湿度应在合理范围；对传感器哈气，湿度应明显上升；用手捂住，温度应缓慢上升。",
-        "api": "读数一直不变：检查是否每次都发起了新的测量。湿度超过 100 或温度为 -45：多半是字节顺序或换算有误，回到 S7、S8 检查。"
+        "api": "读数一直不变：检查是否每次都发起了新的测量。湿度超过 100 或温度为 -45：多半是字节顺序或换算有误，回到 S7、S8 检查。",
+        "skeleton": "",
+        "reference": ""
       },
-      "contract": [
-        {
-          "type": "serialMatch",
-          "text": "串口每秒一行读数"
-        },
-        {
-          "type": "manual",
-          "text": "哈气时湿度上升，手捂时温度上升"
-        }
-      ],
       "rules": []
     },
     {
       "id": "S12",
       "kind": "implement",
-      "layer": "app",
       "title": "带迟滞的报警",
       "goal": "实现 alarm_update()：温度达到上限进入报警，降到下限以下才退出。",
       "why": "只用一个阈值时，温度在阈值附近抖动会让报警反复开关；迟滞让状态稳定。",
+      "layer": "app",
       "dependsOn": [
-        "S1"
+        {
+          "stepId": "S1",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "app/alarm.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "app/alarm.c",
+          "marker": "TODO(S12)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "编译通过",
+          "severity": "required",
+          "legacyType": "compiles"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "只依赖输入数据，不调用 HAL",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "实现 alarm_update()：根据当前状态和温度决定新状态，状态改变时返回 true。",
         "api": "迟滞（hysteresis）：未报警时，温度 ≥ on_celsius 才进入；报警中，温度 < off_celsius 才退出，off_celsius 低于 on_celsius。结构体定义见 app/alarm.h。",
-        "skeleton": [
-          "bool alarm_update(alarm_t *alarm, float celsius)",
-          "{",
-          "    bool next;",
-          "    if (alarm->active) {",
-          "        next = /* 何时保持报警? */;",
-          "    } else {",
-          "        next = /* 何时进入报警? */;",
-          "    }",
-          "    bool changed = /* ? */;",
-          "    alarm->active = next;",
-          "    return changed;",
-          "}"
-        ],
-        "reference": [
-          "bool alarm_update(alarm_t *alarm, float celsius)",
-          "{",
-          "    bool next = alarm->active ? celsius >= alarm->off_celsius : celsius >= alarm->on_celsius;",
-          "    bool changed = next != alarm->active;",
-          "    alarm->active = next;",
-          "    return changed;",
-          "}"
-        ]
+        "skeleton": "bool alarm_update(alarm_t *alarm, float celsius)\n{\n    bool next;\n    if (alarm->active) {\n        next = /* 何时保持报警? */;\n    } else {\n        next = /* 何时进入报警? */;\n    }\n    bool changed = /* ? */;\n    alarm->active = next;\n    return changed;\n}",
+        "reference": "bool alarm_update(alarm_t *alarm, float celsius)\n{\n    bool next = alarm->active ? celsius >= alarm->off_celsius : celsius >= alarm->on_celsius;\n    bool changed = next != alarm->active;\n    alarm->active = next;\n    return changed;\n}"
       },
-      "contract": [
-        {
-          "type": "compiles",
-          "text": "编译通过"
-        },
-        {
-          "type": "manual",
-          "text": "只依赖输入数据，不调用 HAL"
-        }
-      ],
       "rules": [
         "pure-function"
+      ],
+      "guidance": [
+        {
+          "id": "S12-write",
+          "anchorId": "legacy",
+          "lines": [
+            "bool alarm_update(alarm_t *alarm, float celsius)",
+            "{",
+            "    bool next = alarm->active ? celsius >= alarm->off_celsius : celsius >= alarm->on_celsius;",
+            "    bool changed = next != alarm->active;",
+            "    alarm->active = next;",
+            "    return changed;",
+            "}"
+          ],
+          "context": "实现 alarm_update()：温度达到上限进入报警，降到下限以下才退出。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
@@ -824,44 +883,40 @@
       "goal": "在电脑上验证报警的进入、迟滞区内保持和退出。",
       "why": "报警逻辑的边界条件多，板上很难凑出准确的温度，单元测试可以逐个覆盖。",
       "dependsOn": [
-        "S12"
+        {
+          "stepId": "S12",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "test/test_sht30.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "test/test_sht30.c",
+          "marker": "TODO(S13)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "test_sht30 输出“全部通过”",
+          "severity": "required",
+          "legacyType": "hostTest"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "覆盖进入、保持、退出三种情况",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "写 test_alarm()：用一串温度依次调用 alarm_update()，检查每次的返回值和 active，并在 main() 中调用它。",
         "api": "例如上限 30.0、下限 28.0：29.0 不进入；30.0 进入；回到 29.0 仍保持；27.9 退出。每一步同时检查“是否发生变化”和“当前状态”。",
-        "skeleton": [
-          "static void test_alarm(void)",
-          "{",
-          "    alarm_t a = { 30.0f, 28.0f, false };",
-          "    CHECK(!alarm_update(&a, 29.0f) && !a.active);  /* 未达到上限 */",
-          "    /* 进入、迟滞区内保持、退出 */",
-          "}"
-        ],
-        "reference": [
-          "static void test_alarm(void)",
-          "{",
-          "    alarm_t a = { 30.0f, 28.0f, false };",
-          "    CHECK(!alarm_update(&a, 29.0f) && !a.active);  /* 未达到上限 */",
-          "    CHECK(alarm_update(&a, 30.0f) && a.active);    /* 进入 */",
-          "    CHECK(!alarm_update(&a, 29.0f) && a.active);   /* 迟滞区内保持 */",
-          "    CHECK(alarm_update(&a, 27.9f) && !a.active);   /* 退出 */",
-          "}",
-          "/* 并在 main() 中调用 test_alarm(); */"
-        ]
+        "skeleton": "static void test_alarm(void)\n{\n    alarm_t a = { 30.0f, 28.0f, false };\n    CHECK(!alarm_update(&a, 29.0f) && !a.active);  /* 未达到上限 */\n    /* 进入、迟滞区内保持、退出 */\n}",
+        "reference": "static void test_alarm(void)\n{\n    alarm_t a = { 30.0f, 28.0f, false };\n    CHECK(!alarm_update(&a, 29.0f) && !a.active);  /* 未达到上限 */\n    CHECK(alarm_update(&a, 30.0f) && a.active);    /* 进入 */\n    CHECK(!alarm_update(&a, 29.0f) && a.active);   /* 迟滞区内保持 */\n    CHECK(alarm_update(&a, 27.9f) && !a.active);   /* 退出 */\n}\n/* 并在 main() 中调用 test_alarm(); */"
       },
-      "contract": [
-        {
-          "type": "hostTest",
-          "text": "test_sht30 输出“全部通过”"
-        },
-        {
-          "type": "manual",
-          "text": "覆盖进入、保持、退出三种情况"
-        }
-      ],
       "rules": [
         "pure-function"
       ]
@@ -869,122 +924,132 @@
     {
       "id": "S14",
       "kind": "refactor",
-      "layer": "bsp",
       "title": "总线恢复",
       "goal": "实现 bsp_i2c_recover()：总线出错后重新初始化 I2C。",
       "why": "传感器拔插或受干扰后，I2C 外设可能停在错误状态；重新初始化让系统自己恢复。",
+      "layer": "bsp",
       "dependsOn": [
-        "S3",
-        "S11"
+        {
+          "stepId": "S3",
+          "mode": "required"
+        },
+        {
+          "stepId": "S11",
+          "mode": "advisory"
+        }
       ],
-      "anchor": {
-        "file": "bsp/bsp_i2c.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "bsp/bsp_i2c.c",
+          "marker": "TODO(S14)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "编译通过",
+          "severity": "required",
+          "legacyType": "compiles"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "恢复后重新执行完整的初始化",
+          "severity": "required",
+          "legacyType": "manual"
+        }
+      ],
       "hints": {
         "intent": "实现 bsp_i2c_recover()：先反初始化，再调用 bsp_i2c_init() 重新初始化，并打印一行日志。",
         "api": "HAL_I2C_DeInit(&board_sensor_i2c) 释放外设；之后调用 bsp_i2c_init()。从机拉住 SDA 时，完整的恢复还需要用 GPIO 在 SCL 上输出最多 9 个时钟，这要用到板卡包里的引脚，T1 先不做。",
-        "skeleton": [
-          "HAL_StatusTypeDef bsp_i2c_recover(void)",
-          "{",
-          "    log_line(\"i2c: recover\");",
-          "    /* 反初始化 */",
-          "    return /* 重新初始化? */;",
-          "}"
-        ],
-        "reference": [
-          "HAL_StatusTypeDef bsp_i2c_recover(void)",
-          "{",
-          "    log_line(\"i2c: recover\");",
-          "    (void)HAL_I2C_DeInit(&board_sensor_i2c);  /* 外设已出错时也继续重新初始化 */",
-          "    return bsp_i2c_init();",
-          "}"
-        ]
+        "skeleton": "HAL_StatusTypeDef bsp_i2c_recover(void)\n{\n    log_line(\"i2c: recover\");\n    /* 反初始化 */\n    return /* 重新初始化? */;\n}",
+        "reference": "HAL_StatusTypeDef bsp_i2c_recover(void)\n{\n    log_line(\"i2c: recover\");\n    (void)HAL_I2C_DeInit(&board_sensor_i2c);  /* 外设已出错时也继续重新初始化 */\n    return bsp_i2c_init();\n}"
       },
-      "contract": [
-        {
-          "type": "compiles",
-          "text": "编译通过"
-        },
-        {
-          "type": "manual",
-          "text": "恢复后重新执行完整的初始化"
-        }
-      ],
       "rules": [
         "recoverable",
         "check-return"
+      ],
+      "guidance": [
+        {
+          "id": "S14-write",
+          "anchorId": "legacy",
+          "lines": [
+            "HAL_StatusTypeDef bsp_i2c_recover(void)",
+            "{",
+            "    log_line(\"i2c: recover\");",
+            "    (void)HAL_I2C_DeInit(&board_sensor_i2c);  /* 外设已出错时也继续重新初始化 */",
+            "    return bsp_i2c_init();",
+            "}"
+          ],
+          "context": "实现 bsp_i2c_recover()：总线出错后重新初始化 I2C。",
+          "requiredSymbols": [],
+          "citationIds": []
+        }
       ]
     },
     {
       "id": "S15",
       "kind": "refactor",
-      "layer": "app",
       "title": "接入报警与恢复",
       "goal": "采样时更新报警并在状态变化时打印；连续读取失败达到次数后恢复总线。",
       "why": "健壮性是功能的一部分：现场设备会遇到拔插和干扰，程序要能报告并自己恢复。",
+      "layer": "app",
       "dependsOn": [
-        "S10",
-        "S12",
-        "S13",
-        "S14"
+        {
+          "stepId": "S10",
+          "mode": "required"
+        },
+        {
+          "stepId": "S12",
+          "mode": "required"
+        },
+        {
+          "stepId": "S13",
+          "mode": "advisory"
+        },
+        {
+          "stepId": "S14",
+          "mode": "required"
+        }
       ],
-      "anchor": {
-        "file": "app/app.c"
-      },
+      "anchors": [
+        {
+          "id": "legacy",
+          "path": "app/app.c",
+          "marker": "TODO(S15)"
+        }
+      ],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "应用层不直接调用 HAL_I2C_*",
+          "severity": "required",
+          "legacyType": "noCallIn"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "连续失败有次数上限，成功读取后计数清零",
+          "severity": "required",
+          "legacyType": "manual"
+        },
+        {
+          "id": "check-3",
+          "type": "manual",
+          "text": "跨越阈值时只出现一次 alarm: on 和一次 alarm: off",
+          "severity": "required",
+          "legacyType": "serialMatch"
+        }
+      ],
       "hints": {
         "intent": "在这里定义报警阈值和失败计数，再修改 sample_once()：成功时更新报警并清零计数，失败时计数，达到次数后调用 bsp_i2c_recover()。",
         "api": "alarm_update() 返回 true 时打印一行状态变化。恢复调用 bsp_i2c_recover()，应用层不直接调用 HAL_I2C_*。连续失败次数要有上限，避免每次读取失败都重新初始化。",
-        "skeleton": [
-          "#define READ_FAILS_BEFORE_RECOVER 3u",
-          "static alarm_t over_temp = { /* 上限? */, /* 下限? */, false };",
-          "static unsigned read_failures;",
-          "",
-          "/* sample_once() 中：",
-          "    读取失败：read_failures 加 1；达到 READ_FAILS_BEFORE_RECOVER 时恢复并清零",
-          "    读取成功：read_failures 清零；alarm_update() 返回 true 时打印新状态",
-          "*/"
-        ],
-        "reference": [
-          "#define READ_FAILS_BEFORE_RECOVER 3u",
-          "static alarm_t over_temp = { 30.0f, 28.0f, false };",
-          "static unsigned read_failures;",
-          "",
-          "/* 把 sample_once() 改为：",
-          "static void sample_once(void)",
-          "{",
-          "    sht30_raw_t raw;",
-          "    if (sht30_read_raw(&raw) != SHT30_OK) {",
-          "        log_line(\"sht30: read failed\");",
-          "        if (++read_failures >= READ_FAILS_BEFORE_RECOVER) {",
-          "            read_failures = 0;",
-          "            bsp_i2c_recover();",
-          "        }",
-          "        return;",
-          "    }",
-          "    read_failures = 0;",
-          "    sht30_reading_t r = sht30_convert(raw);",
-          "    print_reading(r);",
-          "    if (alarm_update(&over_temp, r.celsius)) {",
-          "        log_line(over_temp.active ? \"alarm: on\" : \"alarm: off\");",
-          "    }",
-          "}",
-          "*/"
-        ]
+        "skeleton": "#define READ_FAILS_BEFORE_RECOVER 3u\nstatic alarm_t over_temp = { /* 上限? */, /* 下限? */, false };\nstatic unsigned read_failures;\n\n/* sample_once() 中：\n    读取失败：read_failures 加 1；达到 READ_FAILS_BEFORE_RECOVER 时恢复并清零\n    读取成功：read_failures 清零；alarm_update() 返回 true 时打印新状态\n*/",
+        "reference": "#define READ_FAILS_BEFORE_RECOVER 3u\nstatic alarm_t over_temp = { 30.0f, 28.0f, false };\nstatic unsigned read_failures;\n\n/* 把 sample_once() 改为：\nstatic void sample_once(void)\n{\n    sht30_raw_t raw;\n    if (sht30_read_raw(&raw) != SHT30_OK) {\n        log_line(\"sht30: read failed\");\n        if (++read_failures >= READ_FAILS_BEFORE_RECOVER) {\n            read_failures = 0;\n            bsp_i2c_recover();\n        }\n        return;\n    }\n    read_failures = 0;\n    sht30_reading_t r = sht30_convert(raw);\n    print_reading(r);\n    if (alarm_update(&over_temp, r.celsius)) {\n        log_line(over_temp.active ? \"alarm: on\" : \"alarm: off\");\n    }\n}\n*/"
       },
-      "contract": [
-        {
-          "type": "noCallIn",
-          "text": "应用层不直接调用 HAL_I2C_*"
-        },
-        {
-          "type": "manual",
-          "text": "连续失败有次数上限，成功读取后计数清零"
-        },
-        {
-          "type": "serialMatch",
-          "text": "跨越阈值时只出现一次 alarm: on 和一次 alarm: off"
-        }
-      ],
       "rules": [
         "recoverable",
         "layering",
@@ -998,29 +1063,45 @@
       "goal": "主动制造故障，确认系统不卡死、会报告错误，并能自己恢复。",
       "why": "只在正常条件下测过的程序，第一次遇到故障时往往直接卡死。",
       "dependsOn": [
-        "S15"
+        {
+          "stepId": "S15",
+          "mode": "required"
+        }
+      ],
+      "anchors": [],
+      "requirements": [
+        {
+          "id": "check-1",
+          "type": "manual",
+          "text": "拔下传感器后程序不卡死，日志报告读取失败",
+          "severity": "required",
+          "legacyType": "manual"
+        },
+        {
+          "id": "check-2",
+          "type": "manual",
+          "text": "插回后无需复位即可恢复读数",
+          "severity": "required",
+          "legacyType": "manual"
+        },
+        {
+          "id": "check-3",
+          "type": "manual",
+          "text": "报警进入与退出各打印一次",
+          "severity": "required",
+          "legacyType": "serialMatch"
+        }
       ],
       "hints": {
         "intent": "运行中拔下传感器，观察日志；几秒后插回，确认读数恢复。再用手捂住传感器让温度超过上限，松开后观察报警退出。",
-        "api": "拔下后应看到 sht30: read failed，每 3 次出现一次 i2c: recover，程序不卡死。插回后读数恢复正常。报警只在跨越阈值时打印，不会反复出现。"
+        "api": "拔下后应看到 sht30: read failed，每 3 次出现一次 i2c: recover，程序不卡死。插回后读数恢复正常。报警只在跨越阈值时打印，不会反复出现。",
+        "skeleton": "",
+        "reference": ""
       },
-      "contract": [
-        {
-          "type": "manual",
-          "text": "拔下传感器后程序不卡死，日志报告读取失败"
-        },
-        {
-          "type": "manual",
-          "text": "插回后无需复位即可恢复读数"
-        },
-        {
-          "type": "serialMatch",
-          "text": "报警进入与退出各打印一次"
-        }
-      ],
       "rules": [
         "recoverable"
       ]
     }
-  ]
+  ],
+  "contentHash": "8ade5e48e858e2ddedbb4f04ff2de87bfaaab4eb26e199ab1f91472a73656330"
 }

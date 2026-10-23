@@ -75,6 +75,7 @@ test('project context and references use real chip metadata and reject escaped f
  const f=await fixture(t),root=await fs.realpath(await fs.mkdtemp(join(tmpdir(),'nodu-goal-project-')));t.after(()=>fs.rm(root,{recursive:true,force:true}));
  await fs.writeFile(join(root,'main.c'),'int main(void) {}\n');await fs.writeFile(join(root,'nodu.json'),JSON.stringify({kind:'stm32-hal',target:{mcu:context.mcu},sdk:context.sdk}));
  await fs.symlink(join(root,'main.c'),join(root,'alias.c'));
+ await fs.mkdir(join(root,'reference'));await fs.writeFile(join(root,'reference/answer.c'),'int answer;');
  const host=new TutorWorkspaceHost({authorizeWorkspace:async()=> 'workspace-1',revokeWorkspace(){},dispose(){}},()=>{});await host.select(pathToFileURL(root).href);
  const data=await host.context('workspace-1');assert.equal(data.mcu,context.mcu);assert.equal(data.sdk,context.sdk);assert.deepEqual(data.files,['main.c']);
  assert.deepEqual(await host.reference('workspace-1','main.c',1),{path:'main.c',line:1});

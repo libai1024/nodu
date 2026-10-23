@@ -181,9 +181,12 @@ class TutorEditorController implements Disposable {
                     if (!base || fragment.requiredSymbols.some(s => !new RegExp(`\\b${s}\\b`).test(buffer.text))) { continue; }
                     const index = position.lineNumber - base - 1;
                     if (index < 0 || index >= fragment.lines.length) { continue; }
-                    // Advancing the lesson requires a semantic result for every prior line.
+                    // Ghost progression follows typed code; semantic feedback never blocks an incomplete construct.
                     const prior = [...this.tasks.values()];
-                    if (index && !fragment.lines.slice(0, index).every((_, i) => prior.some(t => t.guided && model.getDecorationRange(t.decoration)?.startLineNumber === base + i + 1))) { continue; }
+                    if (index && !fragment.lines.slice(0, index).every((expected, i) => {
+                        const line = base + i + 1, actual = model.getLineContent(line).trim();
+                        return actual === expected.trim() || prior.some(t => t.guided && t.text.trim() === actual && model.getDecorationRange(t.decoration)?.startLineNumber === line);
+                    })) { continue; }
                     candidate = fragment.lines[index]; break;
                 }
             }
@@ -253,12 +256,18 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         commands.registerCommand({ id: TUTOR_COMMANDS.guidance, label: 'AI 编辑指导', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => !this.tutor.paused, ...available });
         commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.enabled && this.tutor.mode === 'teach' && !!this.tutor.buffer && !this.tutor.busy, isVisible: () => this.tutor.enabled });
         commands.registerCommand({ id: TUTOR_COMMANDS.revealStep, label: '定位教学代码', category: 'Nodu' }, { execute: async () => {
-            const step = this.tutor.currentStep(), anchor = step?.anchors[0]; if (!anchor || !this.tutor.rootUri) { return; }
-            const widget = await this.editors.open(this.tutor.rootUri.resolve(anchor.path), { mode: 'activate' });
-            const control = MonacoEditor.get(widget)?.getControl(), model = control?.getModel();
-            const line = model && tutorMarkerLine(model.getLinesContent(), anchor);
-            if (control && line) { control.setPosition({ lineNumber: Math.min(line + 1, model!.getLineCount()), column: 1 }); control.revealLineInCenterIfOutsideViewport(line); control.focus(); }
-        } });
+            try {
+                const root = this.tutor.rootUri, step = this.tutor.currentStep(), anchor = step?.anchors[0];
+                if (!anchor || !root) { return; }
+                const reference = await this.tutor.resolveReference(anchor.path, 1);
+                if (root !== this.tutor.rootUri || step !== this.tutor.currentStep()) { return; }
+                const widget = await this.editors.open(root.resolve(reference.path), { mode: 'activate' });
+                const control = MonacoEditor.get(widget)?.getControl(), model = control?.getModel();
+                const line = model && tutorMarkerLine(model.getLinesContent(), anchor);
+                if (control && line) { control.setPosition({ lineNumber: Math.min(line + 1, model!.getLineCount()), column: 1 }); control.revealLineInCenterIfOutsideViewport(line); control.focus(); }
+                else if (anchor.marker) { throw new Error('未找到唯一的教学位置'); }
+            } catch (error) { this.tutor.error = error instanceof Error ? error.message : '无法定位教学代码'; this.tutor.notify(); }
+        }, ...available });
     }
     registerKeybindings(keys: KeybindingRegistry): void {
         keys.registerKeybinding({ command: TUTOR_COMMANDS.togglePanel, keybinding: 'ctrlcmd+shift+a' });
