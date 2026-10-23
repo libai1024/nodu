@@ -1,0 +1,25 @@
+
+> @scope/studio-extension@0.1.4 test:launcher
+> npm run compile && node --test test/launcher.cjs
+
+
+> @scope/studio-extension@0.1.4 compile
+> tsc -p tsconfig.json
+
+✔ desktop starts at workbench, explicit paths and browser default are retained (0.384375ms)
+✔ launcher URL never becomes a recent project; malformed fragments are rejected (0.120417ms)
+✔ recent projects are deduplicated, bounded and moved to front without deleting missing paths (0.502916ms)
+✔ startup settings parse comments without corrupting URL strings (0.194917ms)
+✔ recent store serializes simultaneous windows, handles missing folders and removes Theia recents (6.678375ms)
+✔ example copies are isolated under concurrent creation and omit symlinks and build state (4.269292ms)
+✔ concurrent welcome requests create one window (100.98425ms)
+✔ project routing focuses an existing window and waits before closing the welcome window (5.290875ms)
+✔ failed project opening leaves the welcome window available (3.300292ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 179.938667

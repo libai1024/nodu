@@ -79,7 +79,9 @@ export class TutorGoalSession {
                     : '返回{"text":"简短评价","annotations":[],"review":{"verdict":"ok|needs-work|context","note":"理由"}}。只静态检查本步片段及完整当前文件。必须提供review，等价写法允许，缺定义/未闭合表达式为context。不要返回guidance。ok不代表编译或真机通过。')
                     + '批注可给出当前文件范围startLine/endLine/note，最多8条。';
                 if (kind === 'chat' && buffer.text.split('\n')[buffer.line - 1]?.trim()) { throw new Error('请将光标移到准备编写代码的空白行'); }
-                const raw = await complete(instruction, { project: context, goal: state.goal, step, buffer,
+                const raw = kind === 'step' && context.localCheck?.syntax === 'incomplete'
+                    ? JSON.stringify({ text: '本地检查发现语法结构尚未完整，请先补齐代码。', annotations: context.localCheck.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: 'context', note: 'C 语法树存在错误节点，本次未调用模型。' } })
+                    : await complete(instruction, { project: context, goal: state.goal, step, buffer,
                     previous: state.fragment ? { path: state.fragment.source.path, guidance: state.fragment.answer.guidance } : undefined });
                 const answer = parseTutorAnswer(raw, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer });
                 presentation = { source: { ...buffer }, answer };

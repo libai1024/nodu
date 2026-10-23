@@ -1,0 +1,2 @@
+    Checking nodu-tutor v0.2.1 (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/native/crates/nodu-tutor)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.36s

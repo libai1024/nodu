@@ -35,7 +35,7 @@ function GoalPlan({ tutor, run }: { tutor: NoduTutorModel; run(command: string, 
             <details className="nodu-ai-details"><summary>{step.title}</summary><p>{step.goal}</p></details>
             <div className="nodu-ai-actions">
                 <button className="scope-text-button" disabled={busy} onClick={() => run(TUTOR_COMMANDS.openReference, step.path, state.fragment?.answer.guidance?.anchorLine ?? 1)}>{step.path}</button>
-                <button className="nodu-ai-chip" disabled={busy || state.status === 'paused'} onClick={() => void tutor.goalAction(state.fragment ? 'check' : 'fragment')}>{state.fragment ? '检查片段' : '显示虚影'}</button>
+                <button className="nodu-ai-chip" disabled={busy || state.status === 'paused'} onClick={() => void (state.fragment ? tutor.send('step') : tutor.goalAction('fragment'))}>{state.fragment ? '检查片段' : '显示虚影'}</button>
                 <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction(state.status === 'paused' ? 'resume' : 'pause')}>{state.status === 'paused' ? '继续' : '暂停'}</button>
                 <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction('cancel')}>结束</button>
             </div>

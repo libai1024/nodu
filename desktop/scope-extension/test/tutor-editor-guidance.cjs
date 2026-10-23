@@ -27,7 +27,7 @@ function editor(tutor, lines, cursorLine) {
         deltaDecorations:()=>[String(++state.nextId)] };
     const c = Object.assign(new Controller(), { tutor, tasks:new Map(), changed:new Set(),before:[...lines],composing:false,
         control:{getModel:()=>textModel,getPosition:()=>({lineNumber:cursorLine,column:state.lines[cursorLine-1].length+1})},
-        decorations:{set:d=>{state.decorations=d;},clear:()=>{}}, removeOverlay(){}, schedule(){},active:()=>true,
+        decorations:{set:d=>{state.decorations=d;},clear:()=>{}}, removeOverlay(){}, schedule(){}, queueHistory(){}, active:()=>true,
         buffer:()=>({path:'main.c',text:state.lines.join('\n'),version:state.version,line:cursorLine}),updateContext(){tutor.updateBuffer(this.buffer());} });
     return {c,state};
 }
@@ -113,4 +113,48 @@ test('production editor saves line decorations and rebinds them to the reopened 
     const second=editor(t,['int a;'],1);second.state.version=80;second.c.restoreHistory();
     assert.equal(second.c.tasks.size,1);assert.equal(second.c.tasks.get('1').guided,true);assert.equal(second.c.tasks.get('1').version,80);
     t.goalState.goal='another exercise';const other=editor(t,['int a;'],1);other.c.restoreHistory();assert.equal(other.c.tasks.size,0);
+});
+
+test('manual fragment checks use local evidence offline and ignore results after editing', async () => {
+    const Sender = methods('nodu-tutor-model.ts', 'NoduTutorModel', ['send','settle','updateBuffer','invalidate','notify'], helpers);
+    const make = () => Object.assign(new Sender(), {
+        enabled:true, mode:'teach', workspaceId:'workspace', epoch:1, configured:false,
+        goalState:{status:'active'}, buffer:{path:'main.c',text:'int main(void){return 0;}',version:1,line:1},
+        messages:{teach:[],ask:[]}, drafts:{teach:'',ask:''}, sync:Promise.resolve(),
+        currentStep:()=>undefined, changed:{fire(){}}, invalidated:{fire(){}}, restoreGoalGuidance(){}, autoCheckFragment(){},
+        service:{chat:()=>{throw Error('Offline check must not call model');}, inspectBuffer:async()=>({syntax:'valid',findings:[],errorLines:[]})}
+    });
+    const t=make();await t.send('step');
+    assert.match(t.messages.teach.at(-1).text,/尚未验证编译和运行/);
+    assert.equal(t.presentation.answer.review.verdict,'context');assert.equal(t.goalState.status,'active');
+    const edited=make();let resolve;edited.service.inspectBuffer=()=>new Promise(r=>resolve=r);
+    edited.cancel=()=>{edited.busy=undefined;};const p=edited.send('step');await Promise.resolve();await Promise.resolve();
+    edited.updateBuffer({path:'main.c',text:'int main(void){',version:2,line:1});
+    resolve({syntax:'valid',findings:[],errorLines:[]});await p;assert.equal(edited.presentation,undefined);
+});
+
+function historyStorage() {
+    const map = new Map();
+    return { get length(){return map.size;}, key:i=>[...map.keys()][i] ?? null,
+        getItem:k=>map.get(k) ?? null, setItem:(k,v)=>map.set(k,v), removeItem:k=>map.delete(k), map };
+}
+test('history survives application restart as stale evidence without losing typed guidance progress', () => {
+    const {TutorLineHistoryCache}=require('../lib/common/tutor/tutor-line-history');const disk=historyStorage();
+    new TutorLineHistoryCache(disk).save('project/course/main.c','int a;',[{line:1,text:'int a;',status:'ok',guided:true,note:'AI已检查'}]);
+    const restored=new TutorLineHistoryCache(disk).restore('project/course/main.c','int a;');
+    assert.equal(restored[0].status,'stale');assert.equal(restored[0].guided,true);assert.match(restored[0].note,/历史/);
+    assert.deepEqual(new TutorLineHistoryCache(disk).restore('project/other-course/main.c','int a;'),[]);
+    assert.deepEqual(new TutorLineHistoryCache(disk).restore('project/course/main.c','int b;'),[]);
+});
+test('persistent history validates corruption, never replays pending calls, and bounds stored files', () => {
+    const {TutorLineHistoryCache}=require('../lib/common/tutor/tutor-line-history');const disk=historyStorage();
+    const first=new TutorLineHistoryCache(disk),other=new TutorLineHistoryCache(disk);
+    for(let i=0;i<20;i++)(i%2 ? first:other).save(`file-${i}`,'int a;',[{line:1,text:'int a;',status:'pending',guided:true,note:'working'}]);
+    assert.equal(disk.length,16);
+    const key=disk.key(0), raw=JSON.parse(disk.getItem(key));
+    const restored=new TutorLineHistoryCache(disk).restore(raw.key,'int a;');assert.equal(restored[0].guided,false);assert.equal(restored[0].status,'stale');
+    raw.lines[0].line=999;disk.setItem(key,JSON.stringify(raw));assert.deepEqual(new TutorLineHistoryCache(disk).restore(raw.key,'int a;'),[]);
+    disk.setItem('unrelated','keep');first.clear();assert.equal(disk.getItem('unrelated'),'keep');assert.equal(disk.length,1);
+    const unavailable=new TutorLineHistoryCache({setItem(){throw Error('quota');},getItem(){throw Error('unavailable');},removeItem(){}});
+    unavailable.save('x','int a;',[{line:1,text:'int a;',status:'ok',note:'ok'}]);assert.equal(unavailable.restore('x','int a;').length,1);
 });

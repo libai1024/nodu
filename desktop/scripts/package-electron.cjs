@@ -102,7 +102,7 @@ function requireInputs(arch) {
     stm32.validateToolkit(stm32.toolkitSource(desktop, host, arch));
     const required = [];
     if (host === 'darwin') {
-        for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded',
+        for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded', 'nodu-tutor',
             'ffmpeg', 'ffprobe', 'ffplay', 'libSDL2-2.0.0.dylib']) {
             required.push(`scope-extension/resources/bin/darwin-${arch}/${name}`);
         }
@@ -111,7 +111,7 @@ function requireInputs(arch) {
         required.push('scripts/package-entitlements.plist');
     } else {
         for (const name of ['nodu-device.exe', 'nodu-terminal.exe',
-            'nodu-resources.exe', 'nodu-embedded.exe', 'ffmpeg.exe', 'ffprobe.exe', 'ffplay.exe',
+            'nodu-resources.exe', 'nodu-embedded.exe', 'nodu-tutor.exe', 'ffmpeg.exe', 'ffprobe.exe', 'ffplay.exe',
             'SDL2.dll']) {
             required.push(`scope-extension/resources/bin/win32-${arch}/${name}`);
         }

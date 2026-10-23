@@ -5,12 +5,14 @@ import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { TutorProgressStore } from './tutor-progress-store';
 import type { TutorProjectContext } from '../../common/tutor/tutor-goal';
+import { TutorLocalChecker } from './tutor-local-checker';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
 import { TutorStorageConnection } from './tutor-storage-server';
 
 /** Uses the existing Theia workspace-open lifecycle, never recent-workspace history as a grant. */
 export class TutorWorkspaceHost {
+    private readonly checker = new TutorLocalChecker();
     private current = '';
     private sequence = 0;
     private grants: { id: string; uri: string; root: string }[] = [];
@@ -111,9 +113,10 @@ export class TutorWorkspaceHost {
                 if (!build.currentBufferSaved) { delete build.runtime; }
             }
         }
+        const localCheck = buffer ? await this.checker.inspect(buffer) : undefined;
         if (!this.grants.includes(grant)) { throw new Error('工程授权已失效'); }
         return { key: await TutorProgressStore.projectKey(grant.root), mcu, sdk, files: files.sort(),
-            ...(declarations.length ? { declarations } : {}), ...(build ? { build } : {}) };
+            ...(localCheck ? { localCheck } : {}), ...(declarations.length ? { declarations } : {}), ...(build ? { build } : {}) };
     }
     async reference(id: string, relative: string, line: number): Promise<{ path: string; line: number }> {
         await this.authorize(id, { path: relative, text: '', version: 1, line: 1 });

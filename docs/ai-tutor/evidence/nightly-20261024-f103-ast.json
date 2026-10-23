@@ -1,0 +1,37 @@
+{
+  "mcu": "STM32F103C8Tx",
+  "sdk": "stm32cube-f1@1.8.7",
+  "syntax": {
+    "schema": 1,
+    "sourceDigest": "742b7b8839eef97fd25910271d240ac5e2826fb4482e28ba3ba6cc2c52e0e253",
+    "syntax": "valid",
+    "errorLines": [],
+    "findings": []
+  },
+  "rules": {
+    "schema": 1,
+    "sourceDigest": "742b7b8839eef97fd25910271d240ac5e2826fb4482e28ba3ba6cc2c52e0e253",
+    "syntax": "valid",
+    "errorLines": [],
+    "findings": [
+      {
+        "id": "uart_init",
+        "verdict": "verified",
+        "line": 8,
+        "note": "符合此项语法结构规则（不代表编译或运行）"
+      },
+      {
+        "id": "uart_send",
+        "verdict": "verified",
+        "line": 13,
+        "note": "符合此项语法结构规则（不代表编译或运行）"
+      },
+      {
+        "id": "interval",
+        "verdict": "verified",
+        "line": 14,
+        "note": "符合此项语法结构规则（不代表编译或运行）"
+      }
+    ]
+  }
+}

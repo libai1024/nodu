@@ -2,6 +2,7 @@
 import type { TutorStorageService } from './tutor-storage-protocol';
 import type { TutorAISettingsView, TutorModelSelection, TutorProviderConfig } from './tutor-ai-config';
 import type { TutorGoalRequest, TutorGoalResult, TutorGoalState } from './tutor-goal';
+import type { TutorLocalCheck, TutorLocalRule } from './tutor-local-check';
 export const TUTOR_SERVICE_PATH = '/services/nodu-tutor';
 export type TutorMode = 'teach' | 'ask';
 export interface TutorBuffer {
@@ -46,5 +47,6 @@ export interface TutorService extends TutorStorageService {
     clearChat(workspaceId: string, mode: TutorMode): Promise<void>;
     goalSnapshot(workspaceId: string): Promise<TutorGoalState>;
     goal(request: TutorGoalRequest): Promise<TutorGoalResult>;
+    inspectBuffer(workspaceId: string, buffer: TutorBuffer, rules?: TutorLocalRule[]): Promise<TutorLocalCheck>;
     resolveReference(workspaceId: string, path: string, line: number): Promise<{ path: string; line: number }>;
 }

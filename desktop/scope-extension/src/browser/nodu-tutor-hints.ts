@@ -24,6 +24,7 @@ class TutorEditorController implements Disposable {
     private readonly tasks = new Map<string, LineTask>();
     private before: string[];
     private taskHistoryKey?: string;
+    private historyTimer?: ReturnType<typeof setTimeout>;
     private composing = false;
     private line = 1;
     private changed = new Set<number>();
@@ -52,6 +53,7 @@ class TutorEditorController implements Disposable {
             if (this.taskHistoryKey !== this.historyKey()) { this.clear(); this.restoreHistory(); }
             this.render(); this.schedule();
         }));
+        this.disposables.push(control.onWillChangeModel(() => this.saveHistory()));
         this.disposables.push(control.onDidChangeModel(() => { this.clear(); this.restoreHistory(); this.before = control.getModel()?.getLinesContent() ?? []; this.updateContext(); this.render(); }));
         this.restoreHistory(); this.updateContext(); this.render();
     }
@@ -64,14 +66,18 @@ class TutorEditorController implements Disposable {
     private historyKey(): string | undefined {
         const buffer = this.buffer(), root = this.tutor.rootUri;
         if (!buffer || !root) { return; }
-        return JSON.stringify([root.toString(), this.tutor.plan?.contentHash, this.tutor.goalState.goal, buffer.path]);
+        return JSON.stringify([root.toString(), this.tutor.plan?.contentHash, this.tutor.goalState.goal, this.tutor.goalState.steps, this.tutor.goalState.target, buffer.path]);
+    }
+    private queueHistory(): void {
+        if (this.historyTimer) { clearTimeout(this.historyTimer); }
+        this.historyTimer = setTimeout(() => { this.historyTimer = undefined; if (!this.disposed) { this.saveHistory(); } }, 300);
     }
     private saveHistory(): void {
         const key = this.historyKey(), model = this.control.getModel();
         if (!key || !model || model.isDisposed() || key !== this.taskHistoryKey) { return; }
         const lines = [...this.tasks.values()].flatMap(task => {
             const line = model.getDecorationRange(task.decoration)?.startLineNumber;
-            return line ? [{ line, text: task.text, status: task.status, note: task.note, guided: task.guided }] : [];
+            return line ? [{ line, text: model.getLineContent(line), status: task.status, note: task.note, guided: task.guided }] : [];
         });
         this.tutor.lineHistory.save(key, model.getValue(), lines);
     }
@@ -100,7 +106,7 @@ class TutorEditorController implements Disposable {
                 for (const line of completedLines(this.before, after, change.range.startLineNumber, change.range.endLineNumber, change.text)) { this.changed.delete(line); this.enqueue(line); }
             }
         }
-        this.before = after; this.updateContext(); this.render();
+        this.before = after; this.updateContext(); this.render(); this.queueHistory();
     }
     private enabled(): boolean { return this.tutor.teaching && this.tutor.autoReview && this.tutor.configured && !!(this.tutor.plan || this.tutor.guidance); }
     private enqueuing = false;
@@ -144,7 +150,7 @@ class TutorEditorController implements Disposable {
             if (result?.ok && result.answer.review) {
                 task.status = result.answer.review.verdict; task.guided = task.status === 'ok'; task.note = `${task.status === 'ok' ? 'AI 已检查' : task.status === 'context' ? '待补上下文' : '需要修改'}：${result.answer.review.note}`; task.version = buffer.version;
             } else { task.status = 'unavailable'; task.note = result && !result.ok ? result.error : 'AI 检查未完成'; }
-        } finally { this.processing = false; this.render(); this.schedule(); }
+        } finally { this.processing = false; this.render(); this.schedule(); this.queueHistory(); }
     }
     private render(): void {
         const model = this.control.getModel();
@@ -208,7 +214,7 @@ class TutorEditorController implements Disposable {
     }
     private removeOverlay(): void { if (this.overlay) { this.control.removeOverlayWidget(this.overlay); this.overlay = undefined; } }
     private clear(): void { this.control.getModel()?.deltaDecorations([...this.tasks.keys()], []); this.tasks.clear(); this.changed.clear(); }
-    dispose(): void { this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
+    dispose(): void { if (this.historyTimer) { clearTimeout(this.historyTimer); } this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
 }
 @injectable()
 export class NoduTutorHintsContribution implements FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution {

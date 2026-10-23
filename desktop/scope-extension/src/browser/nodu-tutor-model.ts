@@ -12,6 +12,7 @@ import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tuto
 import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
 import { guidanceEditMatches } from '../common/tutor/tutor-guidance';
 import { emptyGoal, TutorGoalRequest, TutorGoalState } from '../common/tutor/tutor-goal';
+import { TutorLocalRule } from '../common/tutor/tutor-local-check';
 import { TutorLineHistoryCache } from '../common/tutor/tutor-line-history';
 import { ScopeLayoutState } from './scope-layout-state';
 
@@ -57,7 +58,7 @@ export class NoduTutorModel {
     presentation?: TutorPresentation;
     guidance?: { source: TutorBuffer; anchorLine: number; lines: string[] };
     goalState: TutorGoalState = emptyGoal();
-    readonly lineHistory = new TutorLineHistoryCache();
+    readonly lineHistory = new TutorLineHistoryCache((() => { try { return localStorage; } catch { return undefined; } })());
     /** Providers, key presence and this window's model; never the keys themselves. */
     settings?: TutorAISettingsView;
     /** Conversation lane: chat and step checks, owned by the composer. */
@@ -175,7 +176,7 @@ export class NoduTutorModel {
         const before = this.buffer;
         this.buffer = buffer;
         if (before?.path !== buffer?.path || before?.version !== buffer?.version || before?.text !== buffer?.text) {
-            if (this.busy?.goal === 'fragment' || this.busy?.goal === 'check') { this.cancel(); }
+            if (this.busy?.goal === 'fragment' || this.busy?.goal === 'check' || this.busy?.kind === 'step') { this.cancel(); }
             const guidance = this.guidance;
             this.invalidate();
             if (guidance && buffer && guidanceEditMatches(guidance.source, buffer, guidance.anchorLine, guidance.lines.length)) { this.guidance = guidance; }
@@ -329,7 +330,7 @@ export class NoduTutorModel {
         if (this.mode === 'teach' && !this.plan && kind === 'chat' && ['none','draft','cancelled','complete'].includes(this.goalState.status)) {
             await this.goalAction('propose', this.drafts.teach.trim()); return;
         }
-        if (this.mode === 'teach' && kind === 'step' && this.goalState.status === 'active') { await this.goalAction('check'); return; }
+        if (this.mode === 'teach' && kind === 'step' && this.goalState.status === 'active' && this.configured) { await this.goalAction('check'); return; }
         const review = kind === 'line';
         const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
         if (!this.enabled || laneBusy() || !this.workspaceId || (review && this.paused)) { return; }
@@ -338,7 +339,7 @@ export class NoduTutorModel {
         if (!prompt) { return; }
         await this.sync;
         if (!this.enabled || laneBusy() || mode !== this.mode || !this.workspaceId || (review && this.paused)) { return; }
-        const context = buffer ?? (this.includeCode ? this.buffer : undefined);
+        const context = buffer ?? (this.includeCode || kind !== 'chat' ? this.buffer : undefined);
         const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: this.workspaceId, epoch: this.epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
         const current = (): boolean => review ? this.reviewing?.id === request.id : this.busy?.id === request.id;
         if (review) { this.reviewing = { id: request.id }; } else { this.busy = { id: request.id, mode, kind }; }
@@ -350,7 +351,25 @@ export class NoduTutorModel {
         }
         this.notify();
         try {
-            const result = await this.service.chat(request);
+            let localResult: TutorAIResult | undefined;
+            if (kind === 'step' && context) {
+                const step = this.currentStep(), rules: TutorLocalRule[] = [];
+                for (const r of step?.requirements ?? []) {
+                    if (!['calls','noCallIn','checksReturn'].includes(r.type) || !('anchorId' in r)) { continue; }
+                    const anchor = step?.anchors.find(a => a.id === r.anchorId && a.path === context.path);
+                    if (!anchor?.symbol) { continue; }
+                    const callees = 'callees' in r ? r.callees : 'callee' in r ? [r.callee] : [];
+                    for (const callee of callees) { rules.push({ id: `${r.id}_${rules.length}`.slice(0, 80), kind: r.type as TutorLocalRule['kind'], function: anchor.symbol, callee }); }
+                }
+                const local = await this.service.inspectBuffer(request.workspaceId, context, rules.slice(0, 32));
+                if (!current() || request.epoch !== this.epoch) { return { ok: false, error: '已停止', cancelled: true }; }
+                if (!this.configured || local.syntax === 'incomplete' || local.findings.some(f => f.verdict === 'needs-work')) {
+                    const text = local.syntax === 'unavailable' ? local.note ?? '本地检查不可用' : local.syntax === 'incomplete' ? '本地检查发现语法结构尚未完整。' :
+                        local.findings.length ? local.findings.map(f => `${f.id}：${f.note}`).join('\n') : '本地语法结构检查通过，尚未验证编译和运行。';
+                    localResult = { ok: true, answer: { text, annotations: local.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: local.findings.some(f => f.verdict === 'needs-work') ? 'needs-work' : 'context', note: text } } };
+                }
+            }
+            const result = localResult ?? await this.service.chat(request);
             if (!current() || request.epoch !== this.epoch || request.workspaceId !== this.workspaceId) {
                 this.settle(mode, request.id, 'stopped');
                 return { ok: false, error: '已停止', cancelled: true };

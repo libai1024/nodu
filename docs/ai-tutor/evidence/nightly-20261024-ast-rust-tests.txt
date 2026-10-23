@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s
+     Running unittests src/lib.rs (desktop/native/target/debug/deps/nodu_tutor-4ae8bc2dcf6697b1)
+
+running 5 tests
+test tests::budget_and_unicode ... ok
+test tests::incomplete_and_preprocessor_are_unknown ... ok
+test tests::direct_calls_ignore_comments_strings_and_other_functions ... ok
+test tests::restricted_scope_and_indirection ... ok
+test tests::guards_and_equivalent_operand_order ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (desktop/native/target/debug/deps/nodu_tutor-d4a9c4986773a578)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nodu_tutor
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

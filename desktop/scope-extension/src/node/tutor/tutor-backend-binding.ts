@@ -21,6 +21,7 @@ import { TutorGoalStore } from './tutor-goal-store';
 import { NoduEmbeddedServer } from '../nodu-embedded-server';
 import { ProjectStatus } from '../../common/nodu-embedded-protocol';
 import { TutorProjectContext } from '../../common/tutor/tutor-goal';
+import { TutorLocalChecker } from './tutor-local-checker';
 import { TutorGoalSession } from './tutor-goal-session';
 
 const STORE = Symbol('NoduTutorStore');
@@ -42,6 +43,7 @@ class TutorConnection {
             const notify = (fn: (client: RpcProxy<TutorAIClient>) => unknown): void => { try { const client = this.client; if (client) { void Promise.resolve(fn(client)).catch(() => undefined); } } catch { /* closed */ } };
             const connection = storage.connect({ onDidChange: event => { notify(c => c.onDidChange(event)); } });
             const host = new TutorWorkspaceHost(connection, id => { chat.revoke(id); goals.revoke(id); }, () => notify(c => c.onWorkspacesChanged()), hub.buildStatus);
+            const checker = new TutorLocalChecker();
             const provider = {
                 complete: async (messages, signal, delta) => streamCompletion(await settings.target(this.selection), messages, signal, delta),
             } satisfies import('./tutor-model-gateway').TutorModelProvider;
@@ -95,6 +97,9 @@ class TutorConnection {
                 clearChat: async (id: string, mode: 'teach' | 'ask') => { await host.authorize(id); chat.clear(id, mode); },
                 goalSnapshot: (id: string) => goals.snapshot(id),
                 goal: (request: Parameters<TutorService['goal']>[0]) => goals.run(request),
+                inspectBuffer: async (id: string, buffer: import('../../common/tutor/tutor-ai-protocol').TutorBuffer, rules?: import('../../common/tutor/tutor-local-check').TutorLocalRule[]) => {
+                    await host.authorize(id, buffer); const result = await checker.inspect(buffer, rules); await host.authorize(id, buffer); return result;
+                },
                 resolveReference: (id: string, path: string, line: number) => host.reference(id, path, line),
             });
             if (closed) { chat.dispose(); goals.dispose(); host.dispose(); }

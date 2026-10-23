@@ -1,0 +1,30 @@
+{
+  "source": "/Users/wangwei/Model/k210-studio/docs/0.3",
+  "mode": "copy-untracked-design-docs-original-untouched",
+  "files": [
+    {
+      "file": "docs/0.3/API-CONTRACT.md",
+      "sha256": "da82beafc25f478bc25aff3557510a1a2125391afe001edaca5825d7e5c73fd6"
+    },
+    {
+      "file": "docs/0.3/DESIGN.md",
+      "sha256": "6540104320930f9e692dd91e8c0c03dd9706af4b74213a2f19fa01ad99b9b38d"
+    },
+    {
+      "file": "docs/0.3/README.md",
+      "sha256": "dbed67927fa530c3f7fdf543b54cba81223fbf69349cd178aec7be5d7a5b5343"
+    },
+    {
+      "file": "docs/0.3/ROADMAP-AND-TESTS.md",
+      "sha256": "3c597d3272fc344385535e2635377af996ea42373e7e6a5fc63ca80739fdb553"
+    },
+    {
+      "file": "docs/0.3/research-gateway.md",
+      "sha256": "50d04e7f86eb298c0b0b17b182dccac84bd3c4daa2dbab2bfb7acdc8641cbf8e"
+    },
+    {
+      "file": "docs/0.3/research-identity.md",
+      "sha256": "cd8b22f8138b6b2a2be918bca2adc1ef8d5b4afe003d5b42581d7ab743393053"
+    }
+  ]
+}

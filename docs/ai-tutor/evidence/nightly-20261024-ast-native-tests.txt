@@ -1,0 +1,17 @@
+
+> @scope/studio-extension@0.1.4 test:tutor-native
+> npm run compile && node --test test/tutor-local-native.cjs
+
+
+> @scope/studio-extension@0.1.4 compile
+> tsc -p tsconfig.json
+
+✔ packaged Rust checker parses actual C and scopes call rules (5.812208ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.524125

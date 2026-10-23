@@ -95,3 +95,10 @@ test('authorized declarations and saved-build evidence distinguish dirty buffers
  const dirty=await host.context('workspace-1',{path:'main.c',text:text+'// edit',version:2,line:1});assert.equal(dirty.build.currentBufferSaved,false);assert.equal(dirty.build.runtime,undefined);
  status='stale';assert.equal((await host.context('workspace-1')).build.status,'stale');assert.equal(reads,4);
 });
+
+test('local incomplete syntax blocks fragment advancement without calling the model',async t=>{
+ const f=await fixture(t);f.responses.push(plan,fragment);await f.run('propose',{prompt:'serial',buffer});await f.run('confirm');await f.run('fragment',{buffer});
+ const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{schema:1,sourceDigest:'hash',syntax:'incomplete',errorLines:[2],findings:[]}}),f.authorize);
+ const result=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:(await f.store.read(context.key)).revision,action:'check',buffer:{...buffer,text:'int main(void){\nint x = ;\n}',version:2}});
+ assert.equal(result.ok,true);assert.equal(result.state.current,0);assert.equal(result.presentation.answer.review.verdict,'context');assert.equal(f.calls.length,2);
+});
