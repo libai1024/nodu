@@ -40,3 +40,19 @@
 | [Ajv Schema 文档](https://ajv.js.org/json-schema.html) | 结构化计划/模型输出运行时校验 | schema 校验不能证明教学内容正确 |
 
 这些来源用于技术选型。本方案的 UI、权限模型、数据结构、阈值、任务拆解和验收标准是本项目设计决定；不是上游默认行为或本次已测能力。发布前保存实际 lockfile、供应链摘要及许可证清单，不依赖滚动 latest 文档长期保证兼容。
+
+
+## 双模式和直观教学补充依据
+
+2026-10-23 再次打开下列官方页面核对。它们支持实现原语或教学方向；模式划分、开关状态和浮窗取舍是本项目决定，不把一般教学研究当作本产品的效果测试。
+
+| 来源 | 支持的设计方向 | 限制 |
+| --- | --- | --- |
+| [Raspberry Pi Foundation 教学原则](https://www.raspberrypi.org/teach/pedagogy) | 阅读与解释代码、示范、预测和改写可补充跟写，帮助观察理解过程 | 不要求每行弹题；不证明虚影跟写本身有效，也不意味着可自动移除学生选择的辅助 |
+| [EEF 反馈综述](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/feedback) | 反馈聚焦具体任务和可行动的改进；正确时也给简短确认 | 反馈频率须结合情境；本项目逐行自动检查来自用户要求，不能据此声称频率越高越好 |
+| [Monaco IModelDecorationOptions](https://microsoft.github.io/monaco-editor/typedoc/interfaces/editor_editor_api.editor.IModelDecorationOptions.html) | decoration 背景、行旁标记、hoverMessage、injected text 可用于只读高光/批注/虚影 | 滚动文档不等于当前 Theia 捆绑版本；M0 要验证 ABI 和真实能力，不使用编辑器选区模拟高光 |
+| [Monaco IContentWidget](https://microsoft.github.io/monaco-editor/typedoc/interfaces/editor_editor_api.editor.IContentWidget.html) | 在代码位置附近渲染组件，支持交互式浮动批注 | 位置和溢出 API 不自动保证避让、无障碍或焦点恢复，这些仍由 Nodu 实现并测试 |
+
+## AI 侧栏复用补充核查
+
+官方固定版本源码、维护状态与 npm 发布元数据见[开源复用选型](OPEN-SOURCE.md)。本轮核查 Theia 1.76.0 UI 模块和实际默认贡献；Cline 固定 SHA 1619168bdeb570aa233d0f0a9af1d332d83a2816；Continue 固定 SHA 5522c6f44ca0ac3528b37244818fbfa39b5af470。npm @cline/ui 的 latest 为 0.1.0，next 为 0.2.0-next.12；主分支新增导出不等于已发布能力。未安装任何候选包。

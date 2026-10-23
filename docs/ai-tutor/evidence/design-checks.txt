@@ -1,8 +1,15 @@
-Local Markdown links: PASS (32)
-Roadmap tasks and acyclic dependencies: PASS (30)
-Prototype unique DOM ids: PASS (35)
-Prototype middle-dot text: ABSENT
-Prototype network API calls: ABSENT
-Browser observed: steps/chat/check/revision, keyboard tabs, Escape focus recovery, dark/light, 980px layout
-AI model calls: NOT RUN; hardware actions: NONE; product integration tests: NOT RUN
-Prototype JavaScript syntax: PASS
+2026-10-23 Design review only; product code and hardware untouched.
+Prototype JavaScript parsed with Node vm.Script: PASS
+Local Markdown links: PASS
+Roadmap CSV: 38 tasks; unique IDs; valid references; DAG PASS
+HTML element IDs unique: PASS
+Prototype middle-dot copy scan: PASS
+Prototype source network/model/hardware transport scan: none
+Git whitespace diff check: PASS
+Browser: editable code ghost prefix, error feedback, equivalent condition PASS (fixed-rule simulation)
+Browser: switch mode while reviewing, teaching draft restore PASS
+Browser: keyboard menu End/Enter pause, annotation Esc focus restore PASS
+Browser: 1280 px layout; 980 px compact preview; dark/light; optional float/top rail inspected
+True Monaco, real AI, full queue/paste/IME/accessibility, hardware: NOT TESTED
+Open-source dependency integration: NOT TESTED; only official sources/registry metadata reviewed
+Status: UI proposal awaiting joint decision, not product acceptance

@@ -1,18 +1,20 @@
 # Nodu AI 辅助教学详细实施方案
 
-日期：2026-10-23；基线：`1209ffd`；分支：`codex/ai-tutor-design`。这是可拆解实施的设计，所有新增模块和 API 均为拟议接口，不代表已经实现。
+日期：2026-10-23；基线：`1209ffd`；分支：`codex/ai-tutor-design`。这是待共同定稿、可拆解实施的设计，所有新增模块和 API 均为拟议接口，不代表已经实现。
 
 ## 1. 产品选择
 
-以现有“教学步骤”原型为基础，完成“确认目标 → 分解步骤 → 行下提示 → 学生编写 → 本地检查 → 有依据的反馈 → 测试 → 下一步”。AI 帮学生理解和完成工程，不自动替换源码，不代替学生操作设备。
+以现有“教学步骤”原型为基础，完成“确认目标 → 分解步骤 → 代码虚影跟写 → 完成一行 → AI 检查一行 → 整步测试 → 下一步”。
 
-推荐采用 **Nodu 自定义教学 UI + Theia AI 核心 + Node 模型网关 + Rust 本地检查器**。首期不增加独立聊天应用，不接入通用自动编程 Agent，不默认开启行内代码补全。编辑、编译、下载、串口功能继续离线工作。
+2026-10-23 用户修订：默认提示必须是实际代码虚影，不是步骤意图；完成每行自动触发 AI 检查。详细触发、队列、语义边界和接口见[逐行跟写规范](LINE-GUIDANCE.md)。最新双模式、代码高光、浮动批注、步骤浮窗和快速开关以[教学交互设计](INTERACTION-DESIGN.md)为准。AI 帮学生理解和完成工程，不自动替换源码，不代替学生操作设备。
+
+推荐采用 **Nodu 自定义教学 UI + Theia AI 核心 + Node 模型网关 + Rust 本地检查器**。首期不增加独立聊天应用，不接入通用自动编程 Agent，采用必须亲手输入的教学代码虚影，不提供 Tab 一键接受。编辑、编译、下载、串口功能继续离线工作。
 
 ### 1.1 继承与修订旧规划
 
 | 原规划 | 本轮细化决定 |
 | --- | --- |
-| 自顶而下拆解、学生自己写、分级提示 | 保留。L0 意图、L1 API/依据、L2 留空骨架、L3 主动查看参考。默认 L0/L1，不因停留时间自动给答案；卡住时只提供“再提示一点”。 |
+| 自顶而下拆解、学生自己写、分级提示 | 学生亲手写保留；默认改为实际代码虚影，完成一行自动 AI 检查。意图/API/原理按需展开，当前行虚影不设参考确认门槛。 |
 | 只读 Agent，确定性检查优先 | 保留。用户点击测试与模型调用工具是两条授权路径；AI 没有测试执行或设备操作工具。 |
 | 板卡包决定引脚 | 改为芯片能力 + 版本锁定 SDK + 显式接线配置；不再绑定正点原子等开发板名。引脚和电源、时钟、传感器实例必须有来源，未知时先询问。 |
 | T1 学生自查即完成 | 保留为“自查完成”，不能迁移成“已验证”。正式检查结果区分通过、失败、未知、过期。 |
@@ -57,22 +59,22 @@
 | --- | --- |
 | 新增左侧 AI 活动栏 + 独立聊天页 | 入口重复，会挤压项目和代码，不选 |
 | 底部全宽聊天 | 与编译/串口争用位置，学生看不全运行证据，不选 |
-| 现有右侧教学面板，内部“步骤 / 对话”切换 | **采用**。代码居中，教学与视觉面板复用右侧区域；保持一个助手图标 |
+| 现有右栏，内部“教学 / 提问”两种模式 | **采用**。两种模式都有对话；教学顶部固定当前步骤，完整步骤折叠；保持一个 AI 入口 |
 
-工作台只保留现有教学按钮的位置，名称统一“学习助手”，相机按钮仍在最右。有课程时可打开步骤，无课程时同一面板可提问或选择课程；不再另外增加 AI 首页或悬浮球。导入课程只在助手内和命令面板提供。课程项目第一次进入可以打开一次，以后尊重用户收起状态。
+工作台右上角复用现有教学入口位置，采用一个 AI 分体按钮：主体打开/收起右栏，下拉管理虚影、高光、批注、步骤浮窗和“暂停教学”；相机入口保持原位置。关闭右栏只是显示操作，教学未暂停时逐行检查继续。无课程时同一右栏可提问或选择课程，不增加 AI 首页或悬浮球。导入课程只在助手内和命令面板提供。课程项目第一次进入可以打开一次，以后尊重用户收起状态。
 
 ```text
-┌ 项目名                            编译   运行   学习助手   相机 ┐
-│ 文件树 │ main.c / sht30.c                     │ 学习助手   × │
-│        │                                     │ 步骤    对话 │
-│        │ 传感器读取代码                      │ S07 读取数据 │
-│        │ ┌ 当前步骤的意图提示 ─────────────┐  │ API   依据   │
-│        │ └────────────────────────────────┘  │ 条件及状态   │
-│        │                                     │ 再提示  检查 │
-│        │                                     │ ▸ 全部步骤   │
-├────────┴ 编译输出 / 串口 ─────────────────────┴─────────────┤
-│ ST-LINK  编译成功 100%                                      │
-└────────────────────────────────────────────────────────────┘
+┌ 项目名                          编译   运行   AI ▾   相机 ┐
+│ 文件树 │ main.c / sht30.c                   │ 教学  提问 × │
+│        │                                   │ 7/13 读取数据 │
+│        │ 高光代码 〔批注〕                  │ 检查本步  ⌄  │
+│        │ if (crc != expected) { 灰色后缀   │ 本行检查状态  │
+│        │   return SENSOR_CRC_ERROR;         │ 对话与引用    │
+│        │                                   │              │
+│        │                                   │ 输入问题 发送 │
+├────────┴ 编译输出 / 串口 ───────────────────┴──────────────┤
+│ ST-LINK  编译成功 100%                                     │
+└───────────────────────────────────────────────────────────┘
 ```
 
 ### 3.2 视觉规格
@@ -91,25 +93,47 @@
 | 状态 | 显示内容 | 操作及结果 |
 | --- | --- | --- |
 | 无计划 | 项目芯片一行、课程选择、提问框 | 选课程打开适配条件与计划预览；确认后写教学元数据，不生成实现代码 |
-| 学习中 | 当前步骤名、一个意图提示、文件锚点、必要条件状态 | “再提示”“检查”；全部步骤默认折叠，切步不改源码 |
+| 教学 | 当前步骤、对话、下一行实际代码虚影、本行 AI 状态 | Enter 自动审阅；高光和批注辅助讲解；“检查本步”单独核验整步证据 |
 | 正在检查 | 当前条件旁转动图标，单一停止按钮 | 只取消检查任务，不能调用当前下载的 stop |
 | 条件失败 | 指出未满足的一条条件和源码位置 | “查看依据”“讨论”；不自动输出完整替代函数 |
 | 证据不足 | “待编译”“待运行”“来源未确认”等明确短状态 | 定位现有操作入口；检查按钮不顺带编译、下载或连接串口 |
 | 已通过 | 短“已验证”，后续步骤入口 | 保存证据 ID；代码变化立即转“需复查” |
-| 对话 | 近期消息、引用链接、当前步骤上下文 chip、底部输入 | 回车发送、Shift+回车换行，输入法组合态不发送；生成时显示停止 |
+| 提问 | 近期消息、引用链接、用户选定上下文、底部输入 | 不自动检查代码、不推进课程、不显示教学覆盖层；回车发送、Shift+回车换行，输入法组合态不发送 |
+| 教学对话 | 当前步骤下方的消息与输入框 | 讨论本步无需切到提问；发送文字不等于执行编译/设备操作 |
+| 教学暂停 | 保留课程、对话和当前输入，短“已暂停”状态 | 停止新教学请求，旧 epoch 结果不应用；恢复时重新检查暂停期间的相关修改 |
 | 计划修订 | 同面板只读变更对比，标明新增/删除/受影响步骤 | “保留原计划”“采用修订”；确认只改计划，绝不批量改 C 文件 |
 | 模型不可用 | 对话区域短错误 + 重试 | 本地课程提示和检查继续可用，不全屏阻断 IDE |
 | 查看参考 | 面板内展开、一次明确点击，记录“看过参考” | 不加“一键应用”、不拦截正常编辑器 Tab |
 
-首期避免长时间停留自动升级提示。连续两次本地检查失败可出现“再提示一点”按钮强调，但不自动发模型请求或显示 L3。
+教学模式未暂停时，完成代码行自动发起 AI 审阅；普通按键不发请求。当前行虚影默认可见，完整函数参考仍需主动展开。失败反馈短而具体，原理按需查看。
 
 ### 3.4 编辑器内提示与无障碍
 
-复用现有 overlay widget + 占位 view zone，而不是重写为行内补全。每个文件只展示一个当前步骤提示；提示不进入文本模型、不影响撤销/保存/clangd。默认一至三行；大段骨架放右栏，学生输入时折叠为一行。锚点位置由 decoration 跟踪，文档符号重定位必须检查文件版本；符号重名或标记丢失时停止猜测。
+复用 Monaco 的只读 decoration/view zone/overlay 能力渲染实际代码虚影，与源码同字体、同基线；已输入部分成为正常源码，未输入后缀保持灰色。不进入文档、不参与保存/复制，不提供 Tab 接受。默认一次一行；Enter 完成后自动 AI 检查，通过后提供下一行，用户可自由继续编辑。跨行语句、不同有效写法、过期与队列见[逐行跟写规范](LINE-GUIDANCE.md)。
 
 按“符号 + 作用域 + 文件 → 唯一 TODO 标记 → 用户重新指定”定位。新课程优先不要求往源文件插教学标记；手动标记仍是用户主动可撤销编辑。焦点从引用跳到编辑器后可返回；Esc 关闭弹层并还原焦点。步骤/tab 支持键盘与可见焦点，提示正文在面板有同等可访问版本；流式回答按段落公告，不能每 token 朗读。
 
+高光使用 decoration 的背景/边线而非编辑器选区，不改变语法颜色、不抢光标；默认只强调当前讲解所需的小范围。AI 批注是教学展示对象，不写成 C 注释；悬停或键盘聚焦行旁标记展开，一次一个，可钉住，Esc 关闭并还原焦点。与当前输入行冲突时移至空白侧边或右栏，无法安全放置则不覆盖代码。右栏提供同等内容和定位入口。
+
+步骤默认固定在教学面板顶部；“步骤浮窗”默认关闭，由用户手动钉住，适合收起右栏后继续写代码。只显示进度、当前任务、“检查本步”和收起；不追随光标、不自动展开长说明。窄窗口降为编辑器顶部窄条，与右栏共享同一状态，不能产生第二个检查任务。
+
 桌面最小宽度当前为 980 px：助手打开时优先收起文件树并允许恢复，不能把代码压至不可编辑。浏览器小于 900 px 时右栏改为覆盖抽屉（宽 `min(360px, 100vw)`），保留明确关闭按钮和焦点约束；不依赖 hover。200% 缩放、深浅主题和 640 px 窗口列为验收项。
+
+### 3.5 模式、显示和执行状态
+
+```ts
+interface TutorInteractionState {
+  mode: 'teach' | 'ask';
+  teachingPaused: boolean;
+  teachingEpoch: number;
+  panelVisible: boolean;
+  display: { ghost: boolean; highlights: boolean; comments: boolean; stepFloat: boolean };
+}
+```
+
+显示偏好不授予或撤销模型权限。隐藏虚影/批注或收起右栏不停止逐行审阅；“暂停教学”、切到提问、切工程则增加 teachingEpoch，取消教学请求并拒绝旧 epoch 的显示和行检查结果。提问模式不发送教学自动请求，也不应用高光/批注工具结果；返回教学保留进度，按当前快照重新排队未检查的实质修改，不回放旧视图。两种模式分别维护会话任务/上下文，切换不丢文字草稿；未完成的旧模式流可取消并标为中断，不能串入新模式。
+
+首期在关键控制流提供可选短预测题，点击分支后显示课程标定的路径；必须标明这是预测/示意，不冒充实机执行轨迹。首期课程可在跟写后提供一段自主小改写，由学生主动隐藏或恢复虚影；M6 增加测试期望/实际值到断言与源码的定位，串口消息的精确代码映射在 M7 单独扩展。不自动隐藏用户已开启的虚影，不把抄写完成当作理解证明。[教学依据与限制](SOURCES.md)
 
 ## 4. 总体架构与边界
 
@@ -139,6 +163,7 @@ flowchart TB
 | --- | --- | --- | --- |
 | 读当前步骤与允许的源码 | 可以 | 只读、按本次范围 | 只接收快照 |
 | 修订计划 | 用户确认后可以 | 仅提出结构化提案 | 不可以 |
+| 教学高光/批注 | 可显示、隐藏、钉住 | 仅教学模式提出结构化展示对象 | 只返回合法源码区间，不操作 UI |
 | 修改源码 | 学生在编辑器操作 | 不可以 | 不可以 |
 | 编译、下载、复位、串口发送 | 沿用现有按钮和设备策略 | 不可以 | 不可以 |
 | 纯函数测试执行 | 用户点击，受信任课程/工程范围 | 不可以，仅读取结果 | 专用测试进程，不是规则检查器 |
@@ -253,19 +278,22 @@ interface EvidenceStamp {
 | 文件/模块 | 具体职责 |
 | --- | --- |
 | 改 `browser/nodu-tutor-model.ts` | 从 localStorage 主状态迁移为服务端状态投影；维护连接、revision、当前选步和取消令牌 |
-| 改 `browser/nodu-tutor-widget.tsx` | 单一面板容器，步骤/对话 tab、无计划态、底部主要操作 |
+| 改 `browser/nodu-tutor-widget.tsx` | 单一面板容器，教学/提问模式、两种模式的聊天、固定步骤条、无计划态 |
 | 改 `browser/nodu-tutor-hints.ts` | 保留 overlay/view zone；符号锚点、版本检查、低干扰折叠、键盘定位 |
 | 新 `browser/tutor/tutor-step-view.tsx` | 条件行、证据来源、过期与未知状态；不复制编译日志 UI |
 | 新 `browser/tutor/tutor-chat-view.tsx` | 流式消息、引用、停止、重试；不用通用 AI 工作区编辑 UI |
 | 新 `browser/tutor/tutor-plan-diff.tsx` | 只读计划结构对比及受影响步骤；采用/拒绝修订 |
 | 新 `browser/tutor/tutor-context-collector.ts` | 获取选区、相关未保存缓冲区、模型版本、符号与诊断；返回受限快照 |
+| 新 `browser/tutor/tutor-guidance-controller.ts` / `tutor-line-review.ts` | 代码虚影、完成行事件、组合输入处理、稳定行 ID、逐行检查投影 |
+| 新 `browser/tutor/tutor-presentation-controller.ts` / `tutor-annotation-widget.tsx` | 受校验高光、浮动批注、过期移除、键盘/右栏等价路径；不写源码 |
+| 新 `browser/tutor/tutor-controls.tsx` / `tutor-step-float.tsx` | 右上角分体入口、模式/暂停与显示开关、可选步骤浮窗、窄版顶部条 |
 | 新 `browser/tutor/tutor-symbol-anchor.ts` | Monaco 符号提供者/clangd 可用时定位；无符号服务时显式退回标记 |
 | 改 `scope-workbench.tsx`、`scope-frontend-module.ts` | 合并唯一入口、注入服务、feature flag；不增加第二套工作台 |
 | 改 `style/tutor.css` | 使用品牌 token，统一按钮 pressed/focus/disabled，移除小字与中点解释 |
 
 快照捕获：在同一 JS 任务内读取所选模型版本和内容；异步查符号后再检查版本，变化则重取。UTF-16 编辑器位置与 Rust UTF-8 字节区间使用显式映射，测试中文注释、emoji、CRLF。上下文哈希由后端复算；不能把前端自报 hash 当唯一真实性依据。
 
-性能：当前步骤的本地语法检查在保存后或编辑空闲 600 ms 触发，合并待执行快照；每工程最多一个检查在跑，后来的版本取消旧检查。模型默认只在提问、主动语义审阅或计划修订时请求，不跟随每次保存。组件订阅最小状态，流式消息按 50–100 ms 批次更新；关闭面板保留会话但不自动继续新请求。
+性能：当前步骤的本地语法检查在保存后或编辑空闲 600 ms 触发，合并待执行快照；每工程最多一个检查在跑，后来的版本取消旧检查。教学模式未暂停时，每行完成事件自动进入 AI 审阅队列；同一行同一版本去重，不因学生继续下一行就丢弃前一行检查。完整模型语义与本地规则状态分开。组件订阅最小状态，流式消息按 50–100 ms 批次更新；收起面板保留会话且不暂停教学；暂停教学或切到提问才停止自动请求并推进 teachingEpoch。显示状态与执行状态按 §3.5 处理。
 
 ## 8. Node 后端与协议
 
@@ -277,6 +305,8 @@ interface EvidenceStamp {
 - `TutorStore`：计划、记录、迁移、事务和修订冲突。
 - `TutorContextService`：路径边界、缓冲区覆盖、资料检索、截断与来源登记。
 - `TutorCheckCoordinator`：计算输入依赖、调用 Rust、组合编译/测试证据、过期判定。
+- `TutorLineReviewCoordinator`：逐行队列、批处理、快照/epoch 校验和取消；不把 AI 审阅升级成硬件证据。
+- `TutorPresentationService`：教学专用展示工具白名单、范围/引用/schema 校验，发出高光与批注投影；不存为源码。
 - `TutorModelGateway`：提供方配置、密钥读取、数据范围检查、预算、流、重试和脱敏日志。
 - `TutorCourseRegistry`：课程校验、版本锁、适配矩阵，不执行包内脚本。
 - `TutorEvidenceBridge`：订阅当前 embedded 服务的只读事件，不新建 sidecar 或串口。
@@ -289,8 +319,10 @@ interface EvidenceStamp {
 | `openSession` | workspace handle | sessionId、capabilities、计划/状态 snapshot；绑定连接所有权 |
 | `getSnapshot` | sessionId、afterSeq? | 增量事件或全量状态 |
 | `checkStep` | sessionId、stepId、expectedRevision、bufferSnapshot | checkJobId；只读取已有构建/运行结果，不构建 |
-| `sendMessage` | sessionId、message、contextSelection、expectedRevision | requestId，后续 stream 事件 |
-| `requestHint` | stepId、level | 课程本地优先；L3 必须是用户明确动作 |
+| `setInteractionMode` / `setTeachingPaused` | sessionId、mode/paused、expectedEpoch | 原子更新 epoch、取消旧模式教学任务；保留进度 |
+| `sendMessage` | sessionId、mode、teachingEpoch、message、contextSelection、expectedRevision | requestId，后续 stream 事件 |
+| `requestHint` | stepId、level | 解释/资料按需展开；完整函数参考由用户明确请求 |
+| `reviewLine` | lineId、revision、snapshotId、fragmentId、reason、teachingEpoch | 自动审阅完成的代码行，返回逐行结果；不改源码 |
 | `cancelRequest` | requestId | 幂等取消，只对该用户自己的 tutor 请求有效 |
 | `proposeRevision` | 讨论 ID/目标变更 | 返回 proposalId；不落为当前计划 |
 | `acceptRevision` | proposalId、expectedRevision/hash | schema/适配/依赖检查后原子写教学元数据 |
@@ -299,7 +331,7 @@ interface EvidenceStamp {
 | `runPureTests` | 已批准课程 suiteId、snapshotId | 用户命令路径；不允许命令字符串、路径外的可执行文件 |
 | `exportLearningRecord` | 选定范围 | 本地导出；不自动上传给教师 |
 
-事件统一 `{sessionId, seq, requestId?, type, payload}`，类型包括 `state.changed`、`check.completed`、`message.delta`、`message.completed`、`request.failed`、`request.cancelled`、`proposal.ready`、`capture.state`。取消后来的 delta 不再渲染；缺少 completed 的半截 JSON 不执行、不当结论保存。
+事件统一 `{sessionId, seq, requestId?, type, payload}`，类型包括 `interaction.changed`、`presentation.changed/expired`、`line.review.started/completed/cancelled`、`guidance.candidate`、`state.changed`、`check.completed`、`message.delta`、`message.completed`、`request.failed`、`request.cancelled`、`proposal.ready`、`capture.state`。教学事件额外携带 teachingEpoch 和 snapshotId；模式/快照不匹配则不应用。取消后来的 delta 不再渲染；缺少 completed 的半截 JSON 不执行、不当结论保存。
 
 错误码固定：`invalidSchema`、`outOfScope`、`staleSnapshot`、`revisionConflict`、`modelUnavailable`、`rateLimited`、`credentialMissing`、`contextTooLarge`、`unknownApi`、`sourceMissing`、`deviceUnbound`、`toolkitMissing`、`timeout`、`cancelled`、`storageUnavailable`。用户看到短中文原因与一个有效动作，详细诊断进入开发日志。
 
@@ -323,9 +355,11 @@ native/crates/nodu-tutor-test/
   src/report.rs             # 测试清单与结果校验
 ```
 
-拟议命令：`hello` 返回 protocol/rules/capabilities；`checkSnapshot` 返回条件结果；`matchCapture` 检查已采集数据；`cancel` 按 requestId；`shutdown`。收到大于 1 MiB 单行在解析前拒绝；一快照默认最多 20 个文件、512 KiB 文字，可分有界批次，不能无界累计。解析/规则支持主动取消和工作量上限；异常进程退出只影响当前检查，Node 重启时生成新 epoch，旧任务标失败，不重放测试动作。
+拟议命令：`hello` 返回 protocol/rules/capabilities；`classifyLineContext` 返回语句/块边界和待补上下文；`resolveSourceAnchor` 在指定快照内返回符号/范围与摘要，歧义则 unknown；`checkSnapshot` 返回条件结果；`matchCapture` 检查已采集数据；`cancel` 按 requestId；`shutdown`。收到大于 1 MiB 单行在解析前拒绝；一快照默认最多 20 个文件、512 KiB 文字，可分有界批次，不能无界累计。解析/规则支持主动取消和工作量上限；异常进程退出只影响当前检查，Node 重启时生成新 epoch，旧任务标失败，不重放测试动作。
 
 `ts-rs` 复用项目已有工具，生成到 `common/generated/tutor/`；协议字段缺失/未知枚举都需有兼容策略。JSON Schema 是持久化计划的权威定义，Rust 对规则输入进行第二次结构与长度校验；跨语言 golden fixture 证明类型/运行时校验一致，不能只依赖 TypeScript 类型断言。
+
+Rust 只提供可核对源码范围、语句边界和规则事实；高光配色、悬浮位置、模式开关由前端决定，AI 文字由 Node 受控网关生成。上述展示功能不新增 Rust UI、网络或设备依赖。
 
 ### 9.1 规则实现与可证明边界
 
@@ -392,9 +426,9 @@ ST-LINK 通道和 USB 串口是两种不同连接，**时间接近不等于同�
 
 ### 12.1 集成方式
 
-Theia 同版本 `ai-core` 提供模型/Agent 基础，`ai-chat` 提供会话模型；采用自定义 Nodu 面板，不引入 `ai-chat-ui` 的默认工作台。官方源码有模型 request、取消、结构化输出和 usage 相关类型，仍需在 M5 用实际锁定包验证。[ai-core 清单](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-core/package.json)、[ai-chat 清单](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-chat/package.json)、[模型接口](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-core/src/common/language-model.ts)。
+Theia 同版本 `ai-core` 提供模型/Agent 基础，`ai-chat` 提供会话模型；采用自定义 Nodu 教学布局，M0 比较同版本 `ai-chat-ui` 的受控组件复用和 Cline 独立聊天组件；不原样启用上游默认工作台。详见[开源复用选型](OPEN-SOURCE.md)。官方源码有模型 request、取消、结构化输出和 usage 相关类型，仍需在 M5 用实际锁定包验证。[ai-core 清单](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-core/package.json)、[ai-chat 清单](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-chat/package.json)、[模型接口](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-core/src/common/language-model.ts)。
 
-实现 `NoduTutorAgent`，内部只有三种逻辑角色：解释/提示、语义审阅、计划修订；一个受控串行编排器即可，不建立自治多 Agent 网络。结构化规则与权限由代码约束，不依赖 prompt 自觉。
+实现 `NoduTutorAgent`，内部任务类型为解释/提问、逐行审阅、整步语义审阅、教学展示和计划修订；聊天与逐行队列受统一调度，不建立自治多 Agent 网络。结构化规则与权限由代码约束，不依赖 prompt 自觉。
 
 网络链路确定为：面板 → Nodu TutorServer（构造/审查本次 ContextEnvelope）→ TutorModelGateway → Theia 后端模型适配 → 端点。前端 Agent 是会话桥接，不持密钥、不直接发 HTTP。首个云端协议适配复用固定 `@theia/ai-openai@1.76.0` 的能力，在 Node 适配层接入受限请求和凭证，禁止将上游全部默认模型/工具配置自动暴露为产品入口。若其默认注册无法插入后端请求策略，M0 原型须用该包的模型实现包裹成受控 Provider，不能绕过策略直接调用。后续具体厂商只增适配器，不改课程协议。[提供方实现](https://raw.githubusercontent.com/eclipse-theia/theia/v1.76.0/packages/ai-openai/src/node/openai-language-model.ts)。
 
@@ -410,17 +444,19 @@ Theia 同版本 `ai-core` 提供模型/Agent 基础，`ai-chat` 提供会话模�
 
 请求输入：用户问题、当前步骤/版本、已确认决定、局部代码快照、确定性结果、相关接口、少量资料摘录、证据摘要和允许工具。默认预算建议：当前代码约 8k tokens、规则/资料 4k、近期对话 4k、系统与结构 4k；总量由实际模型上限减输出预留后缩减。预算是配置上限，不代表每次全部发送。tokenizer 不可用时保守限制字节，超限明确收窄，不能截掉一半协议或函数而不标注。
 
-输出分两条：用户可读流式解释；完成后经过校验的 `TutorReview/PlanProposal`。审阅对象包含 `verdict`、claims、citationIds、missingEvidence、suggestedNextQuestion、snapshotId；引用必须是本次提供的 sourceId 与合法区间，模型不能新造本地路径、URL 或执行命令。计划提案用领域操作（增加/替换/移除步骤、记录决定），不接受通用文件补丁或任意 JSON Patch 路径。
+输出分为用户可读流式解释和经过 schema/权限校验的结构化结果：`LineReviewResult`、`TutorReview`、`PlanProposal`、`TeachingPresentation`。审阅对象包含 `verdict`、claims、citationIds、missingEvidence、suggestedNextQuestion、snapshotId；引用必须是本次提供的 sourceId 与合法区间，模型不能新造本地路径、URL 或执行命令。计划提案用领域操作（增加/替换/移除步骤、记录决定），不接受通用文件补丁或任意 JSON Patch 路径。
 
-### 12.4 只读工具
+### 12.4 只读与教学展示工具
 
 `readBufferSlice`、`listProjectSymbols`、`readDiagnostics`、`readPlan`、`readCheckResults`、`searchSdkSymbols`、`readKnowledgeExcerpt`、`readRunEvidence`。只返回本次 ContextEnvelope 允许的资源；每次工具请求再次做大小、路径和快照校验。未保存缓冲区覆盖磁盘同名内容；阅读次数有上限（建议每轮 6 次），递归工具轮最多 2 轮，超出则让学生收窄问题。
 
-编译错误由本地解释规则先处理；只有超出规则或学生追问才调用模型。L0/L1 优先人工课程文案，L2 由课程预审骨架给出，L3 显式请求并记录。模型产出的引脚/时序/寄存器数值必须有来源；已在学生代码里定义的自有函数不能因为“不在 HAL 索引”就被拒绝。对官方 API 做版本符号校验，对宏条件无法确定则标“待核对”。
+教学模式专有 `showCodeFocus` / `showCodeNote` 工具接收 `TeachingPresentation`，包括 presentationId、teachingEpoch、planHash、stepId、snapshotId、target.sourceSliceId/symbolId、UTF-16 范围与内容摘要、kind/text、citationIds。Node 核对本轮上下文、引用和范围，前端复核当前版本后渲染；禁止模型直接传 HTML、CSS、DOM 或命令。源码变化导致区间失效则立即隐藏并标记待复核，不能只按旧行号迁移。提问模式的白名单不包含这些展示工具。它只有展示权限，不属于文件写入。
+
+编译错误由本地解释规则先处理；教学模式未暂停时完成每行均自动提交 AI 语义审阅，本地规则为输入而非替代 AI。当前代码行虚影优先使用课程预审候选，解释层次按需展示，完整参考显式请求并记录。模型产出的引脚/时序/寄存器数值必须有来源；已在学生代码里定义的自有函数不能因为“不在 HAL 索引”就被拒绝。对官方 API 做版本符号校验，对宏条件无法确定则标“待核对”。
 
 ### 12.5 取消、限流和费用
 
-每会话一个生成任务，同工程并发最多两个只读任务；取消层层传到 Provider，服务端记 requestId 墓碑并拒绝迟到事件。连接超时 10 秒、首次响应 30 秒、总请求 90 秒作为初始上限；可配置。本地校验失败最多重试一次；429 读取 Retry-After，不在已经显示部分回答后偷偷重放付费请求。usage 缺失标未知，不假设零消耗。预算按输入/输出 token 和请求数限额，费用只有在配置可核对价格时计算估算。
+每会话一个聊天生成任务，逐行审阅单独维护有界队列，同工程并发最多两个只读任务；取消层层传到 Provider，服务端记 requestId 墓碑并拒绝迟到事件。聊天等非逐行任务以连接 10 秒、首次响应 30 秒、总请求 90 秒作为初始上限；可配置。逐行审阅采用 LINE-GUIDANCE 的独立 8 秒总时限，不能继承聊天的等待上限。本地校验失败最多重试一次；429 读取 Retry-After，不在已经显示部分回答后偷偷重放付费请求。usage 缺失标未知，不假设零消耗。预算按输入/输出 token 和请求数限额，费用只有在配置可核对价格时计算估算。
 
 默认不开启逐键模型调用，不定时上报工程。聊天长历史压缩只保存已确认决定与带来源的摘要；摘要是派生信息，不能作为证据替代源码和测试记录。
 
@@ -486,7 +522,8 @@ SHT30 的具体命令、地址、测量时序和接线在课程资料审阅时�
 | `ajv` 8.x | Node/前端 M1 | JSON Schema draft-07 校验；已有传递依赖不能代替显式依赖，锁定通过验证的 8.x patch；strict、禁止远程 `$ref` |
 | `@theia/ai-core`、`@theia/ai-chat` | M5 必需 | 固定 1.76.0；只接基础服务与自定义 Agent/UI |
 | `@theia/ai-openai` | M5 首个协议适配 | 固定 1.76.0，传递 SDK 按 lockfile；凭证和请求仍经过 Nodu 网关 |
-| `@theia/ai-chat-ui`、`ai-ide`、`ai-code-completion` | 不加入首期 | 避免重复入口、通用写入工具、自动代码补全 |
+| `@theia/ai-chat-ui` 1.76.0 / `@cline/ui` 0.1.0 | M0 UI 候选，尚未选定 | 比较受控聊天组件复用；固定版本，不启用多余入口、写入动作或全局主题 |
+| `ai-ide`、`ai-code-completion`、Cline SDK / 完整 VSIX | 不加入首期 | 不为聊天 UI 增加通用自动编程工作流 |
 | `serde/serde_json` | Rust 已有 | 有类型请求/结果；复用 workspace |
 | `sha2`、`regex`、`tempfile`、`ts-rs` | Rust 复用 | 摘要、安全匹配、临时目录、类型生成；现有分别 0.10、1、3、11 系列 |
 | `tree-sitter` + `tree-sitter-c` | Rust M2 新增 | 官方页面当前候选 0.27.1 + 0.24.2；共同验证 grammar ABI/MSRV 与目标平台后冻结，不能只看版本号兼容 |
@@ -503,13 +540,13 @@ Theia AI 包许可按其官方清单保留；Unity、tree-sitter、Wasmtime、LL
 
 ## 16. 端到端实施样例
 
-学生打开 F103 工程并选取课程。系统从 `nodu.json` 识别芯片与 SDK，缺接线配置时只收集接口/引脚/供电事实；确认计划后显示 S1，不动 C 源码。学生编辑保存，600 ms 后规则检查新快照；缺构建证据显示“待编译”。学生点击现有编译按钮，构建服务发布实际 buildId/inputDigest，检查器重新核对并更新条件。
+学生打开 F103 工程并选取课程。系统从 `nodu.json` 识别芯片与 SDK，缺接线配置时只收集接口/引脚/供电事实；确认计划后显示 S1，不动 C 源码。学生照着当前代码虚影输入，Enter 后自动检查这一行；通过后出现下一行虚影。保存后的本地规则核对与整步构建证据继续独立运行，缺构建证据显示“待编译”。学生点击现有编译按钮，构建服务发布实际 buildId/inputDigest，检查器重新核对并更新条件。
 
-学生提问“这样检查错误可以吗”。客户端采集当前未保存缓冲区，后端补充返回值规则和锁定 SDK API，模型仅能读这个范围。规则发现跨函数传播无法证明时返回 unknown，AI 可解释其可行性并给出引用，不把缺少证明转换为硬件通过。
+学生在教学对话中提问“这样检查错误可以吗”，无需切到提问模式。AI 可给当前代码加一处高光和浮动批注，解释通信返回值与 CRC 校验的区别。客户端采集当前未保存缓冲区，后端补充返回值规则和锁定 SDK API，模型仅能读这个范围。规则发现跨函数传播无法证明时返回 unknown，AI 可解释其可行性并给出引用，不把缺少证明转换为硬件通过。
 
 学生点击纯函数测试或现有运行按钮。测试服务记录源码/用例摘要；硬件运行由 embedded 服务完成。学生开启采集并绑定正确串口，本次窗口包含符合条件的数据后 `serialMatch` 才通过。修改驱动后上一步相关证据转 stale；对话保留历史但下一次模型必须读取新版。
 
-学生决定改用 DMA，面板显示计划修订对比；确认只修订计划并使受影响检查失效。学生仍亲自修改、编译和运行。关闭助手后原 IDE 功能正常。
+学生决定改用 DMA，面板显示计划修订对比；确认只修订计划并使受影响检查失效。学生仍亲自修改、编译和运行。收起右栏后原 IDE 功能正常，已启用的教学仍可在编辑器继续；需要停止自动审阅时使用“暂停教学”或切到提问。
 
 ## 17. 验收与质量门槛
 
@@ -520,6 +557,10 @@ Theia AI 包许可按其官方清单保留；Unity、tree-sitter、Wasmtime、LL
 | 源码 | 未保存、中文/emoji/CRLF、重命名、头文件改动、快速切工程 | 结果仅落到对应快照；过期响应不能点亮完成状态 |
 | 规则 | 注释伪调用、宏、函数指针、错误传播、间接 ISR、错误地址、合法替代实现 | 不可证明则 unknown；人工已标注的高风险负例零误通过 |
 | 证据 | 两块板、旧成功日志、TX 回显、断线重连、错误串口、ROM 数据、截断 | 无绑定或窗口不完整不得自动验证；清空 UI 不伪造新证据 |
+| 模式与展示 | 教学/提问往返、切换时流未结束、暂停期间修改、隐藏虚影、收起右栏、旧 epoch | 进度/草稿保留，提问无自动教学请求，迟到结果不恢复覆盖层 |
+| 高光与批注 | 源码增删/重命名、歧义锚点、非法范围/HTML、键盘、浮窗与当前输入重叠 | 不改源码、不抢光标、过期即隐藏、一次一个批注且有右栏等价路径 |
+| 步骤浮窗 | 手动钉住/关闭、窄版、重复检查、焦点返回 | 默认关闭，不遮输入，检查本步不触发硬件动作 |
+| 逐行检查 | 等价写法、多行语句、快速连续输入、改上游定义、旧响应、组合输入 | 每行有状态，不按字符比对评分，不阻塞编辑，不套用旧版本 |
 | 模型 | 无密钥、401/429/超时、半截 JSON、伪造引用、请求取消、工具越界 | 原 IDE 可用；无越界读取/写入/硬件调用；失败可重试但不重复执行 |
 | 纯函数测试 | 死循环、越界、文件/网络访问、伪 PASS 文本、缺包、中文路径 | 受限失败可解释；退出码/清单/摘要均核对；无原生代码静默回退 |
 | 打包 | 三平台目标、签名、无网络启动、工具包损坏 | 实际安装环境通过才标支持，不把开发机通过覆盖其他平台 |
