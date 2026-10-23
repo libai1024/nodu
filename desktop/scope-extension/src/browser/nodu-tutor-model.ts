@@ -9,6 +9,7 @@ import { TutorAIClient, TutorAIResult, TutorAnswer, TutorBuffer, TutorChatReques
 import { TutorCourseTarget, TutorCourseV2 } from '../common/tutor/tutor-course';
 import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tutor-learning-state';
 import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
+import { ScopeLayoutState } from './scope-layout-state';
 
 /** Every assistant item leaves `pending`; a stopped or superseded request must never stay "thinking". */
 export type TutorChatStatus = 'pending' | 'done' | 'stopped' | 'failed';
@@ -21,6 +22,7 @@ export class NoduTutorModel {
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
     @inject(FileService) protected readonly files!: FileService;
     @inject(WebSocketConnectionProvider) protected readonly connections!: WebSocketConnectionProvider;
+    @inject(ScopeLayoutState) protected readonly layout!: ScopeLayoutState;
     private service!: TutorService;
     private readonly changed = new Emitter<void>();
     readonly onDidChange = this.changed.event;
@@ -56,7 +58,9 @@ export class NoduTutorModel {
     private sync: Promise<void> = Promise.resolve();
     get plan(): TutorCourseV2 | undefined { return this.session?.plan.kind === 'course' ? this.session.plan.course : undefined; }
     get progress() { return this.session?.learning?.snapshot.progress ?? emptyLearningProgress(); }
-    get teaching(): boolean { return this.mode === 'teach' && !this.paused; }
+    /** 简洁模式不提供 AI：侧栏、虚影、逐行检查和模型请求只在专业模式可用。 */
+    get enabled(): boolean { return this.layout.mode === 'pro'; }
+    get teaching(): boolean { return this.enabled && this.mode === 'teach' && !this.paused; }
     currentStep() {
         return this.plan?.steps.find(s => s.id === this.progress.current) ?? this.plan?.steps.find(s => !this.progress.steps[s.id] && this.available(s.id));
     }
@@ -70,6 +74,9 @@ export class NoduTutorModel {
         this.toDispose.push(this.files.onDidFilesChange(event => {
             if (this.rootUri && event.contains(this.rootUri.resolve('.nodu-tutor/plan.json'))) { void this.refresh(); }
         }));
+        let enabled = this.enabled;
+        // Leaving professional mode cancels both lanes and moves to a new epoch, so no late result is applied.
+        this.toDispose.push(this.layout.onDidChange(() => { if (this.enabled !== enabled) { enabled = this.enabled; this.transition(); } }));
         this.ready = this.workspace.ready.then(() => this.load());
     }
     dispose(): void { this.cancelAll(); this.toDispose.dispose(); }
@@ -160,7 +167,7 @@ export class NoduTutorModel {
     setPaused(paused: boolean): void { if (paused !== this.paused) { this.paused = paused; this.transition(); } }
     private transition(): void { this.cancelAll(); this.invalidate(); void this.syncPresentation(); this.notify(); }
     private syncPresentation(): Promise<void> {
-        const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = this.paused;
+        const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = this.paused || !this.enabled;
         this.sync = this.sync.catch(() => undefined).then(async () => {
             if (workspace) { await this.service.setPresentation(workspace, epoch, mode, paused); }
         });
@@ -195,12 +202,12 @@ export class NoduTutorModel {
     async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer): Promise<TutorAIResult | undefined> {
         const review = kind === 'line';
         const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
-        if (laneBusy() || !this.workspaceId || (this.mode === 'teach' && this.paused)) { return; }
+        if (!this.enabled || laneBusy() || !this.workspaceId || (this.mode === 'teach' && this.paused)) { return; }
         const mode = this.mode;
         const prompt = kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
         if (!prompt) { return; }
         await this.sync;
-        if (laneBusy() || mode !== this.mode || !this.workspaceId || (mode === 'teach' && this.paused)) { return; }
+        if (!this.enabled || laneBusy() || mode !== this.mode || !this.workspaceId || (mode === 'teach' && this.paused)) { return; }
         const context = buffer ?? (this.includeCode ? this.buffer : undefined);
         const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: this.workspaceId, epoch: this.epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
         const current = (): boolean => review ? this.reviewing?.id === request.id : this.busy?.id === request.id;

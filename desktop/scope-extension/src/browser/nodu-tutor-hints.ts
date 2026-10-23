@@ -197,13 +197,14 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         this.controllers.set(widget, controller); widget.disposed.connect(() => { controller.dispose(); this.controllers.delete(widget); });
     }
     registerCommands(commands: CommandRegistry): void {
+        const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
         const toggle = (id: string, label: string, key: 'hintsVisible' | 'highlightsVisible' | 'annotationsVisible' | 'floatVisible'): void => {
-            commands.registerCommand({ id, label, category: 'Nodu' }, { execute: () => this.tutor.setDisplay(key, !this.tutor[key]), isToggled: () => this.tutor[key] });
+            commands.registerCommand({ id, label, category: 'Nodu' }, { execute: () => this.tutor.setDisplay(key, !this.tutor[key]), isToggled: () => this.tutor[key], ...available });
         };
         toggle(TUTOR_COMMANDS.toggleHints, '代码虚影', 'hintsVisible'); toggle(TUTOR_COMMANDS.highlight, '代码高光', 'highlightsVisible');
         toggle(TUTOR_COMMANDS.annotations, '浮动批注', 'annotationsVisible'); toggle(TUTOR_COMMANDS.float, '步骤浮窗', 'floatVisible');
-        commands.registerCommand({ id: TUTOR_COMMANDS.pause, label: '暂停教学', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => this.tutor.paused });
-        commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.teaching && !!this.tutor.buffer && !this.tutor.busy });
+        commands.registerCommand({ id: TUTOR_COMMANDS.pause, label: '暂停教学', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => this.tutor.paused, ...available });
+        commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.teaching && !!this.tutor.buffer && !this.tutor.busy, isVisible: () => this.tutor.enabled });
         commands.registerCommand({ id: TUTOR_COMMANDS.revealStep, label: '定位教学代码', category: 'Nodu' }, { execute: async () => {
             const step = this.tutor.currentStep(), anchor = step?.anchors[0]; if (!anchor || !this.tutor.rootUri) { return; }
             const widget = await this.editors.open(this.tutor.rootUri.resolve(anchor.path), { mode: 'activate' });

@@ -31,6 +31,7 @@ import { NoduConsoleWidget } from './nodu-console-widget';
 import { NoduBoardFilesContribution } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS, TUTOR_MENU } from './nodu-tutor-hints';
+import { NoduTutorWidget } from './nodu-tutor-widget';
 import { NoduBrand } from './scope-brand';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduCToolbar } from './nodu-embedded-toolbar';
@@ -190,6 +191,8 @@ export class ScopeToolbar extends ReactWidget {
     }
 
     private renderAI(): React.ReactNode {
+        // 简洁模式不提供 AI 功能。
+        if (this.layoutState.mode === 'simple') { return undefined; }
         return <div className="nodu-ai-split" role="group" aria-label="AI">
             <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="AI 侧栏" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title="AI 侧栏"><i className="codicon codicon-sparkle" aria-hidden="true" /></button>
             <button className="scope-action nodu-ai-more" aria-label="AI 显示设置" aria-haspopup="menu" title="AI 显示设置" onClick={event => this.openMenu(TUTOR_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true" /></button>
@@ -413,6 +416,9 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
             this.panelProfiles[this.layoutState.mode] = { files: this.layoutState.filesVisible, console: this.layoutState.consoleVisible, vision: this.layoutState.visionVisible };
         }
         this.layoutState.setMode(mode);
+        // Simple mode has no AI; also close a sidebar restored from a professional-mode layout.
+        const tutor = mode === 'simple' ? this.shell.getWidgetById(NoduTutorWidget.ID) : undefined;
+        if (tutor) { await this.shell.closeWidget(tutor.id); }
         document.body.classList.toggle('nodu-simple', mode === 'simple');
         document.body.classList.toggle('nodu-pro', mode === 'pro');
         this.layoutState.setDeviceOpen(false);

@@ -111,11 +111,13 @@ export class NoduTutorWidget extends ReactWidget {
 }
 @injectable()
 export class NoduTutorViewContribution extends AbstractViewContribution<NoduTutorWidget> {
+    @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     constructor() { super({ widgetId: NoduTutorWidget.ID, widgetName: 'AI', defaultWidgetOptions: { area: 'right', rank: 50 } }); }
     override registerCommands(commands: CommandRegistry): void {
         super.registerCommands(commands);
-        commands.registerCommand({ id: TUTOR_COMMANDS.openPanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ reveal: true, activate: true }) });
-        commands.registerCommand({ id: TUTOR_COMMANDS.togglePanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ toggle: true, activate: true }) });
+        const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
+        commands.registerCommand({ id: TUTOR_COMMANDS.openPanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ reveal: true, activate: true }), ...available });
+        commands.registerCommand({ id: TUTOR_COMMANDS.togglePanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ toggle: true, activate: true }), ...available });
     }
     override registerMenus(menus: MenuModelRegistry): void { menus.registerMenuAction(CommonMenus.VIEW_LAYOUT, { commandId: TUTOR_COMMANDS.togglePanel, order: '0_nodu_5' }); }
 }
