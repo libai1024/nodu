@@ -120,6 +120,13 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
             <div className="nodu-ai-composer-bar">
                 <button type="button" className="nodu-ai-model" title="模型与密钥" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>{tutor.provider?.model ?? 'GLM'}<i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
                 {tutor.provider && !tutor.provider.configured && <button type="button" className="nodu-ai-warn" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>配置密钥</button>}
+                <label className="nodu-ai-mode-select" title="对话模式">
+                    <i className={`codicon codicon-${tutor.mode === 'teach' ? 'mortar-board' : 'comment-discussion'}`} aria-hidden="true"/>
+                    <select aria-label="对话模式" value={tutor.mode} onChange={e => tutor.setMode(e.target.value as typeof tutor.mode)}>
+                        <option value="teach">教学</option><option value="ask">提问</option>
+                    </select>
+                    <i className="codicon codicon-chevron-down" aria-hidden="true"/>
+                </label>
                 {isBusy
                     ? <button type="button" className="nodu-ai-send nodu-ai-stop" aria-label="停止" title="停止" onClick={() => tutor.cancel()}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                     : <button className="nodu-ai-send" aria-label="发送" title="发送 · Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
@@ -156,7 +163,7 @@ export class NoduTutorViewContribution extends AbstractViewContribution<NoduTuto
     override registerMenus(menus: MenuModelRegistry): void { menus.registerMenuAction(CommonMenus.VIEW_LAYOUT, { commandId: TUTOR_COMMANDS.togglePanel, order: '0_nodu_5' }); }
 }
 
-/** Mode switch and new chat sit in the side panel title row, so the AI view has one header line. */
+/** New chat sits in the side panel title row, so the AI view has one header line; the mode switch lives in the composer. */
 @injectable()
 export class NoduTutorToolbarContribution implements TabBarToolbarContribution {
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
@@ -164,9 +171,6 @@ export class NoduTutorToolbarContribution implements TabBarToolbarContribution {
         registry.registerItem({
             id: 'nodu.tutor.header', isVisible: widget => widget instanceof NoduTutorWidget, onDidChange: this.tutor.onDidChange,
             render: widget => widget instanceof NoduTutorWidget ? <div key="nodu-tutor-header" className="nodu-ai-titlebar">
-                <div className="nodu-ai-modes" role="group" aria-label="对话模式">
-                    {(['teach', 'ask'] as const).map(m => <button key={m} type="button" aria-pressed={this.tutor.mode === m} onClick={() => this.tutor.setMode(m)}>{m === 'teach' ? '教学' : '提问'}</button>)}
-                </div>
                 <button type="button" className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!this.tutor.messages[this.tutor.mode].length} onClick={() => void this.tutor.clearChat()}><i className="codicon codicon-add" aria-hidden="true"/></button>
             </div> : null,
         });

@@ -5,10 +5,6 @@
 .nodu-ai-panel button:focus-visible, .nodu-ai-panel input:focus-visible, .nodu-ai-panel select:focus-visible, .nodu-ai-panel textarea:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
 
 .nodu-ai-header { display: flex; align-items: center; gap: 2px; height: 34px; padding: 0 6px 0 8px; flex: none; border-bottom: 1px solid var(--theia-panel-border); }
-.nodu-ai-modes { display: inline-flex; gap: 2px; margin-right: auto; padding: 2px; border-radius: 6px; background: var(--theia-editor-background); }
-.nodu-ai-modes button { height: 22px; padding: 0 10px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 12px; cursor: pointer; }
-.nodu-ai-modes button:hover { color: var(--theia-foreground); }
-.nodu-ai-modes button[aria-pressed="true"] { color: var(--theia-foreground); background: var(--theia-toolbar-activeBackground, var(--theia-list-hoverBackground)); font-weight: 600; }
 .nodu-ai-icon { display: inline-grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
 .nodu-ai-icon:hover:not(:disabled), .nodu-ai-icon[aria-pressed="true"] { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
 .nodu-ai-icon:disabled { opacity: .4; cursor: default; }
@@ -65,7 +61,14 @@
 .nodu-ai-model { display: inline-flex; align-items: center; gap: 2px; margin-right: auto; height: 22px; padding: 0 4px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 11px; cursor: pointer; }
 .nodu-ai-model:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
 .nodu-ai-warn { font-size: 11px; color: var(--theia-editorWarning-foreground); }
-.nodu-ai-send { display: inline-grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 6px; background: var(--theia-button-background); color: var(--theia-button-foreground); cursor: pointer; }
+.nodu-ai-send { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%; background: var(--theia-button-background); color: var(--theia-button-foreground); cursor: pointer; }
+.nodu-ai-mode-select { position: relative; display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 4px; border-radius: 4px; color: var(--theia-descriptionForeground); font-size: 11px; cursor: pointer; }
+.nodu-ai-mode-select:hover, .nodu-ai-mode-select:focus-within { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-mode-select > .codicon { font-size: 13px; }
+.nodu-ai-mode-select > .codicon-chevron-down { font-size: 12px; margin-left: -2px; }
+/* Native select keeps keyboard and screen-reader behaviour; only its chrome is hidden. */
+.nodu-ai-mode-select select { appearance: none; -webkit-appearance: none; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; outline: none; }
+.nodu-ai-mode-select select option { color: var(--theia-dropdown-foreground); background: var(--theia-dropdown-background); }
 .nodu-ai-send:hover:not(:disabled) { background: var(--theia-button-hoverBackground); }
 .nodu-ai-send:disabled { opacity: .35; cursor: default; }
 .nodu-ai-stop { background: var(--theia-button-secondaryBackground, var(--theia-toolbar-hoverBackground)); color: var(--theia-foreground); }
@@ -84,7 +87,6 @@
 
 /* Mode switch and new chat in the side panel title row (one header line, like Cursor). */
 .nodu-ai-titlebar { display: flex; align-items: center; gap: 2px; }
-.theia-sidepanel-toolbar .nodu-ai-titlebar .nodu-ai-modes { margin-right: 4px; }
 /* AI settings popover anchored to the left sidebar button or the composer model picker. */
 .nodu-ai-popover { position: fixed; z-index: 5000; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); border-radius: 8px; background: var(--theia-editorWidget-background, var(--theia-menu-background)); color: var(--theia-foreground); box-shadow: 0 8px 24px var(--theia-widget-shadow, #0003); font-size: 13px; }
 .nodu-ai-popover-card { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
