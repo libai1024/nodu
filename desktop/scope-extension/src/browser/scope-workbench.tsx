@@ -213,7 +213,7 @@ export class ScopeToolbar extends ReactWidget {
         const tutor = this.renderAI();
         return <NoduCToolbar model={this.embedded} simple={this.layoutState.mode === 'simple'} project={this.layoutState.project}
             deviceOpen={this.layoutState.deviceOpen} filesVisible={this.layoutState.filesVisible}
-            panelVisible={this.commandRegistry.isToggled(C_COMMANDS.togglePanel)}
+            panelVisible={this.commandRegistry.isToggled(C_COMMANDS.togglePanel)} rightVisible={this.layoutState.rightVisible}
             setDeviceOpen={open => this.layoutState.setDeviceOpen(open)} exec={id => void this.commands.executeCommand(id)}
             openMenu={(path, anchor) => this.openMenu(path, anchor)} projectMenu={NODU_PROJECT_MENU} moreMenu={NODU_MORE_MENU}
             confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(v => v === true)}
@@ -297,7 +297,8 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         const console = this.consoleView.tryGetWidget();
         this.layoutState.setPanels(!!files?.isVisible && this.shell.getAreaFor(files) === 'left',
             !!console?.isVisible && this.shell.getAreaFor(console) === 'bottom' && !this.shell.bottomPanel.isHidden,
-            !!vision?.isVisible && this.shell.getAreaFor(vision) === 'right' && right.tabBar.currentTitle?.owner === vision);
+            !!vision?.isVisible && this.shell.getAreaFor(vision) === 'right' && right.tabBar.currentTitle?.owner === vision,
+            !right.dockPanel.isHidden && !!right.tabBar.currentTitle);
         const geometry = `${this.layoutState.mode}:${left.dockPanel.isHidden}:${right.dockPanel.isHidden}`;
         if (geometry !== this.geometry) {
             this.geometry = geometry;
@@ -555,6 +556,15 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         await this.settlePanels();
     }
 
+    /** VS Code style secondary side bar toggle; an empty right area opens the AI sidebar in professional mode. */
+    private async toggleRight(): Promise<void> {
+        this.syncPanels();
+        if (this.layoutState.rightVisible) { await this.shell.collapsePanel('right'); }
+        else if (this.shell.getWidgets('right').length) { this.shell.expandPanel('right'); }
+        else if (this.layoutState.mode === 'pro') { await this.tutorView.openView({ area: 'right', reveal: true, activate: false }); }
+        await this.settlePanels();
+    }
+
     private async toggleVision(): Promise<void> {
         this.autoRevealed.vision = true;
         await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right');
@@ -590,6 +600,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         panel('scope.toggle-files', '文件列表', () => this.toggleFiles(), () => this.layoutState.filesVisible);
         panel('scope.toggle-console', '开发面板', () => this.toggleConsole(), () => this.layoutState.consoleVisible);
         panel('scope.toggle-vision', '帧缓冲', () => this.toggleVision(), () => this.layoutState.visionVisible);
+        panel('scope.toggle-right', '右侧栏', () => this.toggleRight(), () => this.layoutState.rightVisible);
         command('scope.show-files', '显示项目文件', () => this.serializeLayout(async () => { await this.ensureSimplePanel(this.filesWidget(), 'left'); await this.navigator.openView({ activate: true }); await this.settlePanels(); }));
         command('scope.show-vision', '显示帧缓冲', () => this.serializeLayout(async () => { await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right'); await this.vision.openView({ activate: true }); await this.settlePanels(); }));
         command('scope.show-devices', '显示设备与连接', () => this.layoutState.setDeviceOpen(true));

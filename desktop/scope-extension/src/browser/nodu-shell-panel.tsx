@@ -8,6 +8,7 @@ import {
 import { SingleTextInputDialog } from '@theia/core/lib/browser/dialogs';
 import { ContextMenuRenderer } from '@theia/core/lib/browser/context-menu-renderer';
 import { CommandRegistry, DisposableCollection, Emitter, MenuModelRegistry, URI } from '@theia/core/lib/common';
+import { isOSX } from '@theia/core/lib/common/os';
 import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
 import { TerminalWidget } from '@theia/terminal/lib/browser/base/terminal-widget';
 import { ShellTerminalServerProxy } from '@theia/terminal/lib/common/shell-terminal-protocol';
@@ -440,14 +441,15 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
         </div>;
     }
 
+    /** A quiet one-line state like VS Code / JetBrains: a text link and the shortcut, no primary button. */
     private renderEmpty(): React.ReactNode {
+        if (this.creating) {
+            return <div className="nodu-shell-empty" role="status"><i className="codicon codicon-loading codicon-modifier-spin" aria-hidden="true"/><span>正在启动终端…</span></div>;
+        }
         return <div className="nodu-shell-empty">
-            {this.failure && <p className="nodu-shell-empty-error" role="alert">{this.failure}</p>}
-            <button className="nodu-shell-create" disabled={!!this.creating} aria-busy={!!this.creating}
-                title={this.failure ? '重试启动终端' : '新建终端'}
-                onClick={() => void this.createSession(true)}>
-                <i className={`codicon ${this.creating ? 'codicon-loading codicon-modifier-spin' : 'codicon-add'}`} aria-hidden="true"/>{this.failure ? '重试' : '新建终端'}
-            </button>
+            {this.failure ? <span className="nodu-shell-empty-error" role="alert">{this.failure}</span> : <span>没有打开的终端</span>}
+            <button type="button" className="nodu-shell-link" onClick={() => void this.createSession(true)}>{this.failure ? '重试' : '新建终端'}</button>
+            {!this.failure && <kbd className="nodu-shell-kbd" title="新建终端快捷键">{isOSX ? '⌃⇧`' : 'Ctrl+Shift+`'}</kbd>}
         </div>;
     }
 }

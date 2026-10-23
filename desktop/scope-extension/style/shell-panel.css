@@ -65,7 +65,7 @@
 .nodu-shell-action > .codicon { font-size: 16px; }
 .nodu-shell-action:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
 .nodu-shell-action:disabled, .nodu-shell-select:disabled { opacity: .45; cursor: default; }
-.nodu-shell-action:focus-visible, .nodu-shell-select:focus-visible, .nodu-shell-create:focus-visible {
+.nodu-shell-action:focus-visible, .nodu-shell-select:focus-visible, .nodu-shell-link:focus-visible {
     outline: 2px solid var(--theia-focusBorder);
     outline-offset: -2px;
 }
@@ -79,34 +79,32 @@
 .nodu-shell-empty {
     height: 100%;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-    padding: 18px 20px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
     box-sizing: border-box;
     font-size: 12px;
     color: var(--theia-descriptionForeground);
 }
-.nodu-shell-empty > p { max-width: 100%; margin: 0; line-height: 1.6; overflow-wrap: anywhere; }
-.nodu-shell-empty-error { color: var(--theia-errorForeground); }
-.nodu-shell-create {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    height: 26px;
-    min-width: 80px;
-    padding: 0 10px;
+.nodu-shell-empty-error { color: var(--theia-errorForeground); overflow-wrap: anywhere; }
+.nodu-shell-link {
+    padding: 0;
     border: 0;
-    border-radius: 3px;
+    background: transparent;
+    color: var(--theia-textLink-foreground, var(--theia-focusBorder));
     font: inherit;
-    color: var(--theia-button-foreground);
-    background: var(--theia-button-background);
     cursor: pointer;
 }
-.nodu-shell-create:hover:not(:disabled) { background: var(--theia-button-hoverBackground); }
-.nodu-shell-create:disabled { opacity: .45; cursor: default; }
+.nodu-shell-link:hover { color: var(--theia-textLink-activeForeground, var(--theia-textLink-foreground)); text-decoration: underline; }
+.nodu-shell-kbd {
+    padding: 1px 5px;
+    border: 1px solid var(--theia-panel-border);
+    border-radius: 3px;
+    font: 11px var(--theia-code-font-family, monospace);
+    color: var(--theia-descriptionForeground);
+}
 @container nodu-shell (max-width: 580px) {
     .nodu-shell-context:not(.nodu-shell-failure) { display: none; }
     .nodu-shell-bar .nodu-select.nodu-shell-select { flex: 1 1 auto; max-width: none; }

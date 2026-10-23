@@ -11,6 +11,8 @@ export class ScopeLayoutState {
     filesVisible = false;
     consoleVisible = false;
     visionVisible = false;
+    /** The right side panel is expanded, whatever view it shows. */
+    rightVisible = false;
     deviceOpen = false;
 
     setMode(mode: 'simple' | 'pro'): void {
@@ -21,9 +23,9 @@ export class ScopeLayoutState {
     }
     setProject(project: string): void { if (this.project !== project) { this.project = project; this.changed.fire(); } }
     setDeviceOpen(open: boolean): void { if (this.deviceOpen !== open) { this.deviceOpen = open; this.changed.fire(); } }
-    setPanels(filesVisible: boolean, consoleVisible: boolean, visionVisible: boolean): void {
-        if (this.filesVisible === filesVisible && this.consoleVisible === consoleVisible && this.visionVisible === visionVisible) { return; }
-        Object.assign(this, { filesVisible, consoleVisible, visionVisible });
+    setPanels(filesVisible: boolean, consoleVisible: boolean, visionVisible: boolean, rightVisible = false): void {
+        if (this.filesVisible === filesVisible && this.consoleVisible === consoleVisible && this.visionVisible === visionVisible && this.rightVisible === rightVisible) { return; }
+        Object.assign(this, { filesVisible, consoleVisible, visionVisible, rightVisible });
         this.changed.fire();
     }
 }

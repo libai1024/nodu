@@ -12,6 +12,7 @@ export interface CToolbarProps {
     deviceOpen: boolean;
     filesVisible: boolean;
     panelVisible: boolean;
+    rightVisible: boolean;
     setDeviceOpen(open: boolean): void;
     exec(id: string): void;
     openMenu(path: string[], anchor: HTMLElement): void;
@@ -120,6 +121,7 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
             <button className={`scope-action scope-toolbar-icon nodu-c-panel-toggle${errors ? ' nodu-has-error' : ''}`} aria-label={`STM32 开发面板${errors ? `，${errors} 个错误` : ''}`} aria-pressed={props.panelVisible} onClick={() => exec(C_COMMANDS.togglePanel)} title={props.panelVisible ? '收起 STM32 开发面板' : '显示 STM32 开发面板'}>
                 <i className={`codicon codicon-layout-panel${props.panelVisible ? '' : '-off'}`} aria-hidden="true"/>{errors ? <span className="nodu-c-badge" aria-hidden="true">{errors > 99 ? '99+' : errors}</span> : null}
             </button>
+            {!simple && <button className="scope-action scope-toolbar-icon scope-toolbar-right" aria-label="右侧栏" aria-pressed={props.rightVisible} onClick={() => exec('scope.toggle-right')} title={props.rightVisible ? '隐藏右侧栏' : '显示右侧栏'}><i className={`codicon codicon-layout-sidebar-right${props.rightVisible ? '' : '-off'}`} aria-hidden="true"/></button>}
             {props.tutorButton}
             <span className="scope-toolbar-divider" aria-hidden="true"/>
             <button className="scope-action scope-toolbar-icon nodu-toolbar-more" aria-label={`更多，当前${simple ? '简洁' : '专业'}模式`} aria-haspopup="menu" title="主题、布局模式与设置" onClick={event => props.openMenu(props.moreMenu, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
