@@ -1,6 +1,6 @@
 id,area,feature,trigger,expected_result,requirement,phase,status,evidence
 H1.1,hardware,F407 ST-LINK 识别,verify_swd 只读,读到设备 ID 0x413、1024 KiB、唯一 ID、目标电压,F2,M0,passed_board,P0 evidence/f407-swd-target.txt（未提交工作树）
-H1.2,hardware,F407 ST-LINK 写入运行,P0 --execute,备份、写入、读回 SHA-256 一致、复位后 RAM 心跳增加,F4 F5,M0,blocked,P0 写入前 reset device failed；探针随后从 USB 消失
+H1.2,hardware,F407 ST-LINK 写入运行,P0 --execute,备份、写入、读回 SHA-256 一致、复位后 RAM 心跳增加,F4 F5,M0,passed_board,2026-10-23 双 ST-LINK 自动匹配 F407；1 MB 首次备份；写入/读回摘要一致；主循环/时钟/复位运行通过。0.2.1.1-REVIEW-2026-10-23.md
 H1.3,hardware,F103 ST-LINK 写入运行,P0 --execute,同 H1.2；记录 F103 设备 ID 与 Flash 容量寄存器实际值,F2–F5,M0,passed_board,芯片默认包 chip-f103c8；界面两次写入读回一致；64 KB 备份；主循环和复位心跳实测。evidence/2026-10-22-f103-ui-acceptance.json
 H1.4,hardware,F407 串口 ISP,手动 BOOT0 + 复位,ROM 应答、GET_ID、备份、写入 -v、读回一致、恢复 BOOT0 后运行,F6,M0,not_started,
 H1.5,hardware,F103 串口 ISP,手动 BOOT0 + 复位,同 H1.4；USART1 PA9/PA10,F6,M0,passed_hardware,F103C8 UART ISP 三次写入回读一致；BOOT0 恢复后启动和双向通信通过。ISP-TEST-2026-10-22.md

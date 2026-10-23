@@ -24,10 +24,22 @@ fn probe(pid: u64, serial: &str, product: &str, driver: Value) -> Value {
     json!({"vid": ST_VID, "pid": pid, "model": model(pid), "serial": serial, "product": product, "driver": driver})
 }
 
+/// IOKit encodes the libusb bus in the high byte and hub ports in the remaining nibbles.
+fn usb_location(value: u32) -> Option<String> {
+    let bus = value >> 24;
+    let ports: Vec<String> = (0..6).rev().map(|n| (value >> (n * 4)) & 15)
+        .take_while(|p| *p != 0).map(|p| p.to_string()).collect();
+    if ports.is_empty() { None } else { Some(format!("{bus}-{}", ports.join("."))) }
+}
+
+pub fn selector(probe: &Value) -> &str {
+    probe["id"].as_str().or_else(|| probe["serial"].as_str()).unwrap_or_default()
+}
+
 /// `ioreg -p IOUSB -l -w0` text: a `+-o` line starts each device.
 pub fn parse_ioreg(text: &str) -> Vec<Value> {
     let start = Regex::new(r"\+-o ").expect("regex");
-    let field = Regex::new(r#""(idVendor|idProduct|USB Serial Number|USB Product Name)" = (?:"([^"]*)"|(\d+))"#).expect("regex");
+    let field = Regex::new(r#""(idVendor|idProduct|USB Serial Number|USB Product Name|locationID)" = (?:"([^"]*)"|(\d+))"#).expect("regex");
     let mut out = Vec::new();
     let mut current: Vec<(String, String)> = Vec::new();
     let flush = |fields: &[(String, String)], out: &mut Vec<Value>| {
@@ -36,7 +48,12 @@ pub fn parse_ioreg(text: &str) -> Vec<Value> {
         let pid = get("idProduct").and_then(|v| v.parse::<u64>().ok());
         if let (Some(ST_VID), Some(pid)) = (vid, pid) {
             if STLINK_PIDS.contains(&pid) {
-                out.push(probe(pid, get("USB Serial Number").unwrap_or(""), get("USB Product Name").unwrap_or("ST-LINK"), json!("ok")));
+                let mut value = probe(pid, get("USB Serial Number").unwrap_or(""), get("USB Product Name").unwrap_or("ST-LINK"), json!("ok"));
+                if let Some(location) = get("locationID").and_then(|s| s.parse::<u32>().ok()).and_then(usb_location) {
+                    value["id"] = json!(format!("usb:{location}"));
+                    value["location"] = json!(location);
+                }
+                out.push(value);
             }
         }
     };
@@ -129,6 +146,17 @@ mod tests {
         assert_eq!(probes.len(), 1);
         assert_eq!(probes[0]["model"], "ST-LINK/V2");
         assert_eq!(probes[0]["serial"], "");
+    }
+
+    #[test]
+    fn mac_locations_distinguish_serialless_probes() {
+        assert_eq!(usb_location(0x03121000).as_deref(), Some("3-1.2.1"));
+        assert_eq!(usb_location(0x03124000).as_deref(), Some("3-1.2.4"));
+        assert_eq!(usb_location(0), None);
+        let text = "+-o STLink\n \"idVendor\" = 1155\n \"idProduct\" = 14152\n \"locationID\" = 51515392\n+-o STLink\n \"idVendor\" = 1155\n \"idProduct\" = 14152\n \"locationID\" = 51527680\n";
+        let values = parse_ioreg(text);
+        assert_eq!(selector(&values[0]), "usb:3-1.2.1");
+        assert_eq!(selector(&values[1]), "usb:3-1.2.4");
     }
 
     #[test]

@@ -21,7 +21,7 @@ import { NODU_PROJECT_MENU } from './scope-workbench';
 import { ScopeLayoutState } from './scope-layout-state';
 import { C_COMMANDS, NODU_C_RUN_MENU } from './nodu-embedded-commands';
 import { NoduDownloadHelpDialog, downloadHelpContent } from './nodu-download-help';
-import { downloadStatusText } from '../common/nodu-download-status';
+import { downloadStatusText, taskProgress } from '../common/nodu-download-status';
 
 export { C_COMMANDS };
 
@@ -123,8 +123,11 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     private updateStatus(): void {
         if (this.model.isC && this.model.project) {
             const text = downloadStatusText(this.model.project.flashMethod, this.model);
+            const percent = taskProgress(this.model);
+            const active = this.model.building || this.model.flashing;
+            const progressClass = percent !== undefined ? `nodu-c-status-progress nodu-c-progress-${percent}` : active && !this.model.awaitUser ? 'nodu-c-status-progress nodu-c-progress-indeterminate' : '';
             void this.status.setElement('nodu:c-download', {
-                text, alignment: StatusBarAlignment.LEFT, priority: 90,
+                className: progressClass, text, alignment: StatusBarAlignment.LEFT, priority: 90,
                 command: C_COMMANDS.showOutput, accessibilityInformation: { label: text, role: 'button' },
             });
             void this.status.setElement('nodu:c-download-help', {

@@ -32,6 +32,63 @@ pub struct Session<'a> {
     pub run_id: &'a str,
 }
 
+/// Validate selectors before interpolating them into Tcl commands.
+fn validate_selector(selector: &str) -> Outcome<()> {
+    let valid = if let Some(location) = selector.strip_prefix("usb:") {
+        Regex::new(r"^\d+-\d+(?:\.\d+)*$").expect("regex").is_match(location)
+    } else { !selector.is_empty() && selector.len() <= 128 && selector.chars().all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_') };
+    if valid { Ok(()) } else { Err(Failure::new("badProbe", "下载器标识无效，请刷新下载器列表。")) }
+}
+
+fn unique_match(matches: &[String], incomplete: bool) -> Outcome<String> {
+    if incomplete { return Err(Failure::new("probeScanIncomplete", "部分 ST-LINK 无法识别，请在设备面板明确选择下载器。")); }
+    match matches {
+        [only] => Ok(only.clone()),
+        [] => Err(Failure::new("wrongChip", "没有找到与工程芯片匹配的 ST-LINK，请检查目标芯片或明确选择下载器。")),
+        _ => Err(Failure::new("ambiguousProbe", "多个 ST-LINK 连接了匹配芯片，请在设备面板选择下载器。")),
+    }
+}
+
+/// Enumeration never resets or halts targets. Keep the chosen resource locked through writing.
+pub fn select_probe(session: &Session<'_>) -> Outcome<(String, crate::locks::ResourceLock)> {
+    let probes = crate::probes::list();
+    let requested = session.serial;
+    let chosen = if !requested.is_empty() {
+        validate_selector(requested)?;
+        if !probes.iter().any(|p| crate::probes::selector(p) == requested || p["serial"].as_str() == Some(requested)) {
+            return Err(Failure::new("noProbe", "所选 ST-LINK 已断开，请刷新下载器列表。"));
+        }
+        requested.to_string()
+    } else if probes.len() == 1 {
+        crate::probes::selector(&probes[0]).to_string()
+    } else if probes.is_empty() {
+        return Err(Failure::new("noProbe", "没有检测到 ST-LINK。"));
+    } else {
+        let mut matches = Vec::new();
+        let mut incomplete = false;
+        let mut seen = std::collections::BTreeSet::new();
+        for probe in &probes {
+            if session.cancel.load(Ordering::Relaxed) { return Err(Failure::cancelled()); }
+            let serial = crate::probes::selector(probe);
+            if serial.is_empty() || !seen.insert(serial) { return Err(Failure::new("ambiguousProbe", "无法区分这些 ST-LINK，请只保留目标下载器连接。")); }
+            validate_selector(serial)?;
+            let _lock = crate::locks::lock_probe(serial, "自动匹配芯片")?;
+            let candidate = Session { serial, ..*session };
+            match candidate.identify() {
+                Ok(identity) if identity["deviceId"].as_u64() == Some(session.chip.device_id())
+                    && identity["flashKiB"].as_u64().unwrap_or(0) * 1024 >= session.chip.flash_size() => matches.push(serial.to_string()),
+                Ok(_) => {},
+                Err(error) if error.code == "cancelled" => return Err(error),
+                Err(_) => incomplete = true,
+            }
+        }
+        unique_match(&matches, incomplete)?
+    };
+    let lock = crate::locks::lock_probe(&chosen, "ST-LINK 操作")?;
+    session.out.event("flash.output", json!({"runId": session.run_id, "line": format!("下载器：{}", if chosen.is_empty() { "ST-LINK" } else { &chosen })}));
+    Ok((chosen, lock))
+}
+
 /// Tcl brace-quoted path. Braces and newlines cannot be expressed safely.
 pub fn tcl_path(path: &Path) -> Outcome<String> {
     let text = path.display().to_string().replace('\\', "/");
@@ -67,7 +124,9 @@ impl Session<'_> {
             "-f".into(),
             "interface/stlink.cfg".into(),
         ];
-        if !self.serial.is_empty() {
+        if let Some(location) = self.serial.strip_prefix("usb:") {
+            args.extend(["-c".into(), format!("adapter usb location {location}")]);
+        } else if !self.serial.is_empty() {
             args.extend(["-c".into(), format!("adapter serial {}", self.serial)]);
         }
         // Accept any debug-port ID: the F4 config would refuse an F103 before
@@ -93,6 +152,7 @@ impl Session<'_> {
 
     /// Run one OpenOCD session; `step` lines become `flash.step` events.
     fn run(&self, commands: &[String], timeout: Duration, cancellable: bool) -> Outcome<(process::Finished, Markers)> {
+        if !self.serial.is_empty() { validate_selector(self.serial)?; }
         let marker = Regex::new(r"^NODU:([a-z0-9]+)=(.*)$").expect("regex");
         let voltage = Regex::new(r"Target voltage: ([\d.]+)").expect("regex");
         let probe = Regex::new(r"Info : (STLINK \S+).*VID:PID").expect("regex");
@@ -111,6 +171,7 @@ impl Session<'_> {
                             "halt" | "program" => Some("program"),
                             "verify" => Some("verify"),
                             "backup" => Some("backup"),
+                            "run" => Some("run"),
                             _ => None,
                         };
                         if let Some(step) = step {
@@ -171,7 +232,7 @@ impl Session<'_> {
             return Ok(json!({
                 "method": "stlink", "deviceId": idcode & 0xfff, "deviceIdHex": format!("0x{:03x}", idcode & 0xfff),
                 "revisionId": format!("0x{:04x}", idcode >> 16), "flashKiB": Value::Null, "uid": Value::Null,
-                "uidWords": Value::Null, "readProtected": Value::Null, "voltage": markers.voltage, "probe": markers.probe,
+                "uidWords": Value::Null, "readProtected": Value::Null, "voltage": markers.voltage, "probe": markers.probe, "probeId": self.serial,
             }));
         }
         let flash_kib = parse_words(get("flashkib")).first().copied().unwrap_or(0);
@@ -191,7 +252,7 @@ impl Session<'_> {
             "uidWords": get("uid"),
             "readProtected": protected,
             "voltage": markers.voltage,
-            "probe": markers.probe,
+            "probe": markers.probe, "probeId": self.serial,
         }))
     }
 
@@ -296,6 +357,16 @@ pub fn classify(output: &str, voltage: Option<f64>) -> Failure {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn selection_never_guesses_on_ambiguous_or_unreadable_targets() {
+        assert_eq!(unique_match(&["usb:3-1.2.4".into()], false).unwrap(), "usb:3-1.2.4");
+        assert_eq!(unique_match(&[], false).unwrap_err().code, "wrongChip");
+        assert_eq!(unique_match(&["a".into(), "b".into()], false).unwrap_err().code, "ambiguousProbe");
+        assert_eq!(unique_match(&["a".into()], true).unwrap_err().code, "probeScanIncomplete");
+        for value in ["usb:3-1.2.4", "ABC123"] { assert!(validate_selector(value).is_ok()); }
+        for value in ["usb:3-1;reset", "[reset]", "abc\nreset", "usb:"] { assert!(validate_selector(value).is_err()); }
+    }
 
     #[test]
     fn words_and_paths() {

@@ -107,7 +107,7 @@ export interface BackupRecord {
     factory: boolean; // Legacy storage flag; UI calls this a first backup, never factory firmware.
 }
 
-export interface ProbeInfo { vid: number; pid: number; model: string; serial: string; product: string; driver: 'ok' | 'missing' }
+export interface ProbeInfo { id?: string; location?: string; vid: number; pid: number; model: string; serial: string; product: string; driver: 'ok' | 'missing' }
 export interface PortInfo { path: string; description: string; vid?: number; pid?: number; serial_number?: string; stlinkVcp?: boolean }
 
 export interface ProjectStatus {

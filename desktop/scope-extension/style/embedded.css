@@ -231,3 +231,118 @@
 .nodu-c-panel-actions { margin-left: auto; flex-shrink: 0; }
 
 .nodu-toolkit-info > .scope-text-button { align-self: flex-start; }
+
+/* Persistent pressed state is distinct from hover and keyboard focus. */
+.nodu-c-panel-actions .scope-toolbar-icon { display: inline-flex; align-items: center; justify-content: center; color: var(--theia-foreground); background: transparent; border: 1px solid transparent; }
+.nodu-c-panel-actions .scope-toolbar-icon:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-c-panel-actions .scope-toolbar-icon[aria-pressed='true'] { background: var(--theia-button-background); color: var(--theia-button-foreground); border-color: var(--theia-button-background); }
+.nodu-c-panel-actions .scope-toolbar-icon[aria-pressed='true']:hover:not(:disabled) { background: var(--theia-button-hoverBackground); }
+.nodu-c-panel-actions .scope-toolbar-icon:focus:not(:focus-visible) { outline: none; }
+.nodu-c-panel-actions .scope-toolbar-icon:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 2px; }
+.nodu-c-panel-actions .scope-toolbar-icon:disabled { background: transparent; color: var(--theia-disabledForeground); border-color: transparent; }
+.nodu-c-status-progress { position: relative; min-width: 132px; }
+.nodu-c-status-progress::after { content: ''; position: absolute; height: 3px; left: 4px; right: 4px; bottom: 0; background: var(--theia-progressBar-background, var(--theia-focusBorder)); transform: scaleX(var(--nodu-task-fraction)); transform-origin: left; }
+.nodu-c-progress-indeterminate::after { width: 35%; right: auto; animation: nodu-status-pulse 1.2s ease-in-out infinite alternate; }
+@keyframes nodu-status-pulse { from { transform: translateX(0); } to { transform: translateX(170%); } }
+@media (prefers-reduced-motion: reduce) { .nodu-c-progress-indeterminate::after { animation: none; } }
+.nodu-c-progress-0 { --nodu-task-fraction: 0; }
+.nodu-c-progress-1 { --nodu-task-fraction: 0.01; }
+.nodu-c-progress-2 { --nodu-task-fraction: 0.02; }
+.nodu-c-progress-3 { --nodu-task-fraction: 0.03; }
+.nodu-c-progress-4 { --nodu-task-fraction: 0.04; }
+.nodu-c-progress-5 { --nodu-task-fraction: 0.05; }
+.nodu-c-progress-6 { --nodu-task-fraction: 0.06; }
+.nodu-c-progress-7 { --nodu-task-fraction: 0.07; }
+.nodu-c-progress-8 { --nodu-task-fraction: 0.08; }
+.nodu-c-progress-9 { --nodu-task-fraction: 0.09; }
+.nodu-c-progress-10 { --nodu-task-fraction: 0.1; }
+.nodu-c-progress-11 { --nodu-task-fraction: 0.11; }
+.nodu-c-progress-12 { --nodu-task-fraction: 0.12; }
+.nodu-c-progress-13 { --nodu-task-fraction: 0.13; }
+.nodu-c-progress-14 { --nodu-task-fraction: 0.14; }
+.nodu-c-progress-15 { --nodu-task-fraction: 0.15; }
+.nodu-c-progress-16 { --nodu-task-fraction: 0.16; }
+.nodu-c-progress-17 { --nodu-task-fraction: 0.17; }
+.nodu-c-progress-18 { --nodu-task-fraction: 0.18; }
+.nodu-c-progress-19 { --nodu-task-fraction: 0.19; }
+.nodu-c-progress-20 { --nodu-task-fraction: 0.2; }
+.nodu-c-progress-21 { --nodu-task-fraction: 0.21; }
+.nodu-c-progress-22 { --nodu-task-fraction: 0.22; }
+.nodu-c-progress-23 { --nodu-task-fraction: 0.23; }
+.nodu-c-progress-24 { --nodu-task-fraction: 0.24; }
+.nodu-c-progress-25 { --nodu-task-fraction: 0.25; }
+.nodu-c-progress-26 { --nodu-task-fraction: 0.26; }
+.nodu-c-progress-27 { --nodu-task-fraction: 0.27; }
+.nodu-c-progress-28 { --nodu-task-fraction: 0.28; }
+.nodu-c-progress-29 { --nodu-task-fraction: 0.29; }
+.nodu-c-progress-30 { --nodu-task-fraction: 0.3; }
+.nodu-c-progress-31 { --nodu-task-fraction: 0.31; }
+.nodu-c-progress-32 { --nodu-task-fraction: 0.32; }
+.nodu-c-progress-33 { --nodu-task-fraction: 0.33; }
+.nodu-c-progress-34 { --nodu-task-fraction: 0.34; }
+.nodu-c-progress-35 { --nodu-task-fraction: 0.35; }
+.nodu-c-progress-36 { --nodu-task-fraction: 0.36; }
+.nodu-c-progress-37 { --nodu-task-fraction: 0.37; }
+.nodu-c-progress-38 { --nodu-task-fraction: 0.38; }
+.nodu-c-progress-39 { --nodu-task-fraction: 0.39; }
+.nodu-c-progress-40 { --nodu-task-fraction: 0.4; }
+.nodu-c-progress-41 { --nodu-task-fraction: 0.41; }
+.nodu-c-progress-42 { --nodu-task-fraction: 0.42; }
+.nodu-c-progress-43 { --nodu-task-fraction: 0.43; }
+.nodu-c-progress-44 { --nodu-task-fraction: 0.44; }
+.nodu-c-progress-45 { --nodu-task-fraction: 0.45; }
+.nodu-c-progress-46 { --nodu-task-fraction: 0.46; }
+.nodu-c-progress-47 { --nodu-task-fraction: 0.47; }
+.nodu-c-progress-48 { --nodu-task-fraction: 0.48; }
+.nodu-c-progress-49 { --nodu-task-fraction: 0.49; }
+.nodu-c-progress-50 { --nodu-task-fraction: 0.5; }
+.nodu-c-progress-51 { --nodu-task-fraction: 0.51; }
+.nodu-c-progress-52 { --nodu-task-fraction: 0.52; }
+.nodu-c-progress-53 { --nodu-task-fraction: 0.53; }
+.nodu-c-progress-54 { --nodu-task-fraction: 0.54; }
+.nodu-c-progress-55 { --nodu-task-fraction: 0.55; }
+.nodu-c-progress-56 { --nodu-task-fraction: 0.56; }
+.nodu-c-progress-57 { --nodu-task-fraction: 0.57; }
+.nodu-c-progress-58 { --nodu-task-fraction: 0.58; }
+.nodu-c-progress-59 { --nodu-task-fraction: 0.59; }
+.nodu-c-progress-60 { --nodu-task-fraction: 0.6; }
+.nodu-c-progress-61 { --nodu-task-fraction: 0.61; }
+.nodu-c-progress-62 { --nodu-task-fraction: 0.62; }
+.nodu-c-progress-63 { --nodu-task-fraction: 0.63; }
+.nodu-c-progress-64 { --nodu-task-fraction: 0.64; }
+.nodu-c-progress-65 { --nodu-task-fraction: 0.65; }
+.nodu-c-progress-66 { --nodu-task-fraction: 0.66; }
+.nodu-c-progress-67 { --nodu-task-fraction: 0.67; }
+.nodu-c-progress-68 { --nodu-task-fraction: 0.68; }
+.nodu-c-progress-69 { --nodu-task-fraction: 0.69; }
+.nodu-c-progress-70 { --nodu-task-fraction: 0.7; }
+.nodu-c-progress-71 { --nodu-task-fraction: 0.71; }
+.nodu-c-progress-72 { --nodu-task-fraction: 0.72; }
+.nodu-c-progress-73 { --nodu-task-fraction: 0.73; }
+.nodu-c-progress-74 { --nodu-task-fraction: 0.74; }
+.nodu-c-progress-75 { --nodu-task-fraction: 0.75; }
+.nodu-c-progress-76 { --nodu-task-fraction: 0.76; }
+.nodu-c-progress-77 { --nodu-task-fraction: 0.77; }
+.nodu-c-progress-78 { --nodu-task-fraction: 0.78; }
+.nodu-c-progress-79 { --nodu-task-fraction: 0.79; }
+.nodu-c-progress-80 { --nodu-task-fraction: 0.8; }
+.nodu-c-progress-81 { --nodu-task-fraction: 0.81; }
+.nodu-c-progress-82 { --nodu-task-fraction: 0.82; }
+.nodu-c-progress-83 { --nodu-task-fraction: 0.83; }
+.nodu-c-progress-84 { --nodu-task-fraction: 0.84; }
+.nodu-c-progress-85 { --nodu-task-fraction: 0.85; }
+.nodu-c-progress-86 { --nodu-task-fraction: 0.86; }
+.nodu-c-progress-87 { --nodu-task-fraction: 0.87; }
+.nodu-c-progress-88 { --nodu-task-fraction: 0.88; }
+.nodu-c-progress-89 { --nodu-task-fraction: 0.89; }
+.nodu-c-progress-90 { --nodu-task-fraction: 0.9; }
+.nodu-c-progress-91 { --nodu-task-fraction: 0.91; }
+.nodu-c-progress-92 { --nodu-task-fraction: 0.92; }
+.nodu-c-progress-93 { --nodu-task-fraction: 0.93; }
+.nodu-c-progress-94 { --nodu-task-fraction: 0.94; }
+.nodu-c-progress-95 { --nodu-task-fraction: 0.95; }
+.nodu-c-progress-96 { --nodu-task-fraction: 0.96; }
+.nodu-c-progress-97 { --nodu-task-fraction: 0.97; }
+.nodu-c-progress-98 { --nodu-task-fraction: 0.98; }
+.nodu-c-progress-99 { --nodu-task-fraction: 0.99; }
+.nodu-c-progress-100 { --nodu-task-fraction: 1; }

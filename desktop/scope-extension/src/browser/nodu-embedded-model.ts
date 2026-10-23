@@ -74,6 +74,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     backups: BackupRecord[] = [];
     probe = '';
     monitorPort = '';
+    private monitorPortExplicit = false;
     monitor = { open: false, port: '', baud: 115200, state: 'closed', message: '' as string | undefined };
     readonly monitorLines: MonitorLine[] = [];
     readonly output: string[] = [];
@@ -111,7 +112,9 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.service = this.connections.createProxy<NoduEmbeddedService>(NODU_EMBEDDED_PATH, this);
         this.workspace.onWorkspaceChanged(roots => void this.detect(roots[0]?.resource));
         void this.workspace.roots.then(roots => this.detect(roots[0]?.resource));
-        this.monitorPort = localStorage.getItem('nodu.stm32.monitor-port') || '';
+        const savedPort = localStorage.getItem('nodu.stm32.monitor-port');
+        this.monitorPort = savedPort || '';
+        this.monitorPortExplicit = savedPort !== null;
     }
 
     get isC(): boolean { return !!this.project; }
@@ -216,6 +219,9 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                 break;
             case 'flash.step':
                 if (d.runId === this.runId) {
+                    if (d.state === 'running') {
+                        for (const step of Object.keys(this.flashSteps)) { if (step !== d.step && this.flashSteps[step] === 'running') { this.flashSteps[step] = 'done'; } }
+                    }
                     this.flashSteps[String(d.step)] = String(d.state); this.flashPercent = undefined;
                     if (d.step !== 'identify' || d.state === 'done') { this.awaitUser = this.awaitUser === 'enterBoot' ? undefined : this.awaitUser; }
                     this.setTask(this.stepText(), 'busy', { steps: this.steps(this.project?.flashMethod || 'stlink'), target: 'output' });
@@ -332,7 +338,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     async refreshDevices(): Promise<void> {
         await Promise.all([this.refreshPorts(), this.call<ProbeInfo[]>('listProbes').then(probes => {
             this.probes = probes;
-            if (this.probe && !probes.some(p => p.serial === this.probe)) { this.probe = ''; }
+            if (this.probe && !probes.some(p => (p.id || p.serial) === this.probe)) { this.probe = ''; }
             this.fire();
         }).catch(() => undefined)]);
     }
@@ -340,7 +346,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     refreshPorts(): Promise<void> {
         if (this.portRefresh) { return this.portRefresh; }
         this.portRefresh = this.call<PortInfo[]>('listPorts').then(ports => {
-            const next = preferredMonitorPort(this.monitorPort, ports);
+            const next = this.monitorPortExplicit && !this.monitorPort ? '' : preferredMonitorPort(this.monitorPort, ports);
             const changed = JSON.stringify(ports) !== JSON.stringify(this.ports) || next !== this.monitorPort;
             this.ports = ports;
             this.monitorPort = next;
@@ -355,6 +361,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     setMonitorPort(port: string): void {
+        this.monitorPortExplicit = true;
         this.monitorPort = port; localStorage.setItem('nodu.stm32.monitor-port', port); this.monitorError = ''; this.fire();
         if (this.monitor.open) { void this.changeMonitor(() => port ? this.openSelectedMonitor() : this.call('closeMonitor')); }
     }
@@ -401,17 +408,21 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             if (this.diagnosticsStale) { this.clearMarkers(); } else { this.setDiagnostics(result.diagnostics); }
             if (!result.ok) {
                 const counts = result.errors ? `${result.errors} 个错误${result.warnings ? `，${result.warnings} 个警告` : ''}` : '工程配置失败';
+                this.appendOutput(`编译失败：${counts}`);
                 this.settle(counts, 'error', { target: 'problems' });
             } else if (result.stale) {
+                this.appendOutput('编译结果已过期，请重新编译。');
                 this.settle('编译期间有文件被修改，这次结果已过期。再编译一次。', 'warn', { target: 'output' });
             } else {
                 const label = result.warnings ? `编译成功（${result.warnings} 个警告）` : '编译成功';
+                this.appendOutput(label);
                 this.settle(label, 'ok', { target: result.warnings ? 'problems' : 'output' });
             }
             await this.reload().catch(() => undefined);
             return result;
         } catch (error) {
             if (error instanceof EmbeddedError && error.code === 'untrusted') { throw error; }
+            this.appendOutput(error instanceof EmbeddedError && error.code === 'cancelled' ? '编译已停止' : `编译失败：${error instanceof Error ? error.message : String(error)}`);
             this.fail(error, '编译');
             return undefined;
         } finally {

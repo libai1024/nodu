@@ -391,9 +391,10 @@ impl Inner {
                     return Err(Failure::new("badRequest", "串口方式在下载时识别芯片（需要先进入引导模式）。"));
                 }
                 let probe = arg_opt_str(args, "probe").unwrap_or_default();
-                let _lock = locks::lock_probe(probe, "识别芯片")?;
                 let session = stlink::Session { toolkit: &toolkit, chip: &project.chip, board: &project.board,
                     serial: probe, out: &self.out, cancel: &self.device_cancel, run_id: "identify" };
+                let (probe, _lock) = stlink::select_probe(&session)?;
+                let session = stlink::Session { serial: &probe, ..session };
                 let mut identity = session.identify()?;
                 identity["matches"] = json!(flash::check_identity(&project.chip, &identity, 0).map_err(|f| f.message).err());
                 identity["deviceName"] = json!(flash::device_name(identity["deviceId"].as_u64().unwrap_or(0)));
@@ -402,9 +403,11 @@ impl Inner {
             }
             "reset" => {
                 let probe = arg_opt_str(args, "probe").unwrap_or_default();
-                let _lock = locks::lock_probe(probe, "复位开发板")?;
                 let session = stlink::Session { toolkit: &toolkit, chip: &project.chip, board: &project.board,
                     serial: probe, out: &self.out, cancel: &self.device_cancel, run_id: "reset" };
+                let (probe, _lock) = stlink::select_probe(&session)?;
+                let session = stlink::Session { serial: &probe, ..session };
+                flash::check_identity(&project.chip, &session.identify()?, 0)?;
                 session.reset()?;
                 Ok(json!({"reset": true}))
             }

@@ -92,8 +92,8 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput, exec }: {
                     {!model.probes.length && <option value="">未检测到 ST-LINK</option>}
                     {model.probes.length === 1 && <option value="">{model.probes[0].model}{model.probes[0].serial ? `  ${model.probes[0].serial.slice(0, 12)}` : ''}</option>}
                     {model.probes.length > 1 && <>
-                        <option value="">请选择下载器</option>
-                        {model.probes.map(p => <option key={p.serial} value={p.serial}>{p.model}  {p.serial ? p.serial.slice(0, 12) : '无序列号'}</option>)}
+                        <option value="">自动匹配目标芯片</option>
+                        {model.probes.map(p => <option key={p.id || p.serial} value={p.id || p.serial}>{p.model}  {p.serial ? p.serial.slice(-12) : `USB ${p.location || '未知端口'}`}</option>)}
                     </>}
                 </select>
             </div> : <div className="nodu-device-field">
@@ -119,7 +119,7 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput, exec }: {
             {identity ? identity.matches
                 ? <p className="nodu-c-error-text">{identity.matches}</p>
                 : <p className="nodu-c-ok-text"><i className="codicon codicon-pass" aria-hidden="true"/>{identity.deviceName ?? project.chip.name}  设备 ID {identity.deviceIdHex}  {identity.flashKiB} KB
-                    {identity.uid && <span className="nodu-c-muted nodu-c-block">唯一 ID {identity.uid.slice(0, 12)}…{identity.voltage ? `  目标电压 ${identity.voltage.toFixed(2)} V` : ''}</span>}</p>
+</p>
                 : <p className="nodu-c-muted">未识别</p>}
         </Section>
         {model.lastError && !model.busy && <NoduDiagnosis failure={model.lastError} method={method} showOutput={showOutput} dismiss={() => { model.lastError = undefined; model.fire(); }}/>}

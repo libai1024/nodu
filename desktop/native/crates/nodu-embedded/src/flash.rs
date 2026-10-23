@@ -223,12 +223,14 @@ pub fn run(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str) -> O
 }
 
 fn run_stlink(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, readback: &Path, record: &mut Value) -> Outcome<Value> {
-    let _lock = crate::locks::lock_probe(target.probe, "下载")?;
     let session = stlink::Session {
         toolkit: ctx.toolkit, chip: &ctx.project.chip, board: &ctx.project.board,
         serial: target.probe, out: ctx.out, cancel: ctx.cancel, run_id,
     };
     step(ctx.out, run_id, "identify", "running");
+    let (probe, _lock) = stlink::select_probe(&session)?;
+    let session = stlink::Session { serial: &probe, ..session };
+    record["probe"] = json!(probe);
     let identity = session.identify()?;
     record["target"] = identity.clone();
     check_identity(&ctx.project.chip, &identity, image.bytes)?;
@@ -255,7 +257,6 @@ fn run_stlink(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, r
         return Err(Failure::new("tampered", "要写入的文件在下载前被修改，已停止。重新编译。"));
     }
     let ran = session.program(&uid_words, &image.file, readback, image.bytes, image.tick)?;
-    step(ctx.out, run_id, "verify", "running");
     let digest = compare_readback(readback, image)?;
     step(ctx.out, run_id, "verify", "done");
     step(ctx.out, run_id, "run", "done");

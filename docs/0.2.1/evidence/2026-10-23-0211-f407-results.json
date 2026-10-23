@@ -1,0 +1,88 @@
+{
+  "checkpointCommit": "c25a353",
+  "probes": [
+    {
+      "vid": 1155,
+      "pid": 14152,
+      "model": "ST-LINK/V2",
+      "serial": "",
+      "product": "STM32 STLink",
+      "driver": "ok",
+      "id": "usb:3-1.2.1",
+      "location": "3-1.2.1"
+    },
+    {
+      "vid": 1155,
+      "pid": 14152,
+      "model": "ST-LINK/V2",
+      "serial": "",
+      "product": "STM32 STLink",
+      "driver": "ok",
+      "id": "usb:3-1.2.4",
+      "location": "3-1.2.4"
+    }
+  ],
+  "run": {
+    "runId": "r-20261023-050807-0b95ff",
+    "startedAt": "2026-10-23T05:08:07Z",
+    "bundle": "d1da6e9acd1959cd3cce49e9abcdd8c0fb3d8d61136e9c27107a967e9d6b6aea",
+    "method": "stlink",
+    "bytes": 9412,
+    "restore": false,
+    "steps": [],
+    "probe": "usb:3-1.2.4",
+    "target": {
+      "method": "stlink",
+      "deviceId": 1043,
+      "deviceIdHex": "0x413",
+      "revisionId": "0x101f",
+      "flashKiB": 1024,
+      "uid": "0018003d3033510430373735",
+      "uidWords": "0x18003d 0x30335104 0x30373735",
+      "readProtected": false,
+      "voltage": 3.164272,
+      "probe": "STLINK V2J37S7",
+      "probeId": "usb:3-1.2.4"
+    },
+    "ms": 12509,
+    "result": "running",
+    "readbackSha256": "0b47a5ce836eb0857c65de1173c16d45573c23459fbb0c07979d71d079ab7369"
+  },
+  "backup": {
+    "schema": 1,
+    "createdAt": "2026-10-23T05:08:18Z",
+    "deviceId": 1043,
+    "deviceName": "STM32F405 / F407",
+    "uid": "0018003d3033510430373735",
+    "flashKiB": 1024,
+    "bytes": 1048576,
+    "sha256": "5d94950ba7e1708599cee9f111df6b49b0a4bf06b51fae8b39dac85dc49b62e9",
+    "method": "stlink",
+    "firstBackup": true,
+    "factory": false,
+    "nodu": "0.2.1"
+  },
+  "f103FlashBeforeSha256": "1c5c3f60a58feeabef8d3a8bf17622aab50c0a31f547d67a6b1645c3f238774c",
+  "f103FlashAfterSha256": "1c5c3f60a58feeabef8d3a8bf17622aab50c0a31f547d67a6b1645c3f238774c",
+  "clockHz": 168000000,
+  "loopBeforeAfter": [
+    64,
+    66
+  ],
+  "tickBeforeAfter": [
+    63885,
+    65398
+  ],
+  "loopAfterReset": [
+    1,
+    3
+  ],
+  "serialTested": false,
+  "ispTested": false,
+  "tests": {
+    "rustPassed": 43,
+    "uiLogicPassed": 14,
+    "clippy": "passed",
+    "electronBuild": "passed"
+  }
+}

@@ -78,3 +78,14 @@ test('compatible-chip UI cancellation prevents download and acceptance passes a 
     c.confirm = async () => false; await c.run(); assert.equal(downloads, 0);
     c.confirm = async () => true; await c.run(); assert.equal(downloads, 1); assert.equal(confirmed, true);
 });
+
+test('build log retains completion and an explicit no-monitor choice survives refresh', async () => {
+    const m = model(); m.setDiagnostics = () => {};
+    m.call = async () => ({ ok: true, diagnostics: [] });
+    await m.build(); assert.equal(m.output.at(-1), '编译成功');
+    m.call = async () => ({ ok: false, diagnostics: [], errors: 1 });
+    await m.build(); assert.match(m.output.at(-1), /编译失败/);
+    m.call = async () => [{ path: '/dev/cu.usbserial-test' }];
+    m.monitorPortExplicit = true; m.monitorPort = '';
+    await m.refreshPorts(); assert.equal(m.monitorPort, '');
+});

@@ -1,0 +1,22 @@
+✔ download status uses actual phases and clears stale percent (0.736ms)
+✔ help command and menu are isolated from model and hardware calls (2.848958ms)
+✔ real model events update progress and reset percent between stages without RPC (15.663459ms)
+✔ build progress only completes on a successful result; errors never show 100% (0.146041ms)
+✔ source edits invalidate diagnostics; generated and unrelated files do not (0.684792ms)
+✔ unsaved edits during build stay stale; next fresh build replaces diagnostics (0.247459ms)
+✔ timestamped text and HEX exports preserve partial text and original bytes (0.730459ms)
+✔ pause freezes display/export while reception continues; resume and clear work independently (4.700333ms)
+✔ compatible-chip UI cancellation prevents download and acceptance passes a one-shot confirmation (1.346125ms)
+✔ build log retains completion and an explicit no-monitor choice survives refresh (0.194709ms)
+✔ hotplug suggests the sole USB port without replacing the user or active port (0.4465ms)
+✔ hex display preserves actual wire bytes, including invalid text and line endings (0.639667ms)
+✔ raw receive buffer retains only its bounded newest bytes (0.077625ms)
+✔ send encoding produces exact UTF-8/GBK bytes and retains line endings (7.591958ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73.408792
