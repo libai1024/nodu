@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "version": "wasi34-wasmtime50",
+  "platforms": {
+    "darwin-arm64": [
+      {
+        "component": "sdk",
+        "name": "wasi-sdk-34.0-arm64-macos.tar.gz",
+        "sha256": "9c59398106b417f8f14913380fdf0097a8cc0ff4af9eb3ce0065a859e88d49e9",
+        "size": 180322002,
+        "url": "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-34/wasi-sdk-34.0-arm64-macos.tar.gz",
+        "folder": "wasi-sdk-34.0-arm64-macos"
+      },
+      {
+        "component": "runtime",
+        "name": "wasmtime-v50.0.0-aarch64-macos.tar.xz",
+        "sha256": "323dc098dc0455d60f396c404627e967b7033ffcfa29abfffb243126cf82c9d6",
+        "size": 9452176,
+        "url": "https://github.com/bytecodealliance/wasmtime/releases/download/v50.0.0/wasmtime-v50.0.0-aarch64-macos.tar.xz",
+        "folder": "wasmtime-v50.0.0-aarch64-macos"
+      }
+    ],
+    "darwin-x64": [
+      {
+        "component": "sdk",
+        "name": "wasi-sdk-34.0-x86_64-macos.tar.gz",
+        "sha256": "87d27fa8adc68dee59bfbf2e22a6d34ef717c34d6bf1d8af2a56fc929d9ce0eb",
+        "size": 182668326,
+        "url": "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-34/wasi-sdk-34.0-x86_64-macos.tar.gz",
+        "folder": "wasi-sdk-34.0-x86_64-macos"
+      },
+      {
+        "component": "runtime",
+        "name": "wasmtime-v50.0.0-x86_64-macos.tar.xz",
+        "sha256": "ad14d9fb6a51d1633318426d6df21734127faddc81fe18a3afd70c5964eabeb5",
+        "size": 10718540,
+        "url": "https://github.com/bytecodealliance/wasmtime/releases/download/v50.0.0/wasmtime-v50.0.0-x86_64-macos.tar.xz",
+        "folder": "wasmtime-v50.0.0-x86_64-macos"
+      }
+    ]
+  }
+}

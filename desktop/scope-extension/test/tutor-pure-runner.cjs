@@ -20,7 +20,12 @@ test('only built-in harnesses and import-free bounded wasm are accepted',()=>{
 });
 async function tools(t,compiler,runtime){
  const root=await fs.mkdtemp(join(tmpdir(),'nodu-fake-wasi-'));t.after(()=>fs.rm(root,{recursive:true,force:true}));
- for(const [name,body] of [['sdk/bin/clang',compiler],['runtime/wasmtime',runtime]]){const p=join(root,name);await fs.mkdir(join(p,'..'),{recursive:true});await fs.writeFile(p,`#!${process.execPath}\n${body}`,{mode:0o700});}return new TutorPureRunner(root);
+ for(const [name,body] of [['sdk/bin/clang',compiler],['runtime/wasmtime',runtime]]){const p=join(root,name);await fs.mkdir(join(p,'..'),{recursive:true});await fs.writeFile(p,`#!${process.execPath}\n${body}`,{mode:0o700});}
+ const {TUTOR_TOOLKIT_REQUIRED,TUTOR_TOOLKIT_VERSION}=require('../lib/node/tutor/tutor-toolkit');
+ for(const name of TUTOR_TOOLKIT_REQUIRED){const p=join(root,name);await fs.mkdir(join(p,'..'),{recursive:true});await fs.access(p).catch(()=>fs.writeFile(p,'fixture'));}
+ const files=await Promise.all(TUTOR_TOOLKIT_REQUIRED.map(async path=>{const b=await fs.readFile(join(root,path));return {path,size:b.length,sha256:require('node:crypto').createHash('sha256').update(b).digest('hex')};}));
+ await fs.writeFile(join(root,'toolkit.json'),JSON.stringify({schema:1,version:TUTOR_TOOLKIT_VERSION,platform:process.platform+'-'+process.arch,files,totalBytes:files.reduce((n,f)=>n+f.size,0)}));
+ return new TutorPureRunner(root);
 }
 const clang='if(process.argv.includes("--version"))console.log("clang version 23.1.0");else require("fs").writeFileSync("test.wasm",Buffer.from([0,97,115,109,1,0,0,0]));';
 const runtime='if(process.argv.includes("--version")) console.log("wasmtime 50.0.0"); else console.log(193);';

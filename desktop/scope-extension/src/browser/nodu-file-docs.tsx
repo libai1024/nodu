@@ -65,7 +65,7 @@ export class NoduAboutDialog extends ReactDialog<void> {
 
     protected render(): React.ReactNode {
         return <div className="nodu-about">
-            <p className="nodu-about-name"><strong>见微 · Nodu</strong></p>
+            <p className="nodu-about-name"><strong>见微 Nodu</strong></p>
             <p>版本 {this.version}</p>
             <p className="scope-helper">K210 视觉开发工作台，基于 Eclipse Theia。</p>
             <p className="scope-helper">功能参考实现：OpenMV IDE 插件（openmv/qt-creator @ af179e44，MIT · © 2016 OpenMV, LLC）及 MaixPy IDE 0.2.5 公开行为，详见 THIRD-PARTY-NOTICES。</p>

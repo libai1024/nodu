@@ -194,3 +194,10 @@ test('dynamic lesson opens the next file and focuses validated guidance without 
     position=undefined;tutor.goalState=state;tutor.goalAction=async()=>{editors.currentEditor={};tutor.goalState={...state,fragment:{source:{path:'next.c',text},answer:{guidance:{anchorLine:2}}}};};
     await Object.assign(new Subject(),{tutor,editors}).prepareGoal();assert.equal(position,undefined);
 });
+test('reviewed equivalent lines trigger a fresh fragment review without being marked complete locally',()=>{
+ const t=model();t.goalState={status:'active',revision:4,fragment:{source:{path:'main.c',text:'\n\n',line:1,version:1},answer:{guidance:{anchorLine:1,lines:['int x = 1;','x += 1;']}}}};
+ const calls=[];t.goalAction=a=>calls.push(a);t.buffer={path:'main.c',text:'int x=1;\nx=x+1;',version:3,line:2};
+ t.autoCheckFragment();assert.equal(calls.length,0);t.autoCheckFragment([1]);assert.equal(calls.length,0);
+ t.autoCheckFragment([1,2]);t.autoCheckFragment([1,2]);assert.deepEqual(calls,['check']);assert.equal(t.goalState.status,'active');
+ t.goalState.status='paused';t.lastAutoFragment=undefined;t.autoCheckFragment([1,2]);assert.equal(calls.length,1);
+});

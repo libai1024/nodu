@@ -3,7 +3,7 @@ import * as React from '@theia/core/shared/react';
 import { createRoot, Root } from '@theia/core/shared/react-dom/client';
 import { ContainerModule, inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry, MessageService } from '@theia/core/lib/common';
-import { CommonMenus, FrontendApplicationContribution } from '@theia/core/lib/browser';
+import { CommonCommands, CommonMenus, FrontendApplicationContribution } from '@theia/core/lib/browser';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { ElectronIpcConnectionProvider } from '@theia/core/lib/electron-browser/messaging/electron-ipc-connection-source';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
@@ -76,6 +76,10 @@ class LauncherContribution implements FrontendApplicationContribution, CommandCo
         if (uri) { await this.main.openProject(uri.path.fsPath()); }
     }
     registerCommands(commands: CommandRegistry): void {
+        commands.registerHandler(CommonCommands.FIND.id, {
+            isEnabled: isLauncher, isVisible: isLauncher,
+            execute: () => document.querySelector<HTMLInputElement>('#nodu-launcher input[type=search]')?.focus(),
+        });
         commands.registerCommand({ id: 'nodu.launcher', label: '工作台', category: 'Nodu' }, { execute: () => this.main.showLauncher() });
     }
     registerMenus(menus: MenuModelRegistry): void {
@@ -100,11 +104,14 @@ function Launcher({ projects, open, create, browse }: {
         refresh(); window.addEventListener('focus', refresh);
         return () => { live = false; window.removeEventListener('focus', refresh); };
     }, [projects]);
-    const run = async (action: () => Promise<void>): Promise<void> => {
+    const run = async (action: () => Promise<void>, trigger?: HTMLElement): Promise<void> => {
         if (pending.current) { return; }
         pending.current = true; setBusy(true); setError('');
         try { await action(); } catch (err) { setError(String(err)); }
-        finally { pending.current = false; setBusy(false); }
+        finally {
+            pending.current = false; setBusy(false);
+            requestAnimationFrame(() => { if (trigger?.isConnected) { trigger.focus(); } });
+        }
     };
     const visible = rows.filter(row => `${row.name} ${row.path} ${row.tag ?? ''}`.toLowerCase().includes(query.toLowerCase()));
     return <main className="nodu-launcher-content scope-widget" aria-label="Nodu 工作台" aria-busy={busy}
@@ -118,8 +125,8 @@ function Launcher({ projects, open, create, browse }: {
         </aside>
         <section className="nodu-launcher-projects" aria-label="项目">
             <div className="nodu-launcher-actions">
-                <button className="theia-button main" disabled={busy} onClick={() => void run(create)}>新建项目</button>
-                <button className="theia-button secondary" disabled={busy} onClick={() => void run(browse)}>打开项目</button>
+                <button className="theia-button main" disabled={busy} onClick={event => void run(create, event.currentTarget)}>新建项目</button>
+                <button className="theia-button secondary" disabled={busy} onClick={event => void run(browse, event.currentTarget)}>打开项目</button>
             </div>
             <input ref={search} autoFocus type="search" className="theia-input nodu-launcher-search" placeholder="搜索项目" aria-label="搜索项目"
                 value={query} onChange={event => setQuery(event.currentTarget.value)} />

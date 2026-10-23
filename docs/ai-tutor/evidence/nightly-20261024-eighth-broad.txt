@@ -1,0 +1,56 @@
+✔ plugin is lazy, serializes switches, filters SDK diagnostics, disposes old client (1.505042ms)
+✔ templates are F103C8-only; existing default stays first (0.75575ms)
+✔ all templates preserve upstream source/circuit bytes and lock independent copies (586.018083ms)
+✔ corrupt or symlinked template pack fails before creating a project (141.495458ms)
+✔ concurrent creation has one winner without deleting its files (80.3955ms)
+﹣ release sync detects changes and never alters existing projects (0.130959ms) # SKIP
+﹣ upstream version upgrade changes new projects only; invalid upstream leaves the pack intact (0.03725ms) # SKIP
+✔ download status uses actual phases and clears stale percent (0.5315ms)
+✔ help command and menu are isolated from model and hardware calls (8.552417ms)
+✔ real model events update progress and reset percent between stages without RPC (14.761791ms)
+✔ build progress only completes on a successful result; errors never show 100% (0.336125ms)
+✔ source edits invalidate diagnostics; generated and unrelated files do not (0.765875ms)
+✔ unsaved edits during build stay stale; next fresh build replaces diagnostics (0.260667ms)
+✔ timestamped text and HEX exports preserve partial text and original bytes (7.485417ms)
+✔ pause freezes display/export while reception continues; resume and clear work independently (2.878458ms)
+✔ compatible-chip UI cancellation prevents download and acceptance passes a one-shot confirmation (1.681333ms)
+✔ build log retains completion and an explicit no-monitor choice survives refresh (0.2045ms)
+✔ hotplug suggests the sole USB port without replacing the user or active port (3.247167ms)
+✔ hex display preserves actual wire bytes, including invalid text and line endings (0.518375ms)
+✔ raw receive buffer retains only its bounded newest bytes (0.263333ms)
+✔ send encoding produces exact UTF-8/GBK bytes and retains line endings (7.901083ms)
+✔ ROM noise is not treated as application startup output (0.6785ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.184666ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.078333ms)
+✔ restored split chains migrate parent-first without changing the active page or any PTY lifecycle (1.366125ms)
+✔ later bottom additions are adopted once while editor terminals and repeated events remain untouched (1.398708ms)
+✔ a terminal added during initial migration is not left behind in the outer dock (0.615208ms)
+✔ framework Problems aliases stay hidden and reveal or activate the single unified Problems page (0.406625ms)
+✔ the framework Problems command routes to the same unified page (0.298834ms)
+✔ ordinary auxiliary views retain their dock and remain accessible from More without stale commands (0.268667ms)
+✔ Python submission does not send IME composition or unfinished multiline input (0.5035ms)
+✔ history navigation does not hijack multiline cursor movement or a selection (0.077083ms)
+✔ a clear cursor distinguishes events that have the same timestamp (0.418417ms)
+✔ bounded output retains monotonic ordering and measurable truncation (0.192208ms)
+✔ search treats regex syntax as literal and retains original Unicode positions (0.284958ms)
+✔ search bounds rendered matches and reports additional occurrences (0.204084ms)
+✔ an empty successful Python response clears the submitted draft without inventing output (0.23725ms)
+✔ failed execution preserves the draft, and success never erases a newer draft (0.110083ms)
+✔ a busy board prevents submission while leaving the editable draft intact (0.081125ms)
+✔ silent adoption reparents a live terminal once and never starts, closes or focuses its PTY (0.965834ms)
+✔ silent background adoption preserves the selected session and its active split (0.102666ms)
+✔ a silent split retains its parent session and workspace after the active workspace changes (0.153417ms)
+✔ explicit split options join the same group and normal adoption retains activation semantics (0.187875ms)
+✔ disposing one adopted split preserves the sibling and disposing the last clears the session (0.281375ms)
+✔ a menu command keeps its captured terminal target after another session becomes active (0.221625ms)
+✔ chip projects create portable K210 and every ESP32 target without a board (66.657792ms)
+✔ reject traversal, reserved names, unknown chips and templates before writing (0.347708ms)
+✔ same-name concurrent creates have one winner (1.615333ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 885.421584

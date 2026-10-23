@@ -32,7 +32,9 @@
     "package:electron": "node scripts/package-electron.cjs",
     "build:plugins": "node scripts/build-clangd-plugin.cjs",
     "templates:daxin:check": "node scripts/sync-daxin-templates.cjs --check",
-    "templates:daxin:sync": "node scripts/sync-daxin-templates.cjs --write"
+    "templates:daxin:sync": "node scripts/sync-daxin-templates.cjs --write",
+    "prepare:tutor-tools": "python3 scripts/prepare-tutor-tools.py",
+    "test:tutor-tools": "python3 scripts/test-prepare-tutor-tools.py && node --test scripts/package-tutor-tools.test.cjs"
   },
   "devDependencies": {
     "@electron/packager": "20.3.0",

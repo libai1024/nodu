@@ -47,10 +47,19 @@ export class TutorGoalSession {
             if (state.revision !== request.revision) { throw new Error('教学进度已更新，请重试'); }
             let next = { ...state };
             let presentation: { source: TutorBuffer; answer: import('../../common/tutor/tutor-ai-protocol').TutorAnswer } | undefined;
-            const complete = async (instruction: string, data: unknown): Promise<string> => {
-                const raw = await this.provider.complete([{ role: 'system', content: SYSTEM + instruction },
-                    { role: 'user', content: JSON.stringify(data) }], abort!.signal, () => undefined);
-                await live(); return raw;
+            const complete = async (instruction: string, data: unknown, validate?: (raw: string) => Promise<boolean>): Promise<string> => {
+                for (let attempt = 0; attempt < 2; attempt++) {
+                    await live();
+                    const correction = attempt ? '上次回复格式或插入位置不正确。本次必须只输出一个完整JSON对象，不加前后说明、代码示例或第二个JSON对象。' : '';
+                    const raw = await this.provider.complete([{ role: 'system', content: SYSTEM + instruction + correction },
+                        { role: 'user', content: JSON.stringify(data) }], abort!.signal, () => undefined);
+                    await live();
+                    let value: unknown;
+                    try { value = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, '')); }
+                    catch { /* Retry malformed syntax once, without trusting or persisting partial output. */ }
+                    if (value && typeof value === 'object' && !Array.isArray(value) && (!validate || await validate(raw))) { return raw; }
+                }
+                throw new Error('模型回复格式或代码位置无效，请重试');
             };
             if (request.action === 'propose') {
                 if (['active','paused'].includes(state.status)) { throw new Error('请先结束当前教学'); }
@@ -88,7 +97,18 @@ export class TutorGoalSession {
                     : kind === 'step' && context.localCheck?.syntax === 'incomplete'
                     ? JSON.stringify({ text: '本地检查发现语法结构尚未完整，请先补齐代码。', annotations: context.localCheck.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: 'context', note: 'C 语法树存在错误节点，本次未调用模型。' } })
                     : await complete(instruction, { project: context, goal: state.goal, step, buffer,
-                    previous: state.fragment ? { path: state.fragment.source.path, guidance: state.fragment.answer.guidance } : undefined });
+                    numberedSource: buffer.text.split('\n').map((line, index) => `${index + 1}: ${line}`).join('\n'),
+                    previous: state.fragment ? { path: state.fragment.source.path, guidance: state.fragment.answer.guidance } : undefined }, kind === 'chat' ? async candidate => {
+                        const value = JSON.parse(candidate.trim().replace(/^```(?:json)?\s*|\s*```$/g, ''));
+                        const line = request.placement === 'suggest' ? value.guidance?.anchorLine : buffer.line;
+                        if (!Number.isInteger(line) || !candidates.includes(line)) { return false; }
+                        const parsed = parseTutorAnswer(candidate, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer: { ...buffer, line } });
+                        if (!parsed.guidance) { return true; }
+                        const lines = buffer.text.split('\n'); lines.splice(line - 1, 0, ...parsed.guidance.lines);
+                        const prospective = await this.context(request.workspaceId, { ...buffer, line, text: lines.join('\n') });
+                        await live();
+                        return !prospective.localCheck || prospective.localCheck.syntax === 'valid';
+                    } : undefined);
                 let source = { ...buffer };
                 if (kind === 'chat' && request.placement === 'suggest') {
                     const proposed = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, '')).guidance?.anchorLine;

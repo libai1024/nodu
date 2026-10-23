@@ -285,7 +285,7 @@ class BottomPanelHeader extends ReactWidget {
             <div className="nodu-bottom-tabs" role="tablist" aria-label={this.owner.isSTM32 ? 'STM32 开发面板' : 'K210 开发面板'}>
                 {this.owner.tabs.map((tab, index) => <button key={tab.id} id={`nodu-bottom-tab-${tab.id}`} className="nodu-bottom-tab"
                     role="tab" aria-selected={this.owner.activePage === tab.id} aria-controls="nodu-bottom-page"
-                    tabIndex={this.owner.activePage === tab.id ? 0 : -1} title={tab.id === 'repl' ? 'Python 交互（REPL）' : tab.status ? `${tab.label} · ${tab.status}` : tab.label}
+                    tabIndex={this.owner.activePage === tab.id ? 0 : -1} title={tab.id === 'repl' ? 'Python 交互（REPL）' : tab.status ? `${tab.label}（${tab.status}）` : tab.label}
                     onKeyDown={event => this.key(event, index)} onClick={() => void this.owner.selectPage(tab.id)}>
                     <span>{tab.label}</span>{tab.status && <span className="nodu-bottom-tab-status" aria-label={tab.status}/>}
                 </button>)}
@@ -293,11 +293,11 @@ class BottomPanelHeader extends ReactWidget {
             <div className="nodu-bottom-actions">{this.owner.pageActions()}</div>
             <div className="nodu-bottom-chrome">
                 {this.owner.activePage !== 'problems' && this.owner.problemCounts.total > 0 && <button className="nodu-panel-icon nodu-problems-toggle"
-                    aria-label={`问题：${this.owner.problemCounts.errors} 个错误，${this.owner.problemCounts.warnings} 个警告`} title="问题 · ⌘/Ctrl+Shift+M"
+                    aria-label={`问题：${this.owner.problemCounts.errors} 个错误，${this.owner.problemCounts.warnings} 个警告`} title="问题（⌘/Ctrl+Shift+M）"
                     onClick={() => void this.owner.selectPage('problems', false)}><i className={`codicon codicon-${this.owner.problemCounts.errors ? 'error' : 'warning'}`} aria-hidden="true"/><span>{this.owner.problemCounts.total}</span></button>}
                 <button className="nodu-panel-icon" aria-label="面板更多操作" title="面板更多操作" onClick={event => this.owner.openMenu(event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
                 <button className="nodu-panel-icon" aria-label={this.owner.maximized ? '恢复面板大小' : '最大化面板'} title={this.owner.maximized ? '恢复面板大小' : '最大化面板'} onClick={() => this.owner.toggleMaximized()}><i className={`codicon codicon-${this.owner.maximized ? 'screen-normal' : 'screen-full'}`} aria-hidden="true"/></button>
-                <button className="nodu-panel-icon" aria-label="收起面板" title="收起面板 · ⌘/Ctrl+J" onClick={() => this.owner.collapse()}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-label="收起面板" title="收起面板（⌘/Ctrl+J）" onClick={() => this.owner.collapse()}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
             </div>
         </div>;
     }

@@ -23,6 +23,7 @@
 .nodu-launcher-remove { display: grid; place-items: center; flex: 0 0 28px; height: 28px; border: 0; border-radius: 4px; color: var(--theia-descriptionForeground); background: transparent; cursor: pointer; margin-right: 4px; }
 .nodu-launcher-remove:hover { background: var(--theia-toolbar-hoverBackground); }
 .nodu-launcher-list .missing .nodu-launcher-project { opacity: .6; }
+.nodu-launcher-list:empty { flex: 0; }
 .nodu-launcher-empty { margin: auto; padding: 20px; color: var(--theia-descriptionForeground); }
 .nodu-launcher-error { color: var(--theia-errorForeground); margin: 0 0 12px; overflow-wrap: anywhere; }
 .nodu-launcher-content button:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }

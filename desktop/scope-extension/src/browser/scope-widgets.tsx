@@ -385,7 +385,7 @@ export class ScopeDeviceWidget extends ReactWidget {
     protected init(): void {
         this.id = ScopeDeviceWidget.ID;
         this.title.label = ScopeDeviceWidget.LABEL;
-        this.title.caption = '见微 Nodu · 串口、REPL 与板端文件';
+        this.title.caption = '见微 Nodu 串口、REPL 与板端文件';
         this.title.closable = true;
         this.title.iconClass = 'codicon codicon-circuit-board';
         this.addClass('scope-widget');

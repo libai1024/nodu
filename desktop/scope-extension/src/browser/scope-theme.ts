@@ -14,11 +14,11 @@ export const SCOPE_LIGHT_THEME_ID = 'scope-light';
 const THEMES = [
     {
         id: SCOPE_THEME_ID, type: 'dark' as const, base: 'vs-dark' as const,
-        label: '见微 Nodu · 芯片墨', description: 'Nodu 的芯片墨工作台与 Nodu 蓝主题。'
+        label: '见微 Nodu 芯片墨', description: 'Nodu 的芯片墨工作台与 Nodu 蓝主题。'
     },
     {
         id: SCOPE_LIGHT_THEME_ID, type: 'light' as const, base: 'vs' as const,
-        label: '见微 Nodu · 丝印白', description: 'Nodu 的丝印白阅读面与 Nodu 蓝主题。'
+        label: '见微 Nodu 丝印白', description: 'Nodu 的丝印白阅读面与 Nodu 蓝主题。'
     }
 ];
 

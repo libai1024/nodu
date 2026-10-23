@@ -243,11 +243,11 @@ export class NoduTutorModel {
             if (advance && this.goalState.status === 'active') { this.fragmentRequested.fire(); }
         }
     }
-    private autoCheckFragment(): void {
+    autoCheckFragment(reviewedLines: readonly number[] = []): void {
         const fragment = this.goalState.fragment, buffer = this.buffer, g = fragment?.answer.guidance;
         if (!this.teaching || this.goalState.status !== 'active' || this.busy || !fragment || !buffer || !g || fragment.source.path !== buffer.path) { return; }
         const lines = buffer.text.split('\n').slice(g.anchorLine - 1, g.anchorLine - 1 + g.lines.length);
-        if (!g.lines.every((line, i) => line.trim() === lines[i]?.trim())) { return; }
+        if (!g.lines.every((line, i) => line.trim() === lines[i]?.trim() || reviewedLines.includes(g.anchorLine + i))) { return; }
         const key = `${this.goalState.revision}:${buffer.path}:${buffer.text}`;
         if (key === this.lastAutoFragment) { return; }
         this.lastAutoFragment = key;

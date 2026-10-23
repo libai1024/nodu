@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import { verifyTutorToolkit } from './tutor-toolkit';
 import { spawn } from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -92,6 +93,7 @@ export class TutorPureRunner {
         TutorPureRunner.active++;
         try {
             const harness = pureHarness(unit); result.total = harness.total;
+            await verifyTutorToolkit(this.root, signal);
             const clang = join(this.root, 'sdk/bin', 'clang'), runtime = join(this.root, 'runtime', 'wasmtime');
             await Promise.all([fs.access(clang), fs.access(runtime)]);
             directory = await fs.mkdtemp(join(tmpdir(), 'nodu-pure-')); await fs.chmod(directory, 0o700);

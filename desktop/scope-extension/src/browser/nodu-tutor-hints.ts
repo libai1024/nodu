@@ -151,7 +151,16 @@ class TutorEditorController implements Disposable {
             if (result?.ok && result.answer.review) {
                 task.status = result.answer.review.verdict; task.guided = task.status === 'ok'; task.note = `${task.status === 'ok' ? 'AI 已检查' : task.status === 'context' ? '待补上下文' : '需要修改'}：${result.answer.review.note}`; task.version = buffer.version;
             } else { task.status = 'unavailable'; task.note = result && !result.ok ? result.error : 'AI 检查未完成'; }
-        } finally { this.processing = false; this.render(); this.schedule(); this.queueHistory(); }
+        } finally {
+            this.processing = false; this.render(); this.schedule(); this.queueHistory();
+            if (!this.disposed && this.active() && model.getVersionId() === buffer.version && epoch === this.tutor.epoch) {
+                const reviewed = [...this.tasks.values()].flatMap(t => {
+                    const row = model.getDecorationRange(t.decoration)?.startLineNumber;
+                    return t.guided && row && t.text.trim() === model.getLineContent(row).trim() ? [row] : [];
+                });
+                this.tutor.autoCheckFragment(reviewed);
+            }
+        }
     }
     private render(): void {
         const model = this.control.getModel();

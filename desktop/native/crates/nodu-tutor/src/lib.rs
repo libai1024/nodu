@@ -127,8 +127,11 @@ pub fn inspect(request: &Request) -> Result<Report, String> {
     let source = request.source.as_bytes();
     let tree = parser.parse_with_options(&mut |offset,_| &source[offset..], None, Some(ParseOptions::new().progress_callback(&mut budget))).ok_or("语法检查超时")?;
     let all = nodes(tree.root_node())?;
-    let error_lines: Vec<_> = all.iter().filter(|n| n.is_error() || n.is_missing()).take(16).map(|n| n.start_position().row + 1).collect();
-    let syntax = if tree.root_node().has_error() { "incomplete" } else { "valid" };
+    // tree-sitter accepts top-level expression statements for macro-heavy C. They
+    // cannot be offered as executable teaching statements outside a function.
+    let invalid = |n: &&Node<'_>| n.is_error() || n.is_missing() || (n.kind() == "expression_statement" && n.parent().is_some_and(|p| p.kind() == "translation_unit"));
+    let error_lines: Vec<_> = all.iter().filter(invalid).take(16).map(|n| n.start_position().row + 1).collect();
+    let syntax = if tree.root_node().has_error() || !error_lines.is_empty() { "incomplete" } else { "valid" };
     let macros = all.iter().any(|n| matches!(n.kind(), "preproc_def" | "preproc_function_def" | "preproc_if" | "preproc_ifdef"));
     let mut offset = 0;
     let insertion_lines = request.source.split('\n').enumerate().filter_map(|(row, line)| {
@@ -192,6 +195,11 @@ mod tests {
         assert_eq!(result("void main(){void nested(){receive();}}",Kind::Calls).findings[0].verdict,Verdict::Unknown);
         assert_eq!(result("void main(){(*fn)();}",Kind::NoCallIn).findings[0].verdict,Verdict::Unknown);
         assert_eq!(result("void other(){receive();} void main(){}",Kind::NoCallIn).findings[0].verdict,Verdict::Verified);
+    }
+    #[test] fn executable_statement_outside_function_is_not_a_valid_teaching_snapshot() {
+        let outside = result("int main(void) {}\nBoard_DebugUartInit(BOARD_DEBUG_BAUD);\n", Kind::Calls);
+        assert_eq!(outside.syntax, "incomplete"); assert_eq!(outside.error_lines, vec![2]);
+        assert_eq!(result("int main(void) { Board_DebugUartInit(BOARD_DEBUG_BAUD); }", Kind::Calls).syntax, "valid");
     }
     #[test] fn insertion_sites_exclude_comments_and_directives() {
         let source = "/* comment\n\n*/\nint main(){\n\n}\n";

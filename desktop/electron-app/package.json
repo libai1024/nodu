@@ -8,7 +8,7 @@
     "target": "electron",
     "frontend": {
       "config": {
-        "applicationName": "见微 · Nodu",
+        "applicationName": "见微 Nodu",
         "defaultLocale": "zh-cn",
         "defaultTheme": "scope-dark",
         "defaultIconTheme": "theia-file-icons",
@@ -20,7 +20,7 @@
           "editor.scrollBeyondLastLine": false,
           "editor.renderWhitespace": "none",
           "editor.wordWrap": "on",
-          "window.title": "${activeEditorShort}${separator}${rootName}${separator}见微 · Nodu",
+          "window.title": "${activeEditorShort}${separator}${rootName}${separator}见微 Nodu",
           "workbench.colorTheme": "scope-dark",
           "security.workspace.trust.enabled": false
         },

@@ -1,0 +1,18 @@
+✔ canonical JS accepts comment and whitespace-only differences (92.260875ms)
+✔ canonical JS rejects literal and keyword differences (2.334333ms)
+✔ canonical JS rejects an ASI semantic split (1.126209ms)
+✔ canonical JS preserves loop slots and literal whitespace (2.283375ms)
+✔ native module normalization touches generated metadata keys only (1.011417ms)
+✔ generated native labels normalize identically for both architectures (1.001667ms)
+✔ packaged bootstrap keeps one binary prefix and sets the profile (1.96275ms)
+✔ dev (unpackaged) bootstrap keeps two binary prefix entries (0.952833ms)
+✔ npm-cli resolves under the POSIX and Windows Node layouts (1.059042ms)
+✔ release rejects development kits, altered content and missing sources; signing refreshes digests (5.415916ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 158.029625

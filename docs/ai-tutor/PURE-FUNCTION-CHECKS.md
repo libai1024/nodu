@@ -22,11 +22,16 @@ CRC 有 193 个固定测试，换算有 3 个。仅出现一个已实现函数�
 
 工具目录结构为 `sdk/bin/clang`（保留 SDK 自身目录结构）及 `runtime/wasmtime`。默认读取扩展资源 `resources/wasi/<platform>-<arch>`，开发环境可显式指定 `NODU_TUTOR_WASI_DIR`。不从 PATH 猜测任意版本，不自动联网下载。
 
-本次使用此前 M0 按官方 SHA256 下载的本机缓存，以 Git 外的 `~/.codex/nodu-nightly-20261024/wasi-kit` 两个目录链接引用，未复制大体积依赖、未发布安装包。应用分发侧的工具安装、摘要校验、许可随包和其它平台集成仍待完成；没有工具时界面如实显示不可用。
+构建期运行 `npm run prepare:tutor-tools --prefix desktop`，按 `desktop/scripts/tutor-tools.lock.json` 的官方归档大小/SHA256 下载或读取离线缓存，验证后解包最小编译器、链接器、动态库及运行时。应用运行时不会下载。默认资源目录包含 `toolkit.json`，启动执行前校验全量文件摘要、路径、平台、版本与额外文件；摘要是完整性检查，不是发布者签名。
+
+本机 macOS arm64 已实际安装 11 个文件、176147897 字节，真实执行测试不再依赖临时环境变量。构建脚本包含 macOS x64 官方锁定条目，但未在 x64 机器执行。打包按架构复制，codesign 修改二进制后重新生成库存摘要；未制作或发布正式安装包。Windows 仍因进程树回收未接入而不可用，Linux 分发未完成。
+
+许可证目录保留 WASI SDK、对应 LLVM 提交、Wasmtime 和 libedit 的原始许可。SDK 官方归档未给出所含 libedit 的精确源版本；`SOURCES.json` 明确记录此不确定性。正式公开分发前仍需核实该来源及 LLVM 所列附加第三方通知，不能把基本许可证扫描通过等同完整许可审计。
 
 ```sh
-NODU_TUTOR_WASI_DIR=/absolute/path/to/wasi-kit npm run test:tutor-wasi --prefix desktop/scope-extension
-npm run test:tutor --prefix desktop/scope-extension
+npm run prepare:tutor-tools --prefix desktop -- --offline --archive-dir /absolute/path/to/verified-archives
+npm run test:tutor-wasi --prefix desktop/scope-extension
+npm run test:tutor-tools --prefix desktop
 ```
 
 产品测试覆盖参考代码 196/196、错误 CRC 多项式 35/196、无限循环 fuel 耗尽、越界内存 trap、缺少常量、畸形产物、外部 import、取消、超时、输出超限、并发额度和释放、过期证据。首次替换本机检查器二进制后出现一次冷启动超时，正确返回 unavailable，未被当作通过；同一二进制再次运行全部完成，两个结果均保存。

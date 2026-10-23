@@ -18,3 +18,5 @@ scope-extension/resources/imaging/
 # keep them out of git, license texts/recipes are committed.
 scope-extension/resources/licenses/ffmpeg/*.tar.*
 dist/
+
+scope-extension/resources/wasi/

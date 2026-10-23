@@ -52,7 +52,11 @@ test('timestamped text and HEX exports preserve partial text and original bytes'
 test('pause freezes display/export while reception continues; resume and clear work independently', async () => {
     const m = model(); m.panelTab = 'monitor';
     const p = new NoduEmbeddedPanel(); p.model = m;
-    const action = label => p.actions().props.children.find(c => c.props['aria-label'] === label).props.onClick();
+    const action = label => {
+        const button = require('react').Children.toArray(p.actions().props.children).find(c => c?.props?.['aria-label'] === label);
+        assert.ok(button, `Missing monitor button: ${label}`);
+        return button.props.onClick();
+    };
     m.decode(Buffer.from('first\n').toString('base64'));
     action('暂停显示'); const frozen = monitorLog(p.snapshot(), false, false);
     m.decode(Buffer.from('second\nunfinished').toString('base64'));

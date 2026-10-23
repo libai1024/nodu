@@ -17,6 +17,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { pipeline } = require('node:stream/promises');
 const { parseArgs } = require('node:util');
+const tutorTools = require('./package-tutor-tools.cjs');
 const { courseExamplesStamp, copyCourseExamples } = require('./course-examples.cjs');
 
 const desktop = path.resolve(__dirname, '..');
@@ -99,6 +100,7 @@ if (host === 'win32' && targetArch !== 'x64') {
 // ------------------------------------------------------ input validation
 
 function requireInputs(arch) {
+    if (host === 'darwin') { tutorTools.validate(tutorTools.rootFor(desktop, `darwin-${arch}`), `darwin-${arch}`); }
     const stm32 = require('./package-stm32.cjs');
     stm32.validateToolkit(stm32.toolkitSource(desktop, host, arch));
     const required = [];
@@ -310,6 +312,7 @@ const EXCLUDE = [
     /^\.DS_Store$/,
 ];
 const EXCLUDE_NESTED = [
+    /^scope-extension\/resources\/wasi(\/|$)/,
     /(^|\/)node_modules(\/|$)/,
     /(^|\/)\.theia(\/|$)/,
     /(^|\/)gen-webpack\.config\.js$/,
@@ -354,6 +357,7 @@ function runtimeResourcesStamp() {
         hash.update(hashTree(full)); hash.update('\0');
     }
     hash.update(courseExamplesStamp(desktop));
+    if (host === 'darwin') { hash.update(tutorTools.stamp(desktop, thinArchs.map(a => `darwin-${a}`))); }
     return hash.digest('hex');
 }
 
@@ -785,7 +789,7 @@ function buildAppInput(arch, workDesktop, universal) {
     // first), while APFS happened to yield `bin` first and masked this.
     fs.mkdirSync(resDest, { recursive: true });
     for (const entry of fs.readdirSync(resSrc, { withFileTypes: true })) {
-        if (entry.name === 'toolkits') { continue; }
+        if (['toolkits','wasi'].includes(entry.name)) { continue; }
         if (entry.name === 'bin') {
             for (const archDir of keepBinDirs(arch, universal)) {
                 const dir = path.join(resSrc, 'bin', archDir);
@@ -801,6 +805,7 @@ function buildAppInput(arch, workDesktop, universal) {
         if (entry.isDirectory()) { copyRes(from, to); }
         else { fs.copyFileSync(from, to); }
     }
+    if (host === 'darwin') { tutorTools.copy(desktop, resDest, keepBinDirs(arch, universal)); }
     copyCourseExamples(desktop, path.join(resDest, 'project-examples'));
     // A Windows package reports its per-target media record as the top-level
     // media metadata; the darwin-universal record would describe the wrong
@@ -936,6 +941,7 @@ function signAppDarwin(appPath) {
             '--preserve-metadata=entitlements,flags', file]);
     }
     require('./package-stm32.cjs').refreshManifests(appPath);
+    tutorTools.refreshManifests(appPath);
     const nestedApps = [];
     const findApps = dir => {
         for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -1095,7 +1101,7 @@ async function packageMacUniversal() {
         // byte-identical across thin apps (each arch dir already holds
         // its own slice). macos-trash is a universal project-built
         // binary by the time we get here.
-        x64ArchFiles: '**/darwin-*/*',
+        x64ArchFiles: '**/darwin-*/**',
     });
     auditMinOs(outApp);
     signAppDarwin(outApp);

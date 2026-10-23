@@ -1,0 +1,4 @@
+
+> @scope/studio-extension@0.1.4 compile
+> tsc -p tsconfig.json
+

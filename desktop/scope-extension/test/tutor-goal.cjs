@@ -106,7 +106,7 @@ test('local incomplete syntax blocks fragment advancement without calling the mo
 
 test('suggested placement chooses only native-approved blank lines and keeps cursor-mode strict', async t=>{
  const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'串口'});await f.run('confirm');
- const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{insertionLines:[2]}}),f.authorize);
+ const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{insertionLines:[2],syntax:'valid'}}),f.authorize);
  t.after(()=>session.dispose());const call=extra=>session.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer:{...buffer,line:1},placement:'suggest',...extra});
  f.responses.push(JSON.stringify({text:'wrong',annotations:[],guidance:{anchorLine:1,lines:['int x;']}}));
  assert.equal((await call({})).ok,false);assert.equal((await f.store.read(context.key)).fragment,undefined);
@@ -132,4 +132,24 @@ test('pure execution evidence is bound to source, workspace and a short freshnes
  assert.equal((await host.context('workspace-1',{...buffer,text:buffer.text+'// changed'})).localCheck.execution,undefined);
  host.executions.get('workspace-1:main.c').time-=61000;assert.equal((await host.context('workspace-1',buffer)).localCheck.execution,undefined);
  await host.select('');assert.equal(host.executions.size,0);
+});
+
+
+test('malformed goal JSON retries once without accepting trailing prose or persisting partial plans', async t=>{
+ const f=await fixture(t);f.responses.push(plan+' trailing prose',plan);
+ const result=await f.run('propose',{prompt:'串口'});assert.equal(result.ok,true);assert.equal(f.calls.length,2);
+ assert.match(f.calls[1][0].content,/只输出一个完整JSON对象/);assert.equal((await f.store.read(context.key)).revision,1);
+ const g=await fixture(t);g.responses.push(plan+'{}','incomplete');
+ const failed=await g.run('propose',{prompt:'串口'});assert.equal(failed.ok,false);assert.equal(failed.error,'模型回复格式或代码位置无效，请重试');
+ assert.equal(g.calls.length,2);assert.equal((await g.store.read(context.key)).revision,0);
+});
+
+
+test('fragment is checked in a prospective buffer before a misplaced ghost can persist',async t=>{
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'serial'});await f.run('confirm');
+ const session=new TutorGoalSession(f.store,f.provider,async(id,b)=>({...context,localCheck:{insertionLines:[2],syntax:b?.text.includes('wrong();')?'incomplete':'valid'}}),f.authorize);t.after(()=>session.dispose());
+ f.responses.push(JSON.stringify({text:'bad',annotations:[],guidance:{anchorLine:2,lines:['wrong();']}}),fragment);
+ const r=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer,placement:'suggest'});
+ assert.equal(r.ok,true);assert.equal(r.state.fragment.answer.guidance.lines[0],'const char *hello = "hello";');assert.equal(f.calls.length,3);
+ assert.match(JSON.parse(f.calls[1][1].content).numberedSource,/2: /);
 });
