@@ -1,0 +1,8 @@
+Local Markdown links: PASS (32)
+Roadmap tasks and acyclic dependencies: PASS (30)
+Prototype unique DOM ids: PASS (35)
+Prototype middle-dot text: ABSENT
+Prototype network API calls: ABSENT
+Browser observed: steps/chat/check/revision, keyboard tabs, Escape focus recovery, dark/light, 980px layout
+AI model calls: NOT RUN; hardware actions: NONE; product integration tests: NOT RUN
+Prototype JavaScript syntax: PASS
