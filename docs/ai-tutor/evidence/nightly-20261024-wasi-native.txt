@@ -1,0 +1,10 @@
+{"good":{"suite":"sht30-pure-v1","sourceDigest":"43f7ed323ac3fc765a476a9ac04a2c3299b959b422f129f8fb7aa8ef7ba68b28","status":"passed","passed":196,"total":196,"note":"纯函数测试 196/196，不代表固件或传感器运行"},"wrong":{"suite":"sht30-pure-v1","sourceDigest":"896d6fc7c49794315a152a2f13e80a877295bd58589e430cb00da96f51f446b1","status":"failed","passed":35,"total":196,"note":"纯函数测试 35/196，不代表固件或传感器运行"},"loop":{"suite":"sht30-pure-v1","sourceDigest":"31a43b651018ee68c5b299cddb224717ee4d0a388ba6d9325f8495cb15e4271b","status":"failed","passed":0,"total":193,"note":"纯函数执行失败或超过运行预算"},"memory":{"suite":"sht30-pure-v1","sourceDigest":"0c14f96b7a9aee6f381b79fe58e5cea526a413e453c6b03e0fbfeb6fff35adbc","status":"failed","passed":0,"total":193,"note":"纯函数执行失败或超过运行预算"},"context":{"suite":"sht30-pure-v1","sourceDigest":"ac4b403d6429a55dc4d67ed53748a1f8755de18a7aa88581277efeee7d3e3f00","status":"unavailable","passed":0,"total":193,"note":"纯函数无法独立编译，检查函数签名、常量或外部依赖"}}
+✔ actual WASI compiler and runtime distinguish correct, wrong and nonterminating course algorithms (596.273083ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 636.700875

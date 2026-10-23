@@ -33,9 +33,11 @@ export class NoduTutorModel {
     private service!: TutorService;
     private readonly changed = new Emitter<void>();
     readonly onDidChange = this.changed.event;
+    private readonly fragmentRequested = new Emitter<void>();
+    readonly onDidRequestGoalFragment = this.fragmentRequested.event;
     private readonly invalidated = new Emitter<void>();
     readonly onDidInvalidate = this.invalidated.event;
-    private readonly toDispose = new DisposableCollection(this.changed, this.invalidated);
+    private readonly toDispose = new DisposableCollection(this.changed, this.invalidated, this.fragmentRequested);
     ready: Promise<void> = Promise.resolve();
     rootUri?: URI;
     workspaceId?: string;
@@ -208,7 +210,7 @@ export class NoduTutorModel {
         if (!this.workspaceId) { throw new Error('请先打开工程'); }
         return this.service.resolveReference(this.workspaceId, path, line);
     }
-    async goalAction(action: TutorGoalRequest['action'], prompt?: string): Promise<void> {
+    async goalAction(action: TutorGoalRequest['action'], prompt?: string, placement?: 'suggest'): Promise<void> {
         if (!this.enabled || this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
         await this.sync;
         if (this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
@@ -216,7 +218,7 @@ export class NoduTutorModel {
         this.busy = { id, mode: 'teach', kind: 'chat', goal: action }; this.error = undefined; this.notify();
         let advance = false;
         try {
-            const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action,
+            const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action, ...(placement ? { placement } : {}),
                 ...(prompt ? { prompt } : {}), ...((action === 'fragment' || action === 'check' || (action === 'propose' && this.includeCode)) && this.buffer ? { buffer: { ...this.buffer } } : {}) });
             if (this.busy?.id !== id || workspace !== this.workspaceId || epoch !== this.epoch) { return; }
             if (!result.ok) { if (!result.cancelled) { this.error = result.error; } await this.refreshGoal(); return; }
@@ -238,8 +240,7 @@ export class NoduTutorModel {
         finally {
             if (this.busy?.id === id) { this.busy = undefined; }
             this.notify();
-            if (advance && this.goalState.status === 'active' && this.goalState.steps[this.goalState.current]?.path === this.buffer?.path
-                && !this.buffer.text.split('\n')[this.buffer.line - 1]?.trim()) { void this.goalAction('fragment'); }
+            if (advance && this.goalState.status === 'active') { this.fragmentRequested.fire(); }
         }
     }
     private autoCheckFragment(): void {
@@ -361,12 +362,12 @@ export class NoduTutorModel {
                     const callees = 'callees' in r ? r.callees : 'callee' in r ? [r.callee] : [];
                     for (const callee of callees) { rules.push({ id: `${r.id}_${rules.length}`.slice(0, 80), kind: r.type as TutorLocalRule['kind'], function: anchor.symbol, callee }); }
                 }
-                const local = await this.service.inspectBuffer(request.workspaceId, context, rules.slice(0, 32));
+                const local = await this.service.inspectBuffer(request.workspaceId, context, rules.slice(0, 32), request.id);
                 if (!current() || request.epoch !== this.epoch) { return { ok: false, error: '已停止', cancelled: true }; }
-                if (!this.configured || local.syntax === 'incomplete' || local.findings.some(f => f.verdict === 'needs-work')) {
-                    const text = local.syntax === 'unavailable' ? local.note ?? '本地检查不可用' : local.syntax === 'incomplete' ? '本地检查发现语法结构尚未完整。' :
+                if (!this.configured || local.execution || local.syntax === 'incomplete' || local.findings.some(f => f.verdict === 'needs-work')) {
+                    const text = local.execution ? local.execution.note : local.syntax === 'unavailable' ? local.note ?? '本地检查不可用' : local.syntax === 'incomplete' ? '本地检查发现语法结构尚未完整。' :
                         local.findings.length ? local.findings.map(f => `${f.id}：${f.note}`).join('\n') : '本地语法结构检查通过，尚未验证编译和运行。';
-                    localResult = { ok: true, answer: { text, annotations: local.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: local.findings.some(f => f.verdict === 'needs-work') ? 'needs-work' : 'context', note: text } } };
+                    localResult = { ok: true, answer: { text, annotations: local.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: local.execution?.status === 'failed' || local.findings.some(f => f.verdict === 'needs-work') ? 'needs-work' : 'context', note: text } } };
                 }
             }
             const result = localResult ?? await this.service.chat(request);

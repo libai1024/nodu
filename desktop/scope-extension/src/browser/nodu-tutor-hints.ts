@@ -13,6 +13,7 @@ import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 export const TUTOR_MENU = ['nodu-ai-controls'];
 export const TUTOR_COMMANDS = {
     openReference: 'nodu.tutor.open-reference',
+    prepareGoal: 'nodu.tutor.prepare-goal',
     openPanel: 'nodu.tutor.open-panel', togglePanel: 'nodu.tutor.toggle-panel', toggleHints: 'nodu.tutor.toggle-hints',
     revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', settings: 'nodu.tutor.settings', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
 } as const;
@@ -227,6 +228,7 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
     private readonly disposables = new DisposableCollection();
     private readonly controllers = new Map<EditorWidget, TutorEditorController>();
     onStart(): void {
+        this.disposables.push(this.tutor.onDidRequestGoalFragment(() => { void this.prepareGoal(); }));
         this.editors.all.forEach(widget => this.attach(widget));
         this.disposables.push(this.editors.onCreated(widget => this.attach(widget)));
     }
@@ -236,7 +238,33 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         const controller = new TutorEditorController(widget, control, this.tutor, () => this.editors.currentEditor === widget, () => void this.commands.executeCommand(TUTOR_COMMANDS.openPanel));
         this.controllers.set(widget, controller); widget.disposed.connect(() => { controller.dispose(); this.controllers.delete(widget); });
     }
+    private preparingGoal = false;
+    private async prepareGoal(): Promise<void> {
+        const root = this.tutor.rootUri, workspace = this.tutor.workspaceId, state = this.tutor.goalState;
+        const step = state.steps[state.current];
+        if (this.preparingGoal || !root || !workspace || !step || state.status !== 'active' || this.tutor.busy || !this.tutor.teaching) { return; }
+        this.preparingGoal = true;
+        const current = (): boolean => root === this.tutor.rootUri && workspace === this.tutor.workspaceId && state.revision === this.tutor.goalState.revision && this.tutor.teaching;
+        try {
+            const reference = await this.tutor.resolveReference(step.path, 1);
+            if (!current()) { return; }
+            const widget = await this.editors.open(root.resolve(reference.path), { mode: 'activate' });
+            if (!current()) { return; }
+            const control = MonacoEditor.get(widget)?.getControl(), model = control?.getModel();
+            if (!model || !control || model.getValueLength() > 32000) { return; }
+            const source = { path: step.path, text: model.getValue(), version: model.getVersionId(), line: control.getPosition()?.lineNumber ?? 1 };
+            this.tutor.updateBuffer(source);
+            if (!state.fragment) { await this.tutor.goalAction('fragment', undefined, 'suggest'); }
+            const fragment = this.tutor.goalState.fragment;
+            if (!this.tutor.teaching || this.tutor.goalState.status !== 'active' || root !== this.tutor.rootUri || workspace !== this.tutor.workspaceId || this.editors.currentEditor !== widget
+                || model.isDisposed() || model.getValue() !== source.text || model.getVersionId() !== source.version || fragment?.source.path !== source.path || fragment.source.text !== source.text) { return; }
+            const line = fragment.answer.guidance?.anchorLine;
+            if (line) { control.setPosition({lineNumber:line,column:model.getLineMaxColumn(line)}); control.revealLineInCenterIfOutsideViewport(line); control.focus(); }
+        } catch (error) { if (current()) { this.tutor.error = error instanceof Error ? error.message : '无法准备教学位置'; this.tutor.notify(); } }
+        finally { this.preparingGoal = false; }
+    }
     registerCommands(commands: CommandRegistry): void {
+        commands.registerCommand({ id: TUTOR_COMMANDS.prepareGoal }, { execute: () => this.prepareGoal(), isEnabled: () => this.tutor.teaching && !this.tutor.busy });
         const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
         commands.registerCommand({ id: TUTOR_COMMANDS.openReference }, { execute: async (path: string, line = 1) => {
             try {

@@ -116,11 +116,17 @@ export class NoduProjectsServer implements NoduProjectsService {
 
     /** Shipped example projects: `desktop/examples` beside the extension, or NODU_EXAMPLES_DIR. */
     protected async examplesDir(): Promise<string | undefined> {
-        const dir = process.env.NODU_EXAMPLES_DIR
-            || join(dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json')), '..', 'examples');
-        const real = await fs.realpath(dir).catch(() => undefined);
-        return real && (await fs.stat(real)).isDirectory() ? real : undefined;
+        const extension = this.extensionDirectory();
+        const candidates = process.env.NODU_EXAMPLES_DIR ? [process.env.NODU_EXAMPLES_DIR]
+            : [join(extension, 'resources/project-examples'), join(extension, '..', 'examples')];
+        for (const dir of candidates) {
+            const real = await fs.realpath(dir).catch(() => undefined);
+            if (real && (await fs.stat(real)).isDirectory()) { return real; }
+        }
+        return undefined;
     }
+
+    protected extensionDirectory(): string { return dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json')); }
 
     private async storeFile(): Promise<string> {
         return join(FileUri.fsPath(await this.env.getConfigDirUri()), STORE);

@@ -12,6 +12,8 @@ pub struct Request {
     pub source: String,
     #[serde(default)]
     pub rules: Vec<Rule>,
+    #[serde(default)]
+    pub extract_pure: bool,
 }
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -37,7 +39,43 @@ pub struct Report {
     pub source_digest: String,
     pub syntax: &'static str,
     pub error_lines: Vec<usize>,
+    pub insertion_lines: Vec<usize>,
     pub findings: Vec<Finding>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pure: Option<PureUnit>,
+}
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PureUnit { pub functions: Vec<String>, pub source: String }
+
+// Only these course algorithms and numeric constants cross the compiler boundary.
+// Headers, globals, directives, attributes and external calls are never copied.
+fn pure_unit(all: &[Node<'_>], source: &str) -> Option<PureUnit> {
+    let names = ["sht30_crc8", "sht30_convert"];
+    let constants = ["SHT30_CRC_POLY", "SHT30_CRC_INIT", "SHT30_RAW_FULL_SCALE"];
+    if all.iter().any(|n| n.kind().starts_with("preproc_") && !["preproc_include", "preproc_def", "preproc_arg"].contains(&n.kind())) { return None; }
+    let mut parts = Vec::new();
+    for n in all.iter().filter(|n| n.kind() == "preproc_def") {
+        let name = text(n.child_by_field_name("name")?, source);
+        let value = text(n.child_by_field_name("value")?, source).trim();
+        if !constants.contains(&name) || value.is_empty() || value.len() > 40 || !value.bytes().all(|c| c.is_ascii_hexdigit() || b"xXuUlL.fF".contains(&c)) { return None; }
+        parts.push(format!("#define {name} {value}\n"));
+    }
+    let mut functions = Vec::new();
+    for name in names {
+        let matches: Vec<_> = all.iter().filter(|n| n.kind() == "function_definition" && function_name(**n, source).as_deref() == Some(name)).collect();
+        if matches.len() > 1 { return None; }
+        if let Some(n) = matches.first() {
+            if n.parent()?.kind() != "translation_unit" { return None; }
+            let body = nodes(**n).ok()?;
+            if body.iter().any(|c| c.kind().contains("attribute") || c.kind().contains("asm") || c.kind().starts_with("preproc_")
+                || c.kind() == "call_expression" || c.kind() == "identifier" && (text(*c, source).starts_with("__") || text(*c, source) == "run_tests")) { return None; }
+            let code = text(**n, source);
+            if code.contains(['#', '\\']) || code.contains("%:") || code.contains("??") { return None; }
+            parts.push(code.into()); functions.push(name.into());
+        }
+    }
+    (!functions.is_empty()).then(|| PureUnit { functions, source: parts.join("\n") })
 }
 fn valid_name(s: &str) -> bool {
     !s.is_empty() && s.len() <= 80 && s.chars().enumerate().all(|(i,c)| c.is_ascii_alphabetic() || c == '_' || i > 0 && c.is_ascii_digit())
@@ -92,6 +130,14 @@ pub fn inspect(request: &Request) -> Result<Report, String> {
     let error_lines: Vec<_> = all.iter().filter(|n| n.is_error() || n.is_missing()).take(16).map(|n| n.start_position().row + 1).collect();
     let syntax = if tree.root_node().has_error() { "incomplete" } else { "valid" };
     let macros = all.iter().any(|n| matches!(n.kind(), "preproc_def" | "preproc_function_def" | "preproc_if" | "preproc_ifdef"));
+    let mut offset = 0;
+    let insertion_lines = request.source.split('\n').enumerate().filter_map(|(row, line)| {
+        let position = offset; offset += line.len() + 1;
+        if !line.trim().is_empty() { return None; }
+        let protected = all.iter().any(|n| n.start_byte() <= position && position < n.end_byte()
+            && (n.kind() == "comment" || n.kind().contains("string_literal") || n.kind().starts_with("preproc_")));
+        (!protected).then_some(row + 1)
+    }).take(128).collect();
     let mut findings = Vec::new();
     for rule in &request.rules {
         let functions: Vec<_> = all.iter().filter(|n| n.kind() == "function_definition" && function_name(**n, &request.source).as_deref() == Some(&rule.function)).collect();
@@ -120,13 +166,13 @@ pub fn inspect(request: &Request) -> Result<Report, String> {
         finding.note = match finding.verdict { Verdict::Verified => "符合此项语法结构规则（不代表编译或运行）", Verdict::NeedsWork => "未满足此项直接调用规则", Verdict::Unknown => "需要更多作用域或数据流信息" }.into();
         findings.push(finding);
     }
-    Ok(Report { schema: 1, source_digest: format!("{:x}", Sha256::digest(source)), syntax, error_lines, findings })
+    Ok(Report { schema: 1, source_digest: format!("{:x}", Sha256::digest(source)), syntax, error_lines, insertion_lines, findings, pure: if request.extract_pure && syntax == "valid" { pure_unit(&all, &request.source) } else { None } })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    fn result(source: &str, kind: Kind) -> Report { inspect(&Request { source: source.into(), rules: vec![Rule { id: "r".into(), kind, function: "main".into(), callee: "receive".into() }] }).unwrap() }
+    fn result(source: &str, kind: Kind) -> Report { inspect(&Request { source: source.into(), extract_pure: false, rules: vec![Rule { id: "r".into(), kind, function: "main".into(), callee: "receive".into() }] }).unwrap() }
     #[test] fn direct_calls_ignore_comments_strings_and_other_functions() {
         assert_eq!(result("void main(){ receive(); }",Kind::Calls).findings[0].verdict,Verdict::Verified);
         assert_eq!(result("void other(){receive();} void main(){/*receive();*/char*s=\"receive()\";}",Kind::Calls).findings[0].verdict,Verdict::NeedsWork);
@@ -147,8 +193,18 @@ mod tests {
         assert_eq!(result("void main(){(*fn)();}",Kind::NoCallIn).findings[0].verdict,Verdict::Unknown);
         assert_eq!(result("void other(){receive();} void main(){}",Kind::NoCallIn).findings[0].verdict,Verdict::Verified);
     }
+    #[test] fn insertion_sites_exclude_comments_and_directives() {
+        let source = "/* comment\n\n*/\nint main(){\n\n}\n";
+        assert_eq!(result(source,Kind::Calls).insertion_lines,vec![5,7]);
+    }
+    #[test] fn pure_algorithms_exclude_host_capabilities_and_conditional_sources() {
+        let extract = |s: &str| inspect(&Request { source: s.into(), rules: vec![], extract_pure: true }).unwrap().pure;
+        let good = "#include \"sht30.h\"\n#define SHT30_CRC_INIT 0xFFu\nuint8_t sht30_crc8(const uint8_t *p,uint8_t n){return SHT30_CRC_INIT;}";
+        let unit=extract(good).unwrap(); assert_eq!(unit.functions,vec!["sht30_crc8"]); assert!(!unit.source.contains("include"));
+        for code in ["uint8_t sht30_crc8(){return system(0);}", "#if 0\nuint8_t sht30_crc8(){return 0;}\n#endif", "#define BAD 1\nuint8_t sht30_crc8(){return 0;}", "uint8_t sht30_crc8(){__asm__(\"nop\");return 0;}", "uint8_t sht30_crc8(){return 0;} uint8_t sht30_crc8(){return 1;}"] { assert!(extract(code).is_none(),"{code}"); }
+    }
     #[test] fn budget_and_unicode() {
-        assert!(inspect(&Request { source: " ".repeat(32001), rules: vec![] }).is_err());
+        assert!(inspect(&Request { source: " ".repeat(32001), rules: vec![], extract_pure: false }).is_err());
         let r=result("// 汉字😀\nvoid main(){receive();}",Kind::Calls);assert_eq!(r.findings[0].line,Some(2));
     }
 }

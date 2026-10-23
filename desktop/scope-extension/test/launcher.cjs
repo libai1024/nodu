@@ -94,3 +94,21 @@ test('failed project opening leaves the welcome window available', async () => {
     app.openWindowWithWorkspace=async()=>({id:2});app.closeWindowById=()=>{closed=true;};
     await assert.rejects(()=>app.openProjectWindow('/existing'),/window failed/);assert.equal(closed,false);
 });
+
+test('packaged courses are filtered, fingerprinted and found through the resource seam', async t => {
+    const {copyCourseExamples,courseExamplesStamp}=require('../../scripts/course-examples.cjs');
+    const root=await fs.mkdtemp(path.join(os.tmpdir(),'nodu-course-package-'));t.after(()=>fs.rm(root,{recursive:true,force:true}));
+    const source=path.join(root,'source'),extension=path.join(root,'app/node_modules/@scope/studio-extension'),dest=path.join(extension,'resources/project-examples');
+    await fs.mkdir(source,{recursive:true});
+    await fs.cp(path.join(__dirname,'../../examples/stm32f103-uart-tutor'),path.join(source,'examples/stm32f103-uart-tutor'),{recursive:true,filter:p=>!['build','.nodu'].includes(path.basename(p))});
+    await fs.cp(path.join(__dirname,'../../examples/stm32-sht30-tutor'),path.join(source,'examples/stm32-sht30-tutor'),{recursive:true,filter:p=>!['build','.nodu'].includes(path.basename(p))});
+    const before=courseExamplesStamp(source),course=path.join(source,'examples/stm32f103-uart-tutor');
+    await fs.mkdir(path.join(course,'.nodu'),{recursive:true});await fs.writeFile(path.join(course,'.nodu/private.json'),'private');
+    await fs.writeFile(path.join(course,'firmware.bin'),'binary');assert.equal(courseExamplesStamp(source),before);
+    copyCourseExamples(source,dest);assert.equal(await fs.stat(path.join(dest,'stm32f103-uart-tutor/firmware.bin')).catch(()=>undefined),undefined);
+    assert.equal(await fs.stat(path.join(dest,'stm32f103-uart-tutor/.nodu')).catch(()=>undefined),undefined);
+    const service=new NoduProjectsServer();service.extensionDirectory=()=>extension;
+    assert.equal((await service.examples()).length,2);
+    await fs.appendFile(path.join(course,'README.md'),'changed');assert.notEqual(courseExamplesStamp(source),before);
+    await fs.symlink(path.join(course,'README.md'),path.join(course,'escape.md'));assert.throws(()=>courseExamplesStamp(source),/symlink/);
+});

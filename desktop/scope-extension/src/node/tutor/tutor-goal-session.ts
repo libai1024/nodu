@@ -28,10 +28,11 @@ export class TutorGoalSession {
             const body = JSON.stringify(request);
             if (!body || body.length > 48000) { throw new Error('教学请求过大'); }
             request = JSON.parse(body);
-            if (!request || Object.keys(request).some(k => !['id','workspaceId','revision','action','prompt','buffer'].includes(k))
+            if (!request || Object.keys(request).some(k => !['id','workspaceId','revision','action','prompt','buffer','placement'].includes(k))
                 || typeof request.workspaceId !== 'string' || !/^[\w-]{8,96}$/.test(request.workspaceId) || !/^[\w-]{8,96}$/.test(request.id)
                 || !Number.isSafeInteger(request.revision) || request.revision < 0
                 || !['propose','confirm','pause','resume','cancel','fragment','check'].includes(request.action)) { throw new Error('教学请求无效'); }
+            if (request.placement !== undefined && (request.placement !== 'suggest' || request.action !== 'fragment')) { throw new Error('教学位置请求无效'); }
             if (this.disposed || this.pending) { throw new Error('请等待当前教学操作'); }
             abort = new AbortController(); this.pending = { id: request.id, workspace: request.workspaceId, abort };
             const live = async (): Promise<void> => {
@@ -55,7 +56,7 @@ export class TutorGoalSession {
                 if (['active','paused'].includes(state.status)) { throw new Error('请先结束当前教学'); }
                 if (typeof request.prompt !== 'string' || !request.prompt.trim() || request.prompt.length > 6000) { throw new Error('请输入想实现的功能'); }
                 if (!context.files.length) { throw new Error('请先创建或打开 C 工程'); }
-                const raw = await complete('根据目标和当前芯片/SDK生成可跟写的计划。每步只编写一个小片段（最多4行），必要时拆分步骤，最多24步。仅引用files列表已有文件，不假设开发板LED引脚。结构：{"title":"标题","steps":[{"title":"步骤","goal":"具体要写的内容和目的","path":"文件相对路径"}]}。',
+                const raw = await complete('根据目标和当前芯片/SDK生成可跟写的计划。每步只编写一个小片段（最多4行），必要时拆分步骤，最多24步。每步结束必须保持C语法完整；长函数先写完整空函数骨架，再分步填内部，不把未闭合函数或if拆到下一步。仅引用files列表已有文件，不假设开发板LED引脚。结构：{"title":"标题","steps":[{"title":"步骤","goal":"具体要写的内容和目的","path":"文件相对路径"}]}。',
                     { goal: request.prompt.trim(), project: context, buffer: request.buffer });
                 const plan = parseGoalPlan(raw, context.files);
                 next = { revision: state.revision, status: 'draft', goal: request.prompt.trim(), ...plan, target: { mcu: context.mcu, sdk: context.sdk }, current: 0 };
@@ -74,21 +75,32 @@ export class TutorGoalSession {
                 const kind = request.action === 'check' ? 'step' : 'chat';
                 if (kind === 'step' && !state.fragment) { throw new Error('请先生成本步跟写片段'); }
                 if (kind === 'step' && buffer.text === state.fragment?.source.text) { throw new Error('请先编写本步代码'); }
+                const candidates = request.placement === 'suggest' ? context.localCheck?.insertionLines ?? [] : [buffer.line];
+                if (kind === 'chat' && !candidates.length) { throw new Error('没有可用的空白位置，请先在目标文件留出空白行'); }
+                const placement = request.placement === 'suggest' ? `从以下可用空白行中选适合本步作用域的位置：${candidates.join(',')}。anchorLine必须是其中一行，不能把语句放在函数外或注释内。` : `anchorLine必须等于${buffer.line}。`;
                 const instruction = (kind === 'chat'
-                    ? `返回{"text":"简短指导","annotations":[],"guidance":{"anchorLine":${buffer.line},"lines":["C代码"]}}。提供本步跟写片段，最多4行，anchorLine必须等于${buffer.line}，仅在这个空白行插入，不覆盖代码。无法确定时省略guidance并解释缺少的上下文。不要返回review。`
+                    ? `返回{"text":"简短指导","annotations":[],"guidance":{"anchorLine":${buffer.line},"lines":["C代码"]}}。提供本步跟写片段，最多4行，${placement}仅在选中的空白行插入，不覆盖代码。无法确定时省略guidance并解释缺少的上下文。不要返回review。`
                     : '返回{"text":"简短评价","annotations":[],"review":{"verdict":"ok|needs-work|context","note":"理由"}}。只静态检查本步片段及完整当前文件。必须提供review，等价写法允许，缺定义/未闭合表达式为context。不要返回guidance。ok不代表编译或真机通过。')
                     + '批注可给出当前文件范围startLine/endLine/note，最多8条。';
-                if (kind === 'chat' && buffer.text.split('\n')[buffer.line - 1]?.trim()) { throw new Error('请将光标移到准备编写代码的空白行'); }
-                const raw = kind === 'step' && context.localCheck?.syntax === 'incomplete'
+                if (kind === 'chat' && !request.placement && buffer.text.split('\n')[buffer.line - 1]?.trim()) { throw new Error('请将光标移到准备编写代码的空白行'); }
+                const raw = kind === 'step' && context.localCheck?.execution && context.localCheck.execution.status !== 'passed'
+                    ? JSON.stringify({ text: context.localCheck.execution.note, annotations: [], review: { verdict: context.localCheck.execution.status === 'failed' ? 'needs-work' : 'context', note: '纯函数执行尚未通过，本次不推进步骤。' } })
+                    : kind === 'step' && context.localCheck?.syntax === 'incomplete'
                     ? JSON.stringify({ text: '本地检查发现语法结构尚未完整，请先补齐代码。', annotations: context.localCheck.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: 'context', note: 'C 语法树存在错误节点，本次未调用模型。' } })
                     : await complete(instruction, { project: context, goal: state.goal, step, buffer,
                     previous: state.fragment ? { path: state.fragment.source.path, guidance: state.fragment.answer.guidance } : undefined });
-                const answer = parseTutorAnswer(raw, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer });
-                presentation = { source: { ...buffer }, answer };
+                let source = { ...buffer };
+                if (kind === 'chat' && request.placement === 'suggest') {
+                    const proposed = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, '')).guidance?.anchorLine;
+                    if (!Number.isInteger(proposed) || !candidates.includes(proposed) || buffer.text.split('\n')[proposed - 1]?.trim()) { throw new Error('模型未选择有效的空白位置'); }
+                    source = { ...buffer, line: proposed };
+                }
+                const answer = parseTutorAnswer(raw, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer: source });
+                presentation = { source, answer };
                 next.feedback = answer.text;
                 if (kind === 'chat') {
                     if (!answer.guidance) { throw new Error(answer.text || '模型没有给出可跟写片段'); }
-                    next.fragment = { source: { ...buffer }, answer };
+                    next.fragment = { source, answer };
                 } else if (answer.review?.verdict === 'ok') {
                     next.current++; next.fragment = undefined;
                     if (next.current >= next.steps.length) { next.status = 'complete'; }

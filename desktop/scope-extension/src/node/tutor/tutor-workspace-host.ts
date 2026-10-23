@@ -5,6 +5,8 @@ import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { TutorProgressStore } from './tutor-progress-store';
 import type { TutorProjectContext } from '../../common/tutor/tutor-goal';
+import { createHash } from 'node:crypto';
+import { TutorPureExecution } from '../../common/tutor/tutor-local-check';
 import { TutorLocalChecker } from './tutor-local-checker';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
@@ -14,6 +16,7 @@ import { TutorStorageConnection } from './tutor-storage-server';
 export class TutorWorkspaceHost {
     private readonly checker = new TutorLocalChecker();
     private current = '';
+    private executions = new Map<string, { result: TutorPureExecution; time: number }>();
     private sequence = 0;
     private grants: { id: string; uri: string; root: string }[] = [];
     private pending: Promise<void> = Promise.resolve();
@@ -24,7 +27,7 @@ export class TutorWorkspaceHost {
     async select(uri: string): Promise<void> {
         if (typeof uri !== 'string' || uri.length > 8192) { throw new Error('工程地址无效'); }
         if (uri === this.current) { return this.pending; }
-        this.current = uri;
+        this.current = uri; this.executions.clear();
         const sequence = ++this.sequence;
         for (const grant of this.grants) { this.storage.revokeWorkspace(grant.id); this.revokeChat(grant.id); }
         this.grants = [];
@@ -60,6 +63,11 @@ export class TutorWorkspaceHost {
         }
     }
     async list(): Promise<{ id: string; uri: string }[]> { await this.pending; return this.grants.map(({ id, uri }) => ({ id, uri })); }
+    rememberExecution(id: string, buffer: TutorBuffer, result: TutorPureExecution): void {
+        if (!this.grants.some(g => g.id === id) || result.sourceDigest !== createHash('sha256').update(buffer.text).digest('hex')) { return; }
+        this.executions.set(`${id}:${buffer.path}`, { result, time: Date.now() });
+        while (this.executions.size > 8) { this.executions.delete(this.executions.keys().next().value!); }
+    }
     async context(id: string, buffer?: TutorBuffer): Promise<TutorProjectContext> {
         await this.authorize(id, buffer);
         const grant = this.grants.find(g => g.id === id)!;
@@ -114,6 +122,8 @@ export class TutorWorkspaceHost {
             }
         }
         const localCheck = buffer ? await this.checker.inspect(buffer) : undefined;
+        const execution = buffer ? this.executions.get(`${id}:${buffer.path}`) : undefined;
+        if (localCheck && execution && execution.result.sourceDigest === localCheck.sourceDigest && Date.now() - execution.time < 60000) { localCheck.execution = execution.result; }
         if (!this.grants.includes(grant)) { throw new Error('工程授权已失效'); }
         return { key: await TutorProgressStore.projectKey(grant.root), mcu, sdk, files: files.sort(),
             ...(localCheck ? { localCheck } : {}), ...(declarations.length ? { declarations } : {}), ...(build ? { build } : {}) };

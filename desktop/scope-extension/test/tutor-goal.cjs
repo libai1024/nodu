@@ -103,3 +103,33 @@ test('local incomplete syntax blocks fragment advancement without calling the mo
  const result=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:(await f.store.read(context.key)).revision,action:'check',buffer:{...buffer,text:'int main(void){\nint x = ;\n}',version:2}});
  assert.equal(result.ok,true);assert.equal(result.state.current,0);assert.equal(result.presentation.answer.review.verdict,'context');assert.equal(f.calls.length,2);
 });
+
+test('suggested placement chooses only native-approved blank lines and keeps cursor-mode strict', async t=>{
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'串口'});await f.run('confirm');
+ const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{insertionLines:[2]}}),f.authorize);
+ t.after(()=>session.dispose());const call=extra=>session.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer:{...buffer,line:1},placement:'suggest',...extra});
+ f.responses.push(JSON.stringify({text:'wrong',annotations:[],guidance:{anchorLine:1,lines:['int x;']}}));
+ assert.equal((await call({})).ok,false);assert.equal((await f.store.read(context.key)).fragment,undefined);
+ f.responses.push(fragment);const result=await call({});assert.equal(result.ok,true);assert.equal(result.state.fragment.source.line,2);assert.equal(result.presentation.source.line,2);
+ assert.match(f.calls.at(-1)[0].content,/可用空白行/);
+ assert.equal((await f.run('fragment',{buffer:{...buffer,line:1}})).ok,false);
+});
+
+test('failed pure execution blocks goal advance even when the provider would approve',async t=>{
+ const f=await fixture(t);f.responses.push(plan,fragment);await f.run('propose',{prompt:'serial',buffer});await f.run('confirm');await f.run('fragment',{buffer});
+ const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{syntax:'valid',execution:{status:'failed',note:'纯函数测试 35/196'}}}),f.authorize);t.after(()=>session.dispose());
+ const result=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:(await f.store.read(context.key)).revision,action:'check',buffer:{...buffer,text:buffer.text.replace('\n\n','\nint x;\n'),version:2}});
+ assert.equal(result.ok,true);assert.equal(result.state.current,0);assert.equal(result.presentation.answer.review.verdict,'needs-work');assert.equal(f.calls.length,2);
+});
+test('pure execution evidence is bound to source, workspace and a short freshness window',async t=>{
+ const root=await fs.realpath(await fs.mkdtemp(join(tmpdir(),'nodu-pure-context-')));t.after(()=>fs.rm(root,{recursive:true,force:true}));
+ await fs.writeFile(join(root,'main.c'),buffer.text);
+ const host=new TutorWorkspaceHost({authorizeWorkspace:async()=> 'workspace-1',revokeWorkspace(){},dispose(){}},()=>{});await host.select(pathToFileURL(root).href);t.after(()=>host.dispose());
+ const digest=require('node:crypto').createHash('sha256').update(buffer.text).digest('hex');host.checker={inspect:async b=>({syntax:'valid',sourceDigest:require('node:crypto').createHash('sha256').update(b.text).digest('hex')})};
+ const result={suite:'sht30-pure-v1',sourceDigest:digest,status:'passed',passed:196,total:196,note:'test'};
+ host.rememberExecution('other',buffer,result);assert.equal((await host.context('workspace-1',buffer)).localCheck.execution,undefined);
+ host.rememberExecution('workspace-1',buffer,result);assert.equal((await host.context('workspace-1',buffer)).localCheck.execution.status,'passed');
+ assert.equal((await host.context('workspace-1',{...buffer,text:buffer.text+'// changed'})).localCheck.execution,undefined);
+ host.executions.get('workspace-1:main.c').time-=61000;assert.equal((await host.context('workspace-1',buffer)).localCheck.execution,undefined);
+ await host.select('');assert.equal(host.executions.size,0);
+});

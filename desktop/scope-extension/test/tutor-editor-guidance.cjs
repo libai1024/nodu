@@ -180,3 +180,17 @@ test('course navigation authorizes files and abandons a location after switching
     tutor.resolveReference=async()=>{tutor.rootUri={resolve:p=>p};return {path:'drivers/sensor.c',line:1};};
     await handlers.get('reveal').execute();assert.equal(opens,1);
 });
+
+test('dynamic lesson opens the next file and focuses validated guidance without editing source', async () => {
+    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['prepareGoal'],{MonacoEditor:{get:w=>w}});
+    const text='int main(){\n\n}',state={revision:2,status:'active',steps:[{path:'next.c'}],current:0};let position,opened;
+    const model={getValueLength:()=>text.length,getValue:()=>text,getVersionId:()=>7,isDisposed:()=>false,getLineMaxColumn:()=>1};
+    const control={getModel:()=>model,getPosition:()=>({lineNumber:1}),setPosition:p=>position=p,revealLineInCenterIfOutsideViewport(){},focus(){}};
+    const widget={getControl:()=>control},editors={currentEditor:undefined,open:async p=>{opened=p;editors.currentEditor=widget;return widget;}};
+    const tutor={rootUri:{resolve:p=>p},workspaceId:'w',teaching:true,goalState:state,notify(){},resolveReference:async p=>({path:p,line:1}),updateBuffer:b=>tutor.buffer=b,
+        goalAction:async(a,p,placement)=>{assert.equal(placement,'suggest');tutor.goalState={...state,revision:3,fragment:{source:{path:'next.c',text},answer:{guidance:{anchorLine:2}}}};}};
+    await Object.assign(new Subject(),{tutor,editors}).prepareGoal();assert.equal(opened,'next.c');assert.equal(position.lineNumber,2);assert.equal(tutor.buffer.text,text);
+    // A user switching editors during the request must retain their focus.
+    position=undefined;tutor.goalState=state;tutor.goalAction=async()=>{editors.currentEditor={};tutor.goalState={...state,fragment:{source:{path:'next.c',text},answer:{guidance:{anchorLine:2}}}};};
+    await Object.assign(new Subject(),{tutor,editors}).prepareGoal();assert.equal(position,undefined);
+});

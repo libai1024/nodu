@@ -9,7 +9,7 @@ import { EnvVariablesServer } from '@theia/core/lib/common/env-variables';
 import { WorkspaceServer, workspacePath } from '@theia/workspace/lib/common/workspace-protocol';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { TutorAIClient, TutorModelTest, TutorService, TUTOR_SERVICE_PATH } from '../../common/tutor/tutor-ai-protocol';
+import { TutorAIClient, TutorModelTest, TutorService, TUTOR_SERVICE_PATH, tutorServiceFacade } from '../../common/tutor/tutor-ai-protocol';
 import { TutorModelSelection } from '../../common/tutor/tutor-ai-config';
 import { TutorProgressStore } from './tutor-progress-store';
 import { TutorStorageServer } from './tutor-storage-server';
@@ -21,6 +21,7 @@ import { TutorGoalStore } from './tutor-goal-store';
 import { NoduEmbeddedServer } from '../nodu-embedded-server';
 import { ProjectStatus } from '../../common/nodu-embedded-protocol';
 import { TutorProjectContext } from '../../common/tutor/tutor-goal';
+import { TutorPureRunner } from './tutor-pure-runner';
 import { TutorLocalChecker } from './tutor-local-checker';
 import { TutorGoalSession } from './tutor-goal-session';
 
@@ -37,13 +38,30 @@ class TutorConnection {
     readonly ready: Promise<{ host: TutorWorkspaceHost; chat: TutorChatSession; goals: TutorGoalSession; service: TutorService }>;
     constructor(store: Promise<TutorStorageServer>, hub: SettingsHub, channel: Channel) {
         let closed = false;
+        const checks = new Map<string, AbortController>();
+        const cancelChecks = (): void => { for (const c of checks.values()) { c.abort(); } checks.clear(); };
         hub.connections.add(this);
-        channel.onClose(() => { closed = true; hub.connections.delete(this); void this.ready.then(c => { c.chat.dispose(); c.goals.dispose(); c.host.dispose(); }); });
+        channel.onClose(() => { closed = true; cancelChecks(); hub.connections.delete(this); void this.ready.then(c => { c.chat.dispose(); c.goals.dispose(); c.host.dispose(); }); });
         this.ready = Promise.all([store, hub.ready, hub.goals]).then(([storage, settings, goalStore]) => {
             const notify = (fn: (client: RpcProxy<TutorAIClient>) => unknown): void => { try { const client = this.client; if (client) { void Promise.resolve(fn(client)).catch(() => undefined); } } catch { /* closed */ } };
             const connection = storage.connect({ onDidChange: event => { notify(c => c.onDidChange(event)); } });
-            const host = new TutorWorkspaceHost(connection, id => { chat.revoke(id); goals.revoke(id); }, () => notify(c => c.onWorkspacesChanged()), hub.buildStatus);
-            const checker = new TutorLocalChecker();
+            const host = new TutorWorkspaceHost(connection, id => { cancelChecks(); chat.revoke(id); goals.revoke(id); }, () => notify(c => c.onWorkspacesChanged()), hub.buildStatus);
+            const checker = new TutorLocalChecker(), runner = new TutorPureRunner();
+            const inspect: TutorService['inspectBuffer'] = async (id, buffer, rules, requestId) => {
+                await host.authorize(id, buffer);
+                if (closed || checks.size >= 2) { throw new Error('检查正在进行'); }
+                const key = requestId ?? `check-${Date.now()}`;
+                if (typeof key !== 'string' || key.length > 100 || checks.has(key)) { throw new Error('检查请求无效'); }
+                const controller = new AbortController(); checks.set(key, controller);
+                try {
+                    const { pure, ...result } = await checker.inspect(buffer, rules, controller.signal, true);
+                    if (pure && result.syntax === 'valid') { result.execution = await runner.inspect(pure, result.sourceDigest, controller.signal); }
+                    await host.authorize(id, buffer);
+                    if (controller.signal.aborted || closed) { throw new Error('检查已取消'); }
+                    if (result.execution) { host.rememberExecution(id, buffer, result.execution); }
+                    return result;
+                } finally { if (checks.get(key) === controller) { checks.delete(key); } }
+            };
             const provider = {
                 complete: async (messages, signal, delta) => streamCompletion(await settings.target(this.selection), messages, signal, delta),
             } satisfies import('./tutor-model-gateway').TutorModelProvider;
@@ -91,15 +109,19 @@ class TutorConnection {
                     const target = await settings.targetFor(providerId);
                     return listRemoteModels(target.provider, target.key);
                 },
-                setPresentation: (id: string, epoch: number, mode: 'teach' | 'ask', paused: boolean) => { goals.cancel(); return chat.setPresentation(id, epoch, mode, paused); },
+                setPresentation: (id: string, epoch: number, mode: 'teach' | 'ask', paused: boolean) => { cancelChecks(); goals.cancel(); return chat.setPresentation(id, epoch, mode, paused); },
                 chat: (request: Parameters<TutorService['chat']>[0]) => chat.chat(request),
-                cancelChat: async (id: string) => { chat.cancel(id); goals.cancel(id); },
+                cancelChat: async (id: string) => { checks.get(id)?.abort(); chat.cancel(id); goals.cancel(id); },
                 clearChat: async (id: string, mode: 'teach' | 'ask') => { await host.authorize(id); chat.clear(id, mode); },
                 goalSnapshot: (id: string) => goals.snapshot(id),
-                goal: (request: Parameters<TutorService['goal']>[0]) => goals.run(request),
-                inspectBuffer: async (id: string, buffer: import('../../common/tutor/tutor-ai-protocol').TutorBuffer, rules?: import('../../common/tutor/tutor-local-check').TutorLocalRule[]) => {
-                    await host.authorize(id, buffer); const result = await checker.inspect(buffer, rules); await host.authorize(id, buffer); return result;
+                goal: async (request: Parameters<TutorService['goal']>[0]) => {
+                    if (request.action === 'check' && request.buffer) {
+                        try { await inspect(request.workspaceId, request.buffer, [], request.id); }
+                        catch { return { ok: false as const, error: '检查已停止', cancelled: true }; }
+                    }
+                    return goals.run(request);
                 },
+                inspectBuffer: inspect,
                 resolveReference: (id: string, path: string, line: number) => host.reference(id, path, line),
             });
             if (closed) { chat.dispose(); goals.dispose(); host.dispose(); }
@@ -144,15 +166,7 @@ export function bindTutorBackend(bind: interfaces.Bind): void {
         bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler<TutorAIClient>(TUTOR_SERVICE_PATH, client => {
             const connection = ctx.container.get(TutorConnection);
             connection.client = client;
-            const names: (keyof TutorService)[] = ['openSession','getSnapshot','closeSession','previewMigration','acceptMigration','recordAction','importLegacyProgress',
-                'workspaces','aiSettings','saveProvider','removeProvider','setProviderKey','deleteProviderKey','selectModel','testModel','listRemoteModels',
-                'setPresentation','chat','cancelChat','clearChat','goalSnapshot','goal','resolveReference'];
-            const facade = Object.create(null);
-            for (const name of names) { facade[name] = async (...args: unknown[]) => {
-                const { service } = await connection.ready;
-                return (service[name] as (...args: unknown[]) => unknown)(...args);
-            }; }
-            return Object.freeze(facade);
+            return tutorServiceFacade(connection.ready);
         })).inSingletonScope();
     }));
 }

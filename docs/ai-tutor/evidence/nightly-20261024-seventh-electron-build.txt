@@ -1,0 +1,14 @@
+Found cached ffmpeg library.
+Hashes are equal, not replacing the ffmpeg library.
+"/Users/wangwei/Model/k210-studio/desktop/node_modules/electron/dist/Electron.app/Contents/Frameworks/Electron Framework.framework/Libraries/libffmpeg.dylib" does not contain proprietary codecs (13 found).
+[build/browser] Build started
+
+[build/browser] Finished with 0 errors in 719ms.
+
+[build/node] Build started
+
+[build/node] Finished with 0 errors in 410ms.
+
+[build/electron] Build started
+
+[build/electron] Finished with 0 errors in 8ms.

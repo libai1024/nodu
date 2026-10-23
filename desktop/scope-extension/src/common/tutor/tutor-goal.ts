@@ -21,7 +21,7 @@ export interface TutorGoalState {
 export interface TutorGoalRequest {
     id: string; workspaceId: string; revision: number;
     action: 'propose' | 'confirm' | 'pause' | 'resume' | 'cancel' | 'fragment' | 'check';
-    prompt?: string; buffer?: TutorBuffer;
+    prompt?: string; buffer?: TutorBuffer; placement?: 'suggest';
 }
 export type TutorGoalResult = { ok: true; state: TutorGoalState; presentation?: { source: TutorBuffer; answer: TutorAnswer } } | { ok: false; error: string; cancelled?: boolean };
 export const emptyGoal = (): TutorGoalState => ({ revision: 0, status: 'none', steps: [], current: 0 });

@@ -5,13 +5,13 @@ import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
-import { TutorLocalCheck, TutorLocalRule } from '../../common/tutor/tutor-local-check';
+import { TutorLocalCheck, TutorLocalRule, TutorPureUnit } from '../../common/tutor/tutor-local-check';
 
 /** One bounded, cancellable read-only process per snapshot. No shell and no project cwd. */
 export class TutorLocalChecker {
     private active = 0;
     constructor(private readonly executable = process.env.NODU_TUTOR_CHECKER_BIN ?? join(dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json')), 'resources/bin', `${process.platform}-${process.arch}`, process.platform === 'win32' ? 'nodu-tutor.exe' : 'nodu-tutor')) { }
-    async inspect(buffer: TutorBuffer, rules: TutorLocalRule[] = [], signal?: AbortSignal): Promise<TutorLocalCheck> {
+    async inspect(buffer: TutorBuffer, rules: TutorLocalRule[] = [], signal?: AbortSignal, extractPure = false): Promise<TutorLocalCheck & { pure?: TutorPureUnit }> {
         const sourceDigest = createHash('sha256').update(buffer.text).digest('hex');
         const unavailable = (note: string): TutorLocalCheck => ({ schema: 1, sourceDigest, syntax: 'unavailable', errorLines: [], findings: [], note });
         if (!/\.(c|h)$/i.test(buffer.path)) { return unavailable('本地结构检查仅支持 C 文件'); }
@@ -43,16 +43,18 @@ export class TutorLocalChecker {
                 child.stderr.on('data', () => { /* Native errors never echo code into model context. */ });
                 child.on('close', code => {
                     try {
-                        const r = JSON.parse(output) as TutorLocalCheck;
+                        const r = JSON.parse(output) as TutorLocalCheck & { pure?: TutorPureUnit };
                         if (code !== 0 || r.schema !== 1 || r.sourceDigest !== sourceDigest || !['valid','incomplete'].includes(r.syntax)
                             || !Array.isArray(r.errorLines) || r.errorLines.length > 16 || r.errorLines.some(n => !Number.isInteger(n) || n < 1 || n > buffer.text.split('\n').length)
+                            || (r.insertionLines !== undefined && (!Array.isArray(r.insertionLines) || r.insertionLines.length > 128 || new Set(r.insertionLines).size !== r.insertionLines.length || r.insertionLines.some(n => !Number.isInteger(n) || n < 1 || n > buffer.text.split('\n').length || buffer.text.split('\n')[n - 1].trim())))
+                            || (r.pure !== undefined && (!extractPure || typeof r.pure?.source !== 'string' || r.pure.source.length > 32000 || !Array.isArray(r.pure.functions) || !r.pure.functions.length || r.pure.functions.length > 2 || new Set(r.pure.functions).size !== r.pure.functions.length || r.pure.functions.some(n => !['sht30_crc8','sht30_convert'].includes(n))))
                             || !Array.isArray(r.findings) || r.findings.length !== rules.length || r.findings.some((f,i) => f.id !== rules[i].id || !['verified','needs-work','unknown'].includes(f.verdict)
                                 || typeof f.note !== 'string' || f.note.length > 300 || f.line != null && (!Number.isInteger(f.line) || f.line < 1 || f.line > buffer.text.split('\n').length))) { throw new Error(); }
                         finish(r);
                     } catch { finish(unavailable('本地检查结果无效')); }
                 });
                 if (signal?.aborted) { abort(); return; }
-                child.stdin.end(JSON.stringify({ source: buffer.text, rules }));
+                child.stdin.end(JSON.stringify({ source: buffer.text, rules, extract_pure: extractPure }));
             });
         } finally { this.active--; }
     }

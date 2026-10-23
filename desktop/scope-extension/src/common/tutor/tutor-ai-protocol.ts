@@ -47,6 +47,25 @@ export interface TutorService extends TutorStorageService {
     clearChat(workspaceId: string, mode: TutorMode): Promise<void>;
     goalSnapshot(workspaceId: string): Promise<TutorGoalState>;
     goal(request: TutorGoalRequest): Promise<TutorGoalResult>;
-    inspectBuffer(workspaceId: string, buffer: TutorBuffer, rules?: TutorLocalRule[]): Promise<TutorLocalCheck>;
+    inspectBuffer(workspaceId: string, buffer: TutorBuffer, rules?: TutorLocalRule[], requestId?: string): Promise<TutorLocalCheck>;
     resolveReference(workspaceId: string, path: string, line: number): Promise<{ path: string; line: number }>;
+}
+
+/** Exhaustive RPC surface: a new service method must explicitly reach the desktop transport. */
+export const TUTOR_SERVICE_METHODS: Record<keyof TutorService, true> = {
+    openSession: true, getSnapshot: true, closeSession: true, previewMigration: true, acceptMigration: true,
+    recordAction: true, importLegacyProgress: true, workspaces: true, aiSettings: true, saveProvider: true,
+    removeProvider: true, setProviderKey: true, deleteProviderKey: true, selectModel: true, testModel: true,
+    listRemoteModels: true, setPresentation: true, chat: true, cancelChat: true, clearChat: true,
+    goalSnapshot: true, goal: true, inspectBuffer: true, resolveReference: true
+};
+export function tutorServiceFacade(ready: Promise<{ service: TutorService }>): TutorService {
+    const facade = Object.create(null);
+    for (const name of Object.keys(TUTOR_SERVICE_METHODS) as (keyof TutorService)[]) {
+        facade[name] = async (...args: unknown[]) => {
+            const { service } = await ready;
+            return (service[name] as (...args: unknown[]) => unknown)(...args);
+        };
+    }
+    return Object.freeze(facade);
 }

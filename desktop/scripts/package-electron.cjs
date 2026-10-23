@@ -17,6 +17,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { pipeline } = require('node:stream/promises');
 const { parseArgs } = require('node:util');
+const { courseExamplesStamp, copyCourseExamples } = require('./course-examples.cjs');
 
 const desktop = path.resolve(__dirname, '..');
 const repo = path.resolve(desktop, '..');
@@ -287,6 +288,7 @@ async function ensureNode(arch) {
 // completed JS/ABI build. resources/imaging + boards + models DO stay —
 // the frontend bundle imports their WASM glue and assets at compile time.
 const EXCLUDE = [
+    /^examples$/,
     /^node_modules$/,
     /^\.tools$/,
     /^dist$/,
@@ -351,6 +353,7 @@ function runtimeResourcesStamp() {
         hash.update(relPath); hash.update('\0');
         hash.update(hashTree(full)); hash.update('\0');
     }
+    hash.update(courseExamplesStamp(desktop));
     return hash.digest('hex');
 }
 
@@ -798,6 +801,7 @@ function buildAppInput(arch, workDesktop, universal) {
         if (entry.isDirectory()) { copyRes(from, to); }
         else { fs.copyFileSync(from, to); }
     }
+    copyCourseExamples(desktop, path.join(resDest, 'project-examples'));
     // A Windows package reports its per-target media record as the top-level
     // media metadata; the darwin-universal record would describe the wrong
     // files. Shared license/source materials stay in place either way.

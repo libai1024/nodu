@@ -1,0 +1,26 @@
+✖ actual WASI compiler and runtime distinguish correct, wrong and nonterminating course algorithms (1507.204083ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1557.461792
+
+✖ failing tests:
+
+test at desktop/scope-extension/test/tutor-pure-native.cjs:6:1
+✖ actual WASI compiler and runtime distinguish correct, wrong and nonterminating course algorithms (1507.204083ms)
+  AssertionError [ERR_ASSERTION]: {"schema":1,"sourceDigest":"43f7ed323ac3fc765a476a9ac04a2c3299b959b422f129f8fb7aa8ef7ba68b28","syntax":"unavailable","errorLines":[],"findings":[],"note":"本地检查超时"}
+      at inspect (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/test/tutor-pure-native.cjs:5:142)
+      at async TestContext.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/test/tutor-pure-native.cjs:8:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
