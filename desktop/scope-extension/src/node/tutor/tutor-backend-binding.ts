@@ -67,7 +67,7 @@ class TutorConnection {
                         const target = await settings.targetFor(providerId, modelId);
                         await streamCompletion(target, [{ role: 'user', content: '只回复 OK' }], AbortSignal.timeout(20000), () => undefined);
                         const ms = Date.now() - started;
-                        return { ok: true, message: `可用 · ${ms} ms`, ms };
+                        return { ok: true, message: `可用 ${ms} ms`, ms };
                     } catch (error) { return { ok: false, message: error instanceof Error ? error.message : '测试失败' }; }
                 },
                 listRemoteModels: async (providerId: string) => {
@@ -88,7 +88,7 @@ export function bindTutorBackend(bind: interfaces.Bind): void {
     const configDir = (ctx: interfaces.Context): Promise<string> => ctx.container.get<EnvVariablesServer>(EnvVariablesServer).getConfigDirUri().then(uri => fileURLToPath(uri));
     bind(SETTINGS).toDynamicValue((ctx): SettingsHub => {
         const keys = ctx.container.get<KeyStoreService>(KeyStoreService);
-        return { ready: configDir(ctx).then(dir => new TutorAISettingsStore(join(dir, 'nodu-tutor', 'ai-settings.json'), keys)), connections: new Set() };
+        return { ready: configDir(ctx).then(dir => new TutorAISettingsStore(join(dir, 'nodu-tutor', 'ai-settings.json'), keys, process.env.NODU_TUTOR_EXPLICIT_CREDENTIALS !== '1')), connections: new Set() };
     }).inSingletonScope();
     bind(STORE).toDynamicValue((ctx): TutorStoreHolder => ({ ready: configDir(ctx)
         .then(dir => new TutorStorageServer(new TutorProgressStore(join(dir, 'nodu-tutor')))) })).inSingletonScope();

@@ -7,7 +7,7 @@ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { EditorWidget } from '@theia/editor/lib/browser/editor-widget';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
 import { NoduTutorModel } from './nodu-tutor-model';
-import { completedLines, ghostSuffix, reviewableLine, tutorMarkerLine } from '../common/tutor/tutor-guidance';
+import { completedLines, ghostSuffix, pendingReviewCount, reviewableLine, tutorMarkerLine } from '../common/tutor/tutor-guidance';
 import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 
 export const TUTOR_MENU = ['nodu-ai-controls'];
@@ -15,7 +15,7 @@ export const TUTOR_COMMANDS = {
     openPanel: 'nodu.tutor.open-panel', togglePanel: 'nodu.tutor.toggle-panel', toggleHints: 'nodu.tutor.toggle-hints',
     revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', settings: 'nodu.tutor.settings', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
 } as const;
-interface LineTask { decoration: string; text: string; status: 'pending' | 'ok' | 'needs-work' | 'context' | 'stale' | 'unavailable'; note: string; version?: number; }
+interface LineTask { decoration: string; text: string; status: 'pending' | 'ok' | 'needs-work' | 'context' | 'stale' | 'unavailable'; note: string; version?: number; guided?: boolean; }
 let count = 0;
 class TutorEditorController implements Disposable {
     private readonly disposables = new DisposableCollection();
@@ -62,7 +62,7 @@ class TutorEditorController implements Disposable {
         const after = model.getLinesContent();
         for (const task of this.tasks.values()) {
             const range = model.getDecorationRange(task.decoration);
-            if (!range || model.getLineContent(range.startLineNumber).trim() !== task.text.trim()) { task.status = 'stale'; task.note = '代码已修改'; }
+            if (!range || model.getLineContent(range.startLineNumber).trim() !== task.text.trim()) { task.status = 'stale'; task.guided = false; task.note = '代码已修改'; }
             else if (task.status !== 'pending') { task.status = 'stale'; task.note = '上下文已修改'; }
         }
         for (const change of event.changes) {
@@ -73,7 +73,7 @@ class TutorEditorController implements Disposable {
         }
         this.before = after; this.updateContext(); this.render();
     }
-    private enabled(): boolean { return this.tutor.teaching && this.tutor.autoReview && this.tutor.configured && !!(this.tutor.plan || this.tutor.presentation?.answer.guidance); }
+    private enabled(): boolean { return this.tutor.teaching && this.tutor.autoReview && this.tutor.configured && !!(this.tutor.plan || this.tutor.guidance); }
     private enqueuing = false;
     private enqueue(line: number): void {
         const model = this.control.getModel();
@@ -85,7 +85,7 @@ class TutorEditorController implements Disposable {
         const existing = [...this.tasks.values()].find(t => model.getDecorationRange(t.decoration)?.startLineNumber === line);
         if (existing) { if (existing.text === text && ['pending','ok'].includes(existing.status)) { return; } existing.text = text; existing.status = 'pending'; existing.note = '待检查'; }
         else {
-            if (this.tasks.size >= 20) {
+            if (pendingReviewCount(this.tasks.values()) >= 20) {
                 this.tutor.error = '待检查行已达 20 条，请先检查当前代码'; this.tutor.notify(); return;
             }
             this.enqueuing = true;
@@ -113,7 +113,7 @@ class TutorEditorController implements Disposable {
             if (this.disposed || epoch !== this.tutor.epoch) { task.status = 'stale'; task.note = '检查已取消'; return; }
             if (model.getVersionId() !== buffer.version) { task.status = 'stale'; task.note = '上下文已修改'; return; }
             if (result?.ok && result.answer.review) {
-                task.status = result.answer.review.verdict; task.note = `${task.status === 'ok' ? 'AI 已检查' : task.status === 'context' ? '待补上下文' : '需要修改'}：${result.answer.review.note}`; task.version = buffer.version;
+                task.status = result.answer.review.verdict; task.guided = task.status === 'ok'; task.note = `${task.status === 'ok' ? 'AI 已检查' : task.status === 'context' ? '待补上下文' : '需要修改'}：${result.answer.review.note}`; task.version = buffer.version;
             } else { task.status = 'unavailable'; task.note = result && !result.ok ? result.error : 'AI 检查未完成'; }
         } finally { this.processing = false; this.render(); this.schedule(); }
     }
@@ -136,7 +136,9 @@ class TutorEditorController implements Disposable {
         }
         if (position && this.tutor.hintsVisible && !this.composing) {
             let candidate: string | undefined;
-            if (valid && presentation.answer.guidance?.anchorLine === position.lineNumber) { candidate = presentation.answer.guidance.lines[0]; }
+            const guidance = this.tutor.guidance;
+            const index = guidance ? position.lineNumber - guidance.anchorLine : -1;
+            if (guidance?.source.path === buffer.path && index >= 0 && index < guidance.lines.length) { candidate = guidance.lines[index]; }
             if (!candidate) {
                 for (const fragment of step?.guidance ?? []) {
                     const anchor = step?.anchors.find(a => a.id === fragment.anchorId && a.path === buffer.path);
@@ -146,7 +148,7 @@ class TutorEditorController implements Disposable {
                     if (index < 0 || index >= fragment.lines.length) { continue; }
                     // Advancing the lesson requires a semantic result for every prior line.
                     const prior = [...this.tasks.values()];
-                    if (index && !fragment.lines.slice(0, index).every((_, i) => prior.some(t => t.status === 'ok' && model.getDecorationRange(t.decoration)?.startLineNumber === base + i + 1))) { continue; }
+                    if (index && !fragment.lines.slice(0, index).every((_, i) => prior.some(t => t.guided && model.getDecorationRange(t.decoration)?.startLineNumber === base + i + 1))) { continue; }
                     candidate = fragment.lines[index]; break;
                 }
             }

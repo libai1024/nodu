@@ -56,9 +56,10 @@ test('built-in endpoints cannot be redirected and account providers are not user
     assert.ok(file.providers.some(p => p.id === cfg.GLM_CODING_PROVIDER), 'the built-in provider is always present');
 });
 
-test('selection falls back to the first enabled model', () => {
+test('invalid explicit selection never falls back to another provider', () => {
     const providers = [{ ...custom(), enabled: false }, cfg.builtinProviders()[0]];
-    assert.deepEqual(cfg.effectiveSelection(providers, { providerId: 'relay', modelId: 'gpt-5.6-sol' }), { providerId: 'glm-coding', modelId: 'glm-5.3' });
+    assert.equal(cfg.effectiveSelection(providers, { providerId: 'relay', modelId: 'gpt-5.6-sol' }), undefined);
+    assert.deepEqual(cfg.effectiveSelection(providers), { providerId: 'glm-coding', modelId: 'glm-5.3' });
     assert.equal(cfg.formatTokens(272000), '272K');
 });
 
@@ -121,4 +122,25 @@ test('the learning write lock blocks a second process and recovers from a dead o
     const recovered = await TutorProgressStore.lock(base, 500);
     await recovered();
     await assert.rejects(fs.stat(join(base, '.write.lock')), /ENOENT/);
+});
+
+test('endpoint edits clear credentials and deleting the selected provider does not redirect requests', async t => {
+    const store = new TutorAISettingsStore(join(await dir(t), 'ai.json'), keystore());
+    await store.saveProvider(custom()); await store.setKey('relay', 'test-secret-123456');
+    await store.setDefault({providerId:'relay',modelId:'gpt-5.6-sol'});
+    await store.saveProvider(custom({baseUrl:'https://new.example.com'}));
+    assert.equal(await store.getKey('relay'),undefined);
+    await store.removeProvider('relay');
+    assert.equal((await store.view()).selection,undefined);
+    await assert.rejects(store.target(), /没有可用/);
+});
+test('explicit credential mode never reads, migrates or writes the OS keychain', async t => {
+    const reject = async()=>{ assert.fail('keychain must not be accessed'); };
+    const store = new TutorAISettingsStore(join(await dir(t),'ai.json'), {getPassword:reject,setPassword:reject,deletePassword:reject}, false);
+    assert.equal(await store.getKey('glm-coding'),undefined);
+    await store.setKey('glm-coding','explicit-test-key-12345');
+    assert.equal((await store.target()).key,'explicit-test-key-12345');
+    assert.equal((await store.view()).storage,'session');
+    await store.deleteKey('glm-coding');
+    assert.equal(await store.getKey('glm-coding'),undefined);
 });

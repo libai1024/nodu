@@ -72,7 +72,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                     {!step && <option value="">已自查全部步骤</option>}{tutor.plan.steps.map(s => <option key={s.id} value={s.id} disabled={!tutor.available(s.id)}>{s.title}{tutor.progress.steps[s.id] ? ' ✓' : ''}</option>)}
                 </select>
                 <span className="nodu-ai-progress" aria-label={`已完成 ${done} / ${tutor.plan.steps.length} 步`}>{done}/{tutor.plan.steps.length}</span>
-                <button className="nodu-ai-chip" disabled={!step || isBusy || !tutor.buffer} onClick={() => void tutor.send('step')} title="检查本步 · ⌘/Ctrl+Alt+Enter"><i className="codicon codicon-check" aria-hidden="true"/>检查本步</button>
+                <button className="nodu-ai-chip" disabled={!step || isBusy || !tutor.buffer} onClick={() => void tutor.send('step')} title="检查本步 ⌘/Ctrl+Alt+Enter"><i className="codicon codicon-check" aria-hidden="true"/>检查本步</button>
             </div>
             {step && <details className="nodu-ai-details"><summary>{step.goal}</summary><div className="nodu-ai-step-body">
                 <p>{step.why}</p><ul>{step.requirements.map(r => <li key={r.id}>{r.text}</li>)}</ul>
@@ -127,7 +127,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                 </label>
                 {isBusy
                     ? <button type="button" className="nodu-ai-send nodu-ai-stop" aria-label="停止" title="停止" onClick={() => tutor.cancel()}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
-                    : <button className="nodu-ai-send" aria-label="发送" title="发送 · Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
+                    : <button className="nodu-ai-send" aria-label="发送" title="发送 Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
             </div>
         </form>
     </div>;

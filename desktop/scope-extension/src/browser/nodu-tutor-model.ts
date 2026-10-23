@@ -10,6 +10,7 @@ import { TutorAISettingsView, TutorModelSelection, TutorProviderConfig, TutorPro
 import { TutorCourseTarget, TutorCourseV2 } from '../common/tutor/tutor-course';
 import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tutor-learning-state';
 import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
+import { guidanceEditMatches } from '../common/tutor/tutor-guidance';
 import { ScopeLayoutState } from './scope-layout-state';
 
 /** Every assistant item leaves `pending`; a stopped or superseded request must never stay "thinking". */
@@ -52,6 +53,7 @@ export class NoduTutorModel {
     includeCode = true;
     buffer?: TutorBuffer;
     presentation?: TutorPresentation;
+    guidance?: { source: TutorBuffer; anchorLine: number; lines: string[] };
     /** Providers, key presence and this window's model; never the keys themselves. */
     settings?: TutorAISettingsView;
     /** Conversation lane: chat and step checks, owned by the composer. */
@@ -160,11 +162,15 @@ export class NoduTutorModel {
         this.session = this.unwrap(await this.service.acceptMigration(this.session.sessionId, this.migration.id, this.migration.sourceDigest));
         this.migration = undefined; await this.importLegacy(); this.invalidate(); this.notify();
     }
-    private invalidate(): void { this.presentation = undefined; this.invalidated.fire(); }
+    private invalidate(): void { this.presentation = undefined; this.guidance = undefined; this.invalidated.fire(); }
     updateBuffer(buffer?: TutorBuffer): void {
         const before = this.buffer;
         this.buffer = buffer;
-        if (before?.path !== buffer?.path || before?.version !== buffer?.version || before?.text !== buffer?.text) { this.invalidate(); }
+        if (before?.path !== buffer?.path || before?.version !== buffer?.version || before?.text !== buffer?.text) {
+            const guidance = this.guidance;
+            this.invalidate();
+            if (guidance && buffer && guidanceEditMatches(guidance.source, buffer, guidance.anchorLine, guidance.lines.length)) { this.guidance = guidance; }
+        }
         // The panel only shows the file and gates step checks on its presence; redraw on that, not on every keystroke.
         if (before?.path !== buffer?.path) { this.notify(); }
     }
@@ -271,6 +277,7 @@ export class NoduTutorModel {
                 assistant.text = result.answer.text; assistant.status = 'done';
                 if (mode === 'teach' && context && this.buffer?.path === context.path && this.buffer.version === context.version && this.buffer.text === context.text) {
                     this.presentation = { buffer: { ...context }, answer: result.answer };
+                    if (result.answer.guidance) { this.guidance = { source: { ...context }, anchorLine: result.answer.guidance.anchorLine, lines: [...result.answer.guidance.lines] }; }
                 }
             } else if (result.cancelled) { this.settle(mode, request.id, 'stopped'); }
             else { this.settle(mode, request.id, 'failed', result.error); }

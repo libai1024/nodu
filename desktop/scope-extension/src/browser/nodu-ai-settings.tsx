@@ -69,7 +69,7 @@ export class NoduAiSettingsPopover {
         this.root?.render(<div className="nodu-ai-popover-card">
             <div className="nodu-ai-popover-head">
                 <span><i className="codicon codicon-sparkle" aria-hidden="true"/>AI 设置</span>
-                <button type="button" className="nodu-ai-icon" aria-label="关闭" title="关闭 · Esc" onClick={() => this.close()}><i className="codicon codicon-close" aria-hidden="true"/></button>
+                <button type="button" className="nodu-ai-icon" aria-label="关闭" title="关闭 Esc" onClick={() => this.close()}><i className="codicon codicon-close" aria-hidden="true"/></button>
             </div>
             <AISettingsPanel tutor={this.tutor} />
             <label className="nodu-ai-popover-foot"><input type="checkbox" checked={this.tutor.autoReview} onChange={e => this.tutor.setDisplay('autoReview', e.target.checked)}/>逐行 AI 检查（完成一行后发送当前文件给所选模型）</label>

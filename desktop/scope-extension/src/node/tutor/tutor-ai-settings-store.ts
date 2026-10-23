@@ -25,7 +25,7 @@ export class TutorAISettingsStore {
     private readonly session = new Map<string, string>();
     storage: 'keychain' | 'session' = 'keychain';
 
-    constructor(private readonly path: string, private readonly keys: Pick<KeyStoreService, 'getPassword' | 'setPassword' | 'deletePassword'>) { }
+    constructor(private readonly path: string, private readonly keys: Pick<KeyStoreService, 'getPassword' | 'setPassword' | 'deletePassword'>, private readonly readStoredKeys = true) { if (!readStoredKeys) { this.storage = 'session'; } }
 
     private async read(): Promise<TutorAISettingsFile> {
         if (this.file) { return this.file; }
@@ -63,6 +63,7 @@ export class TutorAISettingsStore {
     async getKey(providerId: string): Promise<string | undefined> {
         const session = this.session.get(providerId);
         if (session) { return session; }
+        if (!this.readStoredKeys) { return undefined; }
         try {
             const stored = await this.keys.getPassword(KEY_SERVICE, providerId);
             if (stored) { return stored; }
@@ -80,11 +81,13 @@ export class TutorAISettingsStore {
     async setKey(providerId: string, key: string): Promise<void> {
         if (typeof key !== 'string' || !KEY.test(key)) { throw new Error('API Key 格式无效'); }
         await this.provider(providerId);
+        if (!this.readStoredKeys) { this.session.set(providerId, key); return; }
         try { await this.keys.setPassword(KEY_SERVICE, providerId, key); this.session.delete(providerId); this.storage = 'keychain'; }
         catch { this.storage = 'session'; this.session.set(providerId, key); }
     }
     async deleteKey(providerId: string): Promise<void> {
         this.session.delete(providerId);
+        if (!this.readStoredKeys) { return; }
         try { await this.keys.deletePassword(KEY_SERVICE, providerId); }
         catch { throw new Error('无法删除系统凭证'); }
         if (providerId === GLM_CODING_PROVIDER) { await this.keys.deletePassword(LEGACY_SERVICE, 'default').catch(() => false); }
@@ -111,6 +114,8 @@ export class TutorAISettingsStore {
         const existing = file.providers.find(p => p.id === id);
         const next = validateProvider(raw, existing);
         if (!existing && file.providers.length >= 32) { throw new Error('供应商数量已达上限'); }
+        // Re-authenticate after any endpoint/protocol change. Never forward the old secret to a new destination.
+        if (existing && (existing.baseUrl !== next.baseUrl || existing.apiFormat !== next.apiFormat)) { await this.deleteKey(next.id); }
         const providers = existing ? file.providers.map(p => p.id === next.id ? next : p) : [...file.providers, next];
         await this.save({ ...file, providers });
     }
@@ -118,8 +123,7 @@ export class TutorAISettingsStore {
         const file = await this.read();
         const provider = await this.provider(id);
         if (provider.kind !== 'custom') { throw new Error('内置供应商不能删除'); }
-        await this.save({ ...file, providers: file.providers.filter(p => p.id !== id),
-            ...(file.defaultModel?.providerId === id ? { defaultModel: undefined } : {}) });
+        await this.save({ ...file, providers: file.providers.filter(p => p.id !== id) });
         await this.deleteKey(id).catch(() => undefined);
     }
     async setDefault(selection: TutorModelSelection): Promise<void> {

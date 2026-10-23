@@ -23,3 +23,19 @@ export function completedLines(before: readonly string[], after: readonly string
     }
     return result;
 }
+
+/** A code exercise survives edits inside its insertion region, but never follows unrelated file edits. */
+export function guidanceEditMatches(source: { path: string; text: string }, next: { path: string; text: string }, anchorLine: number, lineCount: number): boolean {
+    if (source.path !== next.path || anchorLine < 1 || lineCount < 1) { return false; }
+    const before = source.text.split('\n'), after = next.text.split('\n');
+    if (anchorLine > before.length) { return false; }
+    const head = before.slice(0, anchorLine - 1), tail = before.slice(anchorLine);
+    const regionEnd = after.length - tail.length;
+    return regionEnd >= head.length && regionEnd - head.length <= lineCount + 1
+        && head.every((text, index) => after[index] === text)
+        && tail.every((text, index) => after[regionEnd + index] === text);
+}
+
+export function pendingReviewCount(tasks: Iterable<{ status: string }>): number {
+    return [...tasks].filter(task => task.status === 'pending').length;
+}

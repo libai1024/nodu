@@ -150,7 +150,7 @@ export function validateSettingsFile(raw: unknown): TutorAISettingsFile {
         ...(typeof sel.reasoning === 'string' && LEVEL.test(sel.reasoning) ? { reasoning: sel.reasoning } : {}) } : undefined;
     return { schema: 1, providers, ...(defaultModel ? { defaultModel } : {}) };
 }
-/** The selection if it names an enabled model, otherwise the first enabled model. */
+/** Never redirect an explicit selection to another model or provider. */
 export function effectiveSelection(providers: readonly TutorProviderConfig[], wanted?: TutorModelSelection): TutorModelSelection | undefined {
     const usable = (p: TutorProviderConfig) => p.enabled && p.kind !== 'account';
     const provider = wanted && providers.find(p => p.id === wanted.providerId && usable(p));
@@ -158,6 +158,7 @@ export function effectiveSelection(providers: readonly TutorProviderConfig[], wa
     if (provider && model) {
         return { providerId: provider.id, modelId: model.id, ...(wanted!.reasoning && model.reasoningLevels.includes(wanted!.reasoning) ? { reasoning: wanted!.reasoning } : {}) };
     }
+    if (wanted) { return undefined; }
     for (const p of providers) {
         const m = usable(p) ? p.models.find(x => x.enabled) : undefined;
         if (m) { return { providerId: p.id, modelId: m.id }; }
