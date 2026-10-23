@@ -114,3 +114,153 @@ test('SSE preserves CRLF split at every network boundary including multiline dat
  const p=new SseParser();let result=[];for(const ch of stream)result.push(...p.push(ch));result.push(...p.finish());assert.deepEqual(result,expected);
  const last=new SseParser();assert.deepEqual([...last.push('event: done\rdata: ok\r'),...last.finish()],[{event:'done',data:'ok'}]);
 });
+
+test('cancellation interrupts a blocked reader even when transport ignores the signal and cancel never settles', { timeout: 1500 }, async () => {
+    const controller = new AbortController();
+    let cancelled = 0;
+    const http = async () => new Response(new ReadableStream({ cancel() { cancelled++; return new Promise(() => {}); } }));
+    const output = [];
+    const pending = streamCompletion(target(), [], controller.signal, t => output.push(t), http);
+    setTimeout(() => controller.abort(), 20);
+    await assert.rejects(pending, /已停止/);
+    assert.equal(cancelled, 1);
+    assert.deepEqual(output, []);
+});
+
+test('already cancelled calls never reach the provider; cancellation during delta prevents success', async () => {
+    const stopped = new AbortController(); stopped.abort();
+    let calls = 0;
+    await assert.rejects(streamCompletion(target(), [], stopped.signal, () => {}, async () => { calls++; }), /已停止/);
+    assert.equal(calls, 0);
+    const controller = new AbortController();
+    const local = target('chat-completions', { provider: provider('chat-completions', 'http://localhost:8080/v1'), key: undefined });
+    const output = [];
+    await assert.rejects(streamCompletion(local, [], controller.signal, t => { output.push(t); controller.abort(); },
+        fakeFetch([chat('first') + chat('late') + 'data: [DONE]\n\n']).http), /已停止/);
+    assert.deepEqual(output, ['first']);
+});
+
+test('completion does not wait for a stuck stream cleanup', { timeout: 1500 }, async () => {
+    let cancelled = false;
+    const http = async () => new Response(new ReadableStream({
+        start(c) { c.enqueue(new TextEncoder().encode(chat('ok') + 'data: [DONE]\n\n')); },
+        cancel() { cancelled = true; return new Promise(() => {}); },
+    }));
+    assert.equal(await streamCompletion(target(), [], new AbortController().signal, () => {}, http), 'ok');
+    assert.equal(cancelled, true);
+});
+
+test('refusals, tool terminal reasons and incomplete statuses cannot become successful text', async () => {
+    const cases = [
+        ['chat-completions', { choices: [{ delta: { refusal: 'no' } }] }],
+        ...['tool_calls', 'function_call', 'content_filter'].map(finish_reason => ['chat-completions', { choices: [{ delta: {}, finish_reason }] }]),
+        ['chat-completions', { choices: [{ delta: { function_call: { name: 'run' } } }] }],
+        ['responses', { type: 'response.refusal.delta', delta: 'no' }],
+        ['responses', { type: 'response.output_item.added', item: { type: 'function_call' } }],
+        ['responses', { type: 'response.completed', response: { status: 'incomplete' } }],
+        ['responses', { type: 'response.completed', response: { output: [{ type: 'message', content: [{ type: 'refusal' }] }] } }],
+        ...['tool_use', 'pause_turn', 'refusal'].map(stop_reason => ['anthropic-messages', { type: 'message_delta', delta: { stop_reason } }]),
+        ['anthropic-messages', { type: 'content_block_start', content_block: { type: 'server_tool_use' } }],
+    ];
+    for (const [format, payload] of cases) {
+        assert.deepEqual(readEvent(format, { data: JSON.stringify(payload) }), { error: true });
+        await assert.rejects(streamCompletion(target(format), [], new AbortController().signal, () => {},
+            fakeFetch([`data: ${JSON.stringify(payload)}\n\n`]).http), /不支持/);
+    }
+    assert.deepEqual(readEvent('anthropic-messages', { data: JSON.stringify({ type: 'message_delta', delta: { stop_reason: 'model_context_window_exceeded' } }) }), { truncated: true });
+    assert.deepEqual(readEvent('anthropic-messages', { data: JSON.stringify({ type: 'message_delta', delta: { stop_reason: 'end_turn' } }) }), {});
+});
+
+test('model list caps streamed bytes and cancels without draining the rest', { timeout: 1500 }, async () => {
+    let pulls = 0, cancelled = 0;
+    const http = async () => new Response(new ReadableStream({
+        pull(c) { pulls++; c.enqueue(new Uint8Array(1024 * 1024)); },
+        cancel() { cancelled++; return new Promise(() => {}); },
+    }, { highWaterMark: 0 }));
+    await assert.rejects(listRemoteModels(provider(), KEY, http), /列表过大/);
+    assert.equal(pulls, 3);
+    assert.equal(cancelled, 1);
+});
+
+test('model list rejects invalid UTF-8 and sanitizes stream errors', async () => {
+    await assert.rejects(listRemoteModels(provider(), KEY, fakeFetch([new Uint8Array([0xc3])]).http), /编码无效/);
+    await assert.rejects(listRemoteModels(provider(), KEY, async () => new Response(new ReadableStream({
+        start(c) { c.error(new Error(`network ${KEY}`)); },
+    }))), error => { assert.equal(error.message, '模型列表响应中断'); return true; });
+});
+
+test('keyless local Anthropic requests retain the version header', async () => {
+    const p = provider('anthropic-messages', 'http://localhost:8080/v1');
+    const stream = fakeFetch(['data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"ok"}}\n\ndata: {"type":"message_stop"}\n\n']);
+    await streamCompletion(target('anthropic-messages', { provider: p, key: undefined }), [], new AbortController().signal, () => {}, stream.http);
+    const models = fakeFetch(['{"data":[]}']);
+    await listRemoteModels(p, undefined, models.http);
+    for (const call of [...stream.calls, ...models.calls]) {
+        assert.equal(call.init.headers['anthropic-version'], '2023-06-01');
+        assert.equal(call.init.headers['x-api-key'], undefined);
+    }
+});
+
+test('real localhost HTTP cancellation closes the response and a later request still completes', { timeout: 5000 }, async () => {
+    const { createServer } = require('node:http');
+    const { once } = require('node:events');
+    let count = 0;
+    let closed;
+    const connectionClosed = new Promise(resolve => { closed = resolve; });
+    const server = createServer((req, res) => {
+        req.resume();
+        res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+        if (++count === 1) {
+            res.once('close', closed);
+            res.write(chat('first'));
+        } else { res.end(chat('second') + 'data: [DONE]\n\n'); }
+    });
+    server.listen(0, '127.0.0.1'); await once(server, 'listening');
+    try {
+        const p = provider('chat-completions', `http://127.0.0.1:${server.address().port}/v1`);
+        const t = target('chat-completions', { provider: p, key: undefined });
+        const controller = new AbortController();
+        const output = [];
+        await assert.rejects(streamCompletion(t, [], controller.signal, text => { output.push(text); controller.abort(); }), /已停止/);
+        await connectionClosed;
+        assert.deepEqual(output, ['first']);
+        assert.equal(await streamCompletion(t, [], new AbortController().signal, () => {}), 'second');
+        assert.equal(count, 2);
+    } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+});
+
+test('real localhost HTTP disconnect never returns a partial answer as completed', { timeout: 5000 }, async () => {
+    const { createServer } = require('node:http');
+    const { once } = require('node:events');
+    const server = createServer((req, res) => {
+        req.resume();
+        res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+        res.write(chat('partial'));
+        setImmediate(() => res.destroy());
+    });
+    server.listen(0, '127.0.0.1'); await once(server, 'listening');
+    try {
+        const p = provider('chat-completions', `http://127.0.0.1:${server.address().port}/v1`);
+        await assert.rejects(streamCompletion(target('chat-completions', { provider: p, key: undefined }), [], new AbortController().signal, () => {}), /中断|网络不可用/);
+    } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+});
+
+test('request deadline covers stalled completion and model-list bodies', { timeout: 1500 }, async context => {
+    const deadlines = [];
+    context.mock.method(AbortSignal, 'timeout', ms => {
+        const controller = new AbortController();
+        deadlines.push(ms);
+        setTimeout(() => controller.abort(), 20);
+        return controller.signal;
+    });
+    const http = async () => new Response(new ReadableStream({ cancel() { return new Promise(() => {}); } }));
+    await assert.rejects(streamCompletion(target(), [], new AbortController().signal, () => {}, http), /模型服务超时/);
+    await assert.rejects(listRemoteModels(provider(), KEY, http), /模型服务超时/);
+    assert.deepEqual(deadlines, [60000, 15000]);
+});
+
+
+test('model-list credential echoes are never offered as model IDs', async () => {
+    const http = async () => new Response(JSON.stringify({ data: [{ id: KEY }, { id: `prefix-${KEY}` }, { id: 'safe-model' }] }));
+    assert.deepEqual(await listRemoteModels(provider(), KEY, http), [{ id: 'safe-model' }]);
+});

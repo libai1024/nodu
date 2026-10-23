@@ -1,0 +1,27 @@
+✔ SSE parser handles CRLF, multi-line data, comments and a final event without a blank line (0.872375ms)
+✔ secret guard holds back a key split across deltas (0.232917ms)
+✔ each API format maps text, completion, truncation and tool calls (0.169166ms)
+✔ request bodies follow each format; system text moves where the format expects it (0.142833ms)
+✔ streaming joins UTF-8 split across chunks and uses the resolved endpoint and auth header (12.057042ms)
+✔ a stream that ends without a completion event, or with tool calls, fails cleanly (0.521708ms)
+✔ HTTP errors and key echoes never reach the caller with upstream text (0.375417ms)
+✔ a missing key is refused except for local servers (0.25025ms)
+✔ remote model listing filters invalid ids and keeps context windows (7.150125ms)
+✔ SSE preserves CRLF split at every network boundary including multiline data and event names (0.427542ms)
+✔ cancellation interrupts a blocked reader even when transport ignores the signal and cancel never settles (22.835291ms)
+✔ already cancelled calls never reach the provider; cancellation during delta prevents success (0.385583ms)
+✔ completion does not wait for a stuck stream cleanup (0.149459ms)
+✔ refusals, tool terminal reasons and incomplete statuses cannot become successful text (1.268834ms)
+✔ model list caps streamed bytes and cancels without draining the rest (0.613709ms)
+✔ model list rejects invalid UTF-8 and sanitizes stream errors (0.241041ms)
+✔ keyless local Anthropic requests retain the version header (0.167875ms)
+✔ real localhost HTTP cancellation closes the response and a later request still completes (15.366875ms)
+✔ real localhost HTTP disconnect never returns a partial answer as completed (2.904166ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 128.746625

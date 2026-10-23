@@ -81,7 +81,8 @@ export function readEvent(format: TutorApiFormat, event: SseEvent): Outcome {
         if (event.data === '[DONE]') { return { done: true }; }
         const chunk = JSON.parse(event.data);
         const choice = chunk.choices?.[0];
-        if (chunk.error || choice?.delta?.tool_calls) { return { error: true }; }
+        if (chunk.error || choice?.delta?.tool_calls || choice?.delta?.function_call || choice?.delta?.refusal
+            || (choice?.finish_reason && !['stop', 'length'].includes(choice.finish_reason))) { return { error: true }; }
         return { ...(typeof choice?.delta?.content === 'string' ? { text: choice.delta.content } : {}),
             ...(choice?.finish_reason === 'length' ? { truncated: true } : {}) };
     }
@@ -89,14 +90,24 @@ export function readEvent(format: TutorApiFormat, event: SseEvent): Outcome {
     const type = event.event ?? chunk.type;
     if (format === 'responses') {
         if (type === 'response.output_text.delta' && typeof chunk.delta === 'string') { return { text: chunk.delta }; }
-        if (type === 'response.completed') { return { done: true }; }
+        if (type === 'response.refusal.delta' || type === 'response.refusal.done') { return { error: true }; }
+        const unsupportedItem = (item: { type?: string; content?: Array<{ type?: string }> } | undefined): boolean =>
+            !!item && ((!['message', 'reasoning'].includes(item.type ?? '')) || !!item.content?.some(part => part.type === 'refusal'));
+        if ((type === 'response.output_item.added' || type === 'response.output_item.done') && unsupportedItem(chunk.item)) { return { error: true }; }
+        if (type === 'response.completed') {
+            if ((chunk.response?.status && chunk.response.status !== 'completed') || chunk.response?.output?.some(unsupportedItem)) { return { error: true }; }
+            return { done: true };
+        }
         if (type === 'response.incomplete') { return chunk.response?.incomplete_details?.reason === 'max_output_tokens' ? { truncated: true } : { error: true }; }
         if (type === 'response.failed' || type === 'error' || type === 'response.function_call_arguments.delta') { return { error: true }; }
         return {};
     }
     if (type === 'content_block_delta' && chunk.delta?.type === 'text_delta' && typeof chunk.delta.text === 'string') { return { text: chunk.delta.text }; }
-    if (type === 'content_block_start' && chunk.content_block?.type === 'tool_use') { return { error: true }; }
-    if (type === 'message_delta' && chunk.delta?.stop_reason === 'max_tokens') { return { truncated: true }; }
+    if (type === 'content_block_start' && /tool/.test(chunk.content_block?.type ?? '')) { return { error: true }; }
+    if (type === 'message_delta' && chunk.delta?.stop_reason) {
+        if (['max_tokens', 'model_context_window_exceeded'].includes(chunk.delta.stop_reason)) { return { truncated: true }; }
+        if (!['end_turn', 'stop_sequence'].includes(chunk.delta.stop_reason)) { return { error: true }; }
+    }
     if (type === 'message_stop') { return { done: true }; }
     if (type === 'error') { return { error: true }; }
     return {};
@@ -121,8 +132,9 @@ export function requestBody(target: TutorModelTarget, messages: TutorModelMessag
 
 function headers(target: TutorModelTarget): Record<string, string> {
     const h: Record<string, string> = { 'Content-Type': 'application/json', Accept: 'text/event-stream' };
+    if (target.provider.apiFormat === 'anthropic-messages') { h['anthropic-version'] = '2023-06-01'; }
     if (!target.key) { return h; }
-    if (target.provider.apiFormat === 'anthropic-messages') { h['x-api-key'] = target.key; h['anthropic-version'] = '2023-06-01'; }
+    if (target.provider.apiFormat === 'anthropic-messages') { h['x-api-key'] = target.key; }
     else { h.Authorization = `Bearer ${target.key}`; }
     return h;
 }
@@ -133,15 +145,35 @@ function statusError(status: number): Error {
     return new Error(errors[status] ?? (status >= 500 ? `模型服务暂时不可用 (${status})` : `模型请求失败 (${status})`));
 }
 
+/** Enforce cancellation even when a transport's pending read does not observe the fetch signal. */
+function abortable<T>(operation: () => Promise<T>, signal: AbortSignal): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        const abort = (): void => reject(new Error('请求已取消'));
+        if (signal.aborted) { abort(); return; }
+        signal.addEventListener('abort', abort, { once: true });
+        const cleanup = (): void => signal.removeEventListener('abort', abort);
+        try { operation().then(value => { cleanup(); resolve(value); }, error => { cleanup(); reject(error); }); }
+        catch (error) { cleanup(); reject(error); }
+    });
+}
+
+/** A broken transport must not keep a completed/cancelled request busy during cleanup. */
+function cancelReader(reader: ReadableStreamDefaultReader<Uint8Array>): void {
+    void reader.cancel().catch(() => undefined);
+    try { reader.releaseLock(); } catch { /* A transport may still have an outstanding read. */ }
+}
+
 /** Streams one completion. No tools, redirects, retries or fallback to another endpoint. */
 export async function streamCompletion(target: TutorModelTarget, messages: TutorModelMessage[], signal: AbortSignal,
     delta: (text: string) => void, http: typeof fetch = fetch): Promise<string> {
     if (!target.key && !allowsNoKey(target.provider.baseUrl)) { throw new Error('请先在 AI 设置中填写 API Key'); }
     if (JSON.stringify(messages).length > MAX_CONTEXT) { throw new Error('上下文过长'); }
+    const requestSignal = AbortSignal.any([signal, AbortSignal.timeout(TIMEOUT_MS)]);
+    if (signal.aborted) { throw new Error('已停止'); }
     let response: Response;
     try {
         response = await http(resolveEndpoint(target.provider.baseUrl, target.provider.apiFormat), {
-            method: 'POST', redirect: 'error', signal: AbortSignal.any([signal, AbortSignal.timeout(TIMEOUT_MS)]),
+            method: 'POST', redirect: 'error', signal: requestSignal,
             headers: headers(target), body: JSON.stringify(requestBody(target, messages)),
         });
     } catch { throw new Error(signal.aborted ? '已停止' : '模型服务连接超时或网络不可用'); }
@@ -154,10 +186,12 @@ export async function streamCompletion(target: TutorModelTarget, messages: Tutor
     const guard = new SecretGuard(target.key, text => {
         answer += text;
         if (answer.length > MAX_ANSWER) { throw new Error('模型回复过长'); }
+        if (requestSignal.aborted) { throw new Error(signal.aborted ? '已停止' : '模型服务超时'); }
         delta(text);
     });
     const handle = (events: SseEvent[]): void => {
         for (const event of events) {
+            if (requestSignal.aborted) { throw new Error(signal.aborted ? '已停止' : '模型服务超时'); }
             if (finished) { return; }
             let outcome: Outcome;
             try { outcome = readEvent(target.provider.apiFormat, event); } catch { throw new Error('模型响应格式无效'); }
@@ -170,7 +204,8 @@ export async function streamCompletion(target: TutorModelTarget, messages: Tutor
     try {
         while (!finished) {
             let chunk: ReadableStreamReadResult<Uint8Array>;
-            try { chunk = await reader.read(); } catch { throw new Error(signal.aborted ? '已停止' : '模型响应中断'); }
+            try { chunk = await abortable(() => reader.read(), requestSignal); } catch { throw new Error(signal.aborted ? '已停止' : requestSignal.aborted ? '模型服务超时' : '模型响应中断'); }
+            if (requestSignal.aborted) { throw new Error(signal.aborted ? '已停止' : '模型服务超时'); }
             if (chunk.done) { break; }
             bytes += chunk.value.byteLength;
             if (bytes > MAX_BYTES) { throw new Error('模型响应过大'); }
@@ -183,28 +218,48 @@ export async function streamCompletion(target: TutorModelTarget, messages: Tutor
             handle(parser.finish());
         }
         if (!finished) { throw new Error('模型响应中断'); }
+        if (requestSignal.aborted) { throw new Error(signal.aborted ? '已停止' : '模型服务超时'); }
         guard.finish();
+        if (requestSignal.aborted) { throw new Error(signal.aborted ? '已停止' : '模型服务超时'); }
         if (!answer.trim()) { throw new Error('模型没有返回内容'); }
         return answer;
-    } finally { await reader.cancel().catch(() => undefined); }
+    } finally { cancelReader(reader); }
 }
 
 /** Reads the provider's model list (OpenAI-compatible /models). Used to suggest IDs; never required. */
 export async function listRemoteModels(provider: TutorProviderConfig, key: string | undefined, http: typeof fetch = fetch): Promise<TutorRemoteModel[]> {
     if (!key && !allowsNoKey(provider.baseUrl)) { throw new Error('请先填写 API Key'); }
     const h: Record<string, string> = { Accept: 'application/json' };
-    if (key) { if (provider.apiFormat === 'anthropic-messages') { h['x-api-key'] = key; h['anthropic-version'] = '2023-06-01'; } else { h.Authorization = `Bearer ${key}`; } }
+    if (provider.apiFormat === 'anthropic-messages') { h['anthropic-version'] = '2023-06-01'; }
+    if (key) { if (provider.apiFormat === 'anthropic-messages') { h['x-api-key'] = key; } else { h.Authorization = `Bearer ${key}`; } }
+    const requestSignal = AbortSignal.timeout(15000);
     let response: Response;
-    try { response = await http(resolveModelsEndpoint(provider.baseUrl), { method: 'GET', redirect: 'error', headers: h, signal: AbortSignal.timeout(15000) }); }
+    try { response = await http(resolveModelsEndpoint(provider.baseUrl), { method: 'GET', redirect: 'error', headers: h, signal: requestSignal }); }
     catch { throw new Error('模型服务连接超时或网络不可用'); }
     if (!response.ok) { void response.body?.cancel().catch(() => undefined); throw statusError(response.status); }
-    const text = await response.text();
-    if (text.length > 2 * 1024 * 1024) { throw new Error('模型列表过大'); }
+    if (!response.body) { throw new Error('模型列表格式无效'); }
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8', { fatal: true });
+    let text = '', bytes = 0;
+    try {
+        while (true) {
+            let chunk: ReadableStreamReadResult<Uint8Array>;
+            try { chunk = await abortable(() => reader.read(), requestSignal); }
+            catch { throw new Error(requestSignal.aborted ? '模型服务超时' : '模型列表响应中断'); }
+            if (requestSignal.aborted) { throw new Error('模型服务超时'); }
+            if (chunk.done) { break; }
+            bytes += chunk.value.byteLength;
+            if (bytes > 2 * 1024 * 1024) { throw new Error('模型列表过大'); }
+            try { text += decoder.decode(chunk.value, { stream: true }); }
+            catch { throw new Error('模型列表编码无效'); }
+        }
+        try { text += decoder.decode(); } catch { throw new Error('模型列表编码无效'); }
+    } finally { cancelReader(reader); }
     let data: { data?: Array<{ id?: unknown; context_length?: unknown; context_window?: unknown }> };
     try { data = JSON.parse(text); } catch { throw new Error('模型列表格式无效'); }
     const out: TutorRemoteModel[] = [];
     for (const item of Array.isArray(data?.data) ? data.data : []) {
-        if (typeof item?.id !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._:/@+-]{0,119}$/.test(item.id)) { continue; }
+        if (typeof item?.id !== 'string' || (key && item.id.includes(key)) || !/^[A-Za-z0-9][A-Za-z0-9._:/@+-]{0,119}$/.test(item.id)) { continue; }
         const context = Number(item.context_length ?? item.context_window);
         out.push({ id: item.id, ...(Number.isSafeInteger(context) && context > 0 ? { contextWindow: context } : {}) });
         if (out.length >= 500) { break; }

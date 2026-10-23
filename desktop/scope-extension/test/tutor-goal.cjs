@@ -245,3 +245,23 @@ test('a file replaced between lstat and open is refused without reading its cont
  fs.open=async function(file,...args){if(file===target&&!replaced){replaced=true;await fs.rename(target,join(f.root,'original.c'));await fs.writeFile(target,'int replaced;');}const handle=await open.call(fs,file,...args);const read=handle.read.bind(handle);handle.read=async(...values)=>{reads++;return read(...values);};return handle;};
  try{await assert.rejects(()=>f.host.reference(id,'main.c',1),/已改变/);}finally{fs.open=open;}assert.equal(reads,0);
 });
+
+test('gateway rejection after a valid-looking review does not persist or advance a teaching step', async t => {
+ const {streamCompletion}=require('../lib/node/tutor/tutor-model-gateway');
+ const {modelDefaults}=require('../lib/common/tutor/tutor-ai-config');
+ const f=await fixture(t);f.responses.push(plan,fragment);
+ await f.run('propose',{prompt:'串口'});await f.run('confirm');await f.run('fragment',{buffer});
+ const before=await f.store.read(context.key);
+ const configured={provider:{id:'local',name:'local',kind:'custom',enabled:true,baseUrl:'http://localhost:8080/v1',apiFormat:'chat-completions',models:[]},model:modelDefaults('test')};
+ let finishReason='content_filter';
+ const gateway={complete:(messages,signal,delta)=>streamCompletion(configured,messages,signal,delta,async()=>new Response(
+  `data: ${JSON.stringify({choices:[{delta:{content:review('ok')}}]})}\n\n`+
+  `data: ${JSON.stringify({choices:[{delta:{},finish_reason:finishReason}]})}\n\ndata: [DONE]\n\n`
+ ))};
+ const session=new TutorGoalSession(f.store,gateway,async()=>({...context}),f.authorize);t.after(()=>session.dispose());
+ const edited={...buffer,text:'int main(void) {\nconst char *hello = "hello";\n}\n',version:2};
+ const run=()=>session.run({id:randomUUID(),workspaceId:'workspace-1',revision:before.revision,action:'check',buffer:edited});
+ const result=await run();assert.equal(result.ok,false);assert.match(result.error,/不支持/);
+ assert.deepEqual(await f.store.read(context.key),before);
+ finishReason='stop';const retry=await run();assert.equal(retry.ok,true);assert.equal(retry.state.status,'complete');
+});

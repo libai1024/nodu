@@ -1,0 +1,56 @@
+Electron main: loading modules... [0.127 s since electron main start]
+Electron main: container created [0.501 s since electron main start]
+Electron main: modules loaded [0.501 s since electron main start]
+Electron main: resolving application [0.501 s since electron main start]
+Electron main: application resolved [0.503 s since electron main start]
+using electron user data area : '/Users/wangwei/.codex/nodu-nightly-20261024/profile/electron'
+Backend main: entry point loaded [0.122 s since backend process start]
+Backend server: loading modules... [0.123 s since backend process start]
+Backend server: container created [0.193 s since backend process start]
+Backend server: modules loaded [0.239 s since backend process start]
+2026-10-23T23:35:59.748Z core:EnvVariablesServerImpl INFO Configuration directory URI: 'file:///Users/wangwei/.codex/nodu-nightly-20261024/profile/config'
+Backend server: resolving application [0.246 s since backend process start]
+2026-10-23T23:35:59.829Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 70.5 ms [0.323 s since backend process start]
+2026-10-23T23:35:59.829Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 69.7 ms [0.323 s since backend process start]
+2026-10-23T23:35:59.829Z plugin-ext:PluginApiContribution INFO Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-23T23:35:59.829Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 73.3 ms [0.326 s since backend process start]
+2026-10-23T23:35:59.831Z core:BackendApplication INFO configured all backend app contributions
+2026-10-23T23:35:59.834Z core:BackendApplication INFO Theia app listening on http://127.0.0.1:24240.
+2026-10-23T23:35:59.834Z core:SettingServiceImpl INFO Settings file not found at '/Users/wangwei/.codex/nodu-nightly-20261024/profile/config/backend-settings.json'. Falling back to defaults.
+2026-10-23T23:35:59.835Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/Users/wangwei/.codex/nodu-nightly-20261024/profile/config/plugins does not exist.
+2026-10-23T23:35:59.835Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/Users/wangwei/.codex/nodu-nightly-20261024/profile/config/deployedPlugins does not exist.
+2026-10-23T23:35:59.838Z core:Stopwatch INFO Backend application startup sequence completed (async work may still be pending): 7.1 ms [0.336 s since backend process start]
+2026-10-23T23:35:59.838Z core:Stopwatch INFO All backend contributions settled: 88.8 ms [0.336 s since backend process start]
+Starting backend: 358.9 ms [0.908 s since electron main start]
+2026-10-23T23:35:59.839Z core:Stopwatch INFO Resolve plugins list: 4.9 ms [0.337 s since backend process start]
+2026-10-23T23:35:59.840Z core:Stopwatch INFO Deploy batch of 1 accepted plugins: 1.2 ms [0.339 s since backend process start]
+2026-10-23T23:35:59.841Z core:Stopwatch INFO Deploy plugins list: 6.2 ms [0.339 s since backend process start]
+Attaching security token: 8.5 ms [0.917 s since electron main start]
+ElectronMessagingContribution.onStart: 5.5 ms [0.922 s since electron main start]
+TheiaMainApi.onStart: 5.0 ms [0.923 s since electron main start]
+ElectronApi.onStart: 0.2 ms [0.923 s since electron main start]
+Starting contributions: 6.0 ms [0.923 s since electron main start]
+Startup sequence completed: 373.7 ms [0.923 s since electron main start]
+2026-10-23T23:36:00.221Z core:WebsocketFrontendConnectionService INFO creating connection for 1
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-23T23:36:00.748Z core:FrontendStopwatch INFO Start frontend contributions: 188.6 ms [0.830 s since frontend page start]
+2026-10-23T23:36:00.748Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-23T23:36:00.748Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-23T23:36:00.748Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-23T23:36:00.784Z core:FrontendStopwatch INFO [aee350d3-97d0-461c-b789-301f9639edc0] Waiting for backend deployment: 45.7 ms [0.875 s since frontend page start]
+2026-10-23T23:36:00.830Z core:FrontendStopwatch INFO [aee350d3-97d0-461c-b789-301f9639edc0] Sync of 1 plugin: 46.2 ms [0.921 s since frontend page start]
+2026-10-23T23:36:00.855Z plugin-ext:HostedPluginSupport INFO [aee350d3-97d0-461c-b789-301f9639edc0] Loading plugin contributions
+2026-10-23T23:36:00.855Z core:FrontendStopwatch INFO [aee350d3-97d0-461c-b789-301f9639edc0] Load contributions of 1 plugin: 0.7 ms [0.945 s since frontend page start]
+2026-10-23T23:36:00.858Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-23T23:36:00.859Z core:FrontendStopwatch INFO Initialize the workbench layout: 110.1 ms [0.950 s since frontend page start]
+2026-10-23T23:36:00.859Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-23T23:36:00.895Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 33068] PLUGIN_HOST(33068) starting instance
+2026-10-23T23:36:00.946Z plugin-host INFO PLUGIN_HOST(33068): PluginManagerExtImpl/init()
+2026-10-23T23:36:00.963Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-23T23:36:01.041Z plugin-ext:HostedPluginSupport INFO [aee350d3-97d0-461c-b789-301f9639edc0] Starting plugins.
+2026-10-23T23:36:01.042Z core:FrontendStopwatch INFO [aee350d3-97d0-461c-b789-301f9639edc0] Start of 1 plugin: 187.0 ms [1.134 s since frontend page start]
+2026-10-23T23:36:01.686Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 804.3 ms [1.777 s since frontend page start]
+2026-10-23T23:36:01.687Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-23T23:36:01.687Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1086.7 ms [2.185 s since backend process start]
+2026-10-23T23:36:01.687Z core:FrontendStopwatch INFO All frontend contributions settled: 1136.3 ms [1.777 s since frontend page start]
