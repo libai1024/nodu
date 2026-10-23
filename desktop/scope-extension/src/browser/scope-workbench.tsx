@@ -27,7 +27,7 @@ import { NoduDeviceModel } from './nodu-device-client';
 import { copyImageParameters } from './nodu-image-clipboard';
 import { ScopeLayoutState } from './scope-layout-state';
 import { NoduDevicePanel } from './nodu-device-panel';
-import { NoduConsoleWidget } from './nodu-console-widget';
+import { NoduBottomPanelWidget } from './nodu-bottom-panel';
 import { NoduBoardFilesContribution } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS, TUTOR_MENU } from './nodu-tutor-hints';
@@ -77,9 +77,9 @@ export class ScopeDeviceContribution extends AbstractViewContribution<ScopeDevic
 }
 
 @injectable()
-export class ScopeConsoleContribution extends AbstractViewContribution<NoduConsoleWidget> {
+export class ScopeConsoleContribution extends AbstractViewContribution<NoduBottomPanelWidget> {
     constructor() {
-        super({ widgetId: NoduConsoleWidget.ID, widgetName: NoduConsoleWidget.LABEL,
+        super({ widgetId: NoduBottomPanelWidget.ID, widgetName: NoduBottomPanelWidget.LABEL,
             defaultWidgetOptions: { area: 'bottom', rank: 50 } });
     }
 }
@@ -111,12 +111,18 @@ export class ScopeToolbar extends ReactWidget {
         // Hint and anchor changes fire often; the toolbar only shows whether a plan exists and the panel is open.
         this.toDispose.push(this.tutor.onDidChange(() => this.update()));
         const outside = (event: PointerEvent): void => {
-            if (this.layoutState.deviceOpen && event.target instanceof Node && !this.node.querySelector('.scope-device-picker')?.contains(event.target)) {
+            const picker = this.node.querySelector('.scope-device-picker');
+            const target = event.target;
+            const selectOwner = target instanceof Element ? target.closest<HTMLElement>('[data-nodu-select-trigger]')?.dataset.noduSelectTrigger : undefined;
+            const belongsToPicker = selectOwner && picker?.contains(this.node.ownerDocument.getElementById(selectOwner));
+            if (this.layoutState.deviceOpen && target instanceof Node && !picker?.contains(target) && !belongsToPicker) {
                 this.layoutState.setDeviceOpen(false);
             }
         };
         const escape = (event: KeyboardEvent): void => {
             if (event.key === 'Escape' && this.layoutState.deviceOpen) {
+                // The first Escape cancels the nested selector; the next closes the device popover.
+                if (this.node.querySelector('.scope-device-picker .nodu-select[aria-expanded="true"]')) { return; }
                 event.preventDefault(); event.stopPropagation(); this.layoutState.setDeviceOpen(false);
                 this.node.querySelector<HTMLButtonElement>('.scope-device-chip')?.focus();
             }
@@ -163,7 +169,7 @@ export class ScopeToolbar extends ReactWidget {
             <div className="scope-toolbar-end">
             {/* Position-named toggles (left / bottom / right) avoid clashing with the 文件 menu. */}
             <button className="scope-action scope-toolbar-icon scope-toolbar-files" aria-label="文件列表" aria-pressed={filesVisible} onClick={() => void this.commands.executeCommand('scope.toggle-files')} title={filesVisible ? '隐藏文件列表' : '显示文件列表'}><i className={`codicon codicon-layout-sidebar-left${filesVisible ? '' : '-off'}`} aria-hidden="true"/></button>
-            <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="串行终端" aria-pressed={consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title={consoleVisible ? '隐藏串行终端' : '显示串行终端'}><i className={`codicon codicon-layout-panel${consoleVisible ? '' : '-off'}`} aria-hidden="true"/></button>
+            <button className={`scope-action scope-toolbar-icon scope-toolbar-console ${this.device.error ? 'nodu-has-error' : ''}`} aria-label="开发面板" aria-pressed={consoleVisible} onClick={() => void this.commands.executeCommand('scope.toggle-console')} title={consoleVisible ? '收起开发面板' : '显示开发面板'}><i className={`codicon codicon-layout-panel${consoleVisible ? '' : '-off'}`} aria-hidden="true"/></button>
             {/* Teaching projects only; 帧缓冲 stays the rightmost panel toggle. */}
             {this.renderAI()}
             <button className="scope-action scope-toolbar-icon scope-toolbar-vision" aria-label="帧缓冲" aria-pressed={visionVisible} onClick={() => void this.commands.executeCommand('scope.toggle-vision')} title={visionVisible ? '隐藏帧缓冲' : '显示帧缓冲'}><i className={`codicon codicon-layout-sidebar-right${visionVisible ? '' : '-off'}`} aria-hidden="true"/></button>
@@ -253,6 +259,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private readonly linkedProjectSubmenus = new Set<string>();
     private layoutQueue: Promise<unknown> = Promise.resolve();
     private layoutApplied = false;
+    private layoutPlatform: 'k210' | 'stm32' = 'k210';
     private syncFrame: number | undefined;
     private geometry = '';
     // Traceback navigation: the editor that started the current run, plus the
@@ -261,8 +268,8 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private tracebackTail = '';
     private tracebackDecorations: string[] = [];
     private readonly panelProfiles = {
-        simple: { files: false, console: false, vision: false },
-        pro: { files: true, console: true, vision: true }
+        simple: { files: false, vision: false },
+        pro: { files: true, vision: true }
     };
 
     private serializeLayout(action: () => Promise<unknown>): Promise<unknown> {
@@ -283,7 +290,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         const vision = this.vision.tryGetWidget();
         const console = this.consoleView.tryGetWidget();
         this.layoutState.setPanels(!!files?.isVisible && this.shell.getAreaFor(files) === 'left',
-            this.layoutState.mode === 'simple' ? !!console?.isVisible && this.shell.getAreaFor(console) === 'bottom' : !this.shell.bottomPanel.isHidden,
+            !!console?.isVisible && this.shell.getAreaFor(console) === 'bottom' && !this.shell.bottomPanel.isHidden,
             !!vision?.isVisible && this.shell.getAreaFor(vision) === 'right' && right.tabBar.currentTitle?.owner === vision);
         const geometry = `${this.layoutState.mode}:${left.dockPanel.isHidden}:${right.dockPanel.isHidden}`;
         if (geometry !== this.geometry) {
@@ -355,7 +362,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.toolbar.onBeforeMenu = path => { if (path === NODU_PROJECT_MENU) { this.linkProjectSubmenus(); } };
         let lastDeviceStatus = '';
         this.toDispose.push(this.device.onDidChange(() => {
-            if (this.device.frame && !this.autoRevealed.vision) { this.autoReveal('vision'); }
+            if (!this.embedded.isC && this.device.frame && !this.autoRevealed.vision) { this.autoReveal('vision'); }
             const next = `${this.device.statusLabel}:${this.device.state.port || ''}:${this.device.state.fps ?? ''}:${this.device.state.firmware ?? ''}`;
             if (next !== lastDeviceStatus) { lastDeviceStatus = next; this.updateStatus(); }
         }));
@@ -365,17 +372,21 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         }));
         this.toDispose.push(this.workspace.onWorkspaceChanged(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目')));
         void this.workspace.roots.then(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目'));
+        this.toDispose.push(this.embedded.onDidChange(() => {
+            if (this.layoutApplied && this.layoutPlatform !== (this.embedded.isC ? 'stm32' : 'k210')) {
+                void this.serializeLayout(() => this.applyPlatformLayout());
+            }
+        }));
         this.updateStatus();
     }
 
     async initializeLayout(): Promise<void> {
         await this.navigator.openView({ activate: false });
         await this.vision.openView({ activate: false });
-        await this.outputView.openView({ activate: false });
-        this.output.getChannel('Nodu · 设备').show({ preserveFocus: true });
+        await this.consoleView.openView({ activate: false });
         this.shell.resize(220, 'left');
         this.shell.resize(420, 'right');
-        this.shell.resize(160, 'bottom');
+        (await this.consoleView.widget).restoreHeight();
         const root = (await this.workspace.roots)[0];
         if (root) {
             // Only open files that exist; never create or overwrite a user's project on startup.
@@ -390,6 +401,12 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
 
     protected updateStatus(): void {
+        if (this.embedded.isC) {
+            for (const item of ['scope:device', 'scope:demo', 'scope:firmware', 'scope:serial-port', 'scope:fps']) {
+                this.status.removeElement(item);
+            }
+            return;
+        }
         // Original right-side items keep the label with an empty value while
         // disconnected; FPS stays visible in simple mode like before.
         const fps = this.device.state.fps;
@@ -413,7 +430,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     protected async applyLayout(mode: 'simple' | 'pro'): Promise<void> {
         if (this.layoutApplied) {
             this.syncPanels();
-            this.panelProfiles[this.layoutState.mode] = { files: this.layoutState.filesVisible, console: this.layoutState.consoleVisible, vision: this.layoutState.visionVisible };
+            const previous = this.panelProfiles[this.layoutState.mode];
+            previous.files = this.layoutState.filesVisible;
+            // STM32 has no camera panel; do not overwrite the user's K210 preference.
+            if (this.layoutPlatform === 'k210') { previous.vision = this.layoutState.visionVisible; }
         }
         this.layoutState.setMode(mode);
         // Simple mode has no AI; also close a sidebar restored from a professional-mode layout.
@@ -428,14 +448,36 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         await this.ensureSimplePanel(this.filesWidget(), 'left');
         await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right');
         await this.ensureSimplePanel(this.consoleView.tryGetWidget(), 'bottom');
-        await Promise.all([this.shell.collapsePanel('left'), this.shell.collapsePanel('right'), this.shell.collapsePanel('bottom')]);
         // Professional mode docks 开发板文件 beside the local explorer (added, not revealed).
         if (mode === 'pro' && !this.boardFiles.tryGetWidget()?.isAttached) { await this.boardFiles.openView({ activate: false, reveal: false }); }
         const profile = this.panelProfiles[mode];
         if (profile.files) { await this.navigator.openView({ reveal: true, activate: false }); }
-        if (profile.vision) { await this.vision.openView({ reveal: true, activate: false }); }
-        if (profile.console) { await this.showConsole(false); }
+        else { await this.shell.collapsePanel('left'); }
+        if (!this.embedded.isC && profile.vision) { await this.vision.openView({ reveal: true, activate: false }); }
+        else { await this.shell.collapsePanel('right'); }
+        // The bottom area has one shared visibility, active page and set of sessions.
+        // Changing the surrounding layout must not hide/reveal it or move focus.
+        if (!this.layoutApplied) { await this.showConsole(false); }
+        this.layoutPlatform = this.embedded.isC ? 'stm32' : 'k210';
         this.layoutApplied = true;
+        this.updateStatus();
+        await this.settlePanels();
+    }
+
+    private async applyPlatformLayout(): Promise<void> {
+        const platform = this.embedded.isC ? 'stm32' : 'k210';
+        if (!this.layoutApplied || platform === this.layoutPlatform) { return; }
+        this.syncPanels();
+        const profile = this.panelProfiles[this.layoutState.mode];
+        if (this.layoutPlatform === 'k210') { profile.vision = this.layoutState.visionVisible; }
+        this.layoutPlatform = platform;
+        if (platform === 'stm32') {
+            // Leave an unrelated right-side tool alone when it is the active view.
+            if (this.layoutState.visionVisible) { await this.shell.collapsePanel('right'); }
+        } else if (profile.vision) {
+            await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right');
+            await this.vision.openView({ reveal: true, activate: false });
+        }
         this.updateStatus();
         await this.settlePanels();
     }
@@ -453,13 +495,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     private async showConsole(activate: boolean): Promise<void> {
-        if (this.layoutState.mode === 'simple') {
-            await this.ensureSimplePanel(await this.consoleView.widget, 'bottom');
-            await this.consoleView.openView({ area: 'bottom', reveal: true, activate });
-        } else {
-            this.output.getChannel('Nodu · 设备').show({ preserveFocus: !activate });
-            await this.outputView.openView({ reveal: true, activate });
-        }
+        const widget = await this.consoleView.widget;
+        await this.ensureSimplePanel(widget, 'bottom');
+        await this.consoleView.openView({ area: 'bottom', reveal: true, activate });
+        if (widget.node.clientHeight < 180) { widget.restoreHeight(); }
     }
 
     /** 示例 / 最近的文件 live under the 文件 menu (NoduFileDocsContribution); link, never copy. */
@@ -479,9 +518,10 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private autoReveal(panel: 'console' | 'vision'): void {
         // Frames may already be flowing when the page loads; the startup layout would collapse the
         // panel again and the one-shot would be spent. Keep it for the first frame after layout.
-        if (this.autoRevealed[panel] || !this.layoutApplied) { return; }
+        if (this.autoRevealed[panel] || !this.layoutApplied || (panel === 'vision' && this.embedded.isC)) { return; }
         this.autoRevealed[panel] = true;
         void this.serializeLayout(async () => {
+            if (panel === 'vision' && this.embedded.isC) { return; }
             this.syncPanels();
             if (panel === 'console' && !this.layoutState.consoleVisible) { await this.showConsole(false); }
             if (panel === 'vision' && !this.layoutState.visionVisible) {
@@ -533,7 +573,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         });
         const panel = (id: string, label: string, execute: () => Promise<void>, visible: () => boolean) => registry.registerCommand({ id, label, category: '见微 Nodu' }, { execute: () => this.serializeLayout(execute), isToggled: visible });
         panel('scope.toggle-files', '文件列表', () => this.toggleFiles(), () => this.layoutState.filesVisible);
-        panel('scope.toggle-console', '串行终端', () => this.toggleConsole(), () => this.layoutState.consoleVisible);
+        panel('scope.toggle-console', '开发面板', () => this.toggleConsole(), () => this.layoutState.consoleVisible);
         panel('scope.toggle-vision', '帧缓冲', () => this.toggleVision(), () => this.layoutState.visionVisible);
         command('scope.show-files', '显示项目文件', () => this.serializeLayout(async () => { await this.ensureSimplePanel(this.filesWidget(), 'left'); await this.navigator.openView({ activate: true }); await this.settlePanels(); }));
         command('scope.show-vision', '显示帧缓冲', () => this.serializeLayout(async () => { await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right'); await this.vision.openView({ activate: true }); await this.settlePanels(); }));

@@ -3,6 +3,7 @@ import { C_COMMANDS } from './nodu-embedded-commands';
 import * as React from '@theia/core/shared/react';
 import { EmbeddedFailure } from '../common/nodu-embedded-protocol';
 import { NoduEmbeddedModel, formatBytes } from './nodu-embedded-model';
+import { NoduSelect } from './nodu-select';
 
 type Confirm = (title: string, message: string, ok: string) => Promise<boolean>;
 
@@ -60,10 +61,18 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput, exec }: {
     const method = project.flashMethod;
     const identity = model.identity;
     const locked = model.busy;
-    const portOptions = <>
-        {model.monitorPort && !model.ports.some(port => port.path === model.monitorPort) && <option value={model.monitorPort}>{model.monitorPort.replace('/dev/', '')}（未连接）</option>}
-        {model.ports.map(port => <option key={port.path} value={port.path}>{port.path.replace('/dev/', '')}</option>)}
-    </>;
+    const portOptions = [
+        ...(model.monitorPort && !model.ports.some(port => port.path === model.monitorPort) ? [{ value: model.monitorPort, label: `${model.monitorPort.replace('/dev/', '')}（未连接）` }] : []),
+        ...model.ports.map(port => ({ value: port.path, label: port.path.replace('/dev/', '') })),
+    ];
+    const probeOptions = !model.probes.length
+        ? [{ value: '', label: '未检测到 ST-LINK' }]
+        : model.probes.length === 1
+            ? [{ value: '', label: `${model.probes[0].model}${model.probes[0].serial ? `  ${model.probes[0].serial.slice(0, 12)}` : ''}` }]
+            : [{ value: '', label: '自动匹配目标芯片' }, ...model.probes.map(probe => ({
+                value: probe.id || probe.serial,
+                label: `${probe.model}  ${probe.serial ? probe.serial.slice(-12) : `USB ${probe.location || '未知端口'}`}`,
+            }))];
     const restore = async (id: string): Promise<void> => {
         const backup = model.backups.find(b => b.id === id);
         if (!backup) { return; }
@@ -88,28 +97,17 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput, exec }: {
             </div>
             {method === 'stlink' ? <div className="nodu-device-field">
                 <label htmlFor="nodu-c-probe">下载器</label>
-                <select id="nodu-c-probe" value={model.probe} disabled={locked} onChange={event => { model.probe = event.currentTarget.value; model.fire(); }}>
-                    {!model.probes.length && <option value="">未检测到 ST-LINK</option>}
-                    {model.probes.length === 1 && <option value="">{model.probes[0].model}{model.probes[0].serial ? `  ${model.probes[0].serial.slice(0, 12)}` : ''}</option>}
-                    {model.probes.length > 1 && <>
-                        <option value="">自动匹配目标芯片</option>
-                        {model.probes.map(p => <option key={p.id || p.serial} value={p.id || p.serial}>{p.model}  {p.serial ? p.serial.slice(-12) : `USB ${p.location || '未知端口'}`}</option>)}
-                    </>}
-                </select>
+                <NoduSelect id="nodu-c-probe" aria-label="下载器" value={model.probe} disabled={locked} options={probeOptions} onChange={value => { model.probe = value; model.fire(); }}/>
             </div> : <div className="nodu-device-field">
                 <label htmlFor="nodu-c-isp-port">串口</label>
-                <select id="nodu-c-isp-port" value={model.monitorPort} disabled={locked} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                    <option value="">选择 USB 转串口</option>{portOptions}
-                </select>
+                <NoduSelect id="nodu-c-isp-port" aria-label="ISP 串口" value={model.monitorPort} disabled={locked} options={[{ value: '', label: '选择 USB 转串口' }, ...portOptions]} onChange={value => model.setMonitorPort(value)}/>
             </div>}
             {model.probes.some(p => p.driver === 'missing') && <p className="nodu-c-warn">检测到 ST-LINK，但 Windows 没有为它安装驱动。从 st.com 下载 STSW-LINK009 驱动并安装后重新插拔。</p>}
         </Section>
         {method === 'stlink' && <Section title="串口监视器" icon="output">
             <div className="nodu-device-field">
                 <label htmlFor="nodu-c-monitor-port">串口</label>
-                <select id="nodu-c-monitor-port" value={model.monitorPort} disabled={locked} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                    <option value="">运行后不打开</option>{portOptions}
-                </select>
+                <NoduSelect id="nodu-c-monitor-port" aria-label="监视器串口" value={model.monitorPort} disabled={locked} options={[{ value: '', label: '运行后不打开' }, ...portOptions]} onChange={value => model.setMonitorPort(value)}/>
             </div>
         </Section>}
         <Section title="芯片" icon="chip" action={method === 'stlink' ? <span className="nodu-c-inline-actions">

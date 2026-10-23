@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1280" viewBox="0 0 1280 1280" role="img" aria-labelledby="title desc">
+<title id="title">Nodu STM32 专用底部 UI：手动串口监视</title>
+<desc id="desc">STM32 的构建与下载、串口监视、终端三个标签。CH340 COM5 手动连接与文本十六进制收发。下方比较 SWD 下载保留 UART、UART ISP 让出端口，以及 BOOT 恢复后手动连接三个状态。所有内容为设计示例。</desc>
+<rect x="0" y="0" width="1280" height="1280" rx="0" fill="#FFFFFF" />
+<text x="40" y="54" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="30" font-weight="650" fill="#1D2129">Nodu  /  STM32 串口交互</text>
+<text x="40" y="87" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="16" font-weight="400" fill="#5B616C">一套面向 STM32 的底部 UI：构建与下载、UART 收发、本机终端。</text>
+<text x="1054" y="49" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#5B616C">UI DESIGN  /  STM32</text>
+<text x="1054" y="74" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">2026.10.22 · 手动连接</text>
+<path d="M40 108 L1240 108" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="40" y="145" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">01  手动选择，连接后收发</text>
+<text x="746" y="145" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">首次使用：选择串口 → 波特率 → 点击连接</text>
+<rect x="40" y="164" width="1200" height="476" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<rect x="40" y="164" width="1200" height="36" rx="0" fill="#F7F8FA" />
+<text x="58" y="187" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#1D2129">blink-f407</text>
+<path d="M168 174 L168 190" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="185" y="187" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#3E434C">main.c</text>
+<text x="850" y="187" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">下载器  ST-LINK/V2</text>
+<circle cx="1025" cy="182" r="3" fill="#187244"/>
+<text x="1037" y="187" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#3E434C">已识别目标 STM32F407ZG</text>
+<path d="M40 200 L1240 200" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="62" y="226" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="400" fill="#5B616C">42</text>
+<text x="108" y="226" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#3E434C">printf(&quot;Temperature: %.1f C\r\n&quot;, temperature);</text>
+<text x="62" y="252" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="400" fill="#5B616C">43</text>
+<text x="108" y="252" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">process_uart_command();  // 接收解析由示例固件实现</text>
+<path d="M40 270 L1240 270" fill="none" stroke="#868C97" stroke-width="1"/>
+<rect x="40" y="270" width="1200" height="32" rx="0" fill="#F7F8FA" />
+<g data-tab="构建与下载" data-box="48,270,104,32">
+<text x="100" y="286" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">构建与下载</text>
+</g>
+<g data-tab="串口监视" data-box="152,270,104,32">
+<text x="204" y="286" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#1D2129">串口监视</text>
+<rect x="164" y="300" width="80" height="2" rx="0" fill="#2F5BFF" />
+</g>
+<g data-tab="终端" data-box="256,270,104,32">
+<text x="308" y="286" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">终端</text>
+</g>
+<circle cx="1147" cy="286" r="1.2" fill="#5B616C"/>
+<circle cx="1152" cy="286" r="1.2" fill="#5B616C"/>
+<circle cx="1157" cy="286" r="1.2" fill="#5B616C"/>
+<rect x="1178" y="281" width="10" height="10" rx="0" fill="none" stroke="#5B616C" />
+<path d="M1213 284.5 L1216 287.5 L1219 284.5" fill="none" stroke="#5B616C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M40 302 L1240 302" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<g data-control="CH340 · COM5" data-box="56,309,208,26">
+<rect x="56" y="309" width="208" height="26" rx="3" fill="#F0F2F5" stroke="#E0E3E8" />
+<text x="160.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#A3A7AE">CH340 · COM5</text>
+<path d="M250 320.5 L253 323.5 L256 320.5" fill="none" stroke="#A3A7AE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g data-control="115200" data-box="272,309,96,26">
+<rect x="272" y="309" width="96" height="26" rx="3" fill="#F0F2F5" stroke="#E0E3E8" />
+<text x="320.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#A3A7AE">115200</text>
+<path d="M354 320.5 L357 323.5 L360 320.5" fill="none" stroke="#A3A7AE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<circle cx="390" cy="322" r="3" fill="#187244"/>
+<text x="402" y="327" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#187244">已连接</text>
+<g data-control="断开" data-box="468,309,64,26">
+<rect x="468" y="309" width="64" height="26" rx="3" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="500.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">断开</text>
+</g>
+<text x="776" y="327" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">显示</text>
+<g data-control="TEXT" data-box="816,309,50,26">
+<rect x="816" y="309" width="50" height="26" rx="3" fill="#EEF2FF" stroke="#E0E3E8" />
+<text x="841.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#2449DB">TEXT</text>
+</g>
+<g data-control="HEX" data-box="866,309,50,26">
+<rect x="866" y="309" width="50" height="26" rx="3" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="891.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">HEX</text>
+</g>
+<g data-control="查找" data-box="950,309,48,26">
+<text x="974.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">查找</text>
+</g>
+<g data-control="跟随" data-box="1002,309,48,26">
+<text x="1026.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">跟随</text>
+</g>
+<g data-control="清空" data-box="1054,309,48,26">
+<text x="1078.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">清空</text>
+</g>
+<g data-control="时间戳" data-box="1106,309,82,26">
+<text x="1147.0" y="322.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#2449DB">时间戳</text>
+</g>
+<circle cx="1205" cy="322" r="1.2" fill="#5B616C"/>
+<circle cx="1210" cy="322" r="1.2" fill="#5B616C"/>
+<circle cx="1215" cy="322" r="1.2" fill="#5B616C"/>
+<path d="M40 342 L1240 342" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="60" y="375" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">17:06:32.112</text>
+<text x="178" y="375" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="500" fill="#5B616C">RX</text>
+<text x="220" y="375" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="14" font-weight="400" fill="#1D2129">Temperature: 24.6 C</text>
+<text x="60" y="403" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">17:06:33.114</text>
+<text x="178" y="403" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="500" fill="#5B616C">RX</text>
+<text x="220" y="403" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="14" font-weight="400" fill="#1D2129">Temperature: 24.7 C</text>
+<text x="60" y="431" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">17:06:34.230</text>
+<text x="178" y="431" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="500" fill="#2449DB">TX</text>
+<text x="220" y="431" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="14" font-weight="400" fill="#1D2129">status</text>
+<text x="60" y="459" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">17:06:34.245</text>
+<text x="178" y="459" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="500" fill="#5B616C">RX</text>
+<text x="220" y="459" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="14" font-weight="400" fill="#1D2129">led=off, sampling=1000 ms</text>
+<text x="60" y="487" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">17:06:35.870</text>
+<text x="178" y="487" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="500" fill="#2449DB">TX</text>
+<text x="220" y="487" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="14" font-weight="400" fill="#1D2129">led on</text>
+<text x="60" y="515" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="13" font-weight="400" fill="#5B616C">17:06:35.881</text>
+<text x="178" y="515" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="500" fill="#5B616C">RX</text>
+<text x="220" y="515" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="14" font-weight="400" fill="#1D2129">led=on</text>
+<text x="60" y="555" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">UTF-8 · 8N1 · 时间戳来自主机</text>
+<g data-control="新数据 24 条" data-box="1070,535,150,28">
+<rect x="1070" y="535" width="150" height="28" rx="3" fill="#EEF2FF" stroke="#E0E3E8" />
+<text x="1145.0" y="549.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#2449DB">新数据 24 条</text>
+</g>
+<path d="M1082 543 L1082 554" fill="none" stroke="#2449DB" stroke-width="1.4"/>
+<path d="M1078 550 L1082 554" fill="none" stroke="#2449DB" stroke-width="1.4"/>
+<path d="M1082 554 L1086 550" fill="none" stroke="#2449DB" stroke-width="1.4"/>
+<path d="M40 586 L1240 586" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<g data-control="TEXT" data-box="56,598,88,30">
+<rect x="56" y="598" width="88" height="30" rx="3" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="100.0" y="613.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">TEXT</text>
+<path d="M130 611.5 L133 614.5 L136 611.5" fill="none" stroke="#5B616C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<rect x="152" y="598" width="880" height="30" rx="3" fill="#FFFFFF" stroke="#868C97" />
+<text x="164" y="618" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">输入要发送给固件的内容…</text>
+<g data-control="LF" data-box="1040,598,72,30">
+<rect x="1040" y="598" width="72" height="30" rx="3" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="1076.0" y="613.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">LF</text>
+<path d="M1098 611.5 L1101 614.5 L1104 611.5" fill="none" stroke="#5B616C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g data-control="发送" data-box="1120,598,104,30">
+<rect x="1120" y="598" width="104" height="30" rx="3" fill="#2F5BFF" />
+<text x="1172.0" y="613.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF">发送</text>
+</g>
+<text x="40" y="670" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">status / led on 为示例固件协议；TX 只表示主机写入成功，不代表固件已执行。</text>
+<text x="40" y="694" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">HEX 直接收发字节；发送需校验字节对，默认不追加文本行尾。接收显示和发送模式分别设置。</text>
+<text x="40" y="741" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">02  下载时的三个状态</text>
+<text x="832" y="741" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">UART ISP 结束后，恢复 BOOT 并手动连接。</text>
+<rect x="40" y="766" width="384" height="356" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="56" y="796" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">SWD 下载 · UART 保留</text>
+<text x="56" y="825" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="500" fill="#2449DB">下载器工作；串口是独立通道</text>
+<text x="56" y="848" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">保留用户已有连接，不自动开关 UART。</text>
+<rect x="56" y="869" width="352" height="188" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<rect x="56" y="869" width="352" height="32" rx="0" fill="#F7F8FA" />
+<g data-tab="构建与下载" data-box="64,869,104,32">
+<text x="116" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">构建与下载</text>
+</g>
+<g data-tab="串口监视" data-box="168,869,104,32">
+<text x="220" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#1D2129">串口监视</text>
+<rect x="180" y="899" width="80" height="2" rx="0" fill="#2F5BFF" />
+</g>
+<g data-tab="终端" data-box="272,869,104,32">
+<text x="324" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">终端</text>
+</g>
+<path d="M56 901 L408 901" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<circle cx="70" cy="923" r="3" fill="#187244"/>
+<text x="81" y="927" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#1D2129">CH340 · COM5 · 已连接</text>
+<g data-control="断开" data-box="334,910,62,26">
+<rect x="334" y="910" width="62" height="26" rx="3" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="365.0" y="923.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#3E434C">断开</text>
+</g>
+<path d="M56 943 L408 943" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="68" y="970" font-family="&#x27;SFMono-Regular&#x27;, Menlo, Consolas, &#x27;PingFang SC&#x27;, monospace" font-size="12" font-weight="400" fill="#1D2129">RX  Temperature: 24.6 C</text>
+<text x="68" y="996" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">UART 保持当前连接。</text>
+<text x="56" y="1086" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">下载日志进入「构建与下载」。</text>
+<path d="M56 1019 L408 1019" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<rect x="66" y="1027" width="256" height="24" rx="3" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="76" y="1043" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">输入内容…</text>
+<g data-control="发送" data-box="330,1027,68,24">
+<rect x="330" y="1027" width="68" height="24" rx="3" fill="#2F5BFF" />
+<text x="364.0" y="1039.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF">发送</text>
+</g>
+<rect x="448" y="766" width="384" height="356" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="464" y="796" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">UART ISP · 让出端口</text>
+<text x="464" y="825" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="500" fill="#8A5200">COM5 用于下载，应用发送禁用</text>
+<text x="464" y="848" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">用户确认断开监视后，下载才占用端口。</text>
+<rect x="464" y="869" width="352" height="188" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<rect x="464" y="869" width="352" height="32" rx="0" fill="#F7F8FA" />
+<g data-tab="构建与下载" data-box="472,869,104,32">
+<text x="524" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">构建与下载</text>
+</g>
+<g data-tab="串口监视" data-box="576,869,104,32">
+<text x="628" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#1D2129">串口监视</text>
+<rect x="588" y="899" width="80" height="2" rx="0" fill="#2F5BFF" />
+</g>
+<g data-tab="终端" data-box="680,869,104,32">
+<text x="732" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">终端</text>
+</g>
+<path d="M464 901 L816 901" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<circle cx="478" cy="923" r="3" fill="#8A5200"/>
+<text x="489" y="927" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#8A5200">COM5 正用于串口下载</text>
+<path d="M464 943 L816 943" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="476" y="970" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">原有日志和草稿保留。</text>
+<g data-control="查看下载日志" data-box="476,982,116,24">
+<text x="534.0" y="994.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#2449DB">查看下载日志</text>
+</g>
+<text x="464" y="1086" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">先确认断开监视，再把端口交给下载。</text>
+<path d="M464 1019 L816 1019" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<rect x="474" y="1027" width="256" height="24" rx="3" fill="#F0F2F5" stroke="#E0E3E8" />
+<text x="484" y="1043" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#A3A7AE">未发送的草稿…</text>
+<g data-control="发送" data-box="738,1027,68,24">
+<rect x="738" y="1027" width="68" height="24" rx="3" fill="#F0F2F5" stroke="#E0E3E8" />
+<text x="772.0" y="1039.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#A3A7AE">发送</text>
+</g>
+<rect x="856" y="766" width="384" height="356" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<text x="872" y="796" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="18" font-weight="600" fill="#1D2129">BOOT 恢复 · 手动连接</text>
+<text x="872" y="825" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="500" fill="#2449DB">写入校验完成，等待恢复与复位</text>
+<text x="872" y="848" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">不会因下载任务结束自动重新连接。</text>
+<rect x="872" y="869" width="352" height="188" rx="0" fill="#FFFFFF" stroke="#E0E3E8" />
+<rect x="872" y="869" width="352" height="32" rx="0" fill="#F7F8FA" />
+<g data-tab="构建与下载" data-box="880,869,104,32">
+<text x="932" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">构建与下载</text>
+</g>
+<g data-tab="串口监视" data-box="984,869,104,32">
+<text x="1036" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="600" fill="#1D2129">串口监视</text>
+<rect x="996" y="899" width="80" height="2" rx="0" fill="#2F5BFF" />
+</g>
+<g data-tab="终端" data-box="1088,869,104,32">
+<text x="1140" y="885" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">终端</text>
+</g>
+<path d="M872 901 L1224 901" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<circle cx="886" cy="923" r="3" fill="#5B616C"/>
+<text x="897" y="927" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#1D2129">CH340 · COM5 · 已断开</text>
+<g data-control="连接" data-box="1150,910,62,26">
+<rect x="1150" y="910" width="62" height="26" rx="3" fill="#2F5BFF" />
+<text x="1181.0" y="923.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#FFFFFF">连接</text>
+</g>
+<path d="M872 943 L1224 943" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="884" y="970" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">恢复 BOOT 配置并复位后，</text>
+<text x="884" y="992" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">请手动点击「连接」。</text>
+<text x="872" y="1086" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">写入校验完成 ≠ 已确认程序正常运行。</text>
+<path d="M872 1019 L1224 1019" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<rect x="882" y="1027" width="256" height="24" rx="3" fill="#F0F2F5" stroke="#E0E3E8" />
+<text x="892" y="1043" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#A3A7AE">未发送的草稿…</text>
+<g data-control="发送" data-box="1146,1027,68,24">
+<rect x="1146" y="1027" width="68" height="24" rx="3" fill="#F0F2F5" stroke="#E0E3E8" />
+<text x="1180.0" y="1039.0" text-anchor="middle" dominant-baseline="central" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="500" fill="#A3A7AE">发送</text>
+</g>
+<path d="M40 1152 L1240 1152" fill="none" stroke="#E0E3E8" stroke-width="1"/>
+<text x="40" y="1183" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="600" fill="#1D2129">首版范围</text>
+<text x="140" y="1183" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="14" font-weight="400" fill="#3E434C">手动端口与波特率 · 连接 / 断开 · TEXT / HEX · 行尾 · 查找 / 跟随 / 清空 / 复制</text>
+<text x="40" y="1212" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="13" font-weight="400" fill="#5B616C">标签 104 × 32 px；活动下划线 80 × 2 px；控件文字居中，日志和草稿左对齐。</text>
+<text x="40" y="1243" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="400" fill="#5B616C">设计示意，未实现；日志、代码、端口与硬件状态均为示例，不代表实机运行记录。</text>
+<text x="1168" y="1243" font-family="-apple-system, BlinkMacSystemFont, &#x27;PingFang SC&#x27;, &#x27;Microsoft YaHei&#x27;, sans-serif" font-size="12" font-weight="600" fill="#5B616C">NODU</text>
+</svg>

@@ -96,16 +96,26 @@ export class NoduEmbeddedPanel extends ReactWidget {
         </button>;
     }
 
+    /** Set when the bottom panel hosts this widget; its header then provides the page tabs. */
+    private hosted = false;
+    setView(view: PanelTab): void {
+        this.hosted = true;
+        if (this.model.panelTab !== view) { this.model.panelTab = view; this.follow = true; }
+        if (view === 'monitor') { void this.model.refreshPorts(); }
+        this.update();
+        requestAnimationFrame(() => this.scroll());
+    }
+
     protected render(): React.ReactNode {
         const model = this.model;
         const errors = model.errors.length;
         return <div className="nodu-c-panel-content">
             <div className="nodu-c-panel-bar">
-                <div role="tablist" aria-label="问题与输出" className="nodu-c-tabs">
+                {!this.hosted && <div role="tablist" aria-label="问题与输出" className="nodu-c-tabs">
                     {this.tab('problems', '问题', errors)}
                     {this.tab('monitor', '串口监视器')}
                     {this.tab('output', '编译输出')}
-                </div>
+                </div>}
                 <span className="nodu-c-panel-actions">{this.actions()}</span>
             </div>
             <div className="nodu-c-pane" id={`nodu-c-pane-${model.panelTab}`} role="tabpanel" aria-labelledby={`nodu-c-tab-${model.panelTab}`}>

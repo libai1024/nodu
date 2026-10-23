@@ -1,0 +1,35 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-problems-panel, .nodu-problems-content { min-width: 0; min-height: 0; height: 100%; }
+.nodu-problems-content { display: flex; flex-direction: column; color: var(--theia-foreground); background: var(--theia-editor-background); font-size: 12px; }
+.nodu-problems-toolbar { display: flex; flex: 0 0 40px; align-items: center; gap: 4px; box-sizing: border-box; padding: 0 12px; border-bottom: 1px solid var(--theia-panel-border); }
+.nodu-problems-filter { display: flex; flex: 1 1 auto; align-items: center; gap: 6px; min-width: 80px; max-width: 400px; height: 28px; box-sizing: border-box; padding: 0 7px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 4px; background: var(--theia-input-background); }
+.nodu-problems-filter:focus-within { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-problems-filter > .codicon { color: var(--theia-descriptionForeground); }
+.nodu-problems-filter input { flex: 1; min-width: 0; width: 0; height: 24px; margin: 0; padding: 0; border: 0; outline: none; color: var(--theia-input-foreground); background: transparent; font: inherit; }
+.nodu-problems-filter input::placeholder { color: var(--theia-input-placeholderForeground); }
+.nodu-problem-filter-toggle { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 4px; height: 28px; min-width: 36px; padding: 0 6px; border: 0; border-radius: 3px; color: var(--theia-foreground); background: transparent; font: inherit; cursor: pointer; font-variant-numeric: tabular-nums; }
+.nodu-problem-filter-toggle[aria-pressed='true'] { background: var(--theia-toolbar-activeBackground, var(--theia-toolbar-hoverBackground)); }
+.nodu-problem-filter-toggle[aria-pressed='false'] { color: var(--theia-descriptionForeground); }
+.nodu-problem-filter-toggle[aria-pressed='false'] > .codicon { color: inherit; }
+.nodu-problem-filter-toggle:hover, .nodu-problem-file-header:hover, .nodu-problem-row:hover { background: var(--theia-list-hoverBackground); }
+.nodu-problems-content button:focus-visible, .nodu-problems-list:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-problems-list { flex: 1; min-height: 0; overflow: auto; padding: 4px 0; }
+.nodu-problem-file { margin: 0; padding: 0; }
+.nodu-problem-file-header { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 28px; padding: 3px 12px; box-sizing: border-box; border: 0; color: var(--theia-foreground); background: transparent; font: inherit; text-align: left; cursor: pointer; }
+.nodu-problem-file-header > .codicon { flex: none; }
+.nodu-problem-filename { flex: 0 1 auto; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-problem-directory { flex: 1; min-width: 0; color: var(--theia-descriptionForeground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-problem-file-count { flex: none; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-problem-file ul { margin: 0; padding: 0; list-style: none; }
+.nodu-problem-file ul[hidden] { display: none; }
+.nodu-problem-row { display: flex; align-items: baseline; gap: 7px; width: 100%; min-height: 28px; padding: 5px 12px 5px 32px; box-sizing: border-box; border: 0; color: var(--theia-foreground); background: transparent; font: inherit; line-height: 20px; text-align: left; cursor: pointer; }
+.nodu-problem-row > .codicon { flex: none; align-self: flex-start; line-height: 20px; }
+.nodu-problem-message { flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: pre-line; }
+.nodu-problem-position { flex: none; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-problem-severity-1 > .codicon { color: var(--theia-editorError-foreground, var(--theia-errorForeground)); }
+.nodu-problem-severity-2 > .codicon { color: var(--theia-editorWarning-foreground); }
+.nodu-problem-severity-3 > .codicon { color: var(--theia-editorInfo-foreground); }
+.nodu-problems-empty { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 72px; color: var(--theia-descriptionForeground); }
+.nodu-panel-narrow .nodu-problems-toolbar { padding-inline: 8px; }
+.nodu-panel-narrow .nodu-problem-file-header { padding-inline: 8px; }
+.nodu-panel-narrow .nodu-problem-row { padding-left: 28px; padding-right: 8px; }

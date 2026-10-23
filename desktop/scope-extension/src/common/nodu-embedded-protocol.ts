@@ -133,3 +133,16 @@ export interface CatalogBoard {
     led: { pin: string } | null;
     templates: CatalogTemplate[];
 }
+
+/** Manual connection state. A disconnected session never reopens itself. */
+export interface MonitorSnapshot {
+    open: boolean;
+    state: 'closed' | 'connecting' | 'open' | 'disconnected' | 'lent';
+    port: string;
+    baud: number;
+    session?: string;
+    owner?: string;
+    message?: string;
+}
+export interface MonitorData { port: string; session: string; data: string }
+export interface MonitorWriteResult { sent: number }

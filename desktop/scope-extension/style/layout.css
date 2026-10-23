@@ -57,8 +57,7 @@
 /* Lumino treats max-width:0 as infinity, so the positive subpixel bound is intentional. */
 .nodu-simple #theia-left-content-panel.theia-mod-collapsed,
 .nodu-simple #theia-right-content-panel.theia-mod-collapsed { min-width: 0 !important; max-width: .1px !important; width: 0 !important; overflow: hidden; }
-.nodu-simple #theia-right-content-panel .lm-TabBar,
-.nodu-simple #theia-bottom-content-panel .lm-TabBar { display: none !important; min-height: 0 !important; max-height: .1px !important; }
+.nodu-simple #theia-right-content-panel .lm-TabBar { display: none !important; min-height: 0 !important; max-height: .1px !important; }
 .nodu-simple #theia-statusBar #status-bar-bottom-panel-toggle,
 .nodu-simple #theia-statusBar #status-bar-problem-marker-status,
 .nodu-simple #theia-statusBar #status-bar-theia-notification-center,
@@ -72,18 +71,6 @@
 .nodu-simple .theia-breadcrumbs { display: none !important; }
 .nodu-simple #theia-main-content-panel { --theia-breadcrumbs-height: 0px; --theia-private-horizontal-tab-height: 30px; --theia-horizontal-toolbar-height: 30px; }
 
-.nodu-console-content { display: flex; flex-direction: column; height: 100%; min-height: 0; padding: 8px 14px; box-sizing: border-box; }
-.nodu-console-bar { display: flex; align-items: center; gap: 6px; min-height: 26px; margin-bottom: 6px; }
-.nodu-console-title { color: var(--theia-descriptionForeground); font-size: 11px; }
-.nodu-console-actions { margin-left: auto; display: inline-flex; align-items: center; gap: 2px; }
-.nodu-console-actions .scope-action { width: 24px; min-width: 24px; height: 24px; min-height: 24px; padding: 0; }
-.nodu-console-output { flex: 1; min-height: 0; margin: 0 0 8px; padding: 6px 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--theia-input-background); border: 1px solid var(--theia-panel-border); border-radius: 4px; color: var(--theia-editor-foreground); font-family: var(--theia-code-font-family, monospace); font-size: 12px; line-height: 1.5; }
-.nodu-console-input { display: flex; align-items: center; gap: 8px; margin-top: auto; }
-.nodu-console-input > span { color: var(--theia-descriptionForeground); font-family: var(--theia-code-font-family, monospace); }
-.scope-widget .nodu-console-input textarea { flex: 1; width: 0; min-height: 30px; max-height: 100px; resize: none; font-family: var(--theia-code-font-family, monospace); font-size: 12px; }
-.nodu-console-input > button { flex-shrink: 0; }
-.nodu-console-stderr { color: var(--theia-errorForeground); }
-.nodu-console-content .scope-error { margin: 0 0 8px; }
 
 @media (max-width: 1100px) { .scope-device-chip-port { display: none; } }
 @media (max-width: 760px) { .scope-device-chip-board { max-width: 85px; } .nodu-toolbar-alert { display: none; } .scope-workspace-bar { padding-inline: 7px; gap: 7px; } }

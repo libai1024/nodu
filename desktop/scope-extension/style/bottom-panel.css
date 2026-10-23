@@ -1,0 +1,26 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-bottom-panel { min-width: 0; min-height: 180px; background: var(--theia-panel-background); color: var(--theia-foreground); }
+.nodu-bottom-header-widget { min-height: 32px; max-height: 32px; overflow: visible; }
+.nodu-bottom-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 32px; padding: 0 8px; box-sizing: border-box; border-bottom: 1px solid var(--theia-panel-border); background: var(--theia-editorGroupHeader-tabsBackground); }
+.nodu-bottom-tabs { display: flex; flex: 0 1 auto; min-width: 0; height: 32px; overflow-x: auto; scrollbar-width: none; }
+.nodu-bottom-tabs::-webkit-scrollbar { display: none; }
+.nodu-bottom-tab { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 104px; width: 104px; height: 32px; margin: 0; padding: 0 12px; border: 0; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 13px; line-height: 20px; white-space: nowrap; cursor: pointer; }
+.nodu-bottom-tab[aria-selected='true'] { color: var(--theia-foreground); font-weight: 600; }
+.nodu-bottom-tab[aria-selected='true']::after { position: absolute; content: ''; inset: auto 12px 0; height: 2px; background: var(--theia-scope-accent, var(--theia-focusBorder)); }
+.nodu-bottom-tab:hover, .nodu-panel-icon:hover { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
+.nodu-bottom-tab:focus-visible, .nodu-panel-icon:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-bottom-tab-status { position: absolute; top: 7px; right: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--theia-scope-accent); }
+.nodu-bottom-chrome { display: inline-flex; align-items: center; flex-shrink: 0; gap: 4px; }
+.nodu-panel-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; min-width: 28px; height: 28px; margin: 0; padding: 0; border: 0; border-radius: 3px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
+.nodu-panel-icon > .codicon { font-size: 16px; }
+.nodu-problems-toggle { width: auto; gap: 4px; padding-inline: 6px; color: var(--theia-errorForeground); }
+.nodu-problems-toggle > span { font-size: 11px; font-variant-numeric: tabular-nums; }
+.nodu-bottom-pages, .nodu-bottom-pages > .lm-Widget { min-width: 0; min-height: 0; }
+.nodu-bottom-pages .scope-widget { padding: 0; }
+.nodu-panel-narrow .nodu-bottom-header { gap: 0; padding-inline: 4px; }
+.nodu-panel-narrow .nodu-bottom-chrome { gap: 0; }
+.nodu-panel-compact .nodu-bottom-header { padding-inline: 0; }
+.nodu-panel-compact .nodu-bottom-chrome > button:nth-last-child(-n+2) { display: none; }
+/* The shared owner supplies navigation in both modes. Native auxiliary views
+   retain their own tabs and toolbars when explicitly opened. */
+#theia-bottom-content-panel .lm-TabBar.nodu-bottom-owner-tabs { min-height: 0 !important; max-height: .1px !important; display: none !important; }
