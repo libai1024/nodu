@@ -73,7 +73,7 @@ class TutorEditorController implements Disposable {
         }
         this.before = after; this.updateContext(); this.render();
     }
-    private enabled(): boolean { return this.tutor.teaching && this.tutor.autoReview && !!this.tutor.provider?.configured && !!(this.tutor.plan || this.tutor.presentation?.answer.guidance); }
+    private enabled(): boolean { return this.tutor.teaching && this.tutor.autoReview && this.tutor.configured && !!(this.tutor.plan || this.tutor.presentation?.answer.guidance); }
     private enqueuing = false;
     private enqueue(line: number): void {
         const model = this.control.getModel();

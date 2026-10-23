@@ -364,11 +364,24 @@
 .nodu-c-monitor-conn select[aria-label="波特率"] { flex: 0 0 82px; width: 82px; }
 .nodu-c-monitor-conn select[aria-label="编码"] { flex: 0 0 70px; width: 70px; }
 .nodu-c-monitor-conn .theia-button { flex: none; height: 24px; min-height: 24px; min-width: 0; margin: 0; padding: 0 10px; line-height: 22px; }
-@container nodu-bottom (max-width: 1020px) {
+/* The header row keeps the controls on wide panels; never let them paint over neighbours. */
+.nodu-c-monitor-conn { overflow: hidden; }
+.nodu-c-hosted .nodu-c-monitor-bar-hosted { display: none; }
+@container nodu-panel (max-width: 1080px) {
     .nodu-c-monitor-conn .nodu-c-monitor-label { display: none; }
     .nodu-c-monitor-conn select[aria-label="串口"] { flex-basis: 130px; width: 130px; }
 }
-@container nodu-bottom (max-width: 860px) {
-    .nodu-bottom-actions .nodu-panel-divider { display: none; }
-    .nodu-c-monitor-conn select[aria-label="编码"] { display: none; }
+/* Narrow panel: connection controls move to one compact row under the tabs, like the Arduino IDE monitor. */
+@container nodu-panel (max-width: 920px) {
+    .nodu-c-monitor-conn, .nodu-bottom-actions .nodu-panel-divider { display: none; }
+    .nodu-c-hosted .nodu-c-monitor-bar-hosted { display: flex; flex-wrap: nowrap; align-items: center; gap: 4px; min-width: 0; padding: 3px 8px; border-bottom: 1px solid var(--theia-panel-border); }
+    .nodu-c-monitor-bar-hosted select { height: 24px; box-sizing: border-box; min-width: 0; padding: 0 4px; font-size: 12px; }
+    .nodu-c-monitor-bar-hosted select[aria-label="串口"] { flex: 1 1 160px; width: auto; max-width: 240px; }
+    .nodu-c-monitor-bar-hosted select[aria-label="波特率"] { flex: 0 0 82px; width: 82px; }
+    .nodu-c-monitor-bar-hosted select[aria-label="编码"] { flex: 0 0 70px; width: 70px; }
+    .nodu-c-monitor-bar-hosted .theia-button { flex: none; height: 24px; min-height: 24px; line-height: 22px; padding: 0 10px; margin: 0; min-width: 0; }
+    .nodu-c-monitor-bar-hosted .nodu-c-monitor-state { margin-right: auto; }
+}
+@container nodu-panel (max-width: 520px) {
+    .nodu-c-monitor-bar-hosted .nodu-c-monitor-label, .nodu-c-monitor-bar-hosted select[aria-label="编码"] { display: none; }
 }
