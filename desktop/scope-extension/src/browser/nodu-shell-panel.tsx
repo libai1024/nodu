@@ -363,6 +363,17 @@ export class NoduShellPanelWidget extends BaseWidget implements ApplicationShell
     private refresh(): void {
         this.toolbar?.update();
         this.empty?.update();
+        this.chromeChanged.fire();
+    }
+
+    private readonly chromeChanged = new Emitter<void>();
+    /** Fires whenever the session controls change, for a host that renders them elsewhere. */
+    readonly onDidChangeChrome = this.chromeChanged.event;
+    headerToolbar(): React.ReactNode { return this.renderToolbar(); }
+    /** The bottom panel header shows the session controls; the in-page bar is then hidden. */
+    setChromeHosted(hosted: boolean): void {
+        this.toolbar.setHidden(hosted);
+        this.fit();
     }
 
     private menuTerminal(id?: string): TerminalWidget | undefined {

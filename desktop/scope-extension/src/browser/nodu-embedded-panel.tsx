@@ -9,7 +9,8 @@ import { BinaryBuffer } from '@theia/core/lib/common/buffer';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { MonitorSnapshot, logLine, monitorLog } from '../common/nodu-monitor-log';
-import { CommandService } from '@theia/core/lib/common';
+import { CommandService, Emitter } from '@theia/core/lib/common';
+import { Message } from '@theia/core/shared/@lumino/messaging';
 import { C_COMMANDS } from './nodu-embedded-commands';
 import { Diagnostic } from '../common/nodu-embedded-protocol';
 import { NoduEmbeddedModel, PanelTab, formatBytes } from './nodu-embedded-model';
@@ -96,8 +97,15 @@ export class NoduEmbeddedPanel extends ReactWidget {
         </button>;
     }
 
-    /** Set when the bottom panel hosts this widget; its header then provides the page tabs. */
+    /** Set when the bottom panel hosts this widget; its header then provides the page tabs and actions. */
     private hosted = false;
+    private readonly chromeChanged = new Emitter<void>();
+    readonly onDidChangeChrome = this.chromeChanged.event;
+    protected override onUpdateRequest(msg: Message): void {
+        super.onUpdateRequest(msg);
+        this.chromeChanged.fire();
+    }
+    headerActions(): React.ReactNode { return this.actions(); }
     setView(view: PanelTab): void {
         this.hosted = true;
         if (this.model.panelTab !== view) { this.model.panelTab = view; this.follow = true; }
@@ -109,15 +117,15 @@ export class NoduEmbeddedPanel extends ReactWidget {
     protected render(): React.ReactNode {
         const model = this.model;
         const errors = model.errors.length;
-        return <div className="nodu-c-panel-content">
-            <div className="nodu-c-panel-bar">
-                {!this.hosted && <div role="tablist" aria-label="问题与输出" className="nodu-c-tabs">
+        return <div className={`nodu-c-panel-content${this.hosted ? ' nodu-c-hosted' : ''}`}>
+            {!this.hosted && <div className="nodu-c-panel-bar">
+                <div role="tablist" aria-label="问题与输出" className="nodu-c-tabs">
                     {this.tab('problems', '问题', errors)}
                     {this.tab('monitor', '串口监视器')}
                     {this.tab('output', '编译输出')}
-                </div>}
+                </div>
                 <span className="nodu-c-panel-actions">{this.actions()}</span>
-            </div>
+            </div>}
             <div className="nodu-c-pane" id={`nodu-c-pane-${model.panelTab}`} role="tabpanel" aria-labelledby={`nodu-c-tab-${model.panelTab}`}>
                 {model.panelTab === 'problems' && this.problems()}
                 {model.panelTab === 'monitor' && this.monitor()}
@@ -135,17 +143,19 @@ export class NoduEmbeddedPanel extends ReactWidget {
         const model = this.model;
         if (model.panelTab === 'monitor') {
             return <>
-                <button className="scope-action scope-toolbar-icon" aria-pressed={this.timestamps} aria-label="时间戳" title="时间戳" disabled={this.hex} onClick={() => { this.timestamps = !this.timestamps; this.update(); }}><i className="codicon codicon-history" aria-hidden="true"/></button>
-                <button className="scope-action scope-toolbar-icon" aria-pressed={!!this.paused} aria-label={this.paused ? '继续显示' : '暂停显示'} title={this.paused ? '继续显示' : '暂停显示，继续接收'} onClick={() => { this.paused = this.paused ? undefined : this.snapshot(); this.follow = !this.paused; this.update(); requestAnimationFrame(() => this.scroll()); }}><i className={`codicon codicon-${this.paused ? 'play' : 'debug-pause'}`} aria-hidden="true"/></button>
-                <button className="scope-action scope-toolbar-icon" aria-pressed={this.hex} aria-label="十六进制显示" title="十六进制显示" onClick={() => { this.hex = !this.hex; this.update(); }}><i className="codicon codicon-symbol-numeric" aria-hidden="true"/></button>
-                <button className="scope-action scope-toolbar-icon" aria-label="保存日志" title="保存日志" onClick={() => void this.saveLog()}><i className="codicon codicon-save" aria-hidden="true"/></button>
-                <button className="scope-action scope-toolbar-icon" aria-label="复制输出" title="复制输出" onClick={() => void this.clipboard.writeText(monitorLog(this.snapshot(), this.hex, this.timestamps))}><i className="codicon codicon-copy" aria-hidden="true"/></button>
-                <button className="scope-action scope-toolbar-icon" aria-label="清空" title="清空" onClick={() => { model.clearMonitor(); if (this.paused) { this.paused = { lines: [], partial: '', hex: '' }; } this.update(); }}><i className="codicon codicon-clear-all" aria-hidden="true"/></button>
+                {this.hosted && <div className="nodu-c-monitor-conn">{this.connection()}</div>}
+                {this.hosted && <span className="nodu-panel-divider" aria-hidden="true"/>}
+                <button className="nodu-panel-icon" aria-pressed={this.timestamps} aria-label="时间戳" title="时间戳" disabled={this.hex} onClick={() => { this.timestamps = !this.timestamps; this.update(); }}><i className="codicon codicon-history" aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-pressed={!!this.paused} aria-label={this.paused ? '继续显示' : '暂停显示'} title={this.paused ? '继续显示' : '暂停显示，继续接收'} onClick={() => { this.paused = this.paused ? undefined : this.snapshot(); this.follow = !this.paused; this.update(); requestAnimationFrame(() => this.scroll()); }}><i className={`codicon codicon-${this.paused ? 'play' : 'debug-pause'}`} aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-pressed={this.hex} aria-label="十六进制显示" title="十六进制显示" onClick={() => { this.hex = !this.hex; this.update(); }}><i className="codicon codicon-symbol-numeric" aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-label="保存日志" title="保存日志" onClick={() => void this.saveLog()}><i className="codicon codicon-save" aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-label="复制输出" title="复制输出" onClick={() => void this.clipboard.writeText(monitorLog(this.snapshot(), this.hex, this.timestamps))}><i className="codicon codicon-copy" aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-label="清空" title="清空" onClick={() => { model.clearMonitor(); if (this.paused) { this.paused = { lines: [], partial: '', hex: '' }; } this.update(); }}><i className="codicon codicon-clear-all" aria-hidden="true"/></button>
             </>;
         }
         if (model.panelTab === 'output') {
-            return <><button className="scope-action scope-toolbar-icon" aria-label="打开产物目录" title="打开 BIN/HEX 所在目录" onClick={() => void this.commands.executeCommand(C_COMMANDS.openBuildLocation)}><i className="codicon codicon-folder-opened" aria-hidden="true"/></button>
-                <button className="scope-action scope-toolbar-icon" aria-label="复制输出" title="复制输出" onClick={() => void this.clipboard.writeText(model.output.join('\n'))}><i className="codicon codicon-copy" aria-hidden="true"/></button></>;
+            return <><button className="nodu-panel-icon" aria-label="打开产物目录" title="打开 BIN/HEX 所在目录" onClick={() => void this.commands.executeCommand(C_COMMANDS.openBuildLocation)}><i className="codicon codicon-folder-opened" aria-hidden="true"/></button>
+                <button className="nodu-panel-icon" aria-label="复制输出" title="复制输出" onClick={() => void this.clipboard.writeText(model.output.join('\n'))}><i className="codicon codicon-copy" aria-hidden="true"/></button></>;
         }
         return null;
     }
@@ -203,25 +213,8 @@ export class NoduEmbeddedPanel extends ReactWidget {
             if (sent && this.draft === draft) { this.draft = ''; }
             this.sending = false; this.update();
         };
-        const status = state.state === 'open' ? '已连接'
-            : state.state === 'disconnected' ? '等待重连'
-            : state.state === 'lent' ? '下载中' : '未连接';
         return <div className="nodu-c-monitor">
-            <div className="nodu-c-monitor-bar">
-                <span className={`nodu-c-monitor-state nodu-c-monitor-${state.state}`} role="status"><span className="scope-status-dot" aria-hidden="true"/>{status}</span>
-                <select aria-label="串口" disabled={model.monitorBusy || model.flashing || state.state === 'lent'} value={model.monitorPort} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                    <option value="">选择串口</option>
-                    {model.monitorPort && !model.ports.some(port => port.path === model.monitorPort) && <option value={model.monitorPort}>{model.monitorPort.replace('/dev/', '')}（未连接）</option>}
-                    {model.ports.map(port => <option key={port.path} value={port.path}>{port.path.replace('/dev/', '')}</option>)}
-                </select>
-                <select aria-label="波特率" disabled={model.monitorBusy || model.flashing || state.state === 'lent'} value={project?.manifest.monitor?.baud ?? 115200} onChange={event => void model.setOption('monitorBaud', Number(event.currentTarget.value))}>
-                    {[9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600].map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
-                <select aria-label="编码" value={project?.manifest.monitor?.encoding ?? 'utf-8'} onChange={event => void model.setOption('monitorEncoding', event.currentTarget.value)}>
-                    <option value="utf-8">UTF-8</option><option value="gbk">GBK</option>
-                </select>
-                <button className="theia-button secondary" aria-busy={model.monitorBusy} disabled={!model.monitorPort || model.monitorBusy || model.flashing || state.state === 'lent'} onClick={() => void model.toggleMonitor()}>{state.open ? '关闭' : '打开'}</button>
-            </div>
+            {!this.hosted && <div className="nodu-c-monitor-bar">{this.connection()}</div>}
             {model.monitorError && <div className="nodu-c-monitor-error" role="alert">{model.monitorError}</div>}
             <pre ref={this.monitorRef} className="nodu-c-log nodu-c-monitor-log" tabIndex={0} aria-label="串口输出" aria-live="off" onScroll={this.onScroll}>
                 {this.hex ? snapshot.hex : <>
@@ -239,6 +232,31 @@ export class NoduEmbeddedPanel extends ReactWidget {
                 <button className="theia-button secondary" disabled={!canSend || !this.draft || this.sending} onClick={() => void send()}>发送</button>
             </div>
         </div>;
+    }
+
+    /** Port, baud, encoding and open/close; in the bottom panel these sit in its header row. */
+    private connection(): React.ReactNode {
+        const model = this.model;
+        const project = model.project;
+        const state = model.monitor;
+        const status = state.state === 'open' ? '已连接'
+            : state.state === 'disconnected' ? '等待重连'
+            : state.state === 'lent' ? '下载中' : '未连接';
+        return <>
+                <span className={`nodu-c-monitor-state nodu-c-monitor-${state.state}`} role="status" title={status}><span className="scope-status-dot" aria-hidden="true"/><span className="nodu-c-monitor-label">{status}</span></span>
+            <select aria-label="串口" disabled={model.monitorBusy || model.flashing || state.state === 'lent'} value={model.monitorPort} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
+                <option value="">选择串口</option>
+                {model.monitorPort && !model.ports.some(port => port.path === model.monitorPort) && <option value={model.monitorPort}>{model.monitorPort.replace('/dev/', '')}（未连接）</option>}
+                {model.ports.map(port => <option key={port.path} value={port.path}>{port.path.replace('/dev/', '')}</option>)}
+            </select>
+            <select aria-label="波特率" disabled={model.monitorBusy || model.flashing || state.state === 'lent'} value={project?.manifest.monitor?.baud ?? 115200} onChange={event => void model.setOption('monitorBaud', Number(event.currentTarget.value))}>
+                {[9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600].map(b => <option key={b} value={b}>{b}</option>)}
+            </select>
+            <select aria-label="编码" value={project?.manifest.monitor?.encoding ?? 'utf-8'} onChange={event => void model.setOption('monitorEncoding', event.currentTarget.value)}>
+                <option value="utf-8">UTF-8</option><option value="gbk">GBK</option>
+            </select>
+            <button className="theia-button secondary" aria-busy={model.monitorBusy} disabled={!model.monitorPort || model.monitorBusy || model.flashing || state.state === 'lent'} onClick={() => void model.toggleMonitor()}>{state.open ? '关闭' : '打开'}</button>
+        </>;
     }
 
     private snapshot(): MonitorSnapshot {

@@ -1,17 +1,17 @@
 /* SPDX-License-Identifier: MIT */
 .nodu-bottom-panel { min-width: 0; min-height: 180px; background: var(--theia-panel-background); color: var(--theia-foreground); }
-.nodu-bottom-header-widget { min-height: 32px; max-height: 32px; overflow: visible; }
-.nodu-bottom-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 32px; padding: 0 8px; box-sizing: border-box; border-bottom: 1px solid var(--theia-panel-border); background: var(--theia-editorGroupHeader-tabsBackground); }
-.nodu-bottom-tabs { display: flex; flex: 0 1 auto; min-width: 0; height: 32px; overflow-x: auto; scrollbar-width: none; }
+.nodu-bottom-header-widget { min-height: 30px; max-height: 30px; overflow: visible; }
+.nodu-bottom-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; height: 30px; padding: 0 4px 0 0; container: nodu-bottom / inline-size; box-sizing: border-box; border-bottom: 1px solid var(--theia-panel-border); background: var(--theia-editorGroupHeader-tabsBackground); }
+.nodu-bottom-tabs { display: flex; flex: 0 0 auto; min-width: 0; height: 30px; overflow-x: auto; scrollbar-width: none; }
 .nodu-bottom-tabs::-webkit-scrollbar { display: none; }
-.nodu-bottom-tab { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 104px; width: 104px; height: 32px; margin: 0; padding: 0 12px; border: 0; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 13px; line-height: 20px; white-space: nowrap; cursor: pointer; }
+.nodu-bottom-tab { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; height: 30px; margin: 0; padding: 0 12px; border: 0; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 13px; line-height: 20px; white-space: nowrap; cursor: pointer; }
 .nodu-bottom-tab[aria-selected='true'] { color: var(--theia-foreground); font-weight: 600; }
-.nodu-bottom-tab[aria-selected='true']::after { position: absolute; content: ''; inset: auto 12px 0; height: 2px; background: var(--theia-scope-accent, var(--theia-focusBorder)); }
+.nodu-bottom-tab[aria-selected='true']::after { position: absolute; content: ''; inset: auto 8px 0; height: 2px; background: var(--theia-scope-accent, var(--theia-focusBorder)); }
 .nodu-bottom-tab:hover, .nodu-panel-icon:hover { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
 .nodu-bottom-tab:focus-visible, .nodu-panel-icon:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
-.nodu-bottom-tab-status { position: absolute; top: 7px; right: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--theia-scope-accent); }
-.nodu-bottom-chrome { display: inline-flex; align-items: center; flex-shrink: 0; gap: 4px; }
-.nodu-panel-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; min-width: 28px; height: 28px; margin: 0; padding: 0; border: 0; border-radius: 3px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
+.nodu-bottom-tab-status { position: absolute; top: 6px; right: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--theia-scope-accent); }
+.nodu-bottom-chrome { display: inline-flex; align-items: center; flex-shrink: 0; gap: 0; }
+.nodu-panel-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; min-width: 26px; height: 26px; margin: 0; padding: 0; border: 0; border-radius: 3px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; }
 .nodu-panel-icon > .codicon { font-size: 16px; }
 .nodu-problems-toggle { width: auto; gap: 4px; padding-inline: 6px; color: var(--theia-errorForeground); }
 .nodu-problems-toggle > span { font-size: 11px; font-variant-numeric: tabular-nums; }
@@ -24,3 +24,18 @@
 /* The shared owner supplies navigation in both modes. Native auxiliary views
    retain their own tabs and toolbars when explicitly opened. */
 #theia-bottom-content-panel .lm-TabBar.nodu-bottom-owner-tabs { min-height: 0 !important; max-height: .1px !important; display: none !important; }
+
+/* Page actions live in the header row, like VS Code panel view actions. */
+.nodu-bottom-actions { display: flex; align-items: center; justify-content: flex-end; gap: 2px; flex: 1 1 auto; min-width: 0; height: 30px; overflow: hidden; }
+.nodu-panel-icon[aria-pressed='true'] { color: var(--theia-inputOption-activeForeground, var(--theia-foreground)); background: var(--theia-inputOption-activeBackground, var(--theia-toolbar-activeBackground)); }
+.nodu-panel-icon:disabled { opacity: .45; cursor: default; background: transparent; }
+.nodu-panel-divider { flex: none; width: 1px; height: 16px; margin: 0 4px; background: var(--theia-panel-border); }
+.nodu-bottom-actions .nodu-shell-bar { flex: 1 1 auto; min-width: 0; height: 30px; padding: 0; gap: 2px; justify-content: flex-end; box-shadow: none; background: transparent; }
+.nodu-bottom-actions .nodu-shell-context-icon { display: none; }
+.nodu-bottom-actions .nodu-shell-context { flex: 0 1 auto; padding-inline: 4px; font-size: 12px; }
+.nodu-bottom-actions .nodu-shell-bar .nodu-select.nodu-shell-select { flex: 0 1 180px; height: 24px; }
+.nodu-bottom-actions .nodu-shell-action { flex-basis: 26px; width: 26px; min-width: 26px; height: 26px; }
+@container nodu-bottom (max-width: 760px) {
+    .nodu-bottom-actions .nodu-shell-context:not(.nodu-shell-failure) { display: none; }
+    .nodu-bottom-tab { padding-inline: 8px; }
+}

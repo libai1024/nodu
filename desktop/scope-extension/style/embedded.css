@@ -346,3 +346,29 @@
 .nodu-c-progress-98 { --nodu-task-fraction: 0.98; }
 .nodu-c-progress-99 { --nodu-task-fraction: 0.99; }
 .nodu-c-progress-100 { --nodu-task-fraction: 1; }
+
+/* Hosted in the bottom panel: the header owns tabs, connection and reading actions,
+   so the page is a flat log with one compact send row (Arduino IDE / VS Code style). */
+.nodu-c-hosted.nodu-c-panel-content { padding: 0; }
+.nodu-c-hosted .nodu-c-log { border: 0; border-radius: 0; padding: 4px 12px; background: transparent; }
+.nodu-c-hosted .nodu-c-monitor { gap: 0; }
+.nodu-c-hosted .nodu-c-monitor-error { padding: 3px 12px; border-bottom: 1px solid var(--theia-panel-border); }
+.nodu-c-hosted .nodu-c-monitor-input { flex: none; gap: 4px; padding: 3px 4px 3px 8px; border-top: 1px solid var(--theia-panel-border); }
+.nodu-c-hosted .nodu-c-monitor-input input { height: 24px; box-sizing: border-box; padding: 0 8px; }
+.nodu-c-hosted .nodu-c-monitor-input select { height: 24px; width: 72px; flex: 0 0 72px; }
+.nodu-c-hosted .nodu-c-monitor-input .theia-button { height: 24px; min-height: 24px; line-height: 22px; padding: 0 10px; }
+.nodu-c-monitor-conn { display: inline-flex; align-items: center; gap: 4px; flex: 0 1 auto; min-width: 0; font-size: 12px; }
+.nodu-c-monitor-conn .nodu-c-monitor-state { flex: none; margin: 0 4px 0 0; }
+.nodu-c-monitor-conn select { height: 24px; box-sizing: border-box; min-width: 0; padding: 0 4px; font-size: 12px; }
+.nodu-c-monitor-conn select[aria-label="串口"] { flex: 0 1 170px; width: 170px; min-width: 96px; }
+.nodu-c-monitor-conn select[aria-label="波特率"] { flex: 0 0 82px; width: 82px; }
+.nodu-c-monitor-conn select[aria-label="编码"] { flex: 0 0 70px; width: 70px; }
+.nodu-c-monitor-conn .theia-button { flex: none; height: 24px; min-height: 24px; min-width: 0; margin: 0; padding: 0 10px; line-height: 22px; }
+@container nodu-bottom (max-width: 1020px) {
+    .nodu-c-monitor-conn .nodu-c-monitor-label { display: none; }
+    .nodu-c-monitor-conn select[aria-label="串口"] { flex-basis: 130px; width: 130px; }
+}
+@container nodu-bottom (max-width: 860px) {
+    .nodu-bottom-actions .nodu-panel-divider { display: none; }
+    .nodu-c-monitor-conn select[aria-label="编码"] { display: none; }
+}

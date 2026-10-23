@@ -72,6 +72,9 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
         }
         this.toDispose.push(this.tracked);
         this.toDispose.push(this.menuEntries);
+        this.terminalPanel.setChromeHosted(true);
+        this.toDispose.push(this.terminalPanel.onDidChangeChrome(() => { if (this.selected === 'terminal') { this.header.update(); } }));
+        this.toDispose.push(this.embeddedPanel.onDidChangeChrome(() => { if (this.isSTM32 && (this.selected === 'monitor' || this.selected === 'output')) { this.header.update(); } }));
         this.toDispose.push(this.problemsPanel.onDidChangeProblems(() => this.refreshStatus()));
         this.toDispose.push(this.shell.bottomPanel.onDidChangeCurrent(() => this.syncDockTabs()));
         this.toDispose.push(this.terminalPanel.onDidChangeTrackableWidgets(() => this.tracked.fire(this.getTrackableWidgets())));
@@ -108,6 +111,12 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     get activePage(): BottomPage { return this.selected; }
     get maximized(): boolean { return this.shell.bottomPanel.node.classList.contains('theia-maximized'); }
     get problemCounts(): { errors: number; warnings: number; infos: number; total: number } { return this.problemsPanel.counts; }
+    /** The active page's own actions, shown in the header like VS Code panel view actions. */
+    pageActions(): React.ReactNode {
+        if (this.selected === 'terminal') { return this.terminalPanel.headerToolbar(); }
+        if (this.isSTM32 && (this.selected === 'monitor' || this.selected === 'output')) { return this.embeddedPanel.headerActions(); }
+        return null;
+    }
     get tabs(): ReadonlyArray<{ id: BottomPage; label: string; status?: string }> {
         const tabs: Array<{ id: BottomPage; label: string; status?: string }> = this.isSTM32 ? [
             { id: 'output', label: '构建与下载', status: this.embedded.errors.length ? `${this.embedded.errors.length} 个错误` : this.embedded.busy ? '任务进行中' : undefined },
@@ -281,6 +290,7 @@ class BottomPanelHeader extends ReactWidget {
                     <span>{tab.label}</span>{tab.status && <span className="nodu-bottom-tab-status" aria-label={tab.status}/>}
                 </button>)}
             </div>
+            <div className="nodu-bottom-actions">{this.owner.pageActions()}</div>
             <div className="nodu-bottom-chrome">
                 {this.owner.activePage !== 'problems' && this.owner.problemCounts.total > 0 && <button className="nodu-panel-icon nodu-problems-toggle"
                     aria-label={`问题：${this.owner.problemCounts.errors} 个错误，${this.owner.problemCounts.warnings} 个警告`} title="问题 · ⌘/Ctrl+Shift+M"
