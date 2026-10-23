@@ -5,6 +5,7 @@ import { CommandRegistry, CommandService, MenuModelRegistry } from '@theia/core/
 import { CommonMenus, ReactWidget } from '@theia/core/lib/browser';
 import { AbstractViewContribution } from '@theia/core/lib/browser/shell/view-contribution';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
+import { Message } from '@theia/core/shared/@lumino/messaging';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS } from './nodu-tutor-hints';
 
@@ -47,51 +48,90 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     const [settings, setSettings] = React.useState(false);
     const [, redraw] = React.useReducer(n => n + 1, 0);
     const log = React.useRef<HTMLDivElement>(null);
+    const input = React.useRef<HTMLTextAreaElement>(null);
     const following = React.useRef(true);
     React.useEffect(() => { if (following.current) { log.current?.scrollTo(0, log.current.scrollHeight); } });
+    React.useLayoutEffect(() => { const t = input.current; if (t) { t.style.height = 'auto'; t.style.height = `${Math.min(t.scrollHeight, 200)}px`; } });
     const step = tutor.currentStep();
     const isBusy = !!tutor.busy;
+    const canSend = !!tutor.workspaceId;
+    const messages = tutor.messages[tutor.mode];
+    const draft = tutor.drafts[tutor.mode];
+    const ask = (text: string): void => { tutor.drafts[tutor.mode] = text; following.current = true; void tutor.send(); };
+    const submit = (): void => { if (!isBusy && canSend && draft.trim()) { following.current = true; void tutor.send(); } };
+    const suggestions = tutor.mode === 'teach' ? ['这一步要做什么？', '解释当前文件的结构'] : ['解释这段代码', '这个报错是什么意思？'];
+    const done = tutor.plan?.steps.filter(s => tutor.progress.steps[s.id]).length ?? 0;
+    const file = tutor.buffer?.path.split('/').pop();
     const reset = async (): Promise<void> => {
         if (await new ConfirmDialog({ title: '重置进度', msg: '清除本课程的学习记录？', ok: '重置', cancel: '取消' }).open()) { await tutor.action({ type: 'reset' }); }
     };
     return <div className="nodu-ai-panel">
-        <div className="nodu-ai-modebar"><div className="nodu-ai-modes" role="group" aria-label="对话模式">
-            <button aria-pressed={tutor.mode === 'teach'} onClick={() => tutor.setMode('teach')}>教学</button><button aria-pressed={tutor.mode === 'ask'} onClick={() => tutor.setMode('ask')}>提问</button></div>
-            <button className="nodu-ai-icon" aria-label={tutor.paused ? '继续教学' : '暂停教学'} aria-pressed={tutor.paused} title={tutor.paused ? '继续教学' : '暂停教学'} onClick={() => tutor.setPaused(!tutor.paused)}><i className={`codicon codicon-${tutor.paused ? 'play' : 'debug-pause'}`} /></button>
-            <button className="nodu-ai-icon" aria-label="清空对话" title="清空对话" onClick={() => void tutor.clearChat()}><i className="codicon codicon-clear-all" /></button>
-            <button className="nodu-ai-icon" aria-label="AI 设置" aria-expanded={settings} title="AI 设置" onClick={() => setSettings(!settings)}><i className="codicon codicon-settings-gear" /></button></div>
+        <header className="nodu-ai-header">
+            <div className="nodu-ai-modes" role="group" aria-label="对话模式">
+                {(['teach', 'ask'] as const).map(m => <button key={m} aria-pressed={tutor.mode === m} onClick={() => tutor.setMode(m)}>{m === 'teach' ? '教学' : '提问'}</button>)}
+            </div>
+            <button className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!messages.length} onClick={() => void tutor.clearChat()}><i className="codicon codicon-add" aria-hidden="true"/></button>
+            <button className="nodu-ai-icon" aria-label="AI 设置" aria-pressed={settings} title="模型与密钥" onClick={() => setSettings(!settings)}><i className="codicon codicon-settings-gear" aria-hidden="true"/></button>
+        </header>
         {settings && <ProviderSettings tutor={tutor} close={() => setSettings(false)} />}
         {tutor.error && <div className="nodu-ai-error" role="alert">{tutor.error}<button className="scope-text-button" onClick={() => void tutor.load()}>重连</button></div>}
-        {tutor.mode === 'teach' && <>
-            {tutor.session?.plan.kind === 'legacy' && <Migration tutor={tutor} />}
-            {tutor.plan && <div className="nodu-ai-course">
-                <div className="nodu-ai-stepbar"><select aria-label="当前步骤" value={step?.id ?? ''} onChange={e => void tutor.action({ type: 'select', stepId: e.target.value })}>
-                    {!step && <option value="">已自查全部步骤</option>}{tutor.plan.steps.map(s => <option key={s.id} value={s.id} disabled={!tutor.available(s.id)}>{s.title}{tutor.progress.steps[s.id] ? ' ✓' : ''}</option>)}</select>
-                    <button className="theia-button secondary" disabled={!step || isBusy || tutor.paused || !tutor.buffer} onClick={() => void tutor.send('step')}>检查本步</button></div>
-                {step && <details className="nodu-ai-details"><summary>{step.goal}</summary><div className="nodu-ai-step-body">
-                    <p>{step.why}</p><ul>{step.requirements.map(r => <li key={r.id}>{r.text}</li>)}</ul>
-                    {step.options?.map(o => <button key={o.id} className="theia-button secondary" disabled={!o.available} onClick={() => void tutor.action({ type: 'decide', stepId: step.id, optionId: o.id })}>{o.label}</button>)}
-                    {step.guidance?.map(g => <pre key={g.id} tabIndex={0}>{g.lines.join('\n')}</pre>)}
+        {tutor.mode === 'teach' && tutor.session?.plan.kind === 'legacy' && <Migration tutor={tutor} />}
+        {tutor.mode === 'teach' && tutor.plan && <section className="nodu-ai-course" aria-label="课程步骤">
+            <div className="nodu-ai-stepbar">
+                <select aria-label="当前步骤" value={step?.id ?? ''} onChange={e => void tutor.action({ type: 'select', stepId: e.target.value })}>
+                    {!step && <option value="">已自查全部步骤</option>}{tutor.plan.steps.map(s => <option key={s.id} value={s.id} disabled={!tutor.available(s.id)}>{s.title}{tutor.progress.steps[s.id] ? ' ✓' : ''}</option>)}
+                </select>
+                <span className="nodu-ai-progress" aria-label={`已完成 ${done} / ${tutor.plan.steps.length} 步`}>{done}/{tutor.plan.steps.length}</span>
+                <button className="nodu-ai-chip" disabled={!step || isBusy || !tutor.buffer} onClick={() => void tutor.send('step')} title="检查本步 · ⌘/Ctrl+Alt+Enter"><i className="codicon codicon-check" aria-hidden="true"/>检查本步</button>
+            </div>
+            {step && <details className="nodu-ai-details"><summary>{step.goal}</summary><div className="nodu-ai-step-body">
+                <p>{step.why}</p><ul>{step.requirements.map(r => <li key={r.id}>{r.text}</li>)}</ul>
+                {step.options?.map(o => <button key={o.id} className="theia-button secondary" disabled={!o.available} onClick={() => void tutor.action({ type: 'decide', stepId: step.id, optionId: o.id })}>{o.label}</button>)}
+                {step.guidance?.map(g => <pre key={g.id} tabIndex={0}>{g.lines.join('\n')}</pre>)}
+                <div className="nodu-ai-actions">
                     <button className="scope-text-button" onClick={() => run(TUTOR_COMMANDS.revealStep)}>定位代码</button>
                     {step.kind !== 'decide' && <button className="scope-text-button" onClick={() => void tutor.action({ type: tutor.progress.steps[step.id] ? 'reopen' : 'manualCheck', stepId: step.id })}>{tutor.progress.steps[step.id] ? '重新练习' : '自查完成'}</button>}
                     <button className="scope-text-button" onClick={() => void reset()}>重置进度</button>
-                </div></details>}
-            </div>}
-        </>}
+                </div>
+            </div></details>}
+            {tutor.paused && <div className="nodu-ai-note" role="status">编辑指导已关闭<button className="scope-text-button" onClick={() => tutor.setPaused(false)}>开启</button></div>}
+        </section>}
         <div className="nodu-ai-log" ref={log} role="log" aria-label="AI 对话" onScroll={() => { const n = log.current; following.current = !n || n.scrollHeight - n.scrollTop - n.clientHeight < 32; }}>
-            {tutor.messages[tutor.mode].length === 0 && <div className="nodu-ai-empty"><i className="codicon codicon-sparkle" /><span>{tutor.mode === 'teach' ? '从当前代码开始' : '提问代码问题'}</span></div>}
-            {tutor.messages[tutor.mode].map(m => <article key={m.id} className={`nodu-ai-message nodu-ai-${m.role}`} aria-label={m.role === 'user' ? '你' : 'AI'} aria-busy={m.status === 'pending'}>
-                {m.text ? <MessageText text={m.text} /> : m.status === 'pending' && <span className="nodu-ai-status">正在思考…</span>}
-                {m.status === 'stopped' && <div className="nodu-ai-status">已停止</div>}
-                {m.status === 'failed' && <div className="nodu-ai-failed" role="alert">{m.note ?? 'AI 请求失败'}</div>}
+            {!messages.length && <div className="nodu-ai-empty">
+                <i className="codicon codicon-sparkle" aria-hidden="true"/>
+                <span>{tutor.mode === 'teach' ? '从当前代码开始' : '提问代码问题'}</span>
+                <div className="nodu-ai-suggestions">{suggestions.map(s => <button key={s} className="nodu-ai-suggestion" disabled={!canSend || isBusy} onClick={() => ask(s)}>{s}</button>)}</div>
+            </div>}
+            {messages.map(m => <article key={m.id} className={`nodu-ai-message nodu-ai-${m.role}`} aria-label={m.role === 'user' ? '你' : 'AI'} aria-busy={m.status === 'pending'}>
+                {m.role === 'assistant' && <div className="nodu-ai-author"><i className="codicon codicon-sparkle" aria-hidden="true"/>AI</div>}
+                <div className="nodu-ai-body">
+                    {m.text ? <MessageText text={m.text} /> : m.status === 'pending' && <span className="nodu-ai-status">正在思考…</span>}
+                    {m.status === 'stopped' && <div className="nodu-ai-status">已停止</div>}
+                    {m.status === 'failed' && <div className="nodu-ai-failed" role="alert">{m.note ?? 'AI 请求失败'}</div>}
+                </div>
+                {m.role === 'assistant' && m.status === 'done' && !!m.text && <div className="nodu-ai-message-actions">
+                    <button className="nodu-ai-icon" aria-label="复制回答" title="复制" onClick={() => void navigator.clipboard?.writeText(m.text).catch(() => undefined)}><i className="codicon codicon-copy" aria-hidden="true"/></button>
+                </div>}
             </article>)}
         </div>
-        <form className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); following.current = true; void tutor.send(); }}>
-            {tutor.buffer && <label className="nodu-ai-context"><input type="checkbox" checked={tutor.includeCode} onChange={e => { tutor.includeCode = e.target.checked; redraw(); }} /><span title={tutor.buffer.path}>{tutor.buffer.path}</span></label>}
-            <textarea aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} rows={3} placeholder={tutor.mode === 'teach' ? '一起写这段代码…' : '想了解什么？'} value={tutor.drafts[tutor.mode]} onChange={e => { tutor.drafts[tutor.mode] = e.target.value; redraw(); }} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (!isBusy) { void tutor.send(); } } }} />
-            <div className="nodu-ai-composer-actions"><button type="button" className="scope-text-button" onClick={() => setSettings(true)}>{tutor.provider?.model ?? 'GLM'}</button>
-                {tutor.mode === 'teach' && tutor.paused && <span>教学已暂停</span>}
-                {isBusy ? <button type="button" className="theia-button secondary" onClick={() => tutor.cancel()}>停止</button> : <button className="theia-button" disabled={!tutor.workspaceId || !tutor.drafts[tutor.mode].trim() || (tutor.mode === 'teach' && tutor.paused)}>发送</button>}</div>
+        <form className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); submit(); }}>
+            {tutor.buffer && <div className="nodu-ai-context-row">
+                <button type="button" className={`nodu-ai-pill${tutor.includeCode ? '' : ' nodu-ai-pill-off'}`} aria-pressed={tutor.includeCode}
+                    title={tutor.includeCode ? `发送时附带 ${tutor.buffer.path}，点击移除` : `点击附带 ${tutor.buffer.path}`}
+                    onClick={() => { tutor.includeCode = !tutor.includeCode; redraw(); }}>
+                    <i className="codicon codicon-file-code" aria-hidden="true"/><span>{file}</span><i className={`codicon codicon-${tutor.includeCode ? 'close' : 'add'}`} aria-hidden="true"/>
+                </button>
+            </div>}
+            <textarea ref={input} rows={1} aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} placeholder={tutor.mode === 'teach' ? '问问这一步怎么写…' : '想了解什么？'} value={draft}
+                onChange={e => { tutor.drafts[tutor.mode] = e.target.value; redraw(); }}
+                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }} />
+            <div className="nodu-ai-composer-bar">
+                <button type="button" className="nodu-ai-model" title="模型与密钥" onClick={() => setSettings(true)}>{tutor.provider?.model ?? 'GLM'}<i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                {tutor.provider && !tutor.provider.configured && <span className="nodu-ai-warn">未配置密钥</span>}
+                {isBusy
+                    ? <button type="button" className="nodu-ai-send nodu-ai-stop" aria-label="停止" title="停止" onClick={() => tutor.cancel()}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
+                    : <button className="nodu-ai-send" aria-label="发送" title="发送 · Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
+            </div>
         </form>
     </div>;
 }
@@ -106,6 +146,8 @@ export class NoduTutorWidget extends ReactWidget {
         this.toDispose.push(this.tutor.onDidChange(() => this.update()));
         this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible))); this.update();
     }
+    /** Closing the sidebar is remembered; professional mode reopens it only while preferred. */
+    protected override onCloseRequest(msg: Message): void { this.tutor.setPanelPreferred(false); super.onCloseRequest(msg); }
     protected onActivateRequest(): void { this.node.querySelector<HTMLTextAreaElement>('textarea')?.focus(); }
     protected render(): React.ReactNode { return <TutorPanel tutor={this.tutor} run={id => void this.commands.executeCommand(id)} />; }
 }
@@ -116,8 +158,8 @@ export class NoduTutorViewContribution extends AbstractViewContribution<NoduTuto
     override registerCommands(commands: CommandRegistry): void {
         super.registerCommands(commands);
         const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
-        commands.registerCommand({ id: TUTOR_COMMANDS.openPanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ reveal: true, activate: true }), ...available });
-        commands.registerCommand({ id: TUTOR_COMMANDS.togglePanel, label: 'AI', category: 'Nodu' }, { execute: () => this.openView({ toggle: true, activate: true }), ...available });
+        commands.registerCommand({ id: TUTOR_COMMANDS.openPanel, label: 'AI', category: 'Nodu' }, { execute: async () => { await this.openView({ reveal: true, activate: true }); this.tutor.setPanelPreferred(true); }, ...available });
+        commands.registerCommand({ id: TUTOR_COMMANDS.togglePanel, label: 'AI 对话', category: 'Nodu' }, { execute: async () => { await this.openView({ toggle: true, activate: true }); this.tutor.setPanelPreferred(!!this.tryGetWidget()?.isVisible); }, ...available });
     }
     override registerMenus(menus: MenuModelRegistry): void { menus.registerMenuAction(CommonMenus.VIEW_LAYOUT, { commandId: TUTOR_COMMANDS.togglePanel, order: '0_nodu_5' }); }
 }

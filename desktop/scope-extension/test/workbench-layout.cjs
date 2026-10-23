@@ -29,6 +29,9 @@ function workbench(isC = false) {
     const bottom = { area: 'bottom', sessions: [{ pid: 42 }], page: 'terminal', draft: 'pending command' };
     const vision = { area: 'right' }, files = { area: 'left' };
     owner.embedded = { isC };
+    // The AI sidebar preference is off here so layout tests only cover the panels they assert on.
+    owner.tutorModel = { panelPreferred: false };
+    owner.tutorView = { openView: async () => { throw new Error('AI sidebar should stay closed'); } };
     owner.layoutState = { mode: 'simple', setMode(mode) { this.mode = mode; }, setDeviceOpen() {} };
     owner.shell = {
         getAreaFor: widget => widget.area,

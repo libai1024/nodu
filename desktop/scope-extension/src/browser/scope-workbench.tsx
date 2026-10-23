@@ -31,7 +31,7 @@ import { NoduBottomPanelWidget } from './nodu-bottom-panel';
 import { NoduBoardFilesContribution } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS, TUTOR_MENU } from './nodu-tutor-hints';
-import { NoduTutorWidget } from './nodu-tutor-widget';
+import { NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
 import { NoduBrand } from './scope-brand';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduCToolbar } from './nodu-embedded-toolbar';
@@ -199,9 +199,13 @@ export class ScopeToolbar extends ReactWidget {
     private renderAI(): React.ReactNode {
         // 简洁模式不提供 AI 功能。
         if (this.layoutState.mode === 'simple') { return undefined; }
+        // The switch turns editor guidance on or off; the AI conversation in the sidebar is unaffected.
+        const on = !this.tutor.paused;
         return <div className="nodu-ai-split" role="group" aria-label="AI">
-            <button className="scope-action scope-toolbar-icon nodu-toolbar-tutor" aria-label="AI 侧栏" aria-pressed={this.tutor.panelVisible} onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.togglePanel)} title="AI 侧栏"><i className="codicon codicon-sparkle" aria-hidden="true" /></button>
-            <button className="scope-action nodu-ai-more" aria-label="AI 显示设置" aria-haspopup="menu" title="AI 显示设置" onClick={event => this.openMenu(TUTOR_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true" /></button>
+            <button className={`scope-action scope-toolbar-icon nodu-toolbar-tutor${on ? ' nodu-ai-on' : ''}`} aria-label="AI 编辑指导" aria-pressed={on}
+                onClick={() => void this.commands.executeCommand(TUTOR_COMMANDS.guidance)}
+                title={on ? 'AI 编辑指导已开启，点击关闭（不影响 AI 对话）' : 'AI 编辑指导已关闭，点击开启'}><i className={`codicon codicon-${on ? 'sparkle-filled' : 'sparkle'}`} aria-hidden="true" /></button>
+            <button className="scope-action nodu-ai-more" aria-label="AI 菜单" aria-haspopup="menu" title="AI 对话与显示设置" onClick={event => this.openMenu(TUTOR_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true" /></button>
         </div>;
     }
 
@@ -231,6 +235,8 @@ export class ScopeToolbar extends ReactWidget {
 @injectable()
 export class ScopeWorkbenchContribution implements FrontendApplicationContribution, CommandContribution, MenuContribution, KeybindingContribution {
     @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
+    @inject(NoduTutorModel) protected readonly tutorModel!: NoduTutorModel;
+    @inject(NoduTutorViewContribution) protected readonly tutorView!: NoduTutorViewContribution;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     @inject(ScopeToolbar) protected readonly toolbar!: ScopeToolbar;
     @inject(ScopeSession) protected readonly session!: ScopeSession;
@@ -438,7 +444,8 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.layoutState.setMode(mode);
         // Simple mode has no AI; also close a sidebar restored from a professional-mode layout.
         const tutor = mode === 'simple' ? this.shell.getWidgetById(NoduTutorWidget.ID) : undefined;
-        if (tutor) { await this.shell.closeWidget(tutor.id); }
+        // Closing for simple mode keeps the professional-mode preference.
+        if (tutor) { const keep = this.tutorModel.panelPreferred; await this.shell.closeWidget(tutor.id); this.tutorModel.setPanelPreferred(keep); }
         document.body.classList.toggle('nodu-simple', mode === 'simple');
         document.body.classList.toggle('nodu-pro', mode === 'pro');
         this.layoutState.setDeviceOpen(false);
@@ -455,6 +462,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         else { await this.shell.collapsePanel('left'); }
         if (!this.embedded.isC && profile.vision) { await this.vision.openView({ reveal: true, activate: false }); }
         else { await this.shell.collapsePanel('right'); }
+        await this.openTutorSidebar(!this.embedded.isC && profile.vision);
         // The bottom area has one shared visibility, active page and set of sessions.
         // Changing the surrounding layout must not hide/reveal it or move focus.
         if (!this.layoutApplied) { await this.showConsole(false); }
@@ -462,6 +470,12 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.layoutApplied = true;
         this.updateStatus();
         await this.settlePanels();
+    }
+
+    /** Professional mode keeps the AI sidebar on the right; the framebuffer stays in front when it is shown. */
+    private async openTutorSidebar(behindVision: boolean): Promise<void> {
+        if (this.layoutState.mode !== 'pro' || !this.tutorModel.panelPreferred) { return; }
+        await this.tutorView.openView({ area: 'right', activate: false, reveal: !behindVision });
     }
 
     private async applyPlatformLayout(): Promise<void> {
@@ -478,6 +492,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
             await this.ensureSimplePanel(this.vision.tryGetWidget(), 'right');
             await this.vision.openView({ reveal: true, activate: false });
         }
+        await this.openTutorSidebar(platform === 'k210' && profile.vision);
         this.updateStatus();
         await this.settlePanels();
     }

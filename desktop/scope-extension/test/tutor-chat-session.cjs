@@ -139,3 +139,18 @@ test('line review is refused outside teaching mode', async t => {
     assert.deepEqual(result, { ok: false, error: '检查需要教学代码上下文' });
     assert.equal(provider.calls.length, 0);
 });
+
+test('teach-mode chat accepts a prose reply; line review still requires structure', () => {
+    const { parseTutorAnswer } = require('../lib/node/tutor/tutor-chat-session');
+    const chat = { id: 'chat-0000001', workspaceId: WORKSPACE, epoch: 1, mode: 'teach', kind: 'chat', prompt: 'HAL_Delay 单位？', buffer };
+    assert.deepEqual(parseTutorAnswer('HAL_Delay 的参数单位是毫秒。', chat), { text: 'HAL_Delay 的参数单位是毫秒。', annotations: [] });
+    assert.equal(parseTutorAnswer('```json\n{"text":"好","annotations":[]}\n```', chat).text, '好');
+    assert.throws(() => parseTutorAnswer('看起来没问题。', { ...chat, kind: 'line' }), /教学回复格式无效/);
+});
+
+test('teach-mode chat keeps the text of JSON that fails the structured checks', () => {
+    const { parseTutorAnswer } = require('../lib/node/tutor/tutor-chat-session');
+    const chat = { id: 'chat-0000002', workspaceId: WORKSPACE, epoch: 1, mode: 'teach', kind: 'chat', prompt: '单位？', buffer };
+    assert.deepEqual(parseTutorAnswer('{"text":"毫秒"}', chat), { text: '毫秒', annotations: [] });
+    assert.throws(() => parseTutorAnswer('{"text":"毫秒"}', { ...chat, kind: 'step' }), /教学回复格式无效/);
+});

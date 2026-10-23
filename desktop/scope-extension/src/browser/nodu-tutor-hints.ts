@@ -13,7 +13,7 @@ import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 export const TUTOR_MENU = ['nodu-ai-controls'];
 export const TUTOR_COMMANDS = {
     openPanel: 'nodu.tutor.open-panel', togglePanel: 'nodu.tutor.toggle-panel', toggleHints: 'nodu.tutor.toggle-hints',
-    revealStep: 'nodu.tutor.reveal-step', pause: 'nodu.tutor.pause', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
+    revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
 } as const;
 interface LineTask { decoration: string; text: string; status: 'pending' | 'ok' | 'needs-work' | 'context' | 'stale' | 'unavailable'; note: string; version?: number; }
 let count = 0;
@@ -203,8 +203,9 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         };
         toggle(TUTOR_COMMANDS.toggleHints, '代码虚影', 'hintsVisible'); toggle(TUTOR_COMMANDS.highlight, '代码高光', 'highlightsVisible');
         toggle(TUTOR_COMMANDS.annotations, '浮动批注', 'annotationsVisible'); toggle(TUTOR_COMMANDS.float, '步骤浮窗', 'floatVisible');
-        commands.registerCommand({ id: TUTOR_COMMANDS.pause, label: '暂停教学', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => this.tutor.paused, ...available });
-        commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.teaching && !!this.tutor.buffer && !this.tutor.busy, isVisible: () => this.tutor.enabled });
+        // The toolbar AI switch: editor guidance only; the AI conversation is unaffected.
+        commands.registerCommand({ id: TUTOR_COMMANDS.guidance, label: 'AI 编辑指导', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => !this.tutor.paused, ...available });
+        commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.enabled && this.tutor.mode === 'teach' && !!this.tutor.buffer && !this.tutor.busy, isVisible: () => this.tutor.enabled });
         commands.registerCommand({ id: TUTOR_COMMANDS.revealStep, label: '定位教学代码', category: 'Nodu' }, { execute: async () => {
             const step = this.tutor.currentStep(), anchor = step?.anchors[0]; if (!anchor || !this.tutor.rootUri) { return; }
             const widget = await this.editors.open(this.tutor.rootUri.resolve(anchor.path), { mode: 'activate' });
@@ -219,7 +220,8 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         keys.registerKeybinding({ command: TUTOR_COMMANDS.check, keybinding: 'ctrlcmd+alt+enter', when: 'editorTextFocus' });
     }
     registerMenus(menus: MenuModelRegistry): void {
-        for (const [i, command] of [TUTOR_COMMANDS.toggleHints,TUTOR_COMMANDS.highlight,TUTOR_COMMANDS.annotations,TUTOR_COMMANDS.float].entries()) { menus.registerMenuAction([...TUTOR_MENU, 'display'], { commandId: command, order: String(i) }); }
-        menus.registerMenuAction([...TUTOR_MENU, 'pause'], { commandId: TUTOR_COMMANDS.pause });
+        menus.registerMenuAction([...TUTOR_MENU, '0_chat'], { commandId: TUTOR_COMMANDS.togglePanel });
+        menus.registerMenuAction([...TUTOR_MENU, '1_guidance'], { commandId: TUTOR_COMMANDS.guidance });
+        for (const [i, command] of [TUTOR_COMMANDS.toggleHints,TUTOR_COMMANDS.highlight,TUTOR_COMMANDS.annotations,TUTOR_COMMANDS.float].entries()) { menus.registerMenuAction([...TUTOR_MENU, '2_display'], { commandId: command, order: String(i) }); }
     }
 }

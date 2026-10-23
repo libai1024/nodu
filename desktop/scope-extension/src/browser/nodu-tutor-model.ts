@@ -35,8 +35,11 @@ export class NoduTutorModel {
     session?: TutorSessionSnapshot;
     error?: string;
     mode: TutorMode = 'teach';
-    paused = false;
+    /** Editor guidance (ghost text, highlights, line review) is off; chat stays available. */
+    paused = stored('guidance-off', false);
     panelVisible = false;
+    /** Professional mode opens the AI sidebar on the right unless the user closed it. */
+    panelPreferred = stored('panel', true);
     epoch = 0;
     hintsVisible = stored('ghost', true);
     highlightsVisible = stored('highlight', true);
@@ -164,14 +167,24 @@ export class NoduTutorModel {
         if (mode === this.mode) { return; }
         this.mode = mode; this.transition();
     }
-    setPaused(paused: boolean): void { if (paused !== this.paused) { this.paused = paused; this.transition(); } }
+    /** The toolbar AI switch: stops editor guidance and line review, never the conversation. */
+    setPaused(paused: boolean): void {
+        if (paused === this.paused) { return; }
+        this.paused = paused;
+        try { localStorage.setItem('nodu.tutor.guidance-off', String(paused)); } catch { /* In-memory only. */ }
+        this.cancelReview(); this.invalidate(); this.notify();
+    }
     private transition(): void { this.cancelAll(); this.invalidate(); void this.syncPresentation(); this.notify(); }
     private syncPresentation(): Promise<void> {
-        const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = this.paused || !this.enabled;
+        const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = !this.enabled;
         this.sync = this.sync.catch(() => undefined).then(async () => {
             if (workspace) { await this.service.setPresentation(workspace, epoch, mode, paused); }
         });
         return this.sync.catch(error => { this.error = error instanceof Error ? error.message : '教学会话更新失败'; this.notify(); });
+    }
+    setPanelPreferred(open: boolean): void {
+        this.panelPreferred = open;
+        try { localStorage.setItem('nodu.tutor.panel', String(open)); } catch { /* In-memory only. */ }
     }
     setPanelVisible(visible: boolean): void { this.panelVisible = visible; this.notify(); }
     setDisplay(key: 'hintsVisible' | 'highlightsVisible' | 'annotationsVisible' | 'floatVisible' | 'autoReview', value: boolean): void {
@@ -202,12 +215,12 @@ export class NoduTutorModel {
     async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer): Promise<TutorAIResult | undefined> {
         const review = kind === 'line';
         const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
-        if (!this.enabled || laneBusy() || !this.workspaceId || (this.mode === 'teach' && this.paused)) { return; }
+        if (!this.enabled || laneBusy() || !this.workspaceId || (review && this.paused)) { return; }
         const mode = this.mode;
         const prompt = kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
         if (!prompt) { return; }
         await this.sync;
-        if (!this.enabled || laneBusy() || mode !== this.mode || !this.workspaceId || (mode === 'teach' && this.paused)) { return; }
+        if (!this.enabled || laneBusy() || mode !== this.mode || !this.workspaceId || (review && this.paused)) { return; }
         const context = buffer ?? (this.includeCode ? this.buffer : undefined);
         const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: this.workspaceId, epoch: this.epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
         const current = (): boolean => review ? this.reviewing?.id === request.id : this.busy?.id === request.id;
