@@ -201,10 +201,14 @@ export class NoduTutorModel {
         try {
             const next = await this.service.goalSnapshot(workspace);
             if (workspace === this.workspaceId && next.revision >= this.goalState.revision) {
-                if (next.revision !== this.goalState.revision) { this.invalidate(); }
+                if (next.revision !== this.goalState.revision || JSON.stringify(next.fragment) !== JSON.stringify(this.goalState.fragment)) { this.invalidate(); }
                 this.goalState = next; this.restoreGoalGuidance(); this.notify();
             }
-        } catch (error) { this.error = error instanceof Error ? error.message : '教学进度读取失败'; this.notify(); }
+        } catch (error) {
+            if (workspace !== this.workspaceId) { return; }
+            this.invalidate(); this.goalState = { ...this.goalState, fragment: undefined };
+            this.error = error instanceof Error ? error.message : '教学进度读取失败'; this.notify();
+        }
     }
     async resolveReference(path: string, line = 1): Promise<{ path: string; line: number }> {
         if (!this.workspaceId) { throw new Error('请先打开工程'); }

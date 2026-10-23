@@ -20,7 +20,23 @@ export class TutorGoalSession {
         const context = await this.context(workspace);
         const state = await this.store.read(context.key);
         await this.authorize(workspace);
-        return state;
+        return this.validateRestoredFragment(workspace, context, state);
+    }
+    private async validateRestoredFragment(workspace: string, project: TutorProjectContext, state: TutorGoalState): Promise<TutorGoalState> {
+        const fragment = state.fragment, guidance = fragment?.answer.guidance;
+        if (!fragment || !guidance) { return state; }
+        const withoutFragment = (): TutorGoalState => ({ ...state, fragment: undefined });
+        if (state.target?.mcu !== project.mcu || state.target?.sdk !== project.sdk
+            || state.steps[state.current]?.path !== fragment.source.path) { return withoutFragment(); }
+        await this.authorize(workspace, fragment.source);
+        const lines = fragment.source.text.split('\n');
+        if (lines[guidance.anchorLine - 1]?.trim()) { return withoutFragment(); }
+        lines.splice(guidance.anchorLine - 1, 0, ...guidance.lines);
+        const candidate = await this.context(workspace, { ...fragment.source, text: lines.join('\n') });
+        await this.authorize(workspace, fragment.source);
+        // Reading must not mutate shared progress. A temporary checker failure hides
+        // the ghost; a later successful read may restore it without a model call.
+        return candidate.localCheck && candidate.localCheck.syntax !== 'valid' ? withoutFragment() : state;
     }
     async run(request: TutorGoalRequest): Promise<TutorGoalResult> {
         let abort: AbortController | undefined;
@@ -43,7 +59,10 @@ export class TutorGoalSession {
             await live();
             const context = await this.context(request.workspaceId, request.buffer);
             if (request.buffer && !context.files.includes(request.buffer.path)) { context.files = [request.buffer.path, ...context.files].slice(0, 200); }
-            const state = await this.store.read(context.key);
+            const stored = await this.store.read(context.key);
+            const state = request.action === 'cancel' || request.action === 'pause' ? stored
+                : await this.validateRestoredFragment(request.workspaceId, context, stored);
+            await live();
             if (state.revision !== request.revision) { throw new Error('教学进度已更新，请重试'); }
             let next = { ...state };
             let presentation: { source: TutorBuffer; answer: import('../../common/tutor/tutor-ai-protocol').TutorAnswer } | undefined;
@@ -84,6 +103,7 @@ export class TutorGoalSession {
                 const kind = request.action === 'check' ? 'step' : 'chat';
                 if (kind === 'step' && !state.fragment) { throw new Error('请先生成本步跟写片段'); }
                 if (kind === 'step' && buffer.text === state.fragment?.source.text) { throw new Error('请先编写本步代码'); }
+                if (kind === 'chat' && context.localCheck?.syntax === 'unavailable') { throw new Error(context.localCheck.note ?? '本地检查暂不可用，请重试'); }
                 const candidates = request.placement === 'suggest' ? context.localCheck?.insertionLines ?? [] : [buffer.line];
                 if (kind === 'chat' && !candidates.length) { throw new Error('没有可用的空白位置，请先在目标文件留出空白行'); }
                 const placement = request.placement === 'suggest' ? `从以下可用空白行中选适合本步作用域的位置：${candidates.join(',')}。anchorLine必须是其中一行，不能把语句放在函数外或注释内。` : `anchorLine必须等于${buffer.line}。`;
@@ -96,11 +116,15 @@ export class TutorGoalSession {
                     ? JSON.stringify({ text: context.localCheck.execution.note, annotations: [], review: { verdict: context.localCheck.execution.status === 'failed' ? 'needs-work' : 'context', note: '纯函数执行尚未通过，本次不推进步骤。' } })
                     : kind === 'step' && context.localCheck?.syntax === 'incomplete'
                     ? JSON.stringify({ text: '本地检查发现语法结构尚未完整，请先补齐代码。', annotations: context.localCheck.errorLines.slice(0, 8).map(line => ({ startLine: line, endLine: line, note: '语法结构待补齐' })), review: { verdict: 'context', note: 'C 语法树存在错误节点，本次未调用模型。' } })
-                    : await complete(instruction, { project: context, goal: state.goal, step, buffer,
+                    : await complete(instruction, { project: context, goal: state.goal, step, buffer: { path: buffer.path, version: buffer.version, line: buffer.line },
                     numberedSource: buffer.text.split('\n').map((line, index) => `${index + 1}: ${line}`).join('\n'),
                     previous: state.fragment ? { path: state.fragment.source.path, guidance: state.fragment.answer.guidance } : undefined }, kind === 'chat' ? async candidate => {
                         const value = JSON.parse(candidate.trim().replace(/^```(?:json)?\s*|\s*```$/g, ''));
-                        const line = request.placement === 'suggest' ? value.guidance?.anchorLine : buffer.line;
+                        if (!value.guidance) {
+                            parseTutorAnswer(candidate, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer });
+                            return true;
+                        }
+                        const line = request.placement === 'suggest' ? value.guidance.anchorLine : buffer.line;
                         if (!Number.isInteger(line) || !candidates.includes(line)) { return false; }
                         const parsed = parseTutorAnswer(candidate, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer: { ...buffer, line } });
                         if (!parsed.guidance) { return true; }
@@ -112,8 +136,10 @@ export class TutorGoalSession {
                 let source = { ...buffer };
                 if (kind === 'chat' && request.placement === 'suggest') {
                     const proposed = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, '')).guidance?.anchorLine;
-                    if (!Number.isInteger(proposed) || !candidates.includes(proposed) || buffer.text.split('\n')[proposed - 1]?.trim()) { throw new Error('模型未选择有效的空白位置'); }
-                    source = { ...buffer, line: proposed };
+                    if (proposed !== undefined) {
+                        if (!Number.isInteger(proposed) || !candidates.includes(proposed) || buffer.text.split('\n')[proposed - 1]?.trim()) { throw new Error('模型未选择有效的空白位置'); }
+                        source = { ...buffer, line: proposed };
+                    }
                 }
                 const answer = parseTutorAnswer(raw, { id: request.id, workspaceId: request.workspaceId, epoch: 0, mode: 'teach', kind, prompt: step.goal, buffer: source });
                 presentation = { source, answer };

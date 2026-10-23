@@ -201,3 +201,12 @@ test('reviewed equivalent lines trigger a fresh fragment review without being ma
  t.autoCheckFragment([1,2]);t.autoCheckFragment([1,2]);assert.deepEqual(calls,['check']);assert.equal(t.goalState.status,'active');
  t.goalState.status='paused';t.lastAutoFragment=undefined;t.autoCheckFragment([1,2]);assert.equal(calls.length,1);
 });
+
+
+test('same-revision fragment removal and failed reads clear a restored ghost',async()=>{
+ const Refresh=methods('nodu-tutor-model.ts','NoduTutorModel',['refreshGoal','invalidate','restoreGoalGuidance','notify'],helpers);
+ const m=Object.assign(new Refresh(),{workspaceId:'workspace-1',goalState:{revision:4,status:'active',fragment:{old:true}},guidance:{old:true},invalidated:{fire(){}},changed:{fire(){}}});
+ m.service={goalSnapshot:async()=>({revision:4,status:'active',steps:[],current:0})};await m.refreshGoal();assert.equal(m.guidance,undefined);assert.equal(m.goalState.fragment,undefined);
+ m.guidance={old:true};m.goalState.fragment={old:true};m.service={goalSnapshot:async()=>{throw Error('revoked');}};await m.refreshGoal();assert.equal(m.guidance,undefined);assert.equal(m.goalState.fragment,undefined);
+ const before=m.goalState;m.service={goalSnapshot:async()=>{m.workspaceId='workspace-2';throw Error('late');}};await m.refreshGoal();assert.equal(m.goalState,before);assert.equal(m.error,'revoked');
+});

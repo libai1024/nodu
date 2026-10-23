@@ -29,6 +29,8 @@ export class SseParser {
         const out: SseEvent[] = [];
         let index: number;
         while ((index = this.buffer.search(/\r\n|\r|\n/)) >= 0) {
+            // A CR at a network chunk boundary may be the first half of CRLF.
+            if (this.buffer[index] === '\r' && index === this.buffer.length - 1) { break; }
             const line = this.buffer.slice(0, index);
             this.buffer = this.buffer.slice(index + (this.buffer.startsWith('\r\n', index) ? 2 : 1));
             this.line(line, out);
@@ -37,7 +39,7 @@ export class SseParser {
     }
     finish(): SseEvent[] {
         const out: SseEvent[] = [];
-        if (this.buffer) { this.line(this.buffer, out); this.buffer = ''; }
+        if (this.buffer) { this.line(this.buffer.replace(/\r$/, ''), out); this.buffer = ''; }
         this.line('', out);
         return out;
     }

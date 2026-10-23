@@ -99,7 +99,7 @@ test('authorized declarations and saved-build evidence distinguish dirty buffers
 
 test('local incomplete syntax blocks fragment advancement without calling the model',async t=>{
  const f=await fixture(t);f.responses.push(plan,fragment);await f.run('propose',{prompt:'serial',buffer});await f.run('confirm');await f.run('fragment',{buffer});
- const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{schema:1,sourceDigest:'hash',syntax:'incomplete',errorLines:[2],findings:[]}}),f.authorize);
+ const session=new TutorGoalSession(f.store,f.provider,async(id,b)=>({...context,localCheck:{schema:1,sourceDigest:'hash',syntax:b?.text.includes('int x = ;')?'incomplete':'valid',errorLines:[2],findings:[]}}),f.authorize);
  const result=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:(await f.store.read(context.key)).revision,action:'check',buffer:{...buffer,text:'int main(void){\nint x = ;\n}',version:2}});
  assert.equal(result.ok,true);assert.equal(result.state.current,0);assert.equal(result.presentation.answer.review.verdict,'context');assert.equal(f.calls.length,2);
 });
@@ -152,4 +152,33 @@ test('fragment is checked in a prospective buffer before a misplaced ghost can p
  const r=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer,placement:'suggest'});
  assert.equal(r.ok,true);assert.equal(r.state.fragment.answer.guidance.lines[0],'const char *hello = "hello";');assert.equal(f.calls.length,3);
  assert.match(JSON.parse(f.calls[1][1].content).numberedSource,/2: /);
+});
+
+
+test('restored fragments are rechecked without changing revision or calling the model',async t=>{
+ const f=await fixture(t);f.responses.push(plan,fragment);await f.run('propose',{prompt:'serial'});await f.run('confirm');await f.run('fragment',{buffer});await f.run('pause');
+ const saved=await f.store.read(context.key);let syntax='incomplete';
+ const reopened=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{syntax}}),f.authorize);t.after(()=>reopened.dispose());
+ assert.equal((await reopened.snapshot('workspace-1')).fragment,undefined);assert.equal((await f.store.read(context.key)).revision,saved.revision);assert.ok((await f.store.read(context.key)).fragment);
+ syntax='unavailable';assert.equal((await reopened.snapshot('workspace-1')).fragment,undefined);
+ syntax='valid';assert.deepEqual((await reopened.snapshot('workspace-1')).fragment,saved.fragment);assert.equal(f.calls.length,2);
+ syntax='incomplete';const result=await reopened.run({id:randomUUID(),workspaceId:'workspace-1',revision:saved.revision,action:'resume'});
+ assert.equal(result.ok,true);assert.equal(result.state.status,'active');assert.equal(result.state.fragment,undefined);assert.equal(result.state.current,0);
+});
+test('changed target or revoked source cannot restore an old fragment',async t=>{
+ const f=await fixture(t);f.responses.push(plan,fragment);await f.run('propose',{prompt:'serial'});await f.run('confirm');await f.run('fragment',{buffer});
+ const different=new TutorGoalSession(f.store,f.provider,async()=>({...context,mcu:'STM32F407ZGT6'}),f.authorize);t.after(()=>different.dispose());assert.equal((await different.snapshot('workspace-1')).fragment,undefined);
+ const revoked=new TutorGoalSession(f.store,f.provider,async()=>context,async(id,b)=>{if(b)throw Error('source revoked');});t.after(()=>revoked.dispose());await assert.rejects(()=>revoked.snapshot('workspace-1'),/source revoked/);
+ const cancelled=await revoked.run({id:randomUUID(),workspaceId:'workspace-1',revision:(await f.store.read(context.key)).revision,action:'cancel'});assert.equal(cancelled.ok,true);assert.equal(cancelled.state.status,'cancelled');assert.equal(cancelled.state.fragment,undefined);
+});
+
+
+test('missing context is explained once and never converted into fabricated guidance',async t=>{
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'serial'});await f.run('confirm');
+ const session=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{syntax:'valid',insertionLines:[2]}}),f.authorize);t.after(()=>session.dispose());
+ f.responses.push(JSON.stringify({text:'请先提供传感器接线与驱动声明。',annotations:[]}));
+ const result=await session.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer,placement:'suggest'});
+ assert.equal(result.ok,false);assert.equal(result.error,'请先提供传感器接线与驱动声明。');assert.equal(f.calls.length,2);assert.equal((await f.store.read(context.key)).fragment,undefined);
+ const unavailable=new TutorGoalSession(f.store,f.provider,async()=>({...context,localCheck:{syntax:'unavailable',note:'检查器忙'}}),f.authorize);t.after(()=>unavailable.dispose());
+ const failed=await unavailable.run({id:randomUUID(),workspaceId:'workspace-1',revision:2,action:'fragment',buffer});assert.equal(failed.ok,false);assert.equal(failed.error,'检查器忙');assert.equal(f.calls.length,2);
 });

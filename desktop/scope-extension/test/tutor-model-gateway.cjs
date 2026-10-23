@@ -105,3 +105,12 @@ test('remote model listing filters invalid ids and keeps context windows', async
     const http = async () => new Response(JSON.stringify({ data: [{ id: 'gpt-x', context_length: 128000 }, { id: 'bad id!' }, { id: 'glm-5.3' }] }));
     assert.deepEqual(await listRemoteModels(provider(), KEY, http), [{ id: 'glm-5.3' }, { id: 'gpt-x', contextWindow: 128000 }]);
 });
+
+
+test('SSE preserves CRLF split at every network boundary including multiline data and event names',()=>{
+ const stream='event: response.output_text.delta\r\ndata: {"delta":\r\ndata: "你好"}\r\n\r\n';
+ const expected=[{event:'response.output_text.delta',data:'{"delta":\n"你好"}'}];
+ for(let n=1;n<stream.length;n++){const p=new SseParser();assert.deepEqual([...p.push(stream.slice(0,n)),...p.push(stream.slice(n)),...p.finish()],expected);}
+ const p=new SseParser();let result=[];for(const ch of stream)result.push(...p.push(ch));result.push(...p.finish());assert.deepEqual(result,expected);
+ const last=new SseParser();assert.deepEqual([...last.push('event: done\rdata: ok\r'),...last.finish()],[{event:'done',data:'ok'}]);
+});
