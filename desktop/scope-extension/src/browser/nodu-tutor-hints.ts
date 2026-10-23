@@ -61,7 +61,7 @@ class TutorEditorController implements Disposable {
     private buffer(line = this.control.getPosition()?.lineNumber ?? 1): TutorBuffer | undefined {
         const model = this.control.getModel(), root = this.tutor.rootUri;
         const relative = root?.relative(this.widget.editor.uri)?.toString();
-        if (!model || !relative || relative.startsWith('../') || !/\.(c|h|cpp|hpp|cc)$/i.test(relative) || model.getValueLength() > 32000) { return; }
+        if (!model || model.isDisposed() || !relative || relative.startsWith('../') || !/\.(c|h|cpp|hpp|cc)$/i.test(relative) || model.getValueLength() > 32000) { return; }
         return { path: relative, text: model.getValue(), version: model.getVersionId(), line: Math.min(line, model.getLineCount()) };
     }
     private historyKey(): string | undefined {
@@ -144,16 +144,21 @@ class TutorEditorController implements Disposable {
         const buffer = line && this.buffer(line); if (!buffer) { this.tasks.delete(task.decoration); return; }
         this.processing = true; task.note = '检查中'; this.render();
         const epoch = this.tutor.epoch;
+        const current = (): boolean => !this.disposed && this.control.getModel() === model && !model.isDisposed() && this.tasks.get(task.decoration) === task;
         try {
             const result = await this.tutor.send('line', buffer);
-            if (this.disposed || epoch !== this.tutor.epoch) { task.status = 'stale'; task.note = '检查已取消'; return; }
+            if (!current()) { return; }
+            if (epoch !== this.tutor.epoch) { task.status = 'stale'; task.note = '检查已取消'; return; }
             if (model.getVersionId() !== buffer.version) { task.status = 'stale'; task.note = '上下文已修改'; return; }
             if (result?.ok && result.answer.review) {
                 task.status = result.answer.review.verdict; task.guided = task.status === 'ok'; task.note = `${task.status === 'ok' ? 'AI 已检查' : task.status === 'context' ? '待补上下文' : '需要修改'}：${result.answer.review.note}`; task.version = buffer.version;
             } else { task.status = 'unavailable'; task.note = result && !result.ok ? result.error : 'AI 检查未完成'; }
+        } catch {
+            if (current()) { task.status = 'unavailable'; task.note = 'AI 检查未完成'; }
         } finally {
-            this.processing = false; this.render(); this.schedule(); this.queueHistory();
-            if (!this.disposed && this.active() && model.getVersionId() === buffer.version && epoch === this.tutor.epoch) {
+            this.processing = false;
+            if (!this.disposed) { this.render(); this.schedule(); this.queueHistory(); }
+            if (current() && this.active() && model.getVersionId() === buffer.version && epoch === this.tutor.epoch) {
                 const reviewed = [...this.tasks.values()].flatMap(t => {
                     const row = model.getDecorationRange(t.decoration)?.startLineNumber;
                     return t.guided && row && t.text.trim() === model.getLineContent(row).trim() ? [row] : [];
@@ -164,7 +169,7 @@ class TutorEditorController implements Disposable {
     }
     private render(): void {
         const model = this.control.getModel();
-        if (!model || !this.tutor.teaching) { this.decorations.clear(); this.removeOverlay(); return; }
+        if (!model || model.isDisposed() || !this.tutor.teaching) { this.decorations.clear(); this.removeOverlay(); return; }
         const buffer = this.buffer(); if (!buffer) { this.decorations.clear(); this.removeOverlay(); return; }
         const decorations: monaco.editor.IModelDeltaDecoration[] = [];
         const position = this.control.getPosition();
@@ -226,7 +231,11 @@ class TutorEditorController implements Disposable {
         }
     }
     private removeOverlay(): void { if (this.overlay) { this.control.removeOverlayWidget(this.overlay); this.overlay = undefined; } }
-    private clear(): void { this.control.getModel()?.deltaDecorations([...this.tasks.keys()], []); this.tasks.clear(); this.changed.clear(); }
+    private clear(): void {
+        const model = this.control.getModel();
+        if (model && !model.isDisposed()) { model.deltaDecorations([...this.tasks.keys()], []); }
+        this.tasks.clear(); this.changed.clear();
+    }
     dispose(): void { if (this.historyTimer) { clearTimeout(this.historyTimer); } this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
 }
 @injectable()

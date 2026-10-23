@@ -265,3 +265,50 @@ test('gateway rejection after a valid-looking review does not persist or advance
  assert.deepEqual(await f.store.read(context.key),before);
  finishReason='stop';const retry=await run();assert.equal(retry.ok,true);assert.equal(retry.state.status,'complete');
 });
+
+test('UTF-8 record budget rejects oversized Chinese progress before replacing the last saved state', async t => {
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'串口'});
+ const before=await f.store.read(context.key);
+ const large={...before,status:'active',goal:'中'.repeat(6000),title:'中'.repeat(120),feedback:'中'.repeat(12000),
+  steps:Array.from({length:24},(_,i)=>({id:`step-${i+1}`,title:'中'.repeat(120),goal:'中'.repeat(1200),path:'main.c'})),
+  fragment:{source:{...buffer,text:'中'.repeat(32000),line:1},answer:{text:'中'.repeat(12000),annotations:[],guidance:{anchorLine:1,lines:['int x;']}}}};
+ assert.ok(JSON.stringify(large).length<256000);assert.ok(Buffer.byteLength(JSON.stringify(large))>256000);
+ await assert.rejects(()=>f.store.write(context.key,before.revision,large,async()=>{}),/记录过大/);
+ assert.deepEqual(await f.store.read(context.key),before);
+ large.fragment.source.text='中'.repeat(20000);
+ const saved=await f.store.write(context.key,before.revision,large,async()=>{});
+ assert.deepEqual(await new TutorGoalStore(f.dir).read(context.key),saved);
+ assert.deepEqual(await fs.readdir(f.dir),[context.key+'.json']);
+});
+
+test('goal records reject FIFO, directories and invalid UTF-8 without replacing progress', {timeout:2000}, async t => {
+ const f=await fixture(t),file=join(f.dir,context.key+'.json');
+ await fs.mkdir(file);await assert.rejects(()=>f.store.read(context.key),/教学文件无效/);await fs.rmdir(file);
+ await fs.writeFile(file,Buffer.from([0xc3]));await assert.rejects(()=>f.store.read(context.key),/编码无效/);await fs.unlink(file);
+ if(process.platform!=='win32'){
+  const {execFileSync}=require('node:child_process');execFileSync('mkfifo',[file]);
+  await assert.rejects(()=>f.store.read(context.key),/教学文件无效/);
+ }
+});
+
+test('cancelled authorization before atomic goal replacement leaves prior progress and no temporary file', async t => {
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'串口'});
+ const before=await f.store.read(context.key);
+ await assert.rejects(()=>f.store.write(context.key,before.revision,{...before,status:'active'},async()=>{throw Error('revoked');}),/revoked/);
+ assert.deepEqual(await f.store.read(context.key),before);assert.deepEqual(await fs.readdir(f.dir),[context.key+'.json']);
+});
+
+test('corrupted status, step and fragment relationships are rejected on restore', async t => {
+ const {validateGoalState}=require('../lib/common/tutor/tutor-goal');
+ const f=await fixture(t);f.responses.push(plan,fragment);await f.run('propose',{prompt:'串口'});await f.run('confirm');await f.run('fragment',{buffer});
+ const good=await f.store.read(context.key);
+ const corrupt=[{...good,current:1},{...good,status:'none'},{...good,status:'draft'},
+  {...good,status:'complete'},{...good,status:'cancelled'},
+  {...good,steps:[null]},{...good,steps:[{...good.steps[0],path:123}]},
+  {...good,fragment:{...good.fragment,source:{...good.fragment.source,path:'other.c'}}}];
+ for(const value of corrupt){
+  assert.throws(()=>validateGoalState(value),/教学.*损坏/);
+  await fs.writeFile(join(f.dir,context.key+'.json'),JSON.stringify(value));
+  await assert.rejects(()=>f.store.read(context.key),/教学.*损坏/);
+ }
+});

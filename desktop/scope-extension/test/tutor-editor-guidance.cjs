@@ -14,7 +14,7 @@ function methods(file, className, names, dependencies = {}) {
     return new Function(...Object.keys(dependencies), js + '; return Subject;')(...Object.values(dependencies));
 }
 const Model = methods('nodu-tutor-model.ts', 'NoduTutorModel', ['updateBuffer', 'invalidate', 'notify', 'restoreGoalGuidance', 'autoCheckFragment'], helpers);
-const Controller = methods('nodu-tutor-hints.ts', 'TutorEditorController', ['edit', 'render', 'enabled', 'enqueue', 'historyKey', 'saveHistory', 'restoreHistory'], {
+const Controller = methods('nodu-tutor-hints.ts', 'TutorEditorController', ['edit', 'render', 'enabled', 'enqueue', 'historyKey', 'saveHistory', 'restoreHistory', 'drain', 'clear'], {
     ...helpers, monaco: { Range: class { constructor(line, col, endLine, endCol) { Object.assign(this, {startLineNumber:line,startColumn:col,endLineNumber:endLine,endColumn:endCol}); } }, editor: { InjectedTextCursorStops: {None:0}, TrackedRangeStickiness: {NeverGrowsWhenTypingAtEdges:0} } }
 });
 function model(text = '', plan) {
@@ -323,4 +323,36 @@ test('removing a course clears it and a late snapshot cannot restore the deleted
     const old=m.refresh();await m.refresh();assert.equal(m.session.learning,undefined);
     gate.resolve({ok:true,value:{sessionId:'old',plan:{kind:'course'},learning:{snapshot:{sequence:5,planHash:'old'}}}});await old;
     assert.equal(m.session.plan.kind,'none');assert.equal(m.session.learning,undefined);
+});
+
+
+test('pending line review cannot affect a replaced or disposed editor document', async () => {
+ for (const action of ['switch','dispose']) {
+  const t=model('',{});t.epoch=1;let finish,checks=0;t.autoCheckFragment=()=>checks++;
+  t.send=()=>new Promise(resolve=>finish=resolve);
+  const {c}=editor(t,['int x;'],1);const old=c.control.getModel();
+  const task={decoration:'1',text:'int x;',status:'pending',note:''};c.tasks.set('1',task);
+  let renders=0,saves=0;c.render=()=>renders++;c.queueHistory=()=>saves++;
+  const pending=c.drain();assert.equal(task.note,'检查中');
+  if(action==='switch') {c.control.getModel=()=>({...old});c.tasks=new Map();}
+  else {c.disposed=true;old.isDisposed=()=>true;old.getVersionId=()=>{throw Error('disposed model accessed');};}
+  finish({ok:true,answer:{review:{verdict:'ok',note:'valid'}}});await pending;
+  assert.notEqual(task.status,'ok');assert.equal(checks,0);assert.equal(c.processing,false);
+  if(action==='dispose'){assert.equal(renders,1);assert.equal(saves,0);}
+ }
+});
+
+test('unexpected line-check failure clears processing and allows following work without an unhandled rejection', async () => {
+ const t=model('',{});t.epoch=1;t.send=async()=>{throw Error('transport closed');};t.autoCheckFragment=()=>{};
+ const {c}=editor(t,['int x;'],1);c.render=()=>{};
+ const task={decoration:'1',text:'int x;',status:'pending',note:''};c.tasks.set('1',task);
+ await c.drain();assert.equal(c.processing,false);assert.equal(task.status,'unavailable');assert.equal(task.note,'AI 检查未完成');
+});
+
+
+test('render and disposal cleanup tolerate Monaco destroying the document before its widget', () => {
+ const t=model('',{});const {c}=editor(t,['int x;'],1);const document=c.control.getModel();
+ document.isDisposed=()=>true;document.deltaDecorations=()=>{throw Error('disposed document accessed');};
+ c.buffer=()=>{throw Error('disposed buffer accessed');};c.tasks.set('1',{});c.changed.add(1);
+ c.render();c.clear();assert.equal(c.tasks.size,0);assert.equal(c.changed.size,0);
 });

@@ -41,13 +41,18 @@ export function validateGoalState(value: unknown): TutorGoalState {
     const s = value as TutorGoalState;
     if (!s || !Number.isSafeInteger(s.revision) || s.revision < 0 || !['none','draft','active','paused','cancelled','complete'].includes(s.status)
         || !Array.isArray(s.steps) || s.steps.length > 24 || !Number.isInteger(s.current) || s.current < 0 || s.current > s.steps.length
-        || s.steps.some((step, n) => step.id !== `step-${n + 1}` || !text(step.title, 120) || !text(step.goal, 1200) || !isSafeCoursePath(step.path))
+        || s.steps.some((step, n) => !step || step.id !== `step-${n + 1}` || !text(step.title, 120) || !text(step.goal, 1200) || typeof step.path !== 'string' || !isSafeCoursePath(step.path))
         || (s.status !== 'none' && (!text(s.goal, 6000) || !text(s.title, 120) || !s.steps.length))) { throw new Error('教学记录损坏'); }
+    if ((s.status === 'none' && (s.steps.length !== 0 || s.current !== 0 || s.fragment !== undefined))
+        || (s.status === 'draft' && (s.current !== 0 || s.fragment !== undefined))
+        || (['active', 'paused'].includes(s.status) && s.current >= s.steps.length)
+        || (s.status === 'complete' && (s.current !== s.steps.length || s.fragment !== undefined))
+        || (s.status === 'cancelled' && s.fragment !== undefined)) { throw new Error('教学步骤状态损坏'); }
     if (s.status !== 'none' && (!s.target || !text(s.target.mcu, 80) || !text(s.target.sdk, 80))) { throw new Error('教学目标记录损坏'); }
     if (s.feedback !== undefined && (typeof s.feedback !== 'string' || s.feedback.length > 12000)) { throw new Error('教学反馈记录损坏'); }
     if (s.fragment) {
         const { source, answer } = s.fragment, g = answer?.guidance;
-        if (!source || !isSafeCoursePath(source.path) || typeof source.text !== 'string' || source.text.length > 32000 || source.text.includes('\0')
+        if (!source || typeof source.path !== 'string' || !isSafeCoursePath(source.path) || source.path !== s.steps[s.current]?.path || typeof source.text !== 'string' || source.text.length > 32000 || source.text.includes('\0')
             || !Number.isSafeInteger(source.version) || source.version < 1 || !Number.isInteger(source.line) || source.line < 1 || source.line > source.text.split('\n').length
             || !answer || typeof answer.text !== 'string' || answer.text.length > 12000 || !Array.isArray(answer.annotations) || answer.annotations.length > 8
             || answer.annotations.some(a => !a || !Number.isInteger(a.startLine) || !Number.isInteger(a.endLine) || a.startLine < 1 || a.endLine < a.startLine
