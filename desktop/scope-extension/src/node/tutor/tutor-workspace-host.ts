@@ -17,7 +17,8 @@ export class TutorWorkspaceHost {
     private pending: Promise<void> = Promise.resolve();
     constructor(private readonly storage: TutorStorageConnection, private readonly revokeChat: (id: string) => void,
         /** Tells the window its grants changed, so it never has to race the workspace-open RPC. */
-        private readonly changed: () => void = () => undefined) { }
+        private readonly changed: () => void = () => undefined,
+        private readonly buildStatus?: (root: string) => Promise<NonNullable<TutorProjectContext['build']>>) { }
     async select(uri: string): Promise<void> {
         if (typeof uri !== 'string' || uri.length > 8192) { throw new Error('工程地址无效'); }
         if (uri === this.current) { return this.pending; }
@@ -57,8 +58,8 @@ export class TutorWorkspaceHost {
         }
     }
     async list(): Promise<{ id: string; uri: string }[]> { await this.pending; return this.grants.map(({ id, uri }) => ({ id, uri })); }
-    async context(id: string): Promise<TutorProjectContext> {
-        await this.authorize(id);
+    async context(id: string, buffer?: TutorBuffer): Promise<TutorProjectContext> {
+        await this.authorize(id, buffer);
         const grant = this.grants.find(g => g.id === id)!;
         const files: string[] = [];
         let visited = 0, pathBytes = 0;
@@ -84,8 +85,35 @@ export class TutorWorkspaceHost {
                 }
             } finally { await file.close(); }
         } catch { /* Missing metadata is explicitly unknown, never inferred from a board name. */ }
+        const declarations: { path: string; text: string }[] = [];
+        if (buffer) {
+            const names = new Set(['main.h', 'board.h', ...Array.from(buffer.text.matchAll(/^\s*#\s*include\s*"([^"]+)"/gm), m => m[1])]);
+            let budget = 8000;
+            for (const relative of files.filter(f => /\.h$/i.test(f) && (names.has(f) || names.has(path.basename(f)))).slice(0, 8)) {
+                await this.authorize(id, { path: relative, text: '', version: 1, line: 1 });
+                const file = await fs.open(path.join(grant.root, relative), constants.O_RDONLY | constants.O_NOFOLLOW);
+                try {
+                    if ((await file.stat()).size > budget) { continue; }
+                    const text = await file.readFile('utf8');
+                    budget -= text.length; declarations.push({ path: relative, text });
+                } finally { await file.close(); }
+            }
+        }
+        let build: TutorProjectContext['build'];
+        if (mcu !== '未知' && this.buildStatus) {
+            try { build = await this.buildStatus(grant.root); }
+            catch { build = { status: 'unavailable', scope: 'saved-project' }; }
+            if (!buffer) { delete build.runtime; }
+            if (buffer) {
+                const file = await fs.open(path.join(grant.root, buffer.path), constants.O_RDONLY | constants.O_NOFOLLOW);
+                try { build.currentBufferSaved = (await file.stat()).size <= 32000 && await file.readFile('utf8') === buffer.text; }
+                finally { await file.close(); }
+                if (!build.currentBufferSaved) { delete build.runtime; }
+            }
+        }
         if (!this.grants.includes(grant)) { throw new Error('工程授权已失效'); }
-        return { key: await TutorProgressStore.projectKey(grant.root), mcu, sdk, files: files.sort() };
+        return { key: await TutorProgressStore.projectKey(grant.root), mcu, sdk, files: files.sort(),
+            ...(declarations.length ? { declarations } : {}), ...(build ? { build } : {}) };
     }
     async reference(id: string, relative: string, line: number): Promise<{ path: string; line: number }> {
         await this.authorize(id, { path: relative, text: '', version: 1, line: 1 });

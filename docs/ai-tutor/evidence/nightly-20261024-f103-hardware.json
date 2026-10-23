@@ -1,0 +1,285 @@
+{
+  "project": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor",
+  "dataDir": "/Users/wangwei/.codex/nodu-nightly-20261024/hardware-1792789806509",
+  "startedAt": "2026-10-23T21:10:06.511Z",
+  "identity": {
+    "method": "stlink",
+    "deviceId": 1040,
+    "deviceIdHex": "0x410",
+    "revisionId": "0x0000",
+    "flashKiB": 64,
+    "uid": "0671ff373634574e431e5512",
+    "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+    "readProtected": false,
+    "voltage": 4.86995,
+    "probe": "STLINK V2J37S7",
+    "probeId": "usb:3-1.2.1",
+    "matches": null,
+    "deviceName": "STM32F103（中容量，如 C8 / CB）",
+    "hasBackup": false
+  },
+  "monitor": {
+    "open": true,
+    "port": "/dev/cu.usbserial-31230",
+    "baud": 115200,
+    "state": "disconnected"
+  },
+  "flash": {
+    "ok": true,
+    "method": "stlink",
+    "identity": {
+      "method": "stlink",
+      "deviceId": 1040,
+      "deviceIdHex": "0x410",
+      "revisionId": "0x0000",
+      "flashKiB": 64,
+      "uid": "0671ff373634574e431e5512",
+      "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+      "readProtected": false,
+      "voltage": 4.86995,
+      "probe": "STLINK V2J37S7",
+      "probeId": "usb:3-1.2.1"
+    },
+    "backup": {
+      "schema": 1,
+      "createdAt": "2026-10-23T21:10:08Z",
+      "deviceId": 1040,
+      "deviceName": "STM32F103（中容量，如 C8 / CB）",
+      "uid": "0671ff373634574e431e5512",
+      "flashKiB": 64,
+      "bytes": 65536,
+      "sha256": "4662cb5ec85c80a839adeb379411b22248b3529639670fa9eabf0d2e0698c167",
+      "method": "stlink",
+      "firstBackup": true,
+      "factory": false,
+      "nodu": "0.2.1",
+      "id": "410-0671ff373634574e431e5512/20261023-211006"
+    },
+    "erase": {
+      "unit": "page",
+      "count": 5,
+      "bytes": 5120,
+      "label": "5 页（5 KB）"
+    },
+    "bytes": 4244,
+    "readbackSha256": "0a3c40b35d08eef99a44ae17895eb5add5ae4db46b9d178b1cfe542c25fb78e0",
+    "running": true,
+    "needsBootRestore": false,
+    "runId": "r-20261023-211006-78afc3",
+    "ms": 2714
+  },
+  "flashFinishedAt": 1792789809523,
+  "serialEvents": [
+    {
+      "event": "monitor.data",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "data": "Tk9EVV9UVVRPUl9GMTAzXzIwMjYxMDI0DQo="
+      },
+      "receivedAt": 1792789809908
+    },
+    {
+      "event": "monitor.data",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "data": "Tk9EVV9UVVRPUl9GMTAzXzIwMjYxMDI0DQo="
+      },
+      "receivedAt": 1792789810910
+    },
+    {
+      "event": "monitor.data",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "data": "Tk9EVV9UVVRPUl9GMTAzXzIwMjYxMDI0DQo="
+      },
+      "receivedAt": 1792789811912
+    },
+    {
+      "event": "monitor.data",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "data": "Tk9EVV9UVVRPUl9GMTAzXzIwMjYxMDI0DQo="
+      },
+      "receivedAt": 1792789812915
+    },
+    {
+      "event": "monitor.data",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "data": "Tk9EVV9UVVRPUl9GMTAzXzIwMjYxMDI0DQo="
+      },
+      "receivedAt": 1792789813916
+    }
+  ],
+  "events": [
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      },
+      "receivedAt": 1792789806794
+    },
+    {
+      "event": "flash.started",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "path": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor",
+        "method": "stlink",
+        "restore": false,
+        "bytes": 4244,
+        "erase": {
+          "unit": "page",
+          "count": 5,
+          "bytes": 5120,
+          "label": "5 页（5 KB）"
+        }
+      },
+      "receivedAt": 1792789806802
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "identify",
+        "state": "running"
+      },
+      "receivedAt": 1792789806802
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "identify",
+        "state": "done"
+      },
+      "receivedAt": 1792789806995
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "backup",
+        "state": "running"
+      },
+      "receivedAt": 1792789807161
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "backup",
+        "state": "done"
+      },
+      "receivedAt": 1792789808190
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "program",
+        "state": "running"
+      },
+      "receivedAt": 1792789808360
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "program",
+        "state": "running"
+      },
+      "receivedAt": 1792789808382
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "verify",
+        "state": "running"
+      },
+      "receivedAt": 1792789808737
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "run",
+        "state": "running"
+      },
+      "receivedAt": 1792789808898
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "verify",
+        "state": "done"
+      },
+      "receivedAt": 1792789809517
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261023-211006-78afc3",
+        "step": "run",
+        "state": "done"
+      },
+      "receivedAt": 1792789809517
+    },
+    {
+      "event": "flash.done",
+      "data": {
+        "ok": true,
+        "method": "stlink",
+        "identity": {
+          "method": "stlink",
+          "deviceId": 1040,
+          "deviceIdHex": "0x410",
+          "revisionId": "0x0000",
+          "flashKiB": 64,
+          "uid": "0671ff373634574e431e5512",
+          "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+          "readProtected": false,
+          "voltage": 4.86995,
+          "probe": "STLINK V2J37S7",
+          "probeId": "usb:3-1.2.1"
+        },
+        "backup": {
+          "schema": 1,
+          "createdAt": "2026-10-23T21:10:08Z",
+          "deviceId": 1040,
+          "deviceName": "STM32F103（中容量，如 C8 / CB）",
+          "uid": "0671ff373634574e431e5512",
+          "flashKiB": 64,
+          "bytes": 65536,
+          "sha256": "4662cb5ec85c80a839adeb379411b22248b3529639670fa9eabf0d2e0698c167",
+          "method": "stlink",
+          "firstBackup": true,
+          "factory": false,
+          "nodu": "0.2.1",
+          "id": "410-0671ff373634574e431e5512/20261023-211006"
+        },
+        "erase": {
+          "unit": "page",
+          "count": 5,
+          "bytes": 5120,
+          "label": "5 页（5 KB）"
+        },
+        "bytes": 4244,
+        "readbackSha256": "0a3c40b35d08eef99a44ae17895eb5add5ae4db46b9d178b1cfe542c25fb78e0",
+        "running": true,
+        "needsBootRestore": false,
+        "runId": "r-20261023-211006-78afc3",
+        "ms": 2714
+      },
+      "receivedAt": 1792789809522
+    }
+  ],
+  "complete": true,
+  "serialText": "NODU_TUTOR_F103_20261024\r\nNODU_TUTOR_F103_20261024\r\nNODU_TUTOR_F103_20261024\r\nNODU_TUTOR_F103_20261024\r\nNODU_TUTOR_F103_20261024\r\n",
+  "serialVerified": true,
+  "serialLines": 5
+}

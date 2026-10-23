@@ -1,0 +1,90 @@
+→ build {"path":"/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor"}
+  · build.started {"buildId":"b-20261023-210941-a6d263","path":"/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor"}
+  [0/2] Re-checking globbed directories...
+  [1/22] stm32f1xx_hal_exti.c
+  [2/22] stm32f1xx_hal_gpio_ex.c
+  [3/22] board_uart.c
+  [4/22] board_clock.c
+  [5/22] stm32f1xx_hal_flash.c
+  [6/22] stm32f1xx_hal_rcc_ex.c
+  [7/22] stm32f1xx_hal_gpio.c
+  [8/22] stm32f1xx_hal_dma.c
+  [9/22] stm32f1xx_hal.c
+  [10/22] stm32f1xx_hal_pwr.c
+  [11/22] stm32f1xx_hal_cortex.c
+  [12/22] stm32f1xx_hal_flash_ex.c
+  [13/22] stm32f1xx_hal_rcc.c
+  [14/22] startup_stm32f103xb.s
+  [15/22] stm32f1xx_hal_uart.c
+  [16/22] main.c
+  [17/22] stm32f1xx_hal_msp.c
+  [18/22] stm32f1xx_it.c
+  [19/22] system_stm32f1xx.c
+  [20/22] syscalls.c
+  [21/22] Linking C executable firmware.elf
+  · build.done {"ok":true,"buildId":"b-20261023-210941-a6d263","stale":false,"diagnostics":[],"errors":0,"warnings":0,"capacity":{"FLASH":{"used":4244,"size":65536,"percent":6.48},"RAM":{"used":2648,"size":20480,"percent":12.93}},"artifact":{"schema":1,"bundleSha256":"8e508f09d3f942f7873641811107717ae0965f7f5742172648c525ac27555ed3","buildId":"b-20261023-210941-a6d263","createdAt":"2026-10-23T21:09:41Z","created
+{
+  "ok": true,
+  "buildId": "b-20261023-210941-a6d263",
+  "stale": false,
+  "diagnostics": [],
+  "errors": 0,
+  "warnings": 0,
+  "capacity": {
+    "FLASH": {
+      "used": 4244,
+      "size": 65536,
+      "percent": 6.48
+    },
+    "RAM": {
+      "used": 2648,
+      "size": 20480,
+      "percent": 12.93
+    }
+  },
+  "artifact": {
+    "schema": 1,
+    "bundleSha256": "8e508f09d3f942f7873641811107717ae0965f7f5742172648c525ac27555ed3",
+    "buildId": "b-20261023-210941-a6d263",
+    "createdAt": "2026-10-23T21:09:41Z",
+    "createdMs": 1792789781709,
+    "project": "f103-tutor",
+    "mcu": "STM32F103C8Tx",
+    "board": "chip-f103c8@1",
+    "binaryBytes": 4244,
+    "binarySha256": "0a3c40b35d08eef99a44ae17895eb5add5ae4db46b9d178b1cfe542c25fb78e0",
+    "fileSha256": {
+      "firmware.bin": "0a3c40b35d08eef99a44ae17895eb5add5ae4db46b9d178b1cfe542c25fb78e0",
+      "firmware.elf": "c65a52465a7cdef994e9994407053126aa63e0656bb353bce2c8999993f8e09d",
+      "firmware.hex": "4b4191cedf1b1bd188a1208aed8879c824570eb0c98d57e5ace1aa7751fe5171",
+      "firmware.map": "151b94d91876e6804d439605ec15f39bcb51b050faa858624478f759380a1e0a"
+    },
+    "initialStack": "0x20005000",
+    "resetVector": "0x08000f9d",
+    "elfCpu": "7-M",
+    "tickAddress": 536870924,
+    "capacity": {
+      "FLASH": {
+        "used": 4244,
+        "size": 65536,
+        "percent": 6.48
+      },
+      "RAM": {
+        "used": 2648,
+        "size": 20480,
+        "percent": 12.93
+      }
+    },
+    "inputDigest": "cca1f46f72f7f45f424121fff7ee8cb68f94913624e187b972a7fea9ed4f79ad",
+    "toolkit": "2026.11.0-dev",
+    "sdk": "stm32cube-f1@1.8.7",
+    "erase": {
+      "unit": "page",
+      "count": 5,
+      "bytes": 5120,
+      "label": "5 页（5 KB）"
+    }
+  },
+  "ms": 597,
+  "output": "-- The C compiler identification is GNU 14.2.1\n-- The ASM compiler identification is GNU\n-- Found assembler: /Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/arm-gnu/bin/arm-none-eabi-gcc\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/arm-gnu/bin/arm-none-eabi-gcc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Configuring done (0.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor/build/debug\n[0/2] Re-checking globbed directories...\n[1/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c.obj\n[2/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c.obj\n[3/22] Building C object CMakeFiles/firmware.dir/Board/board_uart.c.obj\n[4/22] Building C object CMakeFiles/firmware.dir/Board/board_clock.c.obj\n[5/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c.obj\n[6/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c.obj\n[7/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c.obj\n[8/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c.obj\n[9/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c.obj\n[10/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c.obj\n[11/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c.obj\n[12/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c.obj\n[13/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c.obj\n[14/22] Building ASM object CMakeFiles/firmware.dir/Startup/startup_stm32f103xb.s.obj\n[15/22] Building C object CMakeFiles/nodu_hal.dir/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c.obj\n[16/22] Building C object CMakeFiles/firmware.dir/Core/Src/main.c.obj\n[17/22] Building C object CMakeFiles/firmware.dir/Core/Src/stm32f1xx_hal_msp.c.obj\n[18/22] Building C object CMakeFiles/firmware.dir/Core/Src/stm32f1xx_it.c.obj\n[19/22] Building C object CMakeFiles/firmware.dir/Core/Src/system_stm32f1xx.c.obj\n[20/22] Building C object CMakeFiles/firmware.dir/Core/Src/syscalls.c.obj\n[21/22] Linking C executable firmware.elf\nMemory region         Used Size  Region Size  %age Used\n           FLASH:        4244 B        64 KB      6.48%\n             RAM:        2648 B        20 KB     12.93%\n"
+}

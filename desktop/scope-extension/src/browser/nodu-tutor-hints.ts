@@ -23,6 +23,7 @@ class TutorEditorController implements Disposable {
     private readonly decorations: monaco.editor.IEditorDecorationsCollection;
     private readonly tasks = new Map<string, LineTask>();
     private before: string[];
+    private taskHistoryKey?: string;
     private composing = false;
     private line = 1;
     private changed = new Set<number>();
@@ -47,15 +48,42 @@ class TutorEditorController implements Disposable {
         // MonacoEditorModel is the document behind Theia's EditorWidget; it owns the save event.
         const document = MonacoEditor.get(widget)?.document;
         if (document) { this.disposables.push(document.onDidSaveModel(() => { const lines = [...this.changed]; this.changed.clear(); lines.forEach(n => this.enqueue(n)); })); }
-        this.disposables.push(tutor.onDidChange(() => { this.render(); this.schedule(); }));
-        this.disposables.push(control.onDidChangeModel(() => { this.clear(); this.before = control.getModel()?.getLinesContent() ?? []; this.updateContext(); this.render(); }));
-        this.updateContext(); this.render();
+        this.disposables.push(tutor.onDidChange(() => {
+            if (this.taskHistoryKey !== this.historyKey()) { this.clear(); this.restoreHistory(); }
+            this.render(); this.schedule();
+        }));
+        this.disposables.push(control.onDidChangeModel(() => { this.clear(); this.restoreHistory(); this.before = control.getModel()?.getLinesContent() ?? []; this.updateContext(); this.render(); }));
+        this.restoreHistory(); this.updateContext(); this.render();
     }
     private buffer(line = this.control.getPosition()?.lineNumber ?? 1): TutorBuffer | undefined {
         const model = this.control.getModel(), root = this.tutor.rootUri;
         const relative = root?.relative(this.widget.editor.uri)?.toString();
         if (!model || !relative || relative.startsWith('../') || !/\.(c|h|cpp|hpp|cc)$/i.test(relative) || model.getValueLength() > 32000) { return; }
         return { path: relative, text: model.getValue(), version: model.getVersionId(), line: Math.min(line, model.getLineCount()) };
+    }
+    private historyKey(): string | undefined {
+        const buffer = this.buffer(), root = this.tutor.rootUri;
+        if (!buffer || !root) { return; }
+        return JSON.stringify([root.toString(), this.tutor.plan?.contentHash, this.tutor.goalState.goal, buffer.path]);
+    }
+    private saveHistory(): void {
+        const key = this.historyKey(), model = this.control.getModel();
+        if (!key || !model || model.isDisposed() || key !== this.taskHistoryKey) { return; }
+        const lines = [...this.tasks.values()].flatMap(task => {
+            const line = model.getDecorationRange(task.decoration)?.startLineNumber;
+            return line ? [{ line, text: task.text, status: task.status, note: task.note, guided: task.guided }] : [];
+        });
+        this.tutor.lineHistory.save(key, model.getValue(), lines);
+    }
+    private restoreHistory(): void {
+        const key = this.historyKey(), model = this.control.getModel();
+        if (!key || !model) { return; }
+        this.taskHistoryKey = key;
+        for (const task of this.tutor.lineHistory.restore(key, model.getValue())) {
+            const decoration = model.deltaDecorations([], [{ range: new monaco.Range(task.line, 1, task.line, 1),
+                options: { stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges } }])[0];
+            this.tasks.set(decoration, { ...task, decoration, version: model.getVersionId() });
+        }
     }
     private updateContext(): void { if (this.active()) { this.tutor.updateBuffer(this.buffer()); } }
     private edit(event: monaco.editor.IModelContentChangedEvent): void {
@@ -180,7 +208,7 @@ class TutorEditorController implements Disposable {
     }
     private removeOverlay(): void { if (this.overlay) { this.control.removeOverlayWidget(this.overlay); this.overlay = undefined; } }
     private clear(): void { this.control.getModel()?.deltaDecorations([...this.tasks.keys()], []); this.tasks.clear(); this.changed.clear(); }
-    dispose(): void { this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
+    dispose(): void { this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
 }
 @injectable()
 export class NoduTutorHintsContribution implements FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution {

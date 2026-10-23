@@ -1,0 +1,155 @@
+→ createProject {"parent":"/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects","name":"f103-tutor","board":"chip-f103c8","template":"empty","method":"stlink","path":"/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor"}
+{
+  "path": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor",
+  "name": "f103-tutor",
+  "manifest": {
+    "schema": 1,
+    "kind": "stm32-hal",
+    "name": "f103-tutor",
+    "target": {
+      "mcu": "STM32F103C8Tx",
+      "board": "chip-f103c8@1"
+    },
+    "sdk": "stm32cube-f1@1.8.7",
+    "build": {
+      "preset": "debug",
+      "printfFloat": false
+    },
+    "flash": {
+      "method": "stlink"
+    },
+    "monitor": {
+      "baud": 115200,
+      "encoding": "utf-8",
+      "lineEnding": "lf"
+    }
+  },
+  "chip": {
+    "schema": 1,
+    "id": "STM32F103C8Tx",
+    "name": "STM32F103C8T6",
+    "family": "f1",
+    "series": "STM32F1xx",
+    "define": "STM32F103xB",
+    "core": "Cortex-M3",
+    "cpuFlags": [
+      "-mcpu=cortex-m3",
+      "-mfloat-abi=soft"
+    ],
+    "sdk": {
+      "id": "stm32cube-f1",
+      "dir": "cube-f1",
+      "version": "1.8.7"
+    },
+    "startup": "startup_stm32f103xb.s",
+    "flash": {
+      "base": 134217728,
+      "size": 65536,
+      "eraseUnit": "1 KB 页",
+      "pageSize": 1024
+    },
+    "ram": {
+      "base": 536870912,
+      "size": 20480
+    },
+    "deviceId": 1040,
+    "registers": {
+      "idcode": 3758366720,
+      "flashSize": 536868832,
+      "uid": 536868840,
+      "rdp": {
+        "address": 1073881116,
+        "mask": 2,
+        "level0": 0
+      }
+    },
+    "openocdTarget": "target/stm32f1x.cfg",
+    "bootUart": {
+      "instance": "USART1",
+      "tx": "PA9",
+      "rx": "PA10"
+    },
+    "notes": "Flash 容量寄存器在不少芯片上报告 128 KB；只要求不小于工程需要。",
+    "gpioPorts": "ABCD",
+    "elfCpu": "7-M",
+    "ramKiB": 20
+  },
+  "board": {
+    "schema": 1,
+    "id": "chip-f103c8",
+    "version": 1,
+    "name": "STM32F103C8T6",
+    "mcu": "STM32F103C8Tx",
+    "description": "",
+    "clock": {
+      "source": "HSI/2 × 16",
+      "sysclk": 64000000,
+      "hse": null,
+      "verified": "内部 HSI 时钟，不依赖外部晶振"
+    },
+    "debugUart": {
+      "instance": "USART1",
+      "tx": "PA9",
+      "rx": "PA10",
+      "baud": 115200,
+      "via": "PA9 / PA10",
+      "verified": "2026-10-22 芯片事实：USART1 默认引脚 PA9 / PA10（RM0008，无重映射）",
+      "note": "TX=PA9，RX=PA10"
+    },
+    "leds": [],
+    "boot": {
+      "boot0": "BOOT0",
+      "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+    },
+    "flash": {
+      "stlink": {
+        "speedKhz": 1000,
+        "resetConfig": "none",
+        "wiring": "SWDIO=PA13，SWCLK=PA14，GND 共地"
+      },
+      "uart": {
+        "port": "debugUart",
+        "baud": 115200,
+        "autoBoot": null
+      }
+    },
+    "templates": [
+      "empty",
+      "uart-hello"
+    ],
+    "sources": [
+      {
+        "title": "STM32 芯片默认配置",
+        "note": "使用芯片内部时钟及 USART1 默认引脚；不假定开发板外设。"
+      }
+    ]
+  },
+  "preset": "debug",
+  "flashMethod": "stlink",
+  "lockedToolkitVersion": "2026.11.0-dev",
+  "trusted": true,
+  "currentBuild": null,
+  "buildStale": true,
+  "toolkit": {
+    "ok": true,
+    "version": "2026.11.0-dev",
+    "root": "/Users/wangwei/Model/k210-studio/desktop/.tools/stm32/darwin"
+  }
+}
+→ identify {"path":"/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/artifacts/ai-tutor-nightly-20261024/projects/f103-tutor"}
+{
+  "method": "stlink",
+  "deviceId": 1040,
+  "deviceIdHex": "0x410",
+  "revisionId": "0x0000",
+  "flashKiB": 64,
+  "uid": "0671ff373634574e431e5512",
+  "uidWords": "0x671ff37 0x3634574e 0x431e5512",
+  "readProtected": false,
+  "voltage": 4.86995,
+  "probe": "STLINK V2J37S7",
+  "probeId": "usb:3-1.2.1",
+  "matches": null,
+  "deviceName": "STM32F103（中容量，如 C8 / CB）",
+  "hasBackup": true
+}

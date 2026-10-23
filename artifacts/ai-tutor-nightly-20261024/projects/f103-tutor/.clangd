@@ -1,0 +1,7 @@
+# clangd 使用编译生成的 build/debug/compile_commands.json。
+CompileFlags:
+  CompilationDatabase: build/debug
+  Remove: [-fdiagnostics-plain-output, -fdiagnostics-column-unit=*, -mthumb-interwork]
+Diagnostics:
+  UnusedIncludes: None
+  MissingIncludes: None

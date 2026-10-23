@@ -1,0 +1,8 @@
+# Nodu 风格：4 空格缩进，接近 STM32CubeMX 生成的代码。可以修改。
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 100
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+SortIncludes: Never

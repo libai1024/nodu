@@ -11,6 +11,7 @@ import { BackendApplicationContribution } from '@theia/core/lib/node/backend-app
 import { CallOutcome, EMBEDDED_METHODS, EmbeddedClient, EmbeddedMethod, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
 import { encodeMonitorText } from './nodu-monitor-encoding';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
+import { TutorRuntimeEvidence } from './tutor/tutor-runtime-evidence';
 import { createDaxinProject } from './nodu-daxin-project';
 
 const MAX_REQUEST = 1024 * 1024;
@@ -28,6 +29,7 @@ interface Pending { resolve(value: unknown): void; reject(error: Error): void; t
  */
 @injectable()
 export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicationContribution {
+    readonly teachingEvidence = new TutorRuntimeEvidence();
     private sidecar?: ChildProcessWithoutNullStreams;
     private sequence = 0;
     private readonly pending = new Map<number, Pending>();
@@ -39,6 +41,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     }
 
     private publish(event: string, data: unknown): void {
+        this.teachingEvidence.event(event, data);
         for (const client of this.clients) {
             try { Promise.resolve(client.onEvent(event, data)).catch(() => this.clients.delete(client)); } catch { this.clients.delete(client); }
         }
@@ -153,7 +156,9 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
             if (method === 'writeMonitor' && args.text !== undefined) {
                 args = { data: encodeMonitorText(args.text, args.encoding) };
             }
-            return { ok: true, result: await this.request(method, args, TIMEOUTS[method]) };
+            const result = await this.request(method, args, TIMEOUTS[method]);
+            this.teachingEvidence.result(method, args, result);
+            return { ok: true, result };
         } catch (error) {
             const e = error as Error & { code?: string; detail?: unknown };
             return { ok: false, error: { message: e.message, code: e.code || 'service', detail: e.detail } };

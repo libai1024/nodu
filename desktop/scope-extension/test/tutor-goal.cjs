@@ -80,3 +80,18 @@ test('project context and references use real chip metadata and reject escaped f
  assert.deepEqual(await host.reference('workspace-1','main.c',1),{path:'main.c',line:1});
  await assert.rejects(()=>host.reference('workspace-1','../outside.c',1));await assert.rejects(()=>host.reference('workspace-1','alias.c',1));await assert.rejects(()=>host.reference('workspace-1','main.c',99));
 });
+
+test('authorized declarations and saved-build evidence distinguish dirty buffers without sending code when excluded',async t=>{
+ const root=await fs.realpath(await fs.mkdtemp(join(tmpdir(),'nodu-context-evidence-')));t.after(()=>fs.rm(root,{recursive:true,force:true}));
+ const text='#include "main.h"\nint main(void) {}\n';
+ await fs.writeFile(join(root,'main.c'),text);await fs.writeFile(join(root,'main.h'),'void Board_DebugUartInit(unsigned baud);');
+ await fs.writeFile(join(root,'nodu.json'),JSON.stringify({target:{mcu:context.mcu},sdk:context.sdk}));
+ let status='current',reads=0;
+ const host=new TutorWorkspaceHost({authorizeWorkspace:async()=> 'workspace-1',revokeWorkspace(){},dispose(){}},()=>{},()=>{},async path=>{assert.equal(path,root);reads++;return {status,scope:'saved-project',bundle:'abc',runtime:{download:{bundle:'abc'},serial:{text:'fresh'}}};});
+ await host.select(pathToFileURL(root).href);
+ const noCode=await host.context('workspace-1');assert.equal(noCode.declarations,undefined);assert.equal(noCode.build.runtime,undefined);assert.equal(noCode.build.currentBufferSaved,undefined);
+ const clean=await host.context('workspace-1',{path:'main.c',text,version:1,line:1});
+ assert.equal(clean.declarations[0].path,'main.h');assert.equal(clean.build.currentBufferSaved,true);
+ const dirty=await host.context('workspace-1',{path:'main.c',text:text+'// edit',version:2,line:1});assert.equal(dirty.build.currentBufferSaved,false);assert.equal(dirty.build.runtime,undefined);
+ status='stale';assert.equal((await host.context('workspace-1')).build.status,'stale');assert.equal(reads,4);
+});

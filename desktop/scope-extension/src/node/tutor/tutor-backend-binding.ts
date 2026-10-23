@@ -18,13 +18,16 @@ import { TutorChatSession } from './tutor-chat-session';
 import { TutorAISettingsStore } from './tutor-ai-settings-store';
 import { listRemoteModels, streamCompletion } from './tutor-model-gateway';
 import { TutorGoalStore } from './tutor-goal-store';
+import { NoduEmbeddedServer } from '../nodu-embedded-server';
+import { ProjectStatus } from '../../common/nodu-embedded-protocol';
+import { TutorProjectContext } from '../../common/tutor/tutor-goal';
 import { TutorGoalSession } from './tutor-goal-session';
 
 const STORE = Symbol('NoduTutorStore');
 const SETTINGS = Symbol('NoduTutorAISettings');
 /** Inversify treats a bound Promise as an async dependency and refuses synchronous get(); keep it inside a holder. */
 interface TutorStoreHolder { readonly ready: Promise<TutorStorageServer>; }
-interface SettingsHub { readonly ready: Promise<TutorAISettingsStore>; readonly goals: Promise<TutorGoalStore>; readonly connections: Set<TutorConnection>; }
+interface SettingsHub { readonly buildStatus: (root: string) => Promise<NonNullable<TutorProjectContext['build']>>; readonly ready: Promise<TutorAISettingsStore>; readonly goals: Promise<TutorGoalStore>; readonly connections: Set<TutorConnection>; }
 
 class TutorConnection {
     client?: RpcProxy<TutorAIClient>;
@@ -38,19 +41,19 @@ class TutorConnection {
         this.ready = Promise.all([store, hub.ready, hub.goals]).then(([storage, settings, goalStore]) => {
             const notify = (fn: (client: RpcProxy<TutorAIClient>) => unknown): void => { try { const client = this.client; if (client) { void Promise.resolve(fn(client)).catch(() => undefined); } } catch { /* closed */ } };
             const connection = storage.connect({ onDidChange: event => { notify(c => c.onDidChange(event)); } });
-            const host = new TutorWorkspaceHost(connection, id => { chat.revoke(id); goals.revoke(id); }, () => notify(c => c.onWorkspacesChanged()));
+            const host = new TutorWorkspaceHost(connection, id => { chat.revoke(id); goals.revoke(id); }, () => notify(c => c.onWorkspacesChanged()), hub.buildStatus);
             const provider = {
                 complete: async (messages, signal, delta) => streamCompletion(await settings.target(this.selection), messages, signal, delta),
             } satisfies import('./tutor-model-gateway').TutorModelProvider;
-            const goals = new TutorGoalSession(goalStore, provider, id => host.context(id), (id, buffer) => host.authorize(id, buffer), () => {
+            const goals = new TutorGoalSession(goalStore, provider, (id, buffer) => host.context(id, buffer), (id, buffer) => host.authorize(id, buffer), () => {
                 for (const other of hub.connections) { try { void Promise.resolve(other.client?.onGoalsChanged()).catch(() => undefined); } catch { /* closed */ } }
             });
             const chat = new TutorChatSession(provider, {
                 onDidChange: event => notify(c => c.onDidChange(event)),
                 onChatDelta: event => notify(c => c.onChatDelta(event)),
                 onWorkspacesChanged: () => undefined, onAISettingsChanged: () => undefined, onGoalsChanged: () => undefined,
-            }, (id, buffer) => host.authorize(id, buffer), async id => {
-                const project = await host.context(id), state = await goalStore.read(project.key);
+            }, (id, buffer) => host.authorize(id, buffer), async (id, buffer) => {
+                const project = await host.context(id, buffer), state = await goalStore.read(project.key);
                 return { project, goal: state.goal, step: state.steps[state.current], status: state.status };
             });
             /** Mutations reach every other window so their settings and model pickers stay current. */
@@ -103,7 +106,15 @@ export function bindTutorBackend(bind: interfaces.Bind): void {
     const configDir = (ctx: interfaces.Context): Promise<string> => ctx.container.get<EnvVariablesServer>(EnvVariablesServer).getConfigDirUri().then(uri => fileURLToPath(uri));
     bind(SETTINGS).toDynamicValue((ctx): SettingsHub => {
         const keys = ctx.container.get<KeyStoreService>(KeyStoreService);
-        return { ready: configDir(ctx).then(dir => new TutorAISettingsStore(join(dir, 'nodu-tutor', 'ai-settings.json'), keys, process.env.NODU_TUTOR_EXPLICIT_CREDENTIALS !== '1')),
+        return { buildStatus: async root => {
+            const embedded = ctx.container.get(NoduEmbeddedServer);
+            const reply = await embedded.call('openProject', { path: root });
+            if (!reply.ok) { return { status: 'unavailable', scope: 'saved-project' }; }
+            const project = reply.result as ProjectStatus;
+            return { status: !project.currentBuild ? 'none' : project.buildStale ? 'stale' : 'current', scope: 'saved-project',
+                ...(project.currentBuild ? { bundle: project.currentBuild.bundle,
+                    ...(!project.buildStale ? { runtime: embedded.teachingEvidence.snapshot(root, project.currentBuild.bundle) } : {}) } : {}) };
+        }, ready: configDir(ctx).then(dir => new TutorAISettingsStore(join(dir, 'nodu-tutor', 'ai-settings.json'), keys, process.env.NODU_TUTOR_EXPLICIT_CREDENTIALS !== '1')),
             goals: configDir(ctx).then(dir => new TutorGoalStore(join(dir, 'nodu-tutor', 'goals'))), connections: new Set() };
     }).inSingletonScope();
     bind(STORE).toDynamicValue((ctx): TutorStoreHolder => ({ ready: configDir(ctx)

@@ -12,6 +12,7 @@ import { TutorLearningAction, emptyLearningProgress } from '../common/tutor/tuto
 import { CourseMigrationPreview, TutorSessionSnapshot, TutorStorageOutcome } from '../common/tutor/tutor-storage-protocol';
 import { guidanceEditMatches } from '../common/tutor/tutor-guidance';
 import { emptyGoal, TutorGoalRequest, TutorGoalState } from '../common/tutor/tutor-goal';
+import { TutorLineHistoryCache } from '../common/tutor/tutor-line-history';
 import { ScopeLayoutState } from './scope-layout-state';
 
 /** Every assistant item leaves `pending`; a stopped or superseded request must never stay "thinking". */
@@ -56,6 +57,7 @@ export class NoduTutorModel {
     presentation?: TutorPresentation;
     guidance?: { source: TutorBuffer; anchorLine: number; lines: string[] };
     goalState: TutorGoalState = emptyGoal();
+    readonly lineHistory = new TutorLineHistoryCache();
     /** Providers, key presence and this window's model; never the keys themselves. */
     settings?: TutorAISettingsView;
     /** Conversation lane: chat and step checks, owned by the composer. */

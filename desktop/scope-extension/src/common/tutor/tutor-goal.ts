@@ -2,7 +2,13 @@
 import type { TutorBuffer, TutorAnswer } from './tutor-ai-protocol';
 import { isSafeCoursePath } from './tutor-course';
 
-export interface TutorProjectContext { key: string; mcu: string; sdk: string; files: string[]; }
+export interface TutorProjectContext { key: string; mcu: string; sdk: string; files: string[];
+    declarations?: { path: string; text: string }[];
+    build?: { status: 'current' | 'stale' | 'none' | 'unavailable'; scope: 'saved-project'; bundle?: string; currentBufferSaved?: boolean;
+        runtime?: { download: { bundle: string; method: string; completedAt: number; running: boolean | null; uid: string };
+            serial?: { port: string; baud: number; observedAt: number; text: string; association: 'user-selected-port' } };
+    };
+}
 export interface TutorGoalStep { id: string; title: string; goal: string; path: string; }
 export interface TutorGoalState {
     revision: number; status: 'none' | 'draft' | 'active' | 'paused' | 'cancelled' | 'complete';

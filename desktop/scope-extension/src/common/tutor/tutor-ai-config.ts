@@ -156,7 +156,7 @@ export function effectiveSelection(providers: readonly TutorProviderConfig[], wa
     const provider = wanted && providers.find(p => p.id === wanted.providerId && usable(p));
     const model = provider?.models.find(m => m.id === wanted!.modelId && m.enabled);
     if (provider && model) {
-        return { providerId: provider.id, modelId: model.id, ...(wanted!.reasoning && model.reasoningLevels.includes(wanted!.reasoning) ? { reasoning: wanted!.reasoning } : {}) };
+        return { providerId: provider.id, modelId: model.id, ...(provider.apiFormat !== 'anthropic-messages' && wanted!.reasoning && model.reasoningLevels.includes(wanted!.reasoning) ? { reasoning: wanted!.reasoning } : {}) };
     }
     if (wanted) { return undefined; }
     for (const p of providers) {

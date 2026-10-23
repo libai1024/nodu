@@ -1,0 +1,4 @@
+# Preserve the unmodified STM32CubeF1 vendor source formatting.
+projects/f103-tutor/Core/Inc/stm32f1xx_hal_conf.h -whitespace
+projects/f103-tutor/Core/Src/system_stm32f1xx.c -whitespace
+projects/f103-tutor/Startup/startup_stm32f103xb.s -whitespace
