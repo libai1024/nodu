@@ -8,12 +8,28 @@
 // merges them into universal Mach-O files staged under both lookup dirs;
 // `--arch arm64|x64` builds a single thin slice. Windows/Linux bundling is a
 // subsequent step and is not silently omitted.
-const { execFileSync } = require('node:child_process');
+const { execFileSync, spawnSync } = require('node:child_process');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { parseArgs } = require('node:util');
+
+// Windows delegates to the dedicated MSYS2 recipe before this file parses
+// its own arguments: --arch/--help and every other flag are forwarded
+// verbatim and the child exit status becomes ours — media is never
+// silently skipped on win32.
+if (require.main === module && process.platform === 'win32') {
+    const child = spawnSync(process.execPath,
+        [path.join(__dirname, 'build-media-windows.cjs'),
+            ...process.argv.slice(2)],
+        { stdio: 'inherit' });
+    if (child.error) {
+        console.error(`build-media: cannot start Windows build: ${child.error.message}`);
+        process.exit(1);
+    }
+    process.exit(child.status === null ? 1 : child.status);
+}
 
 const USAGE = `build-media: bundled media tool build (FFmpeg + SDL2, LGPL-only).
 Usage: node scripts/build-media.cjs [--arch arm64|x64]
@@ -45,7 +61,7 @@ if (parsed.values.help) {
 if (process.platform !== 'darwin') {
     console.error(
         `build-media: this build recipe is not available on ${process.platform}; ` +
-        'it currently supports macOS (darwin) hosts only. Windows/Linux bundling is not implemented yet.');
+        'supported hosts are macOS (darwin) and Windows (win32, delegated to scripts/build-media-windows.cjs).');
     process.exit(1);
 }
 
