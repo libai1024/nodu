@@ -1,0 +1,20 @@
+✔ desktop starts at workbench, explicit paths and browser default are retained (0.431834ms)
+✔ launcher URL never becomes a recent project; malformed fragments are rejected (0.133625ms)
+✔ recent projects are deduplicated, bounded and moved to front without deleting missing paths (0.509708ms)
+✔ startup settings parse comments without corrupting URL strings (0.179416ms)
+✔ recent store serializes simultaneous windows, handles missing folders and removes Theia recents (6.289ms)
+✔ example copies are isolated under concurrent creation and omit symlinks and build state (4.291625ms)
+✔ concurrent welcome requests create one window (104.332459ms)
+✔ project routing focuses an existing window and waits before closing the welcome window (6.112792ms)
+✔ failed project opening leaves the welcome window available (3.434333ms)
+✔ packaged courses are filtered, fingerprinted and found through the resource seam (80.80475ms)
+✔ packaged Rust checker parses actual C and scopes call rules (5.864708ms)
+✔ real AST prevents an older persisted top-level call ghost from reappearing (19.87075ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 276.401958

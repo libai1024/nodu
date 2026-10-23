@@ -72,7 +72,9 @@ export class NoduTutorModel {
     readonly messages: Record<TutorMode, TutorChatItem[]> = { teach: [], ask: [] };
     migration?: CourseMigrationPreview;
     private loading = 0;
+    private refreshing = 0;
     private sync: Promise<void> = Promise.resolve();
+    private sessionQueue: Promise<void> = Promise.resolve();
     get plan(): TutorCourseV2 | undefined { return this.session?.plan.kind === 'course' ? this.session.plan.course : undefined; }
     get progress() { return this.session?.learning?.snapshot.progress ?? emptyLearningProgress(); }
     /** 简洁模式不提供 AI：侧栏、虚影、逐行检查和模型请求只在专业模式可用。 */
@@ -98,54 +100,81 @@ export class NoduTutorModel {
         this.toDispose.push(this.layout.onDidChange(() => { if (this.enabled !== enabled) { enabled = this.enabled; this.transition(); } }));
         this.ready = this.workspace.ready.then(() => this.load());
     }
-    dispose(): void { this.cancelAll(); this.toDispose.dispose(); }
+    dispose(): void {
+        ++this.loading; ++this.epoch; this.cancelAll();
+        const session = this.session; this.session = undefined; this.workspaceId = undefined;
+        if (session) { void this.sessionOperation(() => this.service.closeSession(session.sessionId)).catch(() => undefined); }
+        this.toDispose.dispose();
+    }
     notify(): void { this.changed.fire(); }
     private unwrap<T>(value: TutorStorageOutcome<T>): T { if (!value.ok) { throw new Error(value.error.message); } return value.value; }
+    private sessionOperation<T>(operation: () => Promise<T>): Promise<T> {
+        const next = this.sessionQueue.then(operation);
+        this.sessionQueue = next.then(() => undefined, () => undefined);
+        return next;
+    }
     async load(): Promise<void> {
         const generation = ++this.loading;
-        this.cancelAll(); this.invalidate();
-        const old = this.session?.sessionId;
-        this.session = undefined; this.workspaceId = undefined; this.buffer = undefined; this.error = undefined; this.migration = undefined;
-        this.goalState = emptyGoal();
-        this.messages.teach.length = 0; this.messages.ask.length = 0;
+        ++this.epoch; this.cancelAll(); this.invalidate();
+        const old = this.session?.sessionId, oldRoot = this.rootUri, oldBuffer = this.buffer;
+        this.session = undefined; this.workspaceId = undefined; this.rootUri = undefined; this.buffer = undefined; this.error = undefined; this.migration = undefined;
+        this.goalState = emptyGoal(); this.lastAutoFragment = '';
+        this.notify();
         try {
-            if (old) { await this.service.closeSession(old); }
+            // A disconnected host may no longer know the old handle. Still reconnect; never reuse it.
+            if (old) { await this.sessionOperation(() => this.service.closeSession(old)).catch(() => undefined); }
+            if (generation !== this.loading) { return; }
             const root = (await this.workspace.roots)[0]?.resource;
+            if (generation !== this.loading) { return; }
             const grants = await this.service.workspaces();
             if (generation !== this.loading) { return; }
             this.rootUri = root;
-            this.workspaceId = grants.find(g => sameUri(g.uri, root))?.id;
-            this.settings = await this.service.aiSettings();
-            if (this.workspaceId) {
-                const session = this.unwrap(await this.service.openSession(this.workspaceId));
+            if (oldRoot && sameUri(oldRoot.toString(), root)) { this.buffer = oldBuffer; }
+            else { this.messages.teach.length = 0; this.messages.ask.length = 0; this.drafts.teach = ''; this.drafts.ask = ''; }
+            const workspaceId = grants.find(g => sameUri(g.uri, root))?.id;
+            this.workspaceId = workspaceId;
+            const settings = await this.service.aiSettings();
+            if (generation !== this.loading) { return; }
+            this.settings = settings;
+            if (workspaceId) {
+                // The host deduplicates handles per workspace. Serialize ownership so an obsolete
+                // open cannot close the same handle that a newer reconnect is about to adopt.
+                await this.sessionOperation(async () => {
+                    if (generation !== this.loading) { return; }
+                    const session = this.unwrap(await this.service.openSession(workspaceId));
+                    if (generation !== this.loading) { await this.service.closeSession(session.sessionId).catch(() => undefined); }
+                    else { this.session = session; }
+                });
                 if (generation !== this.loading) { return; }
-                this.session = session;
                 await this.refreshGoal();
+                if (generation !== this.loading) { return; }
                 await this.importLegacy();
+                if (generation !== this.loading) { return; }
                 await this.syncPresentation();
             } else if (root) { this.error = '教学工作区尚未连接，请重新打开工程'; }
         } catch (error) { if (generation === this.loading) { this.error = error instanceof Error ? error.message : '教学连接失败'; } }
         if (generation === this.loading) { this.notify(); }
     }
     private async importLegacy(): Promise<void> {
-        const state = this.session?.learning?.snapshot;
-        if (!state || state.legacyImported || !this.plan || state.progress.log.length) { return; }
+        const session = this.session, state = session?.learning?.snapshot;
+        if (!session || !state || state.legacyImported || !this.plan || state.progress.log.length) { return; }
         let raw: string | null = null;
         try { raw = localStorage.getItem(`nodu.tutor:${this.rootUri?.toString()}:${this.plan.id}`); } catch { return; }
         if (!raw) { return; }
-        const next = this.unwrap(await this.service.importLegacyProgress(this.session!.sessionId, state.sequence, state.planHash, crypto.randomUUID(), JSON.parse(raw)));
-        this.session!.learning = { snapshot: next };
+        const next = this.unwrap(await this.service.importLegacyProgress(session.sessionId, state.sequence, state.planHash, crypto.randomUUID(), JSON.parse(raw)));
+        if (session.sessionId === this.session?.sessionId && next.sequence >= (this.session.learning?.snapshot.sequence ?? 0)) { this.session.learning = { snapshot: next }; }
         // Keep the original until the user chooses to clear old browser data.
     }
     async refresh(): Promise<void> {
-        const sessionId = this.session?.sessionId;
+        const sessionId = this.session?.sessionId, generation = ++this.refreshing;
         if (!sessionId) { return; }
         try {
             const next = this.unwrap(await this.service.getSnapshot(sessionId));
-            if (sessionId !== this.session?.sessionId) { return; }
+            if (sessionId !== this.session?.sessionId || generation !== this.refreshing) { return; }
+            if (next.learning && this.session.learning && next.learning.snapshot.sequence < this.session.learning.snapshot.sequence) { return; }
             if (next.learning?.snapshot.planHash !== this.session.learning?.snapshot.planHash) { this.invalidate(); }
             this.session = next; this.notify();
-        } catch (error) { this.error = error instanceof Error ? error.message : '学习记录读取失败'; this.notify(); }
+        } catch (error) { if (sessionId === this.session?.sessionId && generation === this.refreshing) { this.error = error instanceof Error ? error.message : '学习记录读取失败'; this.notify(); } }
     }
     onStorageChange(event: { sessionId: string; sequence: number }): void {
         if (event.sessionId === this.session?.sessionId && event.sequence > (this.session.learning?.snapshot.sequence ?? 0)) { void this.refresh(); }
@@ -160,18 +189,23 @@ export class NoduTutorModel {
         if (!session || !state) { return; }
         try {
             const next = this.unwrap(await this.service.recordAction(session.sessionId, state.sequence, state.planHash, crypto.randomUUID(), action));
-            if (session.sessionId === this.session?.sessionId) { this.session.learning = { snapshot: next }; this.invalidate(); }
-        } catch (error) { this.error = error instanceof Error ? error.message : '学习记录保存失败'; await this.refresh(); }
+            if (session.sessionId === this.session?.sessionId && next.sequence >= (this.session.learning?.snapshot.sequence ?? 0)) { this.session.learning = { snapshot: next }; this.invalidate(); }
+        } catch (error) { if (session.sessionId === this.session?.sessionId) { this.error = error instanceof Error ? error.message : '学习记录保存失败'; await this.refresh(); } }
         this.notify();
     }
     async previewMigration(target: TutorCourseTarget): Promise<void> {
-        if (!this.session) { return; }
-        this.migration = this.unwrap(await this.service.previewMigration(this.session.sessionId, target)); this.notify();
+        const session = this.session;
+        if (!session) { return; }
+        const preview = this.unwrap(await this.service.previewMigration(session.sessionId, target));
+        if (session.sessionId === this.session?.sessionId) { this.migration = preview; this.notify(); }
     }
     async acceptMigration(): Promise<void> {
-        if (!this.session || !this.migration) { return; }
-        this.session = this.unwrap(await this.service.acceptMigration(this.session.sessionId, this.migration.id, this.migration.sourceDigest));
-        this.migration = undefined; await this.importLegacy(); this.invalidate(); this.notify();
+        const session = this.session, migration = this.migration;
+        if (!session || !migration) { return; }
+        const next = this.unwrap(await this.service.acceptMigration(session.sessionId, migration.id, migration.sourceDigest));
+        if (session.sessionId !== this.session?.sessionId || migration !== this.migration) { return; }
+        this.session = next; this.migration = undefined; await this.importLegacy();
+        if (next.sessionId === this.session?.sessionId) { this.invalidate(); this.notify(); }
     }
     private invalidate(): void { this.presentation = undefined; this.guidance = undefined; this.invalidated.fire(); }
     updateBuffer(buffer?: TutorBuffer): void {
@@ -196,16 +230,16 @@ export class NoduTutorModel {
         }
     }
     async refreshGoal(): Promise<void> {
-        const workspace = this.workspaceId;
+        const workspace = this.workspaceId, generation = this.loading;
         if (!workspace) { return; }
         try {
             const next = await this.service.goalSnapshot(workspace);
-            if (workspace === this.workspaceId && next.revision >= this.goalState.revision) {
+            if (workspace === this.workspaceId && generation === this.loading && next.revision >= this.goalState.revision) {
                 if (next.revision !== this.goalState.revision || JSON.stringify(next.fragment) !== JSON.stringify(this.goalState.fragment)) { this.invalidate(); }
                 this.goalState = next; this.restoreGoalGuidance(); this.notify();
             }
         } catch (error) {
-            if (workspace !== this.workspaceId) { return; }
+            if (workspace !== this.workspaceId || generation !== this.loading) { return; }
             this.invalidate(); this.goalState = { ...this.goalState, fragment: undefined };
             this.error = error instanceof Error ? error.message : '教学进度读取失败'; this.notify();
         }
@@ -216,9 +250,10 @@ export class NoduTutorModel {
     }
     async goalAction(action: TutorGoalRequest['action'], prompt?: string, placement?: 'suggest'): Promise<void> {
         if (!this.enabled || this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
-        await this.sync;
-        if (this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
-        const workspace = this.workspaceId, epoch = this.epoch, id = crypto.randomUUID(), previousStep = this.goalState.current;
+        const workspace = this.workspaceId, epoch = this.epoch;
+        try { await this.sync; } catch { return; }
+        if (!this.enabled || this.busy || workspace !== this.workspaceId || epoch !== this.epoch || this.mode !== 'teach') { return; }
+        const id = crypto.randomUUID(), previousStep = this.goalState.current;
         this.busy = { id, mode: 'teach', kind: 'chat', goal: action }; this.error = undefined; this.notify();
         let advance = false;
         try {
@@ -240,11 +275,11 @@ export class NoduTutorModel {
                 this.presentation = { buffer: { ...this.buffer }, answer: result.presentation.answer };
             }
             if (this.messages.teach.length > 100) { this.messages.teach.splice(0, this.messages.teach.length - 100); }
-        } catch (error) { this.error = error instanceof Error ? error.message : '教学连接已断开'; }
+        } catch (error) { if (this.busy?.id === id && workspace === this.workspaceId && epoch === this.epoch) { this.error = error instanceof Error ? error.message : '教学连接已断开'; } }
         finally {
             if (this.busy?.id === id) { this.busy = undefined; }
             this.notify();
-            if (advance && this.goalState.status === 'active') { this.fragmentRequested.fire(); }
+            if (advance && workspace === this.workspaceId && epoch === this.epoch && this.goalState.status === 'active') { this.fragmentRequested.fire(); }
         }
     }
     autoCheckFragment(reviewedLines: readonly number[] = []): void {
@@ -275,7 +310,7 @@ export class NoduTutorModel {
         this.sync = this.sync.catch(() => undefined).then(async () => {
             if (workspace) { await this.service.setPresentation(workspace, epoch, mode, paused); }
         });
-        return this.sync.catch(error => { this.error = error instanceof Error ? error.message : '教学会话更新失败'; this.notify(); });
+        return this.sync.catch(error => { if (workspace === this.workspaceId && epoch === this.epoch) { this.error = error instanceof Error ? error.message : '教学会话更新失败'; this.notify(); } });
     }
     setPanelPreferred(open: boolean): void {
         this.panelPreferred = open;
@@ -330,7 +365,18 @@ export class NoduTutorModel {
         const item = this.messages[mode].find(m => m.id === id);
         if (item?.status === 'pending') { item.status = status; if (note) { item.note = note; } }
     }
-    async clearChat(): Promise<void> { this.cancel(); if (this.workspaceId) { await this.service.clearChat(this.workspaceId, this.mode); } this.messages[this.mode].length = 0; this.notify(); }
+    async clearChat(): Promise<void> {
+        const workspace = this.workspaceId, mode = this.mode, generation = this.loading;
+        this.cancel(); this.messages[mode].length = 0; this.notify();
+        const cleared = this.sync.catch(() => undefined).then(async () => { if (workspace) { await this.service.clearChat(workspace, mode); } });
+        this.sync = cleared;
+        try { await cleared; }
+        catch (error) {
+            if (workspace === this.workspaceId && mode === this.mode && generation === this.loading) {
+                this.error = error instanceof Error ? error.message : '对话清理失败'; this.notify();
+            }
+        }
+    }
     async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer): Promise<TutorAIResult | undefined> {
         if (this.mode === 'teach' && !this.plan && kind === 'chat' && ['none','draft','cancelled','complete'].includes(this.goalState.status)) {
             await this.goalAction('propose', this.drafts.teach.trim()); return;
@@ -339,13 +385,13 @@ export class NoduTutorModel {
         const review = kind === 'line';
         const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
         if (!this.enabled || laneBusy() || !this.workspaceId || (review && this.paused)) { return; }
-        const mode = this.mode;
+        const mode = this.mode, workspace = this.workspaceId, epoch = this.epoch;
         const prompt = kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
         if (!prompt) { return; }
-        await this.sync;
-        if (!this.enabled || laneBusy() || mode !== this.mode || !this.workspaceId || (review && this.paused)) { return; }
+        try { await this.sync; } catch { return; }
+        if (!this.enabled || laneBusy() || mode !== this.mode || workspace !== this.workspaceId || epoch !== this.epoch || (review && this.paused)) { return; }
         const context = buffer ?? (this.includeCode || kind !== 'chat' ? this.buffer : undefined);
-        const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: this.workspaceId, epoch: this.epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
+        const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: workspace, epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
         const current = (): boolean => review ? this.reviewing?.id === request.id : this.busy?.id === request.id;
         if (review) { this.reviewing = { id: request.id }; } else { this.busy = { id: request.id, mode, kind }; }
         const assistant: TutorChatItem = { id: request.id, role: 'assistant', text: '', status: 'pending' };

@@ -169,11 +169,12 @@ test('static course ghost continues through incomplete constructs and comments w
 
 test('course navigation authorizes files and abandons a location after switching projects', async () => {
     const commands={openReference:'ref',toggleHints:'h',highlight:'hi',annotations:'a',float:'f',guidance:'g',check:'c',revealStep:'reveal'};
-    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['registerCommands'],{TUTOR_COMMANDS:commands,MonacoEditor:{get:w=>w},...helpers});
+    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['registerCommands','openTeachingFile'],{TUTOR_COMMANDS:commands,MonacoEditor:{get:w=>w},...helpers});
     const handlers=new Map(),step={anchors:[{path:'drivers/sensor.c',marker:'// STEP'}]},root={resolve:p=>p};
     let opens=0,position;const control={getModel:()=>({getLinesContent:()=>['// STEP',''],getLineCount:()=>2}),setPosition:p=>position=p,revealLineInCenterIfOutsideViewport(){},focus(){}};
     const tutor={enabled:true,rootUri:root,currentStep:()=>step,notify(){},resolveReference:async()=>{throw Error('outside project');}};
-    const subject=Object.assign(new Subject(),{tutor,editors:{open:async()=>{opens++;return {getControl:()=>control};}}});
+    const editors={open:async()=>{opens++;const widget={getControl:()=>control};editors.currentEditor=widget;return widget;}};
+    const subject=Object.assign(new Subject(),{tutor,editors,shell:{activateWidget:async()=>{}}});
     subject.registerCommands({registerCommand:(c,h)=>handlers.set(c.id,h)});
     await handlers.get('reveal').execute();assert.equal(opens,0);assert.match(tutor.error,/outside/);
     tutor.resolveReference=async()=>({path:'drivers/sensor.c',line:1});await handlers.get('reveal').execute();assert.equal(opens,1);assert.equal(position.lineNumber,2);
@@ -182,17 +183,17 @@ test('course navigation authorizes files and abandons a location after switching
 });
 
 test('dynamic lesson opens the next file and focuses validated guidance without editing source', async () => {
-    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['prepareGoal'],{MonacoEditor:{get:w=>w}});
+    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['prepareGoal','openTeachingFile'],{MonacoEditor:{get:w=>w}});
     const text='int main(){\n\n}',state={revision:2,status:'active',steps:[{path:'next.c'}],current:0};let position,opened;
     const model={getValueLength:()=>text.length,getValue:()=>text,getVersionId:()=>7,isDisposed:()=>false,getLineMaxColumn:()=>1};
     const control={getModel:()=>model,getPosition:()=>({lineNumber:1}),setPosition:p=>position=p,revealLineInCenterIfOutsideViewport(){},focus(){}};
     const widget={getControl:()=>control},editors={currentEditor:undefined,open:async p=>{opened=p;editors.currentEditor=widget;return widget;}};
     const tutor={rootUri:{resolve:p=>p},workspaceId:'w',teaching:true,goalState:state,notify(){},resolveReference:async p=>({path:p,line:1}),updateBuffer:b=>tutor.buffer=b,
         goalAction:async(a,p,placement)=>{assert.equal(placement,'suggest');tutor.goalState={...state,revision:3,fragment:{source:{path:'next.c',text},answer:{guidance:{anchorLine:2}}}};}};
-    await Object.assign(new Subject(),{tutor,editors}).prepareGoal();assert.equal(opened,'next.c');assert.equal(position.lineNumber,2);assert.equal(tutor.buffer.text,text);
+    await Object.assign(new Subject(),{tutor,editors,shell:{activateWidget:async()=>{}}}).prepareGoal();assert.equal(opened,'next.c');assert.equal(position.lineNumber,2);assert.equal(tutor.buffer.text,text);
     // A user switching editors during the request must retain their focus.
     position=undefined;tutor.goalState=state;tutor.goalAction=async()=>{editors.currentEditor={};tutor.goalState={...state,fragment:{source:{path:'next.c',text},answer:{guidance:{anchorLine:2}}}};};
-    await Object.assign(new Subject(),{tutor,editors}).prepareGoal();assert.equal(position,undefined);
+    await Object.assign(new Subject(),{tutor,editors,shell:{activateWidget:async()=>{}}}).prepareGoal();assert.equal(position,undefined);
 });
 test('reviewed equivalent lines trigger a fresh fragment review without being marked complete locally',()=>{
  const t=model();t.goalState={status:'active',revision:4,fragment:{source:{path:'main.c',text:'\n\n',line:1,version:1},answer:{guidance:{anchorLine:1,lines:['int x = 1;','x += 1;']}}}};
@@ -209,4 +210,117 @@ test('same-revision fragment removal and failed reads clear a restored ghost',as
  m.service={goalSnapshot:async()=>({revision:4,status:'active',steps:[],current:0})};await m.refreshGoal();assert.equal(m.guidance,undefined);assert.equal(m.goalState.fragment,undefined);
  m.guidance={old:true};m.goalState.fragment={old:true};m.service={goalSnapshot:async()=>{throw Error('revoked');}};await m.refreshGoal();assert.equal(m.guidance,undefined);assert.equal(m.goalState.fragment,undefined);
  const before=m.goalState;m.service={goalSnapshot:async()=>{m.workspaceId='workspace-2';throw Error('late');}};await m.refreshGoal();assert.equal(m.goalState,before);assert.equal(m.error,'revoked');
+});
+
+// Delayed RPCs exercise the production lifecycle across real request boundaries.
+const deferred = () => { let resolve, reject; const promise = new Promise((a,b)=>{resolve=a;reject=b;}); return {promise,resolve,reject}; };
+const Lifecycle = methods('nodu-tutor-model.ts','NoduTutorModel',[
+    'load','sessionOperation','unwrap','importLegacy','refresh','action','previewMigration','acceptMigration',
+    'clearChat','goalAction','send','settle','syncPresentation'
+], { emptyGoal:()=>({revision:0,status:'none',steps:[],current:0}), sameUri:(a,b)=>a===b?.toString(), localStorage:{getItem:()=>null} });
+function lifecycle(overrides={}) {
+    return Object.assign(new Lifecycle(),{loading:0,refreshing:0,epoch:0,sessionQueue:Promise.resolve(),sync:Promise.resolve(),
+        workspaceId:'a',rootUri:{toString:()=>'/a'},workspace:{roots:Promise.resolve([{resource:{toString:()=>'/a'}}])},
+        session:{sessionId:'old',plan:{kind:'none'}},goalState:{revision:0,status:'none',steps:[],current:0},
+        mode:'teach',enabled:true,includeCode:true,messages:{teach:[],ask:[]},drafts:{teach:'goal',ask:'question'},
+        cancelAll(){this.busy=undefined;},cancel(){this.busy=undefined;},invalidate(){this.guidance=undefined;},notify(){},
+        refreshGoal:async()=>{},restoreGoalGuidance(){},fragmentRequested:{fire(){}},
+        service:{closeSession:async()=>({ok:true}),workspaces:async()=>[{id:'a',uri:'/a'}],aiSettings:async()=>({providers:[]}),
+            openSession:async()=>({ok:true,value:{sessionId:'new',plan:{kind:'none'}}}),setPresentation:async()=>{}},...overrides});
+}
+test('reconnect preserves same-project conversation and buffer, tolerates expired handle, clears on project switch',async()=>{
+    const m=lifecycle();m.messages.teach.push({text:'previous feedback'});m.buffer={path:'main.c',text:'int a;'};
+    m.service.closeSession=async()=>{throw Error('disconnected');};await m.load();
+    assert.equal(m.session.sessionId,'new');assert.equal(m.messages.teach.length,1);assert.equal(m.buffer.text,'int a;');assert.equal(m.error,undefined);
+    m.workspace.roots=Promise.resolve([{resource:{toString:()=>'/b'}}]);m.service.workspaces=async()=>[{id:'b',uri:'/b'}];
+    await m.load();assert.equal(m.workspaceId,'b');assert.equal(m.messages.teach.length,0);assert.equal(m.buffer,undefined);assert.equal(m.drafts.teach,'');
+});
+test('superseded session open is closed before a deduplicated reconnect adopts its own handle',async()=>{
+    const m=lifecycle(), gate=deferred(), entered=deferred(),closed=[];let opens=0,live;
+    m.service.closeSession=async id=>{closed.push(id);if(live===id) live=undefined;return {ok:true};};
+    m.service.openSession=async()=>{opens++;live??=`session-${opens}`;const id=live;if(opens===1){entered.resolve();await gate.promise;}return {ok:true,value:{sessionId:id,plan:{kind:'none'}}};};
+    const first=m.load();await entered.promise;const second=m.load();gate.resolve();await Promise.all([first,second]);
+    assert.equal(m.session.sessionId,'session-2');assert.equal(live,'session-2');assert.deepEqual(closed,['old','session-1']);
+});
+test('settings completion from an obsolete load cannot open or overwrite the new workspace',async()=>{
+    const m=lifecycle(),gate=deferred(),entered=deferred();let calls=0,opens=[];
+    m.service.aiSettings=async()=>{if(++calls===1){entered.resolve();return gate.promise;}return {providers:[],label:'new'};};
+    m.service.openSession=async id=>{opens.push(id);return {ok:true,value:{sessionId:id,plan:{kind:'none'}}};};
+    const first=m.load();await entered.promise;m.workspace.roots=Promise.resolve([{resource:{toString:()=>'/b'}}]);m.service.workspaces=async()=>[{id:'b',uri:'/b'}];
+    await m.load();gate.resolve({providers:[],label:'old'});await first;
+    assert.deepEqual(opens,['b']);assert.equal(m.settings.label,'new');assert.equal(m.session.sessionId,'b');
+});
+test('course snapshots never regress and stale workspace failures do not surface',async()=>{
+    const m=lifecycle();m.session.learning={snapshot:{sequence:4,planHash:'new'}};
+    m.service.getSnapshot=async()=>({ok:true,value:{sessionId:'old',plan:{kind:'none'},learning:{snapshot:{sequence:3,planHash:'old'}}}});
+    await m.refresh();assert.equal(m.session.learning.snapshot.sequence,4);
+    m.service.getSnapshot=async()=>{m.session={sessionId:'other'};throw Error('old failure');};await m.refresh();assert.equal(m.error,undefined);
+    m.session.learning={snapshot:{sequence:1,planHash:'b'}};
+    m.service.recordAction=async()=>{m.session={sessionId:'third'};throw Error('old write failure');};await m.action({type:'reset'});assert.equal(m.error,undefined);
+});
+test('migration preview and accepted migration cannot overwrite a newly selected project',async()=>{
+    const m=lifecycle();m.service.previewMigration=async()=>{m.session={sessionId:'other'};return {ok:true,value:{id:'preview'}};};await m.previewMigration({});assert.equal(m.migration,undefined);
+    m.migration={id:'preview',sourceDigest:'x'};m.service.acceptMigration=async()=>{m.session={sessionId:'third'};return {ok:true,value:{sessionId:'other'}};};
+    await m.acceptMigration();assert.equal(m.session.sessionId,'third');
+});
+test('clearing a conversation is mode-scoped and does not erase messages entered during delayed completion',async()=>{
+    const m=lifecycle(),gate=deferred();m.messages.teach.push({text:'old'});m.messages.ask.push({text:'keep'});
+    m.service.clearChat=async(w,mode)=>{assert.equal(w,'a');assert.equal(mode,'teach');await gate.promise;};
+    const pending=m.clearChat();assert.equal(m.messages.teach.length,0);m.messages.teach.push({text:'new'});m.mode='ask';
+    gate.resolve();await pending;assert.equal(m.messages.ask[0].text,'keep');assert.equal(m.messages.teach[0].text,'new');
+    m.service.clearChat=async()=>{m.workspaceId='b';throw Error('old clear');};await m.clearChat();assert.equal(m.error,undefined);
+});
+test('delayed goal failure after cancellation cannot replace current error or new request',async()=>{
+    const m=lifecycle(),gate=deferred(),entered=deferred();m.service.goal=async()=>{entered.resolve();return gate.promise;};
+    const pending=m.goalAction('propose','hello');await entered.promise;m.busy={id:'new'};m.epoch++;m.error='new state';
+    gate.reject(Error('old failure'));await pending;assert.equal(m.error,'new state');assert.equal(m.busy.id,'new');
+});
+test('queued sends cannot carry an old-project prompt or buffer into a newly selected project',async()=>{
+    for(const kind of ['goal','chat']){
+        const m=lifecycle(),gate=deferred();m.sync=gate.promise;m.buffer={path:'main.c',text:'old private code'};m.mode=kind==='goal'?'teach':'ask';
+        let calls=0;m.service.goal=m.service.chat=async()=>{calls++;throw Error('must not send');};
+        const pending=kind==='goal'?m.goalAction('propose','old goal'):m.send();m.workspaceId='b';m.epoch++;gate.resolve();await pending;assert.equal(calls,0);
+    }
+});
+test('failed presentation synchronization prevents queued model requests without an unhandled rejection',async()=>{
+    const m=lifecycle();m.sync=Promise.reject(Error('offline'));let calls=0;m.service.goal=async()=>{calls++;};
+    await m.goalAction('propose','goal');assert.equal(calls,0);
+    m.mode='ask';m.sync=Promise.reject(Error('offline'));await m.send();assert.equal(calls,0);
+});
+test('late file navigation neither steals focus nor reports errors in another project',async()=>{
+    const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['registerCommands','openTeachingFile'],{TUTOR_COMMANDS:{openReference:'ref',revealStep:'step'},MonacoEditor:{get:w=>w},...helpers});
+    const handlers=new Map(),root={resolve:p=>p},step={anchors:[{path:'main.c',marker:'// STEP'}]};let focused=0;
+    const control={getModel:()=>({getLinesContent:()=>['// STEP',''],getLineCount:()=>2}),setPosition(){},revealLineInCenterIfOutsideViewport(){},focus(){focused++;}},widget={getControl:()=>control};
+    const tutor={rootUri:root,epoch:1,enabled:true,currentStep:()=>step,notify(){},resolveReference:async()=>({path:'main.c',line:1})};
+    const editors={currentEditor:widget,open:async(p,options)=>{assert.equal(options.mode,'open');return widget;}};Object.assign(new Subject(),{tutor,editors,shell:{activateWidget:async()=>{}}}).registerCommands({registerCommand:(c,h)=>handlers.set(c.id,h)});
+    await handlers.get('ref').execute('main.c');assert.equal(focused,1);
+    editors.open=async()=>{tutor.epoch++;return widget;};await handlers.get('ref').execute('main.c');await handlers.get('step').execute();assert.equal(focused,1);
+    editors.open=async()=>{editors.currentEditor={};return widget;};await handlers.get('ref').execute('main.c');assert.equal(focused,1);
+    tutor.resolveReference=async()=>{tutor.rootUri={resolve:p=>p};throw Error('old path failed');};await handlers.get('ref').execute('main.c');assert.equal(tutor.error,undefined);
+});
+test('goal snapshot from a previous connection cannot restore ghosts in the same reopened workspace',async()=>{
+    const Subject=methods('nodu-tutor-model.ts','NoduTutorModel',['refreshGoal'],{}),gate=deferred();
+    const state={revision:1,status:'paused'};const m=Object.assign(new Subject(),{workspaceId:'a',loading:1,goalState:state,service:{goalSnapshot:()=>gate.promise},invalidate(){throw Error('must not apply');}});
+    const pending=m.refreshGoal();m.loading++;gate.resolve({revision:10,status:'active',fragment:{old:true}});await pending;assert.equal(m.goalState,state);
+});
+test('legacy progress import cannot write its result into a different live session',async()=>{
+    const Subject=methods('nodu-tutor-model.ts','NoduTutorModel',['importLegacy','unwrap'],{localStorage:{getItem:()=>'{"done":true}'}}),gate=deferred(),entered=deferred();
+    const m=Object.assign(new Subject(),{rootUri:{toString:()=>'/a'},plan:{id:'course'},session:{sessionId:'a',learning:{snapshot:{sequence:0,planHash:'hash',progress:{log:[]}}}},
+        service:{importLegacyProgress:async()=>{entered.resolve();return gate.promise;}}});
+    const pending=m.importLegacy();await entered.promise;const fresh={sessionId:'b',learning:{snapshot:{sequence:4}}};m.session=fresh;
+    gate.resolve({ok:true,value:{sequence:1}});await pending;assert.equal(m.session,fresh);assert.equal(m.session.learning.snapshot.sequence,4);
+});
+test('a new message waits for server conversation clearing before starting its model request',async()=>{
+    const m=lifecycle({mode:'ask'}),gate=deferred(),entered=deferred(),events=[];
+    m.service.clearChat=async()=>{entered.resolve();await gate.promise;events.push('clear');};
+    m.service.chat=async()=>{events.push('send');return {ok:true,answer:{text:'answer',annotations:[]}};};
+    const clear=m.clearChat();await entered.promise;const send=m.send();assert.deepEqual(events,[]);gate.resolve();await Promise.all([clear,send]);
+    assert.deepEqual(events,['clear','send']);assert.equal(m.messages.ask.at(-1).status,'done');
+});
+test('removing a course clears it and a late snapshot cannot restore the deleted plan',async()=>{
+    const m=lifecycle(),gate=deferred();m.session.learning={snapshot:{sequence:4,planHash:'old'}};let calls=0;
+    m.service.getSnapshot=async()=>++calls===1?gate.promise:{ok:true,value:{sessionId:'old',plan:{kind:'none'}}};
+    const old=m.refresh();await m.refresh();assert.equal(m.session.learning,undefined);
+    gate.resolve({ok:true,value:{sessionId:'old',plan:{kind:'course'},learning:{snapshot:{sequence:5,planHash:'old'}}}});await old;
+    assert.equal(m.session.plan.kind,'none');assert.equal(m.session.learning,undefined);
 });

@@ -2,7 +2,7 @@
 import { inject, injectable } from '@theia/core/shared/inversify';
 import * as monaco from '@theia/monaco-editor-core';
 import { CommandContribution, CommandRegistry, CommandService, Disposable, DisposableCollection, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
-import { FrontendApplicationContribution, KeybindingContribution, KeybindingRegistry } from '@theia/core/lib/browser';
+import { ApplicationShell, FrontendApplicationContribution, KeybindingContribution, KeybindingRegistry } from '@theia/core/lib/browser';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { EditorWidget } from '@theia/editor/lib/browser/editor-widget';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
@@ -232,6 +232,7 @@ class TutorEditorController implements Disposable {
 @injectable()
 export class NoduTutorHintsContribution implements FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution {
     @inject(EditorManager) protected readonly editors!: EditorManager;
+    @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(CommandService) protected readonly commands!: CommandService;
     private readonly disposables = new DisposableCollection();
@@ -247,6 +248,13 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         const controller = new TutorEditorController(widget, control, this.tutor, () => this.editors.currentEditor === widget, () => void this.commands.executeCommand(TUTOR_COMMANDS.openPanel));
         this.controllers.set(widget, controller); widget.disposed.connect(() => { controller.dispose(); this.controllers.delete(widget); });
     }
+    private async openTeachingFile(root: NonNullable<NoduTutorModel['rootUri']>, path: string, current: () => boolean): Promise<EditorWidget | undefined> {
+        const before = this.editors.currentEditor;
+        const widget = await this.editors.open(root.resolve(path), { mode: 'open' });
+        if (!current() || (this.editors.currentEditor !== before && this.editors.currentEditor !== widget)) { return; }
+        await this.shell.activateWidget(widget.id);
+        return current() && this.editors.currentEditor === widget ? widget : undefined;
+    }
     private preparingGoal = false;
     private async prepareGoal(): Promise<void> {
         const root = this.tutor.rootUri, workspace = this.tutor.workspaceId, state = this.tutor.goalState;
@@ -257,8 +265,8 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         try {
             const reference = await this.tutor.resolveReference(step.path, 1);
             if (!current()) { return; }
-            const widget = await this.editors.open(root.resolve(reference.path), { mode: 'activate' });
-            if (!current()) { return; }
+            const widget = await this.openTeachingFile(root, reference.path, current);
+            if (!widget || !current()) { return; }
             const control = MonacoEditor.get(widget)?.getControl(), model = control?.getModel();
             if (!model || !control || model.getValueLength() > 32000) { return; }
             const source = { path: step.path, text: model.getValue(), version: model.getVersionId(), line: control.getPosition()?.lineNumber ?? 1 };
@@ -276,13 +284,16 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         commands.registerCommand({ id: TUTOR_COMMANDS.prepareGoal }, { execute: () => this.prepareGoal(), isEnabled: () => this.tutor.teaching && !this.tutor.busy });
         const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
         commands.registerCommand({ id: TUTOR_COMMANDS.openReference }, { execute: async (path: string, line = 1) => {
+            const root = this.tutor.rootUri, epoch = this.tutor.epoch;
+            const current = (): boolean => !!root && root === this.tutor.rootUri && epoch === this.tutor.epoch;
             try {
-                const root = this.tutor.rootUri, reference = await this.tutor.resolveReference(path, line);
-                if (!root || root !== this.tutor.rootUri) { return; }
-                const widget = await this.editors.open(root.resolve(reference.path), { mode: 'activate' });
+                const reference = await this.tutor.resolveReference(path, line);
+                if (!current()) { return; }
+                const widget = await this.openTeachingFile(root!, reference.path, current);
+                if (!widget || !current()) { return; }
                 const control = MonacoEditor.get(widget)?.getControl();
                 control?.setPosition({ lineNumber: reference.line, column: 1 }); control?.revealLineInCenterIfOutsideViewport(reference.line); control?.focus();
-            } catch (error) { this.tutor.error = error instanceof Error ? error.message : '无法打开代码文件'; this.tutor.notify(); }
+            } catch (error) { if (current()) { this.tutor.error = error instanceof Error ? error.message : '无法打开代码文件'; this.tutor.notify(); } }
         }, ...available });
         const toggle = (id: string, label: string, key: 'hintsVisible' | 'highlightsVisible' | 'annotationsVisible' | 'floatVisible'): void => {
             commands.registerCommand({ id, label, category: 'Nodu' }, { execute: () => this.tutor.setDisplay(key, !this.tutor[key]), isToggled: () => this.tutor[key], ...available });
@@ -293,17 +304,19 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         commands.registerCommand({ id: TUTOR_COMMANDS.guidance, label: 'AI 编辑指导', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => !this.tutor.paused, ...available });
         commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.enabled && this.tutor.mode === 'teach' && !!this.tutor.buffer && !this.tutor.busy, isVisible: () => this.tutor.enabled });
         commands.registerCommand({ id: TUTOR_COMMANDS.revealStep, label: '定位教学代码', category: 'Nodu' }, { execute: async () => {
+            const root = this.tutor.rootUri, epoch = this.tutor.epoch, step = this.tutor.currentStep(), anchor = step?.anchors[0];
+            const current = (): boolean => root === this.tutor.rootUri && epoch === this.tutor.epoch && step === this.tutor.currentStep();
+            if (!anchor || !root) { return; }
             try {
-                const root = this.tutor.rootUri, step = this.tutor.currentStep(), anchor = step?.anchors[0];
-                if (!anchor || !root) { return; }
                 const reference = await this.tutor.resolveReference(anchor.path, 1);
-                if (root !== this.tutor.rootUri || step !== this.tutor.currentStep()) { return; }
-                const widget = await this.editors.open(root.resolve(reference.path), { mode: 'activate' });
+                if (!current()) { return; }
+                const widget = await this.openTeachingFile(root, reference.path, current);
+                if (!widget || !current()) { return; }
                 const control = MonacoEditor.get(widget)?.getControl(), model = control?.getModel();
                 const line = model && tutorMarkerLine(model.getLinesContent(), anchor);
                 if (control && line) { control.setPosition({ lineNumber: Math.min(line + 1, model!.getLineCount()), column: 1 }); control.revealLineInCenterIfOutsideViewport(line); control.focus(); }
                 else if (anchor.marker) { throw new Error('未找到唯一的教学位置'); }
-            } catch (error) { this.tutor.error = error instanceof Error ? error.message : '无法定位教学代码'; this.tutor.notify(); }
+            } catch (error) { if (current()) { this.tutor.error = error instanceof Error ? error.message : '无法定位教学代码'; this.tutor.notify(); } }
         }, ...available });
     }
     registerKeybindings(keys: KeybindingRegistry): void {
