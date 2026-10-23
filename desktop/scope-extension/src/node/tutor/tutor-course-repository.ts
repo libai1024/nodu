@@ -3,7 +3,9 @@ import { createHash, randomUUID } from 'node:crypto';
 import { constants } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { parseTutorPlan, TutorPlan } from '../../common/nodu-tutor-plan';
+import { parseTutorPlan } from '../../common/nodu-tutor-plan';
+import { StoredCourse, CourseMigrationPreview } from '../../common/tutor/tutor-storage-protocol';
+export type { StoredCourse, CourseMigrationPreview } from '../../common/tutor/tutor-storage-protocol';
 import {
     canonicalCourseContent, migrateLegacyCourse, parseCourse, TutorCourseTarget, TutorCourseV2,
 } from '../../common/tutor/tutor-course';
@@ -13,20 +15,14 @@ const PLAN_DIRECTORY = '.nodu-tutor';
 const PLAN_FILE = 'plan.json';
 const PREVIEW_TTL_MS = 30 * 60 * 1000;
 const MAX_PREVIEWS = 8;
+const JOURNAL_FILE = '.migration.json';
+interface MigrationJournal {
+    schema: 1; id: string; pid: number; originalDigest: string; candidateDigest: string;
+}
 
 export type CourseRepositoryErrorCode = 'invalidSchema' | 'outOfScope' | 'revisionConflict' | 'storageUnavailable' | 'sourceMissing';
 export class CourseRepositoryError extends Error {
     constructor(readonly code: CourseRepositoryErrorCode, message: string) { super(message); }
-}
-
-export type StoredCourse =
-    | { kind: 'legacy'; sourceDigest: string; plan: TutorPlan }
-    | { kind: 'course'; sourceDigest: string; course: TutorCourseV2 };
-
-export interface CourseMigrationPreview {
-    id: string;
-    sourceDigest: string;
-    course: TutorCourseV2;
 }
 
 interface PendingMigration extends CourseMigrationPreview { createdAt: number; original: string }
@@ -41,11 +37,15 @@ export class TutorCourseRepository {
     constructor(private readonly authorizedRoot: string) { }
 
     async read(): Promise<StoredCourse> {
-        return this.io(async () => this.decode(await this.readSource()));
+        return this.io(async () => this.serial(await this.workspaceRoot(), async () => {
+            await this.recoverPending();
+            return this.decode(await this.readSource());
+        }));
     }
 
     async previewMigration(target: TutorCourseTarget): Promise<CourseMigrationPreview> {
-        return this.io(async () => {
+        return this.io(async () => this.serial(await this.workspaceRoot(), async () => {
+            await this.recoverPending();
             const original = await this.readSource();
             const source = this.decode(original);
             if (source.kind !== 'legacy') { throw new CourseRepositoryError('invalidSchema', '课程无需迁移'); }
@@ -65,13 +65,15 @@ export class TutorCourseRepository {
             };
             this.previews.set(preview.id, preview);
             return this.publicPreview(preview);
-        });
+        }));
     }
 
-    async acceptMigration(id: string, expectedSourceDigest: string): Promise<StoredCourse> {
+    async acceptMigration(id: string, expectedSourceDigest: string, assertAllowed: () => void = () => undefined): Promise<StoredCourse> {
         return this.io(async () => {
             const root = await this.workspaceRoot();
             return this.serial(root, async () => {
+                assertAllowed();
+                await this.recoverPending();
                 const preview = this.previews.get(id);
                 if (!preview || preview.sourceDigest !== expectedSourceDigest || Date.now() - preview.createdAt > PREVIEW_TTL_MS) {
                     throw new CourseRepositoryError('revisionConflict', '迁移预览已失效');
@@ -80,6 +82,7 @@ export class TutorCourseRepository {
                 if (sha256(original) !== expectedSourceDigest) {
                     throw new CourseRepositoryError('revisionConflict', '教学计划已修改，请重新预览');
                 }
+                assertAllowed();
                 const directory = await this.planDirectory();
                 const backups = join(directory, 'backups');
                 await this.ensureDirectory(backups);
@@ -87,16 +90,24 @@ export class TutorCourseRepository {
                 await this.backup(backup, original);
                 await this.flushDirectory(directory);
                 const source = this.serialize(preview.course);
-                const temporary = join(directory, `.plan-${randomUUID()}.tmp`);
+                const transactionId = randomUUID();
+                const temporary = join(directory, `.plan-${transactionId}.tmp`);
                 const plan = join(directory, PLAN_FILE);
-                const displaced = join(backups, `recovery-${randomUUID()}.json`);
+                const displaced = join(backups, `recovery-${transactionId}.json`);
                 let moved = false;
+                let journalWritten = false;
                 try {
                     await this.writeNew(temporary, source);
+                    await this.publishJournal(directory, {
+                        schema: 1, id: transactionId, pid: process.pid,
+                        originalDigest: expectedSourceDigest, candidateDigest: sha256(source),
+                    });
+                    journalWritten = true;
                     // Include edits made while preparing the backup in the compare-and-swap.
                     if (sha256(await this.readSource()) !== expectedSourceDigest) {
                         throw new CourseRepositoryError('revisionConflict', '教学计划已修改，请重新预览');
                     }
+                    assertAllowed();
                     // Preserve the actual displaced file, including a late external editor save.
                     await fs.rename(plan, displaced);
                     moved = true;
@@ -110,6 +121,7 @@ export class TutorCourseRepository {
                         throw error;
                     }
                     await this.flushDirectory(directory);
+                    await this.finishJournal(directory, transactionId);
                 } catch (error) {
                     if (moved) {
                         // Restore only when the destination is still absent. Keep recovery data.
@@ -118,6 +130,7 @@ export class TutorCourseRepository {
                         });
                         await this.flushDirectory(directory);
                     }
+                    if (journalWritten) { await this.recoverPending(); }
                     throw error;
                 } finally {
                     await fs.unlink(temporary).catch(error => { if (!this.isCode(error, 'ENOENT')) { throw error; } });
@@ -126,6 +139,58 @@ export class TutorCourseRepository {
                 return this.decode(source);
             });
         });
+    }
+
+    private async publishJournal(directory: string, journal: MigrationJournal): Promise<void> {
+        const temporary = join(directory, `.journal-${journal.id}.tmp`);
+        try {
+            await this.writeNew(temporary, JSON.stringify(journal));
+            try { await fs.link(temporary, join(directory, JOURNAL_FILE)); } catch (error) {
+                if (this.isCode(error, 'EEXIST')) { throw new CourseRepositoryError('revisionConflict', '课程迁移正在处理'); }
+                throw error;
+            }
+            await this.flushDirectory(directory);
+        } finally { await fs.unlink(temporary).catch(error => { if (!this.isCode(error, 'ENOENT')) { throw error; } }); }
+    }
+
+    /** Restart recovery rolls back only an absent destination; external saves always win. */
+    private async recoverPending(): Promise<void> {
+        const directory = await this.planDirectory();
+        let source: string;
+        try { source = await this.readFile(join(directory, JOURNAL_FILE)); }
+        catch (error) { if (this.isCode(error, 'ENOENT')) { return; } throw error; }
+        let raw: unknown;
+        try { raw = JSON.parse(source); } catch { throw new CourseRepositoryError('storageUnavailable', '课程恢复记录损坏'); }
+        const j = raw as Partial<MigrationJournal> | null;
+        if (!j || typeof j !== 'object' || Object.keys(j).sort().join() !== 'candidateDigest,id,originalDigest,pid,schema'
+            || j.schema !== 1 || typeof j.id !== 'string' || !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(j.id)
+            || !Number.isSafeInteger(j.pid) || j.pid! <= 0
+            || typeof j.originalDigest !== 'string' || !/^[a-f0-9]{64}$/.test(j.originalDigest)
+            || typeof j.candidateDigest !== 'string' || !/^[a-f0-9]{64}$/.test(j.candidateDigest)) {
+            throw new CourseRepositoryError('storageUnavailable', '课程恢复记录无效');
+        }
+        if (j.pid !== process.pid) {
+            try { process.kill(j.pid!, 0); throw new CourseRepositoryError('storageUnavailable', '另一进程正在迁移课程'); }
+            catch (error) { if (!this.isCode(error, 'ESRCH')) { throw error; } }
+        }
+        const plan = join(directory, PLAN_FILE);
+        try { await this.readFile(plan); } catch (error) {
+            if (!this.isCode(error, 'ENOENT')) { throw error; }
+            const backups = join(directory, 'backups');
+            await this.ensureDirectory(backups);
+            const recovery = join(backups, `recovery-${j.id}.json`);
+            // Validate the actual displaced file without inferring it from an older backup.
+            try { await this.readFile(recovery); } catch { throw new CourseRepositoryError('storageUnavailable', '课程恢复文件缺失或损坏'); }
+            await fs.link(recovery, plan).catch(linkError => { if (!this.isCode(linkError, 'EEXIST')) { throw linkError; } });
+        }
+        await this.flushDirectory(directory);
+        await this.finishJournal(directory, j.id);
+    }
+
+    private async finishJournal(directory: string, id: string): Promise<void> {
+        await fs.unlink(join(directory, `.plan-${id}.tmp`)).catch(error => { if (!this.isCode(error, 'ENOENT')) { throw error; } });
+        await fs.unlink(join(directory, JOURNAL_FILE));
+        await this.flushDirectory(directory);
     }
 
     private publicPreview(preview: PendingMigration): CourseMigrationPreview {

@@ -1,0 +1,75 @@
+
+> @scope/studio-extension@0.1.4 test:tutor
+> npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs
+
+
+> @scope/studio-extension@0.1.4 compile
+> tsc -p tsconfig.json
+
+✔ preview is read-only; accepted course and exact backup are independent from source files (108.692125ms)
+✔ changed source and mismatched preview identity never overwrite the current plan (3.482667ms)
+✔ two windows accept the same source once (61.244542ms)
+✔ malformed JSON, invalid UTF-8 and oversized files are rejected (20.729ms)
+✔ schema2 content hash is verified against file contents (16.175625ms)
+✔ migration size limit includes final whitespace (27.76825ms)
+✔ symlink plan and backup directories cannot redirect migration (4.17475ms)
+✔ an inconsistent existing backup is never overwritten (8.176167ms)
+✔ interrupted backup writes leave the old plan and permit retry (75.256333ms)
+✔ backup publication is flushed before the active plan is moved (65.665292ms)
+✔ a late external save in the read-to-move gap is restored and preserved (81.8775ms)
+✔ external recreation after source move is not overwritten by publication (93.878833ms)
+✔ an editor holding the old file open writes to recovery, not the new course or immutable backup (104.168875ms)
+✔ schema 2 parses object and text without retaining input references (1.820083ms)
+✔ runtime and independent draft-07 validator agree on structural cases (29.062041ms)
+✔ rejects unknown keys at every structured boundary (2.010667ms)
+✔ accepts forward DAG dependencies and rejects unknown, duplicate and cyclic dependencies (0.844084ms)
+✔ paths remain project relative on POSIX and Windows (1.242292ms)
+✔ typed requirements have explicit parameters and cannot carry commands or regex (0.98475ms)
+✔ rule and decision references must resolve without duplicate ids (0.479083ms)
+✔ guidance is explicit code, has a known anchor and bounded individual lines (0.807833ms)
+✔ target needs explicit chip and pinned digests; wiring id and digest are paired (0.291292ms)
+✔ bounded inputs reject invalid JSON, non-JSON values and resource exhaustion (5.304ms)
+✔ canonical content ignores only its hash and is stable across object key order (0.559625ms)
+✔ bundled SHT30 migration preserves authored content and never infers executable checks or chip (9.037875ms)
+✔ migration rejects data that the old parser would silently discard (7.535917ms)
+✔ all legacy step kinds remain self-checked, never verified or executable (2.683042ms)
+✔ bundled course parses and every anchor has exactly one marker in the starter project (5.0975ms)
+✔ bundled course: every implement step authors the reference, and L3 only appears at level 3 (0.921042ms)
+✔ rejects unsafe anchors, forward or unknown dependencies, duplicates and unknown rule cards (0.38275ms)
+✔ decide steps need an available option (0.092ms)
+✔ markers: S1 never matches S10, and duplicates are reported (0.06275ms)
+✔ hint region runs to the next top-level marker; indented markers stay inside (0.133041ms)
+✔ test dependencies only flag 上游未验证; implementation dependencies lock (0.117041ms)
+✔ reminders: a step with a direct test, a finished layer, and an untested streak (0.6205ms)
+✔ process exit after journal recovers without losing original bytes (129.464375ms)
+✔ process exit after moved recovers without losing original bytes (97.038541ms)
+✔ process exit after published recovers without losing original bytes (123.395458ms)
+✔ recovery preserves a newer destination and rejects invalid journal paths (29.06925ms)
+✔ incomplete recovery is not presented as an ordinary project without a course (10.964083ms)
+✔ manual progress uses required dependencies, preserves references and never verifies code (1.877417ms)
+✔ progress survives a new store instance and stays outside the project (173.154417ms)
+✔ two stores serialize the same local project and reject stale writes (167.469625ms)
+✔ retries are idempotent and changed request bodies are refused (117.953291ms)
+✔ a partial log tail is discarded, recorded and checkpointed; full corrupt rows are not skipped (146.046125ms)
+✔ checkpoint failure keeps the durably committed journal and restores on reopen (67.028208ms)
+✔ a journal write failure reports failure, sends no success event and preserves progress (91.632333ms)
+✔ missing committed log entries do not reset the student record (100.669334ms)
+✔ changing the plan starts a new projection and keeps old plan evidence (190.232583ms)
+✔ legacy import is one-time, self-checked, retryable and rejects malformed input (119.158875ms)
+✔ copied projects have separate keys; paths and symlink storage cannot redirect writes (2.557708ms)
+✔ session facade has no path grants or prototype methods and isolates clients (126.928709ms)
+✔ service migration previews are read-only and owned by the originating connection (123.015208ms)
+✔ ordinary project returns no course without creating learning files (2.098875ms)
+✔ process exit after durable event append replays the committed operation exactly once (132.569083ms)
+✔ event gaps produce a complete snapshot and replay window stays bounded (105.771167ms)
+✔ input objects are detached before awaiting queued writes (90.785458ms)
+✔ revoked ownership stops a pending mutation before commit (84.710125ms)
+✔ recreating a directory at the same path does not inherit the removed project session (2.075209ms)
+ℹ tests 59
+ℹ suites 0
+ℹ pass 59
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2286.421

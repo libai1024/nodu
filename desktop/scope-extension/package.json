@@ -26,7 +26,8 @@
     "iconv-lite": "0.6.3"
   },
   "scripts": {
-    "compile": "tsc -p tsconfig.json"
+    "compile": "tsc -p tsconfig.json",
+    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs"
   },
   "theiaExtensions": [
     {
