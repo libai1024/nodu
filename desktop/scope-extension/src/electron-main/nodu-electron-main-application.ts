@@ -16,7 +16,7 @@ import { FrontendApplicationConfig } from '@theia/application-package/lib/applic
 import { NODU_LAUNCHER_QUERY, NODU_REOPEN_LAST_PREF, NoduLauncherMain } from '../common/nodu-launcher-protocol';
 import { parseJsonc, pathKey, projectFromWindowUrl } from '../common/nodu-launcher-util';
 
-const LAUNCHER_SIZE = { width: 880, height: 580, minWidth: 760, minHeight: 500 };
+const LAUNCHER_SIZE = { width: 960, height: 640, minWidth: 760, minHeight: 500 };
 /** Keep the launcher available if opening a project fails or stalls. */
 const SHOW_TIMEOUT = 20000;
 type LaunchArgs = ElectronMainCommandOptions['launchArgs'];
@@ -138,6 +138,7 @@ export class NoduElectronMainApplication extends ElectronMainApplication impleme
         const options: TheiaBrowserWindowOptions = {
             ...this.getDefaultTheiaWindowOptions(),
             width, height, minWidth, minHeight, frame: true, title: 'Nodu',
+            titleBarStyle: 'hidden', trafficLightPosition: { x: 14, y: 14 },
             x: Math.round(workArea.x + (workArea.width - width) / 2),
             y: Math.round(workArea.y + (workArea.height - height) / 2),
             isMaximized: false, isFullScreen: false, maximizable: false, fullscreenable: false,

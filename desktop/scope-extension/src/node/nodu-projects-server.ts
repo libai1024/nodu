@@ -73,7 +73,7 @@ export class NoduProjectsServer implements NoduProjectsService {
         const examples = await Promise.all(entries.filter(entry => entry.isDirectory() && !entry.name.startsWith('.')).map(async entry => {
             const path = join(root, entry.name);
             const { title, summary } = readmeSummary(await fs.readFile(join(path, 'README.md'), 'utf8').catch(() => ''));
-            return { path, name: title || entry.name, summary, tag: await folderTag(path) };
+            return { path, name: entry.name === 'board-api' ? 'K210 板端接口' : title || entry.name, summary, tag: await folderTag(path) };
         }));
         return examples.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
     }

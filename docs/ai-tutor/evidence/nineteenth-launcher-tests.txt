@@ -1,0 +1,40 @@
+
+> @scope/studio-extension@0.1.4 test:launcher
+> npm run compile && node --test test/launcher.cjs test/launcher-view.cjs
+
+
+> @scope/studio-extension@0.1.4 compile
+> tsc -p tsconfig.json
+
+✔ resolved project directory replaces skeleton with inline form (5.804125ms)
+✔ empty reference result settles loading and shows empty state (1.569ms)
+✔ busy action ignores duplicate calls and navigation (1.676417ms)
+✔ refresh preserves an open failure and its dismiss action (1.337417ms)
+✔ inline form busy signal blocks back navigation until operation ends (1.459084ms)
+✔ copy failure offers dismiss instead of retrying unrelated list fetch (1.41925ms)
+✔ directory picker failure is handled and releases form busy state (2.027084ms)
+✔ unmounted creation cannot open a project or call parent handlers (0.92175ms)
+✔ operation failures use one dismissible notice while load failures stay beside retry (2.210042ms)
+✔ reference rows do not leak README explanations into the workbench (1.28475ms)
+✔ launcher project monograms use actual chip families and fall back to the project name (0.555625ms)
+✔ launcher search covers project and example metadata and ignores surrounding whitespace (0.117542ms)
+✔ launcher keyboard navigation stays within the visible project list (0.080667ms)
+✔ desktop starts at workbench, explicit paths and browser default are retained (0.088125ms)
+✔ launcher URL never becomes a recent project; malformed fragments are rejected (0.146625ms)
+✔ recent projects are deduplicated, bounded and moved to front without deleting missing paths (0.539291ms)
+✔ startup settings parse comments without corrupting URL strings (0.636667ms)
+✔ recent store serializes simultaneous windows, handles missing folders and removes Theia recents (6.351708ms)
+✔ example copies are isolated under concurrent creation and omit symlinks and build state (4.376ms)
+✔ concurrent welcome requests create one window (112.584792ms)
+✔ project routing focuses an existing window and waits before closing the welcome window (5.956958ms)
+✔ failed project opening leaves the welcome window available (3.772333ms)
+✔ packaged courses are filtered, fingerprinted and found through the resource seam (88.68075ms)
+✔ Electron reload has a distinct shortcut and preserves run, terminal and other defaults (1.238ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 299.236084

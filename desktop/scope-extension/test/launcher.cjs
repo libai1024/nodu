@@ -7,8 +7,41 @@ const os = require('node:os');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const util = require('../lib/common/nodu-launcher-util');
+const viewUtil = require('../lib/common/nodu-launcher-view-utils');
 const { NoduProjectsServer } = require('../lib/node/nodu-projects-server');
 const { resolveLaunchWorkspace } = require('../../scripts/launch.cjs');
+
+test('launcher project monograms use actual chip families and fall back to the project name', () => {
+    assert.equal(viewUtil.launcherProjectMonogram('STM32F103', 'blink'), 'F1');
+    assert.equal(viewUtil.launcherProjectMonogram('STM32F407', 'uart'), 'F4');
+    assert.equal(viewUtil.launcherProjectMonogram('K210', 'camera'), 'K2');
+    assert.equal(viewUtil.launcherProjectMonogram('ESP32-S3', 'radio'), 'E');
+    assert.equal(viewUtil.launcherProjectMonogram(undefined, '  blink'), 'B');
+    assert.equal(viewUtil.launcherProjectMonogram(undefined, '  见微'), '见');
+    assert.equal(viewUtil.launcherProjectMonogram(undefined, ''), '');
+});
+test('launcher search covers project and example metadata and ignores surrounding whitespace', () => {
+    const project = { name: 'Blink F103', path: '/tmp/STM32/demo', tag: 'STM32F103', summary: 'USART 教学' };
+    assert.equal(viewUtil.launcherSearchMatch(project, ' blink '), true);
+    assert.equal(viewUtil.launcherSearchMatch(project, 'stm32/demo'), true);
+    assert.equal(viewUtil.launcherSearchMatch(project, 'f103'), true);
+    assert.equal(viewUtil.launcherSearchMatch(project, 'USART'), true);
+    assert.equal(viewUtil.launcherSearchMatch(project, ''), true);
+    assert.equal(viewUtil.launcherSearchMatch(project, 'missing'), false);
+});
+test('launcher keyboard navigation stays within the visible project list', () => {
+    assert.equal(viewUtil.nextLauncherIndex(-1, 'ArrowDown', 3), 0);
+    assert.equal(viewUtil.nextLauncherIndex(-1, 'ArrowUp', 3), 2);
+    assert.equal(viewUtil.nextLauncherIndex(1, 'ArrowDown', 3), 2);
+    assert.equal(viewUtil.nextLauncherIndex(2, 'ArrowDown', 3), 2);
+    assert.equal(viewUtil.nextLauncherIndex(0, 'ArrowUp', 3), 0);
+    assert.equal(viewUtil.nextLauncherIndex(1, 'Home', 3), 0);
+    assert.equal(viewUtil.nextLauncherIndex(1, 'End', 3), 2);
+    assert.equal(viewUtil.nextLauncherIndex(1, 'Enter', 3), -1);
+    assert.equal(viewUtil.nextLauncherIndex(1, 'Escape', 3), -1);
+    assert.equal(viewUtil.nextLauncherIndex(0, 'ArrowDown', 0), -1);
+    for (const key of ['Tab', ' ', 'a']) assert.equal(viewUtil.nextLauncherIndex(1, key, 3), -1);
+});
 
 test('desktop starts at workbench, explicit paths and browser default are retained', () => {
     assert.equal(resolveLaunchWorkspace('electron', undefined, '/tmp'), undefined);

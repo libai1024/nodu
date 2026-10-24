@@ -7,7 +7,7 @@ import { URI } from '@theia/core/lib/common/uri';
 import { PROJECT_CHIPS, PROJECT_FAMILIES, ProjectFamily, projectTemplates, validProjectName } from '../common/nodu-project-catalog';
 import { EmbeddedError, NoduEmbeddedModel } from './nodu-embedded-model';
 
-interface Deps { model: NoduEmbeddedModel; dialogs: FileDialogService; parent: string; family?: ProjectFamily; onCreated: (project: { path: string }) => void }
+interface Deps { model: NoduEmbeddedModel; dialogs: FileDialogService; parent: string; family?: ProjectFamily; onBusyChange?: (busy: boolean) => void; onCreated: (project: { path: string }) => void }
 
 export class NoduNewProjectDialog extends ReactDialog<undefined> {
     constructor(props: DialogProps, private readonly deps: Deps) {
@@ -21,7 +21,7 @@ export class NoduNewProjectDialog extends ReactDialog<undefined> {
     protected handleEnter(event: KeyboardEvent): boolean { return false; }
 }
 
-function NewProjectForm({ model, dialogs, parent: initialParent, family: initialFamily = 'k210', onCreated, close }: Deps & { close: () => void }): React.ReactElement {
+export function NewProjectForm({ model, dialogs, parent: initialParent, family: initialFamily = 'k210', onCreated, close, onBusyChange }: Deps & { close: () => void }): React.ReactElement {
     const [family, setFamily] = React.useState<ProjectFamily>(initialFamily);
     const [chipId, setChipId] = React.useState(PROJECT_CHIPS.find(c => c.family === initialFamily)!.id);
     const [expanded, setExpanded] = React.useState({ stm32: initialFamily.startsWith('stm32'), esp32: initialFamily === 'esp32' });
@@ -32,6 +32,9 @@ function NewProjectForm({ model, dialogs, parent: initialParent, family: initial
     const [error, setError] = React.useState('');
     const [busy, setBusy] = React.useState(false);
     const pending = React.useRef(false);
+    const mounted = React.useRef(true);
+    React.useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+    const changeBusy = (value: boolean): void => { pending.current = value; if (mounted.current) { setBusy(value); onBusyChange?.(value); } };
     const [nameTouched, setNameTouched] = React.useState(false);
     const nameOk = validProjectName(name);
     const templates = projectTemplates(family, chipId);
@@ -41,19 +44,24 @@ function NewProjectForm({ model, dialogs, parent: initialParent, family: initial
         if (!nameEdited) { setName(`hello-${next}`); }
     };
     const choose = async (): Promise<void> => {
-        const picked = await dialogs.showOpenDialog({ title: '项目位置', canSelectFolders: true, canSelectFiles: false, openLabel: '选择' });
-        const uri = Array.isArray(picked) ? picked[0] : picked;
-        if (uri) { setParent(uri.path.fsPath()); setError(''); }
+        if (pending.current) { return; }
+        changeBusy(true);
+        try {
+            const picked = await dialogs.showOpenDialog({ title: '项目位置', canSelectFolders: true, canSelectFiles: false, openLabel: '选择' });
+            const uri = Array.isArray(picked) ? picked[0] : picked;
+            if (mounted.current && uri) { setParent(uri.path.fsPath()); setError(''); }
+        } catch (e) { if (mounted.current) { setError(e instanceof Error ? e.message : String(e)); } }
+        finally { changeBusy(false); }
     };
     const create = async (): Promise<void> => {
         if (!nameOk || !parent.trim() || pending.current) { return; }
-        pending.current = true; setBusy(true); setError('');
+        changeBusy(true); setError('');
         try {
             const project = await model.call<{ path: string }>('createWorkspace', { parent, name, chip: chipId, template: templateId });
-            close(); onCreated(project);
+            if (mounted.current) { close(); onCreated(project); }
         } catch (e) {
-            setError(e instanceof EmbeddedError ? e.message : String(e));
-        } finally { pending.current = false; setBusy(false); }
+            if (mounted.current) { setError(e instanceof EmbeddedError || e instanceof Error ? e.message : String(e)); }
+        } finally { changeBusy(false); }
     };
 
     return <form className="nodu-new-project" onSubmit={event => { event.preventDefault(); void create(); }} aria-busy={busy}>

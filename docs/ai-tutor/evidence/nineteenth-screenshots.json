@@ -1,0 +1,552 @@
+[
+  {
+    "file": "01-projects-dark.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "cbf442e1173101a392363db357bc9fd9a0ec1f04ba3f0408334a46af3e4ddd2c"
+  },
+  {
+    "file": "02-keyboard-focus.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "ccb3c6a2e1751fd41fe2a885d26fd720868b98c06aea79d41583917b8ae9d652"
+  },
+  {
+    "file": "03-open-error.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "a35ca25fd5335a5dead4f68538e98d9664161c1e195b5e1554196408c8f177ab"
+  },
+  {
+    "file": "04-search-match.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "c1d3ec4c0ed53c18278c0a0867c3b82dda95f9b2b6918ed382ae862a51d969c5"
+  },
+  {
+    "file": "05-search-empty.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "162ccb526e1e8aec7ad648c5635e4cc0162e330da32622e163eabf64809db911"
+  },
+  {
+    "file": "06-projects-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "45215b729159f5a1f50bc85c3b988e0997700c27a56c38c54f5e4a1e505d1cd9"
+  },
+  {
+    "file": "07-projects-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "37359b019568150bbaf14df593caa412fdee19b8bdf3efbf5b1c84dbee9f2539"
+  },
+  {
+    "file": "08-empty-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "2b1836ee0e0857550c2538550cdbab02715787b9b22959980d0649ffd1ca44b8"
+  },
+  {
+    "file": "09-empty-dark.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "cba8cf0c78f4d28f39e2fb7a44545d39cf46acc13aba549bea07557c8d3bf375"
+  },
+  {
+    "file": "10-create-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "9d630ff5d0a257e3ab535fa2a6a8f611cefc02ea610a5dd7d96c5b7fab9a729f"
+  },
+  {
+    "file": "11-create-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "c531ce663bd3d48a85bb3e332a3a3e919c5b7cc29a4f18f9584a7eb6c6e07331"
+  },
+  {
+    "file": "12-create-invalid.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "c08bcc50efd4bd26b4060841c6c4a9e1d212977dc326697d1077da34f3aadf16"
+  },
+  {
+    "file": "13-create-error-dark.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "629fe44b204c376e718101d531370fb9eeca5056fd37ad2f9cf23becca677f05"
+  },
+  {
+    "file": "14-projects-loading.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "13843639b3736bba9c341c60801d297b22677b94da5a12d88759876e6d6a1f15"
+  },
+  {
+    "file": "15-projects-load-error.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "e1dd13ef5ab1412cff29dd61a12f49adf5317c0862e9d2f31bac8aded94c94a3"
+  },
+  {
+    "file": "16-open-busy.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "a642154cf9616ee7820e53bd86dd074e1650d867fc68a3964aa7a5f7d616268f"
+  },
+  {
+    "file": "17-examples-loading.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "6088411c158203114ca9275d2f6eecdf624429df4c3530aaa51e093a4db8fc67"
+  },
+  {
+    "file": "18-examples-error.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "bde772c9e6fdd5a36a9397239b8b5eff40e1b6f18d5656f326fe477b739dcd6f"
+  },
+  {
+    "file": "19-examples-empty.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "9a13d1566ef6fa1c4b8b914d46862eb53e85d35f40cb74ee361ef5b4df31f81d"
+  },
+  {
+    "file": "20-examples-dark.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "38202fcbb6564f886cc89a92a9e1186b8495ba8fc73bafbae2a508f865e609b9"
+  },
+  {
+    "file": "21-copy-error.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "586a7aa6d798ac8de88ce0af65d25909a1c4ba0fca458afb8f7ee0fc6ac8c1ae"
+  },
+  {
+    "file": "22-copy-busy.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "bfd6526f979841d1e4f0738ec4d0682ca0380654daa8f9d31a4be8a363148c52"
+  },
+  {
+    "file": "23-create-parent-loading.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "1731305933d9a97d176d3d96a64a82fef9ba632a071e77332097666607a848f2"
+  },
+  {
+    "file": "24-create-parent-error.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "cdbc4b940328ebe1864ea220dc51c083cbf7f10c2745e922dc73a5848b214762"
+  },
+  {
+    "file": "25-create-busy.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "89656a0abc452bec78749241cd665249e3dc63803431bd3d80a2d81fbe5a0e62"
+  },
+  {
+    "file": "26-directory-picker-error.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "38353bb4db70dc39f377024edea0aac3fc5c0fca35a7931dc86fa8c0df56d8a0"
+  },
+  {
+    "file": "27-long-list-narrow.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "4312a1ac86d984a47c01413d7d0531e22317792c33f14e77a4a1f4c894707575"
+  },
+  {
+    "file": "28-examples-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "16fc85303f42abdae9a52c0b099c6731fe270da949b5037e9a6d710f38139567"
+  },
+  {
+    "file": "29-examples-search-empty-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "9b04b1a1c91c3117beb0e5e6323ed15c8d2b198f4ceb63904f4f04fd165a4337"
+  },
+  {
+    "file": "30-examples-search-match-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "9c3441231b9cfd35dbe36823d40b66f633dd7678796352f5ae70eee82f847cb4"
+  },
+  {
+    "file": "31-create-k210.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "5c18e76ce14dc2356d39fa20194df05823225cc896950f4d819ec7fe48531ec5"
+  },
+  {
+    "file": "32-create-esp32-expanded.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "b79c70bf1c6ad344655d43ae8c8c12c747fc02339056537ecd10ce591e169e03"
+  },
+  {
+    "file": "33-create-f407.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "28418c7202c75bec5cc7bb9cb054ad8b8328ee36a7859304dd4d9a6720d08329"
+  },
+  {
+    "file": "34-create-dark-final.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "91f11e5cdf6f43d6c2ff101a8e61247bcad4fd15e0846c63857cebda9ed71dec"
+  },
+  {
+    "file": "35-cancel-focus-restored.png",
+    "source": "生产组件状态夹具",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "fbc6739c705faae147f6b28b2de08d84ea87af775f0875b456423a5759283bf8"
+  },
+  {
+    "file": "36-integrated-empty-dark.png",
+    "source": "真实应用",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "d48a933f3b9dfbb827091872d7dcb5675e41f7ad9fcf5a708fdb365144dc4623"
+  },
+  {
+    "file": "37-integrated-create-f103.png",
+    "source": "真实应用",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "3f6b95c0765bd598623039bf5b1a8ff3c141c1ffd40ea29bb692fef1eab0098a"
+  },
+  {
+    "file": "38-integrated-project-created.png",
+    "source": "真实应用",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "de5722717b69de3b8095f48611d6e0ad71ae68b2845d538611343d74d4c0e01e"
+  },
+  {
+    "file": "39-integrated-recent-project.png",
+    "source": "真实应用",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "97c74ab54cf47ae20d2752ddf054322c53ced412e8581128b9fa8f75c51c2b9b"
+  },
+  {
+    "file": "40-integrated-open-dialog.png",
+    "source": "真实应用",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "1a9574deecfeb8d6b6876cf9ab443a07f9d5eef629287ba6973c35afff2a8324"
+  },
+  {
+    "file": "41-integrated-reference-copy.png",
+    "source": "真实应用",
+    "phase": "验收过程",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "2e91b71cac3d1c943e595bd2ebe89c30300b9285dc2b078e8ce20168a1583f3f"
+  },
+  {
+    "file": "42-final-project-list.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "b78770396031cbf35e3ed347d102e91db1873d974121abe1bfd72e1fa88d39de"
+  },
+  {
+    "file": "43-final-open-notification-dark.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "67b24ef6506104691195a42859717862402cb322a8c93384bc56fbb07ac9d834"
+  },
+  {
+    "file": "44-final-notification-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "3ef5e45490e2ff304fdb47452d907c0ca7c088e4a24806c1f6f9fb26a3ddc56e"
+  },
+  {
+    "file": "45-final-examples-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "cdb778ed4c1e46b1f5c295819d5abf49be4aaa9e73d2d407720d967c8a45c14b"
+  },
+  {
+    "file": "46-final-create-narrow-light.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "bafe6fab218563641b6b83dc80a41aea851e9f102465b3457fad424aba87366e"
+  },
+  {
+    "file": "47-final-empty-narrow.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "816f391c9d85dc4c380abe80135d18a3d6c66192ea50efb439e9837ca08f05f8"
+  },
+  {
+    "file": "48-final-examples-empty.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "f03994cf7f204cea3bc0c76cd0ebf911faa84250df7a71b1c37c4ea8adfe5e45"
+  },
+  {
+    "file": "49-final-copy-notification.png",
+    "source": "生产组件状态夹具",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "53024100a42de6950b8c961905ab417de66c5f88c728d734c1c7c5043debaa4a"
+  },
+  {
+    "file": "50-integrated-final-search-focus.png",
+    "source": "真实应用",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "8502dadfe2ccd373077b33155f3d910aabacc3a7ea2ccaa8121aed17192ec2ba"
+  },
+  {
+    "file": "51-integrated-final-examples.png",
+    "source": "真实应用",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "c46c46c20ce361640ab7f8497065c77ca3985eda65ffc411973199a35b5ac8a2"
+  },
+  {
+    "file": "52-integrated-light.png",
+    "source": "真实应用",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "8caa02d79dca023b28608a0c4e530ce6bbdbc32559f50380673a6a305f5ed112"
+  },
+  {
+    "file": "53-integrated-create-light.png",
+    "source": "真实应用",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "60f67bd8a11e8881d55d9f05f76f635ea98732b44170c8a5c4ca550ef02b3a21"
+  },
+  {
+    "file": "54-integrated-resized-create.png",
+    "source": "真实应用",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "bee892d93eeb3ca961051c5b76a96038f9f7e0c0bfced37823e10f296d53bf90"
+  },
+  {
+    "file": "55-integrated-keyboard-result.png",
+    "source": "真实应用",
+    "phase": "最终复验",
+    "pixels": [
+      4718592,
+      4292935744
+    ],
+    "sha256": "ea1f061962000d2adb1b3d31d255402cae930e37dcb9bc541ca6bdb4e40a075a"
+  }
+]
