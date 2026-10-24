@@ -12,8 +12,19 @@ const path = require('node:path');
 const Module = require('node:module');
 
 const {
-    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses,
+    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath,
 } = require('./package-electron.cjs');
+
+test('packager retains STM32 and WASI runtime objects while excluding build debris', () => {
+    for (const name of [
+        '/node_modules/@scope/studio-extension/resources/toolkits/stm32/darwin/arm-gnu/lib/crtbegin.o',
+        '/node_modules/@scope/studio-extension/resources/wasi/darwin-arm64/lib/crt1.o',
+        '\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\arm-gnu\\crt0.obj',
+    ]) assert.equal(ignorePackagedPath(name), false, name);
+    for (const name of ['/build/main.o', '/.git/config', '/node_modules/.bin/compiler', '/package-lock.json']) {
+        assert.equal(ignorePackagedPath(name), true, name);
+    }
+});
 
 test('universal merge retains both exact architecture license inventories in both apps', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-license-merge-'));

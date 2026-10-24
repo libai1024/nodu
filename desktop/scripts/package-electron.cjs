@@ -921,6 +921,7 @@ async function packageThin(arch, appInput) {
         arch,
         asar: false,
         prune: false,
+        ignore: ignorePackagedPath,
         overwrite: true,
         appCategoryType: 'public.app-category.developer-tools',
         darwinDarkModeSupport: true,
@@ -946,6 +947,17 @@ async function packageThin(arch, appInput) {
         fs.chmodSync(bundledTrash, 0o755);
     }
     return outDir;
+}
+
+function ignorePackagedPath(file) {
+    const name = file.replaceAll('\\', '/');
+    // Packager's default *.o exclusion removes the cross-compiler's crt and
+    // support objects. These are runtime toolchain inputs, not build debris.
+    if (/\.o(bj)?$/.test(name)) {
+        return !/\/resources\/(?:toolkits|wasi)\//.test(name);
+    }
+    return /\/(?:package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$/.test(name)
+        || /\/\.git(?:$|\/)|\/node_modules\/\.bin(?:$|\/)|\/node_gyp_bins(?:$|\/)/.test(name);
 }
 
 // Thin 32/64-bit and fat 32/64-bit Mach-O magics in both byte orders.
@@ -1306,5 +1318,5 @@ if (require.main === module) {
 
 module.exports = {
     canonicalJs, canonizeJsForMerge, normalizeNativeModuleKeys, computeStamp, computeInstallStamp,
-    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses,
+    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath,
 };
