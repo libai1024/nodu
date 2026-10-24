@@ -27,6 +27,7 @@ import { NoduTutorModel } from './nodu-tutor-model';
 import { NoduTutorHintsContribution } from './nodu-tutor-hints';
 import { NoduTutorToolbarContribution, NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
 import { NoduAiSettingsContribution, NoduAiSettingsPopover, NoduSidebarBottomMenuWidget } from './nodu-ai-settings';
+import { NoduProfessionalSettings } from './nodu-professional-settings';
 import { SidebarBottomMenuWidget } from '@theia/core/lib/browser/shell/sidebar-bottom-menu-widget';
 import '../../style/scope.css';
 import '../../style/widgets.css';
@@ -134,7 +135,8 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bindViewContribution(bind, NoduTutorViewContribution);
     bind(NoduTutorToolbarContribution).toSelf().inSingletonScope();
     bind(TabBarToolbarContribution).toService(NoduTutorToolbarContribution);
-    // AI settings live above the left sidebar gear and open as a popover.
+    // The corner gear and AI settings commands share one professional settings window.
+    bind(NoduProfessionalSettings).toSelf().inSingletonScope();
     bind(NoduAiSettingsPopover).toSelf().inSingletonScope();
     bind(NoduAiSettingsContribution).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(NoduAiSettingsContribution);

@@ -6,6 +6,7 @@ import {
 } from '../common/tutor/tutor-ai-config';
 import type { TutorRemoteModel } from '../common/tutor/tutor-ai-protocol';
 import { NoduTutorModel } from './nodu-tutor-model';
+import '../../style/ai-provider-settings.css';
 
 const message = (error: unknown): string => error instanceof Error ? error.message : String(error);
 
@@ -22,45 +23,47 @@ function statusOf(p: TutorProviderView): 'ok' | 'warn' | 'off' {
     return p.hasKey || allowsNoKey(p.baseUrl) ? 'ok' : 'warn';
 }
 
-/** ZCode-style provider manager: provider list on the left, endpoint, key and models on the right. */
-export function AISettingsPanel({ tutor }: { tutor: NoduTutorModel }): React.ReactElement {
+/** Compact provider disclosures keep credentials and models in one settings column. */
+export function AISettingsPanel({ tutor, visible = true }: { tutor: NoduTutorModel; visible?: boolean }): React.ReactElement {
     const settings = tutor.settings;
-    const [selected, setSelected] = React.useState<string | undefined>(settings?.selection?.providerId ?? settings?.providers[0]?.id);
+    const id = React.useId();
+    // undefined means first load; null means the user deliberately collapsed every provider.
+    const [selected, setSelected] = React.useState<string | null>();
     const [error, setError] = React.useState('');
     if (!settings) { return <div className="nodu-ai-empty-settings">正在读取 AI 设置…</div>; }
-    const provider = settings.providers.find(p => p.id === selected) ?? settings.providers[0];
+    const active = selected === undefined ? settings.selection?.providerId ?? settings.providers[0]?.id : selected;
     const addProvider = async (): Promise<void> => {
-        const id = `custom-${Math.random().toString(36).slice(2, 8)}`;
+        const providerId = `custom-${Math.random().toString(36).slice(2, 8)}`;
         try {
             setError('');
-            await tutor.saveProvider({ id, name: '新供应商', kind: 'custom', enabled: true, baseUrl: 'https://api.example.com/v1', apiFormat: 'chat-completions', models: [] });
-            setSelected(id);
+            await tutor.saveProvider({ id: providerId, name: '新供应商', kind: 'custom', enabled: true, baseUrl: 'https://api.example.com/v1', apiFormat: 'chat-completions', models: [] });
+            setSelected(providerId);
         } catch (e) { setError(message(e)); }
     };
-    const group = (title: string, items: TutorProviderView[]) => items.length ? <div className="nodu-ai-provider-group">
-        <div className="nodu-ai-provider-group-title">{title}</div>
-        {items.map(p => <button key={p.id} type="button" className={`nodu-ai-provider-item${p.id === provider?.id ? ' nodu-ai-provider-item-on' : ''}`}
-            aria-current={p.id === provider?.id} onClick={() => { setSelected(p.id); setError(''); }}>
-            <i className={`codicon codicon-${p.kind === 'builtin' ? 'sparkle' : 'package'}`} aria-hidden="true"/>
-            <span className="nodu-ai-provider-name">{p.name}</span>
-            <span className={`nodu-ai-dot nodu-ai-dot-${statusOf(p)}`} aria-label={statusOf(p) === 'ok' ? '可用' : statusOf(p) === 'warn' ? '缺少 API Key' : '已停用'}/>
-        </button>)}
-    </div> : null;
-    return <div className="nodu-ai-settings-layout">
-        <nav className="nodu-ai-provider-list" aria-label="模型供应商">
-            {group('内置', settings.providers.filter(p => p.kind === 'builtin'))}
-            {group('自定义供应商', settings.providers.filter(p => p.kind === 'custom'))}
-            <button type="button" className="nodu-ai-provider-add" onClick={() => void addProvider()}><i className="codicon codicon-add" aria-hidden="true"/>添加供应商</button>
-        </nav>
-        <section className="nodu-ai-provider-detail">
-            {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
-            {settings.storage === 'session' && <div className="nodu-ai-form-note" role="status">API Key 仅在本次运行中有效</div>}
-            {provider && <ProviderDetail key={provider.id} tutor={tutor} provider={provider} onDeleted={() => setSelected(undefined)} />}
-        </section>
+    return <div className="nodu-ai-provider-catalog">
+        <div className="nodu-ai-catalog-heading"><h3>模型供应商</h3><button type="button" className="nodu-ai-catalog-add" onClick={() => void addProvider()}><i className="codicon codicon-add" aria-hidden="true"/>添加供应商</button></div>
+        {settings.storage === 'session' && <div className="nodu-ai-catalog-note" role="status">API Key 仅在本次运行中有效</div>}
+        {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
+        {settings.providers.map((provider, index) => {
+            const expanded = active === provider.id, status = statusOf(provider);
+            return <section key={provider.id} className="nodu-ai-provider-card">
+                <button type="button" className="nodu-ai-provider-summary" aria-expanded={expanded} aria-controls={`${id}-provider-${index}`}
+                    onClick={() => setSelected(expanded ? null : provider.id)}>
+                    <i className={`codicon codicon-${provider.kind === 'builtin' ? 'sparkle' : 'package'}`} aria-hidden="true"/>
+                    <span className="nodu-ai-provider-name">{provider.name}</span>
+                    <span className="nodu-ai-provider-count">{provider.models.length} 个模型</span>
+                    <span className={`nodu-ai-dot nodu-ai-dot-${status}`} aria-label={status === 'ok' ? '已配置' : status === 'warn' ? '缺少 API Key' : '已停用'}/>
+                    <i className={`codicon codicon-chevron-${expanded ? 'down' : 'right'}`} aria-hidden="true"/>
+                </button>
+                <div id={`${id}-provider-${index}`} hidden={!expanded} className="nodu-ai-provider-content">
+                    <ProviderDetail tutor={tutor} provider={provider} visible={visible && expanded} onDeleted={() => setSelected(null)}/>
+                </div>
+            </section>;
+        })}
     </div>;
 }
 
-function ProviderDetail({ tutor, provider, onDeleted }: { tutor: NoduTutorModel; provider: TutorProviderView; onDeleted(): void }): React.ReactElement {
+function ProviderDetail({ tutor, provider, visible, onDeleted }: { tutor: NoduTutorModel; provider: TutorProviderView; visible: boolean; onDeleted(): void }): React.ReactElement {
     const locked = provider.kind === 'builtin';
     const [name, setName] = React.useState(provider.name);
     const [baseUrl, setBaseUrl] = React.useState(provider.baseUrl);
@@ -68,17 +71,39 @@ function ProviderDetail({ tutor, provider, onDeleted }: { tutor: NoduTutorModel;
     const [key, setKey] = React.useState('');
     const [showKey, setShowKey] = React.useState(false);
     const [busy, setBusy] = React.useState('');
+    const running = React.useRef(false);
     const [error, setError] = React.useState('');
     const [tests, setTests] = React.useState<Record<string, { ok: boolean; message: string } | 'running'>>({});
     const [editing, setEditing] = React.useState<TutorModelConfig | 'new' | undefined>();
+    const [connectionOpen, setConnectionOpen] = React.useState(provider.kind === 'custom' && !provider.models.length);
+    const connectionId = React.useId();
     const [remote, setRemote] = React.useState<TutorRemoteModel[]>([]);
+    const savedConnection = React.useRef({ name: provider.name, baseUrl: provider.baseUrl, format: provider.apiFormat });
+    React.useEffect(() => {
+        const previous = savedConnection.current;
+        // Retain drafts when another provider/page is opened; refresh only untouched fields.
+        setName(value => value === previous.name ? provider.name : value);
+        setBaseUrl(value => value === previous.baseUrl ? provider.baseUrl : value);
+        setFormat(value => value === previous.format ? provider.apiFormat : value);
+        savedConnection.current = { name: provider.name, baseUrl: provider.baseUrl, format: provider.apiFormat };
+    }, [provider.name, provider.baseUrl, provider.apiFormat]);
     const dirty = name !== provider.name || baseUrl !== provider.baseUrl || format !== provider.apiFormat;
     const selection = tutor.settings?.selection;
-    const config = (patch: Partial<TutorProviderConfig> = {}): TutorProviderConfig => ({ id: provider.id, name, kind: provider.kind, enabled: provider.enabled,
-        baseUrl, apiFormat: format, models: provider.models, ...patch });
+    const config = (patch: Partial<TutorProviderConfig> = {}): TutorProviderConfig => ({ id: provider.id, name: provider.name, kind: provider.kind, enabled: provider.enabled,
+        baseUrl: provider.baseUrl, apiFormat: provider.apiFormat, models: provider.models, ...patch });
     const run = async (label: string, work: () => Promise<unknown>): Promise<void> => {
+        if (running.current) { return; }
+        running.current = true;
         setBusy(label); setError('');
-        try { await work(); } catch (e) { setError(message(e)); } finally { setBusy(''); }
+        try { await work(); } catch (e) { setError(message(e)); } finally { running.current = false; setBusy(''); }
+    };
+    const saveKey = (): Promise<void> => {
+        const submitted = key;
+        return run('key', async () => {
+            await tutor.setProviderKey(provider.id, submitted);
+            setKey(current => current === submitted ? '' : current);
+            setShowKey(false);
+        });
     };
     let endpoint = provider.endpoint;
     try { endpoint = resolveEndpoint(baseUrl, format); } catch { /* shown after save */ }
@@ -90,37 +115,24 @@ function ProviderDetail({ tutor, provider, onDeleted }: { tutor: NoduTutorModel;
     };
     const fetchRemote = () => run('remote', async () => { setRemote(await tutor.listRemoteModels(provider.id)); setEditing('new'); });
     return <div className="nodu-ai-provider-form">
-        <header className="nodu-ai-provider-head">
-            <i className={`codicon codicon-${locked ? 'sparkle' : 'package'}`} aria-hidden="true"/>
-            {locked ? <h3>{provider.name}</h3> : <input className="nodu-ai-provider-title" aria-label="供应商名称" value={name} maxLength={40} onChange={e => setName(e.target.value)}/>}
-            <Switch checked={provider.enabled} label={provider.enabled ? '停用供应商' : '启用供应商'} onChange={enabled => void run('enable', () => tutor.saveProvider(config({ enabled })))}/>
-            {!locked && <button type="button" className="nodu-ai-icon" aria-label="删除供应商" title="删除供应商"
+        <header className="nodu-ai-provider-controls">
+            <span>启用供应商</span><Switch checked={provider.enabled} disabled={!!busy} label={provider.enabled ? '停用供应商' : '启用供应商'} onChange={enabled => void run('enable', () => tutor.saveProvider(config({ enabled })))}/>
+            {!locked && <button type="button" className="nodu-ai-icon" aria-label="删除供应商" title="删除供应商" disabled={!!busy}
                 onClick={() => void run('remove', async () => { await tutor.removeProvider(provider.id); onDeleted(); })}><i className="codicon codicon-trash" aria-hidden="true"/></button>}
         </header>
-        <label className="nodu-ai-field"><span>Base URL{locked && <Help text="内置套餐使用固定地址，密钥不会发送到其他服务器"/>}</span>
-            <input value={baseUrl} readOnly={locked} spellCheck={false} placeholder="https://api.example.com/v1" onChange={e => setBaseUrl(e.target.value)}/></label>
-        <label className="nodu-ai-field"><span>API 格式<Help text="中转站兼容的接口格式。多数 OpenAI 兼容中转站使用 Chat Completions"/></span>
-            <select value={format} disabled={locked} onChange={e => setFormat(e.target.value as TutorApiFormat)}>
-                {API_FORMATS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
-            </select></label>
-        <div className="nodu-ai-endpoint" title="实际请求地址">{endpoint}</div>
-        {dirty && <div className="nodu-ai-form-actions">
-            <button type="button" className="theia-button secondary" onClick={() => { setName(provider.name); setBaseUrl(provider.baseUrl); setFormat(provider.apiFormat); }}>还原</button>
-            <button type="button" className="theia-button" disabled={!!busy} onClick={() => void run('save', () => tutor.saveProvider(config()))}>保存</button>
-        </div>}
         <label className="nodu-ai-field"><span>API Key{allowsNoKey(provider.baseUrl) && <Help text="本机服务可以不填"/>}</span>
             <div className="nodu-ai-key-row">
                 <input type={showKey ? 'text' : 'password'} autoComplete="off" spellCheck={false} value={key} placeholder={provider.hasKey ? '已设置，输入新值可替换' : '输入 API Key'}
-                    onChange={e => setKey(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && key) { e.preventDefault(); void run('key', async () => { await tutor.setProviderKey(provider.id, key); setKey(''); }); } }}/>
-                <button type="button" className="nodu-ai-icon" aria-label={showKey ? '隐藏' : '显示'} title={showKey ? '隐藏' : '显示'} onClick={() => setShowKey(!showKey)}><i className={`codicon codicon-${showKey ? 'eye-closed' : 'eye'}`} aria-hidden="true"/></button>
-                {key && <button type="button" className="theia-button" disabled={!!busy} onClick={() => void run('key', async () => { await tutor.setProviderKey(provider.id, key); setKey(''); })}>保存</button>}
-                {!key && provider.hasKey && <button type="button" className="scope-text-button" onClick={() => void run('key', () => tutor.deleteProviderKey(provider.id))}>删除</button>}
+                    onChange={e => { setKey(e.target.value); setShowKey(false); }} onKeyDown={e => { if (e.key === 'Enter' && key) { e.preventDefault(); void saveKey(); } }}/>
+                {key && <button type="button" className="nodu-ai-icon" aria-label={showKey ? '隐藏' : '显示'} title={showKey ? '隐藏' : '显示'} onClick={() => setShowKey(!showKey)}><i className={`codicon codicon-${showKey ? 'eye-closed' : 'eye'}`} aria-hidden="true"/></button>}
+                {key && <button type="button" className="theia-button" disabled={!!busy} onClick={() => void saveKey()}>保存</button>}
+                {!key && provider.hasKey && <button type="button" className="scope-text-button" disabled={!!busy} onClick={() => void run('key', () => tutor.deleteProviderKey(provider.id))}>删除</button>}
             </div></label>
         {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
         <div className="nodu-ai-models-head">
             <span>模型列表</span>
             <button type="button" className="scope-text-button" disabled={!!busy} title="从供应商读取可用模型 ID" onClick={() => void fetchRemote()}>{busy === 'remote' ? '读取中…' : '获取模型'}</button>
-            <button type="button" className="nodu-ai-chip" onClick={() => setEditing('new')}><i className="codicon codicon-add" aria-hidden="true"/>添加模型</button>
+            <button type="button" className="nodu-ai-chip" disabled={!!busy} onClick={() => setEditing('new')}><i className="codicon codicon-add" aria-hidden="true"/>添加模型</button>
         </div>
         <ul className="nodu-ai-models" aria-label="模型列表">
             {!provider.models.length && <li className="nodu-ai-models-empty">还没有模型，点击“添加模型”</li>}
@@ -128,7 +140,7 @@ function ProviderDetail({ tutor, provider, onDeleted }: { tutor: NoduTutorModel;
                 const current = selection?.providerId === provider.id && selection.modelId === m.id;
                 const result = tests[m.id];
                 return <li key={m.id} className={`nodu-ai-model-row${m.enabled ? '' : ' nodu-ai-model-off'}`}>
-                    <button type="button" className={`nodu-ai-model-use${current ? ' nodu-ai-model-use-on' : ''}`} disabled={!m.enabled || !provider.enabled}
+                    <button type="button" className={`nodu-ai-model-use${current ? ' nodu-ai-model-use-on' : ''}`} disabled={!!busy || !m.enabled || !provider.enabled}
                         aria-label={current ? '当前使用的模型' : '使用此模型'} title={current ? '当前使用的模型' : '使用此模型'}
                         onClick={() => void run('select', () => tutor.selectModel({ providerId: provider.id, modelId: m.id }))}><i className={`codicon codicon-${current ? 'pass-filled' : 'circle-large-outline'}`} aria-hidden="true"/></button>
                     <code className="nodu-ai-model-id" title={m.id}>{m.id}</code>
@@ -138,14 +150,31 @@ function ProviderDetail({ tutor, provider, onDeleted }: { tutor: NoduTutorModel;
                     <span className="nodu-ai-model-actions">
                         <button type="button" className="nodu-ai-icon" aria-label="测试连接" title={result && result !== 'running' && !result.ok ? result.message : '测试连接'} disabled={result === 'running'} onClick={() => void test(m)}>
                             <i className={`codicon codicon-${result === 'running' ? 'loading codicon-modifier-spin' : 'plug'}`} aria-hidden="true"/></button>
-                        <button type="button" className="nodu-ai-icon" aria-label="编辑模型" title="编辑模型" onClick={() => setEditing(m)}><i className="codicon codicon-edit" aria-hidden="true"/></button>
-                        <button type="button" className="nodu-ai-icon" aria-label="删除模型" title="删除模型" onClick={() => void saveModels(provider.models.filter((_, i) => i !== index))}><i className="codicon codicon-trash" aria-hidden="true"/></button>
-                        <Switch checked={m.enabled} label={m.enabled ? '停用模型' : '启用模型'} onChange={enabled => void saveModels(provider.models.map((x, i) => i === index ? { ...x, enabled } : x))}/>
+                        <button type="button" className="nodu-ai-icon" aria-label="编辑模型" title="编辑模型" disabled={!!busy} onClick={() => setEditing(m)}><i className="codicon codicon-edit" aria-hidden="true"/></button>
+                        <button type="button" className="nodu-ai-icon" aria-label="删除模型" title="删除模型" disabled={!!busy} onClick={() => void saveModels(provider.models.filter((_, i) => i !== index))}><i className="codicon codicon-trash" aria-hidden="true"/></button>
+                        <Switch checked={m.enabled} disabled={!!busy} label={m.enabled ? '停用模型' : '启用模型'} onChange={enabled => void saveModels(provider.models.map((x, i) => i === index ? { ...x, enabled } : x))}/>
                     </span>
                 </li>;
             })}
         </ul>
-        {editing && <ModelDialog format={provider.apiFormat} initial={editing === 'new' ? undefined : editing} remote={remote} taken={provider.models.map(m => m.id)}
+        <button type="button" className="nodu-ai-connection-trigger" aria-expanded={connectionOpen} aria-controls={connectionId} onClick={() => setConnectionOpen(!connectionOpen)}>
+            <i className={`codicon codicon-chevron-${connectionOpen ? 'down' : 'right'}`} aria-hidden="true"/>连接设置
+        </button>
+        <div id={connectionId} hidden={!connectionOpen} className="nodu-ai-connection-fields">
+            {!locked && <label className="nodu-ai-field"><span>供应商名称</span><input value={name} maxLength={40} onChange={e => setName(e.target.value)}/></label>}
+        <label className="nodu-ai-field"><span>Base URL{locked && <Help text="内置套餐使用固定地址，密钥不会发送到其他服务器"/>}</span>
+            <input value={baseUrl} readOnly={locked} spellCheck={false} placeholder="https://api.example.com/v1" onChange={e => setBaseUrl(e.target.value)}/></label>
+        <label className="nodu-ai-field"><span>API 格式<Help text="中转站兼容的接口格式。多数 OpenAI 兼容中转站使用 Chat Completions"/></span>
+            <select value={format} disabled={locked} onChange={e => setFormat(e.target.value as TutorApiFormat)}>
+                {API_FORMATS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
+            </select></label>
+        <div className="nodu-ai-endpoint" title="实际请求地址">{endpoint}</div>
+        {dirty && <div className="nodu-ai-form-actions">
+            <button type="button" className="theia-button secondary" onClick={() => { setName(provider.name); setBaseUrl(provider.baseUrl); setFormat(provider.apiFormat); }}>还原</button>
+            <button type="button" className="theia-button" disabled={!!busy} onClick={() => void run('save', () => tutor.saveProvider(config({ name, baseUrl, apiFormat: format })))}>保存</button>
+        </div>}
+        </div>
+        {editing && visible && <ModelDialog format={provider.apiFormat} initial={editing === 'new' ? undefined : editing} remote={remote} taken={provider.models.map(m => m.id)}
             onClose={() => setEditing(undefined)}
             onSave={async model => {
                 const models = editing === 'new' ? [...provider.models, model] : provider.models.map(m => m.id === editing.id ? model : m);

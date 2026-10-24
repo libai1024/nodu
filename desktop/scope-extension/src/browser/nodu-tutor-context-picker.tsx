@@ -5,7 +5,7 @@ import { ChatPopover } from './nodu-tutor-chat-controls';
 import '../../style/tutor-context.css';
 
 interface ContextEntry { path: string; startLine: number; endLine: number; kind: 'file' | 'selection'; index?: number; }
-export interface ContextPickerProps { tutor: NoduTutorModel; open(path: string, line: number): void | Promise<void>; }
+export interface ContextPickerProps { tutor: NoduTutorModel; open(path: string, line: number): void | Promise<void>; children?: (addButton: React.ReactElement) => React.ReactNode; }
 
 /** Use the shortest suffix that still distinguishes same-name files. */
 export function tutorContextLabel(path: string, paths: readonly string[]): string {
@@ -17,18 +17,27 @@ export function tutorContextLabel(path: string, paths: readonly string[]): strin
     return path;
 }
 
-export function ContextPicker({ tutor, open }: ContextPickerProps): React.ReactElement {
+export function ContextPicker({ tutor, open, children }: ContextPickerProps): React.ReactElement {
     const [menu, setMenu] = React.useState<{ anchor: HTMLElement; view: 'add' | 'files' | 'all' }>();
     const [files, setFiles] = React.useState<string[]>();
     const [search, setSearch] = React.useState('');
     const [working, setWorking] = React.useState(false);
     const [error, setError] = React.useState('');
+    const [narrow, setNarrow] = React.useState(false);
+    const row = React.useRef<HTMLDivElement>(null);
     const mounted = React.useRef(true), sequence = React.useRef(0), pending = React.useRef(false);
     const currentMenu = React.useRef(menu); currentMenu.current = menu;
     const identity = `${tutor.workspaceId ?? ''}:${tutor.mode}`;
     const currentIdentity = React.useRef(identity); currentIdentity.current = identity;
     const close = React.useCallback(() => { setMenu(undefined); setSearch(''); }, []);
     React.useEffect(() => { mounted.current = true; return () => { mounted.current = false; sequence.current++; }; }, []);
+    React.useEffect(() => {
+        const node = row.current;
+        if (!node || typeof ResizeObserver === 'undefined') { return; }
+        const measure = (): void => { setNarrow(node.clientWidth > 0 && node.clientWidth < 296); };
+        const observer = new ResizeObserver(measure); observer.observe(node); measure();
+        return () => observer.disconnect();
+    }, []);
     React.useEffect(() => {
         sequence.current++; pending.current = false; setWorking(false); setFiles(undefined); setError(''); close();
     }, [identity, close]);
@@ -81,17 +90,21 @@ export function ContextPicker({ tutor, open }: ContextPickerProps): React.ReactE
             onClick={event => { event.stopPropagation(); remove(entry); }}><i className="codicon codicon-close" aria-hidden="true"/></button>
     </span>;
     const visibleFiles = (files ?? []).filter(path => path.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
-    return <div className="nodu-chat-context">
-        <div className="nodu-ai-context-row nodu-chat-context-row">
-            <button type="button" className="nodu-chat-context-add" title="添加代码上下文" aria-label="添加代码上下文" aria-haspopup="menu" aria-expanded={menu?.view === 'add' || menu?.view === 'files'}
+    const visibleCount = narrow ? 1 : 2;
+    const addButton = <button type="button" className="nodu-chat-context-add" title="添加代码上下文" aria-label="添加代码上下文" aria-haspopup="menu" aria-expanded={menu?.view === 'add' || menu?.view === 'files'}
                 disabled={!tutor.workspaceId} onClick={event => { if (menu?.view === 'add') { close(); } else { setMenu({ anchor: event.currentTarget, view: 'add' }); setError(''); } }}>
                 <i className="codicon codicon-add" aria-hidden="true"/>
-            </button>
-            {entries.slice(0, 2).map(entry => renderChip(entry))}
-            {entries.length > 2 && <button type="button" className="nodu-chat-context-more" aria-label={`查看全部 ${entries.length} 项上下文`} aria-haspopup="menu" aria-expanded={menu?.view === 'all'}
-                onClick={event => { if (menu?.view === 'all') { close(); } else { setMenu({ anchor: event.currentTarget, view: 'all' }); } }}>+{entries.length - 2}</button>}
-        </div>
+            </button>;
+    return <><div ref={row} className="nodu-chat-context">
+        {(entries.length > 0 || !children) && <div className="nodu-ai-context-row nodu-chat-context-row">
+            {!children && addButton}
+            {entries.slice(0, visibleCount).map(entry => renderChip(entry))}
+            {entries.length > visibleCount && <button type="button" className="nodu-chat-context-more" aria-label={`查看全部 ${entries.length} 项上下文`} aria-haspopup="menu" aria-expanded={menu?.view === 'all'}
+                onClick={event => { if (menu?.view === 'all') { close(); } else { setMenu({ anchor: event.currentTarget, view: 'all' }); } }}>+{entries.length - visibleCount}</button>}
+        </div>}
         {(error || tutor.contextError) && <div className="nodu-chat-context-error" role="status">{error || tutor.contextError}</div>}
+        </div>
+        {children?.(addButton)}
         {menu && <ChatPopover anchor={menu.anchor} label={menu.view === 'all' ? '已附带的上下文' : '添加代码上下文'} above close={close}>
             {menu.view === 'add' ? <>
                 <button type="button" role="menuitem" disabled={disabled || !canCurrent} onClick={() => addCurrent('file')}>固定当前文件<i className="codicon codicon-pin" aria-hidden="true"/></button>
@@ -108,5 +121,5 @@ export function ContextPicker({ tutor, open }: ContextPickerProps): React.ReactE
                 {!files && !working && <button type="button" role="menuitem" onClick={listFiles}>重新读取</button>}
             </> : <div className="nodu-chat-context-list">{entries.map(entry => <div key={`${entry.index ?? 'current'}:${entry.path}`}>{renderChip(entry, true)}</div>)}</div>}
         </ChatPopover>}
-    </div>;
+    </>;
 }

@@ -43,6 +43,7 @@ import '../../style/professional-workbench.css';
 import { NoduMinimalAction, ActionIcon } from './nodu-minimal-action';
 import { MinimalAction, MINIMAL_ACTIONS } from './nodu-minimal-action-state';
 import { NoduMinimalPreferences } from './nodu-minimal-preferences';
+import { NoduProfessionalSettings } from './nodu-professional-settings';
 import { NoduMinimalSettingsHost } from './nodu-minimal-settings-host';
 import { NoduToolbarPopover } from './nodu-toolbar-popover';
 import { PreferenceService } from '@theia/core/lib/common/preferences/preference-service';
@@ -113,6 +114,7 @@ export class ScopeToolbar extends ReactWidget {
     @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     @inject(CommandRegistry) protected readonly commandRegistry!: CommandRegistry;
     @inject(PreferenceService) protected readonly preferences!: PreferenceService;
+    @inject(NoduProfessionalSettings) protected readonly professionalSettings!: NoduProfessionalSettings;
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     private readonly selectedActions = new Map<string, MinimalAction>();
@@ -126,6 +128,7 @@ export class ScopeToolbar extends ReactWidget {
         this.toDispose.push(this.layoutState.onDidChange(() => this.update()));
         this.toDispose.push(this.themes.onDidColorThemeChange(() => this.update()));
         this.toDispose.push(this.preferences.onPreferenceChanged(() => this.update()));
+        this.toDispose.push(this.professionalSettings.onDidChange(() => this.update()));
         // Hint and anchor changes fire often; the toolbar only shows whether a plan exists and the panel is open.
         this.toDispose.push(this.tutor.onDidChange(() => this.update()));
         const outside = (event: PointerEvent): void => {
@@ -223,6 +226,12 @@ export class ScopeToolbar extends ReactWidget {
     }
 
     private renderPreferences(): React.ReactNode {
+        if (this.layoutState.mode === 'pro') {
+            return <button type="button" className="nodu-minimal-preferences-trigger" aria-label="设置" title="设置" aria-haspopup="dialog"
+                aria-expanded={this.professionalSettings.isOpen} onClick={event => this.professionalSettings.toggle('general', event.currentTarget)}>
+                <i className="codicon codicon-settings-gear" aria-hidden="true"/>
+            </button>;
+        }
         const scope = this.embedded.project?.path ?? this.layoutState.projectPath;
         const preference = (key: string, value: unknown): Promise<void> => this.preferences.set(key, value, PreferenceScope.User);
         return <NoduMinimalPreferences layoutNode={this.shell.mainPanel.node} theme={getThemeMode(this.themes.getCurrentTheme().type)}

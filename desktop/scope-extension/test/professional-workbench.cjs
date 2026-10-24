@@ -85,6 +85,7 @@ function toolbar(kind = 'stm32', h = harness()) {
     owner.messages = { error: text => calls.push(text) };
     owner.themes = { getCurrentTheme: () => ({ type: 'light' }), setCurrentTheme: theme => themes.push(theme) };
     owner.preferences = { get: (_, fallback) => fallback, set: async (...args) => { preferences.push(args); } };
+    owner.professionalSettings = { isOpen: false, toggle: (page, anchor) => calls.push(['settings', page, anchor]) };
     owner.editors = { currentEditor: { activate: () => calls.push('activate-editor') } };
     owner.shell = { mainPanel: { node: {} }, topPanel: { node: { id: 'titlebar' }, hasClass: () => false }, leftPanelHandler: { container: { node: { querySelector: () => ({ id: 'rail' }) } } } };
     owner.contextMenu = { render: options => menu.push(options) };
@@ -138,19 +139,21 @@ test('ESP task controls do not inherit unrelated connected K210 state or STM32 f
     assert.equal(c.button('停止'), undefined);
     assert.equal(walk(c.render()).some(node => node.props?.['data-action'] === 'flash'), false);
 });
-test('professional settings reuses the simple preferences component and mode switch restores editor focus', async () => {
-    const c = toolbar();
-    const professional = walk(c.render()).filter(node => node.type === c.h.NoduMinimalPreferences);
-    assert.equal(professional.length, 1);
-    assert.equal(professional[0].props.layoutNode, c.owner.shell.mainPanel.node);
-    assert.equal(professional[0].props.mode, 'pro');
-    await professional[0].props.onMode('simple'); assert.deepEqual(c.calls, ['scope.layout.simple', 'activate-editor']);
-    professional[0].props.onTheme('dark'); assert.deepEqual(c.themes, ['scope-dark']);
-    await professional[0].props.onFontSize(16); assert.deepEqual(c.preferences[0], ['editor.fontSize', 16, 1]);
-    c.owner.layoutState.setDeviceOpen(true); professional[0].props.onOpen(); assert.equal(c.owner.layoutState.deviceOpen, false);
+test('professional gear opens unified settings while simple mode keeps the compact preference card', async () => {
+    const c = toolbar(), anchor = {};
+    const gear = walk(c.render()).find(node => node.type === 'button' && node.props['aria-label'] === '设置');
+    assert.equal(gear.props['aria-expanded'], false);
+    assert.equal(walk(c.render()).filter(node => node.type === c.h.NoduMinimalPreferences).length, 0);
+    gear.props.onClick({ currentTarget: anchor }); assert.deepEqual(c.calls, [['settings', 'general', anchor]]);
+    c.owner.professionalSettings.isOpen = true;
+    assert.equal(walk(c.render()).find(node => node.props['aria-label'] === '设置').props['aria-expanded'], true);
     c.owner.layoutState.setMode('simple');
     const minimal = walk(c.owner.renderMinimal()).filter(node => node.type === c.h.NoduMinimalPreferences);
     assert.equal(minimal.length, 1); assert.equal(minimal[0].props.mode, 'simple');
+    await minimal[0].props.onMode('pro'); assert.deepEqual(c.calls.slice(-2), ['scope.layout.pro', 'activate-editor']);
+    minimal[0].props.onTheme('dark'); assert.deepEqual(c.themes, ['scope-dark']);
+    await minimal[0].props.onFontSize(16); assert.deepEqual(c.preferences[0], ['editor.fontSize', 16, 1]);
+    c.owner.layoutState.setDeviceOpen(true); minimal[0].props.onOpen(); assert.equal(c.owner.layoutState.deviceOpen, false);
     const portal = walk(c.owner.renderMinimal()).find(node => node.type === 'portal');
     assert.equal(portal.props.target, c.owner.shell.topPanel.node);
     assert.equal(walk(c.owner.renderMinimal()).some(node => node.type === c.h.NoduMinimalSettingsHost), false);
@@ -162,7 +165,8 @@ test('native titlebars use the same settings host in both modes', () => {
         const host = c.owner.renderSettings();
         assert.equal(host.type, c.h.NoduMinimalSettingsHost);
         assert.equal(host.props.panel, c.owner.shell.mainPanel);
-        assert.equal(walk(host).filter(node => node.type === c.h.NoduMinimalPreferences).length, 1);
+        assert.equal(walk(host).filter(node => node.type === c.h.NoduMinimalPreferences).length, mode === 'simple' ? 1 : 0);
+        if (mode === 'pro') assert.equal(walk(host).filter(node => node.type === 'button' && node.props['aria-label'] === '设置').length, 1);
     }
 });
 test('AI teaching switches guidance without closing conversation; more menus remain target-specific', () => {

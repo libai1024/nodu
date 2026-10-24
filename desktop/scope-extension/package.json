@@ -32,7 +32,7 @@
     "test:tutor-native": "npm run compile && node --test test/tutor-local-native.cjs",
     "test:launcher": "npm run compile && node --test test/launcher.cjs test/launcher-view.cjs",
     "test:tutor-wasi": "npm run compile && node --test test/tutor-pure-native.cjs",
-    "test:workbench": "node --test test/minimal-workbench.cjs test/workbench-layout.cjs test/project-search.cjs test/settings-host.cjs test/minimal-preferences.cjs test/tutor-sidebar.cjs test/tutor-task-window.cjs test/professional-workbench.cjs test/brand-theme.cjs test/framebuffer-platform.cjs"
+    "test:workbench": "node --test test/minimal-workbench.cjs test/workbench-layout.cjs test/project-search.cjs test/settings-host.cjs test/minimal-preferences.cjs test/tutor-sidebar.cjs test/tutor-task-window.cjs test/professional-workbench.cjs test/professional-settings.cjs test/ai-provider-panel.cjs test/brand-theme.cjs test/framebuffer-platform.cjs"
   },
   "theiaExtensions": [
     {

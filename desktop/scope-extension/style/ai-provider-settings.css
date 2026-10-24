@@ -1,0 +1,36 @@
+/* SPDX-License-Identifier: MIT */
+/* A single settings column, following Harness' progressive disclosure pattern. */
+.nodu-ai-provider-catalog { flex: 1; min-height: 0; min-width: 0; padding: 20px 24px; overflow: auto; }
+.nodu-ai-catalog-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.nodu-ai-catalog-heading h3 { margin: 0; font: inherit; font-size: 14px; font-weight: 600; }
+.nodu-ai-catalog-add { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; min-height: 28px; border: 0; border-radius: 5px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; white-space: nowrap; }
+.nodu-ai-catalog-add:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-catalog-note { margin-bottom: 12px; color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-ai-provider-card { margin-bottom: 10px; border: 1px solid var(--theia-panel-border); border-radius: 8px; overflow: hidden; }
+.nodu-ai-provider-card > .nodu-ai-provider-summary { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 42px; padding: 9px 12px; border: 0; border-radius: 0; text-align: left; background: color-mix(in srgb, var(--theia-foreground) 3%, transparent); color: var(--theia-foreground); font: inherit; }
+.nodu-ai-provider-summary:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-provider-summary > .codicon { flex: none; font-size: 14px; color: var(--theia-descriptionForeground); }
+.nodu-ai-provider-count { flex: none; color: var(--theia-descriptionForeground); font-size: 11px; white-space: nowrap; }
+.nodu-ai-provider-content { padding: 0 12px 12px; }
+.nodu-ai-provider-catalog [hidden] { display: none !important; }
+.nodu-ai-provider-controls { display: flex; align-items: center; gap: 8px; padding-top: 10px; color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-ai-provider-controls > span { margin-right: auto; }
+.nodu-ai-provider-catalog .nodu-ai-field input, .nodu-ai-provider-catalog .nodu-ai-field select { border-color: transparent; background: color-mix(in srgb, var(--theia-foreground) 5%, var(--theia-editorWidget-background, var(--theia-editor-background))); height: 30px; }
+.nodu-ai-provider-catalog .nodu-ai-field input:hover, .nodu-ai-provider-catalog .nodu-ai-field select:hover { border-color: var(--theia-panel-border); }
+.nodu-ai-provider-catalog .nodu-ai-models { border: 0; border-radius: 0; }
+.nodu-ai-provider-catalog .nodu-ai-model-row { min-height: 34px; padding: 0; gap: 4px; }
+.nodu-ai-provider-catalog .nodu-ai-model-id { flex: 1; color: var(--theia-foreground); }
+.nodu-ai-provider-catalog .nodu-ai-model-actions { gap: 0; }
+.nodu-ai-provider-catalog .nodu-ai-models-head { gap: 6px; }
+.nodu-ai-provider-catalog .nodu-ai-models-head .nodu-ai-chip { border: 0; border-radius: 5px; background: transparent; color: var(--theia-foreground); }
+.nodu-ai-provider-catalog .nodu-ai-models-head .nodu-ai-chip:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-connection-trigger { display: inline-flex; align-items: center; align-self: flex-start; gap: 5px; padding: 4px 0; border: 0; background: transparent; color: var(--theia-descriptionForeground); font: inherit; }
+.nodu-ai-connection-trigger:hover { color: var(--theia-foreground); }
+.nodu-ai-connection-fields { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+@media (max-width: 640px) {
+    .nodu-ai-provider-catalog { padding: 16px; }
+    .nodu-ai-catalog-heading { flex-wrap: wrap; }
+    .nodu-ai-provider-count { display: none; }
+    .nodu-ai-provider-catalog .nodu-ai-model-row { flex-wrap: wrap; padding-block: 5px; }
+    .nodu-ai-provider-catalog .nodu-ai-models-head { flex-wrap: wrap; }
+}

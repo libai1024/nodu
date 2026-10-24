@@ -55,6 +55,16 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
         else if (messages.length) { setLatest(true); }
     }, [key, messages.length, last?.text, last?.status, tutor.goalState.revision]);
     React.useLayoutEffect(() => { const node = input.current; if (node) { node.style.height = 'auto'; node.style.height = `${Math.min(node.scrollHeight, 180)}px`; } }, [draft]);
+    React.useLayoutEffect(() => {
+        const node = input.current;
+        if (!node || typeof ResizeObserver === 'undefined') { return; }
+        let width = node.clientWidth;
+        const observer = new ResizeObserver(() => {
+            if (node.clientWidth === width) { return; }
+            width = node.clientWidth; node.style.height = 'auto'; node.style.height = `${Math.min(node.scrollHeight, 180)}px`;
+        });
+        observer.observe(node); return () => observer.disconnect();
+    }, []);
     const isBusy = !!tutor.busy, canSend = tutor.canSendChat ?? !!tutor.workspaceId;
     const bottom = (): void => { following.current = true; setLatest(false); if (log.current) { log.current.scrollTop = log.current.scrollHeight; } };
     const submit = (): void => { if (!isBusy && canSend && draft.trim()) { bottom(); void tutor.send(); } };
@@ -81,11 +91,12 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
             : tutor.error && !duplicateError && <div className="nodu-ai-connection" role="status"><span>未能完成请求</span><button type="button" className="nodu-ai-icon" aria-label="查看请求详情" aria-expanded={errorDetail} onClick={() => setErrorDetail(!errorDetail)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>{errorDetail && <span className="nodu-ai-error-detail">{tutor.error}</span>}</div>}
         {tutor.historyStorageError && <div className="nodu-ai-connection" role="status"><span>{tutor.historyStorageError}</span><button type="button" className="scope-text-button" onClick={() => tutor.retryHistorySave()}>重试保存</button></div>}
         <form className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); submit(); }}>
-            <ContextPicker tutor={tutor} open={async (path, line) => { if (await run(TUTOR_COMMANDS.openReference, path, line) === false) { throw new Error('无法打开此文件'); } }} />
+            <ContextPicker tutor={tutor} open={async (path, line) => { if (await run(TUTOR_COMMANDS.openReference, path, line) === false) { throw new Error('无法打开此文件'); } }}>{addButton => <>
             <textarea ref={input} rows={1} aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} placeholder={tutor.mode === 'teach' ? (tutor.goalState.status === 'active' ? '问问这一步怎么写…' : '想实现什么功能？') : '想了解什么？'} value={draft}
                 onChange={e => { tutor.setDraft(e.target.value); redraw(); }}
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229) { e.preventDefault(); submit(); } }} />
             <div className="nodu-ai-composer-bar">
+                {addButton}
                 <label className="nodu-ai-mode-select" title="对话模式">
                     <select aria-label="对话模式" value={tutor.mode} disabled={isBusy} onChange={e => tutor.setMode(e.target.value as typeof tutor.mode)}>
                         <option value="teach">教学</option><option value="ask">提问</option>
@@ -97,6 +108,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                     ? <button key="stop" type="button" className="nodu-ai-send nodu-ai-stop" aria-label="停止" title="停止" onClick={e => { e.preventDefault(); tutor.cancel(); }}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                     : <button key="send" type="button" onClick={submit} className="nodu-ai-send" aria-label="发送" title="发送 Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
             </div>
+            </>}</ContextPicker>
         </form>
     </div>;
 }
