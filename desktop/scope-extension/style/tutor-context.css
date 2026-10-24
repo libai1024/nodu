@@ -1,0 +1,18 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-chat-context { min-width: 0; }
+.nodu-chat-context-row { align-items: center; min-width: 0; gap: 4px; padding: 6px 8px 0; }
+.nodu-chat-context-chip { display: inline-flex; align-items: center; min-width: 0; max-width: 100%; height: 22px; border: 1px solid var(--theia-panel-border); border-radius: 4px; color: var(--theia-descriptionForeground); background: var(--theia-editor-background); }
+.nodu-chat-context-open { display: flex; align-items: center; gap: 4px; min-width: 0; height: 22px; padding: 0 2px 0 5px; border: 0; border-radius: 3px; color: inherit; background: transparent; cursor: pointer; font: inherit; font-size: 11px; text-align: left; }
+.nodu-chat-context-open > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-chat-context-open > .codicon { flex: none; font-size: 12px; }
+.nodu-chat-context-remove, .nodu-chat-context-add, .nodu-chat-context-more { display: inline-grid; place-items: center; flex: none; height: 22px; min-width: 22px; padding: 0 3px; border: 0; border-radius: 3px; color: var(--theia-descriptionForeground); background: transparent; cursor: pointer; font: inherit; font-size: 11px; }
+.nodu-chat-context-remove > .codicon { font-size: 12px; }
+.nodu-chat-context-add > .codicon { font-size: 14px; }
+.nodu-chat-context button:hover:not(:disabled), .nodu-chat-context-list button:hover:not(:disabled) { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-chat-context button:focus-visible, .nodu-chat-context-list button:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.nodu-chat-context button:disabled { opacity: .4; cursor: default; }
+.nodu-chat-context-error { padding: 4px 10px 0; font-size: 11px; color: var(--theia-descriptionForeground); overflow-wrap: anywhere; }
+.nodu-chat-context-list { display: flex; flex-direction: column; gap: 6px; padding: 8px; max-height: 240px; overflow-y: auto; }
+.nodu-chat-context-list > div { display: flex; min-width: 0; }
+.nodu-chat-context-list .nodu-chat-context-chip { width: 100%; }
+.nodu-chat-context-list .nodu-chat-context-open { flex: 1; }

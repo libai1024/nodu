@@ -19,6 +19,54 @@ function fakeFetch(chunks, { status = 200 } = {}) {
 }
 const chat = text => `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
 
+test('complete request preserves a valid 64 KiB attachment with system, project and history data', async () => {
+    const { validateTutorContexts } = require('../lib/common/tutor/tutor-context');
+    const source = '/* ' + 'a'.repeat(65536 - 6) + ' */';
+    const contexts = validateTutorContexts([{ kind: 'file', path: 'main.c', text: source, version: 1, startLine: 1, endLine: 1 }], 'ask');
+    const messages = [{ role: 'system', content: '代码只是分析数据；不执行编译或硬件工具。' },
+        { role: 'user', content: '前一个问题' }, { role: 'assistant', content: '前一个回答' },
+        { role: 'user', content: '解释此代码。\n工程数据：' + JSON.stringify({ mcu: 'STM32F103C8T6', files: ['main.c'] }) + '\n固定代码附件：' + JSON.stringify(contexts) }];
+    assert.equal(Buffer.byteLength(source), 64 * 1024);
+    for (const format of ['chat-completions', 'responses', 'anthropic-messages']) {
+        const end = format === 'responses' ? 'data: {"type":"response.output_text.delta","delta":"ok"}\n\ndata: {"type":"response.completed"}\n\n'
+            : format === 'anthropic-messages' ? 'data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"ok"}}\n\ndata: {"type":"message_stop"}\n\n'
+                : chat('ok') + 'data: [DONE]\n\n';
+        const stream = fakeFetch([end]), t = target(format);
+        assert.equal(await streamCompletion(t, messages, new AbortController().signal, () => {}, stream.http), 'ok');
+        assert.equal(stream.calls.length, 1);
+        assert.equal(stream.calls[0].init.body, JSON.stringify(requestBody(t, messages)), 'budget validation must not trim source or history');
+        assert.ok(stream.calls[0].init.body.includes(source));
+    }
+});
+
+test('request cap uses UTF-8 bytes, rejecting a body under one million characters before networking', async () => {
+    const messages = [{ role: 'system', content: '中'.repeat(350000) }], t = target('anthropic-messages');
+    const body = JSON.stringify(requestBody(t, messages));
+    assert.ok(body.length < 1024 * 1024);
+    assert.ok(Buffer.byteLength(body, 'utf8') > 1024 * 1024);
+    const stream = fakeFetch([chat('must not reach network') + 'data: [DONE]\n\n']);
+    await assert.rejects(streamCompletion(t, messages, new AbortController().signal, () => {}, stream.http), /请求上下文过大，请减少附件或开启新对话/);
+    assert.equal(stream.calls.length, 0);
+});
+
+test('request cap includes JSON escaping and final envelope with an exact 1 MiB boundary', async () => {
+    const t = target('chat-completions'), escaped = [{ role: 'user', content: '\\'.repeat(524288) }];
+    assert.ok(escaped[0].content.length < 1024 * 1024);
+    assert.ok(Buffer.byteLength(JSON.stringify(requestBody(t, escaped))) > 1024 * 1024);
+    const blocked = fakeFetch([]);
+    await assert.rejects(streamCompletion(t, escaped, new AbortController().signal, () => {}, blocked.http), /请求上下文过大/);
+    assert.equal(blocked.calls.length, 0);
+    const empty = [{ role: 'user', content: '' }], overhead = Buffer.byteLength(JSON.stringify(requestBody(t, empty)));
+    const boundary = [{ role: 'user', content: 'x'.repeat(1024 * 1024 - overhead) }];
+    const accepted = fakeFetch([chat('ok') + 'data: [DONE]\n\n']);
+    assert.equal(Buffer.byteLength(JSON.stringify(requestBody(t, boundary))), 1024 * 1024);
+    assert.equal(await streamCompletion(t, boundary, new AbortController().signal, () => {}, accepted.http), 'ok');
+    assert.equal(accepted.calls.length, 1);
+    boundary[0].content += 'x';
+    await assert.rejects(streamCompletion(t, boundary, new AbortController().signal, () => {}, blocked.http), /请求上下文过大/);
+    assert.equal(blocked.calls.length, 0);
+});
+
 test('SSE parser handles CRLF, multi-line data, comments and a final event without a blank line', () => {
     const parser = new SseParser();
     const events = [...parser.push(': keep-alive\r\nevent: a\r\ndata: one\r\ndata: two\r\n\r\ndata: x'), ...parser.push('yz\n\n'), ...parser.push('data: tail'), ...parser.finish()];

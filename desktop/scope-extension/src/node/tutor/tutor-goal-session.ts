@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 import { randomUUID } from 'node:crypto';
+import { TutorContext, validateTutorContexts } from '../../common/tutor/tutor-context';
 import { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
 import { parseGoalPlan, TutorGoalRequest, TutorGoalResult, TutorGoalState, TutorProjectContext } from '../../common/tutor/tutor-goal';
 import { TutorGoalStore } from './tutor-goal-store';
@@ -14,7 +15,8 @@ export class TutorGoalSession {
     constructor(private readonly store: TutorGoalStore, private readonly provider: TutorModelProvider,
         private readonly context: (id: string, buffer?: TutorBuffer) => Promise<TutorProjectContext>,
         private readonly authorize: (id: string, buffer?: TutorBuffer) => Promise<void>,
-        private readonly changed: () => void = () => undefined) { }
+        private readonly changed: () => void = () => undefined,
+        private readonly authorizeContexts?: (workspace: string, contexts: TutorContext[]) => Promise<TutorContext[]>) { }
     cancel(id?: string): void { if (!id || this.pending?.id === id) { this.pending?.abort.abort(); this.pending = undefined; } }
     revoke(id: string): void { if (this.pending?.workspace === id) { this.cancel(); } }
     dispose(): void { this.disposed = true; this.cancel(); }
@@ -44,19 +46,22 @@ export class TutorGoalSession {
         let abort: AbortController | undefined;
         try {
             const body = JSON.stringify(request);
-            if (!body || body.length > 48000) { throw new Error('教学请求过大'); }
+            if (!body || Buffer.byteLength(body, 'utf8') > 160000) { throw new Error('教学请求过大'); }
             request = JSON.parse(body);
-            if (!request || Object.keys(request).some(k => !['id','workspaceId','revision','action','prompt','buffer','placement','stepId'].includes(k))
+            if (!request || Object.keys(request).some(k => !['id','workspaceId','revision','action','prompt','buffer','placement','stepId','contexts'].includes(k))
                 || typeof request.workspaceId !== 'string' || !/^[\w-]{8,96}$/.test(request.workspaceId) || !/^[\w-]{8,96}$/.test(request.id)
                 || !Number.isSafeInteger(request.revision) || request.revision < 0
                 || !['propose','confirm','pause','resume','cancel','fragment','check','add','remove','undo-remove'].includes(request.action)) { throw new Error('教学请求无效'); }
             if (request.stepId !== undefined && (request.action !== 'remove' || typeof request.stepId !== 'string' || !/^[\w-]{1,80}$/.test(request.stepId))) { throw new Error('步骤请求无效'); }
             if (request.placement !== undefined && (request.placement !== 'suggest' || request.action !== 'fragment')) { throw new Error('教学位置请求无效'); }
+            const contexts = validateTutorContexts(request.contexts ?? [], 'teach', request.buffer);
+            if (contexts.length && !this.authorizeContexts) { throw new Error('附件授权不可用'); }
             if (this.disposed || this.pending) { throw new Error('请等待当前教学操作'); }
             abort = new AbortController(); this.pending = { id: request.id, workspace: request.workspaceId, abort };
             const live = async (): Promise<void> => {
                 if (this.disposed || abort!.signal.aborted) { throw new Error('已停止'); }
                 await this.authorize(request.workspaceId, request.buffer);
+                if (contexts.length) { await this.authorizeContexts!(request.workspaceId, contexts); }
                 if (abort!.signal.aborted) { throw new Error('已停止'); }
             };
             await live();
@@ -74,7 +79,7 @@ export class TutorGoalSession {
                     await live();
                     const correction = attempt ? '上次回复格式或插入位置不正确。本次必须只输出一个完整JSON对象，不加前后说明、代码示例或第二个JSON对象。' : '';
                     const raw = await this.provider.complete([{ role: 'system', content: SYSTEM + TUTOR_CODE_POLICY + instruction + correction },
-                        { role: 'user', content: JSON.stringify(data) }], abort!.signal, () => undefined);
+                        { role: 'user', content: JSON.stringify({ ...(data as object), ...(contexts.length ? { attachedCode: contexts } : {}) }) }], abort!.signal, () => undefined);
                     await live();
                     let value: unknown;
                     try { value = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, '')); }

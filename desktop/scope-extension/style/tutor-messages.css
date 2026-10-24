@@ -1,0 +1,56 @@
+/* SPDX-License-Identifier: MIT */
+/* Readable chat layout using the existing workbench palette and codicons. */
+.nodu-chat-message { position: relative; min-width: 0; margin: 0 0 16px; font-size: 13px; line-height: 1.6; user-select: text; overflow-wrap: anywhere; }
+.nodu-chat-content { min-width: 0; max-width: 100%; }
+.nodu-chat-user .nodu-chat-content { box-sizing: border-box; width: fit-content; max-width: 86%; margin-left: auto; padding: 8px 10px; border-radius: 8px; color: var(--theia-foreground); background: color-mix(in srgb, var(--theia-button-background) 15%, var(--theia-editor-background)); }
+.nodu-chat-markdown > :first-child { margin-top: 0; }
+.nodu-chat-markdown > :last-child { margin-bottom: 0; }
+.nodu-chat-markdown p { margin: 0 0 8px; white-space: pre-wrap; }
+.nodu-chat-markdown ul, .nodu-chat-markdown ol { padding-left: 20px; margin: 0 0 8px; }
+.nodu-chat-markdown li { margin: 3px 0; white-space: pre-wrap; }
+.nodu-chat-markdown strong { font-weight: 600; }
+.nodu-chat-markdown p code, .nodu-chat-markdown li code { padding: 1px 4px; border-radius: 3px; background: var(--theia-textCodeBlock-background, var(--theia-editor-background)); font: 12px/1.6 var(--theia-code-font-family, monospace); white-space: break-spaces; }
+.nodu-chat-code { min-width: 0; max-width: 100%; margin: 8px 0; border: 1px solid var(--theia-panel-border); border-radius: 6px; overflow: hidden; background: var(--theia-editor-background); color: var(--theia-editor-foreground); }
+.nodu-chat-code-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 28px; padding: 0 6px 0 10px; border-bottom: 1px solid var(--theia-panel-border); font-size: 11px; color: var(--theia-descriptionForeground); user-select: none; }
+.nodu-chat-code-head > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-chat-code pre { box-sizing: border-box; min-width: 0; margin: 0; padding: 8px 10px; overflow: auto; font: 12px/1.6 var(--theia-code-font-family, monospace); white-space: pre; tab-size: 4; }
+.nodu-chat-code pre code { font: inherit; }
+.nodu-chat-code pre.nodu-chat-code-collapsed { max-height: 285px; }
+.nodu-chat-code-toggle { width: 100%; border-top: 1px solid var(--theia-panel-border) !important; border-radius: 0 !important; padding: 4px 8px !important; }
+.nodu-chat-message-collapsed { max-height: 9.6em; overflow: hidden; }
+.nodu-chat-message-toggle { display: block; margin-top: 4px; }
+.nodu-chat-message-actions { display: flex; align-items: center; gap: 2px; min-height: 24px; margin-top: 2px; opacity: 0; transition: opacity .1s ease; }
+.nodu-chat-user .nodu-chat-message-actions { justify-content: flex-end; }
+.nodu-chat-context-references { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 3px 8px; max-width: 86%; margin: 4px 0 0 auto; font-size: 11px; color: var(--theia-descriptionForeground); }
+.nodu-chat-context-references > span { display: inline-flex; align-items: baseline; gap: 3px; min-width: 0; }
+.nodu-chat-context-references .codicon { flex: none; font-size: 11px; }
+.nodu-chat-context-references .nodu-chat-file-link { color: inherit; }
+.nodu-chat-message:hover > .nodu-chat-message-actions, .nodu-chat-message:focus-within > .nodu-chat-message-actions { opacity: 1; }
+.nodu-chat-icon { display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 4px; color: var(--theia-descriptionForeground); background: transparent; cursor: pointer; }
+.nodu-chat-icon > .codicon { font-size: 14px; }
+.nodu-chat-icon:hover:not(:disabled), .nodu-chat-text-action:hover:not(:disabled) { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-chat-icon:disabled, .nodu-chat-text-action:disabled { cursor: default; opacity: .5; }
+.nodu-chat-copy { display: inline-flex; align-items: center; gap: 4px; }
+.nodu-chat-copy-error { font-size: 11px; color: var(--theia-descriptionForeground); }
+.nodu-chat-text-action { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 24px; padding: 0 4px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; font-size: 12px; cursor: pointer; }
+.nodu-chat-text-action > .codicon { font-size: 12px; }
+.nodu-chat-file-link { display: inline; padding: 0; border: 0; border-radius: 2px; font: inherit; text-align: left; white-space: inherit; overflow-wrap: anywhere; color: var(--theia-textLink-foreground); background: transparent; cursor: pointer; }
+.nodu-chat-file-link:hover { color: var(--theia-textLink-activeForeground, var(--theia-textLink-foreground)); text-decoration: underline; }
+.nodu-chat-file-link:disabled { cursor: wait; }
+.nodu-chat-status, .nodu-chat-reference-error, .nodu-chat-recovery { color: var(--theia-descriptionForeground); font-size: 12px; }
+.nodu-chat-recovery { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.nodu-chat-details { display: flex; align-items: flex-start; gap: 4px; margin-top: 4px; padding: 6px 8px; border-radius: 4px; background: var(--theia-editor-background); color: var(--theia-descriptionForeground); }
+.nodu-chat-details pre { flex: 1; min-width: 0; max-height: 160px; overflow: auto; margin: 0; font: 11px/1.6 var(--theia-code-font-family, monospace); white-space: pre-wrap; overflow-wrap: anywhere; }
+.nodu-chat-token-comment { color: var(--theia-descriptionForeground); }
+.nodu-chat-token-keyword, .nodu-chat-token-type { color: var(--theia-symbolIcon-keywordForeground, var(--theia-textLink-foreground)); }
+.nodu-chat-token-string { color: var(--theia-debugTokenExpression-string, var(--theia-editor-foreground)); }
+.nodu-chat-token-number, .nodu-chat-token-constant { color: var(--theia-debugTokenExpression-number, var(--theia-editor-foreground)); }
+.nodu-chat-message button:focus-visible, .nodu-chat-code pre:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.nodu-chat-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (hover: none) { .nodu-chat-message-actions { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .nodu-chat-message-actions { transition: none; } }
+@media (forced-colors: active) { .nodu-chat-user .nodu-chat-content { border: 1px solid CanvasText; } }
+
+/* Actions keep a stable hover target without adding a full empty row between question and answer. */
+.nodu-chat-user { margin-bottom: 28px; }
+.nodu-chat-user > .nodu-chat-message-actions { position: absolute; top: 100%; right: 0; min-height: 20px; margin-top: 1px; }

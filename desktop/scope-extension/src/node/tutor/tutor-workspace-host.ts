@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import { TutorContext, validateTutorContexts } from '../../common/tutor/tutor-context';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -73,10 +74,10 @@ export class TutorWorkspaceHost {
             if (!this.grants.some(g => g.id === id)) { this.grants.push({ id, root, key, uri: pathToFileURL(candidate).href }); }
         }
     }
-    async list(): Promise<{ id: string; uri: string }[]> {
+    async list(): Promise<{ id: string; uri: string; projectKey: string }[]> {
         await this.pending;
         for (const grant of [...this.grants]) { await this.assertGrant(grant); }
-        return this.grants.map(({ id, uri }) => ({ id, uri }));
+        return this.grants.map(({ id, uri, key }) => ({ id, uri, projectKey: key }));
     }
     private async assertGrant(grant: { id: string; root: string; key: string }): Promise<void> {
         try {
@@ -104,8 +105,8 @@ export class TutorWorkspaceHost {
         this.executions.set(`${id}:${buffer.path}`, { result, time: Date.now() });
         while (this.executions.size > 8) { this.executions.delete(this.executions.keys().next().value!); }
     }
-    async context(id: string, buffer?: TutorBuffer): Promise<TutorProjectContext> {
-        await this.authorize(id, buffer);
+    async context(id: string, buffer?: TutorBuffer, allowPython = false): Promise<TutorProjectContext> {
+        await this.authorize(id, buffer, allowPython);
         const grant = this.grants.find(g => g.id === id)!;
         const files: string[] = [];
         let visited = 0, pathBytes = 0;
@@ -118,7 +119,7 @@ export class TutorWorkspaceHost {
                 if (entry.name.startsWith('.') || /^(node_modules|build|target|Drivers|Middlewares|vendor|reference)$/i.test(entry.name) || entry.isSymbolicLink()) { continue; }
                 const name = relative ? `${relative}/${entry.name}` : entry.name;
                 if (entry.isDirectory()) { await walk(name, depth + 1); }
-                else if (entry.isFile() && /\.(c|h|cpp|hpp|cc)$/i.test(name) && name.length <= 240) { files.push(name); pathBytes += name.length; }
+                else if (entry.isFile() && (allowPython ? /\.(c|h|cpp|hpp|cc|py)$/i : /\.(c|h|cpp|hpp|cc)$/i).test(name) && name.length <= 240) { files.push(name); pathBytes += name.length; }
             }
         };
         await walk('', 0);
@@ -129,7 +130,7 @@ export class TutorWorkspaceHost {
             if (typeof data?.sdk === 'string') { sdk = data.sdk.slice(0, 80); }
         } catch { /* Missing metadata is explicitly unknown, never inferred from a board name. */ }
         const declarations: { path: string; text: string }[] = [];
-        if (buffer) {
+        if (buffer && !/\.py$/i.test(buffer.path)) {
             const names = new Set(['main.h', 'board.h', ...Array.from(buffer.text.matchAll(/^\s*#\s*include\s*"([^"]+)"/gm), m => m[1])]);
             let budget = 8000;
             for (const relative of files.filter(f => /\.h$/i.test(f) && (names.has(f) || names.has(path.basename(f)))).slice(0, 8)) {
@@ -151,7 +152,7 @@ export class TutorWorkspaceHost {
                 if (!build.currentBufferSaved) { delete build.runtime; }
             }
         }
-        const localCheck = buffer ? await this.checker.inspect(buffer) : undefined;
+        const localCheck = buffer && !/\.py$/i.test(buffer.path) ? await this.checker.inspect(buffer) : undefined;
         const execution = buffer ? this.executions.get(`${id}:${buffer.path}`) : undefined;
         if (localCheck && execution && execution.result.sourceDigest === localCheck.sourceDigest && Date.now() - execution.time < 60000) { localCheck.execution = execution.result; }
         await this.assertGrant(grant);
@@ -159,15 +160,27 @@ export class TutorWorkspaceHost {
             ...(localCheck ? { localCheck } : {}), ...(declarations.length ? { declarations } : {}), ...(build ? { build } : {}) };
     }
     async reference(id: string, relative: string, line: number): Promise<{ path: string; line: number }> {
-        await this.authorize(id, { path: relative, text: '', version: 1, line: 1 });
+        await this.authorize(id, { path: relative, text: '', version: 1, line: 1 }, true);
         const grant = this.grants.find(g => g.id === id)!;
-        const text = await this.readProjectFile(grant, relative, 32000);
+        const text = await this.readProjectFile(grant, relative, /\.py$/i.test(relative) ? 64 * 1024 : 32000);
         if (!Number.isInteger(line) || line < 1 || line > text.split('\n').length) { throw new Error('代码行号无效'); }
-        await this.authorize(id, { path: relative, text, version: 1, line });
+        await this.authorize(id, { path: relative, text: '', version: 1, line: 1 }, true);
         return { path: relative, line };
     }
 
-    async authorize(id: string, buffer?: TutorBuffer): Promise<void> {
+    async contexts(id: string, mode: 'teach' | 'ask', input: TutorContext[]): Promise<TutorContext[]> {
+        const contexts = validateTutorContexts(input, mode);
+        for (const c of contexts) { await this.authorize(id, { path: c.path, text: '', version: 1, line: 1 }, mode === 'ask'); }
+        await this.authorize(id); return contexts;
+    }
+    async readContext(id: string, relative: string): Promise<TutorContext> {
+        await this.authorize(id, { path: relative, text: '', version: 1, line: 1 }, true);
+        const grant = this.grants.find(g => g.id === id)!;
+        const text = await this.readProjectFile(grant, relative, 64 * 1024);
+        const context: TutorContext = { kind: 'file', path: relative, text, version: 1, startLine: 1, endLine: text.split('\n').length };
+        return (await this.contexts(id, 'ask', [context]))[0];
+    }
+    async authorize(id: string, buffer?: TutorBuffer, allowPython = false): Promise<void> {
         await this.pending;
         const grant = this.grants.find(g => g.id === id);
         if (!grant) { throw new Error('工程授权已失效'); }
@@ -175,7 +188,7 @@ export class TutorWorkspaceHost {
         if (buffer === undefined) { return; }
         if (!buffer || Object.keys(buffer).some(k => !['path','text','version','line'].includes(k)) || typeof buffer.path !== 'string' || !buffer.path
             || buffer.path.length > 1024 || buffer.path.includes('\\') || buffer.path.includes('\0') || buffer.path.split('/').some(p => p === '..' || p === '.' || p === '')
-            || path.isAbsolute(buffer.path) || !/\.(c|h|cpp|hpp|cc)$/i.test(buffer.path)
+            || path.isAbsolute(buffer.path) || !(allowPython ? /\.(c|h|cpp|hpp|cc|py)$/i : /\.(c|h|cpp|hpp|cc)$/i).test(buffer.path)
             || typeof buffer.text !== 'string' || buffer.text.length > 32000 || buffer.text.includes('\0')
             || !Number.isSafeInteger(buffer.version) || buffer.version < 1 || !Number.isInteger(buffer.line) || buffer.line < 1 || buffer.line > buffer.text.split('\n').length) { throw new Error('代码上下文无效或超过 32 KB'); }
         const target = path.resolve(grant.root, buffer.path);

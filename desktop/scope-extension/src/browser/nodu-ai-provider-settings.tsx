@@ -199,7 +199,7 @@ function ModelDialog({ format, initial, remote, taken, onSave, onClose }: { form
                 <label className="nodu-ai-field"><span>模型 ID</span>
                     <input autoFocus list="nodu-ai-remote-models" value={model.id} spellCheck={false} placeholder="模型 ID" onChange={e => pickId(e.target.value)}/>
                     <datalist id="nodu-ai-remote-models">{remote.filter(r => !taken.includes(r.id)).map(r => <option key={r.id} value={r.id}/>)}</datalist></label>
-                <label className="nodu-ai-field"><span>上下文窗口<Help text="供应商声明的上下文容量，仅作记录。当前请求最多发送 64000 字符"/></span>
+                <label className="nodu-ai-field"><span>上下文窗口<Help text="供应商声明的上下文容量，仅作记录。附带代码合计最多 64 KiB；完整请求含系统提示、工程信息、历史与 JSON 编码最多 1 MiB。仍受模型实际上下文容量限制"/></span>
                     <input inputMode="numeric" value={model.contextWindow ?? ''} placeholder="例如 128000" onChange={e => set({ contextWindow: number(e.target.value) })}/></label>
                 <label className="nodu-ai-field"><span>最大输出 Tokens<Help text="单次回复的最大长度，默认 2048，最大 8192"/></span>
                     <input inputMode="numeric" value={model.maxOutputTokens ?? ''} placeholder="2048" onChange={e => set({ maxOutputTokens: number(e.target.value) })}/></label>

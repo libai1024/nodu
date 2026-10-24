@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const ts = require('typescript');
-const helpers = require('../lib/common/tutor/tutor-guidance');
+const helpers = { ...require('../lib/common/tutor/tutor-guidance'), ...require('../lib/common/tutor/tutor-context'), ...require('../lib/common/tutor/tutor-conversation') };
 // Execute the production class methods with a deterministic editor, without a browser or model service.
 function methods(file, className, names, dependencies = {}) {
     const source = ts.createSourceFile(file, fs.readFileSync(path.join(__dirname, '../src/browser', file), 'utf8'), ts.ScriptTarget.Latest, true);
@@ -253,13 +253,13 @@ test('same-revision fragment removal and failed reads clear a restored ghost',as
 const deferred = () => { let resolve, reject; const promise = new Promise((a,b)=>{resolve=a;reject=b;}); return {promise,resolve,reject}; };
 const Lifecycle = methods('nodu-tutor-model.ts','NoduTutorModel',[
     'load','sessionOperation','unwrap','importLegacy','refresh','action','previewMigration','acceptMigration',
-    'clearChat','goalAction','send','settle','syncPresentation'
-], { emptyGoal:()=>({revision:0,status:'none',steps:[],current:0}), sameUri:(a,b)=>a===b?.toString(), localStorage:{getItem:()=>null} });
+    'clearChat','goalAction','goalRequestContexts','send','settle','syncPresentation'
+], { ...helpers, emptyGoal:()=>({revision:0,status:'none',steps:[],current:0}), sameUri:(a,b)=>a===b?.toString(), localStorage:{getItem:()=>null} });
 function lifecycle(overrides={}) {
     return Object.assign(new Lifecycle(),{loading:0,refreshing:0,epoch:0,sessionQueue:Promise.resolve(),sync:Promise.resolve(),
         workspaceId:'a',rootUri:{toString:()=>'/a'},workspace:{roots:Promise.resolve([{resource:{toString:()=>'/a'}}])},
         session:{sessionId:'old',plan:{kind:'none'}},goalState:{revision:0,status:'none',steps:[],current:0},
-        mode:'teach',enabled:true,includeCode:true,messages:{teach:[],ask:[]},drafts:{teach:'goal',ask:'question'},
+        mode:'teach',enabled:true,includeCode:true,currentContextIncluded:true,pins:[],messages:{teach:[],ask:[]},drafts:{teach:'goal',ask:'question'},
         cancelAll(){this.busy=undefined;},cancel(){this.busy=undefined;},invalidate(){this.guidance=undefined;},notify(){},
         refreshGoal:async()=>{},restoreGoalGuidance(){},fragmentRequested:{fire(){}},
         service:{closeSession:async()=>({ok:true}),workspaces:async()=>[{id:'a',uri:'/a'}],aiSettings:async()=>({providers:[]}),

@@ -10,7 +10,9 @@ export interface TutorModelTarget { provider: TutorProviderConfig; model: TutorM
 
 const MAX_BYTES = 1024 * 1024;
 const MAX_ANSWER = 24000;
-const MAX_CONTEXT = 64000;
+// Separate from the 64 KiB source budget: include framing, instructions,
+// project metadata, history and JSON escaping in the actual outbound body.
+const MAX_REQUEST_BYTES = 1024 * 1024;
 const TIMEOUT_MS = 60000;
 
 /** One server-sent event: the event name (if any) and its data lines joined with "\n". */
@@ -167,14 +169,15 @@ function cancelReader(reader: ReadableStreamDefaultReader<Uint8Array>): void {
 export async function streamCompletion(target: TutorModelTarget, messages: TutorModelMessage[], signal: AbortSignal,
     delta: (text: string) => void, http: typeof fetch = fetch): Promise<string> {
     if (!target.key && !allowsNoKey(target.provider.baseUrl)) { throw new Error('请先在 AI 设置中填写 API Key'); }
-    if (JSON.stringify(messages).length > MAX_CONTEXT) { throw new Error('上下文过长'); }
+    const body = JSON.stringify(requestBody(target, messages));
+    if (Buffer.byteLength(body, 'utf8') > MAX_REQUEST_BYTES) { throw new Error('请求上下文过大，请减少附件或开启新对话'); }
     const requestSignal = AbortSignal.any([signal, AbortSignal.timeout(TIMEOUT_MS)]);
     if (signal.aborted) { throw new Error('已停止'); }
     let response: Response;
     try {
         response = await http(resolveEndpoint(target.provider.baseUrl, target.provider.apiFormat), {
             method: 'POST', redirect: 'error', signal: requestSignal,
-            headers: headers(target), body: JSON.stringify(requestBody(target, messages)),
+            headers: headers(target), body,
         });
     } catch { throw new Error(signal.aborted ? '已停止' : '模型服务连接超时或网络不可用'); }
     if (!response.ok) { void response.body?.cancel().catch(() => undefined); throw statusError(response.status); }

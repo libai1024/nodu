@@ -3,10 +3,14 @@ import type { TutorStorageService } from './tutor-storage-protocol';
 import type { TutorAISettingsView, TutorModelSelection, TutorProviderConfig } from './tutor-ai-config';
 import type { TutorGoalRequest, TutorGoalResult, TutorGoalState } from './tutor-goal';
 import type { TutorLocalCheck, TutorLocalRule } from './tutor-local-check';
+import type { TutorContext } from './tutor-context';
+import type { TutorPromptMessage } from './tutor-conversation';
 export const TUTOR_SERVICE_PATH = '/services/nodu-tutor';
 export type TutorMode = 'teach' | 'ask';
 export interface TutorBuffer {
     path: string; text: string; version: number; line: number;
+    /** Editor-local selection, stripped before sending the main buffer. */
+    selection?: { startLine: number; endLine: number; text: string };
 }
 export interface TutorAnnotation { startLine: number; endLine: number; note: string; }
 export interface TutorGuidance { anchorLine: number; lines: string[]; }
@@ -16,7 +20,7 @@ export interface TutorAnswer {
 }
 export interface TutorChatRequest {
     id: string; workspaceId: string; epoch: number; mode: TutorMode;
-    kind: 'chat' | 'line' | 'step'; prompt: string; buffer?: TutorBuffer;
+    kind: 'chat' | 'line' | 'step'; prompt: string; buffer?: TutorBuffer; contexts?: TutorContext[];
 }
 export interface TutorModelTest { ok: boolean; message: string; ms?: number }
 export interface TutorRemoteModel { id: string; contextWindow?: number }
@@ -31,7 +35,7 @@ export interface TutorAIClient {
 }
 export type TutorAIResult = { ok: true; answer: TutorAnswer } | { ok: false; error: string; cancelled?: boolean };
 export interface TutorService extends TutorStorageService {
-    workspaces(): Promise<{ id: string; uri: string }[]>;
+    workspaces(): Promise<{ id: string; uri: string; projectKey?: string }[]>;
     aiSettings(): Promise<TutorAISettingsView>;
     saveProvider(provider: TutorProviderConfig): Promise<TutorAISettingsView>;
     removeProvider(providerId: string): Promise<TutorAISettingsView>;
@@ -45,9 +49,14 @@ export interface TutorService extends TutorStorageService {
     chat(request: TutorChatRequest): Promise<TutorAIResult>;
     cancelChat(id: string): Promise<void>;
     clearChat(workspaceId: string, mode: TutorMode): Promise<void>;
+    /** Rehydrates bounded plain-text history for this window. Never replays requests or task actions. */
+    restoreChatHistory(workspaceId: string, epoch: number, mode: TutorMode, messages: TutorPromptMessage[]): Promise<void>;
     goalSnapshot(workspaceId: string): Promise<TutorGoalState>;
     goal(request: TutorGoalRequest): Promise<TutorGoalResult>;
     inspectBuffer(workspaceId: string, buffer: TutorBuffer, rules?: TutorLocalRule[], requestId?: string): Promise<TutorLocalCheck>;
+    listChatContextFiles(workspaceId: string): Promise<string[]>;
+    readChatContext(workspaceId: string, path: string): Promise<TutorContext>;
+    authorizeChatContexts(workspaceId: string, mode: TutorMode, contexts: TutorContext[]): Promise<TutorContext[]>;
     resolveReference(workspaceId: string, path: string, line: number): Promise<{ path: string; line: number }>;
 }
 
@@ -56,8 +65,8 @@ export const TUTOR_SERVICE_METHODS: Record<keyof TutorService, true> = {
     openSession: true, getSnapshot: true, closeSession: true, previewMigration: true, acceptMigration: true,
     recordAction: true, importLegacyProgress: true, workspaces: true, aiSettings: true, saveProvider: true,
     removeProvider: true, setProviderKey: true, deleteProviderKey: true, selectModel: true, testModel: true,
-    listRemoteModels: true, setPresentation: true, chat: true, cancelChat: true, clearChat: true,
-    goalSnapshot: true, goal: true, inspectBuffer: true, resolveReference: true
+    listRemoteModels: true, setPresentation: true, chat: true, cancelChat: true, clearChat: true, restoreChatHistory: true,
+    goalSnapshot: true, goal: true, inspectBuffer: true, resolveReference: true, listChatContextFiles: true, readChatContext: true, authorizeChatContexts: true
 };
 export function tutorServiceFacade(ready: Promise<{ service: TutorService }>): TutorService {
     const facade = Object.create(null);

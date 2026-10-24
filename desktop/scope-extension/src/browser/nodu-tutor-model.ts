@@ -14,11 +14,11 @@ import { guidanceEditMatches } from '../common/tutor/tutor-guidance';
 import { emptyGoal, TutorGoalRequest, TutorGoalState } from '../common/tutor/tutor-goal';
 import { TutorLocalRule } from '../common/tutor/tutor-local-check';
 import { TutorLineHistoryCache } from '../common/tutor/tutor-line-history';
+import { TutorContext, validateTutorContexts, requestBuffer } from '../common/tutor/tutor-context';
+import { TutorChatItem, TutorChatSnapshot, TutorConversation, TutorConversationStore, conversationPrompt, chatContextRefs } from '../common/tutor/tutor-conversation';
+export type { TutorChatItem, TutorChatStatus } from '../common/tutor/tutor-conversation';
 import { ScopeLayoutState } from './scope-layout-state';
 
-/** Every assistant item leaves `pending`; a stopped or superseded request must never stay "thinking". */
-export type TutorChatStatus = 'pending' | 'done' | 'stopped' | 'failed';
-export interface TutorChatItem { id: string; role: 'user' | 'assistant'; text: string; status: TutorChatStatus; note?: string; }
 export interface TutorPresentation { buffer: TutorBuffer; answer: TutorAnswer; }
 /** file: URIs from the host and from Theia may differ in encoding and trailing slashes. */
 const sameUri = (a: string, b: URI | undefined): boolean => !!b && new URI(a).path.toString().replace(/\/+$/, '') === b.path.toString().replace(/\/+$/, '');
@@ -55,7 +55,9 @@ export class NoduTutorModel {
     annotationsVisible = stored('annotations', true);
     floatVisible = stored('float', true);
     autoReview = stored('auto-review', true);
-    includeCode = true;
+    private readonly includedCode: Record<TutorMode, boolean> = { teach: true, ask: true };
+    get includeCode(): boolean { return this.includedCode[this.mode]; }
+    set includeCode(value: boolean) { this.includedCode[this.mode] = value; }
     buffer?: TutorBuffer;
     presentation?: TutorPresentation;
     guidance?: { source: TutorBuffer; anchorLine: number; lines: string[] };
@@ -71,6 +73,25 @@ export class NoduTutorModel {
     readonly drafts: Record<TutorMode, string> = { teach: '', ask: '' };
     readonly messages: Record<TutorMode, TutorChatItem[]> = { teach: [], ask: [] };
     migration?: CourseMigrationPreview;
+    connectionState: 'connecting' | 'connected' | 'disconnected' = 'connecting';
+    private conversationProject?: string;
+    private settledRootUri?: URI;
+    private reconnectBuffer?: TutorBuffer;
+    private persistenceError?: string;
+    private readonly conversationStore = new TutorConversationStore((() => { try { return localStorage; } catch { return undefined; } })());
+    private conversationRecords: Partial<Record<TutorMode, TutorConversation>> = {};
+    private draftSave?: ReturnType<typeof setTimeout>;
+    private historySyncing = false;
+    private readonly contextDrafts: Record<TutorMode, TutorContext[]> = { teach: [], ask: [] };
+    contextError?: string;
+    get pins(): readonly TutorContext[] { return this.contextDrafts[this.mode]; }
+    get currentContextIncluded(): boolean { return this.includeCode && !!this.buffer && !this.pins.some(p => p.path === this.buffer!.path); }
+    get historyStorageError(): string | undefined { return this.persistenceError ?? this.conversationStore.storageError; }
+    retryHistorySave(): void { this.conversationStore.flush(); this.persistConversation('teach'); this.persistConversation('ask'); this.notify(); }
+    get conversationLoading(): boolean { return this.historySyncing; }
+    get conversations() { return this.conversationProject ? this.conversationStore.list(this.conversationProject, this.mode) : []; }
+    get activeConversationId(): string | undefined { return this.conversationRecords[this.mode]?.id; }
+    get canSendChat(): boolean { return this.enabled && !!this.workspaceId && this.connectionState === 'connected' && !this.historySyncing && !this.busy; }
     private loading = 0;
     private refreshing = 0;
     private sync: Promise<void> = Promise.resolve();
@@ -90,7 +111,15 @@ export class NoduTutorModel {
             onWorkspacesChanged: () => { void this.onWorkspacesChanged(); }, onAISettingsChanged: () => { void this.refreshSettings(); },
             onGoalsChanged: () => { void this.refreshGoal(); } } satisfies TutorAIClient);
         this.service = proxy;
+        if (typeof window !== 'undefined') {
+            const flush = (): void => { this.persistConversation('teach'); this.persistConversation('ask'); };
+            window.addEventListener('pagehide', flush);
+            this.toDispose.push({ dispose: () => window.removeEventListener('pagehide', flush) });
+        }
         this.toDispose.push(proxy.onDidOpenConnection(() => { void this.workspace.ready.then(() => this.load()); }));
+        this.toDispose.push(proxy.onDidCloseConnection(() => {
+            ++this.loading; ++this.epoch; this.cancelAll(); this.connectionState = 'disconnected'; this.historySyncing = false; this.notify();
+        }));
         this.toDispose.push(this.workspace.onWorkspaceChanged(() => void this.load()));
         this.toDispose.push(this.files.onDidFilesChange(event => {
             if (this.rootUri && event.contains(this.rootUri.resolve('.nodu-tutor/plan.json'))) { void this.refresh(); }
@@ -102,6 +131,8 @@ export class NoduTutorModel {
     }
     dispose(): void {
         ++this.loading; ++this.epoch; this.cancelAll();
+        if (this.draftSave) { clearTimeout(this.draftSave); }
+        this.persistConversation('teach'); this.persistConversation('ask');
         const session = this.session; this.session = undefined; this.workspaceId = undefined;
         if (session) { void this.sessionOperation(() => this.service.closeSession(session.sessionId)).catch(() => undefined); }
         this.toDispose.dispose();
@@ -115,8 +146,14 @@ export class NoduTutorModel {
     }
     async load(): Promise<void> {
         const generation = ++this.loading;
+        if (this.conversationProject) { this.persistConversation('teach'); this.persistConversation('ask'); }
+        this.connectionState = 'connecting';
         ++this.epoch; this.cancelAll(); this.invalidate();
-        const old = this.session?.sessionId, oldRoot = this.rootUri, oldBuffer = this.buffer;
+        // load() clears live handles while reconnecting. Keep the last known root and
+        // buffer separately so an overlapping reconnect cannot mistake that gap for a new project.
+        if (this.rootUri) { this.settledRootUri = this.rootUri; }
+        if (this.buffer) { this.reconnectBuffer = this.buffer; }
+        const old = this.session?.sessionId, oldRoot = this.rootUri ?? this.settledRootUri, oldBuffer = this.buffer ?? this.reconnectBuffer;
         this.session = undefined; this.workspaceId = undefined; this.rootUri = undefined; this.buffer = undefined; this.error = undefined; this.migration = undefined;
         this.goalState = emptyGoal(); this.lastAutoFragment = '';
         this.notify();
@@ -129,9 +166,14 @@ export class NoduTutorModel {
             const grants = await this.service.workspaces();
             if (generation !== this.loading) { return; }
             this.rootUri = root;
-            if (oldRoot && sameUri(oldRoot.toString(), root)) { this.buffer = oldBuffer; }
+            const grant = grants.find(g => sameUri(g.uri, root));
+            const workspaceId = grant?.id;
+            const sameProject = grant?.projectKey ? grant.projectKey === this.conversationProject : !!oldRoot && sameUri(oldRoot.toString(), root);
+            if (sameProject) { this.buffer = oldBuffer; }
             else { this.messages.teach.length = 0; this.messages.ask.length = 0; this.drafts.teach = ''; this.drafts.ask = ''; }
-            const workspaceId = grants.find(g => sameUri(g.uri, root))?.id;
+            this.settledRootUri = workspaceId ? root : undefined; this.reconnectBuffer = this.buffer;
+            if (grant?.projectKey && this.conversationProject !== grant.projectKey) { this.restoreConversations(grant.projectKey); }
+            else if (!workspaceId) { this.conversationProject = undefined; this.conversationRecords = {}; }
             this.workspaceId = workspaceId;
             const settings = await this.service.aiSettings();
             if (generation !== this.loading) { return; }
@@ -150,9 +192,10 @@ export class NoduTutorModel {
                 if (generation !== this.loading) { return; }
                 await this.importLegacy();
                 if (generation !== this.loading) { return; }
-                await this.syncPresentation();
+                await this.syncPresentation(); await this.sync;
             } else if (root) { this.error = '教学工作区尚未连接，请重新打开工程'; }
-        } catch (error) { if (generation === this.loading) { this.error = error instanceof Error ? error.message : '教学连接失败'; } }
+            if (generation === this.loading) { this.connectionState = 'connected'; }
+        } catch (error) { if (generation === this.loading) { this.connectionState = 'disconnected'; this.error = error instanceof Error ? error.message : '教学连接失败'; } }
         if (generation === this.loading) { this.notify(); }
     }
     private async importLegacy(): Promise<void> {
@@ -219,7 +262,7 @@ export class NoduTutorModel {
             this.restoreGoalGuidance();
         }
         // The panel only shows the file and gates step checks on its presence; redraw on that, not on every keystroke.
-        if (before?.path !== buffer?.path) { this.notify(); }
+        if (before?.path !== buffer?.path || JSON.stringify(before?.selection) !== JSON.stringify(buffer?.selection)) { this.notify(); }
     }
     private restoreGoalGuidance(): void {
         const fragment = this.goalState?.fragment, buffer = this.buffer;
@@ -249,7 +292,7 @@ export class NoduTutorModel {
         return this.service.resolveReference(this.workspaceId, path, line);
     }
     async goalAction(action: TutorGoalRequest['action'], prompt?: string, placement?: 'suggest', stepId?: string): Promise<void> {
-        if (!this.enabled || this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
+        if (!this.enabled || this.busy || !this.workspaceId || this.mode !== 'teach' || this.historySyncing || this.connectionState === 'disconnected' || this.connectionState === 'connecting') { return; }
         const workspace = this.workspaceId, epoch = this.epoch;
         try { await this.sync; } catch { return; }
         if (!this.enabled || this.busy || workspace !== this.workspaceId || epoch !== this.epoch || this.mode !== 'teach') { return; }
@@ -259,14 +302,14 @@ export class NoduTutorModel {
         let advance = false;
         try {
             const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action, ...(stepId ? { stepId } : {}), ...(placement ? { placement } : {}),
-                ...(prompt ? { prompt } : {}), ...((action === 'fragment' || action === 'check' || (action === 'propose' && this.includeCode)) && this.buffer ? { buffer: { ...this.buffer } } : {}) });
+                ...(prompt ? { prompt } : {}), ...this.goalRequestContexts(action) });
             if (this.busy?.id !== id || workspace !== this.workspaceId || epoch !== this.epoch) { return; }
             if (!result.ok) { if (!result.cancelled) { this.error = result.error; } await this.refreshGoal(); return; }
             advance = action === 'confirm' || (action === 'check' && result.state.current > previousStep);
             this.invalidate(); this.goalState = result.state; this.restoreGoalGuidance();
             if (action === 'propose') {
                 this.messages.teach.push({ id: crypto.randomUUID(), role: 'user', text: prompt ?? '', status: 'done' });
-                this.drafts.teach = '';
+                if (this.drafts.teach.trim() === prompt?.trim()) { this.drafts.teach = ''; }
             }
             const text = result.state.feedback;
             if (text && ['fragment','check'].includes(action)) { this.messages.teach.push({ id, role: 'assistant', text, status: 'done' }); }
@@ -276,6 +319,7 @@ export class NoduTutorModel {
                 this.presentation = { buffer: { ...this.buffer }, answer: result.presentation.answer };
             }
             if (this.messages.teach.length > 100) { this.messages.teach.splice(0, this.messages.teach.length - 100); }
+            if (this.conversationProject) { this.persistConversation('teach'); }
         } catch (error) { if (this.busy?.id === id && workspace === this.workspaceId && epoch === this.epoch) { this.error = error instanceof Error ? error.message : '教学连接已断开'; } }
         finally {
             if (this.busy?.id === id) { this.busy = undefined; }
@@ -296,7 +340,8 @@ export class NoduTutorModel {
     }
     setMode(mode: TutorMode): void {
         if (mode === this.mode) { return; }
-        this.mode = mode; this.transition();
+        if (this.conversationProject) { this.persistConversation(this.mode); }
+        this.mode = mode; this.contextError = undefined; this.transition();
     }
     /** The toolbar AI switch: stops editor guidance and line review, never the conversation. */
     setPaused(paused: boolean): void {
@@ -309,10 +354,20 @@ export class NoduTutorModel {
     private transition(): void { this.cancelAll(); this.invalidate(); this.restoreGoalGuidance(); void this.syncPresentation(); this.notify(); }
     private syncPresentation(): Promise<void> {
         const workspace = this.workspaceId, epoch = ++this.epoch, mode = this.mode, paused = !this.enabled;
+        this.historySyncing = true;
         this.sync = this.sync.catch(() => undefined).then(async () => {
-            if (workspace) { await this.service.setPresentation(workspace, epoch, mode, paused); }
+            if (workspace) {
+                await this.service.setPresentation(workspace, epoch, mode, paused);
+                if (workspace === this.workspaceId && epoch === this.epoch && this.conversationProject) {
+                    await this.service.restoreChatHistory(workspace, epoch, mode, conversationPrompt(this.messages[mode]));
+                }
+            }
         });
-        return this.sync.catch(error => { if (workspace === this.workspaceId && epoch === this.epoch) { this.error = error instanceof Error ? error.message : '教学会话更新失败'; this.notify(); } });
+        return this.sync.then(() => {
+            if (workspace === this.workspaceId && epoch === this.epoch) { this.historySyncing = false; if (workspace) { this.connectionState = 'connected'; } this.notify(); }
+        }, error => {
+            if (workspace === this.workspaceId && epoch === this.epoch) { this.historySyncing = false; this.connectionState = 'disconnected'; this.error = error instanceof Error ? error.message : '教学会话更新失败'; this.notify(); }
+        });
     }
     setPanelPreferred(open: boolean): void {
         this.panelPreferred = open;
@@ -363,13 +418,139 @@ export class NoduTutorModel {
         void this.service.cancelChat(review.id).catch(() => undefined); this.notify();
     }
     cancelAll(): void { this.cancel(); this.cancelReview(); }
-    private settle(mode: TutorMode, id: string, status: Exclude<TutorChatStatus, 'pending'>, note?: string): void {
+    private settle(mode: TutorMode, id: string, status: Exclude<TutorChatItem['status'], 'pending'>, note?: string): void {
         const item = this.messages[mode].find(m => m.id === id);
-        if (item?.status === 'pending') { item.status = status; if (note) { item.note = note; } }
+        if (item?.status === 'pending') { item.status = status; if (note) { item.note = note; } if (this.conversationProject) { this.persistConversation(mode); } }
+    }
+    setIncludeCode(value: boolean): void { this.includeCode = value; this.contextError = undefined; this.persistConversation(this.mode); this.notify(); }
+    private goalRequestContexts(action: TutorGoalRequest['action']): Pick<TutorGoalRequest, 'buffer' | 'contexts'> {
+        const buffer = this.buffer && (action === 'fragment' || action === 'check' || (action === 'propose' && this.currentContextIncluded)) ? requestBuffer(this.buffer) : undefined;
+        const contexts = ['propose','add','fragment','check'].includes(action) ? validateTutorContexts(this.pins.filter(p => p.path !== buffer?.path), 'teach', buffer) : [];
+        return { ...(buffer ? { buffer } : {}), ...(contexts.length ? { contexts } : {}) };
+    }
+    async listContextFiles(): Promise<string[]> {
+        const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
+        if (!workspace) { return []; }
+        const files = await this.service.listChatContextFiles(workspace);
+        return workspace === this.workspaceId && mode === this.mode && epoch === this.epoch ? files.filter(path => mode === 'ask' || !/\.py$/i.test(path)) : [];
+    }
+    async addCurrentContext(kind: 'file' | 'selection'): Promise<boolean> {
+        const buffer = this.buffer;
+        if (!buffer || (kind === 'selection' && !buffer.selection?.text)) { this.contextError = '请先打开文件并选择代码'; this.notify(); return false; }
+        const selection = kind === 'selection' ? buffer.selection : undefined;
+        return this.addContext({ kind, path: buffer.path, text: selection?.text ?? buffer.text, version: buffer.version,
+            startLine: selection?.startLine ?? 1, endLine: selection?.endLine ?? buffer.text.split('\n').length });
+    }
+    async addContextFile(path: string): Promise<boolean> {
+        const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
+        if (!workspace) { return false; }
+        try {
+            const context = await this.service.readChatContext(workspace, path);
+            if (workspace !== this.workspaceId || mode !== this.mode || epoch !== this.epoch) { return false; }
+            return this.addContext(context);
+        } catch (error) { if (workspace === this.workspaceId && mode === this.mode && epoch === this.epoch) { this.contextError = error instanceof Error ? error.message : '附件读取失败'; this.notify(); } return false; }
+    }
+    private async addContext(context: TutorContext): Promise<boolean> {
+        const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
+        if (!workspace) { return false; }
+        try {
+            const [authorized] = await this.service.authorizeChatContexts(workspace, mode, [context]);
+            if (workspace !== this.workspaceId || mode !== this.mode || epoch !== this.epoch) { return false; }
+            const next = this.pins.filter(p => !(p.path === authorized.path && p.startLine === authorized.startLine && p.endLine === authorized.endLine));
+            next.push(authorized);
+            validateTutorContexts(next, mode);
+            this.contextDrafts[mode] = next; this.contextError = undefined; this.persistConversation(mode); this.notify(); return true;
+        } catch (error) { if (workspace === this.workspaceId && mode === this.mode && epoch === this.epoch) { this.contextError = error instanceof Error ? error.message : '附件不可用'; this.notify(); } return false; }
+    }
+    removeContext(index: number): void {
+        if (!Number.isInteger(index) || index < 0 || index >= this.pins.length) { return; }
+        this.contextDrafts[this.mode].splice(index, 1); this.contextError = undefined; this.persistConversation(this.mode); this.notify();
+    }
+    private selectedKey(project: string, mode: TutorMode): string { return `nodu.tutor.active.${project}.${mode}`; }
+    private rememberSelection(c: TutorConversation): void {
+        try { sessionStorage.setItem(this.selectedKey(c.project, c.mode), c.id); } catch { /* Window-local pointer is optional. */ }
+    }
+    private restoreConversations(project: string): void {
+        this.conversationProject = project; this.conversationRecords = {};
+        for (const mode of ['teach','ask'] as const) {
+            let selected: string | null = null;
+            try { selected = sessionStorage.getItem(this.selectedKey(project, mode)); } catch { /* use recent history */ }
+            const recent = this.conversationStore.list(project, mode)[0]?.id;
+            const c = (selected ? this.conversationStore.read(selected, project, mode) : recent && this.conversationStore.read(recent, project, mode)) || this.conversationStore.create(project, mode);
+            this.conversationRecords[mode] = c;
+            this.messages[mode].splice(0, this.messages[mode].length, ...c.messages); this.drafts[mode] = c.draft;
+            this.contextDrafts[mode] = c.contexts ?? []; this.includedCode[mode] = c.includeCode ?? true;
+            this.rememberSelection(c);
+        }
+    }
+    private persistConversation(mode: TutorMode): void {
+        if (this.draftSave) { clearTimeout(this.draftSave); this.draftSave = undefined; }
+        const project = this.conversationProject;
+        if (!project) { return; }
+        const c = this.conversationRecords[mode] ?? this.conversationStore.create(project, mode);
+        try {
+            const saved = this.conversationStore.save({ ...c, messages: [...this.messages[mode]], draft: this.drafts[mode], contexts: [...this.contextDrafts[mode]], includeCode: this.includedCode[mode] });
+            this.conversationRecords[mode] = saved; this.rememberSelection(saved); this.persistenceError = undefined;
+        } catch (error) { this.persistenceError = error instanceof Error ? error.message : '对话暂未保存，内容保留在当前窗口'; }
+    }
+    setDraft(text: string): void {
+        this.drafts[this.mode] = text;
+        if (this.draftSave) { clearTimeout(this.draftSave); }
+        const mode = this.mode;
+        this.draftSave = setTimeout(() => { this.persistConversation(mode); this.notify(); }, 300);
+        this.notify();
+    }
+    async newConversation(): Promise<void> {
+        if (!this.conversationProject || this.historySyncing) { return; }
+        const mode = this.mode;
+        if (!this.messages[mode].length && !this.drafts[mode] && !this.pins.length) { return; }
+        this.cancelAll(); this.persistConversation(mode);
+        this.conversationRecords[mode] = this.conversationStore.create(this.conversationProject, mode);
+        this.messages[mode].length = 0; this.drafts[mode] = ''; this.contextDrafts[mode] = []; this.contextError = undefined; this.persistConversation(mode);
+        await this.activateConversation();
+    }
+    async selectConversation(id: string): Promise<void> {
+        if (!this.conversationProject || this.historySyncing || id === this.activeConversationId) { return; }
+        const c = this.conversationStore.read(id, this.conversationProject, this.mode);
+        if (!c) { this.error = '对话已不可用'; this.notify(); return; }
+        this.cancelAll(); this.persistConversation(this.mode);
+        this.conversationRecords[this.mode] = c; this.rememberSelection(c);
+        this.messages[this.mode].splice(0, this.messages[this.mode].length, ...c.messages); this.drafts[this.mode] = c.draft;
+        this.contextDrafts[this.mode] = c.contexts ?? []; this.includeCode = c.includeCode ?? true; this.contextError = undefined;
+        await this.activateConversation();
+    }
+    private async activateConversation(): Promise<void> {
+        this.historySyncing = true; this.error = undefined; this.notify();
+        const workspace = this.workspaceId, generation = this.loading;
+        try {
+            await this.syncPresentation(); await this.sync;
+        } catch { if (workspace === this.workspaceId && generation === this.loading) { this.connectionState = 'disconnected'; } }
+        finally { if (workspace === this.workspaceId && generation === this.loading) { this.historySyncing = false; this.notify(); } }
+    }
+    private retrySnapshotCurrent(snapshot: TutorChatSnapshot): boolean {
+        return snapshot.kind === 'chat' && snapshot.mode === this.mode && snapshot.goalRevision === this.goalState.revision
+            && (!snapshot.buffer || !!this.buffer && snapshot.buffer.path === this.buffer.path && snapshot.buffer.text === this.buffer.text);
+    }
+    canRetry(item: TutorChatItem): boolean {
+        return !!item.request && item.role === 'assistant' && ['stopped','failed'].includes(item.status) && item.request.kind === 'chat'
+            && this.messages[this.mode].includes(item) && this.canSendChat;
+    }
+    async retryChat(id: string): Promise<void> {
+        const item = this.messages[this.mode].find(m => m.id === id);
+        if (!item || !this.canRetry(item) || !item.request) { return; }
+        if (!this.retrySnapshotCurrent(item.request)) { this.error = '代码或教学步骤已变更，请重新检查'; this.notify(); return; }
+        await this.send('chat', undefined, item.request);
+    }
+    editMessage(id: string): boolean {
+        const item = this.messages[this.mode].find(m => m.id === id && m.role === 'user');
+        if (!item) { return false; }
+        const draft = this.drafts[this.mode];
+        if (draft.trim() && draft !== item.text) { this.error = '输入框已有草稿，请先保留或清空后再编辑'; this.notify(); return false; }
+        this.error = undefined; this.setDraft(item.text); return true;
     }
     async clearChat(): Promise<void> {
         const workspace = this.workspaceId, mode = this.mode, generation = this.loading;
-        this.cancel(); this.messages[mode].length = 0; this.notify();
+        this.cancel(); this.messages[mode].length = 0; if (this.conversationProject) { this.persistConversation(mode); } this.notify();
         const cleared = this.sync.catch(() => undefined).then(async () => { if (workspace) { await this.service.clearChat(workspace, mode); } });
         this.sync = cleared;
         try { await cleared; }
@@ -379,28 +560,37 @@ export class NoduTutorModel {
             }
         }
     }
-    async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer): Promise<TutorAIResult | undefined> {
-        if (this.mode === 'teach' && !this.plan && kind === 'chat' && ['none','draft','cancelled','complete'].includes(this.goalState.status)) {
+    async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer, retry?: TutorChatSnapshot): Promise<TutorAIResult | undefined> {
+        if (this.historySyncing || this.connectionState === 'connecting' || this.connectionState === 'disconnected') { return; }
+        if (!retry && this.mode === 'teach' && !this.plan && kind === 'chat' && ['none','draft','cancelled','complete'].includes(this.goalState.status)) {
             await this.goalAction('propose', this.drafts.teach.trim()); return;
         }
         if (this.mode === 'teach' && kind === 'step' && this.goalState.status === 'active' && this.configured) { await this.goalAction('check'); return; }
         const review = kind === 'line';
         const laneBusy = (): boolean => review ? !!this.reviewing : !!this.busy;
-        if (!this.enabled || laneBusy() || !this.workspaceId || (review && this.paused)) { return; }
+        if (!this.enabled || laneBusy() || !this.workspaceId || this.historySyncing || (review && this.paused)) { return; }
         const mode = this.mode, workspace = this.workspaceId, epoch = this.epoch;
-        const prompt = kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
+        const prompt = retry ? retry.prompt : kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
         if (!prompt) { return; }
         try { await this.sync; } catch { return; }
         if (!this.enabled || laneBusy() || mode !== this.mode || workspace !== this.workspaceId || epoch !== this.epoch || (review && this.paused)) { return; }
-        const context = buffer ?? (this.includeCode || kind !== 'chat' ? this.buffer : undefined);
-        const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: workspace, epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}) };
+        if (retry && !this.retrySnapshotCurrent(retry)) { this.error = '代码或教学步骤已变更，请重新检查'; this.notify(); return; }
+        const rawContext = retry ? retry.buffer : buffer ?? (kind !== 'chat' || this.currentContextIncluded ? this.buffer : undefined);
+        const context = rawContext ? requestBuffer(rawContext) : undefined;
+        let contexts: TutorContext[];
+        try { contexts = validateTutorContexts(retry?.contexts ?? (kind === 'chat' ? this.pins.filter(p => p.path !== context?.path) : []), mode, context); }
+        catch (error) { this.contextError = error instanceof Error ? error.message : '附件无效'; this.notify(); return; }
+        const request: TutorChatRequest = { id: crypto.randomUUID(), workspaceId: workspace, epoch, mode, kind, prompt, ...(context ? { buffer: { ...context } } : {}), ...(contexts.length ? { contexts } : {}) };
         const current = (): boolean => review ? this.reviewing?.id === request.id : this.busy?.id === request.id;
         if (review) { this.reviewing = { id: request.id }; } else { this.busy = { id: request.id, mode, kind }; }
-        const assistant: TutorChatItem = { id: request.id, role: 'assistant', text: '', status: 'pending' };
+        const userId = crypto.randomUUID();
+        const assistant: TutorChatItem = { id: request.id, role: 'assistant', text: '', status: 'pending', replyTo: userId,
+            request: { prompt, mode, kind, goalRevision: this.goalState.revision, ...(context ? { buffer: { ...context } } : {}), ...(contexts.length ? { contexts } : {}) } };
         if (!review) {
-            this.messages[mode].push({ id: crypto.randomUUID(), role: 'user', text: prompt, status: 'done' }, assistant);
+            this.messages[mode].push({ id: userId, role: 'user', text: prompt, status: 'done', contextRefs: chatContextRefs(request.buffer, request.contexts) }, assistant);
             if (this.messages[mode].length > 100) { this.messages[mode].splice(0, 2); }
-            if (kind === 'chat') { this.drafts[mode] = ''; }
+            if (kind === 'chat' && !retry && this.drafts[mode].trim() === prompt) { this.drafts[mode] = ''; }
+            if (this.conversationProject) { this.persistConversation(mode); }
         }
         this.notify();
         try {
@@ -441,6 +631,7 @@ export class NoduTutorModel {
             return { ok: false, error: 'AI 连接已断开' };
         } finally {
             if (current()) { if (review) { this.reviewing = undefined; } else { this.busy = undefined; } }
+            if (!review && request.workspaceId === this.workspaceId && this.conversationProject) { this.persistConversation(mode); }
             this.notify();
             if (review) { this.autoCheckFragment(); }
         }

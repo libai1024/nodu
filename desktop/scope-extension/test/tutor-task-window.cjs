@@ -21,7 +21,7 @@ function component(file,name,props){
 }
 function setup(overrides={}) {
  const calls=[], state={revision:2,status:'active',goal:'串口输出',title:'USART1 串口输出',steps:Array.from({length:5},(_,i)=>({id:`step-${i+1}`,title:`步骤 ${i+1}`,goal:'写代码',path:i===2?'Core/Inc/board.h':'Core/Src/main.c'})),current:2,fragment:{answer:{guidance:{anchorLine:17}}}};
- const tutor={workspaceId:'test',goalState:state,progress:{steps:{}},buffer:{path:'Core/Inc/board.h'},configured:true,currentStep:()=>undefined,goalAction:async(...args)=>calls.push(['goal',...args]),setDisplay:(...args)=>calls.push(['display',...args]),send:(...args)=>calls.push(['send',...args]),...overrides};
+ const tutor={workspaceId:'test',goalState:state,progress:{steps:{},decisions:{}},buffer:{path:'Core/Inc/board.h'},configured:true,currentStep:()=>undefined,goalAction:async(...args)=>calls.push(['goal',...args]),setDisplay:(...args)=>calls.push(['display',...args]),send:(...args)=>calls.push(['send',...args]),...overrides};
  const props={tutor,narrow:false,prepare:()=>calls.push(['prepare']),open:(...a)=>calls.push(['open',...a]),openPanel:()=>calls.push(['panel'])};const c=component('browser/nodu-tutor-task-window.js','TutorTaskWindow',props);c.render();return{c,tutor,calls,props};
 }
 test('task click opens the mapped file and active anchor without changing progress',()=>{
@@ -54,4 +54,70 @@ test('narrow editor starts collapsed and workspace change clears editing draft',
 });
 test('completed view cannot award build or hardware success',()=>{
  const {c,tutor,calls}=setup();tutor.goalState.status='complete';tutor.goalState.current=5;tutor.goalState.fragment=undefined;c.render();assert.ok(c.text(c.tree).includes('代码跟写完成'));assert.equal(c.button('检查当前步骤'),undefined);assert.deepEqual(calls,[]);
+});
+
+function setupCourse() {
+ const {c,tutor,calls,props}=setup();
+ const step=(id,title,extra={})=>({id,title,kind:'code',goal:`完成 ${title}`,why:`理解 ${title}`,anchors:[{id:'code',path:`Core/Src/${id}.c`,marker:`TUTOR(${id})`}],requirements:[{id:'check',text:`核对 ${title}`}],dependsOn:[],guidance:[{id:'sample',lines:['Board_Init();']}],...extra});
+ tutor.goalState={status:'none',revision:0,steps:[],current:0};
+ tutor.plan={id:'uart',contentHash:'course-one',title:'UART 课程',steps:[
+  step('init','初始化'),
+  step('choose','选择输出方式',{kind:'decide',anchors:[],options:[{id:'uart',label:'串口',available:true},{id:'usb',label:'USB',available:false}]}),
+  step('send','发送消息',{dependsOn:[{stepId:'init',mode:'required'}]})
+ ]};
+ tutor.progress={steps:{},decisions:{},current:'init'};
+ tutor.currentStep=()=>tutor.plan.steps.find(s=>s.id===tutor.progress.current);
+ tutor.available=id=>tutor.plan.steps.find(s=>s.id===id)?.dependsOn.every(d=>d.mode==='advisory'||tutor.progress.steps[d.stepId]);
+ tutor.action=async action=>{calls.push(['course',JSON.parse(JSON.stringify(action))]);if(action.type==='select')tutor.progress.current=action.stepId;if(action.type==='decide')tutor.progress.decisions[action.stepId]=action.optionId;};
+ props.revealStep=()=>calls.push(['reveal']);
+ c.render();c.render();return{c,tutor,calls,props};
+}
+test('course rows select by stable ID, protect dependencies and allow a decision without a file',async()=>{
+ const {c,tutor,calls}=setupCourse();
+ assert.equal(c.button('发送消息').props.disabled,true);c.button('发送消息').props.onClick();await c.flush();assert.deepEqual(calls,[]);
+ assert.equal(c.button('选择输出方式').props.disabled,false);c.button('选择输出方式').props.onClick();await c.flush();
+ assert.deepEqual(calls,[['course',{type:'select',stepId:'choose'}]]);assert.equal(tutor.currentStep().id,'choose');
+ assert.equal(c.button('打开 Core/Src/init.c：初始化').props.disabled,undefined);
+ c.button('打开 Core/Src/init.c：初始化').props.onClick();assert.deepEqual(calls[1],['open','Core/Src/init.c',1]);
+});
+test('course details keep explanations, requirements, choices and code out of the default task view',async()=>{
+ const {c,tutor,calls}=setupCourse();assert.equal(c.find(n=>n.props?.['aria-label']==='步骤详情'),undefined);
+ c.button('步骤详情').props.onClick();c.render();assert.ok(c.text(c.tree).includes('理解 初始化'));assert.ok(c.text(c.tree).includes('核对 初始化'));
+ assert.ok(c.text(c.tree).includes('Board_Init();'));
+ c.button('选择输出方式').props.onClick();await c.flush();assert.equal(c.button('USB').props.disabled,true);
+ c.button('串口').props.onClick();await c.flush();assert.deepEqual(calls[1],['course',{type:'decide',stepId:'choose',optionId:'uart'}]);
+ assert.equal(c.button('串口').props['aria-pressed'],true);assert.equal(tutor.progress.decisions.choose,'uart');
+ c.tree.props.onKeyDown({key:'Escape',preventDefault(){},stopPropagation(){}});c.render();assert.equal(c.find(n=>n.props?.['aria-label']==='步骤详情'),undefined);assert.ok(c.button('初始化'));
+});
+test('course self-check and reopening preserve their original distinction and exact marker navigation',async()=>{
+ const {c,tutor,calls}=setupCourse();
+ c.button('打开 Core/Src/init.c：初始化').props.onClick();assert.deepEqual(calls,[['reveal']]);
+ c.button('任务操作').props.onClick();c.render();c.button('定位代码').props.onClick();assert.deepEqual(calls[1],['reveal']);
+ c.render();c.button('任务操作').props.onClick();c.render();c.button('自查完成').props.onClick();await c.flush();
+ assert.deepEqual(calls[2],['course',{type:'manualCheck',stepId:'init'}]);
+ tutor.progress.steps.init={status:'self-checked'};c.render();assert.equal(c.button('发送消息').props.disabled,false);
+ c.button('任务操作').props.onClick();c.render();c.button('重新练习').props.onClick();await c.flush();
+ assert.deepEqual(calls[3],['course',{type:'reopen',stepId:'init'}]);assert.equal(calls.some(call=>call[0]==='goal'),false);
+});
+test('completed courses can select a passed step or reset, and resetting needs explicit confirmation',async()=>{
+ const {c,tutor,calls}=setupCourse();
+ tutor.progress.steps={init:{status:'self-checked'},choose:{status:'self-checked'},send:{status:'self-checked'}};tutor.progress.current=undefined;c.render();
+ assert.ok(c.text(c.tree).includes('课程已自查'));assert.equal(c.button('检查当前步骤'),undefined);
+ c.button('任务操作').props.onClick();c.render();c.button('重置进度').props.onClick();c.render();assert.deepEqual(calls,[]);
+ c.button('取消').props.onClick();c.render();assert.deepEqual(calls,[]);
+ c.button('初始化').props.onClick();await c.flush();assert.equal(tutor.progress.current,'init');
+ c.button('任务操作').props.onClick();c.render();assert.ok(c.button('重新练习'));c.button('重置进度').props.onClick();c.render();c.button('重置').props.onClick();await c.flush();
+ assert.deepEqual(calls,[['course',{type:'select',stepId:'init'}],['course',{type:'reset'}]]);
+});
+test('course controls gate code checks and concurrent persistence; errors remain visible',async()=>{
+ const {c,tutor,calls}=setupCourse();tutor.buffer=undefined;c.render();assert.equal(c.button('检查当前步骤').props.disabled,true);
+ tutor.buffer={path:'Core/Src/init.c'};const pending=defer();tutor.action=async action=>{calls.push(['course',action]);await pending.promise;tutor.error='学习记录保存失败';};c.render();
+ const select=c.button('选择输出方式');select.props.onClick();select.props.onClick();c.render();assert.equal(c.button('初始化').props.disabled,true);assert.equal(c.button('检查当前步骤').props.disabled,true);
+ assert.equal(calls.length,1);pending.resolve();await c.flush();assert.equal(c.button('初始化').props.disabled,false);assert.ok(c.text(c.find(n=>n.props?.role==='alert')).includes('学习记录保存失败'));
+});
+test('switching course or workspace closes reset confirmation and ignores old pending local state',async()=>{
+ const {c,tutor}=setupCourse();c.button('任务操作').props.onClick();c.render();c.button('重置进度').props.onClick();c.render();
+ tutor.plan={...tutor.plan,contentHash:'course-two'};c.render();c.render();assert.equal(c.button('重置'),undefined);
+ const pending=defer();tutor.action=()=>pending.promise;c.button('选择输出方式').props.onClick();c.render();assert.equal(c.button('初始化').props.disabled,true);
+ tutor.workspaceId='other';c.render();c.render();assert.equal(c.button('初始化').props.disabled,false);pending.resolve();await c.flush();assert.equal(c.button('初始化').props.disabled,false);assert.equal(c.button('重置'),undefined);
 });

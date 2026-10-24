@@ -67,15 +67,15 @@ class TutorConnection {
             } satisfies import('./tutor-model-gateway').TutorModelProvider;
             const goals = new TutorGoalSession(goalStore, provider, (id, buffer) => host.context(id, buffer), (id, buffer) => host.authorize(id, buffer), () => {
                 for (const other of hub.connections) { try { void Promise.resolve(other.client?.onGoalsChanged()).catch(() => undefined); } catch { /* closed */ } }
-            });
+            }, (id, contexts) => host.contexts(id, 'teach', contexts));
             const chat = new TutorChatSession(provider, {
                 onDidChange: event => notify(c => c.onDidChange(event)),
                 onChatDelta: event => notify(c => c.onChatDelta(event)),
                 onWorkspacesChanged: () => undefined, onAISettingsChanged: () => undefined, onGoalsChanged: () => undefined,
-            }, (id, buffer) => host.authorize(id, buffer), async (id, buffer) => {
-                const project = await host.context(id, buffer), state = await goalStore.read(project.key);
+            }, (id, buffer, mode) => host.authorize(id, buffer, mode === 'ask'), async (id, buffer, mode) => {
+                const project = await host.context(id, buffer, mode === 'ask'), state = await goalStore.read(project.key);
                 return { project, goal: state.goal, step: state.steps[state.current], status: state.status };
-            });
+            }, (id, mode, contexts) => host.contexts(id, mode, contexts));
             /** Mutations reach every other window so their settings and model pickers stay current. */
             const changed = async () => {
                 for (const other of hub.connections) {
@@ -113,6 +113,7 @@ class TutorConnection {
                 chat: (request: Parameters<TutorService['chat']>[0]) => chat.chat(request),
                 cancelChat: async (id: string) => { checks.get(id)?.abort(); chat.cancel(id); goals.cancel(id); },
                 clearChat: async (id: string, mode: 'teach' | 'ask') => { await host.authorize(id); chat.clear(id, mode); },
+                restoreChatHistory: (id: string, epoch: number, mode: 'teach' | 'ask', messages: Parameters<TutorService['restoreChatHistory']>[3]) => chat.restore(id, epoch, mode, messages),
                 goalSnapshot: (id: string) => goals.snapshot(id),
                 goal: async (request: Parameters<TutorService['goal']>[0]) => {
                     if (request.action === 'check' && request.buffer) {
@@ -122,6 +123,9 @@ class TutorConnection {
                     return goals.run(request);
                 },
                 inspectBuffer: inspect,
+                listChatContextFiles: async (id: string) => (await host.context(id, undefined, true)).files,
+                readChatContext: (id: string, path: string) => host.readContext(id, path),
+                authorizeChatContexts: (id: string, mode: 'ask' | 'teach', contexts: Parameters<TutorService['authorizeChatContexts']>[2]) => host.contexts(id, mode, contexts),
                 resolveReference: (id: string, path: string, line: number) => host.reference(id, path, line),
             });
             if (closed) { chat.dispose(); goals.dispose(); host.dispose(); }

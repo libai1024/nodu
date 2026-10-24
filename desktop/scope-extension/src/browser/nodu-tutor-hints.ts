@@ -48,6 +48,7 @@ class TutorEditorController implements Disposable {
             if (!this.composing && event.position.lineNumber !== this.line && this.changed.delete(this.line)) { this.enqueue(this.line); }
             this.line = event.position.lineNumber; this.updateContext(); this.render();
         }));
+        if (control.onDidChangeCursorSelection) { this.disposables.push(control.onDidChangeCursorSelection(() => this.updateContext())); }
         this.disposables.push(control.onDidFocusEditorText(() => { this.updateContext(); this.render(); }));
         this.disposables.push(control.onDidLayoutChange(() => this.render()));
         // MonacoEditorModel is the document behind Theia's EditorWidget; it owns the save event.
@@ -58,11 +59,13 @@ class TutorEditorController implements Disposable {
         this.disposables.push(control.onDidChangeModel(() => { this.clear(); this.restoreHistory(); this.before = control.getModel()?.getLinesContent() ?? []; this.updateContext(); this.render(); }));
         this.restoreHistory(); this.updateContext(); this.render();
     }
-    private buffer(line = this.control.getPosition()?.lineNumber ?? 1): TutorBuffer | undefined {
+    private buffer(line = this.control.getPosition()?.lineNumber ?? 1, chat = false): TutorBuffer | undefined {
         const model = this.control.getModel(), root = this.tutor.rootUri;
         const relative = root?.relative(this.widget.editor.uri)?.toString();
-        if (!model || model.isDisposed() || !relative || relative.startsWith('../') || !/\.(c|h|cpp|hpp|cc)$/i.test(relative) || model.getValueLength() > 32000) { return; }
-        return { path: relative, text: model.getValue(), version: model.getVersionId(), line: Math.min(line, model.getLineCount()) };
+        if (!model || model.isDisposed() || !relative || relative.startsWith('../') || !(/\.(c|h|cpp|hpp|cc)$/i.test(relative) || chat && this.tutor.mode === 'ask' && /\.py$/i.test(relative)) || model.getValueLength() > 32000) { return; }
+        const range = this.control.getSelection?.();
+        const selection = range && !range.isEmpty() ? { startLine: range.startLineNumber, endLine: range.endLineNumber, text: model.getValueInRange(range) } : undefined;
+        return { path: relative, text: model.getValue(), version: model.getVersionId(), line: Math.min(line, model.getLineCount()), ...(selection ? { selection } : {}) };
     }
     private historyKey(): string | undefined {
         const buffer = this.buffer(), root = this.tutor.rootUri;
@@ -92,7 +95,7 @@ class TutorEditorController implements Disposable {
             this.tasks.set(decoration, { ...task, decoration, version: model.getVersionId() });
         }
     }
-    private updateContext(): void { if (this.active()) { this.tutor.updateBuffer(this.buffer()); } }
+    private updateContext(): void { if (this.active()) { this.tutor.updateBuffer(this.buffer(undefined, true)); } }
     private tutorChanged(): void {
         if (this.disposed) { return; }
         // Workspace authorization can finish after the editor was restored. Publish
@@ -365,6 +368,7 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         this.taskRoot?.render(React.createElement(TutorTaskWindow, {
             tutor: this.tutor, narrow: bounds.width < 640,
             prepare: () => void this.prepareGoal(),
+            revealStep: () => void this.commands.executeCommand(TUTOR_COMMANDS.revealStep),
             open: (path: string, line: number) => void this.commands.executeCommand(TUTOR_COMMANDS.openReference, path, line),
             openPanel: () => void this.commands.executeCommand(TUTOR_COMMANDS.openPanel),
             move: (dx: number, dy: number) => this.moveTask(dx, dy),
@@ -428,7 +432,7 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
                 if (!widget || !current()) { return; }
                 const control = MonacoEditor.get(widget)?.getControl();
                 control?.setPosition({ lineNumber: reference.line, column: 1 }); control?.revealLineInCenterIfOutsideViewport(reference.line); control?.focus();
-            } catch (error) { if (current()) { this.tutor.error = error instanceof Error ? error.message : '无法打开代码文件'; this.tutor.notify(); } }
+            } catch (error) { if (current()) { this.tutor.error = error instanceof Error ? error.message : '无法打开代码文件'; this.tutor.notify(); } return false; }
         }, ...available });
         const toggle = (id: string, label: string, key: 'hintsVisible' | 'highlightsVisible' | 'annotationsVisible' | 'floatVisible'): void => {
             commands.registerCommand({ id, label, category: 'Nodu' }, { execute: () => this.tutor.setDisplay(key, !this.tutor[key]), isToggled: () => this.tutor[key], ...available });

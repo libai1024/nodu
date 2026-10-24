@@ -11,6 +11,7 @@ const React = require('react');
 const { renderToStaticMarkup } = require('react-dom/server');
 const filename = path.join(__dirname, '../lib/browser/nodu-tutor-widget.js');
 const actualRequire = createRequire(filename);
+require.extensions['.css'] = () => undefined;
 const exported = {};
 const noDecorator = () => () => undefined;
 const stubs = {
@@ -28,7 +29,7 @@ vm.runInNewContext(`${fs.readFileSync(filename, 'utf8')}\nexports.TutorPanel = T
 });
 function tutor(overrides = {}) {
     return {
-        workspaceId: 'project', mode: 'teach', busy: undefined, error: undefined,
+        workspaceId: 'project', mode: 'teach', busy: undefined, error: undefined, pins: [], currentContextIncluded: true, connectionState: 'connected',
         currentStep: () => undefined, messages: { teach: [], ask: [] }, drafts: { teach: '', ask: '' },
         goalState: { status: 'none', steps: [], current: 0 }, progress: { steps: {} },
         ...overrides,
@@ -61,12 +62,37 @@ test('empty sidebar has one composer prompt with mode before model and no canned
     assert.ok(html.indexOf('aria-label="对话模式"') < html.indexOf('aria-label="模型"'));
 });
 test('request failures, stop, reconnect and model setup remain visible', () => {
-    const html = render(tutor({ error: '连接断开', busy: { goal: 'check' }, settings: { providers: [] }, configured: false,
+    const html = render(tutor({ error: '连接断开', connectionState: 'disconnected', busy: { goal: 'check' }, settings: { providers: [] }, configured: false,
         messages: { teach: [{ id: 'failed', role: 'assistant', status: 'failed', text: '', note: '响应中断' }], ask: [] } }));
-    for (const text of ['连接断开', '重连', '配置密钥', '响应中断', 'aria-label="停止"', '正在检查片段']) assert.ok(html.includes(text), text);
+    for (const text of ['连接已断开', '重连', '配置', '未收到回复', 'aria-label="停止"', '正在检查片段']) assert.ok(html.includes(text), text);
 });
-test('standalone courses retain course-specific decisions and manual review', () => {
+test('standalone course controls live only in the floating task window', () => {
     const step = { id: 'one', title: '初始化串口', goal: '配置 USART1', why: '', requirements: [], kind: 'code' };
     const html = render(tutor({ plan: { steps: [step] }, currentStep: () => step, available: () => true }));
-    for (const text of ['课程步骤', '当前步骤', '自查完成', '重置进度', '定位代码']) assert.ok(html.includes(text), text);
+    for (const text of ['课程步骤', '当前步骤', '自查完成', '重置进度', '定位代码']) assert.ok(!html.includes(text), text);
+});
+
+test('new operation errors remain inspectable after a failed reply', () => {
+    const html = render(tutor({ error: '代码已更改', connectionState: 'connected', messages: { teach: [{ id: 'failed', role: 'assistant', status: 'failed', text: '', note: '响应中断' }], ask: [] } }));
+    assert.match(html, /查看请求详情/);
+    assert.match(html, /未能完成请求/);
+});
+test('backend reconnect stays next to composer and never becomes an alert card', () => {
+    const html = render(tutor({ connectionState: 'connecting', canSendChat: false, drafts: { teach: '保留草稿', ask: '' } }));
+    assert.match(html, /正在重新连接/);
+    assert.ok(html.indexOf('正在重新连接') > html.indexOf('nodu-ai-log'));
+    assert.doesNotMatch(html, /role="alert"|codicon-warning|nodu-ai-error/);
+    assert.match(html, /aria-label="发送"[^>]*disabled/);
+});
+test('current file navigation and removal are separate controls', () => {
+    const html = render(tutor({ buffer: { path: 'Core/Src/main.c', line: 12, text: 'int main(void) {}', version: 1 }, includeCode: true }));
+    assert.match(html, /Core\/Src\/main.c/);
+    assert.match(html, /移除 main.c/);
+    assert.doesNotMatch(html, /点击移除/);
+});
+test('local history storage failure offers saving without reconnect or replay', () => {
+    const html = render(tutor({ historyStorageError: '对话暂未保存，内容保留在当前窗口' }));
+    assert.match(html, /对话暂未保存/);
+    assert.match(html, /重试保存/);
+    assert.doesNotMatch(html, /重连|role="alert"|codicon-warning/);
 });

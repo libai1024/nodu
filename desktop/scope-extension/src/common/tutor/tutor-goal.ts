@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import type { TutorContext } from './tutor-context';
 import type { TutorBuffer, TutorAnswer } from './tutor-ai-protocol';
 import type { TutorLocalCheck } from './tutor-local-check';
 import { isSafeCoursePath } from './tutor-course';
@@ -24,7 +25,7 @@ export interface TutorGoalRequest {
     id: string; workspaceId: string; revision: number;
     action: 'propose' | 'confirm' | 'pause' | 'resume' | 'cancel' | 'fragment' | 'check' | 'add' | 'remove' | 'undo-remove';
     stepId?: string;
-    prompt?: string; buffer?: TutorBuffer; placement?: 'suggest';
+    prompt?: string; buffer?: TutorBuffer; contexts?: TutorContext[]; placement?: 'suggest';
 }
 export type TutorGoalResult = { ok: true; state: TutorGoalState; presentation?: { source: TutorBuffer; answer: TutorAnswer } } | { ok: false; error: string; cancelled?: boolean };
 export const emptyGoal = (): TutorGoalState => ({ revision: 0, status: 'none', steps: [], current: 0 });

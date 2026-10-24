@@ -38,3 +38,13 @@
 .nodu-task-list li:hover .nodu-task-file, .nodu-task-list li:focus-within .nodu-task-file, .nodu-task-list .is-current .nodu-task-file { opacity: 1; }
 
 .nodu-task-state .codicon { color: inherit; }
+.nodu-task-details { padding: 7px 10px; border-top: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); overflow-wrap: anywhere; }
+.nodu-task-details p { margin: 0 0 7px; color: var(--theia-descriptionForeground); }
+.nodu-task-details .nodu-task-goal { color: var(--theia-foreground); }
+.nodu-task-details ul { margin: 0 0 7px; padding-left: 16px; }
+.nodu-task-details li + li { margin-top: 4px; }
+.nodu-task-options { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
+.nodu-task-options button { padding: 4px 7px; border: 1px solid var(--theia-panel-border); border-radius: 3px; }
+.nodu-task-options button[aria-pressed="true"] { background: var(--theia-list-inactiveSelectionBackground); }
+.nodu-task-details pre { margin: 6px 0 0; padding: 6px; overflow: auto; background: var(--theia-editor-background); font-family: var(--theia-code-font-family); font-size: 11px; }
+.nodu-task-details pre:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
