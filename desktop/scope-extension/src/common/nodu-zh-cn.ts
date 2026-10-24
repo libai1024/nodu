@@ -9,6 +9,8 @@
 // Keys are validated against the compiled Theia libs in test/backend-validation.cjs.
 
 export const NODU_ZH_CN: Record<string, string> = {
+    'recently opened': '最近打开',
+    'file results': '文件',
     // ---- menubar ----
     'File': '文件',
     'Edit': '编辑',

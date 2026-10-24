@@ -1,0 +1,76 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-minimal-action {
+    --nodu-action-build-color: #e4b95f;
+    --nodu-action-flash-color: #7ea6ff;
+    --nodu-action-run-color: #6ccfa0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--theia-widget-border, #8884);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--theia-foreground);
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+}
+body.theia-light .nodu-minimal-action,
+body.theia-hcLight .nodu-minimal-action {
+    --nodu-action-build-color: #9b6500;
+    --nodu-action-flash-color: #2563c4;
+    --nodu-action-run-color: #16835d;
+}
+.nodu-minimal-action:not(.busy):not(:disabled)[data-action="build"] { color: var(--nodu-action-build-color); }
+.nodu-minimal-action:not(.busy):not(:disabled)[data-action="flash"] { color: var(--nodu-action-flash-color); }
+.nodu-minimal-action:not(.busy):not(:disabled)[data-action="run"] { color: var(--nodu-action-run-color); }
+.nodu-minimal-action:hover,
+.nodu-minimal-action.open {
+    background: var(--theia-toolbar-hoverBackground, rgba(128, 128, 128, .12));
+}
+.nodu-minimal-action:focus-visible {
+    outline: 1px solid var(--theia-focusBorder);
+    outline-offset: 2px;
+}
+.nodu-minimal-action:disabled {
+    color: var(--theia-disabledForeground);
+    cursor: default;
+}
+.nodu-minimal-action.busy:not(:disabled) { color: var(--theia-errorForeground); }
+.nodu-minimal-fan {
+    position: fixed;
+    z-index: 12000;
+    pointer-events: none;
+}
+.nodu-minimal-fan-circle {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--theia-menu-border, var(--theia-widget-border, #8885));
+    border-radius: 50%;
+    padding: 0;
+    background: var(--theia-menu-background, var(--theia-editor-background));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .09);
+    color: var(--theia-foreground);
+    cursor: pointer;
+    pointer-events: auto;
+    outline: none;
+}
+.nodu-minimal-fan-circle:hover {
+    background: var(--theia-list-hoverBackground);
+}
+.nodu-minimal-fan-circle[aria-checked="true"] {
+    color: var(--theia-focusBorder, #3e61ed);
+    border-color: var(--theia-focusBorder, #3e61ed);
+}
+.nodu-minimal-fan-circle:focus-visible {
+    outline: 1px solid var(--theia-focusBorder);
+    outline-offset: 2px;
+}

@@ -9,6 +9,7 @@ export const C_COMMANDS = {
     openBuildLocation: 'nodu.c.open-build-location',
     rebuild: 'nodu.c.rebuild',
     run: 'nodu.c.run',
+    flash: 'nodu.c.flash',
     stop: 'nodu.c.stop',
     reset: 'nodu.c.reset',
     identify: 'nodu.c.identify',

@@ -217,7 +217,7 @@ export function scopeColorDefaults(): NoduColorDefault[] {
         { id: 'scope.ok', description: 'Nodu 状态：已连接 / 成功。', defaults: both('ok') },
         { id: 'scope.warn', description: 'Nodu 状态：风险，例如写入中勿断电。', defaults: both('warn') },
         { id: 'scope.signal', description: 'Nodu 点亮黄：标志、学习里程碑与教学高光。', defaults: both('signal') },
-        { id: 'scope.tutorHighlightBackground', description: '教学代码高光的品牌黄底色。', defaults: both('signal-bg', '#3D372A', '#FFF1C7') },
+        { id: 'scope.tutorHighlightBackground', description: '教学代码高光的品牌黄底色。', defaults: both('signal-bg') },
         { id: 'scope.tutorGhostForeground', description: '代码临摹范字的浅灰色。', defaults: { dark: '#7F8793', light: '#858B95', hcDark: '#FFFFFF', hcLight: l.text } }
     ];
 }

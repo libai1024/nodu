@@ -1,0 +1,141 @@
+/* SPDX-License-Identifier: MIT */
+#nodu-workbench-body { min-width: 0; min-height: 0; overflow: hidden; }
+.nodu-minimal-rail, .lm-TabBar.theia-app-left {
+    --nodu-rail-active-background: color-mix(in srgb, var(--theia-textLink-foreground) 13%, transparent);
+    --nodu-rail-active-foreground: var(--theia-textLink-foreground);
+}
+.scope-toolbar-widget.nodu-minimal-toolbar {
+    width: 52px; min-width: 52px; max-width: 52px;
+    min-height: 0; max-height: none; height: auto;
+    border: 0; border-right: 1px solid var(--theia-panel-border);
+    background: var(--theia-sideBar-background);
+}
+.nodu-minimal-rail {
+    box-sizing: border-box; height: 100%; width: 100%; display: flex;
+    flex-direction: column; align-items: center; padding: 10px 0 10px;
+    color: var(--theia-foreground); position: relative;
+}
+.nodu-minimal-logo, .nodu-minimal-tool {
+    display: flex; align-items: center; justify-content: center; flex: 0 0 36px;
+    width: 36px; height: 36px; min-width: 36px; padding: 0;
+    border: 1px solid transparent; border-radius: 10px; background: transparent;
+    color: var(--theia-foreground); cursor: pointer; box-sizing: border-box;
+}
+.nodu-minimal-logo { margin-bottom: 14px; }
+.nodu-minimal-logo .scope-brand { padding: 0; margin: 0; gap: 0; }
+.nodu-minimal-logo .scope-brand-mark { width: 28px; height: 28px; }
+.nodu-minimal-logo .scope-brand-name, .nodu-minimal-logo .scope-brand-subtitle { display: none; }
+.nodu-minimal-tools { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.nodu-minimal-tool .codicon { font-size: 20px; }
+.nodu-minimal-tool:hover, .nodu-minimal-logo:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-minimal-tool[aria-pressed="true"] {
+    background: var(--nodu-rail-active-background);
+    color: var(--nodu-rail-active-foreground);
+}
+.nodu-minimal-tool:focus-visible, .nodu-minimal-logo:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
+.nodu-minimal-primary { margin-top: auto; padding-top: 12px; }
+
+/* Keep the professional activity bar hit area; selection sits around its icon. */
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab:hover,
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current {
+    background: transparent;
+    box-shadow: none;
+}
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab::before {
+    content: '';
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    pointer-events: none;
+}
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab:hover::before {
+    background: var(--theia-toolbar-hoverBackground);
+}
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current::before {
+    background: var(--nodu-rail-active-background);
+}
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab .lm-TabBar-tabIcon { position: relative; }
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current .lm-TabBar-tabIcon {
+    color: var(--nodu-rail-active-foreground);
+}
+#theia-app-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current .lm-TabBar-tabIcon:not(.codicon):not(.fa):not(.file-icon) {
+    background-color: var(--nodu-rail-active-foreground);
+}
+.nodu-minimal-rail .nodu-c-guide {
+    position: fixed;
+    left: 60px;
+    bottom: 40px;
+    top: auto;
+    transform: none;
+    box-sizing: border-box;
+    max-width: calc(100vw - 76px);
+    max-height: calc(100vh - 56px);
+    overflow: auto;
+    overflow-wrap: anywhere;
+    border-radius: 10px;
+    z-index: 1000;
+}
+.nodu-toolbar-device-popover { z-index: 1002; overflow: auto; margin: 0; }
+.nodu-toolbar-device-popover[hidden] { display: none; }
+
+/* Compact STM32 device form uses the same scale as the minimal settings popover. */
+.nodu-toolbar-device-popover.nodu-toolbar-device-compact {
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: var(--theia-editorWidget-background, var(--theia-editor-background));
+    box-shadow: 0 4px 16px var(--theia-widget-shadow, #0002);
+    overscroll-behavior: contain;
+}
+.nodu-c-device-compact { padding: 8px; font-size: 12px; line-height: 18px; }
+.nodu-c-compact-heading { display: flex; align-items: center; justify-content: space-between; min-height: 28px; padding: 0 6px; gap: 8px; }
+.nodu-c-compact-heading strong { font-size: 13px; font-weight: 600; }
+.nodu-c-compact-heading .scope-toolbar-icon { width: 24px; height: 24px; min-height: 24px; padding: 0; border-radius: 4px; }
+.nodu-c-compact-specs { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0 6px 6px; padding-bottom: 8px; border-bottom: 1px solid var(--theia-panel-border); color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-c-compact-specs > div { display: flex; gap: 4px; }
+.nodu-c-compact-specs dt, .nodu-c-compact-specs dd { margin: 0; font: inherit; }
+.nodu-c-compact-row { display: flex; align-items: center; justify-content: space-between; min-height: 32px; gap: 12px; padding: 0 6px; }
+.nodu-c-compact-row > label, .nodu-c-compact-row > span { flex-shrink: 0; white-space: nowrap; }
+.nodu-c-compact-row > .nodu-select { flex: 0 1 194px; width: 194px; height: 26px; border-radius: 5px; text-align: left; justify-content: flex-start; }
+.nodu-c-device-compact button { font: inherit; cursor: pointer; }
+.nodu-c-device-compact button:disabled { opacity: .45; cursor: default; }
+.nodu-c-device-compact button:focus-visible, .nodu-c-device-compact summary:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.nodu-c-method-segments { display: flex; padding: 2px; gap: 2px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 5px; background: var(--theia-input-background); }
+.nodu-c-method-segments label { position: relative; cursor: pointer; }
+.nodu-c-method-segments input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; }
+.nodu-c-method-segments span { display: grid; place-items: center; min-width: 48px; height: 22px; padding: 0 7px; border-radius: 3px; }
+.nodu-c-method-segments input:not(:disabled) + span:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-c-method-segments input:checked + span { background: var(--theia-list-activeSelectionBackground); color: var(--theia-list-activeSelectionForeground); }
+.nodu-c-method-segments input:focus-visible + span { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.nodu-c-method-segments input:disabled + span { opacity: .45; cursor: default; }
+.nodu-c-compact-target > span { display: flex; align-items: center; gap: 5px; }
+.nodu-c-compact-actions { display: flex; gap: 4px; }
+.nodu-c-compact-actions button { height: 24px; padding: 0 9px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 4px; color: var(--theia-foreground); background: transparent; }
+.nodu-c-compact-actions button:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-c-compact-identity, .nodu-c-compact-warning { margin: 2px 6px 6px; overflow-wrap: anywhere; }
+.nodu-c-compact-identity { color: var(--theia-descriptionForeground); }
+.nodu-c-compact-warning { color: var(--theia-editorWarning-foreground); }
+.nodu-c-device-compact details { margin-top: 4px; }
+.nodu-c-device-compact summary { min-height: 28px; line-height: 28px; padding: 0 6px; cursor: pointer; border-radius: 4px; }
+.nodu-c-device-compact summary:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-c-compact-backups summary > span { float: right; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-c-compact-backups ul { list-style: none; padding: 0 6px 0 18px; margin: 0; max-height: 180px; overflow: auto; overscroll-behavior: contain; }
+.nodu-c-compact-backups li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 0; }
+.nodu-c-compact-backups li > div { display: flex; flex-direction: column; }
+.nodu-c-compact-backups li > button { flex-shrink: 0; white-space: nowrap; }
+.nodu-c-compact-backup-chip { font-weight: 500; overflow-wrap: anywhere; }
+.nodu-c-compact-backups time { color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
+.nodu-c-compact-settings { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 32px; padding: 0 6px; margin-top: 6px; border: 0; border-top: 1px solid var(--theia-panel-border); background: transparent; color: var(--theia-foreground); text-align: left; }
+.nodu-c-compact-settings:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-c-device-compact .nodu-c-diagnosis-compact { margin: 4px 6px; padding: 6px 0; border: 0; border-top: 1px solid var(--theia-panel-border); background: transparent; }
+.nodu-c-diagnosis-compact .nodu-c-diagnosis-title { font-size: 12px; font-weight: 400; margin: 0; overflow-wrap: anywhere; }
+.nodu-c-diagnosis-compact .nodu-c-diagnosis-actions { margin-top: 3px; }
+.nodu-c-diagnosis-compact details { color: var(--theia-descriptionForeground); }
+@media (max-height: 430px) {
+    .nodu-minimal-rail { padding-top: 4px; padding-bottom: 4px; }
+    .nodu-minimal-logo { margin-bottom: 3px; }
+    .nodu-minimal-tools { gap: 2px; }
+}

@@ -34,7 +34,16 @@ import { TUTOR_COMMANDS, TUTOR_MENU } from './nodu-tutor-hints';
 import { NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
 import { NoduBrand } from './scope-brand';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
-import { NoduCToolbar } from './nodu-embedded-toolbar';
+import { NoduCToolbar, BootGuide } from './nodu-embedded-toolbar';
+import { NoduCDevicePanel } from './nodu-embedded-device';
+import { NoduMinimalAction } from './nodu-minimal-action';
+import { MinimalAction, MINIMAL_ACTIONS } from './nodu-minimal-action-state';
+import { NoduMinimalPreferences } from './nodu-minimal-preferences';
+import { NoduMinimalSettingsHost } from './nodu-minimal-settings-host';
+import { NoduToolbarPopover } from './nodu-toolbar-popover';
+import { PreferenceService } from '@theia/core/lib/common/preferences/preference-service';
+import { PreferenceScope } from '@theia/core/lib/common/preferences/preference-scope';
+import '../../style/minimal-workbench.css';
 import { C_COMMANDS } from './nodu-embedded-commands';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { SCOPE_LIGHT_THEME_ID, SCOPE_THEME_ID } from './scope-theme';
@@ -99,6 +108,10 @@ export class ScopeToolbar extends ReactWidget {
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     @inject(CommandRegistry) protected readonly commandRegistry!: CommandRegistry;
+    @inject(PreferenceService) protected readonly preferences!: PreferenceService;
+    @inject(MessageService) protected readonly messages!: MessageService;
+    @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    private readonly selectedActions = new Map<string, MinimalAction>();
 
     @postConstruct()
     protected init(): void {
@@ -108,21 +121,23 @@ export class ScopeToolbar extends ReactWidget {
         this.toDispose.push(this.embedded.onDidChange(() => this.update()));
         this.toDispose.push(this.layoutState.onDidChange(() => this.update()));
         this.toDispose.push(this.themes.onDidColorThemeChange(() => this.update()));
+        this.toDispose.push(this.preferences.onPreferenceChanged(() => this.update()));
         // Hint and anchor changes fire often; the toolbar only shows whether a plan exists and the panel is open.
         this.toDispose.push(this.tutor.onDidChange(() => this.update()));
         const outside = (event: PointerEvent): void => {
             const picker = this.node.querySelector('.scope-device-picker');
+            const popover = document.getElementById('scope-device-popover');
             const target = event.target;
             const selectOwner = target instanceof Element ? target.closest<HTMLElement>('[data-nodu-select-trigger]')?.dataset.noduSelectTrigger : undefined;
-            const belongsToPicker = selectOwner && picker?.contains(this.node.ownerDocument.getElementById(selectOwner));
-            if (this.layoutState.deviceOpen && target instanceof Node && !picker?.contains(target) && !belongsToPicker) {
+            const belongsToPicker = selectOwner && (picker?.contains(document.getElementById(selectOwner)) || popover?.contains(document.getElementById(selectOwner)));
+            if (this.layoutState.deviceOpen && target instanceof Node && !picker?.contains(target) && !popover?.contains(target) && !belongsToPicker) {
                 this.layoutState.setDeviceOpen(false);
             }
         };
         const escape = (event: KeyboardEvent): void => {
             if (event.key === 'Escape' && this.layoutState.deviceOpen) {
                 // The first Escape cancels the nested selector; the next closes the device popover.
-                if (this.node.querySelector('.scope-device-picker .nodu-select[aria-expanded="true"]')) { return; }
+                if (document.querySelector('#scope-device-popover .nodu-select[aria-expanded="true"]')) { return; }
                 event.preventDefault(); event.stopPropagation(); this.layoutState.setDeviceOpen(false);
                 this.node.querySelector<HTMLButtonElement>('.scope-device-chip')?.focus();
             }
@@ -134,6 +149,86 @@ export class ScopeToolbar extends ReactWidget {
     }
 
     protected render(): React.ReactNode {
+        return <React.Fragment>
+            {this.layoutState.mode === 'simple' ? this.renderMinimal() : this.renderProfessional()}
+            {!this.embedded.isEsp && <NoduToolbarPopover open={this.layoutState.deviceOpen} simple={this.layoutState.mode === 'simple'} compact={this.layoutState.mode === 'simple' && this.embedded.isC} owner={this.node}>
+                {this.embedded.isC
+                    ? <NoduCDevicePanel model={this.embedded} simple={this.layoutState.mode === 'simple'}
+                        exec={id => { this.layoutState.setDeviceOpen(false); this.execute(id); }}
+                        confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(value => {
+                            if (!this.isDisposed) { this.node.querySelector<HTMLButtonElement>('.scope-device-chip')?.focus({ preventScroll: true }); }
+                            return value === true;
+                        })}
+                        showOutput={() => { this.layoutState.setDeviceOpen(false); this.execute(C_COMMANDS.showOutput); }} />
+                    : <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors}
+                        compact={this.layoutState.mode === 'simple'} onConnected={() => this.layoutState.setDeviceOpen(false)}
+                        showLogs={() => this.execute('scope.show-logs')} showBoardGuide={() => this.execute('scope.board-guide')} />}
+            </NoduToolbarPopover>}
+        </React.Fragment>;
+    }
+
+    private execute(id: string): void {
+        void this.commands.executeCommand(id).catch(() => this.messages.error('操作未完成，请重试'));
+    }
+
+    private currentAction(scope: string): MinimalAction {
+        if (!this.selectedActions.has(scope)) {
+            let stored: string | null = null;
+            try { stored = localStorage.getItem(`nodu.minimal-action:${scope}`); } catch { /* Storage may be unavailable. */ }
+            this.selectedActions.set(scope, MINIMAL_ACTIONS.includes(stored as MinimalAction) ? stored as MinimalAction : 'build-flash');
+        }
+        return this.selectedActions.get(scope)!;
+    }
+
+    private renderMinimal(): React.ReactNode {
+        const c = this.embedded.isC;
+        const scope = this.embedded.project?.path ?? this.layoutState.projectPath;
+        const action = this.currentAction(scope);
+        const icon = (name: string): React.ReactNode => <i className={`codicon codicon-${name}`} aria-hidden="true" />;
+        const panelVisible = c ? this.commandRegistry.isToggled(C_COMMANDS.togglePanel) : this.layoutState.consoleVisible;
+        const savingOptions = c && this.embedded.savingOptions;
+        const busy = c ? (this.embedded.busy && !savingOptions) || !!this.embedded.awaitUser : !this.embedded.isEsp && (this.device.state.running || this.device.busy);
+        const preference = (key: string, value: unknown): Promise<void> => this.preferences.set(key, value, PreferenceScope.User);
+        const toggleDevice = (): void => {
+            this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen);
+            if (c && this.layoutState.deviceOpen) { void this.embedded.refreshDevices(); void this.embedded.loadBackups(); }
+        };
+        return <nav className="nodu-minimal-rail" aria-label="工作区">
+            <button className="nodu-minimal-logo" title={this.layoutState.project} aria-label="项目菜单" aria-haspopup="menu"
+                onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><NoduBrand /></button>
+            <div className="nodu-minimal-tools">
+                <button className="nodu-minimal-tool" aria-label="文件" title="文件" aria-pressed={this.layoutState.filesVisible} onClick={() => this.execute('scope.toggle-files')}>{icon('folder')}</button>
+                <button className="nodu-minimal-tool" aria-label="搜索" title="搜索" onClick={() => this.execute('search-in-workspace.toggle')}>{icon('search')}</button>
+                {!this.embedded.isEsp && <div className="scope-device-picker">
+                    <button className="nodu-minimal-tool scope-device-chip" aria-label="设备" title="设备" aria-haspopup="dialog" aria-controls="scope-device-popover"
+                        aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={toggleDevice}>{icon('circuit-board')}</button>
+                </div>}
+                {!c && !this.embedded.isEsp && <button className="nodu-minimal-tool" aria-label="图像" title="图像" aria-pressed={this.layoutState.visionVisible} onClick={() => this.execute('scope.toggle-vision')}>{icon('device-camera')}</button>}
+                <button className="nodu-minimal-tool" aria-label="终端与输出" title="终端与输出" aria-pressed={panelVisible}
+                    onClick={() => this.execute(c ? C_COMMANDS.togglePanel : 'scope.toggle-console')}>{icon('terminal')}</button>
+            </div>
+            <NoduMinimalSettingsHost panel={this.shell.mainPanel}>
+                <NoduMinimalPreferences layoutNode={this.shell.mainPanel.node} theme={getThemeMode(this.themes.getCurrentTheme().type)}
+                    onTheme={mode => this.themes.setCurrentTheme(mode === 'light' ? SCOPE_LIGHT_THEME_ID : SCOPE_THEME_ID)}
+                    mode={this.layoutState.mode} onMode={async mode => { await this.commands.executeCommand(`scope.layout.${mode}`); this.editors.currentEditor?.activate(); }}
+                    fontSize={this.preferences.get<number>('editor.fontSize', 14)} onFontSize={value => preference('editor.fontSize', value)}
+                    autoSave={this.preferences.get<string>('files.autoSave', 'off') !== 'off'} onAutoSave={value => preference('files.autoSave', value ? 'afterDelay' : 'off')}
+                    wordWrap={this.preferences.get<string>('editor.wordWrap', 'off') !== 'off'} onWordWrap={value => preference('editor.wordWrap', value ? 'on' : 'off')}
+                    tabSize={this.preferences.get<number>('editor.tabSize', 4)} onTabSize={value => preference('editor.tabSize', value)}
+                    onAllSettings={() => this.execute('preferences:open')} onOpen={() => this.layoutState.setDeviceOpen(false)} scopeKey={scope} />
+            </NoduMinimalSettingsHost>
+            <div className="nodu-minimal-primary">
+                <NoduMinimalAction action={action} allowSelection={c} busy={busy} disabled={savingOptions} scopeKey={scope}
+                    stopDisabled={!c && !this.embedded.isEsp && !this.device.canStop}
+                    onSelect={next => { this.selectedActions.set(scope, next); try { localStorage.setItem(`nodu.minimal-action:${scope}`, next); } catch { /* Keep the session selection. */ } this.update(); }}
+                    onExecute={() => this.execute(c ? action === 'build' ? C_COMMANDS.build : action === 'flash' ? C_COMMANDS.flash : C_COMMANDS.run : this.embedded.isEsp ? 'task:run:build' : 'scope.run-current')}
+                    onStop={() => this.execute(c ? C_COMMANDS.stop : 'scope.stop-device')} />
+            </div>
+            {c && <BootGuide model={this.embedded} exec={id => this.execute(id)} />}
+        </nav>;
+    }
+
+    private renderProfessional(): React.ReactNode {
         // STM32 C projects get their own buttons (UI-DESIGN §3); K210 projects keep this toolbar.
         if (this.embedded.isC) { return this.renderC(); }
         if (this.embedded.isEsp) { return this.renderEsp(); }
@@ -151,7 +246,7 @@ export class ScopeToolbar extends ReactWidget {
         return <header className="scope-workspace-bar" aria-label="Nodu 工具栏">
             <div className="scope-toolbar-start">
                 <NoduBrand />
-                <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单 · ${this.layoutState.project}`} aria-haspopup="menu" title="新建、打开、示例与最近的文件" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span className="nodu-toolbar-project-name">{this.layoutState.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单，${this.layoutState.project}`} aria-haspopup="menu" title="新建、打开、示例与最近的文件" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span className="nodu-toolbar-project-name">{this.layoutState.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
                 <div className="nodu-run-split" role="group" aria-label="运行">
                     <button className={`scope-action scope-action-primary scope-toolbar-run${this.device.state.running ? ' nodu-is-running' : ''}`} disabled={this.device.busy || this.device.state.running} aria-busy={this.device.state.running || undefined} onClick={() => void this.commands.executeCommand('scope.run-current')} title="运行到开发板内存，不保存 · Ctrl / ⌘ Enter"><i className={`codicon ${this.device.state.running ? 'codicon-loading codicon-modifier-spin' : 'codicon-play'}`} aria-hidden="true"/>{this.device.state.running ? '运行中' : '运行'}</button>
                     <button className="scope-action scope-action-primary nodu-run-more" aria-label="更多运行方式" aria-haspopup="menu" title="保存到开发板、设为开机脚本" onClick={event => this.openMenu(NODU_RUN_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
@@ -159,10 +254,7 @@ export class ScopeToolbar extends ReactWidget {
                 <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${this.device.state.running || this.device.busy ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!this.device.canStop} onClick={() => void this.commands.executeCommand('scope.stop-device')} title="停止"><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                 <div className="scope-device-picker">
                     <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || (this.device.connected ? `${board} · 板端配置声明，非硬件实测` : '设备与端口')}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
-                    {/* One permanently mounted form owns drafts/confirmations across popover and mode changes. */}
-                    <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="设备设置" hidden={!this.layoutState.deviceOpen}>
-                        <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors} compact={simple} onConnected={() => this.layoutState.setDeviceOpen(false)} showLogs={() => void this.commands.executeCommand('scope.show-logs')} showBoardGuide={() => void this.commands.executeCommand('scope.board-guide')} />
-                    </div>
+
                 </div>
             </div>
             <div className="scope-toolbar-center">{deviceError ? <button className="nodu-toolbar-alert" onClick={() => void this.commands.executeCommand('scope.show-logs')} title={this.device.error}><i className="codicon codicon-error" aria-hidden="true"/><span>{this.device.error}</span></button> : null}</div>
@@ -183,7 +275,7 @@ export class ScopeToolbar extends ReactWidget {
         return <header className="scope-workspace-bar" aria-label="Nodu 工具栏">
             <div className="scope-toolbar-start">
                 <NoduBrand />
-                <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单 · ${this.layoutState.project}`} aria-haspopup="menu" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span>{this.layoutState.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单，${this.layoutState.project}`} aria-haspopup="menu" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span>{this.layoutState.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
                 <button className="scope-action scope-action-primary" onClick={() => void this.commands.executeCommand('task:run:build')}><i className="codicon codicon-tools" aria-hidden="true"/>编译</button>
                 <button className="scope-action" onClick={() => void this.commands.executeCommand('task:run')}>任务</button>
                 <span className="scope-device-chip-board">{this.embedded.espChip.toUpperCase().replace(/^ESP32(?=.)/, 'ESP32-')}</span>
@@ -217,7 +309,7 @@ export class ScopeToolbar extends ReactWidget {
             setDeviceOpen={open => this.layoutState.setDeviceOpen(open)} exec={id => void this.commands.executeCommand(id)}
             openMenu={(path, anchor) => this.openMenu(path, anchor)} projectMenu={NODU_PROJECT_MENU} moreMenu={NODU_MORE_MENU}
             confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(v => v === true)}
-            tutorButton={tutor} />;
+            tutorButton={tutor} externalDevicePanel />;
     }
 
     /** Toolbar dropdowns are ordinary Theia menus anchored under their button. */
@@ -268,6 +360,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     private layoutPlatform: 'k210' | 'stm32' = 'k210';
     private syncFrame: number | undefined;
     private geometry = '';
+    private workbenchBody?: Widget;
     // Traceback navigation: the editor that started the current run, plus the
     // stderr tail and the highlight ids it produced.
     private runTarget?: { widget: EditorWidget; control: monaco.editor.IStandaloneCodeEditor; model: monaco.editor.ITextModel; version: number; path: string };
@@ -341,11 +434,20 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     async onStart(): Promise<void> {
-        // The shell's vertical BoxLayout places the product toolbar below the native menu/title area.
-        // Leave the top panel intact for Electron window controls and platform menus.
         const shellLayout = this.shell.layout as BoxLayout;
-        shellLayout.insertWidget(1, this.toolbar);
-        BoxLayout.setStretch(this.toolbar, 0);
+        const sideAreas = Array.from(shellLayout.widgets).find(widget => widget.id === 'theia-left-right-split-panel');
+        if (sideAreas) {
+            const body = new Widget();
+            body.id = 'nodu-workbench-body';
+            body.layout = new BoxLayout({ direction: 'left-to-right', spacing: 0 });
+            sideAreas.parent = null;
+            shellLayout.insertWidget(1, body);
+            BoxLayout.setStretch(body, 1);
+            (body.layout as BoxLayout).addWidget(sideAreas);
+            BoxLayout.setStretch(sideAreas, 1);
+            this.workbenchBody = body;
+        }
+        this.positionToolbar();
         // Editors persist local files; ScopeSession supplies synthetic sample frames.
         const channel = this.output.getChannel('Nodu · 示例');
         this.toDispose.push(this.session.onDidLog(line => channel.appendLine(line)));
@@ -377,14 +479,28 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.toDispose.push(this.session.onDidChange(() => {
             if (lastRunning !== this.session.running) { lastRunning = this.session.running; this.updateStatus(); }
         }));
-        this.toDispose.push(this.workspace.onWorkspaceChanged(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目')));
-        void this.workspace.roots.then(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目'));
+        this.toDispose.push(this.workspace.onWorkspaceChanged(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目', roots[0]?.resource.toString() || '')));
+        void this.workspace.roots.then(roots => this.layoutState.setProject(roots[0]?.resource.path.base || '打开项目', roots[0]?.resource.toString() || ''));
         this.toDispose.push(this.embedded.onDidChange(() => {
+            this.updateStatus();
             if (this.layoutApplied && this.layoutPlatform !== (this.embedded.isC ? 'stm32' : 'k210')) {
                 void this.serializeLayout(() => this.applyPlatformLayout());
             }
         }));
         this.updateStatus();
+    }
+
+    private positionToolbar(): void {
+        if (!this.workbenchBody) { return; }
+        const simple = this.layoutState.mode === 'simple';
+        this.toolbar.toggleClass('nodu-minimal-toolbar', simple);
+        const parent = simple ? this.workbenchBody : this.shell;
+        if (this.toolbar.parent !== parent) {
+            this.toolbar.parent = null;
+            (parent.layout as BoxLayout).insertWidget(simple ? 0 : 1, this.toolbar);
+            BoxLayout.setStretch(this.toolbar, 0);
+        }
+        this.toolbar.fit(); this.workbenchBody.fit(); this.shell.fit();
     }
 
     async initializeLayout(): Promise<void> {
@@ -408,6 +524,11 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     onStop(): void { this.clearTracebackDecoration(); this.toDispose.dispose(); this.session.dispose(); this.device.dispose(); }
 
     protected updateStatus(): void {
+        if (this.layoutState.mode === 'simple') {
+            const text = this.embedded.isC ? this.embedded.project!.chip.name : this.embedded.isEsp ? this.embedded.espChip.toUpperCase() : 'K210';
+            void this.status.setElement('scope:minimal-target', { text, alignment: StatusBarAlignment.LEFT, priority: 1100,
+                command: this.embedded.isEsp ? undefined : 'scope.show-devices', tooltip: '设备' });
+        } else { this.status.removeElement('scope:minimal-target'); }
         if (this.embedded.isC) {
             for (const item of ['scope:device', 'scope:demo', 'scope:firmware', 'scope:serial-port', 'scope:fps']) {
                 this.status.removeElement(item);
@@ -443,6 +564,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
             if (this.layoutPlatform === 'k210') { previous.vision = this.layoutState.visionVisible; }
         }
         this.layoutState.setMode(mode);
+        this.positionToolbar();
         // Simple mode has no AI; also close a sidebar restored from a professional-mode layout.
         const tutor = mode === 'simple' ? this.shell.getWidgetById(NoduTutorWidget.ID) : undefined;
         // Closing for simple mode keeps the professional-mode preference.
@@ -466,7 +588,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         await this.openTutorSidebar(!this.embedded.isC && profile.vision);
         // The bottom area has one shared visibility, active page and set of sessions.
         // Changing the surrounding layout must not hide/reveal it or move focus.
-        if (!this.layoutApplied) { await this.showConsole(false); }
+        if (!this.layoutApplied) { if (mode === 'pro') { await this.showConsole(false); } else { await this.shell.collapsePanel('bottom'); } }
         this.layoutPlatform = this.embedded.isC ? 'stm32' : 'k210';
         this.layoutApplied = true;
         this.updateStatus();
@@ -585,7 +707,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     }
 
     registerCommands(registry: CommandRegistry): void {
-        const deviceCommands = new Set(['scope.run-current', 'scope.stop-device', 'scope.toggle-run', 'scope.toggle-connect', 'scope.reset-device', 'scope.show-devices']);
+        const deviceCommands = new Set(['scope.run-current', 'scope.stop-device', 'scope.toggle-run', 'scope.toggle-connect', 'scope.reset-device']);
         const command = (id: string, label: string, execute: () => unknown, proOnly = false) => {
             const available = () => (!proOnly || this.layoutState.mode === 'pro') && (!deviceCommands.has(id) || (!this.embedded.isC && !this.embedded.isEsp));
             return registry.registerCommand({ id, label, category: '见微 Nodu' }, { execute, isVisible: available, isEnabled: available });

@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, Event as ElectronEvent, WebContents } from '@theia/core/electron-shared/electron';
 import { injectable } from '@theia/core/shared/inversify';
 import { MaybePromise } from '@theia/core/lib/common/types';
+import { isOSX } from '@theia/core/lib/common/os';
 import { DEFAULT_WINDOW_HASH } from '@theia/core/lib/common/window';
 import { ElectronMainApplication, ElectronMainCommandOptions } from '@theia/core/lib/electron-main/electron-main-application';
 import { TheiaBrowserWindowOptions } from '@theia/core/lib/electron-main/theia-electron-window';
@@ -43,6 +44,11 @@ function realpathOr(fsPath: string): string {
 
 @injectable()
 export class NoduElectronMainApplication extends ElectronMainApplication implements NoduLauncherMain {
+    protected override getDefaultOptions(): TheiaBrowserWindowOptions {
+        const options = super.getDefaultOptions();
+        return isOSX ? { ...options, titleBarStyle: 'hidden', trafficLightPosition: { x: 14, y: 10 } } : options;
+    }
+
     /** webContents ids of open launcher windows. */
     protected readonly launcherIds = new Set<number>();
     protected readonly launcherWindows = new WeakSet<BrowserWindow>();

@@ -1,0 +1,28 @@
+/* SPDX-License-Identifier: MIT */
+#theia-top-panel.nodu-project-titlebar {
+    height: 36px; min-height: 36px; max-height: 36px;
+    position: relative; box-sizing: border-box;
+    --theia-private-menubar-height: 36px;
+}
+#theia-top-panel.nodu-project-titlebar #theia-drag-panel {
+    margin: 0; height: 100%; width: 100%;
+}
+#nodu-project-search {
+    position: absolute; top: 5px; height: 26px; min-height: 26px;
+    overflow: hidden; z-index: 1; -webkit-app-region: no-drag !important;
+}
+.nodu-project-search-button {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-sizing: border-box; width: 100%; height: 26px; padding: 0 9px;
+    border: 1px solid color-mix(in srgb, var(--theia-titleBar-activeForeground) 14%, transparent);
+    border-radius: 7px; background: color-mix(in srgb, var(--theia-titleBar-activeForeground) 4%, transparent);
+    color: var(--theia-titleBar-activeForeground); font: inherit; font-size: 12px;
+    cursor: pointer; -webkit-app-region: no-drag;
+}
+.nodu-project-search-button:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-project-search-button:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.nodu-project-search-button .codicon { flex-shrink: 0; font-size: 14px; opacity: .7; }
+.nodu-project-search-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-project-search-button kbd { margin-left: auto; font: inherit; font-size: 10px; opacity: .5; flex-shrink: 0; }
+.nodu-project-search-button .codicon { margin-left: auto; }
+@media (max-width: 640px) { .nodu-project-search-button kbd { display: none; } .nodu-project-search-button .codicon { margin-left: 0; } }

@@ -86,7 +86,7 @@
 .nodu-tutor-trace-reference .nodu-tutor-trace-next { border-bottom: 2px solid var(--theia-editorCursor-foreground); }
 .nodu-tutor-trace-reference .nodu-tutor-trace-different, .nodu-tutor-trace-reference .nodu-tutor-trace-extra { color: var(--theia-editorError-foreground); text-decoration: underline dotted; text-underline-offset: 3px; }
 .nodu-tutor-trace-reference .nodu-tutor-trace-extra { text-decoration: line-through; }
-.monaco-editor .nodu-tutor-highlight { background: var(--theia-scope-tutorHighlightBackground, #3D372A); border-bottom: 1px solid var(--theia-scope-signal, #FFC23D); }
+.monaco-editor .nodu-tutor-highlight { background: var(--theia-scope-tutorHighlightBackground, #3D372A); border-bottom: 1px solid var(--theia-scope-signal); }
 .nodu-tutor-line-ok { border-left: 2px solid var(--theia-testing-iconPassed); }
 .nodu-tutor-line-warn { border-left: 2px solid var(--theia-editorWarning-foreground); }
 .nodu-tutor-line-pending { border-left: 2px solid var(--theia-descriptionForeground); }

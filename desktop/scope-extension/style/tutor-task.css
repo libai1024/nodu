@@ -15,7 +15,7 @@
 .nodu-task-list li { display: flex; align-items: center; min-height: 29px; border-radius: 2px; gap: 5px; }
 .nodu-task-list .is-current { background: var(--theia-list-inactiveSelectionBackground); }
 .nodu-task-state { width: 21px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--theia-descriptionForeground); }
-.nodu-task-list .is-current .nodu-task-state { color: var(--theia-nodu-aiHighlight, #ffc23d); }
+.nodu-task-list .is-current .nodu-task-state { color: var(--theia-scope-signal); }
 .nodu-task-window .codicon { font-size: 14px; }
 .nodu-task-step { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 5px 0; text-align: left; }
 .nodu-task-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 32px; padding: 2px 9px; border-top: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); }

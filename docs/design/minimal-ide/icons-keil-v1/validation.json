@@ -1,0 +1,35 @@
+{
+  "compile": {
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  },
+  "flash": {
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  },
+  "compile-flash": {
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": true,
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  }
+}

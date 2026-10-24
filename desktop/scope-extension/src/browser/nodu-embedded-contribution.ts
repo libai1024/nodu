@@ -155,15 +155,19 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     }
 
     /** Building runs the project's CMake scripts: only trusted projects build (§11). */
-    private async ensureTrusted(): Promise<boolean> {
-        const project = this.model.project;
+    private async ensureTrusted(action: 'build' | 'flash' = 'build'): Promise<boolean> {
+        const project = this.model.project, generation = this.model.projectGeneration;
         if (!project) { return false; }
         if (project.trusted) { return true; }
-        const ok = await this.confirm('信任这个工程？', `编译会执行 ${project.name} 里的 CMake 脚本。只信任自己创建或来源可靠的工程。`, '信任并编译');
-        if (!ok) { return false; }
+        const ok = await this.confirm('信任这个工程？', action === 'flash'
+            ? `将烧写 ${project.name} 中的已编译程序。只信任自己创建或来源可靠的工程。`
+            : `编译会执行 ${project.name} 里的 CMake 脚本。只信任自己创建或来源可靠的工程。`, action === 'flash' ? '信任并烧写' : '信任并编译');
+        const current = () => generation === this.model.projectGeneration && project.path === this.model.project?.path;
+        if (!ok || !current()) { return false; }
         await this.model.call('trustProject', { path: project.path });
+        if (!current()) { return false; }
         await this.model.reload();
-        return true;
+        return current();
     }
 
     private async saveAll(): Promise<void> {
@@ -179,18 +183,39 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         if (result && !result.ok) { await this.showPanel('problems'); }
     }
 
-    private async run(): Promise<void> {
-        if (!this.model.isC || this.model.busy) { return; }
-        if (!this.model.project?.toolkit.ok) { this.toolkitProblem(); return; }
-        if (!await this.ensureTrusted()) { return; }
-        await this.saveAll();
-        const compatible = this.model.project?.manifest.target.vendor === 'compatible';
-        if (compatible && !await this.confirm('兼容芯片下载', '此工程按兼容芯片处理，尚未验证其与 ST 芯片的全部差异。继续前请核对具体型号和手册；设备 ID、容量、读保护及备份检查仍会执行。', '确认并下载')) { return; }
-        const ok = await this.model.run(compatible);
-        const failedBuild = this.model.lastBuild && !this.model.lastBuild.ok;
-        if (failedBuild) { await this.showPanel('problems'); }
-        else if (ok) { await this.showPanel(this.model.monitor.open || this.model.lastFlash?.needsBootRestore ? 'monitor' : 'output'); }
-        else if (this.model.lastError) { this.layoutState.setDeviceOpen(true); }
+    private async run(): Promise<void> { await this.download(true); }
+
+    private async flash(): Promise<void> { await this.download(false); }
+
+    private async download(compile: boolean): Promise<void> {
+        const project = this.model.project, generation = this.model.projectGeneration;
+        if (!project || !this.model.isC || this.model.busy) { return; }
+        const current = () => generation === this.model.projectGeneration && project.path === this.model.project?.path;
+        if (!project.toolkit.ok) { this.toolkitProblem(); return; }
+        try {
+            if (!await this.ensureTrusted(compile ? 'build' : 'flash') || !current()) { return; }
+            // A cancelled or failed save must not silently download an older buffer's build.
+            if (compile) { await this.saveAll(); }
+            else { await this.commands.executeCommand(CommonCommands.SAVE_ALL.id); }
+            if (!current()) { return; }
+            if (!compile && this.model.hasUnsavedSources()) {
+                throw new EmbeddedError({ code: 'unsavedSources', message: '工程有未保存的文件，先保存并编译。' });
+            }
+            const compatible = this.model.project?.manifest.target.vendor === 'compatible';
+            if (compatible && !await this.confirm('兼容芯片下载', '此工程按兼容芯片处理，尚未验证其与 ST 芯片的全部差异。继续前请核对具体型号和手册；设备 ID、容量、读保护及备份检查仍会执行。', '确认并下载')) { return; }
+            if (!current()) { return; }
+            const ok = compile ? await this.model.run(compatible) : await this.model.flashCurrent(compatible);
+            if (!current()) { return; }
+            const failedBuild = compile && this.model.lastBuild && !this.model.lastBuild.ok;
+            if (failedBuild) { await this.showPanel('problems'); }
+            else if (ok) { await this.showPanel(this.model.monitor.open || this.model.lastFlash?.needsBootRestore ? 'monitor' : 'output'); }
+            else if (this.model.lastError) {
+                if (['noBuild', 'staleBuild', 'unsavedSources', 'tampered'].includes(this.model.lastError.code)) { await this.showPanel('output'); }
+                else { this.layoutState.setDeviceOpen(true); }
+            }
+        } catch (error) {
+            if (current()) { this.model.fail(error, compile ? '运行' : '烧写'); }
+        }
     }
 
     private toolkitProblem(): void {
@@ -251,6 +276,7 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         add(C_COMMANDS.build, '编译', () => this.build());
         add(C_COMMANDS.rebuild, '清理并重新编译', () => this.build(true));
         add(C_COMMANDS.run, '运行（编译并下载）', () => this.run());
+        add(C_COMMANDS.flash, '烧写已编译程序', () => this.flash());
         add(C_COMMANDS.downloadHelp, '下载帮助', () => this.showDownloadHelp());
         add(C_COMMANDS.stop, '停止', () => this.model.stop());
         add(C_COMMANDS.reset, '复位开发板', () => this.model.reset(), () => c() && this.model.project?.flashMethod === 'stlink');

@@ -7,8 +7,11 @@ import { CommonCommands, CommonMenus, FrontendApplicationContribution } from '@t
 import { ThemeService } from '@theia/core/lib/browser/theming';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { ElectronIpcConnectionProvider } from '@theia/core/lib/electron-browser/messaging/electron-ipc-connection-source';
-import { ElectronMenuContribution } from '@theia/core/lib/electron-browser/menu/electron-menu-contribution';
+import { CustomTitleWidgetFactory, ElectronMenuContribution } from '@theia/core/lib/electron-browser/menu/electron-menu-contribution';
 import { NoduElectronMenuContribution } from './nodu-electron-menu-contribution';
+import { NoduProjectSearch } from './nodu-project-search';
+import { QuickFileOpenService } from '@theia/file-search/lib/browser/quick-file-open';
+import { NoduFileSearch } from './nodu-file-search';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import URI from '@theia/core/lib/common/uri';
@@ -16,6 +19,7 @@ import { NoduEmbeddedModel } from '../browser/nodu-embedded-model';
 import { NODU_LAUNCHER_MAIN_PATH, NODU_LAUNCHER_QUERY, NODU_PROJECTS_PATH, NoduLauncherMain, NoduProjectsService } from '../common/nodu-launcher-protocol';
 import { Launcher } from './nodu-launcher-view';
 import '../../style/launcher.css';
+import '../../style/project-search.css';
 
 const isLauncher = (): boolean => new URLSearchParams(window.location.search).get(NODU_LAUNCHER_QUERY) === '1';
 // Runs before the shell is attached, preventing a flash of the IDE in the welcome window.
@@ -83,6 +87,9 @@ class LauncherContribution implements FrontendApplicationContribution, CommandCo
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     rebind(ElectronMenuContribution).to(NoduElectronMenuContribution).inSingletonScope();
+    bind(NoduProjectSearch).toSelf().inSingletonScope();
+    rebind(QuickFileOpenService).to(NoduFileSearch).inSingletonScope();
+    rebind(CustomTitleWidgetFactory).toFactory(ctx => () => ctx.container.get(NoduProjectSearch));
     bind(NoduLauncherMain).toDynamicValue(ctx => ElectronIpcConnectionProvider.createProxy<NoduLauncherMain>(ctx.container, NODU_LAUNCHER_MAIN_PATH)).inSingletonScope();
     bind(NoduProjectsService).toDynamicValue(ctx => WebSocketConnectionProvider.createProxy<NoduProjectsService>(ctx.container, NODU_PROJECTS_PATH)).inSingletonScope();
     bind(LauncherWorkspaceService).toSelf().inSingletonScope();

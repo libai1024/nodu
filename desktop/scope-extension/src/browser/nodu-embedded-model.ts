@@ -10,6 +10,7 @@ import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/w
 import { ContextKey, ContextKeyService } from '@theia/core/lib/browser/context-key-service';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
+import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { ProblemManager } from '@theia/markers/lib/browser/problem/problem-manager';
 import { Diagnostic as LspDiagnostic } from '@theia/core/shared/vscode-languageserver-protocol';
 import {
@@ -39,6 +40,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(FileService) protected readonly files!: FileService;
     @inject(ProblemManager) protected readonly problems!: ProblemManager;
+    @inject(EditorManager) protected readonly editors!: EditorManager;
     @inject(ContextKeyService) protected readonly contextKeys!: ContextKeyService;
     private service!: NoduEmbeddedService;
     private readonly changed = new Emitter<void>();
@@ -89,6 +91,20 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     private readonly decoder = new MonitorDecoder();
     private buildId = '';
     private runId = '';
+    private preparingFlash = false;
+    private downloadIntent = 0;
+    private activeDownloadIntent: number | undefined;
+    private cancelledFlashRun = '';
+    private stopFailure: EmbeddedFailure | undefined;
+    private deviceRevision = 0;
+    private probeRefresh = 0;
+    private backupRefresh = 0;
+    private identityProbe = '';
+    private identityPort = '';
+    private flashIncludesBuild = true;
+    private optionSaveQueue: Promise<void> = Promise.resolve();
+    private optionSaveCount = 0;
+    private optionErrorTask: TaskStrip | undefined;
     private markerUris = new Set<string>();
     /** Workspace root as the editor sees it; the sidecar reports the canonical (symlink-free) path. */
     private detection = 0;
@@ -118,7 +134,10 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     get isC(): boolean { return !!this.project; }
-    get busy(): boolean { return this.building || this.flashing || this.identifying; }
+    get busy(): boolean { return this.building || this.flashing || this.identifying || this.preparingFlash || this.savingOptions; }
+    get savingOptions(): boolean { return this.optionSaveCount > 0; }
+    get projectGeneration(): number { return this.detection; }
+    get backupScope(): 'device' | 'history' { return this.identity?.uid ? 'device' : 'history'; }
     get errors(): Diagnostic[] { return this.diagnosticsStale ? [] : this.lastBuild?.diagnostics.filter(d => d.severity === 'error') ?? []; }
     get rpc(): NoduEmbeddedService { return this.service; }
 
@@ -166,20 +185,26 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         }
         if (generation !== this.detection) { return; }
         const switched = project?.path !== this.project?.path;
+        const targetChanged = this.hasTargetChanged(project);
         this.localRoot = root?.path.fsPath() ?? '';
         this.project = project;
         this.isEsp = !!espChip; this.espChip = espChip;
         this.espProjectKey.set(this.isEsp);
         this.cProjectKey.set(!!project);
-        if (switched) { this.clearMarkers(); this.lastBuild = undefined; this.diagnosticsStale = false; this.identity = undefined; this.projectChanged.fire(project); }
+        if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
+        if (switched) { this.buildId = ''; this.runId = ''; this.cancelledFlashRun = ''; this.awaitUser = undefined; this.lastFlash = undefined; this.clearMarkers(); this.lastBuild = undefined; this.diagnosticsStale = false; this.projectChanged.fire(project); }
         if (project) { void this.refreshDevices(); void this.syncMonitor(); }
         this.fire();
     }
 
     async reload(): Promise<void> {
         if (!this.project) { return; }
-        const old = this.project;
-        this.project = await this.call<ProjectStatus>('openProject', { path: old.path });
+        const old = this.project, generation = this.detection;
+        const updated = await this.call<ProjectStatus>('openProject', { path: old.path });
+        if (generation !== this.detection || this.project?.path !== old.path) { return; }
+        const targetChanged = this.hasTargetChanged(updated);
+        this.project = updated;
+        if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
         this.fire();
     }
 
@@ -189,7 +214,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     private steps(method: string): { id: string; label: string; state: string }[] {
-        const order = ['build', 'identify', ...(this.flashSteps.backup ? ['backup'] : []), 'program', 'verify', ...(method === 'uart' ? [] : ['run'])];
+        const order = [...(this.flashIncludesBuild ? ['build'] : []), 'identify', ...(this.flashSteps.backup ? ['backup'] : []), 'program', 'verify', ...(method === 'uart' ? [] : ['run'])];
         return order.map(id => ({ id, label: STEP_LABELS[id], state: id === 'build' ? 'done' : this.flashSteps[id] || 'pending' }));
     }
 
@@ -211,7 +236,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                 if (d.buildId === this.buildId) { this.appendOutput(String(d.line)); }
                 break;
             case 'flash.started':
-                if (d.path === this.project?.path) {
+                if (d.path === this.project?.path && this.activeDownloadIntent !== undefined && this.activeDownloadIntent !== this.downloadIntent) {
+                    this.cancelledFlashRun = String(d.runId);
+                    break;
+                }
+                if (d.path === this.project?.path && d.runId !== this.cancelledFlashRun && (this.activeDownloadIntent === undefined || this.activeDownloadIntent === this.downloadIntent)) {
                     this.runId = String(d.runId); this.flashSteps = {}; this.flashPercent = undefined; this.romDetected = false;
                     this.awaitUser = undefined; this.bootOutputSeen = false;
                     this.appendOutput(`── 下载，${(d.erase as { label?: string })?.label ?? ''}，${new Date().toLocaleTimeString()} ──`);
@@ -237,7 +266,10 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                 if (d.runId === this.runId) { this.awaitUser = d.kind === 'exitBoot' ? 'exitBoot' : 'enterBoot'; this.fire(); }
                 break;
             case 'flash.detected':
-                if (d.runId === this.runId) { this.romDetected = true; this.awaitUser = undefined; this.fire(); }
+                if (d.runId === this.runId || (d.runId === this.cancelledFlashRun && this.activeDownloadIntent !== undefined)) {
+                    this.romDetected = true;
+                    if (d.runId === this.runId) { this.awaitUser = undefined; this.fire(); }
+                }
                 break;
             case 'monitor.state':
                 this.monitor = { open: d.state === 'open' || d.state === 'disconnected' || d.state === 'lent', port: String(d.port || ''), baud: Number(d.baud || this.monitor.baud), state: String(d.state), message: d.message as string | undefined };
@@ -322,47 +354,135 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     clearMonitor(): void { this.monitorLines.length = 0; this.partial = ''; this.monitorPartialAt = undefined; this.decoder.clear(); this.monitorBytes.clear(); this.monitorChanged.fire(); }
 
-    sourceChanged(path: string, fromEditor = false): void {
-        const root = this.project?.path;
-        if (!root) { return; }
+    private projectInputPath(path: string, root = this.project?.path): string | undefined {
+        if (!root) { return undefined; }
         const canonical = this.toCanonical(path).replace(/\\/g, '/');
-        if (!canonical.startsWith(root.replace(/\\/g, '/') + '/')) { return; }
-        const relative = canonical.slice(root.length + 1);
-        if (/^(build|\.nodu|\.git)\//.test(relative) || !/\.(c|h|cpp|hpp|s|ld|cmake)$|(^|\/)(CMakeLists\.txt|CMakePresets\.json|nodu\.json)$/i.test(relative)) { return; }
+        const normalizedRoot = root.replace(/\\/g, '/');
+        if (!canonical.startsWith(normalizedRoot + '/')) { return undefined; }
+        const relative = canonical.slice(normalizedRoot.length + 1);
+        // Match the sidecar's build-input exclusions; custom CMake may read non-C resources.
+        if (/^(build|\.nodu|\.cache|\.git|\.theia|\.vscode)\//.test(relative) || /(^|\/)\.DS_Store$/.test(relative)) { return undefined; }
+        if (this.project?.manifest.build?.adapter === 'dacir-directory-v1' && /^(\.studio|runs)\//.test(relative)) { return undefined; }
+        return relative;
+    }
+
+    private isProjectSource(path: string): boolean {
+        const relative = this.projectInputPath(path);
+        return relative !== undefined && /\.(c|h|cpp|hpp|s|ld|cmake)$|(^|\/)(CMakeLists\.txt|CMakePresets\.json|nodu\.json)$/i.test(relative);
+    }
+
+    hasUnsavedSources(path = this.project?.path): boolean {
+        return (this.editors?.all ?? []).some(widget => !widget.isDisposed && widget.saveable.dirty
+            && this.projectInputPath(widget.editor.uri.path.fsPath(), path) !== undefined);
+    }
+
+    sourceChanged(path: string, fromEditor = false): void {
+        if (!this.isProjectSource(path)) { return; }
         if (fromEditor) { this.sourceRevision++; }
         if (this.lastBuild) { this.diagnosticsStale = true; this.clearMarkers(); }
         this.fire();
     }
 
     // ── device lists ──
+    private hasTargetChanged(project: ProjectStatus | undefined): boolean {
+        return project?.path !== this.project?.path || project?.flashMethod !== this.project?.flashMethod
+            || JSON.stringify(project?.manifest.target) !== JSON.stringify(this.project?.manifest.target);
+    }
+
+    private deviceContext() {
+        const project = this.project;
+        return { generation: this.detection, revision: this.deviceRevision, path: project?.path,
+            target: JSON.stringify(project?.manifest.target), method: project?.flashMethod,
+            probe: this.probe, port: project?.flashMethod === 'uart' ? this.monitorPort : '' };
+    }
+
+    private sameDeviceContext(context: ReturnType<NoduEmbeddedModel['deviceContext']>): boolean {
+        const current = this.deviceContext();
+        return Object.keys(current).every(key => current[key as keyof typeof current] === context[key as keyof typeof context]);
+    }
+
+    private clearDeviceIdentity(): void {
+        this.deviceRevision++;
+        this.identity = undefined;
+        this.identityProbe = ''; this.identityPort = '';
+        this.backups = []; this.lastFlash = undefined;
+    }
+
+    private rememberIdentity(identity: ChipIdentity): void {
+        if (this.identity?.uid !== identity.uid || this.identity?.deviceId !== identity.deviceId) { this.backups = []; }
+        this.identity = identity;
+        const actualProbe = (identity as ChipIdentity & { probeId?: string }).probeId;
+        this.identityProbe = identity.method === 'stlink' ? actualProbe || this.probe
+            || (this.probes.length === 1 ? this.probes[0].id || this.probes[0].serial : '') : '';
+        this.identityPort = identity.method === 'uart' ? this.monitorPort : '';
+    }
+
+    setProbe(probe: string): void {
+        if (probe === this.probe || this.busy || this.awaitUser) { return; }
+        this.probe = probe;
+        this.clearDeviceIdentity(); this.fire();
+        void this.loadBackups();
+    }
+
     async refreshDevices(): Promise<void> {
+        const request = ++this.probeRefresh, generation = this.detection;
         await Promise.all([this.refreshPorts(), this.call<ProbeInfo[]>('listProbes').then(probes => {
+            if (request !== this.probeRefresh || generation !== this.detection) { return; }
+            const previous = this.probes;
             this.probes = probes;
-            if (this.probe && !probes.some(p => (p.id || p.serial) === this.probe)) { this.probe = ''; }
+            const present = (selector: string): boolean => probes.some(p => (p.id || p.serial) === selector || p.serial === selector);
+            const changed = JSON.stringify(previous.map(p => p.id || p.serial).sort()) !== JSON.stringify(probes.map(p => p.id || p.serial).sort());
+            if (this.identity?.method === 'stlink' && (this.identityProbe ? !present(this.identityProbe) : changed)) {
+                this.clearDeviceIdentity(); void this.loadBackups();
+            }
+            // Retain an explicit missing probe. The backend must reject it instead
+            // of silently redirecting the next download to a different chip.
             this.fire();
         }).catch(() => undefined)]);
+    }
+
+    private isSystemPort(path: string, ports: PortInfo[] = this.ports): boolean {
+        if (/(?:^|[/\\])(?:cu\.|tty\.)?(?:Bluetooth[^/\\]*|debug-console|wlan-debug)$/i.test(path)) { return true; }
+        const port = ports.find(candidate => candidate.path === path);
+        return port?.vid === undefined && /^(?:BluetoothPort|Bluetooth|Debug console)$/i.test(port?.description ?? '');
+    }
+
+    private selectableMonitorPort(port: string, ports: PortInfo[] = this.ports): string {
+        return !this.monitorPortExplicit && this.isSystemPort(port, ports) ? '' : port;
     }
 
     refreshPorts(): Promise<void> {
         if (this.portRefresh) { return this.portRefresh; }
         this.portRefresh = this.call<PortInfo[]>('listPorts').then(ports => {
-            const next = this.monitorPortExplicit && !this.monitorPort ? '' : preferredMonitorPort(this.monitorPort, ports);
+            const next = this.monitorPortExplicit && !this.monitorPort ? '' : preferredMonitorPort(this.selectableMonitorPort(this.monitorPort, ports), ports.filter(port => !this.isSystemPort(port.path, ports)));
             const changed = JSON.stringify(ports) !== JSON.stringify(this.ports) || next !== this.monitorPort;
-            this.ports = ports;
-            this.monitorPort = next;
+            const targetChanged = this.identity?.method === 'uart' && (next !== this.monitorPort || (this.identityPort && !ports.some(port => port.path === this.identityPort)));
+            this.ports = ports; this.monitorPort = next;
+            if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
             if (changed) { this.fire(); }
         }).catch(() => undefined).finally(() => { this.portRefresh = undefined; });
         return this.portRefresh;
     }
 
     async loadBackups(): Promise<void> {
-        try { this.backups = await this.call<BackupRecord[]>('listBackups', this.identity?.uid ? { uid: this.identity.uid } : {}); } catch { this.backups = []; }
+        const context = this.deviceContext(), identity = this.identity, request = ++this.backupRefresh;
+        if (!this.project) { this.backups = []; this.fire(); return; }
+        const current = (): boolean => request === this.backupRefresh && this.sameDeviceContext(context) && identity === this.identity;
+        try {
+            const backups = await this.call<BackupRecord[]>('listBackups', identity?.uid ? { uid: identity.uid } : {});
+            if (!current()) { return; }
+            this.backups = identity?.uid ? backups.filter(backup => backup.uid === identity.uid && backup.deviceId === identity.deviceId) : backups;
+        } catch { if (!current()) { return; } this.backups = []; }
         this.fire();
     }
 
     setMonitorPort(port: string): void {
+        if (this.flashing || this.identifying || this.preparingFlash || this.monitorBusy || this.awaitUser) { return; }
+        const targetChanged = this.project?.flashMethod === 'uart' && port !== this.monitorPort;
+        if (targetChanged) { this.clearDeviceIdentity(); }
         this.monitorPortExplicit = true;
         this.monitorPort = port; localStorage.setItem('nodu.stm32.monitor-port', port); this.monitorError = ''; this.fire();
+        if (targetChanged) { void this.loadBackups(); }
         if (this.monitor.open) { void this.changeMonitor(() => port ? this.openSelectedMonitor() : this.call('closeMonitor')); }
     }
 
@@ -394,7 +514,8 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     async build(clean = false): Promise<BuildResult | undefined> {
         const project = this.project;
-        if (!project || this.building || this.flashing) { return undefined; }
+        if (!project || this.busy) { return undefined; }
+        const generation = this.detection;
         const sourceRevision = this.sourceRevision;
         this.building = true;
         this.lastError = undefined;
@@ -402,6 +523,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.setTask('编译中', 'busy', { target: 'output' });
         try {
             const result = await this.call<BuildResult>('build', { path: project.path, clean });
+            if (generation !== this.detection || this.project?.path !== project.path) { return undefined; }
             result.stale = !!result.stale || sourceRevision !== this.sourceRevision;
             this.lastBuild = result;
             this.diagnosticsStale = !!result.stale;
@@ -421,6 +543,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             await this.reload().catch(() => undefined);
             return result;
         } catch (error) {
+            if (generation !== this.detection || this.project?.path !== project.path) { return undefined; }
             if (error instanceof EmbeddedError && error.code === 'untrusted') { throw error; }
             this.appendOutput(error instanceof EmbeddedError && error.code === 'cancelled' ? '编译已停止' : `编译失败：${error instanceof Error ? error.message : String(error)}`);
             this.fail(error, '编译');
@@ -432,62 +555,161 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         }
     }
 
-    /** 运行: build if needed, download, start, show serial output (F1). */
+    /** Compile the saved project, then download the resulting bundle. */
     async run(compatibleConfirmed = false): Promise<boolean> {
         const project = this.project;
         if (!project || this.busy) { return false; }
+        const context = { generation: this.detection, intent: ++this.downloadIntent, revision: this.sourceRevision };
         this.awaitUser = undefined;
         const built = await this.build();
-        if (!built?.ok || built.stale || !built.artifact) { return false; }
-        const method = this.project?.flashMethod ?? project.flashMethod;
-        const port = method === 'uart' ? this.monitorPort : '';
-        if (method === 'uart' && !port) {
-            this.settle('串口下载需要先选择串口', 'error', { target: 'device' });
-            this.lastError = { code: 'noPort', message: '串口下载需要先在设备弹层中选择 USB 转串口。' };
+        if (!built?.ok || built.stale || !built.artifact || !this.isDownloadCurrent(project, context)) { return false; }
+        return this.flashBundle(this.project!, built.artifact.bundleSha256, compatibleConfirmed, context, true);
+    }
+
+    /** Download only a current saved build. Never invokes the compiler. */
+    async flashCurrent(compatibleConfirmed = false): Promise<boolean> {
+        const project = this.project;
+        if (!project || this.busy) { return false; }
+        const context = { generation: this.detection, intent: ++this.downloadIntent, revision: this.sourceRevision };
+        this.preparingFlash = true;
+        this.lastError = undefined;
+        this.awaitUser = undefined;
+        this.flashIncludesBuild = false;
+        this.setTask('检查编译产物', 'busy', { target: 'output' });
+        try {
+            this.checkDownloadSources(project, context.revision);
+            const current = await this.call<ProjectStatus>('openProject', { path: project.path });
+            if (!this.isDownloadCurrent(project, context)) { return false; }
+            this.checkDownloadSources(project, context.revision);
+            if (current.path !== project.path) { throw new EmbeddedError({ code: 'projectChanged', message: '工程位置已改变，请重新打开工程。' }); }
+            this.project = current;
+            if (!current.currentBuild?.bundle) { throw new EmbeddedError({ code: 'noBuild', message: '还没有成功编译的程序。先编译。' }); }
+            if (current.buildStale) { throw new EmbeddedError({ code: 'staleBuild', message: '编译之后文件有修改。重新编译后再烧写。' }); }
+            return await this.flashBundle(current, current.currentBuild.bundle, compatibleConfirmed, context, false);
+        } catch (error) {
+            if (this.isDownloadCurrent(project, context)) { this.fail(error, '烧写'); }
             return false;
+        } finally {
+            this.preparingFlash = false;
+            this.fire();
         }
-        // ST-LINK leaves the serial port free: open the monitor first to catch the first lines.
-        if (method === 'stlink') { await this.ensureMonitor().catch(() => undefined); }
-        this.runCount += 1;
-        this.pushMonitor(`── 运行 #${this.runCount}，${new Date().toLocaleTimeString()}，${built.artifact.bundleSha256.slice(0, 7)} ──`, 'separator');
+    }
+
+    private isDownloadCurrent(project: ProjectStatus, context: { generation: number; intent: number }): boolean {
+        return context.generation === this.detection && context.intent === this.downloadIntent && this.project?.path === project.path;
+    }
+
+    private checkDownloadSources(project: ProjectStatus, revision: number): void {
+        if (this.hasUnsavedSources(project.path)) { throw new EmbeddedError({ code: 'unsavedSources', message: '工程有未保存的文件，先保存并编译。' }); }
+        if (revision !== this.sourceRevision) { throw new EmbeddedError({ code: 'staleBuild', message: '准备烧写期间代码有修改。重新编译后再烧写。' }); }
+    }
+
+    private async flashBundle(project: ProjectStatus, bundle: string, compatibleConfirmed: boolean,
+        context: { generation: number; intent: number; revision: number }, compiled: boolean): Promise<boolean> {
+        if (!this.isDownloadCurrent(project, context)) { return false; }
+        const method = project.flashMethod;
+        const port = method === 'uart' ? this.selectableMonitorPort(this.monitorPort) : '';
+        const probe = this.probe;
         this.flashing = true;
+        this.activeDownloadIntent = context.intent;
+        this.runId = '';
+        this.romDetected = false;
+        this.bootOutputSeen = false;
+        let restoreBootOnCancel = false;
+        this.flashIncludesBuild = compiled;
         this.flashSteps = {};
         this.lastError = undefined;
-        this.setTask('识别开发板', 'busy', { steps: this.steps(method), target: 'output' });
         try {
-            const result = await this.call<FlashResult>('flash', { path: project.path, bundle: built.artifact.bundleSha256, compatibleConfirmed, method, probe: this.probe || undefined, port: port || undefined });
+            this.checkDownloadSources(project, context.revision);
+            if (method === 'uart' && !port) { throw new EmbeddedError({ code: 'noPort', message: '串口下载需要先在设备弹层中选择 USB 转串口。' }); }
+            // ST-LINK leaves the serial port free: catch startup output before the flash RPC.
+            if (method === 'stlink') { await this.ensureMonitor().catch(() => undefined); }
+            if (!this.isDownloadCurrent(project, context)) { return false; }
+            this.checkDownloadSources(project, context.revision);
+            this.runCount += 1;
+            this.pushMonitor(`── 运行 #${this.runCount}，${new Date().toLocaleTimeString()}，${bundle.slice(0, 7)} ──`, 'separator');
+            this.setTask('识别芯片', 'busy', { steps: this.steps(method), target: 'output' });
+            const result = await this.call<FlashResult>('flash', { path: project.path, bundle, compatibleConfirmed, method, probe: probe || undefined, port: port || undefined });
+            restoreBootOnCancel = result.needsBootRestore;
+            if (!this.isDownloadCurrent(project, context)) { return false; }
             this.lastFlash = result;
-            this.identity = { ...result.identity, matches: null, hasBackup: true };
+            this.rememberIdentity({ ...result.identity, matches: null, hasBackup: true });
             if (result.backup) { this.appendOutput(`已保存首次备份：${result.backup.id}（${formatBytes(result.backup.bytes)}）`); }
             if (result.needsBootRestore) {
-                await this.ensureMonitor().catch(error => { this.monitorError = error instanceof Error ? error.message : String(error); });
+                await this.ensureMonitor().catch(error => {
+                    if (this.isDownloadCurrent(project, context)) { this.monitorError = error instanceof Error ? error.message : String(error); }
+                });
+                if (!this.isDownloadCurrent(project, context)) { return false; }
                 this.awaitUser = this.bootOutputSeen ? undefined : 'exitBoot';
                 this.setTask(this.bootOutputSeen ? '运行中' : '等待复位', this.bootOutputSeen ? 'ok' : 'warn', { target: 'monitor' });
             } else {
                 if (result.autoBoot) { await this.ensureMonitor().catch(() => undefined); }
+                if (!this.isDownloadCurrent(project, context)) { return false; }
                 const running = result.running === false ? '程序没有运行（心跳未变化）' : result.autoBoot ? '已请求运行' : '运行中';
                 this.settle(running, result.running === false ? 'warn' : 'ok', { target: 'monitor' });
             }
             void this.loadBackups();
             return true;
         } catch (error) {
+            if (!this.isDownloadCurrent(project, context)) {
+                // A real write/verification failure remains relevant after a stop request,
+                // but a result belonging to another workspace must never affect its UI.
+                if (this.activeDownloadIntent === context.intent && context.generation === this.detection && this.project?.path === project.path
+                    && !(error instanceof EmbeddedError && error.code === 'cancelled')) { this.fail(error, '下载'); }
+                return false;
+            }
             this.awaitUser = method === 'uart' && this.romDetected && !project.manifest.flash?.autoBoot?.enabled ? 'exitBoot' : undefined;
             this.fail(error, '下载');
             return false;
         } finally {
-            this.flashing = false;
-            this.fire();
+            if (this.activeDownloadIntent === context.intent) {
+                if (context.intent !== this.downloadIntent && context.generation === this.detection && this.project?.path === project.path) {
+                    // Invalidating a request suppresses its ordinary catch path. Always
+                    // settle its BOOT wait once the device worker actually finishes.
+                    this.awaitUser = method === 'uart' && (restoreBootOnCancel || this.romDetected)
+                        && !project.manifest.flash?.autoBoot?.enabled ? 'exitBoot' : undefined;
+                    if (!this.lastError) { this.settle(this.awaitUser ? '已停止，等待恢复 BOOT' : '已停止', 'warn', { target: this.awaitUser ? 'monitor' : 'output' }); }
+                }
+                this.activeDownloadIntent = undefined;
+                this.flashing = false;
+                this.fire();
+            }
         }
     }
 
     async stop(): Promise<void> {
-        if (this.building) { await this.call('cancel', { queue: 'build' }).catch(() => undefined); }
-        if (this.flashing || this.identifying) {
-            const writing = this.flashSteps.program === 'running' || this.flashSteps.verify === 'running';
-            await this.call('cancel', { queue: 'device' }).catch(() => undefined);
-            if (writing) { this.setTask('写入完成后停止', 'warn'); }
+        if (this.lastError === this.stopFailure) { this.lastError = undefined; }
+        this.stopFailure = undefined;
+        const generation = this.detection, path = this.project?.path;
+        const intent = ++this.downloadIntent;
+        const current = (): boolean => generation === this.detection && path === this.project?.path && intent === this.downloadIntent;
+        const deviceActive = this.flashing || this.identifying;
+        // Already queued events must not recreate the old enterBoot prompt.
+        if (this.flashing || this.awaitUser) {
+            if (this.runId) { this.cancelledFlashRun = this.runId; }
+            this.runId = '';
         }
-        if (this.awaitUser === 'exitBoot') { this.awaitUser = undefined; this.fire(); }
+        if (this.preparingFlash && !this.flashing) { this.settle('已停止', 'warn'); }
+        try {
+            if (this.building) { await this.call('cancel', { queue: 'build' }); }
+            if (!current()) { return; }
+            if (deviceActive) {
+                const writing = this.flashSteps.program === 'running' || this.flashSteps.verify === 'running';
+                await this.call('cancel', { queue: 'device' });
+                if (!current()) { return; }
+                if (this.awaitUser === 'enterBoot') { this.awaitUser = undefined; }
+                if (!this.lastError) {
+                    this.settle(this.flashing && writing ? '写入完成后停止' : this.flashing || this.identifying ? '正在停止'
+                        : this.awaitUser === 'exitBoot' ? '已停止，等待恢复 BOOT' : '已停止', 'warn');
+                }
+            } else if (this.awaitUser) {
+                // Dismiss a finished guide, including a stale wait from an older renderer.
+                this.awaitUser = undefined;
+                this.settle('已停止', 'warn');
+            }
+        } catch (error) {
+            if (current()) { this.fail(error, '停止'); this.stopFailure = this.lastError; }
+        }
     }
 
     /** The user moved BOOT0 back and pressed reset (serial ISP, page 2 of the guide). */
@@ -503,7 +725,12 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         try {
             const status = await this.call<{ open: boolean; port?: string; baud?: number; state?: string }>('monitorStatus');
             this.monitor = { open: status.open, port: status.port || '', baud: status.baud || 115200, state: status.state || (status.open ? 'open' : 'closed'), message: undefined };
-            if (status.open && status.port) { this.monitorPort = status.port; }
+            if (status.open && status.port && !this.monitorPortExplicit) {
+                const next = this.selectableMonitorPort(status.port);
+                const targetChanged = this.project?.flashMethod === 'uart' && next !== this.monitorPort;
+                this.monitorPort = next;
+                if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
+            }
             this.fire();
         } catch { /* The next user action reports an unavailable service. */ }
     }
@@ -539,14 +766,20 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     async identify(): Promise<void> {
         if (!this.project || this.busy || this.project.flashMethod !== 'stlink') { return; }
+        this.clearDeviceIdentity();
+        const context = this.deviceContext(), intent = this.downloadIntent;
+        const current = (): boolean => this.sameDeviceContext(context) && intent === this.downloadIntent;
         this.identifying = true;
         this.lastError = undefined;
         this.fire();
         try {
-            this.identity = await this.call<ChipIdentity>('identify', { path: this.project.path, probe: this.probe || undefined });
+            const identity = await this.call<ChipIdentity>('identify', { path: context.path, probe: context.probe || undefined });
+            if (!current()) { return; }
+            this.rememberIdentity(identity);
             await this.loadBackups();
         } catch (error) {
-            this.identity = undefined;
+            if (!current()) { return; }
+            this.clearDeviceIdentity();
             this.fail(error, '识别');
         } finally {
             this.identifying = false;
@@ -563,42 +796,86 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     async setOption(key: string, value: unknown): Promise<void> {
-        if (!this.project) { return; }
-        const path = this.project.path;
-        const save = async (): Promise<void> => {
-            this.project = await this.call<ProjectStatus>('setProjectOption', { path, key, value });
-            if (key === 'preset') { this.projectChanged.fire(this.project); }
-            this.fire();
+        const project = this.project;
+        if (!project) { return; }
+        const path = project.path, generation = this.detection;
+        const current = (): boolean => this.detection === generation && this.project?.path === path;
+        const allowed = (): boolean => {
+            if (this.building || this.flashing || this.identifying || this.preparingFlash) {
+                this.fail(new EmbeddedError({ code: 'busy', message: '当前操作结束后再修改设置。' }), '保存设置');
+                return false;
+            }
+            if (key === 'flashMethod' && this.awaitUser) {
+                this.fail(new EmbeddedError({ code: 'awaitBoot', message: '完成 BOOT 引导后再切换下载方式。' }), '保存设置');
+                return false;
+            }
+            return true;
         };
-        if (key === 'monitorBaud' && this.monitor.open) {
-            await this.changeMonitor(async () => { await save(); await this.openSelectedMonitor(); });
-        } else {
-            try { await save(); } catch (error) { this.fail(error, '保存设置'); }
-        }
+        if (!allowed()) { return; }
+        this.optionSaveCount++;
+        this.fire();
+        const save = async (): Promise<void> => {
+            if (!current() || !allowed()) { return; }
+            this.lastError = undefined;
+            if (this.task === this.optionErrorTask) { this.task = undefined; }
+            this.optionErrorTask = undefined;
+            this.fire();
+            try {
+                const updated = await this.call<ProjectStatus>('setProjectOption', { path, key, value });
+                if (!current()) { return; }
+                if (updated.path !== path) { throw new EmbeddedError({ code: 'projectChanged', message: '工程位置已改变，请重新打开工程。' }); }
+                const targetChanged = this.hasTargetChanged(updated);
+                this.project = updated;
+                if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
+                if (key === 'preset') { this.projectChanged.fire(updated); }
+                this.fire();
+                if (key === 'monitorBaud' && this.monitor.open && current()) {
+                    await this.changeMonitor(async () => { if (current()) { await this.openSelectedMonitor(); } });
+                }
+            } catch (error) {
+                if (current()) { this.fail(error, '保存设置'); this.optionErrorTask = this.task; }
+            }
+        };
+        // Serialize writes themselves, not just UI responses: a late earlier write must
+        // not restore an obsolete selection on disk or erase another option's change.
+        const pending = this.optionSaveQueue.then(save, save).finally(() => {
+            this.optionSaveCount--;
+            this.fire();
+        });
+        this.optionSaveQueue = pending;
+        await pending;
     }
 
     settingsChanged(project: ProjectStatus): void {
-        this.project = project; this.sourceChanged(`${project.path}/nodu.json`); this.projectChanged.fire(project); this.fire();
+        const targetChanged = this.hasTargetChanged(project);
+        this.project = project;
+        if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
+        this.sourceChanged(`${project.path}/nodu.json`); this.projectChanged.fire(project); this.fire();
     }
 
     async restore(backup: BackupRecord, compatibleConfirmed = false): Promise<void> {
         const project = this.project;
         if (!project || this.busy) { return; }
+        const context = this.deviceContext();
         this.awaitUser = undefined;
         this.flashing = true;
         this.flashSteps = {};
         this.setTask('恢复备份', 'busy', { steps: this.steps(project.flashMethod) });
         try {
             const result = await this.call<FlashResult>('restore', { path: project.path, backup: backup.id, compatibleConfirmed, probe: this.probe || undefined, port: this.monitorPort || undefined });
-            this.identity = { ...result.identity, matches: null, hasBackup: true };
+            if (!this.sameDeviceContext(context)) { return; }
+            this.rememberIdentity({ ...result.identity, matches: null, hasBackup: true });
             if (project.flashMethod === 'uart') {
                 await this.ensureMonitor().catch(() => undefined);
+                if (!this.sameDeviceContext(context)) { return; }
                 this.awaitUser = result.needsBootRestore && !this.bootOutputSeen ? 'exitBoot' : undefined;
             }
             this.settle(this.awaitUser ? '已恢复，等待复位' : '已恢复，读回一致', this.awaitUser ? 'warn' : 'ok');
             // The restored program is not this project's build.
             this.lastFlash = undefined;
+            void this.loadBackups();
         } catch (error) {
+            if (!this.sameDeviceContext(context)) { return; }
             this.fail(error, '恢复');
         } finally {
             this.flashing = false;

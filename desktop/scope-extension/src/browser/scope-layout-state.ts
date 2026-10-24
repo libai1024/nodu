@@ -8,6 +8,7 @@ export class ScopeLayoutState {
     readonly onDidChange = this.changed.event;
     mode: 'simple' | 'pro' = localStorage.getItem('scope.layout-mode') === 'pro' ? 'pro' : 'simple';
     project = '打开项目';
+    projectPath = '';
     filesVisible = false;
     consoleVisible = false;
     visionVisible = false;
@@ -21,7 +22,7 @@ export class ScopeLayoutState {
         localStorage.setItem('scope.layout-mode', mode);
         this.changed.fire();
     }
-    setProject(project: string): void { if (this.project !== project) { this.project = project; this.changed.fire(); } }
+    setProject(project: string, path = ''): void { if (this.project !== project || this.projectPath !== path) { this.project = project; this.projectPath = path; this.deviceOpen = false; this.changed.fire(); } }
     setDeviceOpen(open: boolean): void { if (this.deviceOpen !== open) { this.deviceOpen = open; this.changed.fire(); } }
     setPanels(filesVisible: boolean, consoleVisible: boolean, visionVisible: boolean, rightVisible = false): void {
         if (this.filesVisible === filesVisible && this.consoleVisible === consoleVisible && this.visionVisible === visionVisible && this.rightVisible === rightVisible) { return; }

@@ -1,0 +1,124 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-minimal-settings-host {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    height: var(--theia-private-horizontal-tab-height, 30px);
+    width: 36px;
+    display: grid;
+    place-items: center;
+    z-index: 1002;
+}
+.nodu-minimal-settings-tabbar .theia-tabBar-tab-row {
+    box-sizing: border-box;
+    padding-right: 40px;
+}
+.nodu-minimal-preferences-trigger {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    color: var(--theia-foreground);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.nodu-minimal-preferences-trigger .codicon { font-size: 18px; }
+.nodu-minimal-preferences-trigger:hover,
+.nodu-minimal-preferences-trigger[aria-expanded="true"] { background: var(--theia-toolbar-hoverBackground); }
+.nodu-minimal-preferences-trigger[aria-expanded="true"] {
+    color: var(--theia-textLink-foreground);
+    background: color-mix(in srgb, var(--theia-textLink-foreground) 13%, transparent);
+}
+.nodu-minimal-preferences {
+    position: fixed;
+    z-index: 10010;
+    box-sizing: border-box;
+    padding: 8px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    color: var(--theia-foreground);
+    background: var(--theia-editorWidget-background, var(--theia-editor-background));
+    border: 1px solid var(--theia-widget-border, var(--theia-panel-border));
+    border-radius: 8px;
+    box-shadow: 0 4px 16px var(--theia-widget-shadow, #0002);
+    font-size: 12px;
+    line-height: 18px;
+}
+.nodu-minimal-preferences-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 34px;
+    gap: 16px;
+    padding: 0 6px;
+}
+.nodu-minimal-preferences-row > span { white-space: nowrap; }
+.nodu-minimal-preferences button { font: inherit; color: inherit; cursor: pointer; }
+.nodu-minimal-preferences button[aria-disabled="true"],
+.nodu-minimal-preferences button:disabled { opacity: .45; cursor: default; }
+.nodu-minimal-preferences button:focus-visible,
+.nodu-minimal-preferences-trigger:focus-visible {
+    outline: 1px solid var(--theia-focusBorder);
+    outline-offset: 2px;
+}
+.nodu-minimal-preferences-segments,
+.nodu-minimal-preferences-stepper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--theia-input-border, var(--theia-panel-border));
+    border-radius: 5px;
+    padding: 2px;
+    gap: 2px;
+    background: var(--theia-input-background);
+}
+.nodu-minimal-preferences-segments button,
+.nodu-minimal-preferences-stepper button {
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 24px;
+    padding: 0 7px;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+}
+.nodu-minimal-preferences-segments button:hover,
+.nodu-minimal-preferences-stepper button:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-minimal-preferences-segments button[aria-pressed="true"] {
+    background: var(--theia-list-activeSelectionBackground);
+    color: var(--theia-list-activeSelectionForeground);
+}
+.nodu-minimal-preferences-stepper output { min-width: 24px; text-align: center; font-variant-numeric: tabular-nums; }
+.nodu-minimal-preferences-toggle {
+    display: flex;
+    align-items: center;
+    width: 30px;
+    height: 18px;
+    padding: 2px;
+    margin: 0 2px;
+    border: 1px solid var(--theia-input-border, var(--theia-panel-border));
+    border-radius: 10px;
+    background: var(--theia-input-background);
+}
+.nodu-minimal-preferences-toggle span { width: 12px; height: 12px; border-radius: 50%; background: var(--theia-descriptionForeground); }
+.nodu-minimal-preferences-toggle[aria-checked="true"] { background: var(--theia-button-background); border-color: transparent; }
+.nodu-minimal-preferences-toggle[aria-checked="true"] span { margin-left: auto; background: var(--theia-button-foreground); }
+.nodu-minimal-preferences-all {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 32px;
+    padding: 0 6px;
+    margin-top: 6px;
+    border: 0;
+    border-top: 1px solid var(--theia-panel-border);
+    background: transparent;
+    text-align: left;
+}
+.nodu-minimal-preferences-all:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-minimal-preferences-error { padding: 4px 6px; color: var(--theia-errorForeground); }

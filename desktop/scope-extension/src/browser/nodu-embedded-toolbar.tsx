@@ -21,6 +21,7 @@ export interface CToolbarProps {
     confirm(title: string, message: string, ok: string): Promise<boolean>;
     /** Teaching-step toggle when the project has a tutor plan. */
     tutorButton?: React.ReactNode;
+    externalDevicePanel?: boolean;
 }
 
 const STEP_ICON: Record<string, string> = { done: 'pass', running: 'loading codicon-modifier-spin', failed: 'error', pending: 'circle-large-outline' };
@@ -49,7 +50,7 @@ function TaskStrip({ model, exec, setDeviceOpen }: Pick<CToolbarProps, 'model' |
 }
 
 /** Serial ISP guide card (UI-DESIGN §8.3): enter the ROM bootloader, then leave it. */
-function BootGuide({ model, exec }: Pick<CToolbarProps, 'model' | 'exec'>): React.ReactElement | null {
+export function BootGuide({ model, exec }: Pick<CToolbarProps, 'model' | 'exec'>): React.ReactElement | null {
     const project = model.project;
     if (!project || !model.awaitUser) { return null; }
     const enter = model.awaitUser === 'enterBoot';
@@ -110,9 +111,9 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
                 <button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与下载器，${shortBoard}，${chipText}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={props.deviceOpen} aria-pressed={props.deviceOpen} onClick={toggleDevice} title={model.lastError?.message || project.chip.name}>
                     <span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{shortBoard}</span><span className="scope-device-chip-port">{chipText}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
                 </button>
-                <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="开发板与下载" hidden={!props.deviceOpen}>
+                {!props.externalDevicePanel && <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="开发板与下载" hidden={!props.deviceOpen}>
                     <NoduCDevicePanel exec={id => { props.setDeviceOpen(false); exec(id); }} model={model} simple={simple} confirm={props.confirm} showOutput={() => { props.setDeviceOpen(false); exec(C_COMMANDS.showOutput); }} />
-                </div>
+                </div>}
             </div>
         </div>
         <div className="scope-toolbar-center"><TaskStrip model={model} exec={exec} setDeviceOpen={props.setDeviceOpen} /></div>
