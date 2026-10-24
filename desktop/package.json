@@ -1,7 +1,7 @@
 {
   "name": "scope-studio",
   "private": true,
-  "version": "0.1.4",
+  "version": "0.2.2",
   "license": "MIT",
   "engines": {
     "node": ">=24 <25"

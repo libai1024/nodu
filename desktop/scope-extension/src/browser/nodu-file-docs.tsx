@@ -29,7 +29,7 @@ const MAIXPY_DOCS_URL = 'https://maixpy.sipeed.com/';
 const MAIXPY_FORUM_URL = 'https://bbs.sipeed.com/';
 const MAIXPY_EXAMPLES_URL = 'https://github.com/sipeed/MaixPy_scripts';
 export const MAIXPY_RELEASES_URL = 'https://github.com/sipeed/MaixPy/releases';
-const FALLBACK_VERSION = '0.1.4';
+const FALLBACK_VERSION = '0.2.2';
 
 /** MaixPy IDE 0.2.5 new-file template, byte-identical to libOpenMV.dylib / af179e44. */
 function newScriptTemplate(user: string): string {

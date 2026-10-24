@@ -44,3 +44,6 @@ backups/
 
 # Pinned VSIX unpacked by build-clangd-plugin.cjs.
 /desktop/plugins/
+
+# Local release artifacts (uploaded as GitHub release assets).
+/desktop/dist/

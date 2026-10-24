@@ -1,6 +1,6 @@
 {
   "name": "@scope/studio-extension",
-  "version": "0.1.4",
+  "version": "0.2.2",
   "private": true,
   "license": "MIT",
   "description": "见微 SCOPE vision workspace for Eclipse Theia",
