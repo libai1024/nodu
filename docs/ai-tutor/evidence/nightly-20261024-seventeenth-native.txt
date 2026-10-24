@@ -1,0 +1,11 @@
+✔ packaged Rust checker parses actual C and scopes call rules (1133.53575ms)
+✔ header guards expose safe blank rows for cross-file teaching without accepting file-scope calls (6.402625ms)
+✔ real AST prevents an older persisted top-level call ghost from reappearing (15.994ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1200.745917

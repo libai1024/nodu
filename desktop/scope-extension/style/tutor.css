@@ -79,7 +79,9 @@
 
 .nodu-ai-split { display: flex; align-items: center; }
 .nodu-ai-split .nodu-ai-more { width: 20px; padding: 0; }
-.nodu-tutor-trace-reference { box-sizing: border-box; padding: 2px 0 6px; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--theia-scope-tutorGhostForeground, #7F8793); pointer-events: none; user-select: none; }
+.nodu-tutor-trace-reference { box-sizing: border-box; padding: 6px 0; border-block: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--theia-scope-tutorGhostForeground, #7F8793); pointer-events: none; user-select: none; }
+.nodu-tutor-trace-margin { pointer-events: none; user-select: none; }
+.nodu-tutor-trace-margin > .codicon { position: absolute; top: 7px; display: flex; align-items: center; justify-content: flex-end; color: var(--theia-scope-tutorGhostForeground, #7F8793); }
 .nodu-tutor-trace-reference .nodu-tutor-trace-matched { color: var(--theia-editor-foreground); opacity: .65; }
 .nodu-tutor-trace-reference .nodu-tutor-trace-next { border-bottom: 2px solid var(--theia-editorCursor-foreground); }
 .nodu-tutor-trace-reference .nodu-tutor-trace-different, .nodu-tutor-trace-reference .nodu-tutor-trace-extra { color: var(--theia-editorError-foreground); text-decoration: underline dotted; text-underline-offset: 3px; }

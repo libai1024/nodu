@@ -1,0 +1,48 @@
+✔ an already restored editor publishes its buffer when workspace authorization arrives (0.680333ms)
+✔ dynamic exercise survives typing, advances to its second line, and rejects edits outside its region (0.401334ms)
+✔ reference stays below the input after a typo and backspace without modifying code or requesting a review (0.563042ms)
+✔ reference tolerates indentation and Unicode, preserves the target and marks extra input separately (0.159167ms)
+✔ editing the next exercise line invalidates evidence but preserves unchanged-line guidance progress (0.253625ms)
+✔ completed history does not consume the pending queue budget (0.234875ms)
+✔ accepted goal restores its fragment after editor reopen without trusting old annotation evidence (0.071584ms)
+✔ completed fragment schedules one semantic check and partial typing schedules none (0.102ms)
+✔ editing while a fragment is being checked cancels the stale request (0.076333ms)
+✔ line history reopens exact content, preserves guidance and never replays pending model calls (0.957542ms)
+✔ production editor saves line decorations and rebinds them to the reopened document version (0.201375ms)
+✔ manual fragment checks use local evidence offline and ignore results after editing (11.733541ms)
+✔ history survives application restart as stale evidence without losing typed guidance progress (0.218166ms)
+✔ persistent history validates corruption, never replays pending calls, and bounds stored files (0.447042ms)
+✔ static course ghost continues through incomplete constructs and comments without waiting on model review (0.098542ms)
+✔ course navigation authorizes files and abandons a location after switching projects (7.257042ms)
+✔ dynamic lesson opens the next file and focuses validated guidance without editing source (5.684709ms)
+✔ reviewed equivalent lines trigger a fresh fragment review without being marked complete locally (0.092625ms)
+✔ same-revision fragment removal and failed reads clear a restored ghost (5.453792ms)
+✔ reconnect preserves same-project conversation and buffer, tolerates expired handle, clears on project switch (0.405667ms)
+✔ superseded session open is closed before a deduplicated reconnect adopts its own handle (0.149375ms)
+✔ settings completion from an obsolete load cannot open or overwrite the new workspace (0.123458ms)
+✔ course snapshots never regress and stale workspace failures do not surface (0.132333ms)
+✔ migration preview and accepted migration cannot overwrite a newly selected project (0.087625ms)
+✔ clearing a conversation is mode-scoped and does not erase messages entered during delayed completion (0.18075ms)
+✔ delayed goal failure after cancellation cannot replace current error or new request (0.147125ms)
+✔ queued sends cannot carry an old-project prompt or buffer into a newly selected project (0.229916ms)
+✔ failed presentation synchronization prevents queued model requests without an unhandled rejection (0.071667ms)
+✔ late file navigation neither steals focus nor reports errors in another project (8.74175ms)
+✔ goal snapshot from a previous connection cannot restore ghosts in the same reopened workspace (3.94025ms)
+✔ legacy progress import cannot write its result into a different live session (4.98ms)
+✔ a new message waits for server conversation clearing before starting its model request (0.144958ms)
+✔ removing a course clears it and a late snapshot cannot restore the deleted plan (0.065917ms)
+✔ pending line review cannot affect a replaced or disposed editor document (0.235167ms)
+✔ unexpected line-check failure clears processing and allows following work without an unhandled rejection (0.0975ms)
+✔ render and disposal cleanup tolerate Monaco destroying the document before its widget (0.054667ms)
+✔ reference view zone stays below the input, reflows on narrow layout, and cleans up without editing the document (5.460417ms)
+✔ typing practice temporarily suppresses completion and paired insertion then restores editor settings (6.128666ms)
+✔ AI reference is anchored to its insertion region across cursor moves and focus loss (0.181958ms)
+✔ course reference stays at its marker with the cursor elsewhere or no focused editor (0.053875ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 410.401125

@@ -1,0 +1,29 @@
+   Compiling nodu-tutor v0.2.1 (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/native/crates/nodu-tutor)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.41s
+     Running unittests src/lib.rs (target/debug/deps/nodu_tutor-4ae8bc2dcf6697b1)
+
+running 9 tests
+test tests::insertion_sites_exclude_comments_and_directives ... ok
+test tests::direct_calls_ignore_comments_strings_and_other_functions ... ok
+test tests::budget_and_unicode ... ok
+test tests::restricted_scope_and_indirection ... ok
+test tests::incomplete_and_preprocessor_are_unknown ... ok
+test tests::header_guard_body_allows_insertion_but_not_nested_conditions_or_directives ... ok
+test tests::executable_statement_outside_function_is_not_a_valid_teaching_snapshot ... ok
+test tests::pure_algorithms_exclude_host_capabilities_and_conditional_sources ... ok
+test tests::guards_and_equivalent_operand_order ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/nodu_tutor-d4a9c4986773a578)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nodu_tutor
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

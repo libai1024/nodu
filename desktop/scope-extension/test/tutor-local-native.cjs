@@ -7,6 +7,17 @@ test('packaged Rust checker parses actual C and scopes call rules',async()=>{
  const broken=await checker.inspect({path:'main.c',text:'void main(){ receive(; }',line:1,version:2});assert.equal(broken.syntax,'incomplete');
 });
 
+test('header guards expose safe blank rows for cross-file teaching without accepting file-scope calls',async()=>{
+ const text='#ifndef BOARD_H\n#define BOARD_H\n\n#include <stdint.h>\n\n#endif\n';
+ const source={path:'Board/board.h',text,line:3,version:1};
+ const report=await checker.inspect(source);
+ assert.equal(report.syntax,'valid',report.note);assert.ok(report.insertionLines.includes(3));assert.ok(report.insertionLines.includes(5));
+ const macro=await checker.inspect({...source,text:text.replace('\n\n#include','\n#define TUTOR_READY_MESSAGE "READY\\r\\n"\n\n#include')});
+ assert.equal(macro.syntax,'valid',macro.note);
+ const call=await checker.inspect({...source,text:text.replace('\n\n#include','\nBoard_DebugWrite("READY", 5);\n\n#include')});
+ assert.equal(call.syntax,'incomplete');
+});
+
 test('real AST prevents an older persisted top-level call ghost from reappearing',async t=>{
  const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path');
  const {TutorGoalStore}=require('../lib/node/tutor/tutor-goal-store'),{TutorGoalSession}=require('../lib/node/tutor/tutor-goal-session');

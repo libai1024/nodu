@@ -18,6 +18,7 @@ export const TUTOR_COMMANDS = {
     revealStep: 'nodu.tutor.reveal-step', guidance: 'nodu.tutor.guidance', settings: 'nodu.tutor.settings', highlight: 'nodu.tutor.highlight', annotations: 'nodu.tutor.annotations', float: 'nodu.tutor.float', check: 'nodu.tutor.check',
 } as const;
 interface LineTask { decoration: string; text: string; status: 'pending' | 'ok' | 'needs-work' | 'context' | 'stale' | 'unavailable'; note: string; version?: number; guided?: boolean; }
+interface TraceReference { candidate: string; typed: string; line: number; block?: { lines: readonly string[]; current: number }; }
 let count = 0;
 class TutorEditorController implements Disposable {
     private readonly disposables = new DisposableCollection();
@@ -34,7 +35,7 @@ class TutorEditorController implements Disposable {
     private disposed = false;
     private overlay?: monaco.editor.IOverlayWidget;
     private tracingOptions?: monaco.editor.IEditorOptions;
-    private traceZone?: { id: string; zone: monaco.editor.IViewZone; content: HTMLDivElement; signature: string };
+    private traceZone?: { id: string; zone: monaco.editor.IViewZone; content: HTMLDivElement; icon: HTMLElement; signature: string };
     private readonly id = `nodu.tutor.step.${++count}`;
     constructor(private readonly widget: EditorWidget, private readonly control: monaco.editor.IStandaloneCodeEditor,
         private readonly tutor: NoduTutorModel, private readonly active: () => boolean, private readonly openPanel: () => void) {
@@ -192,31 +193,42 @@ class TutorEditorController implements Disposable {
             }
         }
         let tracing = false;
-        let reference: { candidate: string; typed: string; line: number } | undefined;
-        if (position && this.tutor.hintsVisible && !this.composing && this.active()) {
-            let candidate: string | undefined;
+        let reference: TraceReference | undefined;
+        if (this.tutor.hintsVisible) {
+            const prior = [...this.tasks.values()];
+            const complete = (line: number, expected: string): boolean => {
+                const actual = model.getLineContent(line).trim();
+                return actual === expected.trim() || prior.some(t => t.guided && t.text.trim() === actual
+                    && model.getDecorationRange(t.decoration)?.startLineNumber === line);
+            };
+            const at = (start: number, lines: readonly string[], available: number): void => {
+                if (start < 1 || start > model.getLineCount() || !lines.length) { return; }
+                const count = Math.max(1, Math.min(available, lines.length, model.getLineCount() - start + 1));
+                let index = 0;
+                while (index < count - 1 && complete(start + index, lines[index])) { index++; }
+                const inputLine = start + index;
+                reference = { candidate: lines[index], typed: model.getLineContent(inputLine), line: start + count - 1,
+                    ...(lines.length > 1 ? { block: { lines, current: index } } : {}) };
+                // Focus controls typing aids, never the existence or location of the reference.
+                tracing = !this.composing && this.active() && position?.lineNumber === inputLine;
+            };
             const guidance = this.tutor.guidance;
-            const index = guidance ? position.lineNumber - guidance.anchorLine : -1;
-            if (guidance?.source.path === buffer.path && index >= 0 && index < guidance.lines.length) { candidate = guidance.lines[index]; }
-            if (!candidate) {
+            if (guidance?.source.path === buffer.path) {
+                const inserted = model.getLineCount() - guidance.source.text.split('\n').length;
+                at(guidance.anchorLine, guidance.lines, inserted + 1);
+            }
+            if (!reference) {
                 for (const fragment of step?.guidance ?? []) {
                     const anchor = step?.anchors.find(a => a.id === fragment.anchorId && a.path === buffer.path);
                     const base = anchor && tutorMarkerLine(model.getLinesContent(), anchor);
                     if (!base || fragment.requiredSymbols.some(s => !new RegExp(`\\b${s}\\b`).test(buffer.text))) { continue; }
-                    const index = position.lineNumber - base - 1;
-                    if (index < 0 || index >= fragment.lines.length) { continue; }
-                    // Ghost progression follows typed code; semantic feedback never blocks an incomplete construct.
-                    const prior = [...this.tasks.values()];
-                    if (index && !fragment.lines.slice(0, index).every((expected, i) => {
-                        const line = base + i + 1, actual = model.getLineContent(line).trim();
-                        return actual === expected.trim() || prior.some(t => t.guided && t.text.trim() === actual && model.getDecorationRange(t.decoration)?.startLineNumber === line);
-                    })) { continue; }
-                    candidate = fragment.lines[index]; break;
+                    let available = 1;
+                    while (available < fragment.lines.length && base + available < model.getLineCount()
+                        && complete(base + available, fragment.lines[available - 1])) { available++; }
+                    at(base + 1, fragment.lines, available);
+                    if (reference) { break; }
                 }
             }
-            const typed = model.getLineContent(position.lineNumber);
-            tracing = !!candidate && this.active();
-            if (candidate) { reference = { candidate, typed, line: position.lineNumber }; }
         }
         this.setTracing(tracing);
         this.renderTrace(reference);
@@ -239,7 +251,7 @@ class TutorEditorController implements Disposable {
             this.control.addOverlayWidget(this.overlay);
         }
     }
-    private renderTrace(reference?: { candidate: string; typed: string; line: number }): void {
+    private renderTrace(reference?: TraceReference): void {
         if (!reference) {
             if (this.traceZone) {
                 const id = this.traceZone.id; this.traceZone = undefined;
@@ -247,31 +259,42 @@ class TutorEditorController implements Disposable {
             }
             return;
         }
-        const width = Math.max(80, this.control.getLayoutInfo().contentWidth - 20);
+        const layout = this.control.getLayoutInfo();
+        const width = Math.max(80, layout.contentWidth - 20);
         const font = this.control.getOption(monaco.editor.EditorOption.fontInfo);
         const lineHeight = this.control.getOption(monaco.editor.EditorOption.lineHeight);
         const tabSize = this.control.getModel()?.getOptions().tabSize ?? 4;
-        const signature = JSON.stringify([reference, width, font.fontFamily, font.fontSize, font.fontWeight, font.letterSpacing, lineHeight, tabSize]);
+        const signature = JSON.stringify([reference, width, layout.lineNumbersLeft, layout.lineNumbersWidth, font.fontFamily, font.fontSize, font.fontWeight, font.letterSpacing, lineHeight, tabSize]);
         if (this.traceZone?.signature === signature) { return; }
         if (!this.traceZone) {
             const content = document.createElement('div'); content.className = 'nodu-tutor-trace-reference';
-            content.setAttribute('role', 'note'); content.setAttribute('aria-label', '代码范字');
+            content.setAttribute('role', 'note'); content.setAttribute('aria-label', 'AI 代码范字');
             const domNode = document.createElement('div'); domNode.append(content);
-            const zone: monaco.editor.IViewZone = { afterLineNumber: reference.line, heightInPx: lineHeight + 8, domNode, suppressMouseDown: true };
+            const marginDomNode = document.createElement('div'); marginDomNode.className = 'nodu-tutor-trace-margin'; marginDomNode.setAttribute('aria-hidden', 'true');
+            const icon = document.createElement('i'); icon.className = 'codicon codicon-sparkle'; marginDomNode.append(icon);
+            const zone: monaco.editor.IViewZone = { afterLineNumber: reference.line, heightInPx: lineHeight + 14, domNode, marginDomNode, suppressMouseDown: true };
             let id = '';
             this.control.changeViewZones(accessor => { id = accessor.addZone(zone); });
-            this.traceZone = { id, zone, content, signature: '' };
+            this.traceZone = { id, zone, content, icon, signature: '' };
         }
-        const { content, zone, id } = this.traceZone;
+        const { content, icon, zone, id } = this.traceZone;
         this.traceZone.signature = signature;
         this.control.applyFontInfo(content); content.style.width = `${width}px`; content.style.tabSize = String(tabSize);
+        icon.style.left = `${layout.lineNumbersLeft}px`; icon.style.width = `${layout.lineNumbersWidth}px`;
+        icon.style.height = `${lineHeight}px`; icon.style.fontSize = `${Math.min(16, font.fontSize)}px`;
         content.replaceChildren();
-        for (const part of traceReference(reference.typed, reference.candidate)) {
-            const span = document.createElement('span'); span.className = `nodu-tutor-trace-${part.state}`;
-            span.textContent = part.text; content.append(span);
-        }
+        const lines = reference.block?.lines ?? [reference.candidate], current = reference.block?.current ?? 0;
+        lines.forEach((line, index) => {
+            const parts = index === current ? traceReference(reference.typed, line) : [{ text: line, state: 'pending' }];
+            for (const part of parts) {
+                const span = document.createElement('span'); span.className = `nodu-tutor-trace-${part.state}`;
+                span.textContent = part.text; content.append(span);
+            }
+            if (index < lines.length - 1) { const newline = document.createElement('span'); newline.textContent = '\n'; content.append(newline); }
+        });
         zone.afterLineNumber = reference.line;
-        zone.heightInPx = Math.max(lineHeight + 8, content.scrollHeight);
+        // scrollHeight includes padding, but not the two one-pixel separators.
+        zone.heightInPx = Math.max(lineHeight * lines.length + 14, content.scrollHeight + 2);
         this.control.changeViewZones(accessor => accessor.layoutZone(id));
     }
     private setTracing(active: boolean): void {

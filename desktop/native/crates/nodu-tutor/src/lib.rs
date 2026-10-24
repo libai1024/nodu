@@ -118,6 +118,24 @@ fn guarded(call: Node<'_>, source: &str) -> bool {
     let Some(guard) = decl.next_named_sibling().filter(|n| n.kind() == "if_statement") else { return false; };
     guard.child_by_field_name("condition").is_some_and(|c| comparable(c, text(name, source), source))
 }
+fn header_guard(node: Node<'_>, source: &str) -> bool {
+    if node.kind() != "preproc_ifdef" || node.parent().is_none_or(|p| p.kind() != "translation_unit")
+        || node.child_by_field_name("alternative").is_some()
+        || node.child(0).is_none_or(|n| text(n, source) != "#ifndef") { return false; }
+    let Some(name) = node.child_by_field_name("name") else { return false; };
+    let mut cursor = node.walk();
+    let first = node.named_children(&mut cursor).find(|n| n.id() != name.id() && n.kind() != "comment");
+    first.is_some_and(|n| n.kind() == "preproc_def" && n.child_by_field_name("value").is_none()
+        && n.child_by_field_name("name").is_some_and(|defined| text(defined, source) == text(name, source)))
+}
+fn file_scope(node: Node<'_>) -> bool {
+    let mut parent = node.parent();
+    while let Some(n) = parent {
+        if !n.kind().starts_with("preproc_") { return n.kind() == "translation_unit"; }
+        parent = n.parent();
+    }
+    false
+}
 pub fn inspect(request: &Request) -> Result<Report, String> {
     if request.source.len() > 96000 || request.source.encode_utf16().count() > 32000 || request.source.contains('\0') || request.rules.len() > 32
         || request.rules.iter().any(|r| !valid_name(&r.function) || !valid_name(&r.callee) || r.id.is_empty() || r.id.len() > 80) { return Err("检查请求超过限制".into()); }
@@ -129,16 +147,20 @@ pub fn inspect(request: &Request) -> Result<Report, String> {
     let all = nodes(tree.root_node())?;
     // tree-sitter accepts top-level expression statements for macro-heavy C. They
     // cannot be offered as executable teaching statements outside a function.
-    let invalid = |n: &&Node<'_>| n.is_error() || n.is_missing() || (n.kind() == "expression_statement" && n.parent().is_some_and(|p| p.kind() == "translation_unit"));
+    let invalid = |n: &&Node<'_>| n.is_error() || n.is_missing() || (n.kind() == "expression_statement" && file_scope(**n));
     let error_lines: Vec<_> = all.iter().filter(invalid).take(16).map(|n| n.start_position().row + 1).collect();
     let syntax = if tree.root_node().has_error() || !error_lines.is_empty() { "incomplete" } else { "valid" };
     let macros = all.iter().any(|n| matches!(n.kind(), "preproc_def" | "preproc_function_def" | "preproc_if" | "preproc_ifdef"));
     let mut offset = 0;
+    let mut continued = false;
     let insertion_lines = request.source.split('\n').enumerate().filter_map(|(row, line)| {
         let position = offset; offset += line.len() + 1;
-        if !line.trim().is_empty() { return None; }
+        let continuation = continued;
+        continued = line.strip_suffix('\r').unwrap_or(line).ends_with('\\');
+        if continuation || !line.trim().is_empty() { return None; }
         let protected = all.iter().any(|n| n.start_byte() <= position && position < n.end_byte()
-            && (n.kind() == "comment" || n.kind().contains("string_literal") || n.kind().starts_with("preproc_")));
+            && (n.kind() == "comment" || n.kind().contains("string_literal")
+                || (n.kind().starts_with("preproc_") && !header_guard(*n, &request.source))));
         (!protected).then_some(row + 1)
     }).take(128).collect();
     let mut findings = Vec::new();
@@ -204,6 +226,17 @@ mod tests {
     #[test] fn insertion_sites_exclude_comments_and_directives() {
         let source = "/* comment\n\n*/\nint main(){\n\n}\n";
         assert_eq!(result(source,Kind::Calls).insertion_lines,vec![5,7]);
+    }
+    #[test] fn header_guard_body_allows_insertion_but_not_nested_conditions_or_directives() {
+        let source = "#ifndef BOARD_H\n#define BOARD_H\n\n/* note\n\n*/\n#if DEBUG\n\n#endif\n\n#endif\n";
+        assert_eq!(result(source,Kind::Calls).insertion_lines,vec![3,10,12]);
+        for source in ["#ifdef BOARD_H\n#define BOARD_H\n\n#endif", "#ifndef A\n#define B\n\n#endif", "#ifndef A\n#define A\n\n#else\n\n#endif"] {
+            assert!(result(source,Kind::Calls).insertion_lines.is_empty(),"{source}");
+        }
+        let continuation = "#ifndef H\n#define H\n#define VALUE \\\n\n\n#endif";
+        assert!(!result(continuation,Kind::Calls).insertion_lines.contains(&4));
+        assert_eq!(result("#ifndef H\n#define H\nrun();\n#endif",Kind::Calls).syntax,"incomplete");
+        assert_eq!(result("#ifndef H\n#define H\nvoid run(void);\n#endif",Kind::Calls).syntax,"valid");
     }
     #[test] fn pure_algorithms_exclude_host_capabilities_and_conditional_sources() {
         let extract = |s: &str| inspect(&Request { source: s.into(), rules: vec![], extract_pure: true }).unwrap().pure;

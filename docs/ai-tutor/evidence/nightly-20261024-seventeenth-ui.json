@@ -1,0 +1,62 @@
+{
+  "baseline": "3707408",
+  "desktop": "Electron via native CUA",
+  "project": "/Users/wangwei/.codex/nodu-nightly-20261024/ui-projects/f103-desktop-tutor",
+  "model": "glm-5.3",
+  "endpoint": "https://open.bigmodel.cn/api/coding/paas/v4",
+  "credentials": "Explicit session memory only. No new credential input during anchor/focus fix; renderer reload did not restart backend.",
+  "annotations": {
+    "actualDesktop": true,
+    "keyboard": "Cmd+K Cmd+I",
+    "modelCorrectedLineNumber": true,
+    "writesSource": false
+  },
+  "crossFileGoal": {
+    "completed": 2,
+    "steps": 2,
+    "files": [
+      "Board/board.h",
+      "Core/Src/main.c"
+    ],
+    "headerSavedBeforeNextStep": true,
+    "modelHeaderPlacementInitiallyBlocked": true,
+    "fixedHeaderGuardPlacement": true,
+    "desktopCompile": "success 100%",
+    "flashPercent": 6.4,
+    "hardwareOperations": false
+  },
+  "reference": {
+    "singleSeparatorsActualDesktop": true,
+    "completeBlockAndOneMarginIconUnitTest": true,
+    "finalIconDesktop": true,
+    "pendingGoal": "BLOCK_READY active 0/1; three-line reference restored; user partial const char block preserved at line 16",
+    "anchorCursorOtherLine": true,
+    "anchorChatFocus": true,
+    "rendererReloadRestored": true,
+    "latestLightNarrow": "not repeated after focus fix; user resumed desktop interaction"
+  },
+  "compiledSnapshotFiles": {
+    "Core/Src/main.c": {
+      "bytes": 677,
+      "sha256": "580fb4166e0b08d8198151cf7083eaf4ae8908837aa7d1de522e7f95233a81e2"
+    },
+    "Board/board.h": {
+      "bytes": 485,
+      "sha256": "0d5baa00d016645bde8f691c887e48ad7aa252529a2ca1cb15b753becf4692d8"
+    },
+    "build/debug/firmware.bin": {
+      "bytes": 4196,
+      "sha256": "79815df82d549329c19f59e88eac65a1abe6990930b24c12af5ea956b0ebed66"
+    },
+    "build/debug/firmware.hex": {
+      "bytes": 11862,
+      "sha256": "e5f69a6d8d6c0e12af5f658e0f4d350617f51d418fc03b168bb289b77d9c1d9a"
+    },
+    "build/debug/firmware.elf": {
+      "bytes": 751608,
+      "sha256": "4d1a8f4864a8cccda204b59c9058e78b9fc74e836b040120aae5d2c44bbb99c0"
+    }
+  },
+  "currentSource": "User partial line saved before renderer reload; not compiled successfully. Earlier 2/2 cross-file build is a separate snapshot.",
+  "reloadShortcutIncident": "Cmd+R invoked product Run instead of Reload Window; incomplete C build failed before download. Reload Window was then explicitly selected in command palette. No firmware download/reset."
+}

@@ -59,7 +59,7 @@ test('reference stays below the input after a typo and backspace without modifyi
     const t=model();t.hintsVisible=true;t.currentStep=()=>undefined;
     let requests=0;t.send=()=>{requests++;};
     const {c,state}=editor(t,['inx'],1);c.render();
-    assert.deepEqual(state.reference,{candidate:'int x = 1;',typed:'inx',line:1});
+    assert.deepEqual(state.reference,{candidate:'int x = 1;',typed:'inx',line:1,block:{lines:['int x = 1;', 'int y = 2;'],current:0}});
     assert.equal(state.decorations.some(d=>d.options.after),false,'no inline virtual code');
     const parts=helpers.traceReference(state.reference.typed,state.reference.candidate);
     assert.deepEqual(parts.slice(0,3),[{text:'in',state:'matched'},{text:'t',state:'different'},{text:' ',state:'next'}]);
@@ -77,7 +77,7 @@ test('reference tolerates indentation and Unicode, preserves the target and mark
     const t=model();t.hintsVisible=true;t.currentStep=()=>undefined;
     const {c,state}=editor(t,['int'],1);c.control.getPosition=()=>({lineNumber:1,column:2});c.render();
     assert.equal(state.reference.candidate,'int x = 1;');
-    c.composing=true;c.render();assert.equal(state.reference,undefined);
+    c.composing=true;c.render();assert.ok(state.reference);assert.equal(state.tracing,false);
     c.composing=false;t.hintsVisible=false;c.render();assert.equal(state.reference,undefined);assert.equal(state.tracing,false);
 });
 test('editing the next exercise line invalidates evidence but preserves unchanged-line guidance progress', () => {
@@ -91,7 +91,7 @@ test('editing the next exercise line invalidates evidence but preserves unchange
     assert.equal(state.reference.candidate,'int y = 2;'); assert.equal(state.reference.line,3);
     state.lines[1]='int x = 9;'; c.edit({changes:[]});
     assert.equal(c.tasks.get('2').guided,false);
-    assert.equal(state.reference,undefined);
+    assert.equal(state.reference.candidate,'int x = 1;');assert.equal(state.reference.line,2);
 });
 test('completed history does not consume the pending queue budget', () => {
     const t=model('',{}); const {c,state}=editor(t,Array.from({length:22},(_,i)=>`int x${i};`),22);
@@ -201,7 +201,7 @@ test('static course ghost continues through incomplete constructs and comments w
     t.currentStep=()=>({anchors:[{id:'s',path:'main.c',marker:'// STEP'}],guidance:[{anchorId:'s',requiredSymbols:[],lines:['void sample(void)','{','// setup','int x = 1;','}']}]});
     const {c,state}=editor(t,['// STEP','void sample(void)','{','// setup','i'],5);
     c.render();assert.equal(state.reference.candidate,'int x = 1;');assert.equal(state.reference.line,5);
-    state.lines[1]='void different(void)';c.render();assert.equal(state.reference,undefined);
+    state.lines[1]='void different(void)';c.render();assert.equal(state.reference.candidate,'void sample(void)');assert.equal(state.reference.line,2);
 });
 
 test('course navigation authorizes files and abandons a location after switching projects', async () => {
@@ -399,12 +399,20 @@ test('reference view zone stays below the input, reflows on narrow layout, and c
  const document={createElement:()=>{const node={style:{},children:[],setAttribute(){},append(child){this.children.push(child);},replaceChildren(){this.children=[];},get scrollHeight(){return this.style.width==='100px'?64:32;}};nodes.push(node);return node;}};
  const Subject=methods('nodu-tutor-hints.ts','TutorEditorController',['renderTrace'],{document,traceReference:helpers.traceReference,monaco:{editor:{EditorOption:{fontInfo:'fontInfo',lineHeight:'lineHeight'}}}});
  const zones=new Map();let width=700,adds=0,layouts=0,removes=0;
- const c=Object.assign(new Subject(),{control:{getLayoutInfo:()=>({contentWidth:width}),getOption:key=>key==='lineHeight'?24:{fontFamily:'mono',fontSize:14},getModel:()=>({getOptions:()=>({tabSize:4})}),applyFontInfo(){},changeViewZones:fn=>fn({addZone(zone){const id=String(++adds);zones.set(id,zone);return id;},layoutZone(){layouts++;},removeZone(id){zones.delete(id);removes++;}})}});
+ const c=Object.assign(new Subject(),{control:{getLayoutInfo:()=>({contentWidth:width,lineNumbersLeft:20,lineNumbersWidth:36}),getOption:key=>key==='lineHeight'?24:{fontFamily:'mono',fontSize:14},getModel:()=>({getOptions:()=>({tabSize:4})}),applyFontInfo(){},changeViewZones:fn=>fn({addZone(zone){const id=String(++adds);zones.set(id,zone);return id;},layoutZone(){layouts++;},removeZone(id){zones.delete(id);removes++;}})}});
  c.renderTrace({typed:'in',candidate:'int x = 1;',line:4});
- assert.equal(zones.get('1').afterLineNumber,4);assert.equal(zones.get('1').heightInPx,32);
+ assert.equal(zones.get('1').afterLineNumber,4);assert.equal(zones.get('1').heightInPx,38);
  assert.equal(c.traceZone.content.children.map(s=>s.textContent).join(''),'int x = 1;');
  c.renderTrace({typed:'inx',candidate:'int x = 1;',line:4});assert.equal(adds,1);assert.ok(c.traceZone.content.children.some(s=>s.className.endsWith('different')));
- width=120;c.renderTrace({typed:'inx',candidate:'int x = 1;',line:4});assert.equal(zones.get('1').heightInPx,64);
+ width=120;c.renderTrace({typed:'inx',candidate:'int x = 1;',line:4});assert.equal(zones.get('1').heightInPx,66);
+ width=700;c.renderTrace({typed:'re',candidate:'    return 0;',line:5,block:{lines:['if (ready) {','    return 0;','}'],current:1}});
+ assert.equal(adds,1,'a whole block shares one bounded reference region');
+ assert.equal(zones.get('1').afterLineNumber,5);assert.equal(zones.get('1').heightInPx,86);
+ assert.equal(c.traceZone.content.children.map(s=>s.textContent).join(''),'if (ready) {\n    return 0;\n}');
+ assert.equal(c.traceZone.content.children.filter(s=>s.className?.endsWith('next')).length,1,'only the active reference row has a next-character cue');
+ assert.equal(zones.get('1').marginDomNode.children.length,1,'the whole block has one AI icon, not one per line');
+ assert.equal(c.traceZone.icon.className,'codicon codicon-sparkle');
+ assert.deepEqual(c.traceZone.icon.style,{left:'20px',width:'36px',height:'24px',fontSize:'14px'});
  c.renderTrace();assert.equal(zones.size,0);assert.equal(removes,1);assert.equal(c.traceZone,undefined);
  c.renderTrace({typed:'',candidate:'return 0;',line:8});assert.equal(zones.get('2').afterLineNumber,8);assert.ok(layouts>=4);
 });
@@ -416,4 +424,22 @@ test('typing practice temporarily suppresses completion and paired insertion the
  c.setTracing(true);c.setTracing(true);assert.equal(updates.length,1);assert.equal(updates[0].quickSuggestions,false);assert.equal(updates[0].autoClosingQuotes,'never');
  c.setTracing(false);assert.deepEqual(updates[1],original);assert.equal(c.tracingOptions,undefined);
  c.setTracing(false);assert.equal(updates.length,2);
+});
+
+test('AI reference is anchored to its insertion region across cursor moves and focus loss',()=>{
+ const t=model('head\n\ntail');t.hintsVisible=true;t.currentStep=()=>undefined;
+ t.guidance={source:{path:'main.c',text:'head\n\ntail'},anchorLine:2,lines:['int x = 1;','int y = 2;']};
+ const {c,state}=editor(t,['head','int','tail'],2);c.render();const original=structuredClone(state.reference);
+ c.control.getPosition=()=>({lineNumber:1,column:1});c.render();assert.deepEqual(state.reference,original);assert.equal(state.tracing,false);
+ c.active=()=>false;c.render();assert.deepEqual(state.reference,original);
+ c.control.getPosition=()=>null;c.render();assert.deepEqual(state.reference,original);
+ state.lines=['head','int x = 1;','','tail'];c.render();assert.equal(state.reference.line,3);assert.equal(state.reference.candidate,'int y = 2;');
+ c.control.getPosition=()=>({lineNumber:4,column:1});c.render();assert.equal(state.reference.line,3);
+ t.teaching=false;c.render();assert.equal(state.reference,undefined);
+});
+test('course reference stays at its marker with the cursor elsewhere or no focused editor',()=>{
+ const t=model();t.guidance=undefined;t.hintsVisible=true;
+ t.currentStep=()=>({anchors:[{id:'s',path:'main.c',marker:'// STEP'}],guidance:[{anchorId:'s',requiredSymbols:[],lines:['int x;','int y;']}]});
+ const {c,state}=editor(t,['// STEP','','tail'],3);c.active=()=>false;c.render();
+ assert.equal(state.reference.line,2);assert.equal(state.reference.candidate,'int x;');assert.equal(state.tracing,false);
 });
