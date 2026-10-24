@@ -6,6 +6,8 @@ import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegist
 import { CommonCommands, CommonMenus, FrontendApplicationContribution } from '@theia/core/lib/browser';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { ElectronIpcConnectionProvider } from '@theia/core/lib/electron-browser/messaging/electron-ipc-connection-source';
+import { ElectronMenuContribution } from '@theia/core/lib/electron-browser/menu/electron-menu-contribution';
+import { NoduElectronMenuContribution } from './nodu-electron-menu-contribution';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import URI from '@theia/core/lib/common/uri';
@@ -150,6 +152,7 @@ function Launcher({ projects, open, create, browse }: {
 }
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
+    rebind(ElectronMenuContribution).to(NoduElectronMenuContribution).inSingletonScope();
     bind(NoduLauncherMain).toDynamicValue(ctx => ElectronIpcConnectionProvider.createProxy<NoduLauncherMain>(ctx.container, NODU_LAUNCHER_MAIN_PATH)).inSingletonScope();
     bind(NoduProjectsService).toDynamicValue(ctx => WebSocketConnectionProvider.createProxy<NoduProjectsService>(ctx.container, NODU_PROJECTS_PATH)).inSingletonScope();
     bind(LauncherWorkspaceService).toSelf().inSingletonScope();

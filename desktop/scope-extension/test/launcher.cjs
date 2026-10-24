@@ -112,3 +112,34 @@ test('packaged courses are filtered, fingerprinted and found through the resourc
     await fs.appendFile(path.join(course,'README.md'),'changed');assert.notEqual(courseExamplesStamp(source),before);
     await fs.symlink(path.join(course,'README.md'),path.join(course,'escape.md'));assert.throws(()=>courseExamplesStamp(source),/symlink/);
 });
+
+test('Electron reload has a distinct shortcut and preserves run, terminal and other defaults', () => {
+    const vm = require('node:vm'), fsSync = require('node:fs');
+    const reload = { id: 'workbench.action.reloadWindow' };
+    class BaseMenu {
+        registerKeybindings(registry) {
+            registry.registerKeybinding({ command: reload.id, keybinding: 'ctrlcmd+r' });
+            registry.registerKeybinding({ command: 'zoom', keybinding: 'ctrlcmd+=' });
+        }
+    }
+    const exported = { exports: {} };
+    vm.runInNewContext(fsSync.readFileSync(path.join(__dirname, '../lib/electron-browser/nodu-electron-menu-contribution.js'), 'utf8'), {
+        exports: exported.exports, module: exported,
+        require: name => name.includes('inversify') ? { injectable: () => value => value }
+            : { ElectronCommands: { RELOAD: reload }, ElectronMenuContribution: BaseMenu }
+    });
+    const defaults = [{ command: 'nodu.run', keybinding: 'ctrlcmd+r' },
+        { command: 'terminal.raw', keybinding: 'ctrlcmd+r', when: 'terminalFocus' }];
+    const registry = {
+        registerKeybinding: binding => defaults.push(binding),
+        unregisterKeybinding: command => {
+            assert.equal(command, reload, 'remove by command identity, never by shared key');
+            for (let i = defaults.length - 1; i >= 0; i--) if (defaults[i].command === command.id) defaults.splice(i, 1);
+        }
+    };
+    new exported.exports.NoduElectronMenuContribution().registerKeybindings(registry);
+    assert.equal(defaults.filter(b => b.command === reload.id).length, 1);
+    assert.equal(defaults.find(b => b.command === reload.id).keybinding, 'ctrlcmd+shift+r');
+    assert.deepEqual(defaults.filter(b => b.keybinding === 'ctrlcmd+r').map(b => b.command), ['nodu.run', 'terminal.raw']);
+    assert.equal(defaults.find(b => b.command === 'zoom').keybinding, 'ctrlcmd+=');
+});
