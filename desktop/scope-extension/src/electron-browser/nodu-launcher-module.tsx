@@ -4,6 +4,9 @@ import { createRoot, Root } from '@theia/core/shared/react-dom/client';
 import { ContainerModule, inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
 import { CommonCommands, CommonMenus, FrontendApplicationContribution } from '@theia/core/lib/browser';
+import { PreferenceContribution } from '@theia/core/lib/common/preferences/preference-schema';
+import { PreferenceService } from '@theia/core/lib/common/preferences/preference-service';
+import { ApplicationServer } from '@theia/core/lib/common/application-protocol';
 import { ThemeService } from '@theia/core/lib/browser/theming';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { ElectronIpcConnectionProvider } from '@theia/core/lib/electron-browser/messaging/electron-ipc-connection-source';
@@ -16,9 +19,10 @@ import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import URI from '@theia/core/lib/common/uri';
 import { NoduEmbeddedModel } from '../browser/nodu-embedded-model';
-import { NODU_LAUNCHER_MAIN_PATH, NODU_LAUNCHER_QUERY, NODU_PROJECTS_PATH, NoduLauncherMain, NoduProjectsService } from '../common/nodu-launcher-protocol';
+import { NODU_LAUNCHER_MAIN_PATH, NODU_LAUNCHER_QUERY, NODU_PROJECTS_PATH, NODU_REOPEN_LAST_PREF, NoduLauncherMain, NoduProjectsService } from '../common/nodu-launcher-protocol';
 import { Launcher } from './nodu-launcher-view';
 import '../../style/launcher.css';
+import '../../style/project-icon.css';
 import '../../style/project-search.css';
 
 const isLauncher = (): boolean => new URLSearchParams(window.location.search).get(NODU_LAUNCHER_QUERY) === '1';
@@ -52,6 +56,8 @@ class LauncherContribution implements FrontendApplicationContribution, CommandCo
     @inject(NoduEmbeddedModel) protected readonly model!: NoduEmbeddedModel;
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
     @inject(ThemeService) protected readonly themes!: ThemeService;
+    @inject(PreferenceService) protected readonly preferences!: PreferenceService;
+    @inject(ApplicationServer) protected readonly appServer!: ApplicationServer;
     private root?: Root;
     async onStart(): Promise<void> {
         if (!isLauncher()) {
@@ -63,8 +69,9 @@ class LauncherContribution implements FrontendApplicationContribution, CommandCo
         const host = document.createElement('div');
         host.id = 'nodu-launcher'; document.body.appendChild(host);
         this.root = createRoot(host);
-        this.root.render(<Launcher projects={this.projects} open={path => this.main.openProject(path)}
-            browse={() => this.openFolder()} themes={this.themes} model={this.model} dialogs={this.dialogs} />);
+        this.root.render(<Launcher projects={this.projects} open={(path, keepLauncher) => this.main.openProject(path, { keepLauncher })}
+            reveal={async path => window.electronTheiaCore.showItemInFolder(path)} browse={() => this.openFolder()} themes={this.themes}
+            model={this.model} dialogs={this.dialogs} preferences={this.preferences} application={this.appServer} />);
         document.getElementById('theia-app-shell')?.setAttribute('inert', '');
     }
     onStop(): void { this.root?.unmount(); }
@@ -86,6 +93,11 @@ class LauncherContribution implements FrontendApplicationContribution, CommandCo
 }
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
+    bind(PreferenceContribution).toConstantValue({ schema: {
+        title: 'Nodu 启动', properties: {
+            [NODU_REOPEN_LAST_PREF]: { type: 'boolean', default: false, description: '启动时重新打开上次的项目。' },
+        },
+    } });
     rebind(ElectronMenuContribution).to(NoduElectronMenuContribution).inSingletonScope();
     bind(NoduProjectSearch).toSelf().inSingletonScope();
     rebind(QuickFileOpenService).to(NoduFileSearch).inSingletonScope();

@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Launcher } from '../../scope-extension/src/electron-browser/nodu-launcher-view';
+import { version } from '../../electron-app/package.json';
 import { workbenchColors, scopeColorDefaults } from '../../scope-extension/src/browser/nodu-theme-colors';
 import '../../scope-extension/style/scope.css';
 import '../../scope-extension/style/embedded.css';
@@ -40,4 +41,6 @@ const open=()=>scenario==='open-busy'?wait():fail('项目窗口未能打开。')
 const browse=async()=>{};
 const model={call:()=>scenario==='create-busy'?wait():fail('同名项目已存在，请修改名称。')};
 const dialogs={showOpenDialog:()=>scenario==='browse-error'?fail('无法打开文件夹选择器。'):Promise.resolve(undefined)};
-createRoot(document.getElementById('nodu-launcher')!).render(<Launcher projects={projects as any} themes={themes as any} model={model as any} dialogs={dialogs as any} open={open} browse={browse}/>);
+createRoot(document.getElementById('nodu-launcher')!).render(<Launcher projects={projects as any} themes={themes as any} model={model as any} dialogs={dialogs as any} open={open} browse={browse}
+ application={{ getApplicationInfo: async () => ({ name: 'Nodu', version }) }}
+ preferences={{ ready: Promise.resolve(), get: () => false, set: async () => {} } as any}/>);

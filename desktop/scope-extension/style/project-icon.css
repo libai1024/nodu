@@ -1,0 +1,21 @@
+/* SPDX-License-Identifier: MIT */
+/* Vendor silhouettes are local assets; their geometry also identifies them without color. */
+.nodu-project-icon { position: relative; display: inline-block; flex: 0 0 40px; width: 40px; height: 40px; vertical-align: middle; }
+.nodu-project-icon-plate { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--theia-panel-border); border-radius: 8px; background: var(--theia-sideBar-background); color: var(--theia-foreground); }
+.nodu-project-icon-logo { display: block; width: 24px; height: 24px; transform: translateY(-4px); background: currentColor; mask: var(--nodu-vendor-logo) center / contain no-repeat; }
+.nodu-project-icon--kendryte { --nodu-vendor-logo: url('./project-icons/kendryte.svg'); }
+.nodu-project-icon--stmicroelectronics { --nodu-vendor-logo: url('./project-icons/stmicroelectronics.svg'); }
+.nodu-project-icon--espressif { --nodu-vendor-logo: url('./project-icons/espressif.svg'); }
+.nodu-chip-mark { display: inline-block; flex: 0 0 18px; width: 18px; height: 18px; vertical-align: middle; background: currentColor; mask: var(--nodu-vendor-logo, url('./project-icons/chip.svg')) center / contain no-repeat; }
+.nodu-chip-entry-icon { display: inline-block; width: 24px; height: 24px; background: currentColor; mask: url('./project-icons/chip.svg') center / contain no-repeat; }
+.nodu-chip-label { display: inline-flex; align-items: center; gap: 7px; }
+.nodu-chip-label .nodu-chip-mark { width: 16px; height: 16px; flex-basis: 16px; }
+.nodu-chip-status .codicon-chip::before { content: ''; display: inline-block; width: 16px; height: 16px; vertical-align: middle; background: currentColor; mask: var(--nodu-vendor-logo, url('./project-icons/chip.svg')) center / contain no-repeat; }
+.nodu-project-icon--stmicroelectronics .nodu-project-icon-logo { width: 28px; height: 28px; }
+.nodu-project-icon--espressif .nodu-project-icon-logo { width: 22px; height: 22px; }
+.nodu-project-icon-model { position: absolute; right: 0; bottom: 0; min-width: 20px; padding: 0 3px; border: 1px solid var(--theia-panel-border); border-radius: 3px; background: var(--theia-editor-background); color: var(--theia-foreground); font-family: 'Scope Plex Mono', 'SFMono-Regular', Consolas, monospace; font-size: 9px; font-weight: 600; line-height: 13px; text-align: center; white-space: nowrap; }
+.nodu-project-icon-folder { width: 24px; height: 24px; color: var(--theia-descriptionForeground); }
+.nodu-project-icon--unknown .nodu-project-icon-plate { border-style: dashed; }
+.nodu-project-icon.is-missing .nodu-project-icon-plate { opacity: .5; }
+.nodu-project-icon.is-missing .nodu-project-icon-model { color: var(--theia-descriptionForeground); }
+.nodu-project-icon-missing { position: absolute; top: -4px; left: -4px; width: 17px; height: 17px; border-radius: 4px; background: var(--theia-editor-background); color: var(--theia-editorWarning-foreground); }

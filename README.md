@@ -14,13 +14,16 @@ Nodu 是面向嵌入式学习与开发的桌面 IDE。它把代码编辑、芯�
 
 ## 安装
 
-从 [Releases](https://github.com/libai1024/nodu/releases) 下载对应版本与处理器架构的附件。Release 标签、应用版本与附件版本保持一致；平台是否提供，以该版本实际上传的文件为准。
+从 [v0.2.2 Release](https://github.com/libai1024/nodu/releases/tag/v0.2.2) 下载对应平台附件。当前仓库为私有仓库，下载需要具有仓库访问权限的 GitHub 账号。
 
-- **macOS**：打开 DMG，将 `Nodu.app` 拖入“应用程序”；ZIP 则先解压再移动应用。当前 0.2.2 的主要交付目标为 Apple Silicon，最低构建目标为 macOS 15。签名、公证及实测系统见 [发布说明](docs/releases/0.2.2.md)。
-- **Windows**：提供附件时，完整解压 x64 便携 ZIP 后运行其中的应用。不要只移动 EXE，工具链与运行库需要保留在原目录结构中。
-- **Linux**：尚无经过验收的安装包。
+| 平台 | 下载 | 安装方式 |
+| --- | --- | --- |
+| macOS 15+ / Apple Silicon | [DMG](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-mac-arm64.dmg) · [ZIP](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-mac-arm64.zip) | 打开 DMG，或完整解压 ZIP，将 `Nodu.app` 移入“应用程序” |
+| Windows x64 | [便携 ZIP](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-win32-x64.zip) | 完整解压后运行 `Nodu.exe`，保留同目录工具与运行库 |
 
-安装包使用者无需安装 Node.js 或 Rust。若系统提示开发者身份无法验证，请先核对下载来源、文件摘要及 Release 的签名说明，不要关闭全局系统保护。
+macOS 包采用 ad-hoc 签名，未经 Apple Developer ID 签名或公证；Windows 包未经 Authenticode 签名，已在 Windows 10 19045 x64 验证启动和课程编译。Intel Mac 与 Linux 本版未提供安装包。
+
+安装包使用者无需安装 Node.js 或 Rust。附件的 SHA-256、构建提交、实测范围及签名状态见 [发布说明](docs/releases/0.2.2.md#安装包与校验)。系统提示开发者身份无法验证时，请先核对来源与摘要，不要关闭全局系统保护。
 
 ## 两种芯片工作流
 
@@ -37,7 +40,7 @@ K210 的脚本运行不需要每次重新烧写 MaixPy 固件。STM32 的“运�
 
 ### STM32：第一个工程
 
-1. 从独立工作台新建项目，选择目标芯片与模板，或从参考项目创建自己的副本。
+1. 从独立工作台新建项目，选择目标芯片与模板，或从示例项目创建自己的副本。
 2. 打开源文件并编写代码。clangd 提供 C 语言补全、定义跳转、悬停和诊断。
 3. 在极简模式左下角长按动作按钮，选择 **编译、烧录、运行（编译并烧录）**；短按执行当前动作。没有硬件时也可以编译。
 4. 在目标设备设置中选择 ST-LINK 或串口 ISP。多个下载器同时连接时，核对所选探针及芯片身份；串口 ISP 按界面提示操作 BOOT 和复位。

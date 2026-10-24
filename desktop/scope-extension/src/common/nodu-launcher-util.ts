@@ -54,8 +54,12 @@ export function projectTag(manifests: { nodu?: unknown; board?: unknown }): stri
 export function projectFromWindowUrl(url: string, launcherQuery: string): string | undefined {
     let parsed: URL;
     try { parsed = new URL(url); } catch { return undefined; }
-    if (parsed.searchParams.has(launcherQuery)) { return undefined; }
-    const raw = parsed.hash.slice(1);
+    return parsed.searchParams.has(launcherQuery) ? undefined : projectFromHash(parsed.hash);
+}
+
+/** Project folder carried by a Theia fragment; shared with the launcher renderer. */
+export function projectFromHash(hash: string): string | undefined {
+    const raw = hash.startsWith('#') ? hash.slice(1) : hash;
     if (!raw || raw.startsWith('!')) { return undefined; }
     let value: string;
     try { value = decodeURI(raw); } catch { return undefined; }
@@ -72,13 +76,13 @@ export function pathKey(fsPath: string): string {
     return /^[A-Za-z]:/.test(trimmed) ? trimmed.replace(/\\/g, '/').toLowerCase() : trimmed;
 }
 
-export interface StoredProject { path: string; lastOpened?: number }
+export interface StoredProject { path: string; lastOpened?: number; tag?: string }
 export const RECENT_LIMIT = 50;
 
 /** Moves (or adds) a folder to the front of the recent list with the given time. */
 export function touchRecent(stored: StoredProject[], fsPath: string, now: number, limit = RECENT_LIMIT): StoredProject[] {
     const key = pathKey(fsPath);
-    return [{ path: fsPath, lastOpened: now }, ...stored.filter(p => pathKey(p.path) !== key)].slice(0, limit);
+    return [{ ...stored.find(p => pathKey(p.path) === key), path: fsPath, lastOpened: now }, ...stored.filter(p => pathKey(p.path) !== key)].slice(0, limit);
 }
 
 /** Launcher order: Nodu's own list (it keeps missing folders and times) first, then Theia's recent roots it lacks. */

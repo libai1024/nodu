@@ -2,7 +2,7 @@
 // Recent projects and examples for the desktop launcher. Nodu keeps its own list next to
 // Theia's recentworkspace.json because Theia drops folders that no longer exist, while the
 // launcher shows them greyed out as 找不到 until the user removes them.
-import { promises as fs } from 'node:fs';
+import { constants, promises as fs } from 'node:fs';
 import { createRequire } from 'node:module';
 import { homedir } from 'node:os';
 import { basename, dirname, isAbsolute, join } from 'node:path';
@@ -26,8 +26,41 @@ async function readJson(file: string): Promise<unknown> {
     } catch { return undefined; }
 }
 
+/** A transient read error must not erase a remembered project identity. */
+async function folderIdentity(folder: string): Promise<{ known: boolean; tag?: string }> {
+    const folderStat = await fs.stat(folder).catch(() => undefined);
+    if (!folderStat?.isDirectory()) { return { known: false }; }
+    const read = async (name: string): Promise<{ known: boolean; value?: unknown }> => {
+        const file = join(folder, name); let observed = false;
+        try {
+            const before = await fs.lstat(file); observed = true;
+            if (!before.isFile() || before.size > MAX_MANIFEST) { return { known: false }; }
+            const handle = await fs.open(file, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | (constants.O_NONBLOCK ?? 0));
+            try {
+                const opened = await handle.stat();
+                if (!opened.isFile() || opened.dev !== before.dev || opened.ino !== before.ino || opened.size > MAX_MANIFEST) { return { known: false }; }
+                const bytes = Buffer.alloc(MAX_MANIFEST + 1); let length = 0;
+                while (length < bytes.length) {
+                    const part = await handle.read(bytes, length, bytes.length - length, length);
+                    if (!part.bytesRead) { break; } length += part.bytesRead;
+                }
+                const after = await handle.stat(), current = await fs.lstat(file);
+                if (length > MAX_MANIFEST || length !== after.size || !current.isFile() || current.dev !== opened.dev || current.ino !== opened.ino
+                    || current.size !== after.size || current.mtimeMs !== after.mtimeMs || after.size !== opened.size || after.mtimeMs !== opened.mtimeMs) { return { known: false }; }
+                return { known: true, value: JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.subarray(0, length))) };
+            } finally { await handle.close(); }
+        } catch (error) { return { known: !observed && (error as NodeJS.ErrnoException).code === 'ENOENT' }; }
+    };
+    const [nodu, board] = await Promise.all([read('nodu.json'), read('board.json')]);
+    const current = await fs.stat(folder).catch(() => undefined);
+    if (!current?.isDirectory() || current.dev !== folderStat.dev || current.ino !== folderStat.ino) { return { known: false }; }
+    const noduTag = nodu.known ? projectTag({ nodu: nodu.value }) : undefined;
+    return { known: nodu.known && (noduTag !== undefined || board.known),
+        tag: noduTag ?? projectTag({ board: board.value }) };
+}
+
 async function folderTag(folder: string): Promise<string | undefined> {
-    return projectTag({ nodu: await readJson(join(folder, 'nodu.json')), board: await readJson(join(folder, 'board.json')) });
+    return (await folderIdentity(folder)).tag;
 }
 
 function requireAbsolute(fsPath: unknown): string {
@@ -45,19 +78,34 @@ export class NoduProjectsServer implements NoduProjectsService {
     async recent(): Promise<RecentProject[]> {
         const [stored, roots] = await Promise.all([this.load(), this.workspaces.getRecentWorkspaces().catch(() => [] as string[])]);
         const merged = mergeRecent(stored, roots.map(uri => (uri.startsWith('file:') ? FileUri.fsPath(uri) : uri)));
+        const tags = new Map<string, string | undefined>();
         const rows = await Promise.all(merged.map(async (item): Promise<RecentProject | undefined> => {
             const stat = await fs.stat(item.path).catch(() => undefined);
             // Theia also lists workspace files (untitled multi-root workspaces); Nodu projects are folders.
             if (stat && !stat.isDirectory()) { return undefined; }
+            const identity = stat ? await folderIdentity(item.path) : { known: false };
+            if (identity.known) { tags.set(pathKey(item.path), identity.tag); }
             return { path: item.path, name: basename(item.path) || item.path, lastOpened: item.lastOpened, missing: !stat,
-                tag: stat ? await folderTag(item.path) : undefined };
+                tag: identity.known ? identity.tag : item.tag };
         }));
+        if (stored.some(item => tags.has(pathKey(item.path)) && item.tag !== tags.get(pathKey(item.path)))) {
+            // Identity caching is optional. A read-only profile must still list projects.
+            await this.update(current => current.map(item => {
+                const key = pathKey(item.path), previous = stored.find(p => pathKey(p.path) === key);
+                return tags.has(key) && previous && previous.tag === item.tag && previous.lastOpened === item.lastOpened
+                    ? { ...item, tag: tags.get(key) } : item;
+            })).catch(() => undefined);
+        }
         return rows.filter((row): row is RecentProject => !!row);
     }
 
     touch(fsPath: string): Promise<void> {
         const path = requireAbsolute(fsPath);
-        return this.update(stored => touchRecent(stored, path, Date.now()));
+        return this.update(async stored => {
+            const identity = await folderIdentity(path);
+            return touchRecent(stored, path, Date.now()).map(item =>
+                pathKey(item.path) === pathKey(path) && identity.known ? { ...item, tag: identity.tag } : item);
+        });
     }
 
     async remove(fsPath: string): Promise<void> {
@@ -136,15 +184,16 @@ export class NoduProjectsServer implements NoduProjectsService {
         const data = await readJson(await this.storeFile()) as { projects?: unknown } | undefined;
         const list: unknown[] = Array.isArray(data?.projects) ? data.projects : [];
         return list.flatMap(item => {
-            const { path, lastOpened } = (item ?? {}) as { path?: unknown; lastOpened?: unknown };
-            return typeof path === 'string' && isAbsolute(path) ? [{ path, lastOpened: typeof lastOpened === 'number' ? lastOpened : undefined }] : [];
+            const { path, lastOpened, tag } = (item ?? {}) as { path?: unknown; lastOpened?: unknown; tag?: unknown };
+            return typeof path === 'string' && isAbsolute(path) ? [{ path, lastOpened: typeof lastOpened === 'number' && Number.isFinite(lastOpened) ? lastOpened : undefined,
+                tag: typeof tag === 'string' && !/[\u0000-\u001f]/.test(tag) ? tag.trim().slice(0, 16) || undefined : undefined }] : [];
         });
     }
 
-    private update(change: (stored: StoredProject[]) => StoredProject[]): Promise<void> {
+    private update(change: (stored: StoredProject[]) => StoredProject[] | Promise<StoredProject[]>): Promise<void> {
         const run = this.queue.then(async () => {
             const file = await this.storeFile();
-            const next = change(await this.load());
+            const next = await change(await this.load());
             await fs.mkdir(dirname(file), { recursive: true });
             const temporary = `${file}.${process.pid}.tmp`;
             await fs.writeFile(temporary, JSON.stringify({ projects: next }, null, 2) + '\n');

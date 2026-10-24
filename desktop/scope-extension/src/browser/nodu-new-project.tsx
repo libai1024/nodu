@@ -6,6 +6,7 @@ import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { URI } from '@theia/core/lib/common/uri';
 import { PROJECT_CHIPS, PROJECT_FAMILIES, ProjectFamily, projectTemplates, validProjectName } from '../common/nodu-project-catalog';
 import { EmbeddedError, NoduEmbeddedModel } from './nodu-embedded-model';
+import { ChipMark } from './nodu-project-icon';
 
 interface Deps { model: NoduEmbeddedModel; dialogs: FileDialogService; parent: string; family?: ProjectFamily; onBusyChange?: (busy: boolean) => void; onCreated: (project: { path: string }) => void }
 
@@ -38,6 +39,7 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
     const [nameTouched, setNameTouched] = React.useState(false);
     const nameOk = validProjectName(name);
     const templates = projectTemplates(family, chipId);
+    const chips = PROJECT_CHIPS.filter(chip => chip.family === family);
     const switchFamily = (next: ProjectFamily): void => {
         setFamily(next); setChipId(PROJECT_CHIPS.find(c => c.family === next)!.id); setError('');
         if (!projectTemplates(next).some(t => t.id === templateId)) { setTemplateId('empty'); }
@@ -67,40 +69,50 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
     return <form className="nodu-new-project" onSubmit={event => { event.preventDefault(); void create(); }} aria-busy={busy}>
         <div className="nodu-np-body">
             <nav className="nodu-np-families" aria-label="芯片系列">
+                <div className="nodu-np-group-title">芯片系列</div>
                 <button type="button" className={`nodu-np-family nodu-np-root${family === 'k210' ? ' nodu-np-selected' : ''}`} aria-pressed={family === 'k210'} disabled={busy} onClick={() => switchFamily('k210')}>
-                    <i className="codicon codicon-circuit-board" aria-hidden="true"/><span>K210</span>
+                    <span aria-hidden="true"/><ChipMark tag="K210"/><span>K210</span>
                 </button>
-                <button type="button" className="nodu-np-family nodu-np-group" aria-expanded={expanded.stm32} aria-controls="nodu-stm32-families" disabled={busy} onClick={() => setExpanded(value => ({ ...value, stm32: !value.stm32 }))}>
-                    <i className={`codicon codicon-chevron-${expanded.stm32 ? 'down' : 'right'}`} aria-hidden="true"/><i className="codicon codicon-circuit-board" aria-hidden="true"/><span>STM32</span>
+                <button type="button" className={`nodu-np-family nodu-np-group${expanded.stm32 ? ' is-open' : ''}`} aria-expanded={expanded.stm32} aria-controls="nodu-stm32-families" disabled={busy} onClick={() => setExpanded(value => ({ ...value, stm32: !value.stm32 }))}>
+                    <i className={`codicon codicon-chevron-${expanded.stm32 ? 'down' : 'right'}`} aria-hidden="true"/><ChipMark tag="STM32"/><span>STM32</span>
                 </button>
-                <div id="nodu-stm32-families" hidden={!expanded.stm32}>
-                    {PROJECT_FAMILIES.filter(item => item.id.startsWith('stm32')).map(item => <button type="button" key={item.id} className={`nodu-np-family nodu-np-child${family === item.id ? ' nodu-np-selected' : ''}`} aria-pressed={family === item.id} disabled={busy} onClick={() => switchFamily(item.id)}>{item.name}</button>)}
+                <div className="nodu-np-children" id="nodu-stm32-families" hidden={!expanded.stm32}>
+                    {PROJECT_FAMILIES.filter(item => item.id.startsWith('stm32')).map(item => <button type="button" key={item.id} className={`nodu-np-family nodu-np-child${family === item.id ? ' nodu-np-selected' : ''}`} aria-pressed={family === item.id} disabled={busy} onClick={() => switchFamily(item.id)}><span>{item.name}</span></button>)}
                 </div>
-                <button type="button" className="nodu-np-family nodu-np-group" aria-expanded={expanded.esp32} aria-controls="nodu-esp32-chips" disabled={busy} onClick={() => setExpanded(value => ({ ...value, esp32: !value.esp32 }))}>
-                    <i className={`codicon codicon-chevron-${expanded.esp32 ? 'down' : 'right'}`} aria-hidden="true"/><i className="codicon codicon-circuit-board" aria-hidden="true"/><span>ESP32</span>
+                <button type="button" className={`nodu-np-family nodu-np-group${expanded.esp32 ? ' is-open' : ''}`} aria-expanded={expanded.esp32} aria-controls="nodu-esp32-chips" disabled={busy} onClick={() => setExpanded(value => ({ ...value, esp32: !value.esp32 }))}>
+                    <i className={`codicon codicon-chevron-${expanded.esp32 ? 'down' : 'right'}`} aria-hidden="true"/><ChipMark tag="ESP32"/><span>ESP32</span>
                 </button>
-                <div id="nodu-esp32-chips" hidden={!expanded.esp32}>
-                    {PROJECT_CHIPS.filter(item => item.family === 'esp32').map(item => <button type="button" key={item.id} className={`nodu-np-family nodu-np-child${chipId === item.id ? ' nodu-np-selected' : ''}`} aria-pressed={chipId === item.id} disabled={busy} onClick={() => { switchFamily('esp32'); setChipId(item.id); }}>{item.name}</button>)}
+                <div className="nodu-np-children" id="nodu-esp32-chips" hidden={!expanded.esp32}>
+                    {PROJECT_CHIPS.filter(item => item.family === 'esp32').map(item => <button type="button" key={item.id} className={`nodu-np-family nodu-np-child${chipId === item.id ? ' nodu-np-selected' : ''}`} aria-pressed={chipId === item.id} disabled={busy} onClick={() => { switchFamily('esp32'); setChipId(item.id); }}><span>{item.name}</span></button>)}
                 </div>
             </nav>
             <div className="nodu-np-fields">
-                <label className="nodu-np-field" htmlFor="nodu-project-name">名称</label>
-                <div><input id="nodu-project-name" value={name} disabled={busy} onChange={event => { setName(event.currentTarget.value); setNameEdited(true); setError(''); }}
-                    onBlur={() => setNameTouched(true)} aria-invalid={nameTouched && !nameOk} aria-describedby={nameTouched && !nameOk ? 'nodu-name-error' : undefined} spellCheck={false} autoFocus />
+                <div className="nodu-np-control">
+                    <label className="nodu-np-label" htmlFor="nodu-project-name">名称</label>
+                    <input id="nodu-project-name" value={name} disabled={busy} onChange={event => { setName(event.currentTarget.value); setNameEdited(true); setError(''); }}
+                        onBlur={() => setNameTouched(true)} aria-invalid={nameTouched && !nameOk} aria-describedby={nameTouched && !nameOk ? 'nodu-name-error' : undefined} spellCheck={false} autoFocus />
                     {nameTouched && !nameOk && <p id="nodu-name-error" className="nodu-np-invalid" role="alert">以字母开头，限 40 位字母、数字、- 或 _，避开系统保留名称。</p>}
                 </div>
-                <label className="nodu-np-field" htmlFor="nodu-project-parent">位置</label>
-                <div className="nodu-np-location"><input id="nodu-project-parent" value={parent} disabled={busy} onChange={event => { setParent(event.currentTarget.value); setError(''); }} spellCheck={false} />
-                    <button type="button" className="nodu-np-browse" aria-label="浏览项目位置" title="浏览" disabled={busy} onClick={() => void choose()}><i className="codicon codicon-folder-opened" aria-hidden="true"/></button>
+                <div className="nodu-np-control">
+                    <label className="nodu-np-label" htmlFor="nodu-project-parent">位置</label>
+                    <div className="nodu-np-location"><input id="nodu-project-parent" value={parent} disabled={busy} onChange={event => { setParent(event.currentTarget.value); setError(''); }} spellCheck={false} />
+                        <button type="button" className="nodu-np-browse" aria-label="浏览项目位置" title="浏览" disabled={busy} onClick={() => void choose()}><i className="codicon codicon-folder-opened" aria-hidden="true"/></button>
+                    </div>
                 </div>
-                <label className="nodu-np-field" htmlFor="nodu-project-chip">型号</label>
-                <select id="nodu-project-chip" value={chipId} disabled={busy} onChange={event => { setChipId(event.currentTarget.value); setError(''); }}>
-                    {PROJECT_CHIPS.filter(c => c.family === family).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
-                <label className="nodu-np-field" htmlFor="nodu-project-template">模板</label>
-                <select id="nodu-project-template" value={templateId} disabled={busy} onChange={event => { setTemplateId(event.currentTarget.value); setError(''); }}>
-                    {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                </select>
+                <div className="nodu-np-row">
+                    {chips.length > 1 && <div className="nodu-np-control">
+                        <label className="nodu-np-label" htmlFor="nodu-project-chip">型号</label>
+                        <select id="nodu-project-chip" value={chipId} disabled={busy} onChange={event => { setChipId(event.currentTarget.value); setError(''); }}>
+                            {chips.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </select>
+                    </div>}
+                    <div className="nodu-np-control">
+                        <label className="nodu-np-label" htmlFor="nodu-project-template">模板</label>
+                        <select id="nodu-project-template" value={templateId} disabled={busy} onChange={event => { setTemplateId(event.currentTarget.value); setError(''); }}>
+                            {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                        </select>
+                    </div>
+                </div>
                 {error && <p className="nodu-np-error scope-error" role="alert">{error}</p>}
             </div>
         </div>

@@ -102,7 +102,8 @@ function applicationMethods(names, dependencies={}) {
     const source=ts.createSourceFile(file,fsSync.readFileSync(file,'utf8'),ts.ScriptTarget.Latest,true);
     const cls=source.statements.find(node=>ts.isClassDeclaration(node)&&node.name.text==='NoduElectronMainApplication');
     const members=cls.members.filter(m=>names.includes(m.name?.getText(source))).map(m=>m.getText(source)).join('\n');
-    const js=ts.transpile(`class Subject extends Base { ${members} }`,{target:ts.ScriptTarget.ES2022});
+    const constants=source.statements.filter(node=>ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>d.name.getText(source)==='LAUNCHER_SIZE')).map(node=>node.getText(source)).join('\n');
+    const js=ts.transpile(`${constants}\nclass Subject extends Base { ${members} }`,{target:ts.ScriptTarget.ES2022});
     return new Function('Base',...Object.keys(dependencies),js+';return Subject;')(class {},...Object.values(dependencies));
 }
 test('concurrent welcome requests create one window', async () => {
@@ -112,6 +113,31 @@ test('concurrent welcome requests create one window', async () => {
     app.reveal=w=>{assert.equal(w,window);revealed++;};
     await Promise.all([app.showLauncher(),app.showLauncher(),app.showLauncher()]);
     assert.equal(created,1);assert.equal(revealed,3);assert.equal(app.pendingLauncher,undefined);
+});
+test('welcome window has fixed independent bounds and fits smaller display work areas', async () => {
+    const App=applicationMethods(['createLauncherWindow'],{NODU_LAUNCHER_QUERY:'noduLauncher',DEFAULT_WINDOW_HASH:'!empty'});
+    for (const workArea of [{x:100,y:50,width:1920,height:1080},{x:-800,y:0,width:800,height:600}]) {
+        const app=new App(); let options,fragment,loaded;
+        const window={webContents:{id:7},loadURL:async url=>{loaded=url;}};
+        app.launcherIds=new Set();app.launcherWindows=new WeakSet();
+        app.getDisplayForNewWindow=()=>({workArea});
+        app.getDefaultTheiaWindowOptions=()=>({width:1800,height:1000,resizable:true,isMaximized:true,isFullScreen:true});
+        app.createWindow=async value=>{options=value;return window;};
+        app.createWindowUri=async query=>{
+            assert.deepEqual(query,{noduLauncher:'1'});
+            return {withFragment:value=>{fragment=value;return {toString:()=>'/welcome'};}};
+        };
+        assert.equal(await app.createLauncherWindow(),window);
+        const width=Math.min(960,workArea.width),height=Math.min(680,workArea.height);
+        assert.equal(options.width,width);assert.equal(options.height,height);
+        assert.equal(options.minWidth,width);assert.equal(options.maxWidth,width);
+        assert.equal(options.minHeight,height);assert.equal(options.maxHeight,height);
+        assert.equal(options.x,Math.round(workArea.x+(workArea.width-width)/2));
+        assert.equal(options.y,Math.round(workArea.y+(workArea.height-height)/2));
+        for (const key of ['resizable','maximizable','fullscreenable','isMaximized','isFullScreen']) assert.equal(options[key],false);
+        assert.equal(fragment,'!empty');assert.equal(loaded,'/welcome');
+        assert.equal(app.launcherIds.has(7),true);assert.equal(app.launcherWindows.has(window),true);
+    }
 });
 test('project routing focuses an existing window and waits before closing the welcome window', async () => {
     const events=[];const App=applicationMethods(['openProjectWindow'],{whenShown:async()=>events.push('shown')});

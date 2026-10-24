@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
+import { ChipMark } from './nodu-project-icon';
+import { projectIconIdentity } from '../common/nodu-project-icon';
 import { BoxLayout, Widget } from '@theia/core/shared/@lumino/widgets';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, CommandService, DisposableCollection, MenuContribution, MenuModelRegistry, MAIN_MENU_BAR, environment } from '@theia/core/lib/common';
@@ -253,7 +255,7 @@ export class ScopeToolbar extends ReactWidget {
                 </div>
                 <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${this.device.state.running || this.device.busy ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!this.device.canStop} onClick={() => void this.commands.executeCommand('scope.stop-device')} title="停止"><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                 <div className="scope-device-picker">
-                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || (this.device.connected ? `${board} · 板端配置声明，非硬件实测` : '设备与端口')}><span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
+                    <button className={`scope-action scope-device-chip nodu-chip-${chipState} ${deviceError ? 'nodu-has-error' : ''}`} aria-label="设备与端口" aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={() => this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen)} title={this.device.error || (this.device.connected ? `${board} · 板端配置声明，非硬件实测` : '设备与端口')}><span className="scope-status-dot" aria-hidden="true"/><ChipMark tag="K210"/><span className="scope-device-chip-board">{board}</span><span className="scope-device-chip-port">{port}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
 
                 </div>
             </div>
@@ -278,7 +280,7 @@ export class ScopeToolbar extends ReactWidget {
                 <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单，${this.layoutState.project}`} aria-haspopup="menu" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span>{this.layoutState.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
                 <button className="scope-action scope-action-primary" onClick={() => void this.commands.executeCommand('task:run:build')}><i className="codicon codicon-tools" aria-hidden="true"/>编译</button>
                 <button className="scope-action" onClick={() => void this.commands.executeCommand('task:run')}>任务</button>
-                <span className="scope-device-chip-board">{this.embedded.espChip.toUpperCase().replace(/^ESP32(?=.)/, 'ESP32-')}</span>
+                <span className="scope-device-chip-board nodu-chip-label"><ChipMark tag={this.embedded.espChip}/>{this.embedded.espChip.toUpperCase().replace(/^ESP32(?=.)/, 'ESP32-')}</span>
             </div>
             <div className="scope-toolbar-end">
                 {this.renderAI()}
@@ -526,7 +528,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
     protected updateStatus(): void {
         if (this.layoutState.mode === 'simple') {
             const text = this.embedded.isC ? this.embedded.project!.chip.name : this.embedded.isEsp ? this.embedded.espChip.toUpperCase() : 'K210';
-            void this.status.setElement('scope:minimal-target', { text, alignment: StatusBarAlignment.LEFT, priority: 1100,
+            void this.status.setElement('scope:minimal-target', { text: `$(chip) ${text}`, className: `nodu-chip-status nodu-project-icon--${projectIconIdentity(text).vendor}`, alignment: StatusBarAlignment.LEFT, priority: 1100,
                 command: this.embedded.isEsp ? undefined : 'scope.show-devices', tooltip: '设备' });
         } else { this.status.removeElement('scope:minimal-target'); }
         if (this.embedded.isC) {

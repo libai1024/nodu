@@ -19,6 +19,7 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../lib/browser/nodu-emb
         if (name === '@theia/core/shared/react') return React;
         if (name === './nodu-embedded-model') return { NoduEmbeddedModel: class {}, formatBytes };
         if (name === './nodu-embedded-commands') return commands;
+        if (name === './nodu-project-icon') return { ChipMark: 'chip-mark' };
         if (name === './nodu-select') return { NoduSelect: 'nodu-select-control' };
         throw new Error(`Unexpected component dependency: ${name}`);
     }

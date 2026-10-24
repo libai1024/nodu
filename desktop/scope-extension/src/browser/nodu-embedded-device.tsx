@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 import { C_COMMANDS } from './nodu-embedded-commands';
 import * as React from '@theia/core/shared/react';
+import { ChipMark } from './nodu-project-icon';
 import { EmbeddedFailure } from '../common/nodu-embedded-protocol';
 import { NoduEmbeddedModel, formatBytes } from './nodu-embedded-model';
 import { NoduSelect } from './nodu-select';
@@ -162,7 +163,7 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput, exec }: {
     }
     return <div className="scope-device-panel nodu-c-device">
         <Section title="目标芯片" icon="chip" action={<button className="scope-text-button" disabled={locked} onClick={() => exec(C_COMMANDS.projectSettings)}>设置…</button>}>
-            <p className="nodu-c-strong">{project.chip.name}</p>
+            <p className="nodu-c-strong nodu-chip-label"><ChipMark tag={project.chip.name}/>{project.chip.name}</p>
             <dl className="nodu-chip-spec"><dt>内核</dt><dd>{project.chip.core}</dd><dt>Flash</dt><dd>{formatBytes(project.chip.flash.size)}</dd><dt>RAM</dt><dd>{formatBytes(project.chip.ram.size)}</dd></dl>
         </Section>
         <Section title="下载方式" icon="cloud-upload" action={<span className="nodu-c-inline-actions">{model.savingOptions && <span role="status">保存中</span>}{refresh}</span>}>

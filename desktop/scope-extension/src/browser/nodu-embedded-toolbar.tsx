@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
+import { ChipMark } from './nodu-project-icon';
 import { NoduBrand } from './scope-brand';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduCDevicePanel } from './nodu-embedded-device';
@@ -109,7 +110,7 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
             <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${model.busy || model.awaitUser ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!model.busy && !model.awaitUser} onClick={() => exec(C_COMMANDS.stop)} title={model.flashSteps.program === 'running' ? '写入完成后停止' : '停止'}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
             <div className="scope-device-picker">
                 <button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与下载器，${shortBoard}，${chipText}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={props.deviceOpen} aria-pressed={props.deviceOpen} onClick={toggleDevice} title={model.lastError?.message || project.chip.name}>
-                    <span className="scope-status-dot" aria-hidden="true"/><span className="scope-device-chip-board">{shortBoard}</span><span className="scope-device-chip-port">{chipText}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
+                    <span className="scope-status-dot" aria-hidden="true"/><ChipMark tag={project.chip.name}/><span className="scope-device-chip-board">{shortBoard}</span><span className="scope-device-chip-port">{chipText}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
                 </button>
                 {!props.externalDevicePanel && <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="开发板与下载" hidden={!props.deviceOpen}>
                     <NoduCDevicePanel exec={id => { props.setDeviceOpen(false); exec(id); }} model={model} simple={simple} confirm={props.confirm} showOutput={() => { props.setDeviceOpen(false); exec(C_COMMANDS.showOutput); }} />

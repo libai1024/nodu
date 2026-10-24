@@ -1,3 +1,4 @@
+import '../../style/project-icon.css';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, CommandService } from '@theia/core/lib/common/command';
@@ -387,7 +388,7 @@ export class ScopeDeviceWidget extends ReactWidget {
         this.title.label = ScopeDeviceWidget.LABEL;
         this.title.caption = '见微 Nodu 串口、REPL 与板端文件';
         this.title.closable = true;
-        this.title.iconClass = 'codicon codicon-circuit-board';
+        this.title.iconClass = 'nodu-chip-entry-icon';
         this.addClass('scope-widget');
         this.addClass('scope-device-widget');
         this.node.tabIndex = 0;

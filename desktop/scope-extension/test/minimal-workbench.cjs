@@ -55,6 +55,7 @@ function harness() {
         './nodu-minimal-action-state': require('../lib/browser/nodu-minimal-action-state'),
         './nodu-embedded-commands': { C_COMMANDS },
         './nodu-tutor-widget': { NoduTutorWidget: { ID: 'tutor' } },
+        '../common/nodu-project-icon': require('../lib/common/nodu-project-icon'),
         '../common/nodu-status': { fpsStatusText: () => 'FPS' },
     };
     const exports = {};
@@ -205,7 +206,8 @@ test('STM32 status target routes to an enabled device command while K210-only ex
     w.owner.registerCommands({ registerCommand: (command, handler) => commands.set(command.id, handler) });
     w.owner.status = { setElement: (id, entry) => status.set(id, entry), removeElement: id => status.delete(id) };
     w.h.ScopeWorkbenchContribution.prototype.updateStatus.call(w.owner);
-    const target = status.get('scope:minimal-target'); assert.equal(target.text, 'STM32F103C8T6');
+    const target = status.get('scope:minimal-target'); assert.equal(target.text, '$(chip) STM32F103C8T6');
+    assert.match(target.className, /nodu-project-icon--stmicroelectronics/);
     assert.equal(commands.get(target.command).isEnabled(), true); commands.get(target.command).execute();
     assert.equal(w.owner.layoutState.deviceOpen, true);
     assert.equal(commands.get('scope.run-current').isEnabled(), false);
