@@ -20,6 +20,7 @@ import { ScopeLayoutState } from './scope-layout-state';
 import { C_COMMANDS, NODU_C_RUN_MENU } from './nodu-embedded-commands';
 import { NoduDownloadHelpDialog, downloadHelpContent } from './nodu-download-help';
 import { downloadStatusText, taskProgress } from '../common/nodu-download-status';
+import { NoduDiagnostics } from './nodu-diagnostics';
 
 export { C_COMMANDS };
 
@@ -38,6 +39,7 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(StatusBarImpl) protected readonly status!: StatusBarImpl;
     @inject(ScopeLayoutState) protected readonly layoutState!: ScopeLayoutState;
+    @inject(NoduDiagnostics) protected readonly systemDiagnostics!: NoduDiagnostics;
     private openedFor = '';
     private helpOpen = false;
     private readonly versionNotices = new Set<string>();
@@ -220,8 +222,8 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
 
     private toolkitProblem(): void {
         const message = this.model.project?.toolkit.message || 'STM32 工具包不可用。';
-        this.model.setTask('STM32 工具包不完整', 'error');
-        void this.messages.error(message);
+        this.systemDiagnostics.report({ source: 'STM32 工具包', key: this.model.project?.path || 'toolkit',
+            message: 'STM32 工具包不可用，暂时无法编译或烧写。', error: message });
     }
 
     async newProject(): Promise<void> {

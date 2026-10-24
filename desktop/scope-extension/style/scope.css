@@ -1,4 +1,6 @@
 /* SPDX-License-Identifier: MIT */
+/* Reuse the native notification center in both workbench modes. */
+.theia-notifications-container { max-width: calc(100vw - 32px); }
 /* Theia's global :focus rule also outlines pointer-focused controls. Keep
  * focus/restore behavior intact, but reserve outlines for :focus-visible
  * (keyboard navigation and text entry). :root gives this shared policy higher

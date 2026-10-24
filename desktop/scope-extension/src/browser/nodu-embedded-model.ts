@@ -2,6 +2,7 @@
 import { MonitorBytes } from '../common/nodu-monitor-bytes';
 import { preferredMonitorPort } from '../common/nodu-monitor-ports';
 import { MonitorDecoder, hasMonitorStartupLine } from '../common/nodu-monitor-decoder';
+import { NoduDiagnostics } from './nodu-diagnostics';
 import { MessageService } from '@theia/core/lib/common';
 import { Emitter } from '@theia/core/lib/common/event';
 import { URI } from '@theia/core/lib/common/uri';
@@ -35,6 +36,7 @@ const MAX_LINES = 10_000;
 /** STM32 HAL project state for this window (FUNCTIONAL-DESIGN §10.3). */
 @injectable()
 export class NoduEmbeddedModel implements EmbeddedClient {
+    @inject(NoduDiagnostics) protected readonly systemDiagnostics!: NoduDiagnostics;
     @inject(WebSocketConnectionProvider) protected readonly connections!: WebSocketConnectionProvider;
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
     @inject(MessageService) protected readonly messages!: MessageService;
@@ -180,10 +182,13 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                     }
                 }
             } catch (error) {
-                this.setTask(`STM32 工程无法打开：${error instanceof Error ? error.message : String(error)}`, 'error');
+                this.systemDiagnostics.report({ source: '工程', key: root.toString(), message: 'STM32 工程无法打开。', error,
+                    context: { path: root.path.fsPath() }, isCurrent: () => generation === this.detection,
+                    retry: () => this.detect(root) });
             }
         }
         if (generation !== this.detection) { return; }
+        if (project && root) { this.systemDiagnostics.resolve('工程', root.toString()); }
         const switched = project?.path !== this.project?.path;
         const targetChanged = this.hasTargetChanged(project);
         this.localRoot = root?.path.fsPath() ?? '';
@@ -283,7 +288,14 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                 if (!d.port || d.port === this.monitor.port) { this.decode(String(d.data || '')); }
                 break;
             case 'service.state':
-                if (d.running === false) { this.building = false; this.flashing = false; this.setTask(String(d.message || 'STM32 服务已停止'), 'error'); }
+                if (d.running === false) {
+                    const interrupted = this.building || this.flashing;
+                    this.building = false; this.flashing = false;
+                    if (interrupted) { this.setTask('任务已中断', 'error', { target: 'output' }); }
+                    this.systemDiagnostics.report({ source: 'STM32 服务', key: 'stopped', message: 'STM32 后台服务已停止，请查看日志。',
+                        error: String(d.message || 'service.state: running=false') });
+                    this.fire();
+                } else if (d.running === true) { this.systemDiagnostics.resolve('STM32 服务', 'stopped'); }
                 break;
         }
     }

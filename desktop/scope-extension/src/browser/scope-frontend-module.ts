@@ -46,8 +46,11 @@ import { NoduShellPanelWidget } from './nodu-shell-panel';
 import { NoduProblemsPanel } from './nodu-problems-panel';
 import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-creation-handler';
 import { NoduClangdClient } from './nodu-clangd-client';
+import { NoduDiagnostics } from './nodu-diagnostics';
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
+    bind(NoduDiagnostics).toSelf().inSingletonScope();
+    bind(CommandContribution).toService(NoduDiagnostics);
     bind(NoduDeviceModel).toSelf().inSingletonScope();
     // STM32 C workbench (0.2.1): inert until a folder with nodu.json kind stm32-hal is open.
     bind(NoduEmbeddedModel).toSelf().inSingletonScope();
@@ -70,6 +73,7 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bind(FrontendApplicationContribution).toService(NoduStartContribution);
     bind(NoduClangdClient).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(NoduClangdClient);
+    bind(CommandContribution).toService(NoduClangdClient);
     bind(ScopeSession).toSelf().inSingletonScope();
     bind(ScopeLayoutState).toSelf().inSingletonScope();
     bind(ScopeToolbar).toSelf().inSingletonScope();

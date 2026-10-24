@@ -41,7 +41,11 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     }
 
     private publish(event: string, data: unknown): void {
-        this.teachingEvidence.event(event, data);
+        // Readiness can follow flash.started when the first request is a flash.
+        // Only losing the service invalidates its current execution evidence.
+        if (event !== 'service.state' || (data as { running?: boolean } | undefined)?.running !== true) {
+            this.teachingEvidence.event(event, data);
+        }
         for (const client of this.clients) {
             try { Promise.resolve(client.onEvent(event, data)).catch(() => this.clients.delete(client)); } catch { this.clients.delete(client); }
         }
@@ -79,23 +83,36 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
         const child = spawn(this.binary(), ['--resources', join(this.extensionDir(), 'resources', 'stm32'),
             '--toolkit', this.toolkitRoot(), '--data-dir', this.dataDir()], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
         this.sidecar = child;
+        let ready = false;
         const reader = createInterface({ input: child.stdout });
         reader.on('line', line => {
-            let message: { id?: unknown; result?: unknown; error?: string; code?: string; detail?: unknown; event?: string; data?: unknown };
+            // A failed process can still drain stdout after its replacement starts.
+            if (this.sidecar !== child) { return; }
+            let message: { id?: unknown; result?: unknown; error?: unknown; code?: string; detail?: unknown; event?: string; data?: unknown };
             try { message = JSON.parse(line); } catch { return; }
+            if (!message || typeof message !== 'object' || Array.isArray(message)) { return; }
             if (typeof message.id === 'number') {
                 const item = this.pending.get(message.id);
                 if (!item) { return; }
+                const hasResult = Object.prototype.hasOwnProperty.call(message, 'result');
+                const hasError = Object.prototype.hasOwnProperty.call(message, 'error');
+                if (hasResult === hasError || (hasError && typeof message.error !== 'string')) { return; }
                 clearTimeout(item.timer); this.pending.delete(message.id);
-                if (message.error !== undefined) {
+                // A correlated business refusal also proves that the RPC service is
+                // alive. Spawn/logs/unsolicited events alone do not prove readiness.
+                if (!ready) { ready = true; this.publish('service.state', { running: true }); }
+                if (typeof message.error === 'string') {
                     // Keep the stable code and tool output for the diagnosis card.
                     item.reject(Object.assign(new Error(message.error), { code: message.code, detail: message.detail }));
                 } else { item.resolve(message.result); }
-            } else if (typeof message.event === 'string') {
+            } else if (typeof message.event === 'string' && message.event !== 'service.state') {
+                // Lifecycle state belongs to this adapter, not unsolicited output.
                 this.publish(message.event, message.data);
             }
         });
-        child.stderr.on('data', data => this.publish('service.log', { text: String(data).slice(0, 8000) }));
+        child.stderr.on('data', data => {
+            if (this.sidecar === child) { this.publish('service.log', { text: String(data).slice(0, 8000) }); }
+        });
         child.on('error', error => this.failSidecar(child, `STM32 服务启动失败：${error.message}。开发者请运行 npm run build:native。`));
         child.on('exit', code => { reader.close(); this.failSidecar(child, `STM32 服务已退出（${code}）。`); });
         return child;

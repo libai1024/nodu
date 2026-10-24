@@ -60,7 +60,6 @@
 .nodu-simple #theia-right-content-panel .lm-TabBar { display: none !important; min-height: 0 !important; max-height: .1px !important; }
 .nodu-simple #theia-statusBar #status-bar-bottom-panel-toggle,
 .nodu-simple #theia-statusBar #status-bar-problem-marker-status,
-.nodu-simple #theia-statusBar #status-bar-theia-notification-center,
 .nodu-simple #theia-statusBar [id='status-bar-scope:device'],
 .nodu-simple #theia-statusBar [id='status-bar-scope:demo'],
 .nodu-simple #theia-statusBar [id='status-bar-scope:fps'] { display: none !important; }
