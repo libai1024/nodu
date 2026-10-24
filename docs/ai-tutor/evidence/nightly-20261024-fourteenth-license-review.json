@@ -1,0 +1,83 @@
+{
+  "commit": "895aa2c896ada719451be2e3673c83da8ddf1141",
+  "reviewed": [
+    {
+      "path": "llvm/include/llvm/Support/LICENSE.TXT",
+      "sha256": "54cbc326a78b9400065bfc5830a57fdcdaf808286d4ac35d8a9e324aa77b7241",
+      "bytes": 303
+    },
+    {
+      "path": "llvm/lib/Support/BLAKE3/LICENSE",
+      "sha256": "6a94bedb8b707ed97f6e310d0d015ab14e0683ffa0a612b02958581b9cc9fc0e",
+      "bytes": 18691
+    },
+    {
+      "path": "llvm/lib/Support/COPYRIGHT.regex",
+      "sha256": "0424e57d4303164dc59a8509c20dae0518b853692e5c2b0e98b11816fdbc97c7",
+      "bytes": 2718
+    },
+    {
+      "path": "clang/LICENSE.TXT",
+      "sha256": "ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47",
+      "bytes": 15140
+    },
+    {
+      "path": "lld/LICENSE.TXT",
+      "sha256": "f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0",
+      "bytes": 15138
+    },
+    {
+      "path": "llvm/lib/Support/xxhash.cpp",
+      "sha256": "699389b388a56d0caf330bb872739b2e23d51a22b7e2f758f2c11fac9936752d",
+      "bytes": 36697
+    },
+    {
+      "path": "llvm/lib/Support/ConvertUTF.cpp",
+      "sha256": "bdbbdf159f5dda86bf70faa4be49f810a01c9e4c4f866889aedf2eec1efcd798",
+      "bytes": 29484
+    },
+    {
+      "path": "llvm/lib/Support/MD5.cpp",
+      "sha256": "7b7e82f5508a7d5551b78a1140b1d6aa9cba87282168219743cb6377cd5f9acd",
+      "bytes": 9841
+    },
+    {
+      "path": "llvm/lib/Support/SHA256.cpp",
+      "sha256": "9b1f22d8181e5776527fe8d45948dc31d99d264a68065f6da6d8fab0db7ea232",
+      "bytes": 11123
+    },
+    {
+      "path": "llvm/lib/Support/SHA1.cpp",
+      "sha256": "cc6c4b80b5c2a85f915fd336b72a87aeac696a03c30ce87756e71b060c5ca8a9",
+      "bytes": 10556
+    },
+    {
+      "path": "llvm/lib/Support/SipHash.cpp",
+      "sha256": "20662e3d8e1149a7d09f651d70671c237b298283492fdc26900bc1730f09f1b8",
+      "bytes": 2198
+    }
+  ],
+  "treeScan": {
+    "clang": {
+      "truncated": false,
+      "entries": 39766
+    },
+    "lld": {
+      "truncated": false,
+      "entries": 4230
+    },
+    "third-party": {
+      "truncated": false,
+      "entries": 828
+    },
+    "llvm": {
+      "truncated": true,
+      "entries": 69903
+    }
+  },
+  "scope": "Named notices and selected support file headers only; not exhaustive binary license audit",
+  "initialTreeRequest": "LLVM recursive request failed with SSL EOF; retry succeeded but returned truncated:true",
+  "archiveNoticeFiles": 0,
+  "x64Libedit": "/usr/lib/libedit.3.dylib (system library); pinned x64 archive has no lib/libedit.0.dylib",
+  "arm64Libedit": "@rpath/libedit.0.dylib (bundled pinned source)"
+}

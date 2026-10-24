@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MIT
+from unittest.mock import patch
 import importlib.util,unittest,tempfile,pathlib,tarfile,io,hashlib,json
 spec=importlib.util.spec_from_file_location('prepare',pathlib.Path(__file__).with_name('prepare-tutor-tools.py'));prepare=importlib.util.module_from_spec(spec);spec.loader.exec_module(prepare)
 class Boundaries(unittest.TestCase):
@@ -52,4 +53,25 @@ class Boundaries(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'license material is stale'):prepare.verify_existing(out,target)
                 self.assertEqual((out/'licenses/SOURCES.json').read_bytes(),b'fixture')
             finally:prepare.DESKTOP=desktop
+    def test_platform_specific_components_and_missing_arm64_dependency(self):
+        for target,missing in [('darwin-x64',False),('darwin-arm64',False),('darwin-arm64',True)]:
+            with self.subTest(target=target,missing=missing),tempfile.TemporaryDirectory() as temp:
+                root=pathlib.Path(temp);out=root/'installed'
+                def unpack(file,destination,folder):
+                    package=destination/folder
+                    if 'wasi-sdk' in folder:
+                        paths=[source for source,_ in prepare.sdk_components(target)]
+                        if missing: paths.remove('lib/libedit.0.dylib')
+                    else: paths=['wasmtime','LICENSE']
+                    for relative in paths:
+                        p=package/relative;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'fixture')
+                with patch.object(prepare,'archive',return_value=root/'fixture'),patch.object(prepare,'extract',side_effect=unpack):
+                    if missing:
+                        with self.assertRaisesRegex(ValueError,'libedit'):prepare.prepare(target,root,out,True)
+                        self.assertFalse(out.exists())
+                    else:
+                        manifest=prepare.prepare(target,root,out,True)
+                        self.assertEqual('sdk/lib/libedit.0.dylib' in [f['path'] for f in manifest['files']],target=='darwin-arm64')
+                        self.assertEqual(prepare.verify_existing(out,target),manifest)
+
 if __name__=='__main__':unittest.main()

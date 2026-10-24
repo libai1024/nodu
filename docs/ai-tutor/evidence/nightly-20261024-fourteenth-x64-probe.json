@@ -1,0 +1,31 @@
+{
+  "host": "darwin-arm64",
+  "tools": "darwin-x64",
+  "scope": "x64 compiler/runtime under Rosetta using product harness and process budgets; not native Intel app",
+  "cases": [
+    {
+      "name": "reference",
+      "total": 196,
+      "code": 0,
+      "output": "warning: using `--invoke` with a function that returns values is experimental and may break in the future\n196\n"
+    },
+    {
+      "name": "wrong-crc",
+      "total": 196,
+      "code": 0,
+      "output": "warning: using `--invoke` with a function that returns values is experimental and may break in the future\n35\n"
+    },
+    {
+      "name": "loop",
+      "total": 193,
+      "code": 134,
+      "output": "Error: failed to run main module `test.wasm`\n\nCaused by:\n    0: failed to invoke `run_tests`\n    1: error while executing at wasm backtrace:\n    0:     0x68 - test.wasm!sht30_crc8\n    1:    0x17b - test.wasm!crc_checks\n    2:     0x92 - test.wasm!run_tests\n    2: wasm trap: all fuel consumed by WebAssembly\n\n"
+    },
+    {
+      "name": "memory",
+      "total": 193,
+      "code": 134,
+      "output": "Error: failed to run main module `test.wasm`\n\nCaused by:\n    0: failed to invoke `run_tests`\n    1: error while executing at wasm backtrace:\n    0:     0x6c - test.wasm!sht30_crc8\n    1:    0x160 - test.wasm!crc_checks\n    2:     0x77 - test.wasm!run_tests\n    2: memory fault at wasm address 0x10000000 in linear memory of size 0x20000\n    3: wasm trap: out of bounds memory access\n\n"
+    }
+  ]
+}

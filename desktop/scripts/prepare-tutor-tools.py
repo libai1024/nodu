@@ -73,6 +73,15 @@ def verify_existing(out,target):
         if source.is_file() and digest(source)!=digest(out/'licenses'/source.name): raise ValueError('Installed toolkit license material is stale: '+source.name)
     return m
 
+def sdk_components(target):
+    files=[('bin/clang-23','sdk/bin/clang'),('bin/lld','sdk/bin/wasm-ld'),
+        ('lib/libLLVM.23.1-wasi-sdk.dylib','sdk/lib/libLLVM.23.1-wasi-sdk.dylib'),
+        ('lib/libclang-cpp.23.1-wasi-sdk.dylib','sdk/lib/libclang-cpp.23.1-wasi-sdk.dylib')]
+    # The pinned x64 macOS release disables libedit when cross-built on arm64.
+    # Keep it required on arm64; do not silently ignore an incomplete archive.
+    if target=='darwin-arm64': files.append(('lib/libedit.0.dylib','sdk/lib/libedit.0.dylib'))
+    return files
+
 def prepare(target, cache, out, offline=False):
     assets=LOCK['platforms'].get(target)
     if not assets: raise ValueError('Unsupported toolkit platform: '+target)
@@ -85,10 +94,7 @@ def prepare(target, cache, out, offline=False):
         for asset in assets:
             extract(archive(asset,cache,offline),root,asset['folder'])
         sdk=root/assets[0]['folder']; runtime=root/assets[1]['folder']
-        for source,destination in [('bin/clang-23','sdk/bin/clang'),('bin/lld','sdk/bin/wasm-ld'),
-            ('lib/libLLVM.23.1-wasi-sdk.dylib','sdk/lib/libLLVM.23.1-wasi-sdk.dylib'),
-            ('lib/libclang-cpp.23.1-wasi-sdk.dylib','sdk/lib/libclang-cpp.23.1-wasi-sdk.dylib'),
-            ('lib/libedit.0.dylib','sdk/lib/libedit.0.dylib')]: copy_inside(sdk,source,package/destination)
+        for source,destination in sdk_components(target): copy_inside(sdk,source,package/destination)
         copy_inside(runtime,'wasmtime',package/'runtime/wasmtime')
         copy_inside(runtime,'LICENSE',package/'licenses/Wasmtime-LICENSE')
         licenses=DESKTOP/'scope-extension/resources/licenses/tutor-wasi'

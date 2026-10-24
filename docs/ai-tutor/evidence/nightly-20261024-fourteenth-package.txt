@@ -1,0 +1,11 @@
+✔ packaging and runtime agree on a complete inventory and reject tampering and injected clang config (12.177166ms)
+✔ copies only explicitly selected architecture and refreshes hashes after binary signing (11.872459ms)
+✔ invalid platform, traversal, external links and cancellation cannot become valid toolkit evidence (8.207709ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73.077208
