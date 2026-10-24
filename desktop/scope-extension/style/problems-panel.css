@@ -3,7 +3,7 @@
 .nodu-problems-content { display: flex; flex-direction: column; color: var(--theia-foreground); background: var(--theia-editor-background); font-size: 12px; }
 .nodu-problems-toolbar { display: flex; flex: 0 0 40px; align-items: center; gap: 4px; box-sizing: border-box; padding: 0 12px; border-bottom: 1px solid var(--theia-panel-border); }
 .nodu-problems-filter { display: flex; flex: 1 1 auto; align-items: center; gap: 6px; min-width: 80px; max-width: 400px; height: 28px; box-sizing: border-box; padding: 0 7px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 4px; background: var(--theia-input-background); }
-.nodu-problems-filter:focus-within { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-problems-filter:has(:focus-visible) { outline: 2px solid var(--theia-focusBorder); outline-offset: -2px; }
 .nodu-problems-filter > .codicon { color: var(--theia-descriptionForeground); }
 .nodu-problems-filter input { flex: 1; min-width: 0; width: 0; height: 24px; margin: 0; padding: 0; border: 0; outline: none; color: var(--theia-input-foreground); background: transparent; font: inherit; }
 .nodu-problems-filter input::placeholder { color: var(--theia-input-placeholderForeground); }

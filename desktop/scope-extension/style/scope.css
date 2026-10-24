@@ -1,4 +1,19 @@
 /* SPDX-License-Identifier: MIT */
+/* Theia's global :focus rule also outlines pointer-focused controls. Keep
+ * focus/restore behavior intact, but reserve outlines for :focus-visible
+ * (keyboard navigation and text entry). :root gives this shared policy higher
+ * specificity than Theia's :focus rules without changing widget state. */
+:root :focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Trees paint focus on rows/empty-state pseudo-elements instead of the actual
+ * focus target. Keep their selected background, with outlines only for keys. */
+.theia-Tree:focus:not(:focus-visible) .theia-TreeContainer:is(.empty, .focused)::before,
+.theia-Tree:focus-within:not(:focus-visible):not(:has(:focus-visible)) .theia-TreeNode:is(.theia-mod-selected, .theia-mod-focus) {
+    outline: none;
+}
+
 @font-face {
     font-family: 'Scope Plex';
     src: url('./fonts/plex-sans.woff2') format('woff2');

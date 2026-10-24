@@ -54,9 +54,9 @@
 
 /* ---------- search ---------- */
 .nodu-launcher-search { display: flex; height: 34px; flex: 0 0 auto; align-items: center; gap: 8px; margin-bottom: 14px; padding: 0 6px 0 10px; border: 1px solid var(--theia-editorWidget-border); border-radius: 6px; background: var(--theia-input-background); transition: border-color 110ms ease-out; }
-.nodu-launcher-search:focus-within { border-color: var(--theia-focusBorder); }
+.nodu-launcher-search:has(:focus-visible) { border-color: var(--theia-focusBorder); }
 .nodu-launcher-search > .codicon { flex: 0 0 15px; color: var(--theia-descriptionForeground); font-size: 15px; pointer-events: none; }
-.nodu-launcher-search:focus-within > .codicon { color: var(--theia-scope-accent); }
+.nodu-launcher-search:has(:focus-visible) > .codicon { color: var(--theia-scope-accent); }
 #nodu-launcher .nodu-launcher-search input { min-width: 0; height: 100%; flex: 1; padding: 0; border: 0; outline: 0; background: transparent; color: var(--theia-input-foreground); caret-color: var(--theia-focusBorder); font: inherit; font-size: 12px; appearance: none; -webkit-appearance: none; }
 #nodu-launcher .nodu-launcher-search input:focus, #nodu-launcher .nodu-launcher-search input:focus-visible { border: 0; outline: 0; box-shadow: none; }
 .nodu-launcher-search input::-webkit-search-decoration, .nodu-launcher-search input::-webkit-search-cancel-button { display: none; }

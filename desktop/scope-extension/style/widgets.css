@@ -77,7 +77,7 @@
 .scope-target > span > span { font-size: 11px; color: var(--theia-descriptionForeground); line-height: 1.6; }
 .scope-target:hover { background: var(--theia-list-hoverBackground); }
 .scope-target-selected { background: var(--theia-list-inactiveSelectionBackground); border-color: var(--theia-panel-border); }
-.scope-target:focus-within { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
+.scope-target:focus-visible, .scope-target:has(:focus-visible) { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
 .scope-widget .scope-demo-run { margin-top: 16px; }
 .scope-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (prefers-reduced-motion: reduce) { .scope-widget * { scroll-behavior: auto; } }
