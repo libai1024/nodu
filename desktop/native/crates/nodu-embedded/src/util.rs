@@ -12,6 +12,30 @@ use sha2::{Digest, Sha256};
 
 use crate::proto::{Failure, Outcome};
 
+/// Canonical paths stay verbatim for authorization and filesystem operations.
+/// MinGW tools do not reliably accept that namespace in their argv or cwd.
+pub fn external_tool_path(path: &Path) -> String {
+    let text = path.to_string_lossy();
+    #[cfg(windows)]
+    { windows_tool_path(&text) }
+    #[cfg(not(windows))]
+    { text.into_owned() }
+}
+
+#[cfg(any(windows, test))]
+fn windows_tool_path(text: &str) -> String {
+    if let Some(unc) = text.strip_prefix(r"\\?\UNC\") {
+        return format!(r"\\{unc}");
+    }
+    if let Some(drive) = text.strip_prefix(r"\\?\") {
+        let bytes = drive.as_bytes();
+        if bytes.len() >= 3 && bytes[0].is_ascii_alphabetic() && bytes[1..3] == *b":\\" {
+            return drive.to_owned();
+        }
+    }
+    text.to_owned()
+}
+
 pub fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
 }
@@ -135,6 +159,15 @@ pub fn u64_field(value: &Value, path: &[&str]) -> Option<u64> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn windows_tool_paths_preserve_drive_and_unc_identity() {
+        assert_eq!(windows_tool_path(r"\\?\D:\工程\main.c"), r"D:\工程\main.c");
+        assert_eq!(windows_tool_path(r"\\?\UNC\server\share\main.c"), r"\\server\share\main.c");
+        for path in [r"D:\main.c", r"\\server\share", r"\\?\Volume{abc}\main.c", r"\\.\COM3", "/tmp/file", r"\\?\D:relative"] {
+            assert_eq!(windows_tool_path(path), path);
+        }
+    }
 
     #[test]
     fn civil_dates() {

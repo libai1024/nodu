@@ -20,7 +20,7 @@ use crate::process::{self, Control};
 use crate::project::Project;
 use crate::proto::{Failure, Outcome, Output};
 use crate::toolkit::Toolkit;
-use crate::util::{iso_now, millis_now, read_json, sha256_file, sha256_hex, write_json};
+use crate::util::{external_tool_path, iso_now, millis_now, read_json, sha256_file, sha256_hex, write_json};
 
 const CONFIGURE_TIMEOUT: Duration = Duration::from_secs(120);
 const BUILD_TIMEOUT: Duration = Duration::from_secs(600);
@@ -138,8 +138,8 @@ fn ensure_configured(env: &Env<'_>, project: &Project, clean: bool, parser: &mut
                 .map_err(|e| Failure::io("准备外部工程工具链", &e))?;
             path
         };
-        args = vec!["-S".into(), project.root.display().to_string(), "-B".into(), build_dir.display().to_string(),
-            "-G".into(), "Ninja".into(), format!("-DCMAKE_TOOLCHAIN_FILE={}", toolchain.display()),
+        args = vec!["-S".into(), external_tool_path(&project.root), "-B".into(), external_tool_path(&build_dir),
+            "-G".into(), "Ninja".into(), format!("-DCMAKE_TOOLCHAIN_FILE={}", external_tool_path(&toolchain)),
             format!("-DCMAKE_BUILD_TYPE={}", if project.preset() == "release" { "Release" } else { "Debug" }),
             "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON".into()];
     }
@@ -190,7 +190,7 @@ pub fn build(env: &Env<'_>, project: &Project, clean: bool, build_id: &str) -> O
         // Never normalize an ELF left by an earlier, differently named target.
         for name in FILES { let _ = fs::remove_file(project.build_dir().join(name)); }
     }
-    let args = vec!["--build".to_string(), project.build_dir().display().to_string()];
+    let args = vec!["--build".to_string(), external_tool_path(&project.build_dir())];
     let done = run_tool(env, project, &args, BUILD_TIMEOUT, &mut parser, "build", build_id)?;
     output.push_str(&done.output);
     if !done.ok() {
@@ -233,7 +233,7 @@ fn normalize_external_artifacts(toolkit: &Toolkit, project: &Project) -> Outcome
     if elf != dir.join("firmware.elf") { fs::copy(&elf, dir.join("firmware.elf")).map_err(|e| Failure::io("复制 ELF", &e))?; }
     for (format, extension) in [("binary", "bin"), ("ihex", "hex")] {
         let result = std::process::Command::new(toolkit.gcc_tool("objcopy"))
-            .arg("-O").arg(format).arg(&elf).arg(dir.join(format!("firmware.{extension}")))
+            .arg("-O").arg(format).arg(external_tool_path(&elf)).arg(external_tool_path(&dir.join(format!("firmware.{extension}"))))
             .env_clear().envs(toolkit.child_env()).output().map_err(|e| Failure::io("转换外部工程产物", &e))?;
         if !result.status.success() { return Err(Failure::new("objcopy", String::from_utf8_lossy(&result.stderr).to_string())); }
     }
@@ -277,7 +277,7 @@ fn store_artifact(toolkit: &Toolkit, project: &Project, input_digest: &str, capa
     let (stack, reset) = (word(0), word(4));
     let chip = &project.chip;
     let elf = build_dir.join("firmware.elf");
-    let elf_text = elf.display().to_string();
+    let elf_text = external_tool_path(&elf);
     let attributes = tool_output(toolkit, "readelf", &["-A", &elf_text]);
     let cpu = Regex::new(r#"Tag_CPU_name: "([^"]+)""#).expect("regex")
         .captures(&attributes).map(|c| c[1].to_string()).unwrap_or_default();

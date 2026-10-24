@@ -127,6 +127,7 @@ pub fn run(
     #[cfg(windows)]
     {
         use std::os::windows::process::CommandExt;
+        command.current_dir(crate::util::external_tool_path(cwd));
         const CREATE_NO_WINDOW: u32 = 0x0800_0000;
         command.creation_flags(CREATE_NO_WINDOW);
     }
