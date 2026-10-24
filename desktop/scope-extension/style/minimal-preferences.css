@@ -1,4 +1,15 @@
 /* SPDX-License-Identifier: MIT */
+.nodu-titlebar-settings {
+    position: absolute;
+    top: 3px;
+    right: 8px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    -webkit-app-region: no-drag;
+}
+body:not(.mac) .nodu-titlebar-settings { right: 142px; }
 .nodu-minimal-settings-host {
     position: absolute;
     top: 0;

@@ -32,9 +32,7 @@ body:not(.mac) #theia-top-panel > .nodu-titlebar-toolbar { right: 142px; }
 /* Settings live at the right of the header. AI settings remain in the model picker/menu. */
 .nodu-pro #theia-left-content-panel .theia-sidebar-menu-item:has(.codicon-settings-gear),
 .nodu-pro #theia-left-content-panel .theia-sidebar-menu-item:has(.codicon-sparkle) { display: none; }
-/* Right tools remain reachable from the header's View menu; only the redundant rail goes away. */
-.nodu-pro #theia-right-content-panel > .theia-app-sidebar-container { display: none !important; min-width: 0 !important; max-width: .1px !important; width: 0 !important; }
-.nodu-pro #theia-right-content-panel.theia-mod-collapsed { min-width: 0 !important; max-width: .1px !important; width: 0 !important; overflow: hidden; }
+/* Keep Theia's right tool rail visible, including when its content is collapsed. */
 .nodu-professional-bar .nodu-c-guide { position: fixed; top: 48px; left: 50%; transform: translateX(-50%); box-sizing: border-box; max-width: calc(100vw - 24px); max-height: calc(100vh - 80px); overflow: auto; }
 @media (max-width: 1100px) {
     .nodu-professional-bar { gap: 4px; }

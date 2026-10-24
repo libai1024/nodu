@@ -99,3 +99,19 @@ test('switching to STM32 closes a visible framebuffer but leaves another right-s
     await owner.applyPlatformLayout();
     assert.deepEqual(calls, []);
 });
+
+test('K210 and STM32 can explicitly open, collapse and reopen the same right-side framebuffer', async () => {
+    for (const isC of [false, true]) {
+        const { owner, visible, calls } = workbench(isC);
+        owner.layoutState.mode = 'pro';
+        const widget = owner.vision.tryGetWidget();
+        await owner.toggleVision();
+        assert.equal(visible.vision, true);
+        await owner.toggleVision();
+        assert.equal(visible.vision, false);
+        await owner.toggleVision();
+        assert.equal(visible.vision, true);
+        assert.equal(owner.vision.tryGetWidget(), widget);
+        assert.deepEqual(calls, [['open', 'vision'], ['collapse', 'right'], ['open', 'vision']]);
+    }
+});

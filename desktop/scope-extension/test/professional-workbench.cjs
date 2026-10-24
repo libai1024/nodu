@@ -72,8 +72,8 @@ function harness(electron = true, mac = true) {
     return { ...load('scope-workbench.tsx'), ...modules['./scope-layout-state'], ...modules['./nodu-embedded-toolbar'],
         ...modules['./nodu-embedded-commands'], TUTOR_COMMANDS, Widget, BoxLayout, NoduMinimalPreferences, NoduMinimalSettingsHost, NoduMinimalAction, ActionIcon };
 }
-function toolbar(kind = 'stm32') {
-    const h = harness(), owner = new h.ScopeToolbar(), calls = [], preferences = [], themes = [], menu = [];
+function toolbar(kind = 'stm32', h = harness()) {
+    const owner = new h.ScopeToolbar(), calls = [], preferences = [], themes = [], menu = [];
     owner.layoutState = new h.ScopeLayoutState(); owner.layoutState.setMode('pro'); owner.layoutState.setProject('unique-project-name', '/project');
     owner.embedded = { isC: kind === 'stm32', isEsp: kind === 'esp', espChip: 'esp32', busy: false, savingOptions: false,
         project: { path: '/project', chip: { name: 'STM32F103C8T6' }, board: { name: 'STM32F103C8T6 最小系统板' }, flashMethod: 'stlink' },
@@ -86,7 +86,7 @@ function toolbar(kind = 'stm32') {
     owner.themes = { getCurrentTheme: () => ({ type: 'light' }), setCurrentTheme: theme => themes.push(theme) };
     owner.preferences = { get: (_, fallback) => fallback, set: async (...args) => { preferences.push(args); } };
     owner.editors = { currentEditor: { activate: () => calls.push('activate-editor') } };
-    owner.shell = { mainPanel: { node: {} }, leftPanelHandler: { container: { node: { querySelector: () => ({ id: 'rail' }) } } } };
+    owner.shell = { mainPanel: { node: {} }, topPanel: { node: { id: 'titlebar' }, hasClass: () => false }, leftPanelHandler: { container: { node: { querySelector: () => ({ id: 'rail' }) } } } };
     owner.contextMenu = { render: options => menu.push(options) };
     const render = () => kind === 'stm32' ? h.NoduCToolbar(owner.renderC().props) : owner.renderPythonOrEsp();
     const button = label => walk(render()).find(node => node.type === 'button' && node.props['aria-label'] === label);
@@ -151,6 +151,19 @@ test('professional settings reuses the simple preferences component and mode swi
     c.owner.layoutState.setMode('simple');
     const minimal = walk(c.owner.renderMinimal()).filter(node => node.type === c.h.NoduMinimalPreferences);
     assert.equal(minimal.length, 1); assert.equal(minimal[0].props.mode, 'simple');
+    const portal = walk(c.owner.renderMinimal()).find(node => node.type === 'portal');
+    assert.equal(portal.props.target, c.owner.shell.topPanel.node);
+    assert.equal(walk(c.owner.renderMinimal()).some(node => node.type === c.h.NoduMinimalSettingsHost), false);
+});
+test('native titlebars use the same settings host in both modes', () => {
+    const c = toolbar('stm32', harness(true, false));
+    for (const mode of ['simple', 'pro']) {
+        c.owner.layoutState.setMode(mode);
+        const host = c.owner.renderSettings();
+        assert.equal(host.type, c.h.NoduMinimalSettingsHost);
+        assert.equal(host.props.panel, c.owner.shell.mainPanel);
+        assert.equal(walk(host).filter(node => node.type === c.h.NoduMinimalPreferences).length, 1);
+    }
 });
 test('AI teaching switches guidance without closing conversation; more menus remain target-specific', () => {
     for (const [kind, segment] of [['stm32', 'stm32'], ['k210', 'k210'], ['esp', 'esp']]) {

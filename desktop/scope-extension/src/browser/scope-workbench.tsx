@@ -210,9 +210,7 @@ export class ScopeToolbar extends ReactWidget {
                 <button className="nodu-minimal-tool" aria-label="终端与输出" title="终端与输出" aria-pressed={panelVisible}
                     onClick={() => this.execute(c ? C_COMMANDS.togglePanel : 'scope.toggle-console')}>{icon('terminal')}</button>
             </div>
-            <NoduMinimalSettingsHost panel={this.shell.mainPanel}>
-                {this.renderPreferences()}
-            </NoduMinimalSettingsHost>
+            {this.renderSettings()}
             <div className="nodu-minimal-primary">
                 <NoduMinimalAction action={action} allowSelection={c} busy={busy} disabled={savingOptions} scopeKey={scope}
                     stopDisabled={!c && !this.embedded.isEsp && !this.device.canStop}
@@ -235,6 +233,16 @@ export class ScopeToolbar extends ReactWidget {
                     wordWrap={this.preferences.get<string>('editor.wordWrap', 'off') !== 'off'} onWordWrap={value => preference('editor.wordWrap', value ? 'on' : 'off')}
                     tabSize={this.preferences.get<number>('editor.tabSize', 4)} onTabSize={value => preference('editor.tabSize', value)}
                     onAllSettings={() => this.execute('preferences:open')} onOpen={() => this.layoutState.setDeviceOpen(false)} scopeKey={scope} />;
+    }
+
+    /** Use the same corner in both modes; native titlebars share the editor-area fallback. */
+    private renderSettings(): React.ReactNode {
+        const titlebar = environment.electron.is() && (isOSX || this.shell.topPanel.hasClass('nodu-project-titlebar'));
+        if (titlebar) {
+            if (this.layoutState.mode === 'pro') { return this.renderPreferences(); }
+            return createPortal(<div className="nodu-titlebar-settings">{this.renderPreferences()}</div>, this.shell.topPanel.node);
+        }
+        return <NoduMinimalSettingsHost panel={this.shell.mainPanel}>{this.renderPreferences()}</NoduMinimalSettingsHost>;
     }
 
     private renderProjectLogo(): React.ReactNode {
@@ -284,7 +292,7 @@ export class ScopeToolbar extends ReactWidget {
             </div>
             {this.renderAI()}
             {this.renderMore()}
-            {this.renderPreferences()}
+            {this.renderSettings()}
         </header>;
     }
 
@@ -310,7 +318,7 @@ export class ScopeToolbar extends ReactWidget {
             setDeviceOpen={open => this.layoutState.setDeviceOpen(open)} exec={id => this.execute(id)}
             openMenu={(path, anchor) => this.openMenu(path, anchor)} projectMenu={NODU_PROJECT_MENU} moreMenu={NODU_MORE_MENU}
             confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(v => v === true)}
-            tutorButton={this.renderAI()} moreButton={this.renderMore()} settingsButton={this.renderPreferences()} externalDevicePanel />;
+            tutorButton={this.renderAI()} moreButton={this.renderMore()} settingsButton={this.renderSettings()} externalDevicePanel />;
     }
 
     /** Toolbar dropdowns are ordinary Theia menus anchored under their button. */
@@ -825,7 +833,7 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         for (const platform of ['stm32', 'k210', 'esp'] as const) {
             const root = [...NODU_MORE_MENU, platform];
             const panels = ['scope.toggle-files', platform === 'stm32' ? C_COMMANDS.togglePanel : 'scope.toggle-console', 'scope.toggle-right', TUTOR_COMMANDS.openPanel];
-            if (platform === 'k210') { panels.push('scope.toggle-vision'); }
+            if (platform !== 'esp') { panels.push('scope.toggle-vision'); }
             panels.forEach((commandId, order) => menus.registerMenuAction([...root, '0_panels'], { commandId, order: String(order) }));
             menus.registerSubmenu([...root, '1_actions'], '更多运行方式');
             menus.registerSubmenu([...root, '2_ai'], 'AI 教学');

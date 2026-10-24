@@ -15,6 +15,7 @@ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
 import { DeviceFrame } from '../common/nodu-device-protocol';
 import { NoduDeviceModel } from './nodu-device-client';
+import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NODU_COLORS } from './nodu-brand';
 import { NoduImageTools } from './nodu-image-tools';
 import { NoduImageToolState } from './nodu-image-state';
@@ -107,6 +108,7 @@ export class ScopeVisionWidget extends ReactWidget {
     @inject(ScopeSession) protected readonly session!: ScopeSession;
     @inject(CommandService) protected readonly commands!: CommandService;
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
+    @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     @inject(FileService) protected readonly files!: FileService;
     @inject(FileDialogService) protected readonly dialogs!: FileDialogService;
     @inject(ClipboardService) protected readonly clipboard!: ClipboardService;
@@ -123,6 +125,8 @@ export class ScopeVisionWidget extends ReactWidget {
     private source: 'device' | 'demo' = 'device';
     private wasConnected = false;
     private exporting = false;
+    private imageSourceEpoch = 0;
+    private lastSourceAvailable: boolean | undefined;
     // The worker reports recording counters with each appended frame; between
     // frames the clock keeps running locally so it never appears to stall.
     private recClock: { elapsedMs: number; at: number } | undefined;
@@ -141,6 +145,7 @@ export class ScopeVisionWidget extends ReactWidget {
         this.toDispose.push(this.toolbarChanged);
         this.toDispose.push({ dispose: () => this.stopClock() });
         this.toDispose.push(this.session.onDidChange(() => this.update()));
+        this.toDispose.push(this.embedded.onDidChange(() => this.refresh()));
         this.toDispose.push(this.layoutState.onDidChange(() => { if (this.layoutState.mode === 'simple') { this.source = 'device'; } this.refresh(); }));
         this.toDispose.push(this.device.onDidChange(() => {
             if (this.device.connected && !this.wasConnected) { this.source = 'device'; }
@@ -153,17 +158,22 @@ export class ScopeVisionWidget extends ReactWidget {
 
     protected onActivateRequest(): void { this.node.focus(); }
 
-    showLocalDemo(): void { this.source = 'demo'; this.refresh(); }
+    /** The existing device transport supplies K210 images only. Other projects retain the view entry. */
+    get deviceSourceAvailable(): boolean { return !this.embedded.isC && !this.embedded.isEsp; }
+    showLocalDemo(): void { if (this.deviceSourceAvailable) { this.source = 'demo'; this.refresh(); } }
     get showingDemo(): boolean { return this.source === 'demo'; }
-    toggleDemo(): void { this.source = this.source === 'demo' ? 'device' : 'demo'; this.refresh(); }
+    toggleDemo(): void { if (this.deviceSourceAvailable) { this.source = this.source === 'demo' ? 'device' : 'demo'; this.refresh(); } }
     get exportBusy(): boolean { return this.exporting; }
     toggleFit(): void { this.imageTools.fit = !this.imageTools.fit; this.refresh(); }
 
     /** Re-render the body, and the title-row actions only when what they show changed. */
     private refresh(): void {
         const { state, frame } = this.device;
+        const available = this.deviceSourceAvailable;
+        if (this.lastSourceAvailable !== available) { this.imageSourceEpoch++; this.lastSourceAvailable = available; }
+        if (!available) { this.source = 'device'; this.stopClock(); }
         this.node.classList.toggle('nodu-vision-demo', this.source === 'demo');
-        const key = [this.layoutState.mode, this.source, this.device.connected, this.device.busy, state.running, state.preview,
+        const key = [available, this.layoutState.mode, this.source, this.device.connected, this.device.busy, state.running, state.preview,
             !!frame, state.recording?.active, state.capabilities.framebuffer, state.capabilities.script, this.imageTools.fit, this.exporting].join(':');
         if (key !== this.toolbarKey) { this.toolbarKey = key; this.toolbarChanged.fire(); }
         this.update();
@@ -171,7 +181,7 @@ export class ScopeVisionWidget extends ReactWidget {
 
     private syncClock(): void {
         const recording = this.device.state.recording;
-        if (!recording?.active) { this.stopClock(); return; }
+        if (!this.deviceSourceAvailable || !recording?.active) { this.stopClock(); return; }
         if (!this.recClock || recording.elapsedMs !== this.recClock.elapsedMs) { this.recClock = { elapsedMs: recording.elapsedMs, at: performance.now() }; }
         this.recTimer ??= window.setInterval(() => this.update(), 100);
     }
@@ -183,14 +193,17 @@ export class ScopeVisionWidget extends ReactWidget {
     /** 截图: the received JPEG as-is, or re-encoded as PNG when the name says so. */
     async exportFrame(): Promise<void> {
         const captured = this.device.frame;
-        if (!captured || this.exporting) { return; }
+        if (!this.deviceSourceAvailable || !captured || this.exporting) { return; }
         this.exporting = true; this.refresh();
+        const epoch = this.imageSourceEpoch;
+        const current = (): boolean => !this.isDisposed && this.deviceSourceAvailable && epoch === this.imageSourceEpoch;
         try {
             const uri = await this.dialogs.showSaveDialog({ title: '保存截图', saveLabel: '保存', inputValue: `nodu-frame-${captured.sequence}.jpg`, filters: { 'JPEG 图像': ['jpg', 'jpeg'], 'PNG 图像': ['png'] } }, this.workspace.tryGetRoots()[0]);
-            if (!uri) { return; }
+            if (!uri || !current()) { return; }
             const lower = uri.path.base.toLowerCase();
             if (!/\.(jpe?g|png)$/.test(lower)) { throw new Error('请使用 .jpg 或 .png 文件名。'); }
             const bytes = lower.endsWith('.png') ? await pngBytes(captured) : Uint8Array.from(atob(captured.data), character => character.charCodeAt(0));
+            if (!current()) { return; }
             await this.files.writeFile(uri, BinaryBuffer.wrap(bytes));
             this.device.note(`截图已保存到 ${uri.path.fsPath()}`);
         } catch (error) {
@@ -202,6 +215,7 @@ export class ScopeVisionWidget extends ReactWidget {
     }
 
     protected render(): React.ReactNode {
+        if (!this.deviceSourceAvailable) { return <div className="nodu-fb-empty"><span>当前工程暂无图像来源</span></div>; }
         if (this.source === 'device' || this.layoutState.mode === 'simple') { return this.renderDevicePreview(); }
         return this.renderDemo();
     }
@@ -219,7 +233,7 @@ export class ScopeVisionWidget extends ReactWidget {
             return <div className="nodu-fb-panel"><div className="nodu-fb-empty">
                 <i className="codicon codicon-device-camera" aria-hidden="true" />
                 <strong>{state.capabilities.framebuffer ? (state.running ? '等待图像' : '没有图像') : '相机未启用'}</strong>
-                {canStart && !state.running && <button className="theia-button" disabled={model.busy} onClick={() => void model.startCamera()}>启动相机</button>}
+                {canStart && !state.running && <button className="theia-button" disabled={model.busy} onClick={() => { if (this.deviceSourceAvailable) { void model.startCamera(); } }}>启动相机</button>}
             </div>{cameraError}</div>;
         }
         const recording = state.recording?.active ? state.recording : undefined;
@@ -314,6 +328,7 @@ async function pngBytes(frame: DeviceFrame): Promise<Uint8Array> {
 @injectable()
 export class ScopeVisionToolbarContribution implements TabBarToolbarContribution, CommandContribution {
     @inject(NoduDeviceModel) protected readonly device!: NoduDeviceModel;
+    @inject(NoduEmbeddedModel) protected readonly embedded!: NoduEmbeddedModel;
     @inject(CommandService) protected readonly commands!: CommandService;
     @inject(ScopeLayoutState) protected readonly layoutState!: ScopeLayoutState;
     @inject(WidgetManager) protected readonly widgets!: WidgetManager;
@@ -321,16 +336,17 @@ export class ScopeVisionToolbarContribution implements TabBarToolbarContribution
 
     registerCommands(registry: CommandRegistry): void {
         const vision = (): ScopeVisionWidget | undefined => this.widgets.tryGetWidget<ScopeVisionWidget>(ScopeVisionWidget.ID);
+        const available = (): boolean => !this.embedded.isC && !this.embedded.isEsp;
         registry.registerCommand({ id: 'scope.framebuffer.fit', label: '缩放到合适大小', category: '见微 Nodu' }, {
-            execute: () => vision()?.toggleFit(), isToggled: () => vision()?.imageTools.fit ?? true,
+            execute: () => { if (available()) { vision()?.toggleFit(); } }, isEnabled: available, isToggled: () => available() && (vision()?.imageTools.fit ?? true),
         });
         registry.registerCommand({ id: 'scope.framebuffer.toggle-preview', label: '禁用帧缓冲区', category: '见微 Nodu' }, {
-            execute: () => this.device.setPreview(!this.device.state.preview),
-            isEnabled: () => this.device.connected && !this.device.busy && !!this.device.state.capabilities.framebuffer && (this.device.state.preview || !!this.device.frame),
-            isToggled: () => this.device.connected && !this.device.state.preview && !!this.device.frame,
+            execute: () => { if (available()) { return this.device.setPreview(!this.device.state.preview); } },
+            isEnabled: () => available() && this.device.connected && !this.device.busy && !!this.device.state.capabilities.framebuffer && (this.device.state.preview || !!this.device.frame),
+            isToggled: () => available() && this.device.connected && !this.device.state.preview && !!this.device.frame,
         });
         registry.registerCommand({ id: 'scope.framebuffer.snapshot', label: '保存截图…', category: '见微 Nodu' }, {
-            execute: () => vision()?.exportFrame(), isEnabled: () => !!this.device.frame && !vision()?.exportBusy,
+            execute: () => { if (available()) { return vision()?.exportFrame(); } }, isEnabled: () => available() && !!this.device.frame && !vision()?.exportBusy,
         });
     }
 
@@ -346,12 +362,13 @@ export class ScopeVisionToolbarContribution implements TabBarToolbarContribution
     }
 
     private renderActions(widget: ScopeVisionWidget): React.ReactNode {
+        if (!widget.deviceSourceAvailable) { return null; }
         const model = this.device, state = model.state;
         const demo = widget.showingDemo && this.layoutState.mode === 'pro';
         const recording = !!state.recording?.active;
         const button = (key: string, icon: string, label: string, onClick: () => unknown, options: { disabled?: boolean; pressed?: boolean; className?: string } = {}): React.ReactNode =>
             <button key={key} type="button" className={`nodu-fb-action${options.pressed ? ' nodu-fb-action-on' : ''}${options.className ? ` ${options.className}` : ''}`}
-                aria-label={label} title={label} aria-pressed={options.pressed} disabled={options.disabled} onClick={event => { event.stopPropagation(); void onClick(); }}>
+                aria-label={label} title={label} aria-pressed={options.pressed} disabled={options.disabled} onClick={event => { event.stopPropagation(); if (widget.deviceSourceAvailable) { void onClick(); } }}>
                 <i className={`codicon codicon-${icon}`} aria-hidden="true" />
             </button>;
         const items: React.ReactNode[] = [];
