@@ -32,15 +32,22 @@ test('file search changes only provider copy and retains the existing search imp
     assert.deepEqual(descriptor.helpEntries, [{ description: '搜索文件', needsEditor: false }]);
 });
 
-function searchFixture({ mac = true, width = 980, menu, workspace = directory('uart-demo') } = {}) {
-    const listeners = {}, observers = [], calls = [], disposables = [], roots = deferred();
+function searchFixture({ mac = true, width = 980, menu, toolbar, controls, workspace = directory('uart-demo') } = {}) {
+    const listeners = {}, observers = [], mutations = [], calls = [], disposables = [], roots = deferred();
     class ResizeObserver {
         constructor(callback) { this.callback = callback; observers.push(this); }
-        observe(node) { this.observed = node; }
+        observed = new Set();
+        observe(node) { this.observed.add(node); }
+        unobserve(node) { this.observed.delete(node); }
+        disconnect() { this.disconnected = true; }
+    }
+    class MutationObserver {
+        constructor(callback) { this.callback = callback; mutations.push(this); }
+        observe(node, options) { this.observed = node; this.options = options; }
         disconnect() { this.disconnected = true; }
     }
     const Search = productionClass('electron-browser/nodu-project-search.ts', 'NoduProjectSearch',
-        ['opening', 'init', 'updateProject', 'openSearch', 'layoutSearch'], { isOSX: mac, ResizeObserver, postConstruct: () => () => {} });
+        ['opening', 'init', 'updateProject', 'openSearch', 'layoutSearch'], { isOSX: mac, ResizeObserver, MutationObserver, postConstruct: () => () => {} });
     const search = new Search();
     search.workspace = {
         workspace, roots: roots.promise, tryGetRoots: () => [],
@@ -50,11 +57,12 @@ function searchFixture({ mac = true, width = 980, menu, workspace = directory('u
     search.name = { textContent: '' };
     search.button = { attributes: {}, setAttribute(name, value) { this.attributes[name] = value; } };
     search.node = { style: {}, hidden: false };
-    search.shell = { topPanel: { node: { clientWidth: width, querySelector(selector) { assert.equal(selector, '.lm-MenuBar'); return menu; } } } };
+    const elements = { '.lm-MenuBar': menu, '.nodu-titlebar-toolbar': toolbar, '#window-controls': controls };
+    search.shell = { topPanel: { node: { clientWidth: width, querySelector(selector) { assert.ok(selector in elements); return elements[selector]; } } } };
     search.commands = { executeCommand: async (...args) => { calls.push(['command', ...args]); } };
     search.messages = { error: async message => { calls.push(['error', message]); } };
     search.toDispose = { push(...items) { disposables.push(...items); } };
-    return { search, listeners, observers, calls, disposables, roots };
+    return { search, listeners, observers, mutations, elements, calls, disposables, roots };
 }
 
 test('title search follows project and workspace names, with a useful empty fallback', () => {
@@ -83,13 +91,13 @@ test('workspace events refresh the title; active-file changes never replace the 
     assert.equal(f.search.name.textContent, 'sensor');
     f.search.workspace.workspace = workspaceFile('Renamed'); f.listeners.location();
     assert.equal(f.search.name.textContent, 'Renamed');
-    assert.equal(f.observers[0].observed, f.search.shell.topPanel.node);
+    assert.ok(f.observers[0].observed.has(f.search.shell.topPanel.node));
     f.observers[0].callback(); assert.ok(Math.abs(parseFloat(f.search.node.style.width) - 411.6) < 0.001);
     f.search.isDisposed = true; f.search.workspace.workspace = directory('late');
     f.roots.resolve([]); await f.roots.promise; await Promise.resolve();
     assert.equal(f.search.name.textContent, 'Renamed', 'late workspace readiness cannot update a disposed widget');
     f.disposables.forEach(item => item.dispose());
-    assert.equal(f.observers[0].disconnected, true); assert.deepEqual(f.listeners, {});
+    assert.equal(f.observers[0].disconnected, true); assert.equal(f.mutations[0].disconnected, true); assert.deepEqual(f.listeners, {});
 });
 
 test('opening search only executes the existing file picker command and suppresses duplicate clicks', async () => {
@@ -143,6 +151,52 @@ test('non-mac geometry avoids both menus and window controls and hides rather th
         assert.equal(f.search.node.hidden, width - (8 + menuWidth + 16) - 156 < 80);
     }
     assertLayout(searchFixture({ mac: false, width: 980 }), 16, 156);
+});
+
+test('professional header reserves the live toolbar width and restores centered search when it moves to the rail', () => {
+    const f = searchFixture({ width: 1200 });
+    f.search.init();
+    assert.equal(parseFloat(f.search.node.style.left), 390);
+    const toolbar = { offsetLeft: 720, offsetWidth: 472 };
+    f.elements['.nodu-titlebar-toolbar'] = toolbar;
+    f.mutations[0].callback();
+    assert.ok(f.observers[0].observed.has(toolbar));
+    assertLayout(f, 100, 1200 - toolbar.offsetLeft + 12);
+    assert.equal(parseFloat(f.search.node.style.left) + parseFloat(f.search.node.style.width), 708);
+    toolbar.offsetLeft = 620; toolbar.offsetWidth = 572;
+    f.observers[0].callback();
+    assert.equal(parseFloat(f.search.node.style.left) + parseFloat(f.search.node.style.width), 608);
+    delete f.elements['.nodu-titlebar-toolbar'];
+    // QuerySelector still recognizes the target when no matching child remains.
+    f.elements['.nodu-titlebar-toolbar'] = undefined;
+    f.mutations[0].callback();
+    assert.equal(f.observers[0].observed.has(toolbar), false);
+    assert.equal(parseFloat(f.search.node.style.left), 390);
+});
+
+test('professional search yields space to Windows menu, tools and native controls without overlap', () => {
+    const toolbar = { offsetLeft: 730, offsetWidth: 320 };
+    const f = searchFixture({ mac: false, width: 1200, menu: { offsetLeft: 8, offsetWidth: 330 }, toolbar,
+        controls: { offsetLeft: 1062, offsetWidth: 138 } });
+    assertLayout(f, 354, 482);
+    assert.equal(f.search.node.hidden, false);
+    toolbar.offsetLeft = 430;
+    assertLayout(f, 354, 782);
+    assert.equal(f.search.node.hidden, true);
+    toolbar.offsetWidth = 0; // A hidden toolbar reserves no stale space.
+    assertLayout(f, 354, 156);
+    assert.equal(f.search.node.hidden, false);
+    f.elements['#window-controls'] = { offsetLeft: 970, offsetWidth: 230 };
+    assertLayout(f, 354, 242);
+});
+
+test('title observers ignore queued callbacks after disposal', () => {
+    const f = searchFixture(); f.search.init();
+    const before = { ...f.search.node.style };
+    f.search.isDisposed = true;
+    f.search.shell.topPanel.node.clientWidth = 400;
+    f.mutations[0].callback(); f.observers[0].callback();
+    assert.deepEqual(f.search.node.style, before);
 });
 
 function menuFixture({ mac = true, query = '' } = {}) {

@@ -1,8 +1,10 @@
 /* SPDX-License-Identifier: MIT */
-.nodu-minimal-action {
+.nodu-pro-actions, .nodu-minimal-action {
     --nodu-action-build-color: #e4b95f;
     --nodu-action-flash-color: #7ea6ff;
     --nodu-action-run-color: #6ccfa0;
+}
+.nodu-minimal-action {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,6 +20,8 @@
     touch-action: none;
     user-select: none;
 }
+body.theia-light .nodu-pro-actions,
+body.theia-hcLight .nodu-pro-actions,
 body.theia-light .nodu-minimal-action,
 body.theia-hcLight .nodu-minimal-action {
     --nodu-action-build-color: #9b6500;

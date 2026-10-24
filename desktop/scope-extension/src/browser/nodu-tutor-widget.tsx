@@ -20,26 +20,16 @@ function MessageText({ text, open }: { text: string; open(path: string, line: nu
                 ? <button key={n} className="scope-text-button nodu-ai-file-link" onClick={() => open(match[2], Number(match[3] ?? 1))}>{match[1]}</button> : chunk;
         })}</span>)}</>;
 }
-function GoalPlan({ tutor, run, revise }: { tutor: NoduTutorModel; run(command: string, ...args: unknown[]): void; revise(): void }): React.ReactElement | null {
-    const state = tutor.goalState, busy = !!tutor.busy, step = state.steps[state.current];
-    if (['none','cancelled'].includes(state.status)) { return null; }
-    const active = state.status === 'active' || state.status === 'paused';
-    return <section className="nodu-ai-course" aria-label="教学计划">
-        <div className="nodu-ai-stepbar"><span className="nodu-ai-goal-title">{state.title}</span><span className="nodu-ai-progress">{state.current}/{state.steps.length}</span></div>
-        {state.status === 'draft' ? <>
-            <ol className="nodu-ai-goal-steps">{state.steps.map(s => <li key={s.id}>{s.title}</li>)}</ol>
-            <div className="nodu-ai-actions"><button className="theia-button" disabled={busy} onClick={() => void tutor.goalAction('confirm')}>开始跟写</button>
-                <button className="scope-text-button" disabled={busy} onClick={revise}>修改目标</button>
-                <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction('cancel')}>取消</button></div>
-        </> : active && step ? <>
-            <details className="nodu-ai-details"><summary>{step.title}</summary><p>{step.goal}</p></details>
-            <div className="nodu-ai-actions">
-                <button className="scope-text-button" disabled={busy} onClick={() => run(TUTOR_COMMANDS.openReference, step.path, state.fragment?.answer.guidance?.anchorLine ?? 1)}>{step.path}</button>
-                <button className="nodu-ai-chip" disabled={busy || state.status === 'paused'} onClick={() => void (state.fragment ? tutor.send('step') : run(TUTOR_COMMANDS.prepareGoal))}>{state.fragment ? '检查片段' : '显示虚影'}</button>
-                <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction(state.status === 'paused' ? 'resume' : 'pause')}>{state.status === 'paused' ? '继续' : '暂停'}</button>
-                <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction('cancel')}>结束</button>
-            </div>
-        </> : <span className="nodu-ai-note">已完成代码跟写</span>}
+/** Plans are confirmed here; an accepted task is managed only by the shared task window. */
+function GoalPlan({ tutor, revise }: { tutor: NoduTutorModel; revise(): void }): React.ReactElement | null {
+    const state = tutor.goalState, busy = !!tutor.busy;
+    if (state.status !== 'draft') { return null; }
+    return <section className="nodu-ai-course nodu-ai-draft-plan" aria-label="确认教学计划">
+        <div className="nodu-ai-stepbar"><span className="nodu-ai-goal-title">{state.title}</span></div>
+        <ol className="nodu-ai-goal-steps">{state.steps.map(s => <li key={s.id}>{s.title}</li>)}</ol>
+        <div className="nodu-ai-actions"><button className="theia-button" disabled={busy} onClick={() => void tutor.goalAction('confirm')}>开始跟写</button>
+            <button className="scope-text-button" disabled={busy} onClick={revise}>修改目标</button>
+            <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction('cancel')}>取消</button></div>
     </section>;
 }
 /** Composer model picker: enabled models from every enabled provider, plus a shortcut to settings. */
@@ -82,9 +72,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     const canSend = !!tutor.workspaceId;
     const messages = tutor.messages[tutor.mode];
     const draft = tutor.drafts[tutor.mode];
-    const ask = (text: string): void => { tutor.drafts[tutor.mode] = text; following.current = true; void tutor.send(); };
     const submit = (): void => { if (!isBusy && canSend && draft.trim()) { following.current = true; void tutor.send(); } };
-    const suggestions = tutor.mode === 'teach' ? ['我想用 USART1 打印一条启动消息', '我想学习 GPIO 输入检测'] : ['解释这段代码', '这个报错是什么意思？'];
     const done = tutor.plan?.steps.filter(s => tutor.progress.steps[s.id]).length ?? 0;
     const file = tutor.buffer?.path.split('/').pop();
     const reset = async (): Promise<void> => {
@@ -92,9 +80,9 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     };
     return <div className="nodu-ai-panel">
         {tutor.error && <div className="nodu-ai-error" role="alert">{tutor.error}<button className="scope-text-button" onClick={() => void tutor.load()}>重连</button></div>}
-        {tutor.mode === 'teach' && <GoalPlan tutor={tutor} run={run} revise={() => { tutor.drafts.teach = tutor.goalState.goal ?? ''; tutor.notify(); input.current?.focus(); }} />}
+        {tutor.mode === 'teach' && <GoalPlan tutor={tutor} revise={() => { tutor.drafts.teach = tutor.goalState.goal ?? ''; tutor.notify(); input.current?.focus(); }} />}
         {tutor.mode === 'teach' && tutor.session?.plan.kind === 'legacy' && <Migration tutor={tutor} />}
-        {tutor.mode === 'teach' && tutor.plan && <section className="nodu-ai-course" aria-label="课程步骤">
+        {tutor.mode === 'teach' && tutor.plan && ['none', 'cancelled'].includes(tutor.goalState.status) && <section className="nodu-ai-course" aria-label="课程步骤">
             <div className="nodu-ai-stepbar">
                 <select aria-label="当前步骤" value={step?.id ?? ''} onChange={e => void tutor.action({ type: 'select', stepId: e.target.value })}>
                     {!step && <option value="">已自查全部步骤</option>}{tutor.plan.steps.map(s => <option key={s.id} value={s.id} disabled={!tutor.available(s.id)}>{s.title}{tutor.progress.steps[s.id] ? ' ✓' : ''}</option>)}
@@ -116,13 +104,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
         </section>}
         <div className="nodu-ai-log" ref={log} role="log" aria-label="AI 对话" onScroll={() => { const n = log.current; following.current = !n || n.scrollHeight - n.scrollTop - n.clientHeight < 32; }}>
             {tutor.busy?.goal && <span className="nodu-ai-status" role="status">{tutor.busy.goal === 'propose' ? '正在制定计划…' : tutor.busy.goal === 'fragment' ? '准备代码片段…' : tutor.busy.goal === 'check' ? '正在检查片段…' : '正在更新…'}</span>}
-            {!messages.length && <div className="nodu-ai-empty">
-                <i className="codicon codicon-sparkle" aria-hidden="true"/>
-                <span>{tutor.mode === 'teach' ? '想实现什么功能？' : '提问代码问题'}</span>
-                <div className="nodu-ai-suggestions">{suggestions.map(s => <button key={s} className="nodu-ai-suggestion" disabled={!canSend || isBusy} onClick={() => ask(s)}>{s}</button>)}</div>
-            </div>}
             {messages.map(m => <article key={m.id} className={`nodu-ai-message nodu-ai-${m.role}`} aria-label={m.role === 'user' ? '你' : 'AI'} aria-busy={m.status === 'pending'}>
-                {m.role === 'assistant' && <div className="nodu-ai-author"><i className="codicon codicon-sparkle" aria-hidden="true"/>AI</div>}
                 <div className="nodu-ai-body">
                     {m.text ? <MessageText text={m.text} open={(path, line) => run(TUTOR_COMMANDS.openReference, path, line)} /> : m.status === 'pending' && <span className="nodu-ai-status">正在思考…</span>}
                     {m.status === 'stopped' && <div className="nodu-ai-status">已停止</div>}
@@ -145,8 +127,6 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                 onChange={e => { tutor.drafts[tutor.mode] = e.target.value; redraw(); }}
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }} />
             <div className="nodu-ai-composer-bar">
-                <ModelPicker tutor={tutor} openSettings={anchor => run(TUTOR_COMMANDS.settings, anchor)} />
-                {tutor.settings && !tutor.configured && <button type="button" className="nodu-ai-warn" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>配置密钥</button>}
                 <label className="nodu-ai-mode-select" title="对话模式">
                     <i className={`codicon codicon-${tutor.mode === 'teach' ? 'mortar-board' : 'comment-discussion'}`} aria-hidden="true"/>
                     <select aria-label="对话模式" value={tutor.mode} onChange={e => tutor.setMode(e.target.value as typeof tutor.mode)}>
@@ -154,6 +134,8 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                     </select>
                     <i className="codicon codicon-chevron-down" aria-hidden="true"/>
                 </label>
+                <ModelPicker tutor={tutor} openSettings={anchor => run(TUTOR_COMMANDS.settings, anchor)} />
+                {tutor.settings && !tutor.configured && <button type="button" className="nodu-ai-warn" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}>配置密钥</button>}
                 {isBusy
                     ? <button type="button" className="nodu-ai-send nodu-ai-stop" aria-label="停止" title="停止" onClick={() => tutor.cancel()}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                     : <button className="nodu-ai-send" aria-label="发送" title="发送 Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
@@ -163,11 +145,11 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
 }
 @injectable()
 export class NoduTutorWidget extends ReactWidget {
-    static readonly ID = 'nodu:tutor'; static readonly LABEL = 'AI';
+    static readonly ID = 'nodu:tutor'; static readonly LABEL = 'AI 对话';
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(CommandService) protected readonly commands!: CommandService;
     @postConstruct() protected init(): void {
-        this.id = NoduTutorWidget.ID; this.title.label = 'AI'; this.title.caption = 'AI'; this.title.iconClass = 'codicon codicon-sparkle'; this.title.closable = true;
+        this.id = NoduTutorWidget.ID; this.title.label = NoduTutorWidget.LABEL; this.title.caption = NoduTutorWidget.LABEL; this.title.iconClass = 'codicon codicon-sparkle'; this.title.closable = true;
         this.addClass('scope-widget'); this.addClass('nodu-tutor-widget'); this.node.tabIndex = -1;
         this.toDispose.push(this.tutor.onDidChange(() => this.update()));
         this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible))); this.update();
@@ -180,7 +162,7 @@ export class NoduTutorWidget extends ReactWidget {
 @injectable()
 export class NoduTutorViewContribution extends AbstractViewContribution<NoduTutorWidget> {
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
-    constructor() { super({ widgetId: NoduTutorWidget.ID, widgetName: 'AI', defaultWidgetOptions: { area: 'right', rank: 50 } }); }
+    constructor() { super({ widgetId: NoduTutorWidget.ID, widgetName: NoduTutorWidget.LABEL, defaultWidgetOptions: { area: 'right', rank: 50 } }); }
     override registerCommands(commands: CommandRegistry): void {
         super.registerCommands(commands);
         const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };

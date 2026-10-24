@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: MIT */
-/* AI sidebar: header, optional course strip, conversation, composer card (Cursor / Windsurf layout). */
+/* AI sidebar: one title row, draft confirmation, conversation and the existing compact composer. */
 .nodu-tutor-widget { min-width: 260px; height: 100%; }
 .nodu-ai-panel { display: flex; flex-direction: column; height: 100%; min-height: 0; font-size: 13px; color: var(--theia-foreground); background: var(--theia-sideBar-background, var(--theia-panel-background)); }
 .nodu-ai-panel button:focus-visible, .nodu-ai-panel input:focus-visible, .nodu-ai-panel select:focus-visible, .nodu-ai-panel textarea:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
@@ -15,7 +15,7 @@
 .nodu-ai-settings .nodu-ai-checkbox { flex-direction: row; align-items: center; gap: 6px; }
 .nodu-ai-settings input[type="checkbox"] { width: auto; height: auto; accent-color: var(--theia-button-background); }
 .nodu-ai-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.nodu-ai-error { flex: none; padding: 6px 12px; font-size: 12px; color: var(--theia-errorForeground); border-bottom: 1px solid var(--theia-panel-border); }
+.nodu-ai-error { overflow-wrap: anywhere; flex: none; padding: 6px 12px; font-size: 12px; color: var(--theia-errorForeground); border-bottom: 1px solid var(--theia-panel-border); }
 
 .nodu-ai-course { flex: none; max-height: 38%; overflow: auto; border-bottom: 1px solid var(--theia-panel-border); }
 .nodu-ai-stepbar { display: flex; gap: 6px; align-items: center; padding: 6px 8px; }
@@ -32,17 +32,9 @@
 .nodu-ai-note { display: flex; align-items: center; gap: 6px; padding: 0 10px 8px; font-size: 12px; color: var(--theia-descriptionForeground); }
 
 .nodu-ai-log { flex: 1; min-height: 60px; overflow-y: auto; padding: 12px 12px 4px; overscroll-behavior: contain; }
-.nodu-ai-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 100%; color: var(--theia-descriptionForeground); }
-.nodu-ai-empty > i { font-size: 22px; }
-.nodu-ai-suggestions { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 260px; margin-top: 6px; }
-.nodu-ai-suggestion { padding: 6px 10px; border: 1px solid var(--theia-panel-border); border-radius: 6px; background: transparent; color: var(--theia-foreground); font: inherit; font-size: 12px; text-align: left; cursor: pointer; }
-.nodu-ai-suggestion:hover:not(:disabled) { background: var(--theia-list-hoverBackground); }
-.nodu-ai-suggestion:disabled { opacity: .45; cursor: default; }
 .nodu-ai-message { position: relative; margin-bottom: 14px; line-height: 1.6; user-select: text; }
 .nodu-ai-body { white-space: pre-wrap; overflow-wrap: anywhere; }
 .nodu-ai-user { margin-left: 24px; padding: 7px 10px; border-radius: 8px; background: var(--theia-input-background); border: 1px solid var(--theia-panel-border); }
-.nodu-ai-author { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; font-size: 11px; font-weight: 600; color: var(--theia-descriptionForeground); }
-.nodu-ai-author > i { font-size: 12px; color: var(--theia-scope-accent, var(--theia-focusBorder)); }
 .nodu-ai-message pre { margin: 6px 0; padding: 8px 10px; border: 1px solid var(--theia-panel-border); border-radius: 6px; background: var(--theia-editor-background); overflow-x: auto; white-space: pre; font: 12px/1.6 var(--theia-code-font-family); }
 .nodu-ai-message-actions { display: flex; gap: 2px; margin-top: 2px; opacity: 0; transition: opacity .12s; }
 .nodu-ai-message:hover .nodu-ai-message-actions, .nodu-ai-message-actions:focus-within { opacity: 1; }
@@ -60,14 +52,14 @@
 /* The composer border already marks text-entry focus; avoid a second inner ring. */
 .nodu-ai-composer textarea:focus { outline: none; }
 .nodu-ai-composer-bar { display: flex; align-items: center; gap: 6px; padding: 2px 6px 6px 8px; }
-.nodu-ai-model { position: relative; display: inline-flex; align-items: center; gap: 2px; margin-right: auto; min-width: 0; height: 22px; padding: 0 4px; border-radius: 4px; color: var(--theia-descriptionForeground); font-size: 11px; cursor: pointer; }
-.nodu-ai-model select { appearance: none; -webkit-appearance: none; min-width: 0; max-width: 180px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-overflow: ellipsis; cursor: pointer; outline: none; }
+.nodu-ai-model { position: relative; display: inline-flex; flex: 1; align-items: center; gap: 2px; margin-right: auto; min-width: 0; height: 22px; padding: 0 4px; border-radius: 4px; color: var(--theia-descriptionForeground); font-size: 11px; cursor: pointer; }
+.nodu-ai-model select { appearance: none; -webkit-appearance: none; min-width: 0; max-width: min(180px, 100%); padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-overflow: ellipsis; cursor: pointer; outline: none; }
 .nodu-ai-model select option, .nodu-ai-model select optgroup { color: var(--theia-dropdown-foreground); background: var(--theia-dropdown-background); }
 .nodu-ai-model > .codicon { font-size: 12px; }
 .nodu-ai-model:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
 .nodu-ai-warn { font-size: 11px; color: var(--theia-editorWarning-foreground); }
 .nodu-ai-send { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%; background: var(--theia-button-background); color: var(--theia-button-foreground); cursor: pointer; }
-.nodu-ai-mode-select { position: relative; display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 4px; border-radius: 4px; color: var(--theia-descriptionForeground); font-size: 11px; cursor: pointer; }
+.nodu-ai-mode-select { flex: none; position: relative; display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 4px; border-radius: 4px; color: var(--theia-descriptionForeground); font-size: 11px; cursor: pointer; }
 .nodu-ai-mode-select:hover, .nodu-ai-mode-select:focus-within { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
 .nodu-ai-mode-select > .codicon { font-size: 13px; }
 .nodu-ai-mode-select > .codicon-chevron-down { font-size: 12px; margin-left: -2px; }
@@ -190,3 +182,6 @@
 .nodu-ai-goal-steps { margin: 8px 0; padding-left: 24px; max-height: 240px; overflow: auto; }
 .nodu-ai-goal-steps li { padding: 3px 0; }
 .nodu-ai-file-link { display: inline; padding: 0; color: var(--theia-textLink-foreground); text-decoration: underline; }
+
+.nodu-ai-draft-plan .nodu-ai-actions { padding: 0 8px 8px; }
+.nodu-ai-composer-bar > .nodu-ai-warn { flex: none; font-size: 11px; }

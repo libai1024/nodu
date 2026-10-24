@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
 import { ChipMark } from './nodu-project-icon';
-import { NoduBrand } from './scope-brand';
+import { ActionIcon } from './nodu-minimal-action';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 import { NoduCDevicePanel } from './nodu-embedded-device';
-import { C_COMMANDS, NODU_C_RUN_MENU } from './nodu-embedded-commands';
+import { C_COMMANDS } from './nodu-embedded-commands';
 
 export interface CToolbarProps {
     model: NoduEmbeddedModel;
@@ -23,31 +23,8 @@ export interface CToolbarProps {
     /** Teaching-step toggle when the project has a tutor plan. */
     tutorButton?: React.ReactNode;
     externalDevicePanel?: boolean;
-}
-
-const STEP_ICON: Record<string, string> = { done: 'pass', running: 'loading codicon-modifier-spin', failed: 'error', pending: 'circle-large-outline' };
-
-function TaskStrip({ model, exec, setDeviceOpen }: Pick<CToolbarProps, 'model' | 'exec' | 'setDeviceOpen'>): React.ReactElement | null {
-    const task = model.task;
-    if (!task) { return <span role="status" aria-live="polite" className="scope-visually-hidden" />; }
-    const open = (): void => {
-        if (task.target === 'problems') { exec(C_COMMANDS.showProblems); }
-        else if (task.target === 'monitor') { exec(C_COMMANDS.showMonitor); }
-        else if (task.target === 'device') { setDeviceOpen(true); }
-        else { exec(C_COMMANDS.showOutput); }
-    };
-    const icon = task.tone === 'busy' ? 'loading codicon-modifier-spin' : task.tone === 'ok' ? 'pass' : task.tone === 'warn' ? 'warning' : 'error';
-    return <button className={`nodu-c-task nodu-c-task-${task.tone}`} onClick={open} title={task.text} aria-busy={task.tone === 'busy' || undefined}>
-        <span role="status" aria-live="polite" className="nodu-c-task-text">
-            {task.steps ? <span className="nodu-c-steps">
-                {task.steps.map(step => <span key={step.id} className={`nodu-c-step nodu-c-step-${step.state}`}>
-                    <i className={`codicon codicon-${STEP_ICON[step.state] ?? STEP_ICON.pending}`} aria-hidden="true"/>{step.label}
-                    <span className="scope-visually-hidden">{step.state === 'done' ? '完成' : step.state === 'running' ? '进行中' : '未开始'}</span>
-                </span>)}
-                <span className="nodu-c-step-now">{task.text}</span>
-            </span> : <><i className={`codicon codicon-${icon}`} aria-hidden="true"/><span>{task.text}</span></>}
-        </span>
-    </button>;
+    settingsButton?: React.ReactNode;
+    moreButton?: React.ReactNode;
 }
 
 /** Serial ISP guide card (UI-DESIGN §8.3): enter the ROM bootloader, then leave it. */
@@ -87,47 +64,32 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
     else if (model.lastError && !model.flashing && ['wrongChip', 'noProbe', 'noPower', 'noTarget', 'romTimeout', 'portBusy', 'portOpen'].includes(model.lastError.code)) { chip = 'error'; }
     else if (model.identity && model.identity.matches) { chip = 'error'; chipText = '芯片不一致'; }
     else if (method === 'stlink' ? !!probe : !!port) { chip = 'connected'; }
-    const errors = model.errors.length;
-    const running = model.flashing;
     const toggleDevice = (): void => {
         const next = !props.deviceOpen;
         props.setDeviceOpen(next);
         if (next) { void model.refreshDevices(); void model.loadBackups(); }
     };
-    return <header className="scope-workspace-bar nodu-c-toolbar" aria-label="Nodu 工具栏">
-        <div className="scope-toolbar-start">
-            <NoduBrand />
-            <button className="scope-action nodu-toolbar-project" aria-label={`项目菜单，${props.project}`} aria-haspopup="menu" title="新建、打开与最近的项目" onClick={event => props.openMenu(props.projectMenu, event.currentTarget)}><i className="codicon codicon-folder" aria-hidden="true"/><span className="nodu-toolbar-project-name">{props.project}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
-            <button className="scope-action nodu-c-build" disabled={model.flashing} aria-busy={model.building || undefined} onClick={() => exec(C_COMMANDS.build)} title="编译（Ctrl / ⌘ B）">
-                <i className={`codicon ${model.building ? 'codicon-loading codicon-modifier-spin' : 'codicon-tools'}`} aria-hidden="true"/>{model.building ? '编译中' : '编译'}
+    return <header className="nodu-professional-bar nodu-c-toolbar" aria-label="Nodu 工具栏">
+        <div className="scope-device-picker">
+            <button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与下载器，${shortBoard}，${chipText}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={props.deviceOpen} aria-pressed={props.deviceOpen} onClick={toggleDevice} title={model.lastError?.message || `${project.chip.name}，${chipText}`}>
+                <span className="scope-status-dot" aria-hidden="true"/><ChipMark tag={project.chip.name}/><span className="scope-device-chip-board">{shortBoard}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
             </button>
-            <div className="nodu-run-split" role="group" aria-label="运行">
-                <button className={`scope-action scope-action-primary scope-toolbar-run${running ? ' nodu-is-running' : ''}`} disabled={model.busy} aria-busy={running || undefined} onClick={() => exec(C_COMMANDS.run)} title="编译并下载（Ctrl / ⌘ R）">
-                    <i className={`codicon ${running ? 'codicon-loading codicon-modifier-spin' : 'codicon-play'}`} aria-hidden="true"/>{running ? '下载中' : '运行'}
-                </button>
-                <button className="scope-action scope-action-primary nodu-run-more" aria-label="更多运行方式" aria-haspopup="menu" title="下载方式、复位开发板、重新编译" onClick={event => props.openMenu(NODU_C_RUN_MENU, event.currentTarget)}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>
-            </div>
-            <button className={`scope-action scope-toolbar-icon nodu-toolbar-stop${model.busy || model.awaitUser ? ' nodu-stop-active' : ''}`} aria-label="停止" disabled={!model.busy && !model.awaitUser} onClick={() => exec(C_COMMANDS.stop)} title={model.flashSteps.program === 'running' ? '写入完成后停止' : '停止'}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
-            <div className="scope-device-picker">
-                <button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与下载器，${shortBoard}，${chipText}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={props.deviceOpen} aria-pressed={props.deviceOpen} onClick={toggleDevice} title={model.lastError?.message || project.chip.name}>
-                    <span className="scope-status-dot" aria-hidden="true"/><ChipMark tag={project.chip.name}/><span className="scope-device-chip-board">{shortBoard}</span><span className="scope-device-chip-port">{chipText}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
-                </button>
-                {!props.externalDevicePanel && <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="开发板与下载" hidden={!props.deviceOpen}>
-                    <NoduCDevicePanel exec={id => { props.setDeviceOpen(false); exec(id); }} model={model} simple={simple} confirm={props.confirm} showOutput={() => { props.setDeviceOpen(false); exec(C_COMMANDS.showOutput); }} />
-                </div>}
-            </div>
+            {!props.externalDevicePanel && <div id="scope-device-popover" className="scope-device-popover scope-widget" role="dialog" aria-label="开发板与下载" hidden={!props.deviceOpen}>
+                <NoduCDevicePanel exec={id => { props.setDeviceOpen(false); exec(id); }} model={model} simple={simple} confirm={props.confirm} showOutput={() => { props.setDeviceOpen(false); exec(C_COMMANDS.showOutput); }} />
+            </div>}
         </div>
-        <div className="scope-toolbar-center"><TaskStrip model={model} exec={exec} setDeviceOpen={props.setDeviceOpen} /></div>
-        <div className="scope-toolbar-end">
-            <button className="scope-action scope-toolbar-icon scope-toolbar-files" aria-label="文件列表" aria-pressed={props.filesVisible} onClick={() => exec('scope.toggle-files')} title={props.filesVisible ? '隐藏文件列表' : '显示文件列表'}><i className={`codicon codicon-layout-sidebar-left${props.filesVisible ? '' : '-off'}`} aria-hidden="true"/></button>
-            <button className={`scope-action scope-toolbar-icon nodu-c-panel-toggle${errors ? ' nodu-has-error' : ''}`} aria-label={`STM32 开发面板${errors ? `，${errors} 个错误` : ''}`} aria-pressed={props.panelVisible} onClick={() => exec(C_COMMANDS.togglePanel)} title={props.panelVisible ? '收起 STM32 开发面板' : '显示 STM32 开发面板'}>
-                <i className={`codicon codicon-layout-panel${props.panelVisible ? '' : '-off'}`} aria-hidden="true"/>{errors ? <span className="nodu-c-badge" aria-hidden="true">{errors > 99 ? '99+' : errors}</span> : null}
+        <div className="nodu-pro-actions" role="group" aria-label="编译与烧录">
+            <button className="nodu-pro-action" data-action="build" aria-label="编译" disabled={model.busy || !!model.awaitUser} aria-busy={model.building || undefined} onClick={() => exec(C_COMMANDS.build)} title="编译（Ctrl / ⌘ B）">
+                {model.building ? <i className="codicon codicon-loading codicon-modifier-spin" aria-hidden="true"/> : <ActionIcon action="build"/>}
             </button>
-            {!simple && <button className="scope-action scope-toolbar-icon scope-toolbar-right" aria-label="右侧栏" aria-pressed={props.rightVisible} onClick={() => exec('scope.toggle-right')} title={props.rightVisible ? '隐藏右侧栏' : '显示右侧栏'}><i className={`codicon codicon-layout-sidebar-right${props.rightVisible ? '' : '-off'}`} aria-hidden="true"/></button>}
-            {props.tutorButton}
-            <span className="scope-toolbar-divider" aria-hidden="true"/>
-            <button className="scope-action scope-toolbar-icon nodu-toolbar-more" aria-label={`更多，当前${simple ? '简洁' : '专业'}模式`} aria-haspopup="menu" title="主题、布局模式与设置" onClick={event => props.openMenu(props.moreMenu, event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
+            <button className="nodu-pro-action" data-action="flash" aria-label="烧录" disabled={model.busy || !!model.awaitUser} onClick={() => exec(C_COMMANDS.flash)} title="烧录现有构建"><ActionIcon action="flash"/></button>
+            <button className="nodu-pro-action" data-action="run" aria-label="运行（编译并烧录）" disabled={model.busy || !!model.awaitUser} aria-busy={model.flashing || undefined} onClick={() => exec(C_COMMANDS.run)} title="运行：编译并烧录（Ctrl / ⌘ R）"><ActionIcon action="build-flash"/></button>
+            <button className="nodu-pro-action nodu-pro-stop" aria-label="停止" disabled={model.savingOptions || (!model.busy && !model.awaitUser)} onClick={() => exec(C_COMMANDS.stop)} title={model.flashSteps.program === 'running' ? '写入完成后停止' : '停止'}><ActionIcon action="build-flash" stop/></button>
         </div>
+        {props.tutorButton}
+        {props.moreButton}
+        {props.settingsButton}
+        <span role="status" aria-live="polite" className="scope-visually-hidden">{model.task?.text}</span>
         <BootGuide model={model} exec={exec} />
     </header>;
 }

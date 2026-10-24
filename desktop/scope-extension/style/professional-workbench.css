@@ -1,0 +1,49 @@
+/* SPDX-License-Identifier: MIT */
+/* Layout only: use the existing surfaces, controls and minimal-mode action icons. */
+.nodu-professional-toolbar { min-height: 36px; max-height: 36px; background: var(--theia-titleBar-activeBackground); }
+#theia-top-panel > .nodu-titlebar-toolbar {
+    position: absolute; left: auto; right: 8px; top: 3px;
+    width: max-content; height: 30px; min-height: 30px; max-height: 30px;
+    overflow: visible; z-index: 2; -webkit-app-region: no-drag;
+}
+body:not(.mac) #theia-top-panel > .nodu-titlebar-toolbar { right: 142px; }
+.nodu-professional-bar { display: flex; align-items: center; justify-content: flex-end; gap: 8px; height: 30px; padding: 0; color: var(--theia-foreground); -webkit-app-region: no-drag; }
+.nodu-professional-toolbar:not(.nodu-titlebar-toolbar) .nodu-professional-bar { padding: 3px 8px; }
+.nodu-pro-actions { display: flex; align-items: center; gap: 2px; }
+.nodu-pro-action { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--theia-foreground); cursor: pointer; flex-shrink: 0; }
+.nodu-pro-action svg { width: 18px; height: 18px; }
+.nodu-pro-action .codicon { font-size: 16px; }
+.nodu-pro-action:hover:not(:disabled) { background: var(--theia-toolbar-hoverBackground); }
+.nodu-pro-action:disabled { color: var(--theia-disabledForeground); opacity: .5; cursor: default; }
+.nodu-pro-action[data-action="run"]:not(:disabled) { color: var(--nodu-action-run-color); }
+.nodu-pro-stop:not(:disabled) { color: var(--theia-errorForeground); }
+.nodu-pro-action:focus-visible, .nodu-pro-teaching:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
+.nodu-professional-bar .scope-device-chip { max-width: 192px; height: 26px; min-height: 26px; font-size: 12px; gap: 5px; padding: 0 7px; background: transparent; }
+.nodu-pro-target { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+.nodu-pro-teaching { display: flex; align-items: center; gap: 6px; height: 26px; padding: 0 6px; border: 1px solid var(--theia-panel-border); border-radius: 5px; color: var(--theia-foreground); background: transparent; font: inherit; font-size: 12px; white-space: nowrap; cursor: pointer; }
+.nodu-pro-teaching > .codicon { display: none; }
+.nodu-pro-switch { display: flex; width: 24px; height: 14px; padding: 2px; box-sizing: border-box; border-radius: 8px; background: var(--theia-disabledForeground); }
+.nodu-pro-switch > span { width: 10px; height: 10px; border-radius: 50%; background: var(--theia-button-foreground); }
+.nodu-pro-teaching[aria-checked="true"] .nodu-pro-switch { background: var(--theia-button-background); }
+.nodu-pro-teaching[aria-checked="true"] .nodu-pro-switch > span { margin-left: auto; }
+.nodu-pro-teaching:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-pro #theia-left-content-panel > .theia-app-sidebar-container { position: relative; padding-top: 50px; box-sizing: border-box; }
+.nodu-pro-project { position: absolute; top: 7px; left: 50%; transform: translateX(-50%); margin: 0; z-index: 1; }
+/* Settings live at the right of the header. AI settings remain in the model picker/menu. */
+.nodu-pro #theia-left-content-panel .theia-sidebar-menu-item:has(.codicon-settings-gear),
+.nodu-pro #theia-left-content-panel .theia-sidebar-menu-item:has(.codicon-sparkle) { display: none; }
+/* Right tools remain reachable from the header's View menu; only the redundant rail goes away. */
+.nodu-pro #theia-right-content-panel > .theia-app-sidebar-container { display: none !important; min-width: 0 !important; max-width: .1px !important; width: 0 !important; }
+.nodu-pro #theia-right-content-panel.theia-mod-collapsed { min-width: 0 !important; max-width: .1px !important; width: 0 !important; overflow: hidden; }
+.nodu-professional-bar .nodu-c-guide { position: fixed; top: 48px; left: 50%; transform: translateX(-50%); box-sizing: border-box; max-width: calc(100vw - 24px); max-height: calc(100vh - 80px); overflow: auto; }
+@media (max-width: 1100px) {
+    .nodu-professional-bar { gap: 4px; }
+    .nodu-professional-bar .scope-device-chip { max-width: 160px; }
+    .nodu-pro-teaching-label { display: none; }
+    .nodu-pro-teaching > .codicon { display: block; }
+    .nodu-pro-teaching { gap: 4px; }
+    body:not(.mac) .nodu-professional-bar .scope-device-chip-board { display: none; }
+}
+
+.nodu-pro-action[data-action="build"]:not(:disabled) { color: var(--nodu-action-build-color); }
+.nodu-pro-action[data-action="flash"]:not(:disabled) { color: var(--nodu-action-flash-color); }
