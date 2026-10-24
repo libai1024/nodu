@@ -126,12 +126,12 @@ function ProviderDetail({ tutor, provider, visible, onDeleted }: { tutor: NoduTu
                     onChange={e => { setKey(e.target.value); setShowKey(false); }} onKeyDown={e => { if (e.key === 'Enter' && key) { e.preventDefault(); void saveKey(); } }}/>
                 {key && <button type="button" className="nodu-ai-icon" aria-label={showKey ? '隐藏' : '显示'} title={showKey ? '隐藏' : '显示'} onClick={() => setShowKey(!showKey)}><i className={`codicon codicon-${showKey ? 'eye-closed' : 'eye'}`} aria-hidden="true"/></button>}
                 {key && <button type="button" className="theia-button" disabled={!!busy} onClick={() => void saveKey()}>保存</button>}
-                {!key && provider.hasKey && <button type="button" className="scope-text-button" disabled={!!busy} onClick={() => void run('key', () => tutor.deleteProviderKey(provider.id))}>删除</button>}
+                {!key && provider.hasKey && <button type="button" className="nodu-ai-text-action" disabled={!!busy} onClick={() => void run('key', () => tutor.deleteProviderKey(provider.id))}>删除</button>}
             </div></label>
         {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
         <div className="nodu-ai-models-head">
             <span>模型列表</span>
-            <button type="button" className="scope-text-button" disabled={!!busy} title="从供应商读取可用模型 ID" onClick={() => void fetchRemote()}>{busy === 'remote' ? '读取中…' : '获取模型'}</button>
+            <button type="button" className="nodu-ai-text-action" disabled={!!busy} title="从供应商读取可用模型 ID" onClick={() => void fetchRemote()}>{busy === 'remote' ? '读取中…' : '获取模型'}</button>
             <button type="button" className="nodu-ai-chip" disabled={!!busy} onClick={() => setEditing('new')}><i className="codicon codicon-add" aria-hidden="true"/>添加模型</button>
         </div>
         <ul className="nodu-ai-models" aria-label="模型列表">

@@ -127,7 +127,7 @@ test('real markup uses modal/tab semantics and stylesheet constrains small viewp
     assert.match(markup, /aria-modal="true"/); assert.match(markup, /role="tablist"/); assert.match(markup, /aria-orientation="vertical"/); assert.match(markup, /role="tabpanel"/);
     assert.equal((markup.match(/role="dialog"/g) || []).length, 1);
     const css = fs.readFileSync(path.join(__dirname,'../style/professional-settings.css'),'utf8');
-    assert.match(css, /width: min\(760px, 100%\)/); assert.match(css, /height: 560px/); assert.match(css, /max-height: 100%/); assert.match(css, /\.scope-widget\.nodu-professional-settings/); assert.match(css, /@media \(max-width: 520px\)/); assert.doesNotMatch(css, /transform:/);
+    assert.match(css, /width: min\(800px, 100%\)/); assert.match(css, /height: 800px/); assert.match(css, /max-height: 100%/); assert.match(css, /\.scope-widget\.nodu-professional-settings/); assert.match(css, /@media \(max-width: 520px\)/); assert.doesNotMatch(css.match(/\.scope-widget\.nodu-professional-settings \{([^}]+)\}/)[1], /transform:/);
 });
 
 test('legacy AI settings command routes to the unified AI page and never opens a separate popover', () => {

@@ -1,34 +1,56 @@
 /* SPDX-License-Identifier: MIT */
-/* A single settings column, following Harness' progressive disclosure pattern. */
-.nodu-ai-provider-catalog { flex: 1; min-height: 0; min-width: 0; padding: 20px 24px; overflow: auto; }
+/* Harness type rhythm and disclosure density, using Nodu's theme materials.
+   Qualify shared controls so the later workbench stylesheet cannot reset them. */
+.nodu-ai-provider-catalog { flex: 1; min-height: 0; min-width: 0; padding: 10px 24px 24px; overflow: auto; overscroll-behavior: contain; }
 .nodu-ai-catalog-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.nodu-ai-catalog-heading h3 { margin: 0; font: inherit; font-size: 14px; font-weight: 600; }
-.nodu-ai-catalog-add { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; min-height: 28px; border: 0; border-radius: 5px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; white-space: nowrap; }
+.nodu-ai-catalog-heading h3 { margin: 0; font: 500 16px/24px var(--theia-ui-font-family); }
+.nodu-ai-catalog-add { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; min-height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; white-space: nowrap; }
 .nodu-ai-catalog-add:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
-.nodu-ai-catalog-note { margin-bottom: 12px; color: var(--theia-descriptionForeground); font-size: 11px; }
-.nodu-ai-provider-card { margin-bottom: 10px; border: 1px solid var(--theia-panel-border); border-radius: 8px; overflow: hidden; }
-.nodu-ai-provider-card > .nodu-ai-provider-summary { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 42px; padding: 9px 12px; border: 0; border-radius: 0; text-align: left; background: color-mix(in srgb, var(--theia-foreground) 3%, transparent); color: var(--theia-foreground); font: inherit; }
-.nodu-ai-provider-summary:hover { background: var(--theia-toolbar-hoverBackground); }
-.nodu-ai-provider-summary > .codicon { flex: none; font-size: 14px; color: var(--theia-descriptionForeground); }
-.nodu-ai-provider-count { flex: none; color: var(--theia-descriptionForeground); font-size: 11px; white-space: nowrap; }
-.nodu-ai-provider-content { padding: 0 12px 12px; }
+.nodu-ai-catalog-note { margin-bottom: 24px; color: var(--theia-descriptionForeground); font-size: 12px; line-height: 18px; }
+.nodu-ai-provider-card { margin-bottom: 8px; border: 1px solid var(--theia-panel-border); border-radius: 16px; overflow: hidden; }
+.nodu-ai-provider-card > .nodu-ai-provider-summary { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 48px; padding: 12px 14px; border: 0; border-radius: 0; text-align: left; background: transparent; color: var(--theia-foreground); font: inherit; }
+.nodu-ai-provider-card > .nodu-ai-provider-summary:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-provider-summary > .codicon { flex: none; font-size: 16px; color: var(--theia-descriptionForeground); }
+.nodu-ai-provider-summary .nodu-ai-provider-name { font-weight: 500; }
+.nodu-ai-provider-count { flex: none; color: var(--theia-descriptionForeground); font-size: 12px; line-height: 18px; white-space: nowrap; }
+.nodu-ai-provider-content { padding: 0 14px 14px; }
 .nodu-ai-provider-catalog [hidden] { display: none !important; }
-.nodu-ai-provider-controls { display: flex; align-items: center; gap: 8px; padding-top: 10px; color: var(--theia-descriptionForeground); font-size: 11px; }
+.nodu-ai-provider-catalog .nodu-ai-provider-form { gap: 14px; }
+.nodu-ai-provider-controls { display: flex; align-items: center; gap: 8px; min-height: 28px; padding-top: 2px; color: var(--theia-descriptionForeground); font-size: 12px; line-height: 18px; }
 .nodu-ai-provider-controls > span { margin-right: auto; }
-.nodu-ai-provider-catalog .nodu-ai-field input, .nodu-ai-provider-catalog .nodu-ai-field select { border-color: transparent; background: color-mix(in srgb, var(--theia-foreground) 5%, var(--theia-editorWidget-background, var(--theia-editor-background))); height: 30px; }
-.nodu-ai-provider-catalog .nodu-ai-field input:hover, .nodu-ai-provider-catalog .nodu-ai-field select:hover { border-color: var(--theia-panel-border); }
+.nodu-ai-provider-catalog .nodu-ai-field { gap: 6px; font-size: 12px; line-height: 18px; }
+.nodu-ai-provider-catalog .nodu-ai-field > span { font-weight: 500; }
+.scope-widget.nodu-professional-settings .nodu-ai-field input:not([type="checkbox"]):not([type="radio"]),
+.scope-widget.nodu-professional-settings .nodu-ai-field select { height: 36px; padding-inline: 12px; border: 1px solid transparent; border-radius: 8px; background: color-mix(in srgb, var(--theia-foreground) 5%, var(--theia-editorWidget-background, var(--theia-editor-background))); font: 14px/22px var(--theia-ui-font-family); }
+.scope-widget.nodu-professional-settings .nodu-ai-field input:not([type="checkbox"]):not([type="radio"]):hover,
+.scope-widget.nodu-professional-settings .nodu-ai-field select:hover { border-color: var(--theia-panel-border); }
+.scope-widget.nodu-professional-settings .nodu-ai-field input:not([type="checkbox"]):not([type="radio"])::placeholder { color: var(--theia-descriptionForeground); opacity: 1; }
 .nodu-ai-provider-catalog .nodu-ai-models { border: 0; border-radius: 0; }
-.nodu-ai-provider-catalog .nodu-ai-model-row { min-height: 34px; padding: 0; gap: 4px; }
-.nodu-ai-provider-catalog .nodu-ai-model-id { flex: 1; color: var(--theia-foreground); }
-.nodu-ai-provider-catalog .nodu-ai-model-actions { gap: 0; }
-.nodu-ai-provider-catalog .nodu-ai-models-head { gap: 6px; }
-.nodu-ai-provider-catalog .nodu-ai-models-head .nodu-ai-chip { border: 0; border-radius: 5px; background: transparent; color: var(--theia-foreground); }
-.nodu-ai-provider-catalog .nodu-ai-models-head .nodu-ai-chip:hover { background: var(--theia-toolbar-hoverBackground); }
-.nodu-ai-connection-trigger { display: inline-flex; align-items: center; align-self: flex-start; gap: 5px; padding: 4px 0; border: 0; background: transparent; color: var(--theia-descriptionForeground); font: inherit; }
-.nodu-ai-connection-trigger:hover { color: var(--theia-foreground); }
-.nodu-ai-connection-fields { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+.nodu-ai-provider-catalog .nodu-ai-model-row { min-height: 40px; padding: 0 4px; gap: 6px; border-top: 0; border-radius: 8px; }
+.nodu-ai-provider-catalog .nodu-ai-model-row:hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-provider-catalog .nodu-ai-model-id { flex: 1; color: var(--theia-foreground); font: 14px/22px var(--theia-ui-font-family); }
+.nodu-ai-provider-catalog .nodu-ai-model-actions { gap: 2px; }
+.nodu-ai-provider-catalog .nodu-ai-model-use { width: 24px; height: 28px; }
+.nodu-ai-provider-catalog .nodu-ai-models-head { gap: 6px; margin-top: 6px; font-size: 12px; line-height: 18px; }
+.nodu-ai-provider-catalog .nodu-ai-models-head > span { font-weight: 500; }
+.nodu-ai-provider-catalog .nodu-ai-chip,
+.nodu-ai-provider-catalog .nodu-ai-text-action { display: inline-flex; align-items: center; gap: 4px; flex: none; min-height: 28px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: var(--theia-descriptionForeground); font: 12px/18px var(--theia-ui-font-family); }
+.nodu-ai-provider-catalog .nodu-ai-chip:hover:not(:disabled),
+.nodu-ai-provider-catalog .nodu-ai-text-action:hover:not(:disabled) { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-provider-catalog .nodu-ai-badge { font-size: 11px; line-height: 18px; }
+.scope-widget.nodu-professional-settings .nodu-ai-provider-catalog .theia-button { height: 32px; border-radius: 8px; font-size: 12px; }
+.nodu-ai-connection-trigger { display: inline-flex; align-items: center; align-self: flex-start; gap: 6px; min-height: 28px; padding: 0 4px; margin-left: -4px; border: 0; border-radius: 8px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; }
+.nodu-ai-connection-trigger:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-connection-fields { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; border-top: 1px solid var(--theia-panel-border); }
+/* Nested model editor follows the same type/control scale as its parent. */
+.nodu-professional-settings .nodu-ai-dialog { border-radius: 16px; }
+.nodu-professional-settings .nodu-ai-dialog header,
+.nodu-professional-settings .nodu-ai-dialog footer { padding: 16px 20px; }
+.nodu-professional-settings .nodu-ai-dialog header h3 { font: 500 16px/24px var(--theia-ui-font-family); }
+.nodu-professional-settings .nodu-ai-dialog-body { padding: 20px; gap: 16px; }
+.nodu-professional-settings .nodu-ai-dialog footer .theia-button { height: 36px; padding: 0 14px; }
 @media (max-width: 640px) {
-    .nodu-ai-provider-catalog { padding: 16px; }
+    .nodu-ai-provider-catalog { padding: 10px 16px 16px; }
     .nodu-ai-catalog-heading { flex-wrap: wrap; }
     .nodu-ai-provider-count { display: none; }
     .nodu-ai-provider-catalog .nodu-ai-model-row { flex-wrap: wrap; padding-block: 5px; }
