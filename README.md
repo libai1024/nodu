@@ -21,7 +21,9 @@ Nodu 是面向嵌入式学习与开发的桌面 IDE。它把代码编辑、芯�
 | macOS 15+ / Apple Silicon | [DMG](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-mac-arm64.dmg) · [ZIP](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-mac-arm64.zip) | 打开 DMG，或完整解压 ZIP，将 `Nodu.app` 移入“应用程序” |
 | Windows x64 | [便携 ZIP](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-win32-x64.zip) | 完整解压后运行 `Nodu.exe`，保留同目录工具与运行库 |
 
-macOS 包采用 ad-hoc 签名，未经 Apple Developer ID 签名或公证；Windows 包未经 Authenticode 签名，已在 Windows 10 19045 x64 验证启动和课程编译。Intel Mac 与 Linux 本版未提供安装包。
+macOS 包采用 ad-hoc 签名，未经 Apple Developer ID 签名或公证；Windows 包未经 Authenticode 签名。最终 macOS DMG 已验证欢迎页、新建 F103 工程与编译；最终 Windows 包已在 Windows 10 19045 x64 启动到 ready 并核对资源，尚非完整手动 UI 验收。Intel Mac 与 Linux 本版未提供安装包。
+
+两平台安装包与 `v0.2.2` 标签均对应源码 [`026c34613d88f5d696cc750a3a4866a7a8b2dcc9`](https://github.com/libai1024/nodu/commit/026c34613d88f5d696cc750a3a4866a7a8b2dcc9)，manifest 记录 `sourceDirty=false`。此后的 `main` 更新为验收文档补录，不改变本版安装包。
 
 安装包使用者无需安装 Node.js 或 Rust。附件的 SHA-256、构建提交、实测范围及签名状态见 [发布说明](docs/releases/0.2.2.md#安装包与校验)。系统提示开发者身份无法验证时，请先核对来源与摘要，不要关闭全局系统保护。
 
@@ -82,15 +84,15 @@ K210 的脚本运行不需要每次重新烧写 MaixPy 固件。STM32 的“运�
 
 | 范围 | 当前记录 |
 | --- | --- |
-| macOS Apple Silicon | 已验证桌面工作台、极简界面、真实模型教学及部分设备流程 |
+| macOS Apple Silicon | 0.2.2 最终 DMG 已验证固定欢迎页、新建 F103 工程及 BIN/HEX/ELF 编译；另有真实模型教学和部分设备流程历史记录 |
 | K210 | 有野火 K210 / GC2145 的真实设备运行、文件与图像流程记录，不代表所有 MaixPy 板卡兼容 |
 | STM32F103C8T6 | 已验证 HAL 编译、ST-LINK 写入与读回、目标运行和新的串口输出；串口 ISP 另有实测记录 |
 | STM32F407 | 有 ST-LINK 写入、读回与运行记录；SHT30 课程的真实传感器通信未完成验收 |
 | macOS Intel | 部分 x64 工具在 Rosetta 下验证，完整 Intel 真机应用仍待验收 |
-| Windows | 有历史构建及部分设备冒烟记录，本次版本以 Release 的构建与测试结果为准 |
+| Windows | 0.2.2 最终包在 Windows 10 19045 x64 启动到 ready，版本、欢迎页资源与固定窗口配置已核对；本轮未完成手动视觉或真机验收 |
 | 受控纯函数检查 | 当前用于 SHT30 CRC 与数据换算，macOS arm64 产品链路已验证；Windows 暂不可用 |
 
-详细记录：[界面实现与验收](docs/design/minimal-ide/IMPLEMENTATION-2026-10-24.md)、[教学集成及设备记录](docs/ai-tutor/NIGHTLY-2026-10-24.md)、[工作台验收](docs/ai-tutor/WORKBENCH-ACCEPTANCE-2026-10-24.md)、[任务浮窗](docs/ai-tutor/TASK-OVERLAY-IMPLEMENTATION-2026-10-24.md)、[纯函数检查](docs/ai-tutor/PURE-FUNCTION-CHECKS.md)。历史设计稿保留当时状态，最新发行范围以 Release 为准。
+详细记录：[0.2.2 安装包与工作台验收](docs/releases/0.2.2-launcher-acceptance.md)、[界面实现与验收](docs/design/minimal-ide/IMPLEMENTATION-2026-10-24.md)、[教学集成及设备记录](docs/ai-tutor/NIGHTLY-2026-10-24.md)、[工作台验收](docs/ai-tutor/WORKBENCH-ACCEPTANCE-2026-10-24.md)、[任务浮窗](docs/ai-tutor/TASK-OVERLAY-IMPLEMENTATION-2026-10-24.md)、[纯函数检查](docs/ai-tutor/PURE-FUNCTION-CHECKS.md)。历史设计稿保留当时状态，最新发行范围以 Release 为准。
 
 ## 从源码开发
 
