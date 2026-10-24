@@ -1256,16 +1256,20 @@ async function packageWindows() {
     fs.cpSync(out, portable, { recursive: true });
     const zip = path.join(distDir, `Nodu-${applicationVersion}-win32-x64.zip`);
     fs.rmSync(zip, { force: true });
-    // GNU tar reads `host:file` in -f as remote-tape syntax; the zip target
-    // must be a basename with cwd, not a drive-letter path (same failure as
-    // build-media-windows.cjs hit on the real Windows run).
-    execFileSync('tar', ['-a', '-cf', path.basename(zip), 'Nodu-win32-x64'],
+    // Git for Windows puts GNU tar on PATH; -a there can write a tar file
+    // named .zip. Use the system bsdtar with an explicit ZIP format.
+    const archiver = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
+    if (!fs.existsSync(archiver)) { fail('Windows system bsdtar is required to create the portable ZIP.'); }
+    execFileSync(archiver, ['--format=zip', '-cf', path.basename(zip), 'Nodu-win32-x64'],
         { cwd: distDir });
+    assertZipHeader(zip);
+    execFileSync(archiver, ['-tf', path.basename(zip)], { cwd: distDir, stdio: 'ignore' });
     const manifest = {
         version: applicationVersion,
         targetPlatform: 'win32-x64',
         ...sourceIdentity(),
         artifact: path.basename(zip),
+        size: fs.statSync(zip).size,
         sha256: sha256File(zip),
         electron: ELECTRON_VERSION,
         node: NODE_VERSION,
@@ -1273,9 +1277,20 @@ async function packageWindows() {
         runtimeResources: runtimeResourcesStamp(),
         generatedAt: new Date().toISOString(),
     };
-    fs.writeFileSync(path.join(distDir, 'manifest.json'),
+    fs.writeFileSync(path.join(distDir, `Nodu-${applicationVersion}-win32-x64.manifest.json`),
         JSON.stringify(manifest, null, 2) + '\n');
+    fs.writeFileSync(path.join(distDir, `Nodu-${applicationVersion}-win32-x64.sha256`),
+        `${manifest.sha256}  ${manifest.artifact}\n`);
     console.log(`package-electron: ${rel(zip)}`);
+}
+
+function assertZipHeader(file) {
+    const header = Buffer.alloc(4), fd = fs.openSync(file, 'r');
+    try {
+        if (fs.readSync(fd, header, 0, 4, 0) !== 4 || !header.equals(Buffer.from([0x50, 0x4b, 0x03, 0x04]))) {
+            throw new Error('Portable archive is not a ZIP file');
+        }
+    } finally { fs.closeSync(fd); }
 }
 
 async function main() {
@@ -1318,5 +1333,5 @@ if (require.main === module) {
 
 module.exports = {
     canonicalJs, canonizeJsForMerge, normalizeNativeModuleKeys, computeStamp, computeInstallStamp,
-    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath,
+    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader,
 };

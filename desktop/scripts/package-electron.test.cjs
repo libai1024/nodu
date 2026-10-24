@@ -12,8 +12,19 @@ const path = require('node:path');
 const Module = require('node:module');
 
 const {
-    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath,
+    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader,
 } = require('./package-electron.cjs');
+
+test('portable archive rejects TAR content mislabeled as ZIP', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-zip-header-'));
+    const file = path.join(dir, 'portable.zip');
+    try {
+        fs.writeFileSync(file, Buffer.alloc(512));
+        assert.throws(() => assertZipHeader(file), /not a ZIP/);
+        fs.writeFileSync(file, Buffer.from([0x50, 0x4b, 0x03, 0x04, 0, 0]));
+        assert.doesNotThrow(() => assertZipHeader(file));
+    } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
 
 test('packager retains STM32 and WASI runtime objects while excluding build debris', () => {
     for (const name of [
