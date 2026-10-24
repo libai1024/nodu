@@ -8,9 +8,9 @@ Rust tree-sitter 从当前 C 缓冲区提取唯一的 `sht30_crc8`、`sht30_conv
 
 后端使用 WASI SDK 34 的 clang 23.1.0 编译到 `wasm32-wasip1`，指定 `-nostdlib -nostdinc -fno-builtin`，不搜索工程头文件。运行时固定 Wasmtime 50.0.0，仅调用内置 `run_tests`。测试产物必须没有 import section，因而不使用任何 WASI 系统调用。没有目录预打开、环境变量继承、网络、时钟、终端或硬件访问。也不接受预编译 cwasm。
 
-每个子进程有 5 秒墙钟限制、16 KB 输出限制；POSIX 进程组在取消或超限时终止。全进程执行器并发最多 2。Wasm 限制 200 万 fuel、16 MiB 线性内存、256 KB 产物。源码仍受前置 32 KB 限制。临时目录权限 0700、文件 0600，结束后清除。主机编译器依旧是原生进程，不能把时间/输入限制描述成完整操作系统沙箱或主机内存限额。
+每个子进程有 5 秒墙钟限制、16 KB 输出限制；POSIX 进程组在取消、超限或父进程退出时终止，避免父进程正常退出后遗留后代。已经取消的请求不启动子进程。全进程执行器并发最多 2。Wasm 限制 200 万 fuel、16 MiB 线性内存、256 KB 产物。源码仍受前置 32 KB 限制。临时目录权限 0700、文件 0600，结束后清除。主机编译器依旧是原生进程，不能把时间/输入限制描述成完整操作系统沙箱或主机内存限额。
 
-目前 Windows 没有接入 Job Object 进程树回收，因此显式返回不可用，不启动编译器。已实际测试的平台只有 macOS arm64。其它平台不可据此标记已通过。
+目前 Windows 没有接入 Job Object 进程树回收，因此显式返回不可用，不启动编译器。完整产品检查入口已在 macOS arm64 实测；x64 工具在 Rosetta 下的验证范围见后文，不能据此标记其它平台完整通过。
 
 ## 判断与证据
 
@@ -36,4 +36,4 @@ npm run test:tutor-tools --prefix desktop
 
 产品测试覆盖参考代码 196/196、错误 CRC 多项式 35/196、无限循环 fuel 耗尽、越界内存 trap、缺少常量、畸形产物、外部 import、取消、超时、输出超限、并发额度和释放、过期证据。首次替换本机检查器二进制后出现一次冷启动超时，正确返回 unavailable，未被当作通过；同一二进制再次运行全部完成，两个结果均保存。
 
-参考：[Wasmtime CLI](https://docs.wasmtime.dev/cli-options.html)、[WASI SDK 官方版本](https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-34)。CLI 的 invoke 文本输出不是稳定公共协议，因此固定版本且严格解析单一整数，格式改变即不可用。
+参考：[Wasmtime CLI](https://docs.wasmtime.dev/cli-options.html)、[WASI SDK 官方版本](https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-34)。CLI 的 invoke 文本输出不是稳定公共协议，因此固定版本且只接受 stdout 中的单一非负整数。stderr 警告单独收集，不能提供通过计数；stdout 混入其它文字、重复数字或超出测试数量均返回不可用。两个输出流共享16 KB预算，格式改变即不可用。

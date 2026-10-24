@@ -45,3 +45,48 @@ test('wall budget and concurrent limit terminate work without retaining executio
  const timed=await one;assert.equal(timed.status,'unavailable');assert.match(timed.note,/时间限制/);
  const fast=await tools(t,clang,runtime);assert.equal((await fast.inspect(unit,'d')).status,'passed');
 });
+test('only a single integer on stdout is accepted as runtime evidence',async t=>{
+ for(const body of ['console.error(193)','console.log("warning\\n193")','console.log("193\\n193")','console.log("193oops")','console.log(-1)']){
+  const fake=await tools(t,clang,runtime.replace('console.log(193)',body));
+  const result=await fake.inspect(unit,'digest');assert.equal(result.status,'unavailable',body);assert.equal(result.passed,0);
+ }
+ const fake=await tools(t,clang,runtime.replace('console.log(193)','{console.error("invocation warning");console.log(193)}'));
+ assert.equal((await fake.inspect(unit,'digest')).status,'passed');
+});
+async function processFixture(t){
+ const root=await fs.mkdtemp(join(tmpdir(),'nodu-process-tree-'));
+ t.after(async()=>{
+  try{const pid=Number(await fs.readFile(join(root,'pid'),'utf8'));process.kill(pid,'SIGKILL');}catch{}
+  await fs.rm(root,{recursive:true,force:true});
+ });
+ return {root,runner:new TutorPureRunner(root)};
+}
+async function eventually(check){
+ const deadline=Date.now()+2000;
+ do{if(await check())return;await new Promise(resolve=>setTimeout(resolve,20));}while(Date.now()<deadline);
+ assert.fail('process lifecycle condition was not met');
+}
+test('a signal cancelled before spawn never starts a process',async t=>{
+ const {root,runner}=await processFixture(t),abort=new AbortController();abort.abort();
+ const result=await runner.run(process.execPath,['-e','require("fs").writeFileSync("started","yes")'],root,abort.signal);
+ assert.match(result.reason,/取消/);await assert.rejects(fs.access(join(root,'started')));
+});
+for(const inherited of [false,true])test(`normal parent exit reaps descendants with ${inherited?'inherited':'closed'} pipes`,{skip:process.platform==='win32'},async t=>{
+ const {root,runner}=await processFixture(t);
+ const code=`const cp=require('child_process').spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:${inherited?"['ignore',1,2]":"'ignore'"}});require('fs').writeFileSync('pid',String(cp.pid));cp.unref();process.exit(0);`;
+ const result=await runner.run(process.execPath,['-e',code],root);
+ assert.equal(result.code,0);assert.equal(result.reason,undefined);
+ const pid=Number(await fs.readFile(join(root,'pid'),'utf8'));
+ await eventually(()=>{try{process.kill(pid,0);return false;}catch(error){return error.code==='ESRCH';}});
+});
+test('cancellation reaps the process group and a subsequent run still succeeds',{skip:process.platform==='win32'},async t=>{
+ const {root,runner}=await processFixture(t),abort=new AbortController();
+ const code=`const cp=require('child_process').spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:['ignore',1,2]});require('fs').writeFileSync('pid',String(cp.pid));setInterval(()=>{},1000);`;
+ const pending=runner.run(process.execPath,['-e',code],root,abort.signal);
+ await eventually(async()=>fs.access(join(root,'pid')).then(()=>true,()=>false));abort.abort();
+ const result=await pending;assert.match(result.reason,/取消/);
+ const pid=Number(await fs.readFile(join(root,'pid'),'utf8'));
+ await eventually(()=>{try{process.kill(pid,0);return false;}catch(error){return error.code==='ESRCH';}});
+ const next=await runner.run(process.execPath,['-e','console.log(7);console.error("notice")'],root);
+ assert.equal(next.code,0);assert.equal(next.stdout,'7\n');assert.equal(next.stderr,'notice\n');
+});

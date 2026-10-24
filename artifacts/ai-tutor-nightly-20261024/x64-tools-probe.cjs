@@ -18,9 +18,9 @@ const {validate}=require('../../desktop/scripts/package-tutor-tools.cjs');
    assert.equal(compile.code,0,JSON.stringify(compile));assert.ok(!compile.reason);
    assert.ok(verifyNoImports(await fs.readFile(path.join(directory,'test.wasm'))));
    const result=await runner.run(path.join(root,'runtime/wasmtime'),['run','-W','fuel=2000000','-W','max-memory-size=16777216','--invoke','run_tests','test.wasm'],directory);
-   const counts=result.output.split(/\r?\n/).filter(x=>/^\d+$/.test(x));
-   if(name==='reference'){assert.equal(result.code,0);assert.deepEqual(counts,['196']);}
-   else if(name==='wrong-crc'){assert.equal(result.code,0);assert.deepEqual(counts,['35']);}
+   const count=result.stdout.trim();
+   if(name==='reference'){assert.equal(result.code,0);assert.equal(count,'196');}
+   else if(name==='wrong-crc'){assert.equal(result.code,0);assert.equal(count,'35');}
    else {assert.notEqual(result.code,0);assert.equal(result.reason,undefined);assert.match(result.output,name==='loop'?/fuel consumed/:/out of bounds memory access/);}
    results.cases.push({name,total:harness.total,...result});
   }

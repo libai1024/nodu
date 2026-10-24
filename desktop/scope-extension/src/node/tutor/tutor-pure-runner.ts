@@ -63,23 +63,30 @@ export function verifyNoImports(wasm: Buffer): boolean {
     }
     return offset === wasm.length;
 }
-interface ProcessResult { code: number | null; output: string; reason?: string; }
+interface ProcessResult { code: number | null; output: string; stdout: string; stderr: string; reason?: string; }
 export class TutorPureRunner {
     private static active = 0;
     constructor(private readonly root = process.env.NODU_TUTOR_WASI_DIR ?? join(dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json')), 'resources/wasi', `${process.platform}-${process.arch}`)) { }
     private run(executable: string, args: string[], cwd: string, signal?: AbortSignal): Promise<ProcessResult> {
+        if (signal?.aborted) { return Promise.resolve({ code: null, output: '', stdout: '', stderr: '', reason: '测试已取消' }); }
         return new Promise(resolve => {
-            let output = '', size = 0, reason: string | undefined, done = false;
+            let output = '', stdout = '', stderr = '', size = 0, reason: string | undefined, done = false;
             const child = spawn(executable, args, { cwd, detached: process.platform !== 'win32', windowsHide: true,
                 env: { PATH: join(this.root, 'sdk/bin'), SystemRoot: process.env.SystemRoot, TMPDIR: cwd, TEMP: cwd, HOME: cwd }, stdio: ['ignore','pipe','pipe'] });
             const kill = (): void => { try { if (process.platform !== 'win32' && child.pid) { process.kill(-child.pid, 'SIGKILL'); } else { child.kill('SIGKILL'); } } catch { /* already exited */ } };
             const stop = (why: string): void => { reason ??= why; kill(); };
             const abort = (): void => stop('测试已取消');
             const timer = setTimeout(() => stop('测试超过时间限制'), 5000);
-            const finish = (code: number | null): void => { if (done) { return; } done = true; clearTimeout(timer); signal?.removeEventListener('abort', abort); resolve({ code, output, reason }); };
+            const finish = (code: number | null): void => { if (done) { return; } done = true; clearTimeout(timer); signal?.removeEventListener('abort', abort); resolve({ code, output, stdout, stderr, reason }); };
             signal?.addEventListener('abort', abort, { once: true });
-            for (const stream of [child.stdout, child.stderr]) { stream.on('data', (data: Buffer) => { size += data.length; if (size > 16000) { stop('测试输出超过限制'); } else { output += data.toString('utf8'); } }); }
+            for (const stream of [child.stdout, child.stderr]) { stream.on('data', (data: Buffer) => {
+                size += data.length;
+                if (size > 16000) { stop('测试输出超过限制'); }
+                else { const text = data.toString('utf8'); output += text; if (stream === child.stdout) { stdout += text; } else { stderr += text; } }
+            }); }
             child.once('error', () => { reason = '测试工具不可用'; finish(null); });
+            // Reap descendants even when the parent exits successfully and closes its pipes.
+            child.once('exit', kill);
             child.once('close', code => finish(code));
             if (signal?.aborted) { abort(); }
         });
@@ -109,10 +116,10 @@ export class TutorPureRunner {
             const run = await this.run(runtime, ['run','-W','fuel=2000000','-W','max-memory-size=16777216','--invoke','run_tests','test.wasm'], directory, signal);
             if (run.reason) { throw new Error(run.reason); }
             // The pinned CLI prints an invocation warning to stderr; only its one integer stdout result is accepted.
-            const counts = run.output.split(/\r?\n/).filter(line => /^\d+$/.test(line));
+            const count = run.stdout.trim();
             if (run.code !== 0) { return { ...result, status: 'failed', note: '纯函数执行失败或超过运行预算' }; }
-            if (counts.length !== 1 || Number(counts[0]) > result.total) { throw new Error('纯函数测试结果无效'); }
-            result.passed = Number(counts[0]); result.status = result.passed === result.total ? 'passed' : 'failed';
+            if (!/^\d+$/.test(count) || !Number.isSafeInteger(Number(count)) || Number(count) > result.total) { throw new Error('纯函数测试结果无效'); }
+            result.passed = Number(count); result.status = result.passed === result.total ? 'passed' : 'failed';
             result.note = `纯函数测试 ${result.passed}/${result.total}，不代表固件或传感器运行`;
             return result;
         } catch (error) {
