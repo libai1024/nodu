@@ -31,6 +31,14 @@ const NODE_DARWIN_SHA = {
     x64: '0ae5a24c24bb7d015cd816c5036b3f90f2945aa872fcf54e58da054753b3a299',
 };
 const ELECTRON_VERSION = '42.8.1';
+// Official release SHASUMS256.txt retained with the verified download cache.
+// Pin the digest so cached archives can be verified without fetching this
+// small metadata file on every packaging run. New versions need new digests.
+const ELECTRON_SHA256 = {
+    'electron-v42.8.1-darwin-arm64.zip': 'f03df963463d120a35a194e0c172f15c611ea81dceda09a6ea275843611231fd',
+    'electron-v42.8.1-darwin-x64.zip': 'a9cb0bc4e7e41e047798c5366a2136ece4949fb9092c59d54597d6ce09bb2e09',
+    'electron-v42.8.1-win32-x64.zip': '7a1aff619f94ead8a377d82e1f59bfd9a31a17db5b948f82fc5e60d576fe9304',
+};
 const PACKAGER_VERSION = '20.3.0';
 const UNIVERSAL_VERSION = '3.0.6';
 const MIN_OS = '15.0';
@@ -908,6 +916,7 @@ async function packageThin(arch, appInput) {
         appBundleId: 'org.scope.studio',
         appVersion: applicationVersion,
         electronVersion: ELECTRON_VERSION,
+        download: { checksums: ELECTRON_SHA256 },
         platform: host,
         arch,
         asar: false,
