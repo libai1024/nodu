@@ -312,3 +312,44 @@ test('corrupted status, step and fragment relationships are rejected on restore'
   await assert.rejects(()=>f.store.read(context.key),/教学.*损坏/);
  }
 });
+
+test('task additions use stable IDs and removal undo preserves progress across restart', async t => {
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'串口'});await f.run('confirm');
+ f.responses.push(JSON.stringify({title:'增加内容',steps:[{title:'发送消息',goal:'发送数组',path:'main.c'},{title:'延时',goal:'加入延时',path:'main.c'}]}));
+ let r=await f.run('add',{prompt:'发送消息并延时'});assert.equal(r.ok,true);const ids=r.state.steps.map(s=>s.id);assert.equal(new Set(ids).size,3);
+ r=await f.run('remove',{stepId:ids[1]});assert.deepEqual(r.state.steps.map(s=>s.id),[ids[0],ids[2]]);assert.equal(r.state.current,0);
+ const restored=await new TutorGoalStore(f.dir).read(context.key);assert.equal(restored.removed.step.id,ids[1]);
+ r=await f.run('undo-remove');assert.deepEqual(r.state.steps.map(s=>s.id),ids);assert.equal(r.state.removed,undefined);
+ assert.equal(f.calls.length,2,'remove/undo do not call the model');
+});
+test('removing current step clears only guidance, pauses, and cannot count deletion as completion', async t=>{
+ const f=await fixture(t);f.responses.push(JSON.stringify({title:'串口',steps:[{title:'定义',goal:'定义消息',path:'main.c'},{title:'发送',goal:'发送消息',path:'main.c'}]}),fragment);
+ await f.run('propose',{prompt:'串口'});await f.run('confirm');await f.run('fragment',{buffer});
+ let r=await f.run('remove',{stepId:'step-1'});assert.equal(r.state.status,'paused');assert.equal(r.state.fragment,undefined);assert.equal(r.state.current,0);assert.equal(r.state.steps[0].id,'step-2');
+ assert.equal((await f.run('remove',{stepId:'step-2'})).ok,false);assert.equal((await f.store.read(context.key)).status,'paused');
+ r=await f.run('undo-remove');assert.equal(r.state.steps[0].id,'step-1');assert.equal(r.state.status,'paused');assert.equal(r.state.fragment,undefined);
+});
+test('completed step history cannot be deleted; append reopens complete goal paused',async t=>{
+ const f=await fixture(t);f.responses.push(plan,fragment,review('ok'),plan);
+ await f.run('propose',{prompt:'串口'});await f.run('confirm');await f.run('fragment',{buffer});
+ await f.run('check',{buffer:{...buffer,text:'int main(void) {\nconst char *hello = "hello";\n}\n',version:2}});
+ assert.equal((await f.run('remove',{stepId:'step-1'})).ok,false);
+ const r=await f.run('add',{prompt:'增加第二条消息'});assert.equal(r.state.status,'paused');assert.equal(r.state.current,1);assert.equal(r.state.steps.length,2);
+ assert.equal((await f.run('remove',{stepId:'step-1'})).ok,false);
+});
+test('revision conflict prevents a late model addition from resurrecting removed steps',async t=>{
+ const f=await fixture(t);f.responses.push(JSON.stringify({title:'串口',steps:[{title:'定义',goal:'定义消息',path:'main.c'},{title:'发送',goal:'发送消息',path:'main.c'}]}));
+ await f.run('propose',{prompt:'串口'});await f.run('confirm');let finish;
+ f.responses.push(()=>new Promise(resolve=>{finish=resolve;}));const pending=f.run('add',{prompt:'增加延时'});
+ while(!finish)await new Promise(r=>setImmediate(r));
+ const other=new TutorGoalSession(f.store,f.provider,async()=>({...context}),f.authorize);t.after(()=>other.dispose());
+ const r=await other.run({id:randomUUID(),workspaceId:'workspace-1',revision:(await f.store.read(context.key)).revision,action:'remove',stepId:'step-2'});assert.equal(r.ok,true);
+ finish(plan);assert.equal((await pending).ok,false);assert.deepEqual((await f.store.read(context.key)).steps.map(s=>s.id),['step-1']);
+});
+test('invalid additions and duplicate IDs never replace a valid task',async t=>{
+ const f=await fixture(t);f.responses.push(plan);await f.run('propose',{prompt:'串口'});const prior=await f.store.read(context.key);
+ f.responses.push(JSON.stringify({title:'x',steps:[{title:'x',goal:'x',path:'../secret.c'}]}));assert.equal((await f.run('add',{prompt:'新增'})).ok,false);
+ assert.deepEqual(await f.store.read(context.key),prior);
+ await assert.rejects(()=>f.store.write(context.key,prior.revision,{...prior,steps:[prior.steps[0],prior.steps[0]]},async()=>{}));
+ assert.equal((await f.run('add',{prompt:' '.repeat(8)})).ok,false);
+});

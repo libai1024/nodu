@@ -1,0 +1,40 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-task-layer { position: fixed; z-index: 20; pointer-events: none; overflow: hidden; }
+.nodu-task-host { position: absolute; pointer-events: auto; padding: 8px 12px; box-sizing: border-box; width: 324px; max-width: 100%; }
+.nodu-task-window { color: var(--theia-foreground); background: var(--theia-editorWidget-background); border: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); border-radius: 5px; font-family: var(--theia-ui-font-family); font-size: 12px; line-height: 1.4; max-height: var(--nodu-task-max-height, 360px); overflow: auto; }
+.nodu-task-window button { font: inherit; color: inherit; cursor: pointer; border: 0; background: transparent; margin: 0; }
+.nodu-task-window button:disabled { opacity: .45; cursor: default; }
+.nodu-task-window button:focus-visible, .nodu-task-window textarea:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -2px; }
+.nodu-task-window button:not(:disabled):hover { background: var(--theia-toolbar-hoverBackground); }
+.nodu-task-head { height: 32px; display: flex; align-items: center; padding: 0 4px; gap: 2px; }
+.nodu-task-title { display: flex; align-items: center; flex: 1; gap: 5px; padding: 5px 3px; overflow: hidden; text-align: left; min-width: 0; }
+.nodu-task-title span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.nodu-task-count { font-variant-numeric: tabular-nums; padding: 5px; flex-shrink: 0; }
+.nodu-task-window .nodu-task-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; flex-shrink: 0; padding: 0; }
+.nodu-task-list { margin: 0; padding: 3px 4px; list-style: none; max-height: min(224px, 32vh); overflow: auto; border-top: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); }
+.nodu-task-list li { display: flex; align-items: center; min-height: 29px; border-radius: 2px; gap: 5px; }
+.nodu-task-list .is-current { background: var(--theia-list-inactiveSelectionBackground); }
+.nodu-task-state { width: 21px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--theia-descriptionForeground); }
+.nodu-task-list .is-current .nodu-task-state { color: var(--theia-nodu-aiHighlight, #ffc23d); }
+.nodu-task-window .codicon { font-size: 14px; }
+.nodu-task-step { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 5px 0; text-align: left; }
+.nodu-task-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 32px; padding: 2px 9px; border-top: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); }
+.nodu-task-foot > span { color: var(--theia-descriptionForeground); }
+.nodu-task-window .scope-text-button { padding: 4px 2px; }
+.nodu-task-menu { display: flex; flex-direction: column; padding: 4px; border-top: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); }
+.nodu-task-menu button { text-align: left; padding: 5px 9px; }
+.nodu-task-add, .nodu-task-decision { margin: 0; padding: 6px 10px; border-top: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); }
+.nodu-task-add textarea { display: block; width: 100%; box-sizing: border-box; resize: vertical; max-height: 100px; font: inherit; color: var(--theia-input-foreground); background: var(--theia-input-background); border: 1px solid var(--theia-input-border, var(--theia-panel-border)); padding: 5px 7px; }
+.nodu-task-add textarea::placeholder { color: var(--theia-input-placeholderForeground); }
+.nodu-task-add > div, .nodu-task-decision > div { display: flex; justify-content: flex-end; gap: 12px; }
+.nodu-task-error { color: var(--theia-errorForeground); max-height: 70px; overflow: auto; overflow-wrap: anywhere; padding: 5px 10px; }
+.nodu-task-undo { display: flex; justify-content: space-between; align-items: center; padding: 3px 10px; }
+.nodu-task-state.is-checking .codicon { animation: nodu-task-spin 1s linear infinite; }
+@keyframes nodu-task-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .nodu-task-state.is-checking .codicon { animation: none; } }
+
+.nodu-task-window .nodu-task-grip { padding: 0; width: 14px; height: 26px; flex-shrink: 0; cursor: grab; touch-action: none; color: var(--theia-descriptionForeground); }
+.nodu-task-file { opacity: 0; }
+.nodu-task-list li:hover .nodu-task-file, .nodu-task-list li:focus-within .nodu-task-file, .nodu-task-list .is-current .nodu-task-file { opacity: 1; }
+
+.nodu-task-state .codicon { color: inherit; }

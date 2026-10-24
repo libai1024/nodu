@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import { randomUUID } from 'node:crypto';
 import { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
 import { parseGoalPlan, TutorGoalRequest, TutorGoalResult, TutorGoalState, TutorProjectContext } from '../../common/tutor/tutor-goal';
 import { TutorGoalStore } from './tutor-goal-store';
@@ -45,10 +46,11 @@ export class TutorGoalSession {
             const body = JSON.stringify(request);
             if (!body || body.length > 48000) { throw new Error('教学请求过大'); }
             request = JSON.parse(body);
-            if (!request || Object.keys(request).some(k => !['id','workspaceId','revision','action','prompt','buffer','placement'].includes(k))
+            if (!request || Object.keys(request).some(k => !['id','workspaceId','revision','action','prompt','buffer','placement','stepId'].includes(k))
                 || typeof request.workspaceId !== 'string' || !/^[\w-]{8,96}$/.test(request.workspaceId) || !/^[\w-]{8,96}$/.test(request.id)
                 || !Number.isSafeInteger(request.revision) || request.revision < 0
-                || !['propose','confirm','pause','resume','cancel','fragment','check'].includes(request.action)) { throw new Error('教学请求无效'); }
+                || !['propose','confirm','pause','resume','cancel','fragment','check','add','remove','undo-remove'].includes(request.action)) { throw new Error('教学请求无效'); }
+            if (request.stepId !== undefined && (request.action !== 'remove' || typeof request.stepId !== 'string' || !/^[\w-]{1,80}$/.test(request.stepId))) { throw new Error('步骤请求无效'); }
             if (request.placement !== undefined && (request.placement !== 'suggest' || request.action !== 'fragment')) { throw new Error('教学位置请求无效'); }
             if (this.disposed || this.pending) { throw new Error('请等待当前教学操作'); }
             abort = new AbortController(); this.pending = { id: request.id, workspace: request.workspaceId, abort };
@@ -89,11 +91,37 @@ export class TutorGoalSession {
                     { goal: request.prompt.trim(), project: context, buffer: request.buffer });
                 const plan = parseGoalPlan(raw, context.files);
                 next = { revision: state.revision, status: 'draft', goal: request.prompt.trim(), ...plan, target: { mcu: context.mcu, sdk: context.sdk }, current: 0 };
+            } else if (request.action === 'add') {
+                if (!['draft', 'active', 'paused', 'complete'].includes(state.status)) { throw new Error('请先生成教学计划'); }
+                if (state.steps.length >= 24) { throw new Error('一个任务最多 24 步'); }
+                if (typeof request.prompt !== 'string' || !request.prompt.trim() || request.prompt.length > 1200) { throw new Error('请输入要添加的内容'); }
+                if (state.target?.mcu !== context.mcu || state.target?.sdk !== context.sdk) { throw new Error('工程芯片或 SDK 已改变，请重新制定计划'); }
+                const raw = await complete('为现有教学任务追加步骤，不重复现有步骤。每步最多4行完整C代码，只引用files中的现有文件。不增加编译、下载或硬件操作步骤。返回{ "title":"任务标题", "steps":[{ "title":"步骤", "goal":"具体要写的内容和目的", "path":"文件相对路径" }] }。最多' + (24 - state.steps.length) + '步。',
+                    { goal: state.goal, steps: state.steps, request: request.prompt.trim(), project: context });
+                const added = parseGoalPlan(raw, context.files).steps.map(step => ({ ...step, id: randomUUID() }));
+                if (state.steps.length + added.length > 24) { throw new Error('一个任务最多 24 步'); }
+                next.steps = [...state.steps, ...added]; next.removed = undefined;
+                if (state.status === 'complete') { next.status = 'paused'; next.verdict = undefined; }
+            } else if (request.action === 'remove') {
+                if (!['draft', 'active', 'paused'].includes(state.status)) { throw new Error('当前任务不能删除步骤'); }
+                const index = state.steps.findIndex(step => step.id === request.stepId);
+                if (index < 0) { throw new Error('步骤已不存在'); }
+                if (index < state.current) { throw new Error('已完成步骤保留在学习记录中'); }
+                if (state.steps.length - state.current <= 1) { throw new Error('请使用结束任务取消最后一步'); }
+                next.removed = { step: state.steps[index], index };
+                next.steps = state.steps.filter((_, n) => n !== index);
+                if (index === state.current) { next.fragment = undefined; next.feedback = undefined; next.verdict = undefined; if (state.status === 'active') { next.status = 'paused'; } }
+            } else if (request.action === 'undo-remove') {
+                const removed = state.removed;
+                if (!removed || state.steps.length >= 24 || removed.index < state.current || !['draft', 'active', 'paused'].includes(state.status)) { throw new Error('无法撤销此次删除'); }
+                if (!context.files.includes(removed.step.path)) { throw new Error('原步骤文件已不可用'); }
+                next.steps = [...state.steps]; next.steps.splice(removed.index, 0, removed.step); next.removed = undefined;
+                if (removed.index === state.current) { next.fragment = undefined; next.verdict = undefined; if (state.status === 'active') { next.status = 'paused'; } }
             } else if (request.action === 'confirm') {
                 if (state.status !== 'draft') { throw new Error('没有待确认计划'); }
                 next.status = 'active';
             } else if (request.action === 'cancel') {
-                next.status = state.status === 'none' ? 'none' : 'cancelled'; next.fragment = undefined;
+                next.status = state.status === 'none' ? 'none' : 'cancelled'; next.fragment = undefined; next.removed = undefined;
             } else if (request.action === 'pause' || request.action === 'resume') {
                 if (state.status !== (request.action === 'pause' ? 'active' : 'paused')) { throw new Error('教学状态已更新'); }
                 next.status = request.action === 'pause' ? 'paused' : 'active';
@@ -147,10 +175,13 @@ export class TutorGoalSession {
                 next.feedback = answer.text;
                 if (kind === 'chat') {
                     if (!answer.guidance) { throw new Error(answer.text || '模型没有给出可跟写片段'); }
-                    next.fragment = { source, answer };
-                } else if (answer.review?.verdict === 'ok') {
-                    next.current++; next.fragment = undefined;
-                    if (next.current >= next.steps.length) { next.status = 'complete'; }
+                    next.fragment = { source, answer }; next.verdict = undefined;
+                } else {
+                    next.verdict = answer.review?.verdict;
+                    if (answer.review?.verdict === 'ok') {
+                        next.current++; next.fragment = undefined; next.removed = undefined;
+                        if (next.current >= next.steps.length) { next.status = 'complete'; }
+                    }
                 }
             }
             await live();

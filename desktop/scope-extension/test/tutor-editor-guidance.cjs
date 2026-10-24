@@ -39,7 +39,7 @@ function editor(tutor, lines, cursorLine) {
         deltaDecorations:()=>[String(++state.nextId)] };
     const c = Object.assign(new Controller(), { tutor, tasks:new Map(), changed:new Set(),before:[...lines],composing:false,
         control:{getModel:()=>textModel,getPosition:()=>({lineNumber:cursorLine,column:state.lines[cursorLine-1].length+1})},
-        decorations:{set:d=>{state.decorations=d;},clear:()=>{}}, removeOverlay(){}, setTracing(value){state.tracing=value;},renderTrace(value){state.reference=value;}, schedule(){}, queueHistory(){}, active:()=>true,
+        decorations:{set:d=>{state.decorations=d;},clear:()=>{}}, removeOverlay(){}, renderTask(){}, setTracing(value){state.tracing=value;},renderTrace(value){state.reference=value;}, schedule(){}, queueHistory(){}, active:()=>true,
         buffer:()=>({path:'main.c',text:state.lines.join('\n'),version:state.version,line:cursorLine}),updateContext(){tutor.updateBuffer(this.buffer());} });
     return {c,state};
 }
@@ -442,4 +442,33 @@ test('course reference stays at its marker with the cursor elsewhere or no focus
  t.currentStep=()=>({anchors:[{id:'s',path:'main.c',marker:'// STEP'}],guidance:[{anchorId:'s',requiredSymbols:[],lines:['int x;','int y;']}]});
  const {c,state}=editor(t,['// STEP','','tail'],3);c.active=()=>false;c.render();
  assert.equal(state.reference.line,2);assert.equal(state.reference.candidate,'int x;');assert.equal(state.tracing,false);
+});
+
+test('shared task overlay obeys the AI switches without depending on the active file',()=>{
+ const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['renderTask']);
+ for(const state of [{teaching:false,floatVisible:true},{teaching:true,floatVisible:false},{teaching:true,floatVisible:true,empty:true}]){
+  let removed=0;const c=Object.assign(new Subject(),{tutor:{...state,goalState:{status:state.empty?'none':'active'}},removeTask(){removed++;}});
+  c.renderTask();assert.equal(removed,1);
+ }
+});
+test('task window can cross editor splits and clamps only to the whole editor area',()=>{
+ const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['moveTask']);
+ const c=Object.assign(new Subject(),{taskHost:{offsetWidth:324,offsetHeight:220,style:{}},taskLayer:{clientWidth:1200,clientHeight:700},taskOffset:{x:0,y:0}});
+ c.moveTask(-650,100);assert.deepEqual(c.taskOffset,{x:-650,y:100});
+ c.moveTask(-900,1000);assert.deepEqual(c.taskOffset,{x:-876,y:480});
+ c.taskLayer.clientWidth=500;c.taskLayer.clientHeight=300;c.moveTask(0,0);assert.deepEqual(c.taskOffset,{x:-176,y:80});
+ c.moveTask(1000,-1000);assert.deepEqual(c.taskOffset,{x:0,y:0});
+});
+test('split editors share one React task host and retain its position on file switches',()=>{
+ let mounts=0,renders=0,appends=0;const bounds={left:200,top:50,width:1200,height:700};
+ const node=()=>({style:{setProperty(){}},append(){},offsetWidth:324,offsetHeight:220,clientWidth:1200,clientHeight:700});
+ const Subject=methods('nodu-tutor-hints.ts','NoduTutorHintsContribution',['renderTask','moveTask'],{
+  document:{createElement:node,body:{append(){appends++;}}},createRoot:()=>{mounts++;return{render(){renders++;}};},
+  React:{createElement:(_type,props)=>props},TutorTaskWindow:{},TUTOR_COMMANDS:{openReference:'open',openPanel:'panel'},
+ });
+ const c=Object.assign(new Subject(),{tutor:{teaching:true,floatVisible:true,goalState:{status:'active'}},shell:{mainPanel:{node:{getBoundingClientRect:()=>bounds}}},taskOffset:{x:0,y:0}});
+ c.renderTask();c.moveTask(-500,80);const host=c.taskHost;
+ c.editors={currentEditor:{id:'other-file'}};c.renderTask();
+ assert.equal(c.taskHost,host);assert.equal(mounts,1);assert.equal(appends,1);assert.equal(renders,2);
+ assert.deepEqual(c.taskOffset,{x:-500,y:80});assert.equal(c.taskLayer.style.left,'200px');
 });

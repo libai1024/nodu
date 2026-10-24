@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: MIT
+import * as React from '@theia/core/shared/react';
+import { createRoot, Root } from '@theia/core/shared/react-dom/client';
+import { TutorTaskWindow } from './nodu-tutor-task-window';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import * as monaco from '@theia/monaco-editor-core';
 import { CommandContribution, CommandRegistry, CommandService, Disposable, DisposableCollection, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
@@ -19,7 +22,6 @@ export const TUTOR_COMMANDS = {
 } as const;
 interface LineTask { decoration: string; text: string; status: 'pending' | 'ok' | 'needs-work' | 'context' | 'stale' | 'unavailable'; note: string; version?: number; guided?: boolean; }
 interface TraceReference { candidate: string; typed: string; line: number; block?: { lines: readonly string[]; current: number }; }
-let count = 0;
 class TutorEditorController implements Disposable {
     private readonly disposables = new DisposableCollection();
     private readonly decorations: monaco.editor.IEditorDecorationsCollection;
@@ -33,12 +35,10 @@ class TutorEditorController implements Disposable {
     private timer?: ReturnType<typeof setTimeout>;
     private processing = false;
     private disposed = false;
-    private overlay?: monaco.editor.IOverlayWidget;
     private tracingOptions?: monaco.editor.IEditorOptions;
     private traceZone?: { id: string; zone: monaco.editor.IViewZone; content: HTMLDivElement; icon: HTMLElement; signature: string };
-    private readonly id = `nodu.tutor.step.${++count}`;
     constructor(private readonly widget: EditorWidget, private readonly control: monaco.editor.IStandaloneCodeEditor,
-        private readonly tutor: NoduTutorModel, private readonly active: () => boolean, private readonly openPanel: () => void) {
+        private readonly tutor: NoduTutorModel, private readonly active: () => boolean) {
         this.decorations = control.createDecorationsCollection();
         this.before = control.getModel()?.getLinesContent() ?? [];
         this.disposables.push(control.onDidCompositionStart(() => { this.composing = true; }));
@@ -177,8 +177,8 @@ class TutorEditorController implements Disposable {
     }
     private render(): void {
         const model = this.control.getModel();
-        if (!model || model.isDisposed() || !this.tutor.teaching) { this.setTracing(false); this.renderTrace(); this.decorations.clear(); this.removeOverlay(); return; }
-        const buffer = this.buffer(); if (!buffer) { this.setTracing(false); this.renderTrace(); this.decorations.clear(); this.removeOverlay(); return; }
+        if (!model || model.isDisposed() || !this.tutor.teaching) { this.setTracing(false); this.renderTrace(); this.decorations.clear(); return; }
+        const buffer = this.buffer(); if (!buffer) { this.setTracing(false); this.renderTrace(); this.decorations.clear(); return; }
         const decorations: monaco.editor.IModelDeltaDecoration[] = [];
         const position = this.control.getPosition();
         const step = this.tutor.currentStep();
@@ -238,18 +238,6 @@ class TutorEditorController implements Disposable {
                 hoverMessage: { value: task.note.replace(/[\\`*_{}\[\]()#+.!<>]/g, '\\$&'), isTrusted: false } } });
         }
         this.decorations.set(decorations);
-        this.removeOverlay();
-        if (this.tutor.floatVisible && step) {
-            const node = document.createElement('div'); node.className = 'nodu-tutor-step-float';
-            const title = document.createElement('span'); title.textContent = step.title;
-            const button = document.createElement('button'); button.className = 'theia-button secondary'; button.textContent = '检查'; button.disabled = !!this.tutor.busy;
-            button.onclick = () => { this.updateContext(); void this.tutor.send('step'); };
-            const more = document.createElement('button'); more.className = 'scope-text-button'; more.textContent = '步骤'; more.onclick = this.openPanel;
-            node.append(title, button, more);
-            if (this.control.getLayoutInfo().width < 620) { node.style.maxWidth = 'calc(100% - 24px)'; }
-            this.overlay = { getId: () => this.id, getDomNode: () => node, getPosition: () => ({ preference: monaco.editor.OverlayWidgetPositionPreference.TOP_RIGHT_CORNER }) };
-            this.control.addOverlayWidget(this.overlay);
-        }
     }
     private renderTrace(reference?: TraceReference): void {
         if (!reference) {
@@ -315,13 +303,12 @@ class TutorEditorController implements Disposable {
             this.control.updateOptions(options);
         }
     }
-    private removeOverlay(): void { if (this.overlay) { this.control.removeOverlayWidget(this.overlay); this.overlay = undefined; } }
     private clear(): void {
         const model = this.control.getModel();
         if (model && !model.isDisposed()) { model.deltaDecorations([...this.tasks.keys()], []); }
         this.tasks.clear(); this.changed.clear();
     }
-    dispose(): void { if (this.historyTimer) { clearTimeout(this.historyTimer); } this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.setTracing(false); this.renderTrace(); this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
+    dispose(): void { if (this.historyTimer) { clearTimeout(this.historyTimer); } this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.setTracing(false); this.renderTrace(); this.clear(); this.decorations.clear(); this.disposables.dispose(); }
 }
 @injectable()
 export class NoduTutorHintsContribution implements FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution {
@@ -334,13 +321,67 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
     onStart(): void {
         this.disposables.push(this.tutor.onDidRequestGoalFragment(() => { void this.prepareGoal(); }));
         this.editors.all.forEach(widget => this.attach(widget));
+        this.disposables.push(this.editors.onCurrentEditorChanged(() => this.renderTask()));
+        this.disposables.push(this.tutor.onDidChange(() => this.renderTask()));
+        this.taskResize = new ResizeObserver(() => this.renderTask());
+        this.taskResize.observe(this.shell.mainPanel.node);
+        this.taskResize.observe(this.shell.node);
+        window.addEventListener('resize', this.layoutTask);
+        this.renderTask();
         this.disposables.push(this.editors.onCreated(widget => this.attach(widget)));
     }
-    onStop(): void { this.controllers.forEach(c => c.dispose()); this.controllers.clear(); this.disposables.dispose(); }
+    onStop(): void { this.controllers.forEach(c => c.dispose()); this.controllers.clear(); this.removeTask(); this.taskResize?.disconnect(); window.removeEventListener('resize', this.layoutTask); this.disposables.dispose(); }
     private attach(widget: EditorWidget): void {
         const control = MonacoEditor.get(widget)?.getControl(); if (!control || this.controllers.has(widget)) { return; }
-        const controller = new TutorEditorController(widget, control, this.tutor, () => this.editors.currentEditor === widget, () => void this.commands.executeCommand(TUTOR_COMMANDS.openPanel));
+        const controller = new TutorEditorController(widget, control, this.tutor, () => this.editors.currentEditor === widget);
         this.controllers.set(widget, controller); widget.disposed.connect(() => { controller.dispose(); this.controllers.delete(widget); });
+    }
+    private taskLayer?: HTMLDivElement;
+    private taskHost?: HTMLDivElement;
+    private taskRoot?: Root;
+    private taskResize?: ResizeObserver;
+    private taskOffset = { x: 0, y: 44 };
+    private readonly layoutTask = (): void => this.renderTask();
+    private renderTask(): void {
+        const state = this.tutor.goalState;
+        if (!this.tutor.teaching || !this.tutor.floatVisible || (!this.tutor.plan && ['none', 'cancelled'].includes(state.status))) {
+            this.removeTask(); return;
+        }
+        const bounds = this.shell.mainPanel.node.getBoundingClientRect();
+        if (bounds.width <= 0 || bounds.height <= 0) {
+            if (this.taskLayer) { this.taskLayer.style.display = 'none'; }
+            return;
+        }
+        if (!this.taskLayer) {
+            this.taskLayer = document.createElement('div'); this.taskLayer.className = 'nodu-task-layer';
+            this.taskHost = document.createElement('div'); this.taskHost.className = 'nodu-task-host';
+            this.taskLayer.append(this.taskHost); document.body.append(this.taskLayer);
+            this.taskRoot = createRoot(this.taskHost);
+            this.taskResize?.observe(this.taskHost);
+        }
+        Object.assign(this.taskLayer.style, { left: `${bounds.left}px`, top: `${bounds.top}px`, width: `${bounds.width}px`, height: `${bounds.height}px`, display: bounds.width > 0 && bounds.height > 0 ? '' : 'none' });
+        this.taskHost!.style.width = `${Math.min(324, bounds.width)}px`;
+        this.taskHost!.style.setProperty('--nodu-task-max-height', `${Math.max(0, bounds.height - 16)}px`);
+        this.taskRoot?.render(React.createElement(TutorTaskWindow, {
+            tutor: this.tutor, narrow: bounds.width < 640,
+            prepare: () => void this.prepareGoal(),
+            open: (path: string, line: number) => void this.commands.executeCommand(TUTOR_COMMANDS.openReference, path, line),
+            openPanel: () => void this.commands.executeCommand(TUTOR_COMMANDS.openPanel),
+            move: (dx: number, dy: number) => this.moveTask(dx, dy),
+        }));
+        this.moveTask(0, 0);
+    }
+    private moveTask(dx: number, dy: number): void {
+        const host = this.taskHost, layer = this.taskLayer;
+        if (!host || !layer) { return; }
+        this.taskOffset.x = Math.max(Math.min(0, host.offsetWidth - layer.clientWidth), Math.min(0, this.taskOffset.x + dx));
+        this.taskOffset.y = Math.max(0, Math.min(Math.max(0, layer.clientHeight - host.offsetHeight), this.taskOffset.y + dy));
+        Object.assign(host.style, { right: '0', top: '0', transform: `translate(${this.taskOffset.x}px, ${this.taskOffset.y}px)` });
+    }
+    private removeTask(): void {
+        if (this.taskHost) { this.taskResize?.unobserve(this.taskHost); }
+        this.taskRoot?.unmount(); this.taskRoot = undefined;
+        this.taskLayer?.remove(); this.taskLayer = undefined; this.taskHost = undefined;
     }
     private async openTeachingFile(root: NonNullable<NoduTutorModel['rootUri']>, path: string, current: () => boolean): Promise<EditorWidget | undefined> {
         const before = this.editors.currentEditor;
@@ -393,7 +434,7 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
             commands.registerCommand({ id, label, category: 'Nodu' }, { execute: () => this.tutor.setDisplay(key, !this.tutor[key]), isToggled: () => this.tutor[key], ...available });
         };
         toggle(TUTOR_COMMANDS.toggleHints, '代码虚影', 'hintsVisible'); toggle(TUTOR_COMMANDS.highlight, '代码高光', 'highlightsVisible');
-        toggle(TUTOR_COMMANDS.annotations, '浮动批注', 'annotationsVisible'); toggle(TUTOR_COMMANDS.float, '步骤浮窗', 'floatVisible');
+        toggle(TUTOR_COMMANDS.annotations, '浮动批注', 'annotationsVisible'); toggle(TUTOR_COMMANDS.float, '任务步骤窗', 'floatVisible');
         // The toolbar AI switch: editor guidance only; the AI conversation is unaffected.
         commands.registerCommand({ id: TUTOR_COMMANDS.guidance, label: 'AI 编辑指导', category: 'Nodu' }, { execute: () => this.tutor.setPaused(!this.tutor.paused), isToggled: () => !this.tutor.paused, ...available });
         commands.registerCommand({ id: TUTOR_COMMANDS.check, label: '检查本步', category: 'Nodu' }, { execute: () => this.tutor.send('step'), isEnabled: () => this.tutor.enabled && this.tutor.mode === 'teach' && !!this.tutor.buffer && !this.tutor.busy, isVisible: () => this.tutor.enabled });

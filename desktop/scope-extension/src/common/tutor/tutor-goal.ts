@@ -17,10 +17,13 @@ export interface TutorGoalState {
     goal?: string; title?: string; target?: { mcu: string; sdk: string }; steps: TutorGoalStep[]; current: number;
     fragment?: { source: TutorBuffer; answer: TutorAnswer };
     feedback?: string;
+    removed?: { step: TutorGoalStep; index: number };
+    verdict?: 'ok' | 'needs-work' | 'context';
 }
 export interface TutorGoalRequest {
     id: string; workspaceId: string; revision: number;
-    action: 'propose' | 'confirm' | 'pause' | 'resume' | 'cancel' | 'fragment' | 'check';
+    action: 'propose' | 'confirm' | 'pause' | 'resume' | 'cancel' | 'fragment' | 'check' | 'add' | 'remove' | 'undo-remove';
+    stepId?: string;
     prompt?: string; buffer?: TutorBuffer; placement?: 'suggest';
 }
 export type TutorGoalResult = { ok: true; state: TutorGoalState; presentation?: { source: TutorBuffer; answer: TutorAnswer } } | { ok: false; error: string; cancelled?: boolean };
@@ -41,7 +44,8 @@ export function validateGoalState(value: unknown): TutorGoalState {
     const s = value as TutorGoalState;
     if (!s || !Number.isSafeInteger(s.revision) || s.revision < 0 || !['none','draft','active','paused','cancelled','complete'].includes(s.status)
         || !Array.isArray(s.steps) || s.steps.length > 24 || !Number.isInteger(s.current) || s.current < 0 || s.current > s.steps.length
-        || s.steps.some((step, n) => !step || step.id !== `step-${n + 1}` || !text(step.title, 120) || !text(step.goal, 1200) || typeof step.path !== 'string' || !isSafeCoursePath(step.path))
+        || new Set(s.steps.map(step => step?.id)).size !== s.steps.length
+        || s.steps.some(step => !step || typeof step.id !== 'string' || !/^[\w-]{1,80}$/.test(step.id) || !text(step.title, 120) || !text(step.goal, 1200) || typeof step.path !== 'string' || !isSafeCoursePath(step.path))
         || (s.status !== 'none' && (!text(s.goal, 6000) || !text(s.title, 120) || !s.steps.length))) { throw new Error('教学记录损坏'); }
     if ((s.status === 'none' && (s.steps.length !== 0 || s.current !== 0 || s.fragment !== undefined))
         || (s.status === 'draft' && (s.current !== 0 || s.fragment !== undefined))
@@ -49,6 +53,13 @@ export function validateGoalState(value: unknown): TutorGoalState {
         || (s.status === 'complete' && (s.current !== s.steps.length || s.fragment !== undefined))
         || (s.status === 'cancelled' && s.fragment !== undefined)) { throw new Error('教学步骤状态损坏'); }
     if (s.status !== 'none' && (!s.target || !text(s.target.mcu, 80) || !text(s.target.sdk, 80))) { throw new Error('教学目标记录损坏'); }
+    if (s.verdict !== undefined && !['ok', 'needs-work', 'context'].includes(s.verdict)) { throw new Error('教学检查记录损坏'); }
+    if (s.removed) {
+        const r = s.removed, step = r.step;
+        if (!Number.isInteger(r.index) || r.index < s.current || r.index > s.steps.length || !step
+            || typeof step.id !== 'string' || !/^[\w-]{1,80}$/.test(step.id) || s.steps.some(s => s.id === step.id)
+            || !text(step.title, 120) || !text(step.goal, 1200) || typeof step.path !== 'string' || !isSafeCoursePath(step.path)) { throw new Error('已删除步骤记录损坏'); }
+    }
     if (s.feedback !== undefined && (typeof s.feedback !== 'string' || s.feedback.length > 12000)) { throw new Error('教学反馈记录损坏'); }
     if (s.fragment) {
         const { source, answer } = s.fragment, g = answer?.guidance;

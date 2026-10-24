@@ -34,6 +34,7 @@ import '../../style/layout.css';
 import '../../style/device.css';
 import '../../style/board-guide.css';
 import '../../style/tutor.css';
+import '../../style/tutor-task.css';
 import '../../style/embedded.css';
 import '../../style/select.css';
 import { NoduEmbeddedModel } from './nodu-embedded-model';

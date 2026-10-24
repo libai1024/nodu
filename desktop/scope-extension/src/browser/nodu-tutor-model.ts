@@ -53,7 +53,7 @@ export class NoduTutorModel {
     hintsVisible = stored('ghost', true);
     highlightsVisible = stored('highlight', true);
     annotationsVisible = stored('annotations', true);
-    floatVisible = stored('float', false);
+    floatVisible = stored('float', true);
     autoReview = stored('auto-review', true);
     includeCode = true;
     buffer?: TutorBuffer;
@@ -248,16 +248,17 @@ export class NoduTutorModel {
         if (!this.workspaceId) { throw new Error('请先打开工程'); }
         return this.service.resolveReference(this.workspaceId, path, line);
     }
-    async goalAction(action: TutorGoalRequest['action'], prompt?: string, placement?: 'suggest'): Promise<void> {
+    async goalAction(action: TutorGoalRequest['action'], prompt?: string, placement?: 'suggest', stepId?: string): Promise<void> {
         if (!this.enabled || this.busy || !this.workspaceId || this.mode !== 'teach') { return; }
         const workspace = this.workspaceId, epoch = this.epoch;
         try { await this.sync; } catch { return; }
         if (!this.enabled || this.busy || workspace !== this.workspaceId || epoch !== this.epoch || this.mode !== 'teach') { return; }
+        if (['add', 'remove', 'undo-remove', 'pause', 'cancel'].includes(action)) { this.cancelReview(); }
         const id = crypto.randomUUID(), previousStep = this.goalState.current;
         this.busy = { id, mode: 'teach', kind: 'chat', goal: action }; this.error = undefined; this.notify();
         let advance = false;
         try {
-            const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action, ...(placement ? { placement } : {}),
+            const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action, ...(stepId ? { stepId } : {}), ...(placement ? { placement } : {}),
                 ...(prompt ? { prompt } : {}), ...((action === 'fragment' || action === 'check' || (action === 'propose' && this.includeCode)) && this.buffer ? { buffer: { ...this.buffer } } : {}) });
             if (this.busy?.id !== id || workspace !== this.workspaceId || epoch !== this.epoch) { return; }
             if (!result.ok) { if (!result.cancelled) { this.error = result.error; } await this.refreshGoal(); return; }
@@ -279,7 +280,8 @@ export class NoduTutorModel {
         finally {
             if (this.busy?.id === id) { this.busy = undefined; }
             this.notify();
-            if (advance && workspace === this.workspaceId && epoch === this.epoch && this.goalState.status === 'active') { this.fragmentRequested.fire(); }
+            if (advance && workspace === this.workspaceId && epoch === this.epoch && this.goalState.status === 'active'
+                && (action === 'confirm' || this.buffer?.path === this.goalState.steps[this.goalState.current]?.path)) { this.fragmentRequested.fire(); }
         }
     }
     autoCheckFragment(reviewedLines: readonly number[] = []): void {
