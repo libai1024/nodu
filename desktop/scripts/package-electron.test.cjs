@@ -12,8 +12,27 @@ const path = require('node:path');
 const Module = require('node:module');
 
 const {
-    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli,
+    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses,
 } = require('./package-electron.cjs');
+
+test('universal merge retains both exact architecture license inventories in both apps', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-license-merge-'));
+    try {
+        for (const arch of ['arm64', 'x64']) {
+            fs.mkdirSync(path.join(root, arch, 'licenses', 'npm'), { recursive: true });
+            fs.writeFileSync(path.join(root, arch, 'licenses', 'INDEX.json'), JSON.stringify({ arch }));
+            fs.writeFileSync(path.join(root, arch, 'licenses', 'npm', 'NOTICE'), arch + ' original notice');
+        }
+        prepareUniversalLicenses(path.join(root, 'arm64'), path.join(root, 'x64'));
+        for (const app of ['arm64', 'x64']) {
+            for (const arch of ['arm64', 'x64']) {
+                const base = path.join(root, app, 'licenses', arch);
+                assert.deepEqual(JSON.parse(fs.readFileSync(path.join(base, 'INDEX.json'))), { arch });
+                assert.equal(fs.readFileSync(path.join(base, 'npm', 'NOTICE'), 'utf8'), arch + ' original notice');
+            }
+        }
+    } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
 
 function tmpJs(text) {
     const file = path.join(
@@ -165,6 +184,18 @@ test('packaged bootstrap keeps one binary prefix and sets the profile', () => {
     assert.ok(captured.argv.some(arg => arg.startsWith('--plugins=local-dir:')));
     assert.equal(captured.updateResources, '1');
     assert.equal(captured.userData, path.join(profile, 'electron'));
+});
+
+test('packaged app without a project opens the launcher without creating a Documents workspace', () => {
+    const documents = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-documents-'));
+    const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-prof-'));
+    const captured = requirePackagedEntry({
+        argv: ['/Applications/Nodu.app/Contents/MacOS/Nodu'],
+        packaged: true, documents, profile,
+    });
+    assert.equal(captured.argv.length, 5);
+    assert.ok(captured.argv.slice(1).every(value => value.startsWith('--')));
+    assert.equal(fs.existsSync(path.join(documents, 'Nodu')), false);
 });
 
 test('dev (unpackaged) bootstrap keeps two binary prefix entries', () => {

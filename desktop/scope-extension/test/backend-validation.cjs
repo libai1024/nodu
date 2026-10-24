@@ -525,6 +525,8 @@ const resourcesFixture = () => {
     };
     const resources = join(home, 'resources');
     const versionFile = join(home, 'resources-version.json');
+    const [major, minor, patch] = require('../package.json').version.split('.').map(Number);
+    const currentVersion = { major, minor, patch };
     process.env.NODU_RESOURCES_HOME = home;
     if (bin) { process.env.NODU_RESOURCES_BIN = bin; }
     delete process.env.NODU_UPDATE_RESOURCES;
@@ -533,7 +535,7 @@ const resourcesFixture = () => {
             if (value === undefined) { delete process.env[key]; } else { process.env[key] = value; }
         }
     };
-    return { NoduResourcesServer, home, resources, versionFile, bin, restore, mkdirSync, writeFileSync, join };
+    return { NoduResourcesServer, home, resources, versionFile, currentVersion, bin, restore, mkdirSync, writeFileSync, join };
 };
 
 test('resources server resets when the version file is missing', async t => {
@@ -544,7 +546,7 @@ test('resources server resets when the version file is missing', async t => {
         const { examplesDir } = await server.ready();
         assert.ok(existsSync(fx.join(fx.resources, 'examples', 'Nodu')), 'bundled examples copied into the user dir');
         const recorded = JSON.parse(readFileSync(fx.versionFile, 'utf8'));
-        assert.deepEqual([recorded.major, recorded.minor, recorded.patch], [0, 1, 4]);
+        assert.deepEqual(recorded, fx.currentVersion);
         assert.equal(examplesDir, fx.join(fx.resources, 'examples'));
         server.onStop();
     } finally { fx.restore(); }
@@ -571,7 +573,7 @@ test('NODU_UPDATE_RESOURCES=1 forces the reset even at equal version', async t =
     try {
         fx.mkdirSync(fx.resources, { recursive: true });
         fx.writeFileSync(fx.join(fx.resources, 'marker.txt'), 'keep?');
-        fx.writeFileSync(fx.versionFile, '{"major":0,"minor":1,"patch":4}');
+        fx.writeFileSync(fx.versionFile, JSON.stringify(fx.currentVersion));
         process.env.NODU_UPDATE_RESOURCES = '1';
         const server = new fx.NoduResourcesServer();
         await server.ready();
@@ -587,7 +589,7 @@ test('resources server skips the reset when the recorded version matches', async
     try {
         fx.mkdirSync(fx.join(fx.resources, 'examples'), { recursive: true });
         fx.writeFileSync(fx.join(fx.resources, 'examples', 'marker.txt'), 'user content');
-        fx.writeFileSync(fx.versionFile, '{"major":0,"minor":1,"patch":4}');
+        fx.writeFileSync(fx.versionFile, JSON.stringify(fx.currentVersion));
         const server = new fx.NoduResourcesServer();
         const { examplesDir } = await server.ready();
         assert.equal(readFileSync(fx.join(fx.resources, 'examples', 'marker.txt'), 'utf8'), 'user content', 'equal version keeps user resources');

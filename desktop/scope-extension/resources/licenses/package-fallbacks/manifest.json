@@ -1,0 +1,1614 @@
+{
+  "schema": 1,
+  "packages": [
+    {
+      "kind": "cargo",
+      "name": "r-efi",
+      "version": "6.0.0",
+      "upstreamCommit": "7e1b0322d31d625f81a5656096330934f9cd835d",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "r-efi_r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/AUTHORS",
+          "sha256": "d027e91dbc9cdbb2f1190068e498bd6b61cff022b6a032b191021ba658d96111",
+          "source": "https://raw.githubusercontent.com/r-efi/r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/AUTHORS"
+        },
+        {
+          "path": "r-efi_r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/README.md",
+          "sha256": "420f65fec3ba2e89d49da51b222d2881d26959037a7b7d3794143db4bd4627b1",
+          "source": "https://raw.githubusercontent.com/r-efi/r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/README.md"
+        },
+        {
+          "path": "r-efi_r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/Cargo.toml",
+          "sha256": "b8e89c393831c2161b6d390bd40422910ac34f02903ad39edd85ec38d4513fef",
+          "source": "https://raw.githubusercontent.com/r-efi/r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/Cargo.toml"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "ts-rs",
+      "version": "11.1.0",
+      "upstreamCommit": "1dce5297090804082e9639d2b7d851ba815aa359",
+      "materials": [
+        {
+          "path": "Aleph-Alpha_ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE",
+          "sha256": "db7f7f8e7236a2d0b41b855b2501b7b913caebbcda6ce498637a304ad1706ce1",
+          "source": "https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "ts-rs-macros",
+      "version": "11.1.0",
+      "upstreamCommit": "1dce5297090804082e9639d2b7d851ba815aa359",
+      "materials": [
+        {
+          "path": "Aleph-Alpha_ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE",
+          "sha256": "db7f7f8e7236a2d0b41b855b2501b7b913caebbcda6ce498637a304ad1706ce1",
+          "source": "https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0",
+      "upstreamCommit": "4ac6c90e4ab92850c78b6103137290fe4ab9d273",
+      "materialBasis": "Architecture crate source notice matches the fixed upstream revision byte-for-byte.",
+      "materials": [
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT",
+          "sha256": "ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT"
+        },
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE"
+        },
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/src/lib.rs",
+          "sha256": "79212a91f610f8a77aa6ed4cc77212c2531eeb35630388bf07323cc328fcca42",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/src/lib.rs"
+        },
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/Cargo.toml",
+          "sha256": "2b366e86c69e5c0ca208cb244ad2aaf9c97a7f9310b711dd722f8db827b64c9f",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/Cargo.toml"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0",
+      "upstreamCommit": "4ac6c90e4ab92850c78b6103137290fe4ab9d273",
+      "materialBasis": "Architecture crate source notice matches the fixed upstream revision byte-for-byte.",
+      "materials": [
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT",
+          "sha256": "ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT"
+        },
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE"
+        },
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/src/lib.rs",
+          "sha256": "79212a91f610f8a77aa6ed4cc77212c2531eeb35630388bf07323cc328fcca42",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/src/lib.rs"
+        },
+        {
+          "path": "retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/Cargo.toml",
+          "sha256": "bfae0ed252a110efdc81caa66355772db19cf2a3619d591118e7bc271a661d26",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/Cargo.toml"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@electron-internal/extract-zip",
+      "version": "1.0.5",
+      "upstreamCommit": "b83e459fd04c53b0a1c8438a6792df8f64be47fc",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "electron_extract-zip/b83e459fd04c53b0a1c8438a6792df8f64be47fc/package.json",
+          "sha256": "3325e1bd93641aadde1d2d1ad8bde9b40ec952a50a8e68ccc8a61331d8cc5cf4",
+          "source": "https://raw.githubusercontent.com/electron/extract-zip/b83e459fd04c53b0a1c8438a6792df8f64be47fc/package.json"
+        },
+        {
+          "path": "electron_extract-zip/b83e459fd04c53b0a1c8438a6792df8f64be47fc/README.md",
+          "sha256": "61090965f7edb896c4492e9a090bec14e8e6abe2322480e4d2acde2a478c7500",
+          "source": "https://raw.githubusercontent.com/electron/extract-zip/b83e459fd04c53b0a1c8438a6792df8f64be47fc/README.md"
+        },
+        {
+          "path": "electron_extract-zip/b83e459fd04c53b0a1c8438a6792df8f64be47fc/readme.md",
+          "sha256": "61090965f7edb896c4492e9a090bec14e8e6abe2322480e4d2acde2a478c7500",
+          "source": "https://raw.githubusercontent.com/electron/extract-zip/b83e459fd04c53b0a1c8438a6792df8f64be47fc/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/BSD-2-Clause.txt",
+          "sha256": "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/BSD-2-Clause.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/algorithm",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/algorithm@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/collections",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/collections@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/commands",
+      "version": "2.3.4",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/commands@2.3.4",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/coreutils",
+      "version": "2.2.3",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/coreutils@2.2.3",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/disposable",
+      "version": "2.1.6",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/disposable@2.1.6",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/domutils",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/domutils@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/dragdrop",
+      "version": "2.1.9",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/dragdrop@2.1.9",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/keyboard",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/keyboard@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/messaging",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/messaging@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/properties",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/properties@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/signaling",
+      "version": "2.1.6",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/signaling@2.1.6",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/virtualdom",
+      "version": "2.0.5",
+      "upstreamCommit": "cd6ece2592679988eb65689773978583596cd06f",
+      "sourceTag": "@lumino/virtualdom@2.0.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/cd6ece2592679988eb65689773978583596cd06f/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@lumino/widgets",
+      "version": "2.7.5",
+      "upstreamCommit": "1cc7050687224764b0f6309962079409e8698d46",
+      "sourceTag": "@lumino/widgets@2.7.5",
+      "materials": [
+        {
+          "path": "jupyterlab_lumino/1cc7050687224764b0f6309962079409e8698d46/LICENSE",
+          "sha256": "b0da99e8c73e7fdad117622971e6d16379fd01b5d0b60589de7133b6fec59422",
+          "source": "https://raw.githubusercontent.com/jupyterlab/lumino/1cc7050687224764b0f6309962079409e8698d46/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@msgpackr-extract/msgpackr-extract-darwin-arm64",
+      "version": "3.0.4",
+      "upstreamCommit": "71def7bd969e5c88d2c918e0d81ee2ba3155d19c",
+      "materials": [
+        {
+          "path": "kriszyp_msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE",
+          "sha256": "d00470775464c789c7ac04cfba3bf1b79ef149790eb72556d1c51d8f50c8e7f3",
+          "source": "https://raw.githubusercontent.com/kriszyp/msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@msgpackr-extract/msgpackr-extract-darwin-x64",
+      "version": "3.0.4",
+      "upstreamCommit": "71def7bd969e5c88d2c918e0d81ee2ba3155d19c",
+      "materials": [
+        {
+          "path": "kriszyp_msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE",
+          "sha256": "d00470775464c789c7ac04cfba3bf1b79ef149790eb72556d1c51d8f50c8e7f3",
+          "source": "https://raw.githubusercontent.com/kriszyp/msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@msgpackr-extract/msgpackr-extract-linux-arm",
+      "version": "3.0.4",
+      "upstreamCommit": "71def7bd969e5c88d2c918e0d81ee2ba3155d19c",
+      "materials": [
+        {
+          "path": "kriszyp_msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE",
+          "sha256": "d00470775464c789c7ac04cfba3bf1b79ef149790eb72556d1c51d8f50c8e7f3",
+          "source": "https://raw.githubusercontent.com/kriszyp/msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@msgpackr-extract/msgpackr-extract-linux-arm64",
+      "version": "3.0.4",
+      "upstreamCommit": "71def7bd969e5c88d2c918e0d81ee2ba3155d19c",
+      "materials": [
+        {
+          "path": "kriszyp_msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE",
+          "sha256": "d00470775464c789c7ac04cfba3bf1b79ef149790eb72556d1c51d8f50c8e7f3",
+          "source": "https://raw.githubusercontent.com/kriszyp/msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@msgpackr-extract/msgpackr-extract-linux-x64",
+      "version": "3.0.4",
+      "upstreamCommit": "71def7bd969e5c88d2c918e0d81ee2ba3155d19c",
+      "materials": [
+        {
+          "path": "kriszyp_msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE",
+          "sha256": "d00470775464c789c7ac04cfba3bf1b79ef149790eb72556d1c51d8f50c8e7f3",
+          "source": "https://raw.githubusercontent.com/kriszyp/msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@msgpackr-extract/msgpackr-extract-win32-x64",
+      "version": "3.0.4",
+      "upstreamCommit": "71def7bd969e5c88d2c918e0d81ee2ba3155d19c",
+      "materials": [
+        {
+          "path": "kriszyp_msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE",
+          "sha256": "d00470775464c789c7ac04cfba3bf1b79ef149790eb72556d1c51d8f50c8e7f3",
+          "source": "https://raw.githubusercontent.com/kriszyp/msgpackr-extract/71def7bd969e5c88d2c918e0d81ee2ba3155d19c/LICENSE"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/ai-core",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/ai-core-ui",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/ai-mcp",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/application-package",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/bulk-edit",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/callhierarchy",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/console",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/core",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/debug",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/editor",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/editor-preview",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/electron",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/file-search",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/filesystem",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/keymaps",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/markers",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/messages",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/monaco",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/navigator",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/notebook",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/outline-view",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/output",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/plugin",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/plugin-ext",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/plugin-ext-vscode",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/plugin-utils",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/preferences",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/process",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/request",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/scm",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/search-in-workspace",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/task",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/telemetry",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/terminal",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/test",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/timeline",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/typehierarchy",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/userstorage",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/variable-resolver",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@theia/workspace",
+      "version": "1.76.0",
+      "upstreamCommit": "b9b54c500b46515512e2b44371bc0c7122947bed",
+      "materials": [
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL",
+          "sha256": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-EPL"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION",
+          "sha256": "7d74322f208420b6886c40eda1c7d1bad618f12e067af934f02bc9bbfcc038ae",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/LICENSE-GPL-2.0-ONLY-CLASSPATH-EXCEPTION"
+        },
+        {
+          "path": "eclipse-theia_theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md",
+          "sha256": "34ccf26888137fe0cd1f6ba0d2ebe7b41de22cb9a25e64360f9ec41a88aae318",
+          "source": "https://raw.githubusercontent.com/eclipse-theia/theia/b9b54c500b46515512e2b44371bc0c7122947bed/NOTICE.md"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "@tootallnate/once",
+      "version": "1.1.2",
+      "upstreamCommit": "3948afcb5803013e184861943e0018e37830fcfe",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "TooTallNate_once/3948afcb5803013e184861943e0018e37830fcfe/package.json",
+          "sha256": "91391dee2904a0bb0de498cc0a41e020338d671a4c85f5bcafa15dde73eb26fe",
+          "source": "https://raw.githubusercontent.com/TooTallNate/once/3948afcb5803013e184861943e0018e37830fcfe/package.json"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "buffer-alloc",
+      "version": "1.2.0",
+      "upstreamCommit": "a0d55382c805f3b117a055e0be203f13f2519cc5",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "LinusU_buffer-alloc/a0d55382c805f3b117a055e0be203f13f2519cc5/package.json",
+          "sha256": "d607efec5e54b94b612bd7065186e00f1591fade12aaf41a170606d02f6ac670",
+          "source": "https://raw.githubusercontent.com/LinusU/buffer-alloc/a0d55382c805f3b117a055e0be203f13f2519cc5/package.json"
+        },
+        {
+          "path": "LinusU_buffer-alloc/a0d55382c805f3b117a055e0be203f13f2519cc5/README.md",
+          "sha256": "84842655309217474329ece059c2d1941d35bc29e4b34baa702c61951d7e20f5",
+          "source": "https://raw.githubusercontent.com/LinusU/buffer-alloc/a0d55382c805f3b117a055e0be203f13f2519cc5/README.md"
+        },
+        {
+          "path": "LinusU_buffer-alloc/a0d55382c805f3b117a055e0be203f13f2519cc5/readme.md",
+          "sha256": "84842655309217474329ece059c2d1941d35bc29e4b34baa702c61951d7e20f5",
+          "source": "https://raw.githubusercontent.com/LinusU/buffer-alloc/a0d55382c805f3b117a055e0be203f13f2519cc5/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "buffer-alloc-unsafe",
+      "version": "1.1.0",
+      "upstreamCommit": "93c66c6a1e0f812a55128036004d6ff8a561fd98",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "LinusU_buffer-alloc-unsafe/93c66c6a1e0f812a55128036004d6ff8a561fd98/package.json",
+          "sha256": "abd77cd9f8e32a213714c6a188c62a59d97bb9359824022db89f57da4949a549",
+          "source": "https://raw.githubusercontent.com/LinusU/buffer-alloc-unsafe/93c66c6a1e0f812a55128036004d6ff8a561fd98/package.json"
+        },
+        {
+          "path": "LinusU_buffer-alloc-unsafe/93c66c6a1e0f812a55128036004d6ff8a561fd98/README.md",
+          "sha256": "965f6d7b3de0559bac1d54fa1bc6320139593feb9e82a2d3258fdcbd729b627b",
+          "source": "https://raw.githubusercontent.com/LinusU/buffer-alloc-unsafe/93c66c6a1e0f812a55128036004d6ff8a561fd98/README.md"
+        },
+        {
+          "path": "LinusU_buffer-alloc-unsafe/93c66c6a1e0f812a55128036004d6ff8a561fd98/readme.md",
+          "sha256": "965f6d7b3de0559bac1d54fa1bc6320139593feb9e82a2d3258fdcbd729b627b",
+          "source": "https://raw.githubusercontent.com/LinusU/buffer-alloc-unsafe/93c66c6a1e0f812a55128036004d6ff8a561fd98/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "buffer-fill",
+      "version": "1.0.0",
+      "upstreamCommit": "a2badd1de771c99285e385dccdebd63093f0285a",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "linusu_buffer-fill/a2badd1de771c99285e385dccdebd63093f0285a/package.json",
+          "sha256": "602a10e946f2f5eff5b19781d13fb3b589babe12815a1a9be4c7a673eb0fdd4f",
+          "source": "https://raw.githubusercontent.com/linusu/buffer-fill/a2badd1de771c99285e385dccdebd63093f0285a/package.json"
+        },
+        {
+          "path": "linusu_buffer-fill/a2badd1de771c99285e385dccdebd63093f0285a/README.md",
+          "sha256": "9a9f187c854f7b9c481eba59b90328668b7298f8208300cb642e985843815b40",
+          "source": "https://raw.githubusercontent.com/linusu/buffer-fill/a2badd1de771c99285e385dccdebd63093f0285a/README.md"
+        },
+        {
+          "path": "linusu_buffer-fill/a2badd1de771c99285e385dccdebd63093f0285a/readme.md",
+          "sha256": "9a9f187c854f7b9c481eba59b90328668b7298f8208300cb642e985843815b40",
+          "source": "https://raw.githubusercontent.com/linusu/buffer-fill/a2badd1de771c99285e385dccdebd63093f0285a/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "eastasianwidth",
+      "version": "0.2.0",
+      "upstreamCommit": "b89f04d44dc786885615e94cd6e2ba1ef7866fa4",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "komagata_eastasianwidth/b89f04d44dc786885615e94cd6e2ba1ef7866fa4/package.json",
+          "sha256": "51db62f97656d02d4bc9670393cae42930dbd1ed89f5837056851807e602867a",
+          "source": "https://raw.githubusercontent.com/komagata/eastasianwidth/b89f04d44dc786885615e94cd6e2ba1ef7866fa4/package.json"
+        },
+        {
+          "path": "komagata_eastasianwidth/b89f04d44dc786885615e94cd6e2ba1ef7866fa4/README.md",
+          "sha256": "5a20e0a3c5f1a6b449dd3fee8e3f0c7dc0a6e508c93fa5703d7c8823d35aed54",
+          "source": "https://raw.githubusercontent.com/komagata/eastasianwidth/b89f04d44dc786885615e94cd6e2ba1ef7866fa4/README.md"
+        },
+        {
+          "path": "komagata_eastasianwidth/b89f04d44dc786885615e94cd6e2ba1ef7866fa4/readme.md",
+          "sha256": "5a20e0a3c5f1a6b449dd3fee8e3f0c7dc0a6e508c93fa5703d7c8823d35aed54",
+          "source": "https://raw.githubusercontent.com/komagata/eastasianwidth/b89f04d44dc786885615e94cd6e2ba1ef7866fa4/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "font-awesome",
+      "version": "4.7.0",
+      "upstreamCommit": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "FortAwesome_Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/package.json",
+          "sha256": "f84631c8d0429309d83438af2f4ad73ef39fd6b1ee3022244425c1e79dbd5afc",
+          "source": "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/package.json"
+        },
+        {
+          "path": "FortAwesome_Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/README.md",
+          "sha256": "610427fe917f2b51ef69b5bfa9a7bfe3fcba59b1ccaf86a500a47e5fa1da322b",
+          "source": "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/README.md"
+        },
+        {
+          "path": "FortAwesome_Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/readme.md",
+          "sha256": "610427fe917f2b51ef69b5bfa9a7bfe3fcba59b1ccaf86a500a47e5fa1da322b",
+          "source": "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/OFL-1.1.txt",
+          "sha256": "8eea8287e5876b539670cadb82e99f9a7afddec6f6730811be1daf25d2e9bcfd",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/OFL-1.1.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "ignore",
+      "version": "3.3.10",
+      "upstreamCommit": "d01ef8d91497a771b5e3adf52b2ed19248a7c625",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "kaelzhang_node-ignore/d01ef8d91497a771b5e3adf52b2ed19248a7c625/package.json",
+          "sha256": "2097d1b7100efca025a26640989391badfcae6483e5c7f7b8310e5851edd17fc",
+          "source": "https://raw.githubusercontent.com/kaelzhang/node-ignore/d01ef8d91497a771b5e3adf52b2ed19248a7c625/package.json"
+        },
+        {
+          "path": "kaelzhang_node-ignore/d01ef8d91497a771b5e3adf52b2ed19248a7c625/README.md",
+          "sha256": "42169a62fd4e9cc09ac2291ac40ac262ab51a9ed3aec60a96f9b890efe7764a3",
+          "source": "https://raw.githubusercontent.com/kaelzhang/node-ignore/d01ef8d91497a771b5e3adf52b2ed19248a7c625/README.md"
+        },
+        {
+          "path": "kaelzhang_node-ignore/d01ef8d91497a771b5e3adf52b2ed19248a7c625/readme.md",
+          "sha256": "42169a62fd4e9cc09ac2291ac40ac262ab51a9ed3aec60a96f9b890efe7764a3",
+          "source": "https://raw.githubusercontent.com/kaelzhang/node-ignore/d01ef8d91497a771b5e3adf52b2ed19248a7c625/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "resolve-package-path",
+      "version": "4.0.3",
+      "upstreamCommit": "80178425b38d95d27d77886a3ba930473b0864d1",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "stefanpenner_resolve-package-path/80178425b38d95d27d77886a3ba930473b0864d1/package.json",
+          "sha256": "b3939b789b07541fb03d4064974aab3c9ca9ee33437a226e4d338f96bf1e913e",
+          "source": "https://raw.githubusercontent.com/stefanpenner/resolve-package-path/80178425b38d95d27d77886a3ba930473b0864d1/package.json"
+        },
+        {
+          "path": "stefanpenner_resolve-package-path/80178425b38d95d27d77886a3ba930473b0864d1/README.md",
+          "sha256": "d551678412b71688253d7b775466a3d4d842b8418e4879dadb578941ddb7ceb5",
+          "source": "https://raw.githubusercontent.com/stefanpenner/resolve-package-path/80178425b38d95d27d77886a3ba930473b0864d1/README.md"
+        },
+        {
+          "path": "stefanpenner_resolve-package-path/80178425b38d95d27d77886a3ba930473b0864d1/readme.md",
+          "sha256": "d551678412b71688253d7b775466a3d4d842b8418e4879dadb578941ddb7ceb5",
+          "source": "https://raw.githubusercontent.com/stefanpenner/resolve-package-path/80178425b38d95d27d77886a3ba930473b0864d1/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "slash",
+      "version": "1.0.0",
+      "upstreamCommit": "c801dd4568ad9380b534067eabe88942394f82ff",
+      "materials": [
+        {
+          "path": "sindresorhus_slash/c801dd4568ad9380b534067eabe88942394f82ff/license",
+          "sha256": "6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c",
+          "source": "https://raw.githubusercontent.com/sindresorhus/slash/c801dd4568ad9380b534067eabe88942394f82ff/license"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "type-fest",
+      "version": "2.19.0",
+      "upstreamCommit": "d07df21f8b79e35ad8411cb9ceb8b5cb8f40f9d4",
+      "materials": [
+        {
+          "path": "sindresorhus_type-fest/d07df21f8b79e35ad8411cb9ceb8b5cb8f40f9d4/license-mit",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "source": "https://raw.githubusercontent.com/sindresorhus/type-fest/d07df21f8b79e35ad8411cb9ceb8b5cb8f40f9d4/license-mit"
+        },
+        {
+          "path": "sindresorhus_type-fest/d07df21f8b79e35ad8411cb9ceb8b5cb8f40f9d4/license-cc0",
+          "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "source": "https://raw.githubusercontent.com/sindresorhus/type-fest/d07df21f8b79e35ad8411cb9ceb8b5cb8f40f9d4/license-cc0"
+        }
+      ]
+    },
+    {
+      "kind": "npm",
+      "name": "use-composed-ref",
+      "version": "1.4.0",
+      "upstreamCommit": "ea2c9d969f2f90a349f4c99338b806423824cea2",
+      "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file.",
+      "materials": [
+        {
+          "path": "Andarist_use-composed-ref/ea2c9d969f2f90a349f4c99338b806423824cea2/package.json",
+          "sha256": "f1bb61c939b089aa90f631b513f14c7d2eaff3093395634365243127f2ba8547",
+          "source": "https://raw.githubusercontent.com/Andarist/use-composed-ref/ea2c9d969f2f90a349f4c99338b806423824cea2/package.json"
+        },
+        {
+          "path": "Andarist_use-composed-ref/ea2c9d969f2f90a349f4c99338b806423824cea2/README.md",
+          "sha256": "68a8b163a5ebfc8b9e82188cd1acc0a55b4301ab549591d98f7588b703380575",
+          "source": "https://raw.githubusercontent.com/Andarist/use-composed-ref/ea2c9d969f2f90a349f4c99338b806423824cea2/README.md"
+        },
+        {
+          "path": "Andarist_use-composed-ref/ea2c9d969f2f90a349f4c99338b806423824cea2/readme.md",
+          "sha256": "68a8b163a5ebfc8b9e82188cd1acc0a55b4301ab549591d98f7588b703380575",
+          "source": "https://raw.githubusercontent.com/Andarist/use-composed-ref/ea2c9d969f2f90a349f4c99338b806423824cea2/readme.md"
+        },
+        {
+          "path": "spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ]
+    }
+  ]
+}

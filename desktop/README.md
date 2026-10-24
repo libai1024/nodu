@@ -52,7 +52,7 @@ npm run start:electron -- /absolute/path/to/project
 
 - 开发用生成器：[scripts/build-toolkit.cjs](scripts/build-toolkit.cjs)。先按 [P0 工具准备](../tools/stm32-p0/README.md#准备工具与-sdk)获取锁定版本；脚本接收 `--p0-local`、`--homebrew` 与 `--clangd` 参数，目前仅实现 macOS 开发配置。
 - 开发包默认输出 `.tools/stm32/darwin/`；可通过 `NODU_STM32_TOOLKIT` 显式选择完整工具包。
-- 发布包必须使用 `profile=release`，包含许可与对应源码归档，通过 [package-stm32.cjs](scripts/package-stm32.cjs) 检查。不能把开发包中的 Xcode / Homebrew 文件改标签当作发布工具包。
+- 发布包使用 `profile=release`，包含许可与对应源码归档，通过 [package-stm32.cjs](scripts/package-stm32.cjs) 检查。macOS 正式工具包已接入固定来源准备流程，命令、平台范围和验收见 [发布工具包](../docs/0.2.1/STM32-RELEASE-TOOLKIT.md)。不能把开发包中的 Xcode / Homebrew 文件改标签当作发布工具包。
 
 [工具包分发设计](../docs/0.2.1/TOOLKIT-DISTRIBUTION.md)记录布局与来源，其中标为设计的步骤不代表已自动完成。
 
@@ -86,6 +86,8 @@ npm run package:electron -- --help
 npm run package:electron
 ```
 
-默认在 macOS 生成 Universal `.app` 与 ZIP，在 Windows 生成 x64 便携 ZIP；macOS 可指定 `-- --arch arm64` 或 `-- --arch x64` 生成单架构应用。缺少资源或清单不合规时会停止。打包代码只做 ad-hoc 签名，不代表完成 Apple Developer ID 签名、公证或 Windows Authenticode。
+默认在 macOS 生成 Universal `.app`、ZIP 与 DMG，在 Windows 生成 x64 便携 ZIP；macOS 可指定 `-- --arch arm64` 或 `-- --arch x64` 生成对应单架构应用、ZIP 与 DMG。缺少资源或清单不合规时会停止。打包代码只做 ad-hoc 签名，不代表完成 Apple Developer ID 签名、公证或 Windows Authenticode。
 
 打包所需的上游示例由 `npm run vendor:examples` 准备，该命令要求匹配固定提交的来源仓库。请阅读 [第三方组件说明](THIRD-PARTY-NOTICES.md)，保留随包许可证、修改记录与对应源码材料。当前采用本地构建和人工上传，暂不配置 CI/CD；旧工作流仅作为 [停用示例](../docs/build/workflow-examples/)保存。
+
+安装包中的 `licenses/INDEX.json` 与 `licenses/SUMMARY.md` 记录精确生产依赖、字体和 Rust 依赖的许可材料。缺失材料会阻止打包；部分上游包未附完整文本时，保留其原始声明与署名，并从固定版本的 SPDX 文本补齐，清单明确标记该来源。详见 [许可收集说明](../docs/build/package-licenses.md)。

@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "version": "2026.10.24",
+  "platform": "darwin-arm64",
+  "assets": [
+    {
+      "id": "cmake",
+      "name": "cmake-4.4.3-macos-universal.tar.gz",
+      "url": "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-macos-universal.tar.gz",
+      "size": 89445170,
+      "sha256": "0c5d65251c14cc884bfa16bdbed3c263ce5bffe2e21c0d0d00962cb0610464fa"
+    },
+    {
+      "id": "ninja",
+      "name": "ninja-mac.zip",
+      "url": "https://github.com/ninja-build/ninja/releases/download/v1.13.2/ninja-mac.zip",
+      "size": 314051,
+      "sha256": "c99048673aa765960a99cf10c6ddb9f1fad506099ff0a0e137ad8960a88f321b"
+    },
+    {
+      "id": "clangd",
+      "name": "clangd-mac-23.1.0.zip",
+      "url": "https://github.com/clangd/clangd/releases/download/23.1.0/clangd-mac-23.1.0.zip",
+      "size": 100060151,
+      "sha256": "1082e6638223b785ca2daf0939f13afcd0bb95c84ee9a4bbaff4745365159253"
+    },
+    {
+      "id": "armGnu",
+      "name": "arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz",
+      "url": "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi.tar.xz",
+      "sha256": "c7c78ffab9bebfce91d99d3c24da6bf4b81c01e16cf551eb2ff9f25b9e0a3818",
+      "size": 134812148
+    },
+    {
+      "id": "armSource",
+      "name": "arm-gnu-toolchain-src-snapshot-14.2.rel1.tar.xz",
+      "url": "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/srcrel/arm-gnu-toolchain-src-snapshot-14.2.rel1.tar.xz",
+      "sha256": "e6405f20f8a817a50d92dbf7974d0ee77708dfdf9e79900a59c5d343b464ef9c",
+      "size": 311500280
+    },
+    {
+      "id": "openocd",
+      "name": "openocd-0.12.0.tar.bz2",
+      "url": "https://downloads.sourceforge.net/project/openocd/openocd/0.12.0/openocd-0.12.0.tar.bz2",
+      "sha256": "af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa",
+      "size": 6790673
+    },
+    {
+      "id": "stm32flash",
+      "name": "stm32flash-0.7.tar.gz",
+      "url": "https://downloads.sourceforge.net/project/stm32flash/stm32flash-0.7.tar.gz",
+      "sha256": "c4c9cd8bec79da63b111d15713ef5cc2cd947deca411d35d6e3065e227dc414a",
+      "size": 380166
+    },
+    {
+      "id": "libusb",
+      "name": "libusb-1.0.29.tar.bz2",
+      "url": "https://github.com/libusb/libusb/releases/download/v1.0.29/libusb-1.0.29.tar.bz2",
+      "sha256": "5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85",
+      "size": 645381
+    },
+    {
+      "id": "ninjaSource",
+      "name": "ninja-1.13.2.tar.gz",
+      "url": "https://codeload.github.com/ninja-build/ninja/tar.gz/refs/tags/v1.13.2",
+      "sha256": "974d6b2f4eeefa25625d34da3cb36bdcebe7fbce40f4c16ac0835fd1c0cbae17",
+      "size": 292385
+    }
+  ]
+}

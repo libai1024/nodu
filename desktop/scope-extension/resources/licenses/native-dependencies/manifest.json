@@ -1,0 +1,3834 @@
+{
+  "schema": 1,
+  "cargoLockSha256": "c4579eb3cbb9c9d3f584c52a94983738a45c487b61dfe02dde58f31ca44e6781",
+  "rustToolchainSha256": "a7a23801522d469e93021507fc88e9f5651056fce0e6aa22b3d3157c5f3dc6fe",
+  "rustVersion": "1.98.1",
+  "coverage": "Fixed Cargo.lock source superset and pinned Rust distribution notices. Portable material input; no Rust installation or network access is needed during packaging.",
+  "packages": [
+    {
+      "kind": "cargo",
+      "name": "aho-corasick",
+      "version": "1.1.5",
+      "license": "Unlicense OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "c982642fa9e8606056828ee9a8505737230110bb1099153c79efe865c59d12ba",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/aho-corasick@1.1.5-2e09fc5a17/COPYING",
+          "size": 126,
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "file": "cargo/aho-corasick@1.1.5-2e09fc5a17/LICENSE-MIT",
+          "size": 1081,
+          "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+        },
+        {
+          "file": "cargo/aho-corasick@1.1.5-2e09fc5a17/UNLICENSE",
+          "size": 1211,
+          "sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "autocfg",
+      "version": "1.5.1",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/autocfg@1.5.1-6bccb89925/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/autocfg@1.5.1-6bccb89925/LICENSE-MIT",
+          "size": 1054,
+          "sha256": "27995d58ad5c1145c1a8cd86244ce844886958a35eb2b78c6b772748669999ac"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "base64",
+      "version": "0.22.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/base64@0.22.1-16488ddc84/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/base64@0.22.1-16488ddc84/LICENSE-MIT",
+          "size": 1076,
+          "sha256": "0dd882e53de11566d50f8e8e2d5a651bcf3fabee4987d70f306233cf39094ba7"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "base64",
+      "version": "0.23.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ac07cdecf99051d9a5238b80f35af32cdeba5b336e55d957b318b50137e18da5",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/base64@0.23.1-5ccb6b9df1/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/base64@0.23.1-5ccb6b9df1/LICENSE-MIT",
+          "size": 1093,
+          "sha256": "ab499c75a0f0da8e0fe83bf9ba3a27e5c39705310f07107c6c66b69958d2401c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "base64ct",
+      "version": "1.8.3",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2af50177e190e07a26ab74f8b1efbfe2ef87da2116221318cb1c2e82baf7de06",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/base64ct@1.8.3-8071bcc920/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/base64ct@1.8.3-8071bcc920/LICENSE-MIT",
+          "size": 1148,
+          "sha256": "2d1c57bff28344b9e698f51063bc8509799cc4c99a4e0cf2aa3f7e7c3e1f9a9d"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "bit-set",
+      "version": "0.11.1",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "56d87354e4229f54a44f7bf2435906a4656dba36026ab6eaca629a2c436a691c",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/bit-set@0.11.1-b06b0dcfc9/LICENSE-APACHE",
+          "size": 10850,
+          "sha256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90"
+        },
+        {
+          "file": "cargo/bit-set@0.11.1-b06b0dcfc9/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "f51ac2c59a222f7476ce507ca879960e2b64ea64bb2786eefdbeb7b0b538d1b7"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "bit-vec",
+      "version": "0.10.1",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "5727b15fa97d4f4fee0a3b7c3d550ed0269f54329207b86388de918604e31269",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/bit-vec@0.10.1-4fee5da3a7/LICENSE-APACHE",
+          "size": 10850,
+          "sha256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90"
+        },
+        {
+          "file": "cargo/bit-vec@0.10.1-4fee5da3a7/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "f51ac2c59a222f7476ce507ca879960e2b64ea64bb2786eefdbeb7b0b538d1b7"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "bitflags",
+      "version": "1.3.2",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/bitflags@1.3.2-174b67f8e6/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/bitflags@1.3.2-174b67f8e6/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "bitflags",
+      "version": "2.13.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "3ded4057c258ba199e2d26386d3af3780957ecaee6c4ef4041c6b4b8b97c0b06",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/bitflags@2.13.2-77cd08d442/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/bitflags@2.13.2-77cd08d442/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "block-buffer",
+      "version": "0.10.4",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/block-buffer@0.10.4-40388916ca/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/block-buffer@0.10.4-40388916ca/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "d5c22aa3118d240e877ad41c5d9fa232f9c77d757d4aac0c2f943afc0a95e0ef"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "borsh-derive",
+      "version": "1.8.1",
+      "license": "Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "12cdfe656708a01f89b451a7d36466e6fe6c414de0aa18fc54f864f6f9ca9f56",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/borsh-derive@1.8.1-57a2ad7d7a/LICENSE-APACHE",
+          "size": 11334,
+          "sha256": "7b724c8fa4a82af733caccabdaa21e2bf8bcb0822fe62d5cf03f99d458438705"
+        },
+        {
+          "file": "cargo/borsh-derive@1.8.1-57a2ad7d7a/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "borsh",
+      "version": "1.8.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "553c5d846a6ba5150c65e3b1b8ec073bcf1abc20f9b7220de384a4443ea4e20a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/borsh@1.8.1-1338c58f98/LICENSE-APACHE",
+          "size": 11334,
+          "sha256": "7b724c8fa4a82af733caccabdaa21e2bf8bcb0822fe62d5cf03f99d458438705"
+        },
+        {
+          "file": "cargo/borsh@1.8.1-1338c58f98/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "bumpalo",
+      "version": "3.20.3",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "72f5acc6cb2ba439de613abc23857ec3d78374d8ed5ac84e9d11336e87da8649",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/bumpalo@3.20.3-b7c43fb7de/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/bumpalo@3.20.3-b7c43fb7de/LICENSE-MIT",
+          "size": 1059,
+          "sha256": "65f94e99ddaf4f5d1782a6dae23f35d4293a9a01444a13135a6887017d353cee"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "bytes",
+      "version": "1.12.1",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/bytes@1.12.1-0370fe444e/LICENSE",
+          "size": 1055,
+          "sha256": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "cc",
+      "version": "1.9.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "877bf67ac8e52449eb2f9e98a344ea163beb70dd1f9eebe3cc5357dcfeaee4df",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/cc@1.9.0-801bb9e4c4/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/cc@1.9.0-801bb9e4c4/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "cfg_aliases",
+      "version": "0.2.2",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f079e83a288787bcd14a6aea84cee5c87a67c5a3e660c30f557a3d24761b3527",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/cfg_aliases@0.2.2-7f347d1bcc/LICENSE",
+          "size": 1076,
+          "sha256": "31b94860253d8ec7b4529f51901044d3b459d6292d996504a36b1bae3a36a812"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/cfg-if@1.0.5-57588cd0b3/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/cfg-if@1.0.5-57588cd0b3/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "chacha20",
+      "version": "0.10.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/chacha20@0.10.2-68cdaa401e/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/chacha20@0.10.2-68cdaa401e/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "b8c6939380a400f53e11923d50fcc4dd2fa1ba8339fd9d04cda38a0251b6c9b0"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "convert_case",
+      "version": "0.10.0",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "633458d4ef8c78b72454de2d54fd6ab2e60f9e02be22f3c6104cdc8a4e0fceb9",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/convert_case@0.10.0-59991f176f/LICENSE",
+          "size": 1062,
+          "sha256": "aed7b1758e35afa0cd0fde059d61950747ca11cd0e5e169cb21c11608daed772"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "core_detect",
+      "version": "1.0.0",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "7f8f80099a98041a3d1622845c271458a2d73e688351bf3cb999266764b81d48",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/core_detect@1.0.0-b64ea801ae/LICENSE-APACHE",
+          "size": 10846,
+          "sha256": "769f80b5bcb42ed0af4e4d2fd74e1ac9bf843cb80c5a29219d1ef3544428a6bb"
+        },
+        {
+          "file": "cargo/core_detect@1.0.0-b64ea801ae/LICENSE-MIT",
+          "size": 1076,
+          "sha256": "8569ebf6bf52937b961d9c9c934d8400a2bb6b09651a9afacbb3fc18fe5c09b1"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "core-foundation-sys",
+      "version": "0.8.7",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/core-foundation-sys@0.8.7-b37bb34e70/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/core-foundation-sys@0.8.7-b37bb34e70/LICENSE-MIT",
+          "size": 1067,
+          "sha256": "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "core-foundation",
+      "version": "0.10.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b2a6cd9ae233e7f62ba4e9353e81a88df7fc8a5987b8d445b4d90c879bd156f6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/core-foundation@0.10.1-6ce864d4e8/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/core-foundation@0.10.1-6ce864d4e8/LICENSE-MIT",
+          "size": 1067,
+          "sha256": "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "cpufeatures",
+      "version": "0.2.17",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/cpufeatures@0.2.17-d595649f0c/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/cpufeatures@0.2.17-d595649f0c/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "ae9baa7beea910273c2f384c2a6b721fb7bd02bda3436074a1072e4ee689f985"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "cpufeatures",
+      "version": "0.3.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "5ca28b0ae3115b884660db4118d803791fd6756b6e88f39c0f3f7859060d7566",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/cpufeatures@0.3.1-512bf89d51/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/cpufeatures@0.3.1-512bf89d51/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "73b9dc2e79c7308998dd30296e073aefaefb944a68fb89aa412c23c0edcabcaa"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crc32fast",
+      "version": "1.5.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "01a7799fd6b852db0e61728dde9a204c423b44d689dbd432522543614b490e78",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crc32fast@1.5.2-1efc783920/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/crc32fast@1.5.2-1efc783920/LICENSE-MIT",
+          "size": 1097,
+          "sha256": "61d383b05b87d78f94d2937e2580cce47226d17823c0430fbcad09596537efcf"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crossbeam-deque",
+      "version": "0.8.8",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "622f3fc73690be383c7214310406f28a90e6edeadc3cea882f9d71e495b9711a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crossbeam-deque@0.8.8-b8b91300d0/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/crossbeam-deque@0.8.8-b8b91300d0/LICENSE-MIT",
+          "size": 1099,
+          "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crossbeam-epoch",
+      "version": "0.9.21",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "dc74980687109a3b14c72fd458107bf0baa1da1a1a805e178d15501ba9b86d9d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crossbeam-epoch@0.9.21-7f41010a2e/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/crossbeam-epoch@0.9.21-7f41010a2e/LICENSE-MIT",
+          "size": 1099,
+          "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crossbeam-utils",
+      "version": "0.8.23",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a31eee39dddec8330830986fcd7625edb5a24ec90ea038215273bbc3adb08ac6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crossbeam-utils@0.8.23-72d3d8e3a6/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/crossbeam-utils@0.8.23-72d3d8e3a6/LICENSE-MIT",
+          "size": 1099,
+          "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crossterm_winapi",
+      "version": "0.9.1",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "acdd7c62a3665c7f6830a51635d9ac9b23ed385797f70a83bb8bafe9c572ab2b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crossterm_winapi@0.9.1-1e136bda92/LICENSE",
+          "size": 1083,
+          "sha256": "aca4760f2a5eba9ce9d4448fe7cd3fcf98245a8315ede59ebd0c6085dd542e61"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crossterm",
+      "version": "0.29.0",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d8b9f2e4c67f833b660cdb0a3523065869fb35570177239812ed4c905aeff87b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crossterm@0.29.0-312f1c7e56/LICENSE",
+          "size": 1083,
+          "sha256": "aca4760f2a5eba9ce9d4448fe7cd3fcf98245a8315ede59ebd0c6085dd542e61"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "crypto-common",
+      "version": "0.1.7",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/crypto-common@0.1.7-dfae250c40/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/crypto-common@0.1.7-dfae250c40/LICENSE-MIT",
+          "size": 1065,
+          "sha256": "3521672491a3479422d5fe1aca6645dd2984090f85da6e5205abfb18fb7a6897"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "der",
+      "version": "0.8.2",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a878c850e9e421b20262e9b41f9c860e4785fa07541c266b62ff9d1ef998a80a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/der@0.8.2-eb3a5f70ad/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/der@0.8.2-eb3a5f70ad/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "73b9dc2e79c7308998dd30296e073aefaefb944a68fb89aa412c23c0edcabcaa"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "deranged",
+      "version": "0.5.9",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9e9de72ce2ad1f90dc62fa25f0f430ef85eb4b0d8fa0be4f30373bc40a21d28e",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/deranged@0.5.9-fa7529215a/LICENSE-Apache",
+          "size": 11349,
+          "sha256": "edd65bdd88957a205c47d53fa499eed8865a70320f0f03f6391668cb304ea376"
+        },
+        {
+          "file": "cargo/deranged@0.5.9-fa7529215a/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "231c837c45eb53f108fb48929e488965bc4fcc14e9ea21d35f50e6b99d98685b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "derive_more-impl",
+      "version": "2.1.1",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "799a97264921d8623a957f6c3b9011f3b5492f557bbb7a5a19b7fa6d06ba8dcb",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/derive_more-impl@2.1.1-7bb4888f0f/LICENSE",
+          "size": 1080,
+          "sha256": "8a35369f3ca263b3c62fbb5032947e53b6bfebc6c8a4d1bb982de1c069f6fba5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "derive_more",
+      "version": "2.1.1",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d751e9e49156b02b44f9c1815bcb94b984cdcc4396ecc32521c739452808b134",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/derive_more@2.1.1-7cd227f311/LICENSE",
+          "size": 1080,
+          "sha256": "8a35369f3ca263b3c62fbb5032947e53b6bfebc6c8a4d1bb982de1c069f6fba5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "digest",
+      "version": "0.10.7",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/digest@0.10.7-93b3d3ad5a/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/digest@0.10.7-93b3d3ad5a/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "9e0dfd2dd4173a530e238cb6adb37aa78c34c6bc7444e0e10c1ab5d8881f63ba"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "document-features",
+      "version": "0.2.12",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d4b8a88685455ed29a21542a33abd9cb6510b6b129abadabdcef0f4c55bc8f61",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/document-features@0.2.12-532f8b030a/LICENSE-APACHE",
+          "size": 10280,
+          "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff"
+        },
+        {
+          "file": "cargo/document-features@0.2.12-532f8b030a/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "aa893340d14b9844625be6a50ac644169a01b52f0211cbf81b09e1874c8cd81d"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "either",
+      "version": "1.19.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "0e9c71c2167ca323c882b99918929403426e2373ea17242ff5653e0d5e1058be",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/either@1.19.0-5e79219e7e/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/either@1.19.0-5e79219e7e/LICENSE-MIT",
+          "size": 1043,
+          "sha256": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "equivalent",
+      "version": "1.0.3",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "00d174d5400e5e8fd687ad1049e2f578285fa914201b1af7e8b112a4546bd826",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/equivalent@1.0.3-eb3d099996/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/equivalent@1.0.3-eb3d099996/LICENSE-MIT",
+          "size": 1049,
+          "sha256": "7365cc8878a1d7ce155a58c4ca09c3d7a6be413efa5334a80ea842912b669349"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "errno",
+      "version": "0.3.14",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/errno@0.3.14-c428cb009c/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/errno@0.3.14-c428cb009c/LICENSE-MIT",
+          "size": 1054,
+          "sha256": "8764a597675778ddfd4e25f81b08a05dbcf089ac05662df7613fe67f150e3aa2"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "fastrand",
+      "version": "2.5.0",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "da7c62ceae207dd37ea5b845da6a0696c799f85e97da1ab5b7910be3c1c80223",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/fastrand@2.5.0-4de8483a22/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/fastrand@2.5.0-4de8483a22/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "find-msvc-tools",
+      "version": "0.1.15",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "1c66915cc5391097de7a2b0b972e8505aa33c0df401fd3a6811dbdb32881ba48",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/find-msvc-tools@0.1.15-7189a5bd0c/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/find-msvc-tools@0.1.15-7189a5bd0c/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "flate2",
+      "version": "1.1.10",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "6e634e2e0ebac1ee034020da1ca582e17ffe4e0f5e985823721e168928136dcb",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/flate2@1.1.10-7ffe0cd39e/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/flate2@1.1.10-7ffe0cd39e/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "025436edff4cfcdde17a5811fdea78892d8482efd1abdec5a17872d07a4f2112"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "fnv",
+      "version": "1.0.7",
+      "license": "Apache-2.0 / MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/fnv@1.0.7-1673547934/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/fnv@1.0.7-1673547934/LICENSE-MIT",
+          "size": 1056,
+          "sha256": "65fdb6c76cd61612070c066eec9ecdb30ee74fb27859d0d9af58b9f499fd0c3e"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "foldhash",
+      "version": "0.2.0",
+      "license": "Zlib",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/foldhash@0.2.0-8a1b0b8979/LICENSE",
+          "size": 856,
+          "sha256": "b1181a40b2a7b25cf66fd01481713bc1005df082c53ef73e851e55071b102744"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "foreign-types-shared",
+      "version": "0.1.1",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/foreign-types-shared@0.1.1-30fa928b56/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/foreign-types-shared@0.1.1-30fa928b56/LICENSE-MIT",
+          "size": 1072,
+          "sha256": "333ea3aaa3cadb819f4acd9f9153f9feee060a995ca8710f32bc5bd9a4b91734"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "foreign-types",
+      "version": "0.3.2",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f6f339eb8adc052cd2ca78910fda869aefa38d22d5cb648e6485e4d3fc06f3b1",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/foreign-types@0.3.2-0151e1bfc1/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/foreign-types@0.3.2-0151e1bfc1/LICENSE-MIT",
+          "size": 1072,
+          "sha256": "333ea3aaa3cadb819f4acd9f9153f9feee060a995ca8710f32bc5bd9a4b91734"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "fs2",
+      "version": "0.4.3",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9564fc758e15025b46aa6643b1b77d047d1a56a1aea6e01002ac0c7026876213",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/fs2@0.4.3-96f6d755bd/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/fs2@0.4.3-96f6d755bd/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "generic-array",
+      "version": "0.14.7",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/generic-array@0.14.7-c941f6192c/LICENSE",
+          "size": 1107,
+          "sha256": "c09aae9d3c77b531f56351a9947bc7446511d6b025b3255312d3e3442a9a7583"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "getrandom",
+      "version": "0.4.3",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "300e883d756b2e4ec94e02791f39b04b522276138852cfc41d9fb7e904106099",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/getrandom@0.4.3-3d7c95b041/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf"
+        },
+        {
+          "file": "cargo/getrandom@0.4.3-3d7c95b041/LICENSE-MIT",
+          "size": 1130,
+          "sha256": "523a42c25d245dde9c015f882cec7f4555aad883382a6cf19b4b7d9b2cd5419b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/hashbrown@0.17.1-b6f91fd783/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/hashbrown@0.17.1-b6f91fd783/LICENSE-MIT",
+          "size": 1060,
+          "sha256": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "http",
+      "version": "1.5.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "918d3568bebf352712bc2ef3d46a8bcf1a75b373be6539de198e9105cbbf9ce0",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/http@1.5.0-a50d444caf/LICENSE-APACHE",
+          "size": 10835,
+          "sha256": "8bb1b50b0e5c9399ae33bd35fab2769010fa6c14e8860c729a52295d84896b7a"
+        },
+        {
+          "file": "cargo/http@1.5.0-a50d444caf/LICENSE-MIT",
+          "size": 1059,
+          "sha256": "dc91f8200e4b2a1f9261035d4c18c33c246911a6c0f7b543d75347e61b249cff"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "httparse",
+      "version": "1.10.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "6dbf3de79e51f3d586ab4cb9d5c3e2c14aa28ed23d180cf89b4df0454a69cc87",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/httparse@1.10.1-1c61f0a95b/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/httparse@1.10.1-1c61f0a95b/LICENSE-MIT",
+          "size": 1063,
+          "sha256": "391a5396cec6230bfabd4ef4eb2350eb895bc5efce377a2218f5702ed020d3e3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "indexmap",
+      "version": "2.14.2",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cc4e190f5d26ca7051642629da2c52fc03bde85a03197c99408dcd291734c855",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/indexmap@2.14.2-ab8d6e58df/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/indexmap@2.14.2-ab8d6e58df/LICENSE-MIT",
+          "size": 1049,
+          "sha256": "ecc269ef87fd38a1d98e30bfac9ba964a9dbd9315c3770fed98d4d7cb5882055"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "io-kit-sys",
+      "version": "0.4.1",
+      "license": "MIT / Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "617ee6cf8e3f66f3b4ea67a4058564628cde41901316e19f559e14c7c72c5e7b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/io-kit-sys@0.4.1-e890182112/LICENSE-APACHE",
+          "size": 11359,
+          "sha256": "7f45563da8518d28291f2931f3ec78dfd238a4e2612eb7351933e72b7a68203a"
+        },
+        {
+          "file": "cargo/io-kit-sys@0.4.1-e890182112/LICENSE-MIT",
+          "size": 1063,
+          "sha256": "52291085f8530d441f958295a04cba4ecdb2aa734c0731a5f2dd58105eb3fe10"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "itoa",
+      "version": "1.0.18",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/itoa@1.0.18-cbeda638f8/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/itoa@1.0.18-cbeda638f8/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "jpeg-decoder",
+      "version": "0.3.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "00810f1d8b74be64b13dbf3db89ac67740615d6c891f0e7b6179326533011a07",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/jpeg-decoder@0.3.2-b3855cb333/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/jpeg-decoder@0.3.2-b3855cb333/LICENSE-MIT",
+          "size": 1084,
+          "sha256": "22b83fb92a50418c7df9564b9c179fa2a0e74f293bc58b72dd7e218fc0902143"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "libc",
+      "version": "0.2.191",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "65cd87c9a6d60536580b316ad985726104730a5151c99845f2490428ef91240a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/libc@0.2.191-1c7d644a1b/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/libc@0.2.191-1c7d644a1b/LICENSE-MIT",
+          "size": 1066,
+          "sha256": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "libudev-sys",
+      "version": "0.1.4",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "3c8469b4a23b962c1396b9b451dda50ef5b283e8dd309d69033475fa9b334324",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/libudev-sys@0.1.4-390b4011f4/LICENSE",
+          "size": 1059,
+          "sha256": "871afd9d691846de71e0b83812ba9c7ff00bc7b3ad102dedcaa109f2246d52ad"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "libudev",
+      "version": "0.3.0",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "78b324152da65df7bb95acfcaab55e3097ceaab02fb19b228a9eb74d55f135e0",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/libudev@0.3.0-1729329967/LICENSE",
+          "size": 1059,
+          "sha256": "871afd9d691846de71e0b83812ba9c7ff00bc7b3ad102dedcaa109f2246d52ad"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "libz-sys",
+      "version": "1.1.30",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f710a23e6dbf193214fd46ca56a9d6864e550abe86202184532ae7275e46de19",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/libz-sys@1.1.30-114f5acc70/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/libz-sys@1.1.30-114f5acc70/LICENSE-MIT",
+          "size": 1090,
+          "sha256": "34c467b6945a22696d060b8fdd2379d464acb3408d4c599d3dc5fe4fa1b4c84f"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "linux-raw-sys",
+      "version": "0.12.1",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "32a66949e030da00e8c7d4434b251670a91556f4144941d37452769c25d58a53",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/linux-raw-sys@0.12.1-dff4897cc2/COPYRIGHT",
+          "size": 881,
+          "sha256": "3290ae0fbc9ddb77d2239121d710f0bb9d31b3b4744e6d97fe01e652b4c1870b"
+        },
+        {
+          "file": "cargo/linux-raw-sys@0.12.1-dff4897cc2/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/linux-raw-sys@0.12.1-dff4897cc2/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "size": 12243,
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "file": "cargo/linux-raw-sys@0.12.1-dff4897cc2/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "litrs",
+      "version": "1.0.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "4744e383959f0db86ede514b809b1c53251889093803c05267acc7d4e7030d70",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/litrs@1.0.1-3de526cc5e/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/litrs@1.0.1-3de526cc5e/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "7dc1552e88f49132cb358b1b962fc5e79fa42d70bcbb88c526d33e45b8e98036"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "lock_api",
+      "version": "0.4.14",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "224399e74b87b5f3557511d98dff8b14089b3dadafcab6bb93eab67d3aace965",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/lock_api@0.4.14-78fedd5cf6/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/lock_api@0.4.14-78fedd5cf6/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "log",
+      "version": "0.4.34",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/log@0.4.34-c24ba86dee/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/log@0.4.34-c24ba86dee/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "mach2",
+      "version": "0.4.3",
+      "license": "BSD-2-Clause OR MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d640282b302c0bb0a2a8e0233ead9035e3bed871f0b7e81fe4a1ec829765db44",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/mach2@0.4.3-03cdc832fe/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/mach2@0.4.3-03cdc832fe/LICENSE-BSD",
+          "size": 1320,
+          "sha256": "044983df14c97f2f9570766aaf977b3cdfc4a06cf1f36b776331c5ff89b4fb89"
+        },
+        {
+          "file": "cargo/mach2@0.4.3-03cdc832fe/LICENSE-MIT",
+          "size": 1077,
+          "sha256": "3f9f0f7e5a5911a8042e32c83ff5d061ce1ffd02e8a207ec2135a44ad73b4191"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "license": "Unlicense OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/memchr@2.8.3-8f775fb7db/COPYING",
+          "size": 126,
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "file": "cargo/memchr@2.8.3-8f775fb7db/LICENSE-MIT",
+          "size": 1081,
+          "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+        },
+        {
+          "file": "cargo/memchr@2.8.3-8f775fb7db/UNLICENSE",
+          "size": 1211,
+          "sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "mio",
+      "version": "1.2.4",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "1788edb87fdc09c7e26304471e2f5be8cdefb1b6930d6e3985fc02ff53bf86ee",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/mio@1.2.4-0a3f14fd71/LICENSE",
+          "size": 1082,
+          "sha256": "07919255c7e04793d8ea760d6c2ce32d19f9ff02bdbdde3ce90b1e1880929a9b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "native-tls",
+      "version": "0.2.18",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "465500e14ea162429d264d44189adc38b199b62b1c21eea9f69e4b73cb03bbf2",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/native-tls@0.2.18-c7549e95ec/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/native-tls@0.2.18-c7549e95ec/LICENSE-MIT",
+          "size": 1074,
+          "sha256": "f2ad7982ddbfa8c45eb965315718c55b70b9cc311b49afacb50d5fe84173ae2c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "nix",
+      "version": "0.26.4",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "598beaf3cc6fdd9a5dfb1630c2800c7acd31df7aaf0f565796fba2b53ca1af1b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/nix@0.26.4-30da4d5177/LICENSE",
+          "size": 1097,
+          "sha256": "66e3ee1fa7f909ad3c612d556f2a0cdabcd809ad6e66f3b0605015ac64841b70"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "nix",
+      "version": "0.31.3",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cf20d2fde8ff38632c426f1165ed7436270b44f199fc55284c38276f9db47c3d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/nix@0.31.3-0e97b53cb4/LICENSE",
+          "size": 1097,
+          "sha256": "66e3ee1fa7f909ad3c612d556f2a0cdabcd809ad6e66f3b0605015ac64841b70"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "num_threads",
+      "version": "0.1.8",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cabcc654086861f9e1bc5115258de62ef92c79b20f4615a1b0cc57c4e82027d4",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/num_threads@0.1.8-ea52d25e6b/LICENSE-Apache",
+          "size": 11342,
+          "sha256": "c69b72788ec261765e460532016b4bb78372f238e449b5e70e3268ec1e18fd15"
+        },
+        {
+          "file": "cargo/num_threads@0.1.8-ea52d25e6b/LICENSE-MIT",
+          "size": 1055,
+          "sha256": "b4bf94a9fceb8846320fda938ee53fc16b506572609da5cf1d2d289a5597a8f8"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "num-conv",
+      "version": "0.2.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "521739c6d2bac4aa25192232afe6841231376b2b26d4d9fae5ecf8ca5772e441",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/num-conv@0.2.2-aaf5e91064/LICENSE-Apache",
+          "size": 10174,
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "file": "cargo/num-conv@0.2.2-aaf5e91064/LICENSE-MIT",
+          "size": 1050,
+          "sha256": "e2e245f2b566d0bfafb0f6a04c16b82d710c4e6e7d799e39bb4ef6e541b85b98"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "num-traits",
+      "version": "0.2.19",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/num-traits@0.2.19-e2c9886834/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/num-traits@0.2.19-e2c9886834/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "once_cell",
+      "version": "1.21.4",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/once_cell@1.21.4-4938c84a84/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/once_cell@1.21.4-4938c84a84/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "openssl-macros",
+      "version": "0.1.1",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/openssl-macros@0.1.1-8a363c9b7e/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/openssl-macros@0.1.1-8a363c9b7e/LICENSE-MIT",
+          "size": 1058,
+          "sha256": "ea5ab440900ab271811d5c2dc02a9de6e03a6956ac5727e85c11d76df5883d30"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "openssl-probe",
+      "version": "0.2.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "7c87def4c32ab89d880effc9e097653c8da5d6ef28e6b539d313baaacfbafcbe",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/openssl-probe@0.2.1-da1e443174/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/openssl-probe@0.2.1-da1e443174/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "openssl-sys",
+      "version": "0.9.117",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b47e7e6bb2c38cd930d25a23b40fa52e068c10e85f3e03a7f5ba5aaca5713695",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/openssl-sys@0.9.117-6a781f9550/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "openssl",
+      "version": "0.10.81",
+      "license": "Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "77823a27f0babb03091cb9ed9ef80af3b39dbc82f97e8fa530374b7dafd87a45",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/openssl@0.10.81-fb2657b383/LICENSE",
+          "size": 618,
+          "sha256": "f3d4287b4a21c5176fea2f9bd4ae800696004e2fb8e05cbc818be513f188a941"
+        },
+        {
+          "file": "cargo/openssl@0.10.81-fb2657b383/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "parking_lot_core",
+      "version": "0.9.12",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2621685985a2ebf1c516881c026032ac7deafcda1a2c9b7850dc81e3dfcb64c1",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/parking_lot_core@0.9.12-e73966cb01/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/parking_lot_core@0.9.12-e73966cb01/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "parking_lot",
+      "version": "0.12.5",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "93857453250e3077bd71ff98b6a65ea6621a19bb0f559a85248955ac12c45a1a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/parking_lot@0.12.5-f2fd374c09/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/parking_lot@0.12.5-f2fd374c09/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "pem-rfc7468",
+      "version": "1.0.0",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a6305423e0e7738146434843d1694d621cce767262b2a86910beab705e4493d9",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/pem-rfc7468@1.0.0-107a8ea04c/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/pem-rfc7468@1.0.0-107a8ea04c/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "4148e7b027fba018131f297b4fe27995386ba317018d6855e182fd0e86cd754f"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "percent-encoding",
+      "version": "2.3.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/percent-encoding@2.3.2-e1cded5c48/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/percent-encoding@2.3.2-e1cded5c48/LICENSE-MIT",
+          "size": 1072,
+          "sha256": "b38f11f6096706e6de553dabe2a7ed142d59b6fa8c97e290c67496154745cdd5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "pkg-config",
+      "version": "0.3.34",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f6b464fbc74e149a392436b17d523f769e057cb6877f6a5c4618bc6f11800548",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/pkg-config@0.3.34-0c40d597d3/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/pkg-config@0.3.34-0c40d597d3/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "powerfmt",
+      "version": "0.2.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "4a6394b9e965e73d0a289ee54f589087e2c676aedf60885baf52c76b771e4958",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/powerfmt@0.2.1-5683d5ce15/LICENSE-Apache",
+          "size": 11349,
+          "sha256": "155420c6403d4e0fca34105e3c03fdd6939b64c393c7ec6f95f5b72c5474eab0"
+        },
+        {
+          "file": "cargo/powerfmt@0.2.1-5683d5ce15/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "070dbc7dda03a29296f2d58bdb9b7331af90f2abc9f31df22875d1eabaf29852"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "proc-macro-crate",
+      "version": "3.5.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "e67ba7e9b2b56446f1d419b1d807906278ffa1a658a8a5d8a39dcb1f5a78614f",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/proc-macro-crate@3.5.0-3cb1d49eb9/LICENSE-APACHE",
+          "size": 10860,
+          "sha256": "8ada45cd9f843acf64e4722ae262c622a2b3b3007c7310ef36ac1061a30f6adb"
+        },
+        {
+          "file": "cargo/proc-macro-crate@3.5.0-3cb1d49eb9/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/proc-macro2@1.0.107-0ef2e4521b/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/proc-macro2@1.0.107-0ef2e4521b/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "proptest",
+      "version": "1.12.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b8530004ccb15eae51c7e40009fbe317f341f804db54dc033eec1c50be28cfa0",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/proptest@1.12.0-f25d07ff69/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/proptest@1.12.0-f25d07ff69/LICENSE-MIT",
+          "size": 1060,
+          "sha256": "d8e0806926ce9f0a5030c382ecc0ffdf6de6fbea5c69a458435fd443fa7a5b92"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "quick-error",
+      "version": "1.2.3",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a1d01941d82fa2ab50be1e79e6714289dd7cde78eba4c074bc5a4374f650dfe0",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/quick-error@1.2.3-ef93107a4c/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/quick-error@1.2.3-ef93107a4c/LICENSE-MIT",
+          "size": 1070,
+          "sha256": "058f01fe181608d027fcde7e528fc03ea3cf90f30903c407644b0a9bbc54f500"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/quote@1.0.47-63c7655d6a/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/quote@1.0.47-63c7655d6a/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "r-efi",
+      "version": "6.0.0",
+      "license": "MIT OR Apache-2.0 OR LGPL-2.1-or-later",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/r-efi@6.0.0-47d6887839/upstream/r-efi_r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/AUTHORS",
+          "size": 3733,
+          "sha256": "d027e91dbc9cdbb2f1190068e498bd6b61cff022b6a032b191021ba658d96111",
+          "source": "https://raw.githubusercontent.com/r-efi/r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/AUTHORS"
+        },
+        {
+          "file": "cargo/r-efi@6.0.0-47d6887839/upstream/r-efi_r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/README.md",
+          "size": 2919,
+          "sha256": "420f65fec3ba2e89d49da51b222d2881d26959037a7b7d3794143db4bd4627b1",
+          "source": "https://raw.githubusercontent.com/r-efi/r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/README.md"
+        },
+        {
+          "file": "cargo/r-efi@6.0.0-47d6887839/upstream/r-efi_r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/Cargo.toml",
+          "size": 1107,
+          "sha256": "b8e89c393831c2161b6d390bd40422910ac34f02903ad39edd85ec38d4513fef",
+          "source": "https://raw.githubusercontent.com/r-efi/r-efi/7e1b0322d31d625f81a5656096330934f9cd835d/Cargo.toml"
+        },
+        {
+          "file": "cargo/r-efi@6.0.0-47d6887839/upstream/spdx/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/MIT.txt",
+          "size": 1078,
+          "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "source": "https://raw.githubusercontent.com/spdx/license-list-data/d46e94e2c78ceede1cfc63cfa0396472d2798d4c/text/MIT.txt"
+        }
+      ],
+      "supplements": [
+        {
+          "upstreamCommit": "7e1b0322d31d625f81a5656096330934f9cd835d",
+          "materialBasis": "Upstream package declaration and original attribution; standard license text supplied from SPDX license-list-data v3.27.0 because upstream did not ship a standalone full license file."
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rand_core",
+      "version": "0.10.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rand_core@0.10.1-86e1fe1681/COPYRIGHT",
+          "size": 478,
+          "sha256": "92b81db30f7ab6d693e0af5661a40d273ca1947e891123ed823924192c10cbc7"
+        },
+        {
+          "file": "cargo/rand_core@0.10.1-86e1fe1681/LICENSE-APACHE",
+          "size": 10282,
+          "sha256": "6df43f6f4b5d4587f3d8d71e45532c688fd168afa5fe89d571cb32fa09c4ef51"
+        },
+        {
+          "file": "cargo/rand_core@0.10.1-86e1fe1681/LICENSE-MIT",
+          "size": 1076,
+          "sha256": "8b6e9feec03e7c9a5facb26855cecd31662bf989b636bcfe79521bdf8ac863f0"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rand_xorshift",
+      "version": "0.5.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "60aa6af80be32871323012e02e6e65f8a7cc7890931ae421d217ad8fe0df2ccf",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rand_xorshift@0.5.0-d31e20ea7b/COPYRIGHT",
+          "size": 569,
+          "sha256": "90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5"
+        },
+        {
+          "file": "cargo/rand_xorshift@0.5.0-d31e20ea7b/LICENSE-APACHE",
+          "size": 9724,
+          "sha256": "35242e7a83f69875e6edeff02291e688c97caafe2f8902e4e19b49d3e78b4cab"
+        },
+        {
+          "file": "cargo/rand_xorshift@0.5.0-d31e20ea7b/LICENSE-MIT",
+          "size": 1117,
+          "sha256": "209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rand",
+      "version": "0.10.3",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "65c9fb96cbc91e3478eaae79a69fcd3f1ae4ad052e471fe6732fff548984b4af",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rand@0.10.3-ca9928ff76/COPYRIGHT",
+          "size": 569,
+          "sha256": "90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5"
+        },
+        {
+          "file": "cargo/rand@0.10.3-ca9928ff76/LICENSE-APACHE",
+          "size": 9724,
+          "sha256": "35242e7a83f69875e6edeff02291e688c97caafe2f8902e4e19b49d3e78b4cab"
+        },
+        {
+          "file": "cargo/rand@0.10.3-ca9928ff76/LICENSE-MIT",
+          "size": 1117,
+          "sha256": "209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rayon-core",
+      "version": "1.13.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "22e18b0f0062d30d4230b2e85ff77fdfe4326feb054b9783a3460d8435c8ab91",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rayon-core@1.13.0-b52e66f41f/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/rayon-core@1.13.0-b52e66f41f/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "0621878e61f0d0fda054bcbe02df75192c28bde1ecc8289cbd86aeba2dd72720"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rayon",
+      "version": "1.12.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "fb39b166781f92d482534ef4b4b1b2568f42613b53e5b6c160e24cfbfa30926d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rayon@1.12.0-b7baf2c524/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/rayon@1.12.0-b7baf2c524/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "0621878e61f0d0fda054bcbe02df75192c28bde1ecc8289cbd86aeba2dd72720"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "redox_syscall",
+      "version": "0.5.18",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ed2bf2547551a7053d6fdfafda3f938979645c44812fbfcda098faae3f1a362d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/redox_syscall@0.5.18-1732973d72/LICENSE",
+          "size": 1076,
+          "sha256": "efcfee7981ff72431fffb06925cad00a23dce079ed4354f61030ad5abdb78829"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "regex-automata",
+      "version": "0.4.18",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ad8553b9b26413251cbf30e620595c7a41b3887f03da04579c0e6b0d6a06b4b2",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/regex-automata@0.4.18-30003c4c52/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/regex-automata@0.4.18-30003c4c52/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "regex-syntax",
+      "version": "0.8.11",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/regex-syntax@0.8.11-b43ae426e3/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/regex-syntax@0.8.11-b43ae426e3/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "regex",
+      "version": "1.13.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f020237b6c8eed93db2e2cb53c00c60a8e1bc73da7d073199a1180401450218d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/regex@1.13.1-cc9e6b629c/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/regex@1.13.1-cc9e6b629c/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rustc_version",
+      "version": "0.4.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cfcb3a22ef46e85b45de6ee7e79d063319ebb6594faafcf1c225ea92ab6e9b92",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rustc_version@0.4.1-a9617c229e/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/rustc_version@0.4.1-a9617c229e/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rustix",
+      "version": "1.1.5",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "891efababe418670775f199f0d233d84843c227a0949a883ce15b37c78d6629d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rustix@1.1.5-0c33a7b60e/COPYRIGHT",
+          "size": 853,
+          "sha256": "377c2e7c53250cc5905c0b0532d35973392af16ffb9596a41d99d202cf3617c9"
+        },
+        {
+          "file": "cargo/rustix@1.1.5-0c33a7b60e/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/rustix@1.1.5-0c33a7b60e/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "size": 12243,
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "file": "cargo/rustix@1.1.5-0c33a7b60e/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rustls-pki-types",
+      "version": "1.15.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2f4925028c7eb5d1fcdaf196971378ed9d2c1c4efc7dc5d011256f76c99c0a96",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rustls-pki-types@1.15.1-035676c6b3/LICENSE-APACHE",
+          "size": 10835,
+          "sha256": "45fd05c4865e7c350b98ad7ac50e1b15462d49af4a91e9b0c9dd933dc9a69742"
+        },
+        {
+          "file": "cargo/rustls-pki-types@1.15.1-035676c6b3/LICENSE-MIT",
+          "size": 1080,
+          "sha256": "9117d922e667125508dde62b02c1f57ed22f5ad21eb536aa2e2d99e1c796e639"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rustversion",
+      "version": "1.0.23",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rustversion@1.0.23-d5cc9fae5b/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/rustversion@1.0.23-d5cc9fae5b/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "rusty-fork",
+      "version": "0.3.1",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cc6bf79ff24e648f6da1f8d1f011e9cac26491b619e6b9280f2b47f1774e6ee2",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/rusty-fork@0.3.1-4ec4dd8690/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/rusty-fork@0.3.1-4ec4dd8690/LICENSE-MIT",
+          "size": 1060,
+          "sha256": "d8e0806926ce9f0a5030c382ecc0ffdf6de6fbea5c69a458435fd443fa7a5b92"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "schannel",
+      "version": "0.1.30",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9cb23c424d8ee841bb4d813677ca237e2a610067d594fec130f87d6093495ab5",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/schannel@0.1.30-46c17d53a0/LICENSE.md",
+          "size": 1053,
+          "sha256": "aa72991ac35b4de0034da0afe943e62b48c4092fc2ba13ae47806d8e9a4ad551"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "scopeguard",
+      "version": "1.2.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/scopeguard@1.2.0-7a5a4406ed/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/scopeguard@1.2.0-7a5a4406ed/LICENSE-MIT",
+          "size": 1097,
+          "sha256": "fb77f0a9c53e473abe5103c8632ef9f0f2874d4fb3f17cb2d8c661aab9cee9d7"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "security-framework-sys",
+      "version": "2.17.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "6ce2691df843ecc5d231c0b14ece2acc3efb62c0a398c7e1d875f3983ce020e3",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/security-framework-sys@2.17.0-bfdedf989e/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/security-framework-sys@2.17.0-bfdedf989e/LICENSE-MIT",
+          "size": 1081,
+          "sha256": "91e934255ba3b2f21103d68c5581c23ef34aa95c4628e4405b8c901935e11c69"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "security-framework",
+      "version": "3.7.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b7f4bc775c73d9a02cde8bf7b2ec4c9d12743edf609006c7facc23998404cd1d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/security-framework@3.7.0-d0b881edf8/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/security-framework@3.7.0-d0b881edf8/LICENSE-MIT",
+          "size": 1081,
+          "sha256": "91e934255ba3b2f21103d68c5581c23ef34aa95c4628e4405b8c901935e11c69"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "semver",
+      "version": "1.0.28",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/semver@1.0.28-18e7d01984/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/semver@1.0.28-18e7d01984/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "serde_core",
+      "version": "1.0.229",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "67dca2c9c51e58a4791a4b1ed58308b39c64224d349a935ab5039aa360942a48",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/serde_core@1.0.229-c9302cc80a/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/serde_core@1.0.229-c9302cc80a/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "serde_derive",
+      "version": "1.0.229",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/serde_derive@1.0.229-5d12236a21/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/serde_derive@1.0.229-5d12236a21/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "e7e9cc8b1b85264074fbcc02a88680c4096b1e47df8f739dceb03bf482f04bd6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/serde_json@1.0.154-18ce241b1e/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/serde_json@1.0.154-18ce241b1e/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "serde",
+      "version": "1.0.229",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/serde@1.0.229-a177643e20/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/serde@1.0.229-a177643e20/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "serialport",
+      "version": "4.10.1",
+      "license": "MPL-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "6ba5f8f29aa20853c4e3e85a33ec580eb66be1f057142e77a333834a318bacf2",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/serialport@4.10.1-fc89a28e35/LICENSE.txt",
+          "size": 195,
+          "sha256": "00a4d69750686b8fcd2369b17176b4389d67f275fd22b9eab6c66155b72bd4d2"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "sha2",
+      "version": "0.10.9",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/sha2@0.10.9-1d95c551da/LICENSE-APACHE",
+          "size": 10849,
+          "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5"
+        },
+        {
+          "file": "cargo/sha2@0.10.9-1d95c551da/LICENSE-MIT",
+          "size": 1138,
+          "sha256": "b4eb00df6e2a4d22518fcaa6a2b4646f249b3a3c9814509b22bd2091f1392ff1"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "shlex",
+      "version": "2.0.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/shlex@2.0.1-ab3e960858/LICENSE-APACHE",
+          "size": 566,
+          "sha256": "553fffcd9b1cb158bc3e9edc35da85ca5c3b3d7d2e61c883ebcfa8a65814b583"
+        },
+        {
+          "file": "cargo/shlex@2.0.1-ab3e960858/LICENSE-MIT",
+          "size": 1092,
+          "sha256": "4455bf75a91154108304cb283e0fea9948c14f13e20d60887cf2552449dea3b1"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "signal-hook-mio",
+      "version": "0.2.5",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b75a19a7a740b25bc7944bdee6172368f988763b744e3d4dfe753f6b4ece40cc",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/signal-hook-mio@0.2.5-40a8df6465/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/signal-hook-mio@0.2.5-40a8df6465/LICENSE-MIT",
+          "size": 1068,
+          "sha256": "503558bfefe66ca15e4e3f7955b3cb0ec87fd52f29bf24b336af7bd00e946d5c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "signal-hook-registry",
+      "version": "1.4.8",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "c4db69cba1110affc0e9f7bcd48bbf87b3f4fc7c61fc9155afd4c469eb3d6c1b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/signal-hook-registry@1.4.8-34697c06e6/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/signal-hook-registry@1.4.8-34697c06e6/LICENSE-MIT",
+          "size": 1068,
+          "sha256": "503558bfefe66ca15e4e3f7955b3cb0ec87fd52f29bf24b336af7bd00e946d5c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "signal-hook",
+      "version": "0.3.18",
+      "license": "Apache-2.0/MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d881a16cf4426aa584979d30bd82cb33429027e42122b169753d6ef1085ed6e2",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/signal-hook@0.3.18-19631e92a9/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/signal-hook@0.3.18-19631e92a9/LICENSE-MIT",
+          "size": 1068,
+          "sha256": "503558bfefe66ca15e4e3f7955b3cb0ec87fd52f29bf24b336af7bd00e946d5c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "simd-adler32",
+      "version": "0.3.10",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "3a219298ac11a56ea9a6d2120044824d6f01aeb034955e7af7bc16858527deea",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/simd-adler32@0.3.10-dc2ca47f20/LICENSE.md",
+          "size": 1078,
+          "sha256": "42a35170233e83e18856792e748de4c1ce4a63b2afce9a370c89ef3fe23f9f2d"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "smallvec",
+      "version": "1.16.3",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "5b3dc8af474f516a851ff4bd12db780f948b9250ad37211e4eec0bccea54e01b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/smallvec@1.16.3-589f3327f2/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/smallvec@1.16.3-589f3327f2/LICENSE-MIT",
+          "size": 1072,
+          "sha256": "0b28172679e0009b655da42797c03fd163a3379d5cfa67ba1f1655e974a2a1a9"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "streaming-iterator",
+      "version": "0.1.9",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2b2231b7c3057d5e4ad0156fb3dc807d900806020c5ffa3ee6ff2c8c76fb8520",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/streaming-iterator@0.1.9-f3f53caf34/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "file": "cargo/streaming-iterator@0.1.9-f3f53caf34/LICENSE-MIT",
+          "size": 1058,
+          "sha256": "34cb64162194d52a8412e96d8693ebf43a67d019c6b5bd76da3bb377ba7507aa"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "syn",
+      "version": "2.0.119",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/syn@2.0.119-473fea64fc/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/syn@2.0.119-473fea64fc/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "syn",
+      "version": "3.0.9",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d78c8dee4c7bf0e14673097256fed6142ce9d3b85a408189d07482442145823b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/syn@3.0.9-6d646647c4/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/syn@3.0.9-6d646647c4/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "tempfile",
+      "version": "3.27.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/tempfile@3.27.0-b9a5c64a96/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/tempfile@3.27.0-b9a5c64a96/LICENSE-MIT",
+          "size": 1056,
+          "sha256": "8b427f5bc501764575e52ba4f9d95673cf8f6d80a86d0d06599852e1a9a20a36"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "termcolor",
+      "version": "1.4.1",
+      "license": "Unlicense OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/termcolor@1.4.1-f27e705170/COPYING",
+          "size": 126,
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "file": "cargo/termcolor@1.4.1-f27e705170/LICENSE-MIT",
+          "size": 1081,
+          "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+        },
+        {
+          "file": "cargo/termcolor@1.4.1-f27e705170/UNLICENSE",
+          "size": 1211,
+          "sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "thiserror-impl",
+      "version": "2.0.21",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "fe5197923287db20a58125f0bc85c062f7f2c892de97b18c356f9efb14b28524",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/thiserror-impl@2.0.21-c643554793/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/thiserror-impl@2.0.21-c643554793/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "thiserror",
+      "version": "2.0.21",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "09e52cb86a36cede5cb101bf8908837b3e4c6e5e59fe7fd85c23fb56200d189e",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/thiserror@2.0.21-188e8fc2cf/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/thiserror@2.0.21-188e8fc2cf/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "time-core",
+      "version": "0.1.9",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9e1c906769ad99c88eaa54e728060edef082f8e358ff32030cb7c7d315e81109",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/time-core@0.1.9-86ea6b57cb/LICENSE-Apache",
+          "size": 10174,
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "file": "cargo/time-core@0.1.9-86ea6b57cb/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "2537228d9a1b44a5dc595241349cae7090b326c8de165aaf89bfddef4a00d0fc"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "time",
+      "version": "0.3.55",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cdb87b95ec50ddfa440816d227a17b2ccbdda963a316a727fda0fc4334f7d134",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/time@0.3.55-cfddae9eb1/LICENSE-Apache",
+          "size": 10174,
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "file": "cargo/time@0.3.55-cfddae9eb1/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "2537228d9a1b44a5dc595241349cae7090b326c8de165aaf89bfddef4a00d0fc"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "toml_datetime",
+      "version": "1.1.2+spec-1.1.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2b86d767906c6c42421dcba507eb9d203e779497710a47782a224bb871653053",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/toml_datetime@1.1.2_spec-1.1.0-a5cd3cc5cf/LICENSE-APACHE",
+          "size": 11349,
+          "sha256": "249fdb6694467dd615b259f7ddde07be3f8ae5a72cecebb0e24f6629af4215fe"
+        },
+        {
+          "file": "cargo/toml_datetime@1.1.2_spec-1.1.0-a5cd3cc5cf/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "toml_edit",
+      "version": "0.25.17+spec-1.1.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "e3641d5bbb5349a79e1020a242d251efbc546ad8048d133958323ce9c40a9c9c",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/toml_edit@0.25.17_spec-1.1.0-120fb76ff0/LICENSE-APACHE",
+          "size": 11349,
+          "sha256": "249fdb6694467dd615b259f7ddde07be3f8ae5a72cecebb0e24f6629af4215fe"
+        },
+        {
+          "file": "cargo/toml_edit@0.25.17_spec-1.1.0-120fb76ff0/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "toml_parser",
+      "version": "1.1.5+spec-1.1.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "baa693a8032d7e1cada7d0041e96126df243179ff061456783ac7f12bda4744c",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/toml_parser@1.1.5_spec-1.1.0-a5df90d828/LICENSE-APACHE",
+          "size": 11349,
+          "sha256": "249fdb6694467dd615b259f7ddde07be3f8ae5a72cecebb0e24f6629af4215fe"
+        },
+        {
+          "file": "cargo/toml_parser@1.1.5_spec-1.1.0-a5df90d828/LICENSE-MIT",
+          "size": 1062,
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "tree-sitter-c",
+      "version": "0.24.2",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a9b2eb57a55fed6b00812912e730b7a275cf4fe98bfd6a5d76263d4438371728",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/tree-sitter-c@0.24.2-6cfc8a7f16/LICENSE",
+          "size": 1080,
+          "sha256": "2e0110e07abef7c2548b26ec9d6969775617ca539a0dc8dbeeb14d6452c711d1"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "tree-sitter-language",
+      "version": "0.1.9",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d0af592be68c579aa78a16846bd19422978c3c52e438523d45ff5d1bff1f9d4a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/tree-sitter-language@0.1.9-77dc20fb46/LICENSE",
+          "size": 1080,
+          "sha256": "c5cfb43042b6b72045f4ba997834d0a7786d2793d91680868b5815b39f14fc78"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "tree-sitter",
+      "version": "0.27.1",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a5129de2ccc97808c4583d48f1fb44576d015cf241e432800572bda11ef30c3b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/tree-sitter@0.27.1-a35fa4436d/LICENSE",
+          "size": 1080,
+          "sha256": "c5cfb43042b6b72045f4ba997834d0a7786d2793d91680868b5815b39f14fc78"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "ts-rs-macros",
+      "version": "11.1.0",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ee6ff59666c9cbaec3533964505d39154dc4e0a56151fdea30a09ed0301f62e2",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/ts-rs-macros@11.1.0-a8e07bb955/upstream/Aleph-Alpha_ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE",
+          "size": 1073,
+          "sha256": "db7f7f8e7236a2d0b41b855b2501b7b913caebbcda6ce498637a304ad1706ce1",
+          "source": "https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE"
+        }
+      ],
+      "supplements": [
+        {
+          "upstreamCommit": "1dce5297090804082e9639d2b7d851ba815aa359",
+          "materialBasis": "Original license material from fixed upstream revision"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "ts-rs",
+      "version": "11.1.0",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "4994acea2522cd2b3b85c1d9529a55991e3ad5e25cdcd3de9d505972c4379424",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/ts-rs@11.1.0-f7e1fc4b01/upstream/Aleph-Alpha_ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE",
+          "size": 1073,
+          "sha256": "db7f7f8e7236a2d0b41b855b2501b7b913caebbcda6ce498637a304ad1706ce1",
+          "source": "https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/1dce5297090804082e9639d2b7d851ba815aa359/LICENSE"
+        }
+      ],
+      "supplements": [
+        {
+          "upstreamCommit": "1dce5297090804082e9639d2b7d851ba815aa359",
+          "materialBasis": "Original license material from fixed upstream revision"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "typed-path",
+      "version": "0.12.4",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "54ec2755506471f54baf5e4bb5499d8e510cc1caf271270e778a736bd2d7336c",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/typed-path@0.12.4-90238385cb/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/typed-path@0.12.4-90238385cb/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "typenum",
+      "version": "1.20.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/typenum@1.20.1-69a376d9e6/LICENSE",
+          "size": 17,
+          "sha256": "db11fec9946737df39ca3898d9cd8c10ec6f6c3a884a6802b0ad0b81b4e8f23a"
+        },
+        {
+          "file": "cargo/typenum@1.20.1-69a376d9e6/LICENSE-APACHE",
+          "size": 10835,
+          "sha256": "516b24e051bf5630880ebbd55c40a25ce9552ebaf8970a53e8976eb70e522406"
+        },
+        {
+          "file": "cargo/typenum@1.20.1-69a376d9e6/LICENSE-MIT",
+          "size": 1083,
+          "sha256": "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "unarray",
+      "version": "0.1.4",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "eaea85b334db583fe3274d12b4cd1880032beab409c0d774be044d4480ab9a94",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/unarray@0.1.4-1714214bd8/LICENSE-APACHE",
+          "size": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "file": "cargo/unarray@0.1.4-1714214bd8/LICENSE-MIT",
+          "size": 1069,
+          "sha256": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "unescaper",
+      "version": "0.1.10",
+      "license": "MIT OR GPL-3.0-only",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "7285e83a80ce76f5e7bce79fa41f68d78ba62d1003cf27bf748ab24413808cf4",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/unescaper@0.1.10-8a4888bc5a/LICENSE-GPL3",
+          "size": 35141,
+          "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2"
+        },
+        {
+          "file": "cargo/unescaper@0.1.10-8a4888bc5a/LICENSE-MIT",
+          "size": 1065,
+          "sha256": "6e0bad263cbd2aa6235d78e3c26bcfa2668cf32f6b274ae21ce0dd620114c7b3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/unicode-ident@1.0.27-991799a90e/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/unicode-ident@1.0.27-991799a90e/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "file": "cargo/unicode-ident@1.0.27-991799a90e/LICENSE-UNICODE",
+          "size": 1995,
+          "sha256": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "unicode-segmentation",
+      "version": "1.13.3",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "c6f5d3c3b1bf09027a88a6bc961fc00497d651009560b5463668dc81b0fa87a8",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/unicode-segmentation@1.13.3-31b3fc4d27/COPYRIGHT",
+          "size": 321,
+          "sha256": "23860c2a7b5d96b21569afedf033469bab9fe14a1b24a35068b8641c578ce24d"
+        },
+        {
+          "file": "cargo/unicode-segmentation@1.13.3-31b3fc4d27/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/unicode-segmentation@1.13.3-31b3fc4d27/LICENSE-MIT",
+          "size": 1071,
+          "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "ureq-proto",
+      "version": "0.6.5",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "841583fc36089d7d59419568ae157f43a5a03a2e5a81ba87c77d1596ef46e922",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/ureq-proto@0.6.5-f41e7beac4/LICENSE-APACHE.txt",
+          "size": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "file": "cargo/ureq-proto@0.6.5-f41e7beac4/LICENSE-MIT.txt",
+          "size": 1055,
+          "sha256": "5b460f37be48ac4cf2181596181cc6cae432fc2caae05944873f380730829a4b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "ureq",
+      "version": "3.4.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9a7ac20be9b7726e0bbdbf974c059676d9acb1cd414961f570a4e8231cacd7fc",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/ureq@3.4.2-d2fcfdb020/LICENSE-APACHE",
+          "size": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "file": "cargo/ureq@3.4.2-d2fcfdb020/LICENSE-MIT",
+          "size": 1072,
+          "sha256": "7e5886959f67f8c75063a9d55cd3cb08c5a8cbea9a944fa1df2d4ae038f53721"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "utf8-zero",
+      "version": "0.8.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b8c0a043c9540bae7c578c88f91dda8bd82e59ae27c21baca69c8b191aaf5a6e",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/utf8-zero@0.8.1-863b82e744/LICENSE-APACHE",
+          "size": 9723,
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "file": "cargo/utf8-zero@0.8.1-863b82e744/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "vcpkg",
+      "version": "0.2.15",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/vcpkg@0.2.15-446743c44c/LICENSE-APACHE",
+          "size": 11050,
+          "sha256": "60c93a31f490375aadf64098b75f10715010379541021e00261045d7800611d3"
+        },
+        {
+          "file": "cargo/vcpkg@0.2.15-446743c44c/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "016d20f335060a70e79d9fcf8dfaa6201114d65d592211f4bdfb8ae9ca2bc1dc"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "version_check",
+      "version": "0.9.5",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/version_check@0.9.5-d7334e95c7/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/version_check@0.9.5-d7334e95c7/LICENSE-MIT",
+          "size": 1085,
+          "sha256": "b7e650f3fce5c53249d1cdc608b54df156a97edd636cf9d23498d0cfe7aec63e"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "wait-timeout",
+      "version": "0.2.1",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "09ac3b126d3914f9849036f826e054cbabdc8519970b8998ddaf3b5bd3c65f11",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/wait-timeout@0.2.1-05c3c6cf82/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/wait-timeout@0.2.1-05c3c6cf82/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "wasi",
+      "version": "0.11.1+wasi-snapshot-preview1",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ccf3ec651a847eb01de73ccad15eb7d99f80485de043efb2f370cd654f4ea44b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/wasi@0.11.1_wasi-snapshot-preview1-6b9816fb42/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/wasi@0.11.1_wasi-snapshot-preview1-6b9816fb42/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "size": 12243,
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "file": "cargo/wasi@0.11.1_wasi-snapshot-preview1-6b9816fb42/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "wasm-bindgen-macro-support",
+      "version": "0.2.129",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "6f501a8bc3719dba86ef8ae4728879c08001bea749eb1333ac5b91e040e2a6b7",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/wasm-bindgen-macro-support@0.2.129-bc58771bbc/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/wasm-bindgen-macro-support@0.2.129-bc58771bbc/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "wasm-bindgen-macro",
+      "version": "0.2.129",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2e29d0c35b16e224a7eeb5cd2d25e3e1968fbd65604117b44d3b789d00ee8535",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/wasm-bindgen-macro@0.2.129-8a70d191f7/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/wasm-bindgen-macro@0.2.129-8a70d191f7/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "wasm-bindgen-shared",
+      "version": "0.2.129",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "23f0c9c52aa7cd7d77769a4cfe2a9adb1b331f489a41d912ce14513d5ab995c6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/wasm-bindgen-shared@0.2.129-bd999f8c92/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/wasm-bindgen-shared@0.2.129-bd999f8c92/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "wasm-bindgen",
+      "version": "0.2.129",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9bb54f33acc68fd454578d9820b0bde1a1a3d17aa17bb7b6595806d02886d409",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/wasm-bindgen@0.2.129-c0149690a3/LICENSE-APACHE",
+          "size": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "file": "cargo/wasm-bindgen@0.2.129-c0149690a3/LICENSE-MIT",
+          "size": 1057,
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/winapi-i686-pc-windows-gnu@0.4.0-9c4f4bfaef/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT",
+          "size": 1073,
+          "sha256": "ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT"
+        },
+        {
+          "file": "cargo/winapi-i686-pc-windows-gnu@0.4.0-9c4f4bfaef/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE",
+          "size": 11357,
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE"
+        },
+        {
+          "file": "cargo/winapi-i686-pc-windows-gnu@0.4.0-9c4f4bfaef/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/src/lib.rs",
+          "size": 389,
+          "sha256": "79212a91f610f8a77aa6ed4cc77212c2531eeb35630388bf07323cc328fcca42",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/src/lib.rs"
+        },
+        {
+          "file": "cargo/winapi-i686-pc-windows-gnu@0.4.0-9c4f4bfaef/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/Cargo.toml",
+          "size": 463,
+          "sha256": "2b366e86c69e5c0ca208cb244ad2aaf9c97a7f9310b711dd722f8db827b64c9f",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/i686/Cargo.toml"
+        }
+      ],
+      "supplements": [
+        {
+          "upstreamCommit": "4ac6c90e4ab92850c78b6103137290fe4ab9d273",
+          "materialBasis": "Architecture crate source notice matches the fixed upstream revision byte-for-byte."
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winapi-util",
+      "version": "0.1.11",
+      "license": "Unlicense OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/winapi-util@0.1.11-5c601fef50/COPYING",
+          "size": 126,
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "file": "cargo/winapi-util@0.1.11-5c601fef50/LICENSE-MIT",
+          "size": 1081,
+          "sha256": "cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14"
+        },
+        {
+          "file": "cargo/winapi-util@0.1.11-5c601fef50/UNLICENSE",
+          "size": 1211,
+          "sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/winapi-x86_64-pc-windows-gnu@0.4.0-c9b43f8bda/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT",
+          "size": 1073,
+          "sha256": "ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-MIT"
+        },
+        {
+          "file": "cargo/winapi-x86_64-pc-windows-gnu@0.4.0-c9b43f8bda/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE",
+          "size": 11357,
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/LICENSE-APACHE"
+        },
+        {
+          "file": "cargo/winapi-x86_64-pc-windows-gnu@0.4.0-c9b43f8bda/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/src/lib.rs",
+          "size": 389,
+          "sha256": "79212a91f610f8a77aa6ed4cc77212c2531eeb35630388bf07323cc328fcca42",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/src/lib.rs"
+        },
+        {
+          "file": "cargo/winapi-x86_64-pc-windows-gnu@0.4.0-c9b43f8bda/upstream/retep998_winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/Cargo.toml",
+          "size": 467,
+          "sha256": "bfae0ed252a110efdc81caa66355772db19cf2a3619d591118e7bc271a661d26",
+          "source": "https://raw.githubusercontent.com/retep998/winapi-rs/4ac6c90e4ab92850c78b6103137290fe4ab9d273/x86_64/Cargo.toml"
+        }
+      ],
+      "supplements": [
+        {
+          "upstreamCommit": "4ac6c90e4ab92850c78b6103137290fe4ab9d273",
+          "materialBasis": "Architecture crate source notice matches the fixed upstream revision byte-for-byte."
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winapi",
+      "version": "0.3.9",
+      "license": "MIT/Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/winapi@0.3.9-11a6541da9/LICENSE-APACHE",
+          "size": 11357,
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        },
+        {
+          "file": "cargo/winapi@0.3.9-11a6541da9/LICENSE-MIT",
+          "size": 1073,
+          "sha256": "ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_aarch64_gnullvm",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "32a4622180e7a0ec044bb555404c800bc9fd9ec262ec147edd5989ccd0c02cd3",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_aarch64_gnullvm@0.52.6-7363e30dd8/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_aarch64_gnullvm@0.52.6-7363e30dd8/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_aarch64_msvc",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "09ec2a7bb152e2252b53fa7803150007879548bc709c039df7627cabbd05d469",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_aarch64_msvc@0.52.6-19a2ab3eaf/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_aarch64_msvc@0.52.6-19a2ab3eaf/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_i686_gnu",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "8e9b5ad5ab802e97eb8e295ac6720e509ee4c243f69d781394014ebfe8bbfa0b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_i686_gnu@0.52.6-5357826d52/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_i686_gnu@0.52.6-5357826d52/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_i686_gnullvm",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "0eee52d38c090b3caa76c563b86c3a4bd71ef1a819287c19d586d7334ae8ed66",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_i686_gnullvm@0.52.6-b252da3715/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_i686_gnullvm@0.52.6-b252da3715/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_i686_msvc",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "240948bc05c5e7c6dabba28bf89d89ffce3e303022809e73deaefe4f6ec56c66",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_i686_msvc@0.52.6-5362960481/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_i686_msvc@0.52.6-5362960481/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_x86_64_gnu",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "147a5c80aabfbf0c7d901cb5895d1de30ef2907eb21fbbab29ca94c5b08b1a78",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_x86_64_gnu@0.52.6-f35b7be51d/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_x86_64_gnu@0.52.6-f35b7be51d/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_x86_64_gnullvm",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "24d5b23dc417412679681396f2b49f3de8c1473deb516bd34410872eff51ed0d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_x86_64_gnullvm@0.52.6-24f5688a7f/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_x86_64_gnullvm@0.52.6-24f5688a7f/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows_x86_64_msvc",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows_x86_64_msvc@0.52.6-233dd8d264/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows_x86_64_msvc@0.52.6-233dd8d264/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows-link",
+      "version": "0.2.1",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows-link@0.2.1-a6a11e40fc/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows-link@0.2.1-a6a11e40fc/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows-sys",
+      "version": "0.52.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "282be5f36a8ce781fad8c8ae18fa3f9beff57ec1b52cb3de0789201425d9a33d",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows-sys@0.52.0-f5a8b9602b/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows-sys@0.52.0-f5a8b9602b/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows-sys@0.61.2-4106fd8636/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows-sys@0.61.2-4106fd8636/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "windows-targets",
+      "version": "0.52.6",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9b724f72796e036ab90c1021d4780d4d3d648aca59e491e6b98e725b84e99973",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/windows-targets@0.52.6-f2ac62aa00/license-apache-2.0",
+          "size": 11351,
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "file": "cargo/windows-targets@0.52.6-f2ac62aa00/license-mit",
+          "size": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "winnow",
+      "version": "1.0.4",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/winnow@1.0.4-2bf87569dc/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "cb5aedb296c5246d1f22e9099f925a65146f9f0d6b4eebba97fd27a6cdbbab2d"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "zeroize",
+      "version": "1.9.1",
+      "license": "Apache-2.0 OR MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "e13084392c5e4bc371903e2935a5eaeed24905a7511356b883835e18a78f6879",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/zeroize@1.9.1-1b6f36c76f/LICENSE-APACHE",
+          "size": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "file": "cargo/zeroize@1.9.1-1b6f36c76f/LICENSE-MIT",
+          "size": 1082,
+          "sha256": "8c7516d4b27b1e495be5e38b612298b63de48d05f49cdac94f70f3cd70f8864b"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "zip",
+      "version": "9.0.2",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "9e2fc56a6707efb066c40aead2409ebb1224e6dde24a074e9fbc78ced500507b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/zip@9.0.2-ebba3d28f8/LICENSE",
+          "size": 1085,
+          "sha256": "58545fed1565e42d687aecec6897d35c6d37ccb71479a137c0deb2203e125c79"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "zlib-rs",
+      "version": "0.6.8",
+      "license": "Zlib",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "b268e58e7c693d7c271f93ffc4ba3b380412554231c85bf61ca7af91042a4112",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/zlib-rs@0.6.8-e0da5cd5cd/LICENSE",
+          "size": 856,
+          "sha256": "e72111c52b7d96ebe25348dee19f0744f444d3c95ae6b1ecb6ccaecc5bce05ba"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "zmij",
+      "version": "1.0.23",
+      "license": "MIT",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/zmij@1.0.23-2660338ca5/LICENSE-MIT",
+          "size": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ]
+    },
+    {
+      "kind": "cargo",
+      "name": "zopfli",
+      "version": "0.8.4",
+      "license": "Apache-2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "aaf7fc5d30c28483d93805c4a5e12b05bbb52407fa67c5f8bd552374cd01fb11",
+      "scope": "Cargo.lock source superset (includes build and non-host dependencies)",
+      "materials": [
+        {
+          "file": "cargo/zopfli@0.8.4-9a34942c5b/COPYING",
+          "size": 11341,
+          "sha256": "018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513"
+        }
+      ]
+    },
+    {
+      "kind": "runtime",
+      "name": "Rust standard library",
+      "version": "1.98.1",
+      "license": "See compiler distribution copyright and licenses",
+      "materials": [
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/COPYRIGHT-library.html",
+          "size": 1512520,
+          "sha256": "68129500b616d5838629e68f55ff3aed5e096dacf60ce9eb41bbe599a563afa6"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/COPYRIGHT.html",
+          "size": 15380909,
+          "sha256": "5b0c93fc4e6d4b072eaa521b1762d1e746f4c368f65e81a0e5308e2772dac85e"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/Apache-2.0.txt",
+          "size": 10280,
+          "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/BSD-2-Clause.txt",
+          "size": 1267,
+          "sha256": "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/CC-BY-SA-4.0.txt",
+          "size": 20137,
+          "sha256": "23ee78c8bae49cf08ea2f0c84945c66b987ebe4520881fb51b3dad4fb43d07c2"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/GCC-exception-3.1.txt",
+          "size": 3320,
+          "sha256": "a3966c9410ef94a1efbfa9ec04e9c1994026a70623fbf0885ce36737bfba3b54"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/GPL-2.0-only.txt",
+          "size": 17642,
+          "sha256": "54b212ba1f97f6948fa5486239ab505dd820b02e50cbfd296b4062c8609a70af"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/GPL-3.0-or-later.txt",
+          "size": 34795,
+          "sha256": "05315fce6c35f79b8a35454828995fa26336f235895ac64557abc028f4ffcea2"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/ISC.txt",
+          "size": 730,
+          "sha256": "0ff61769b238634e042ab759dddfd104a8e69d091e3600ae3410e401a6164381"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/LLVM-exception.txt",
+          "size": 919,
+          "sha256": "e34c58338bd89d43e709e226610d8f32b3e3c47f4ad9a99a8dc1d4ac7842488e"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/MIT.txt",
+          "size": 1078,
+          "sha256": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/NCSA.txt",
+          "size": 1676,
+          "sha256": "39cb0234065c92b9e6cee3830cbb52b1aa289aa8fe9ba2e66730fec5cf05c630"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/OFL-1.1.txt",
+          "size": 4016,
+          "sha256": "8eea8287e5876b539670cadb82e99f9a7afddec6f6730811be1daf25d2e9bcfd"
+        },
+        {
+          "file": "runtime/Rust_standard_library@1.98.1-d58cd6a286/licenses/Unicode-3.0.txt",
+          "size": 1995,
+          "sha256": "f5062c9a188d81dfe66b56db4182dcf9e4b17c0d9b0d311a8e20b3a1b075c443"
+        }
+      ]
+    }
+  ]
+}

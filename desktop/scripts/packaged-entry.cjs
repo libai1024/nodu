@@ -65,15 +65,10 @@ if (extracted.terminals.length) {
 Object.assign(process.env, extracted.timeouts);
 
 const workspaceArgument = rest[0] && !rest[0].startsWith('-') ? rest.shift() : undefined;
-const workspace = workspaceArgument
-    ? path.resolve(process.cwd(), workspaceArgument)
-    : path.join(app.getPath('documents'), 'Nodu');
-if (!workspaceArgument) {
-    // First launch opens a fresh per-user workspace; nothing is copied from
-    // developer settings or an existing profile.
-    fs.mkdirSync(workspace, { recursive: true });
-}
-if (!fs.existsSync(workspace)) {
+// Keep the no-project launch empty so the dedicated workbench opens.
+// Do not manufacture an empty Documents/Nodu workspace or add it to recents.
+const workspace = workspaceArgument ? path.resolve(process.cwd(), workspaceArgument) : undefined;
+if (workspace && !fs.existsSync(workspace)) {
     fail(`Workspace does not exist: ${workspace}`);
 }
 
@@ -86,6 +81,6 @@ const managed = [
 // Bundled ElectronMainProcessArgv.processArgvBinIndex is 0, so packaged
 // mode keeps exactly one binary entry; a second one would be parsed as
 // an extra workspace/file argument (the app executable itself).
-process.argv = [process.argv[0], ...(app.isPackaged ? [] : [__filename]), workspace, ...rest, ...managed];
+process.argv = [process.argv[0], ...(app.isPackaged ? [] : [__filename]), ...(workspace ? [workspace] : []), ...rest, ...managed];
 
 require('./lib/backend/electron-main.js');

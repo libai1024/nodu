@@ -6,8 +6,8 @@
 // under the pinned Node toolchain), @electron/packager thin apps,
 // @electron/universal merge, ad-hoc codesign, ditto zip + manifest.
 // Windows x64: same isolated pipeline on a Windows host, portable zip;
-// missing media/sidecar .exe inputs fail validation. No installers, no
-// DMG/NSIS, no Developer ID or notarization claims.
+// missing media/sidecar .exe inputs fail validation. macOS also produces a
+// drag-to-Applications DMG. No Developer ID or notarization claims.
 
 const { execFileSync, execSync } = require('node:child_process');
 const crypto = require('node:crypto');
@@ -66,6 +66,7 @@ const { values } = (() => {
                 arch: { type: 'string' },
                 help: { type: 'boolean' },
                 stamp: { type: 'boolean' },
+                prepare: { type: 'boolean' },
             },
             allowPositionals: false,
         });
@@ -79,7 +80,8 @@ if (values.help) {
 Usage: node scripts/package-electron.cjs [--arch universal|arm64|x64]
   (no --arch)   macOS: universal .app merge + ad-hoc sign + zip.
                 Windows: x64 portable package.
-  --arch arm64|x64   single-arch thin .app only (macOS).
+  --arch arm64|x64   single-arch signed .app + zip + DMG (macOS).
+  --prepare     build isolated JS/Electron workspaces without assembling runtime assets.
   --help        show this text.`);
     process.exit(0);
 }
@@ -141,7 +143,14 @@ function requireInputs(arch) {
 // ------------------------------------------------- toolchain (darwin)
 
 function sha256File(file) {
-    return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+    const hash = crypto.createHash('sha256');
+    const fd = fs.openSync(file, 'r');
+    const chunk = Buffer.alloc(1024 * 1024);
+    try {
+        let size;
+        while ((size = fs.readSync(fd, chunk, 0, chunk.length, null)) > 0) { hash.update(chunk.subarray(0, size)); }
+    } finally { fs.closeSync(fd); }
+    return hash.digest('hex');
 }
 
 // Bounded fetch: HTTPS only, at most 5 redirects (relative Location
@@ -356,6 +365,10 @@ function runtimeResourcesStamp() {
         hash.update(relPath); hash.update('\0');
         hash.update(hashTree(full)); hash.update('\0');
     }
+    for (const relPath of ['scripts/package-licenses.cjs', 'THIRD-PARTY-NOTICES.md', 'scope-extension/style/fonts/FONT-LICENSE.txt']) {
+        const file = path.join(desktop, relPath);
+        if (fs.existsSync(file)) { hash.update(relPath); hash.update(fs.readFileSync(file)); }
+    }
     hash.update(courseExamplesStamp(desktop));
     if (host === 'darwin') { hash.update(tutorTools.stamp(desktop, thinArchs.map(a => `darwin-${a}`))); }
     return hash.digest('hex');
@@ -556,6 +569,19 @@ function writePackagingEsbuild(workDesktop) {
         path.join(workDesktop, 'electron-app', 'esbuild.mjs'));
 }
 
+function assertWindowsBuildPrerequisites(workDesktop) {
+    if (host !== 'win32') { return; }
+    // npm can silently omit this optional native package after node-gyp fails,
+    // while Theia's Windows backend still requires it for the production build.
+    if (!fs.existsSync(path.join(workDesktop,
+        'node_modules/@vscode/windows-ca-certs/build/Release/crypt32.node'))) {
+        fail('Windows certificate module was not built. Install the matching '
+            + 'VS 2022 C++ x64/x86 Spectre-mitigated libraries and Windows SDK, '
+            + 'then rerun npm ci in the isolated packaging workspace. '
+            + 'Do not disable Spectre mitigation to bypass this requirement.');
+    }
+}
+
 async function buildWorkspace(arch) {
     const workDesktop = path.join(packageRoot, `work-${arch}`, 'desktop');
     const stampFile = path.join(packageRoot, `work-${arch}`, '.stamp');
@@ -576,6 +602,7 @@ async function buildWorkspace(arch) {
         && fs.existsSync(path.join(workDesktop, 'node_modules'));
 
     if (stored.compiler === stamp && installReusable && built) {
+        assertWindowsBuildPrerequisites(workDesktop);
         if (host === 'darwin') { syncDarwinPrebuilds(workDesktop, arch); }
         assertNativeArch(workDesktop, arch);
         console.log(`package-electron: work-${arch} stamps current `
@@ -597,6 +624,7 @@ async function buildWorkspace(arch) {
             + 'syncing changed compiler inputs');
         syncInputs(workDesktop, stored.inputList);
     }
+    assertWindowsBuildPrerequisites(workDesktop);
     writePackagingEsbuild(workDesktop);
     run(nodeBin, [npmCli, 'run', 'compile', '--workspace', '@scope/studio-extension'],
         { cwd: workDesktop, env });
@@ -820,6 +848,14 @@ function buildAppInput(arch, workDesktop, universal) {
     stm32.copyToolkit(stm32.toolkitSource(desktop, host, arch), resDest, host, arch);
     copyRes(path.join(desktop, 'plugins'), path.join(appInput, 'plugins'));
     copyRuntimePackages(workDesktop, appInput);
+    require('./package-licenses.cjs').collectPackageLicenses({ desktop, workDesktop, appInput });
+    fs.writeFileSync(path.join(appInput, 'build-info.json'), JSON.stringify({
+        version: applicationVersion, ...sourceIdentity(),
+        compilerInputs: universal
+            ? { arm64: computeStamp('arm64').stamp, x64: computeStamp('x64').stamp }
+            : { [arch]: computeStamp(arch).stamp },
+        runtimeResources: runtimeResourcesStamp(),
+    }, null, 2) + '\n');
     return appInput;
 }
 
@@ -1082,6 +1118,9 @@ async function packageMacUniversal() {
             fail(`thin ${arch} app missing at ${thinApps[arch]}`);
         }
     }
+    prepareUniversalLicenses(
+        path.join(thinApps.arm64, 'Contents', 'Resources', 'app'),
+        path.join(thinApps.x64, 'Contents', 'Resources', 'app'));
     require('./package-stm32.cjs').prepareUniversal(thinApps.arm64, thinApps.x64);
     canonizeJsForMerge(
         path.join(thinApps.arm64, 'Contents', 'Resources', 'app'),
@@ -1103,30 +1142,86 @@ async function packageMacUniversal() {
         // binary by the time we get here.
         x64ArchFiles: '**/darwin-*/**',
     });
-    auditMinOs(outApp);
-    signAppDarwin(outApp);
-    const zip = path.join(distDir, `Nodu-${applicationVersion}-mac-universal.zip`);
+    writeMacArtifacts(outApp, 'universal');
+}
+
+function prepareUniversalLicenses(arm64Root, x64Root) {
+    // Optional native npm packages differ by architecture. Keep both inventories
+    // verbatim in both thin apps before the universal byte comparison.
+    const staging = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-universal-licenses-'));
+    try {
+        for (const [arch, root] of [['arm64', arm64Root], ['x64', x64Root]]) {
+            const from = path.join(root, 'licenses');
+            if (!fs.existsSync(path.join(from, 'INDEX.json'))) {
+                throw new Error(`Missing ${arch} package license inventory`);
+            }
+            fs.cpSync(from, path.join(staging, arch), { recursive: true });
+        }
+        for (const root of [arm64Root, x64Root]) {
+            const destination = path.join(root, 'licenses');
+            fs.rmSync(destination, { recursive: true });
+            fs.cpSync(staging, destination, { recursive: true });
+        }
+    } finally {
+        fs.rmSync(staging, { recursive: true, force: true });
+    }
+}
+
+function sourceIdentity() {
+    try {
+        return {
+            sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim(),
+            sourceDirty: !!execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], { cwd: repo, encoding: 'utf8' }).trim(),
+        };
+    } catch {
+        return { sourceCommit: process.env.NODU_SOURCE_COMMIT || null, sourceDirty: null };
+    }
+}
+
+function writeMacArtifacts(appPath, arch) {
+    auditMinOs(appPath);
+    signAppDarwin(appPath);
+    fs.mkdirSync(distDir, { recursive: true });
+    const stem = `Nodu-${applicationVersion}-mac-${arch}`;
+    const zip = path.join(distDir, `${stem}.zip`);
     fs.rmSync(zip, { force: true });
     execFileSync('ditto', ['-c', '-k', '--sequesterRsrc', '--keepParent',
-        'Nodu.app', zip], { cwd: distDir });
+        appPath, zip]);
+    // A plain drag-to-install image keeps installation independent of shell
+    // scripts, administrator rights and project/user configuration.
+    const imageRoot = fs.mkdtempSync(path.join(packageRoot, 'dmg-'));
+    const dmg = path.join(distDir, `${stem}.dmg`);
+    try {
+        execFileSync('ditto', [appPath, path.join(imageRoot, 'Nodu.app')]);
+        fs.symlinkSync('/Applications', path.join(imageRoot, 'Applications'));
+        fs.rmSync(dmg, { force: true });
+        execFileSync('hdiutil', ['create', '-volname', `Nodu ${applicationVersion}`,
+            '-srcfolder', imageRoot, '-ov', '-format', 'UDZO', dmg], { stdio: 'inherit' });
+        execFileSync('hdiutil', ['verify', dmg], { stdio: 'inherit' });
+    } finally {
+        fs.rmSync(imageRoot, { recursive: true, force: true });
+    }
+    const artifacts = [zip, dmg].map(file => ({
+        name: path.basename(file), size: fs.statSync(file).size, sha256: sha256File(file),
+    }));
     const manifest = {
-        version: applicationVersion,
-        targetPlatform: 'darwin-universal',
-        artifact: path.basename(zip),
-        sha256: sha256File(zip),
+        version: applicationVersion, ...sourceIdentity(),
+        targetPlatform: `darwin-${arch}`,
+        artifacts,
         electron: ELECTRON_VERSION,
         node: NODE_VERSION,
         packager: PACKAGER_VERSION,
-        universal: UNIVERSAL_VERSION,
         signing: 'ad-hoc (codesign -s -); NOT Developer ID signed, NOT notarized',
         minimumSystem: MIN_OS,
         runtimeResources: runtimeResourcesStamp(),
         generatedAt: new Date().toISOString(),
     };
-    fs.writeFileSync(path.join(distDir, 'manifest.json'),
+    fs.writeFileSync(path.join(distDir, `${stem}.manifest.json`),
         JSON.stringify(manifest, null, 2) + '\n');
+    fs.writeFileSync(path.join(distDir, `${stem}.sha256`),
+        artifacts.map(item => `${item.sha256}  ${item.name}`).join('\n') + '\n');
     console.log(`package-electron: ${rel(zip)}`);
-    console.log(`package-electron: sha256 ${manifest.sha256}`);
+    console.log(`package-electron: ${rel(dmg)}`);
 }
 
 async function packageWindows() {
@@ -1148,6 +1243,7 @@ async function packageWindows() {
     const manifest = {
         version: applicationVersion,
         targetPlatform: 'win32-x64',
+        ...sourceIdentity(),
         artifact: path.basename(zip),
         sha256: sha256File(zip),
         electron: ELECTRON_VERSION,
@@ -1176,6 +1272,10 @@ async function main() {
         return;
     }
     fs.mkdirSync(packageRoot, { recursive: true });
+    if (values.prepare) {
+        for (const arch of thinArchs) { await buildWorkspace(arch); }
+        return;
+    }
     for (const arch of thinArchs) { requireInputs(arch); }
     if (host === 'darwin' && targetArch === 'universal') {
         await packageMacUniversal();
@@ -1185,7 +1285,7 @@ async function main() {
         const workDesktop = await buildWorkspace(targetArch);
         const appInput = buildAppInput(targetArch, workDesktop, false);
         const out = await packageThin(targetArch, appInput);
-        console.log(`package-electron: thin app at ${rel(out)}`);
+        writeMacArtifacts(path.join(out, 'Nodu.app'), targetArch);
         return;
     }
     await packageWindows();
@@ -1197,5 +1297,5 @@ if (require.main === module) {
 
 module.exports = {
     canonicalJs, canonizeJsForMerge, normalizeNativeModuleKeys, computeStamp, computeInstallStamp,
-    isMachO, isPeX64, keepBinDirs, resolveNpmCli,
+    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses,
 };
