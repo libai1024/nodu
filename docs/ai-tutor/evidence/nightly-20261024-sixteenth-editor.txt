@@ -1,0 +1,46 @@
+✔ an already restored editor publishes its buffer when workspace authorization arrives (0.659583ms)
+✔ dynamic exercise survives typing, advances to its second line, and rejects edits outside its region (0.382167ms)
+✔ reference stays below the input after a typo and backspace without modifying code or requesting a review (2.635959ms)
+✔ reference tolerates indentation and Unicode, preserves the target and marks extra input separately (0.32975ms)
+✔ editing the next exercise line invalidates evidence but preserves unchanged-line guidance progress (0.386417ms)
+✔ completed history does not consume the pending queue budget (0.365208ms)
+✔ accepted goal restores its fragment after editor reopen without trusting old annotation evidence (0.09975ms)
+✔ completed fragment schedules one semantic check and partial typing schedules none (0.135875ms)
+✔ editing while a fragment is being checked cancels the stale request (0.098708ms)
+✔ line history reopens exact content, preserves guidance and never replays pending model calls (0.765ms)
+✔ production editor saves line decorations and rebinds them to the reopened document version (0.232041ms)
+✔ manual fragment checks use local evidence offline and ignore results after editing (10.07475ms)
+✔ history survives application restart as stale evidence without losing typed guidance progress (0.75525ms)
+✔ persistent history validates corruption, never replays pending calls, and bounds stored files (2.933ms)
+✔ static course ghost continues through incomplete constructs and comments without waiting on model review (0.120875ms)
+✔ course navigation authorizes files and abandons a location after switching projects (6.4995ms)
+✔ dynamic lesson opens the next file and focuses validated guidance without editing source (6.116791ms)
+✔ reviewed equivalent lines trigger a fresh fragment review without being marked complete locally (0.154667ms)
+✔ same-revision fragment removal and failed reads clear a restored ghost (5.933625ms)
+✔ reconnect preserves same-project conversation and buffer, tolerates expired handle, clears on project switch (0.478458ms)
+✔ superseded session open is closed before a deduplicated reconnect adopts its own handle (0.186083ms)
+✔ settings completion from an obsolete load cannot open or overwrite the new workspace (0.130292ms)
+✔ course snapshots never regress and stale workspace failures do not surface (0.149125ms)
+✔ migration preview and accepted migration cannot overwrite a newly selected project (0.079833ms)
+✔ clearing a conversation is mode-scoped and does not erase messages entered during delayed completion (0.1365ms)
+✔ delayed goal failure after cancellation cannot replace current error or new request (0.174292ms)
+✔ queued sends cannot carry an old-project prompt or buffer into a newly selected project (0.251375ms)
+✔ failed presentation synchronization prevents queued model requests without an unhandled rejection (0.071167ms)
+✔ late file navigation neither steals focus nor reports errors in another project (9.257292ms)
+✔ goal snapshot from a previous connection cannot restore ghosts in the same reopened workspace (8.075209ms)
+✔ legacy progress import cannot write its result into a different live session (5.947208ms)
+✔ a new message waits for server conversation clearing before starting its model request (0.351791ms)
+✔ removing a course clears it and a late snapshot cannot restore the deleted plan (0.087917ms)
+✔ pending line review cannot affect a replaced or disposed editor document (0.34975ms)
+✔ unexpected line-check failure clears processing and allows following work without an unhandled rejection (0.10625ms)
+✔ render and disposal cleanup tolerate Monaco destroying the document before its widget (0.071166ms)
+✔ reference view zone stays below the input, reflows on narrow layout, and cleans up without editing the document (5.062ms)
+✔ typing practice temporarily suppresses completion and paired insertion then restores editor settings (4.836459ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 345.46625

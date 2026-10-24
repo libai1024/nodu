@@ -20,7 +20,7 @@ function MessageText({ text, open }: { text: string; open(path: string, line: nu
                 ? <button key={n} className="scope-text-button nodu-ai-file-link" onClick={() => open(match[2], Number(match[3] ?? 1))}>{match[1]}</button> : chunk;
         })}</span>)}</>;
 }
-function GoalPlan({ tutor, run }: { tutor: NoduTutorModel; run(command: string, ...args: unknown[]): void }): React.ReactElement | null {
+function GoalPlan({ tutor, run, revise }: { tutor: NoduTutorModel; run(command: string, ...args: unknown[]): void; revise(): void }): React.ReactElement | null {
     const state = tutor.goalState, busy = !!tutor.busy, step = state.steps[state.current];
     if (['none','cancelled'].includes(state.status)) { return null; }
     const active = state.status === 'active' || state.status === 'paused';
@@ -29,7 +29,7 @@ function GoalPlan({ tutor, run }: { tutor: NoduTutorModel; run(command: string, 
         {state.status === 'draft' ? <>
             <ol className="nodu-ai-goal-steps">{state.steps.map(s => <li key={s.id}>{s.title}</li>)}</ol>
             <div className="nodu-ai-actions"><button className="theia-button" disabled={busy} onClick={() => void tutor.goalAction('confirm')}>开始跟写</button>
-                <button className="scope-text-button" disabled={busy} onClick={() => { tutor.drafts.teach = state.goal ?? ''; tutor.notify(); }}>修改目标</button>
+                <button className="scope-text-button" disabled={busy} onClick={revise}>修改目标</button>
                 <button className="scope-text-button" disabled={busy} onClick={() => void tutor.goalAction('cancel')}>取消</button></div>
         </> : active && step ? <>
             <details className="nodu-ai-details"><summary>{step.title}</summary><p>{step.goal}</p></details>
@@ -92,7 +92,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     };
     return <div className="nodu-ai-panel">
         {tutor.error && <div className="nodu-ai-error" role="alert">{tutor.error}<button className="scope-text-button" onClick={() => void tutor.load()}>重连</button></div>}
-        {tutor.mode === 'teach' && <GoalPlan tutor={tutor} run={run} />}
+        {tutor.mode === 'teach' && <GoalPlan tutor={tutor} run={run} revise={() => { tutor.drafts.teach = tutor.goalState.goal ?? ''; tutor.notify(); input.current?.focus(); }} />}
         {tutor.mode === 'teach' && tutor.session?.plan.kind === 'legacy' && <Migration tutor={tutor} />}
         {tutor.mode === 'teach' && tutor.plan && <section className="nodu-ai-course" aria-label="课程步骤">
             <div className="nodu-ai-stepbar">

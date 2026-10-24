@@ -14,8 +14,20 @@ function methods(file, className, names, dependencies = {}) {
     return new Function(...Object.keys(dependencies), js + '; return Subject;')(...Object.values(dependencies));
 }
 const Model = methods('nodu-tutor-model.ts', 'NoduTutorModel', ['updateBuffer', 'invalidate', 'notify', 'restoreGoalGuidance', 'autoCheckFragment'], helpers);
-const Controller = methods('nodu-tutor-hints.ts', 'TutorEditorController', ['edit', 'render', 'enabled', 'enqueue', 'historyKey', 'saveHistory', 'restoreHistory', 'drain', 'clear'], {
+const Controller = methods('nodu-tutor-hints.ts', 'TutorEditorController', ['edit', 'render', 'enabled', 'enqueue', 'historyKey', 'saveHistory', 'restoreHistory', 'drain', 'clear', 'tutorChanged', 'updateContext'], {
     ...helpers, monaco: { Range: class { constructor(line, col, endLine, endCol) { Object.assign(this, {startLineNumber:line,startColumn:col,endLineNumber:endLine,endColumn:endCol}); } }, editor: { InjectedTextCursorStops: {None:0}, TrackedRangeStickiness: {NeverGrowsWhenTypingAtEdges:0} } }
+});
+test('an already restored editor publishes its buffer when workspace authorization arrives',()=>{
+ const t=model();t.buffer=undefined;t.guidance=undefined;
+ let authorized=false,active=true,restores=0,renders=0;
+ const c=Object.assign(new Controller(),{tutor:t,active:()=>active,
+  buffer:()=>authorized?{path:'main.c',text:'int main(void) {}',version:1,line:1}:undefined,
+  historyKey:()=>t.buffer?.path,clear(){},restoreHistory(){this.taskHistoryKey=this.historyKey();restores++;},render(){renders++;},schedule(){}});
+ t.changed.fire=()=>c.tutorChanged();
+ c.tutorChanged();assert.equal(t.buffer,undefined);
+ authorized=true;c.tutorChanged();assert.equal(t.buffer.text,'int main(void) {}');assert.equal(restores,1,'nested notification must not restore twice');
+ active=false;t.buffer={path:'other.c',text:'other',version:1,line:1};c.tutorChanged();assert.equal(t.buffer.path,'other.c','inactive editor must not replace the active file');
+ const previous=renders;c.disposed=true;c.tutorChanged();assert.equal(renders,previous);
 });
 function model(text = '', plan) {
     return Object.assign(new Model(), { buffer: {path:'main.c',text,version:1,line:1}, guidance: {source:{path:'main.c',text,version:1,line:1},anchorLine:1,lines:['int x = 1;', 'int y = 2;']}, changed:{fire(){}},invalidated:{fire(){}}, teaching:true,autoReview:true,configured:true,plan });
@@ -27,7 +39,7 @@ function editor(tutor, lines, cursorLine) {
         deltaDecorations:()=>[String(++state.nextId)] };
     const c = Object.assign(new Controller(), { tutor, tasks:new Map(), changed:new Set(),before:[...lines],composing:false,
         control:{getModel:()=>textModel,getPosition:()=>({lineNumber:cursorLine,column:state.lines[cursorLine-1].length+1})},
-        decorations:{set:d=>{state.decorations=d;},clear:()=>{}}, removeOverlay(){}, schedule(){}, queueHistory(){}, active:()=>true,
+        decorations:{set:d=>{state.decorations=d;},clear:()=>{}}, removeOverlay(){}, setTracing(value){state.tracing=value;},renderTrace(value){state.reference=value;}, schedule(){}, queueHistory(){}, active:()=>true,
         buffer:()=>({path:'main.c',text:state.lines.join('\n'),version:state.version,line:cursorLine}),updateContext(){tutor.updateBuffer(this.buffer());} });
     return {c,state};
 }
@@ -39,9 +51,34 @@ test('dynamic exercise survives typing, advances to its second line, and rejects
     const {c,state}=editor(t,['int x = 1;','i'],2);
     t.updateBuffer(c.buffer()); c.render();
     assert.equal(c.enabled(),true);
-    assert.equal(state.decorations.find(d=>d.options.after)?.options.after.content,'nt y = 2;');
+    assert.equal(state.reference.candidate,'int y = 2;'); assert.equal(state.reference.line,2);
     t.updateBuffer({path:'other.c',text:'i',version:3,line:1}); assert.equal(t.guidance,undefined);
     assert.equal(helpers.guidanceEditMatches({path:'a',text:'head\n\ntail'},{path:'a',text:'changed\ni\ntail'},2,2),false);
+});
+test('reference stays below the input after a typo and backspace without modifying code or requesting a review', () => {
+    const t=model();t.hintsVisible=true;t.currentStep=()=>undefined;
+    let requests=0;t.send=()=>{requests++;};
+    const {c,state}=editor(t,['inx'],1);c.render();
+    assert.deepEqual(state.reference,{candidate:'int x = 1;',typed:'inx',line:1});
+    assert.equal(state.decorations.some(d=>d.options.after),false,'no inline virtual code');
+    const parts=helpers.traceReference(state.reference.typed,state.reference.candidate);
+    assert.deepEqual(parts.slice(0,3),[{text:'in',state:'matched'},{text:'t',state:'different'},{text:' ',state:'next'}]);
+    state.lines[0]='in';c.render();
+    assert.equal(helpers.traceReference('in',state.reference.candidate).some(p=>p.state==='different'),false);
+    assert.equal(helpers.traceReference('in',state.reference.candidate).map(p=>p.text).join(''),'int x = 1;');
+    state.lines[0]='int x = 1;';c.render();
+    assert.equal(helpers.traceReference(state.lines[0],state.reference.candidate)[0].state,'matched');
+    assert.equal(requests,0);assert.equal(state.lines[0],'int x = 1;');
+});
+test('reference tolerates indentation and Unicode, preserves the target and marks extra input separately', () => {
+    assert.deepEqual(helpers.traceReference('    inx','int'),[{text:'    ',state:'indent'},{text:'in',state:'matched'},{text:'t',state:'different'}]);
+    assert.deepEqual(helpers.traceReference('😀x','😀y;'),[{text:'😀',state:'matched'},{text:'y',state:'different'},{text:';',state:'next'}]);
+    assert.deepEqual(helpers.traceReference('int EXTRA','int'),[{text:'int',state:'matched'},{text:' EXTRA',state:'extra'}]);
+    const t=model();t.hintsVisible=true;t.currentStep=()=>undefined;
+    const {c,state}=editor(t,['int'],1);c.control.getPosition=()=>({lineNumber:1,column:2});c.render();
+    assert.equal(state.reference.candidate,'int x = 1;');
+    c.composing=true;c.render();assert.equal(state.reference,undefined);
+    c.composing=false;t.hintsVisible=false;c.render();assert.equal(state.reference,undefined);assert.equal(state.tracing,false);
 });
 test('editing the next exercise line invalidates evidence but preserves unchanged-line guidance progress', () => {
     const t = model('// STEP\nint x = 1;\n', {}); t.guidance=undefined; t.hintsVisible=true;
@@ -51,10 +88,10 @@ test('editing the next exercise line invalidates evidence but preserves unchange
     state.lines[2]='i'; state.version++;
     c.edit({changes:[{range:{startLineNumber:3,endLineNumber:3},text:'i'}]});
     assert.equal(c.tasks.get('2').status,'stale'); assert.equal(c.tasks.get('2').guided,true);
-    assert.equal(state.decorations.find(d=>d.options.after)?.options.after.content,'nt y = 2;');
+    assert.equal(state.reference.candidate,'int y = 2;'); assert.equal(state.reference.line,3);
     state.lines[1]='int x = 9;'; c.edit({changes:[]});
     assert.equal(c.tasks.get('2').guided,false);
-    assert.equal(state.decorations.some(d=>d.options.after),false);
+    assert.equal(state.reference,undefined);
 });
 test('completed history does not consume the pending queue budget', () => {
     const t=model('',{}); const {c,state}=editor(t,Array.from({length:22},(_,i)=>`int x${i};`),22);
@@ -163,8 +200,8 @@ test('static course ghost continues through incomplete constructs and comments w
     const t=model('',{});t.guidance=undefined;t.hintsVisible=true;
     t.currentStep=()=>({anchors:[{id:'s',path:'main.c',marker:'// STEP'}],guidance:[{anchorId:'s',requiredSymbols:[],lines:['void sample(void)','{','// setup','int x = 1;','}']}]});
     const {c,state}=editor(t,['// STEP','void sample(void)','{','// setup','i'],5);
-    c.render();assert.equal(state.decorations.find(d=>d.options.after)?.options.after.content,'nt x = 1;');
-    state.lines[1]='void different(void)';c.render();assert.equal(state.decorations.some(d=>d.options.after),false);
+    c.render();assert.equal(state.reference.candidate,'int x = 1;');assert.equal(state.reference.line,5);
+    state.lines[1]='void different(void)';c.render();assert.equal(state.reference,undefined);
 });
 
 test('course navigation authorizes files and abandons a location after switching projects', async () => {
@@ -355,4 +392,28 @@ test('render and disposal cleanup tolerate Monaco destroying the document before
  document.isDisposed=()=>true;document.deltaDecorations=()=>{throw Error('disposed document accessed');};
  c.buffer=()=>{throw Error('disposed buffer accessed');};c.tasks.set('1',{});c.changed.add(1);
  c.render();c.clear();assert.equal(c.tasks.size,0);assert.equal(c.changed.size,0);
+});
+
+test('reference view zone stays below the input, reflows on narrow layout, and cleans up without editing the document',()=>{
+ const nodes=[];
+ const document={createElement:()=>{const node={style:{},children:[],setAttribute(){},append(child){this.children.push(child);},replaceChildren(){this.children=[];},get scrollHeight(){return this.style.width==='100px'?64:32;}};nodes.push(node);return node;}};
+ const Subject=methods('nodu-tutor-hints.ts','TutorEditorController',['renderTrace'],{document,traceReference:helpers.traceReference,monaco:{editor:{EditorOption:{fontInfo:'fontInfo',lineHeight:'lineHeight'}}}});
+ const zones=new Map();let width=700,adds=0,layouts=0,removes=0;
+ const c=Object.assign(new Subject(),{control:{getLayoutInfo:()=>({contentWidth:width}),getOption:key=>key==='lineHeight'?24:{fontFamily:'mono',fontSize:14},getModel:()=>({getOptions:()=>({tabSize:4})}),applyFontInfo(){},changeViewZones:fn=>fn({addZone(zone){const id=String(++adds);zones.set(id,zone);return id;},layoutZone(){layouts++;},removeZone(id){zones.delete(id);removes++;}})}});
+ c.renderTrace({typed:'in',candidate:'int x = 1;',line:4});
+ assert.equal(zones.get('1').afterLineNumber,4);assert.equal(zones.get('1').heightInPx,32);
+ assert.equal(c.traceZone.content.children.map(s=>s.textContent).join(''),'int x = 1;');
+ c.renderTrace({typed:'inx',candidate:'int x = 1;',line:4});assert.equal(adds,1);assert.ok(c.traceZone.content.children.some(s=>s.className.endsWith('different')));
+ width=120;c.renderTrace({typed:'inx',candidate:'int x = 1;',line:4});assert.equal(zones.get('1').heightInPx,64);
+ c.renderTrace();assert.equal(zones.size,0);assert.equal(removes,1);assert.equal(c.traceZone,undefined);
+ c.renderTrace({typed:'',candidate:'return 0;',line:8});assert.equal(zones.get('2').afterLineNumber,8);assert.ok(layouts>=4);
+});
+test('typing practice temporarily suppresses completion and paired insertion then restores editor settings',()=>{
+ const keys=['quickSuggestions','suggestOnTriggerCharacters','inlineSuggest','autoClosingBrackets','autoClosingQuotes','autoSurround'];
+ const original={quickSuggestions:{other:'on',comments:'off',strings:'off'},suggestOnTriggerCharacters:true,inlineSuggest:{enabled:true},autoClosingBrackets:'languageDefined',autoClosingQuotes:'languageDefined',autoSurround:'languageDefined'};
+ const Subject=methods('nodu-tutor-hints.ts','TutorEditorController',['setTracing'],{monaco:{editor:{EditorOption:Object.fromEntries(keys.map(k=>[k,k]))}}});
+ const updates=[];const c=Object.assign(new Subject(),{control:{getOption:k=>original[k],updateOptions:options=>updates.push(options)}});
+ c.setTracing(true);c.setTracing(true);assert.equal(updates.length,1);assert.equal(updates[0].quickSuggestions,false);assert.equal(updates[0].autoClosingQuotes,'never');
+ c.setTracing(false);assert.deepEqual(updates[1],original);assert.equal(c.tracingOptions,undefined);
+ c.setTracing(false);assert.equal(updates.length,2);
 });

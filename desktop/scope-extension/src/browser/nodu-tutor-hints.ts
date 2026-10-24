@@ -7,7 +7,7 @@ import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { EditorWidget } from '@theia/editor/lib/browser/editor-widget';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
 import { NoduTutorModel } from './nodu-tutor-model';
-import { completedLines, ghostSuffix, pendingReviewCount, reviewableLine, tutorMarkerLine } from '../common/tutor/tutor-guidance';
+import { completedLines, pendingReviewCount, reviewableLine, tutorMarkerLine, traceReference } from '../common/tutor/tutor-guidance';
 import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 
 export const TUTOR_MENU = ['nodu-ai-controls'];
@@ -33,6 +33,8 @@ class TutorEditorController implements Disposable {
     private processing = false;
     private disposed = false;
     private overlay?: monaco.editor.IOverlayWidget;
+    private tracingOptions?: monaco.editor.IEditorOptions;
+    private traceZone?: { id: string; zone: monaco.editor.IViewZone; content: HTMLDivElement; signature: string };
     private readonly id = `nodu.tutor.step.${++count}`;
     constructor(private readonly widget: EditorWidget, private readonly control: monaco.editor.IStandaloneCodeEditor,
         private readonly tutor: NoduTutorModel, private readonly active: () => boolean, private readonly openPanel: () => void) {
@@ -50,11 +52,8 @@ class TutorEditorController implements Disposable {
         // MonacoEditorModel is the document behind Theia's EditorWidget; it owns the save event.
         const document = MonacoEditor.get(widget)?.document;
         if (document) { this.disposables.push(document.onDidSaveModel(() => { const lines = [...this.changed]; this.changed.clear(); lines.forEach(n => this.enqueue(n)); })); }
-        this.disposables.push(tutor.onDidChange(() => {
-            if (this.taskHistoryKey !== this.historyKey()) { this.clear(); this.restoreHistory(); }
-            this.render(); this.schedule();
-        }));
-        this.disposables.push(control.onWillChangeModel(() => this.saveHistory()));
+        this.disposables.push(tutor.onDidChange(() => this.tutorChanged()));
+        this.disposables.push(control.onWillChangeModel(() => { this.saveHistory(); this.renderTrace(); this.setTracing(false); }));
         this.disposables.push(control.onDidChangeModel(() => { this.clear(); this.restoreHistory(); this.before = control.getModel()?.getLinesContent() ?? []; this.updateContext(); this.render(); }));
         this.restoreHistory(); this.updateContext(); this.render();
     }
@@ -93,6 +92,14 @@ class TutorEditorController implements Disposable {
         }
     }
     private updateContext(): void { if (this.active()) { this.tutor.updateBuffer(this.buffer()); } }
+    private tutorChanged(): void {
+        if (this.disposed) { return; }
+        // Workspace authorization can finish after the editor was restored. Publish
+        // the active buffer before the first goal, without waiting for a focus event.
+        this.updateContext();
+        if (this.taskHistoryKey !== this.historyKey()) { this.clear(); this.restoreHistory(); }
+        this.render(); this.schedule();
+    }
     private edit(event: monaco.editor.IModelContentChangedEvent): void {
         const model = this.control.getModel(); if (!model) { return; }
         const after = model.getLinesContent();
@@ -169,8 +176,8 @@ class TutorEditorController implements Disposable {
     }
     private render(): void {
         const model = this.control.getModel();
-        if (!model || model.isDisposed() || !this.tutor.teaching) { this.decorations.clear(); this.removeOverlay(); return; }
-        const buffer = this.buffer(); if (!buffer) { this.decorations.clear(); this.removeOverlay(); return; }
+        if (!model || model.isDisposed() || !this.tutor.teaching) { this.setTracing(false); this.renderTrace(); this.decorations.clear(); this.removeOverlay(); return; }
+        const buffer = this.buffer(); if (!buffer) { this.setTracing(false); this.renderTrace(); this.decorations.clear(); this.removeOverlay(); return; }
         const decorations: monaco.editor.IModelDeltaDecoration[] = [];
         const position = this.control.getPosition();
         const step = this.tutor.currentStep();
@@ -184,7 +191,9 @@ class TutorEditorController implements Disposable {
                 } });
             }
         }
-        if (position && this.tutor.hintsVisible && !this.composing) {
+        let tracing = false;
+        let reference: { candidate: string; typed: string; line: number } | undefined;
+        if (position && this.tutor.hintsVisible && !this.composing && this.active()) {
             let candidate: string | undefined;
             const guidance = this.tutor.guidance;
             const index = guidance ? position.lineNumber - guidance.anchorLine : -1;
@@ -206,11 +215,11 @@ class TutorEditorController implements Disposable {
                 }
             }
             const typed = model.getLineContent(position.lineNumber);
-            const suffix = candidate && position.column === typed.length + 1 ? ghostSuffix(typed, candidate) : undefined;
-            if (suffix) { decorations.push({ range: new monaco.Range(position.lineNumber, typed.length + 1, position.lineNumber, typed.length + 1), options: {
-                after: { content: suffix, inlineClassName: 'nodu-tutor-ghost-text', cursorStops: monaco.editor.InjectedTextCursorStops.None }, showIfCollapsed: true,
-            } }); }
+            tracing = !!candidate && this.active();
+            if (candidate) { reference = { candidate, typed, line: position.lineNumber }; }
         }
+        this.setTracing(tracing);
+        this.renderTrace(reference);
         for (const task of this.tasks.values()) {
             const range = model.getDecorationRange(task.decoration); if (!range) { continue; }
             decorations.push({ range, options: { isWholeLine: true, linesDecorationsClassName: task.status === 'ok' ? 'nodu-tutor-line-ok' : task.status === 'needs-work' ? 'nodu-tutor-line-warn' : 'nodu-tutor-line-pending',
@@ -230,13 +239,66 @@ class TutorEditorController implements Disposable {
             this.control.addOverlayWidget(this.overlay);
         }
     }
+    private renderTrace(reference?: { candidate: string; typed: string; line: number }): void {
+        if (!reference) {
+            if (this.traceZone) {
+                const id = this.traceZone.id; this.traceZone = undefined;
+                this.control.changeViewZones(accessor => accessor.removeZone(id));
+            }
+            return;
+        }
+        const width = Math.max(80, this.control.getLayoutInfo().contentWidth - 20);
+        const font = this.control.getOption(monaco.editor.EditorOption.fontInfo);
+        const lineHeight = this.control.getOption(monaco.editor.EditorOption.lineHeight);
+        const tabSize = this.control.getModel()?.getOptions().tabSize ?? 4;
+        const signature = JSON.stringify([reference, width, font.fontFamily, font.fontSize, font.fontWeight, font.letterSpacing, lineHeight, tabSize]);
+        if (this.traceZone?.signature === signature) { return; }
+        if (!this.traceZone) {
+            const content = document.createElement('div'); content.className = 'nodu-tutor-trace-reference';
+            content.setAttribute('role', 'note'); content.setAttribute('aria-label', '代码范字');
+            const domNode = document.createElement('div'); domNode.append(content);
+            const zone: monaco.editor.IViewZone = { afterLineNumber: reference.line, heightInPx: lineHeight + 8, domNode, suppressMouseDown: true };
+            let id = '';
+            this.control.changeViewZones(accessor => { id = accessor.addZone(zone); });
+            this.traceZone = { id, zone, content, signature: '' };
+        }
+        const { content, zone, id } = this.traceZone;
+        this.traceZone.signature = signature;
+        this.control.applyFontInfo(content); content.style.width = `${width}px`; content.style.tabSize = String(tabSize);
+        content.replaceChildren();
+        for (const part of traceReference(reference.typed, reference.candidate)) {
+            const span = document.createElement('span'); span.className = `nodu-tutor-trace-${part.state}`;
+            span.textContent = part.text; content.append(span);
+        }
+        zone.afterLineNumber = reference.line;
+        zone.heightInPx = Math.max(lineHeight + 8, content.scrollHeight);
+        this.control.changeViewZones(accessor => accessor.layoutZone(id));
+    }
+    private setTracing(active: boolean): void {
+        if (active && !this.tracingOptions) {
+            const option = monaco.editor.EditorOption;
+            this.tracingOptions = {
+                quickSuggestions: this.control.getOption(option.quickSuggestions),
+                suggestOnTriggerCharacters: this.control.getOption(option.suggestOnTriggerCharacters),
+                inlineSuggest: this.control.getOption(option.inlineSuggest),
+                autoClosingBrackets: this.control.getOption(option.autoClosingBrackets),
+                autoClosingQuotes: this.control.getOption(option.autoClosingQuotes),
+                autoSurround: this.control.getOption(option.autoSurround),
+            };
+            this.control.updateOptions({ quickSuggestions: false, suggestOnTriggerCharacters: false, inlineSuggest: { enabled: false },
+                autoClosingBrackets: 'never', autoClosingQuotes: 'never', autoSurround: 'never' });
+        } else if (!active && this.tracingOptions) {
+            const options = this.tracingOptions; this.tracingOptions = undefined;
+            this.control.updateOptions(options);
+        }
+    }
     private removeOverlay(): void { if (this.overlay) { this.control.removeOverlayWidget(this.overlay); this.overlay = undefined; } }
     private clear(): void {
         const model = this.control.getModel();
         if (model && !model.isDisposed()) { model.deltaDecorations([...this.tasks.keys()], []); }
         this.tasks.clear(); this.changed.clear();
     }
-    dispose(): void { if (this.historyTimer) { clearTimeout(this.historyTimer); } this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
+    dispose(): void { if (this.historyTimer) { clearTimeout(this.historyTimer); } this.saveHistory(); this.disposed = true; if (this.timer) { clearTimeout(this.timer); } this.setTracing(false); this.renderTrace(); this.clear(); this.decorations.clear(); this.removeOverlay(); this.disposables.dispose(); }
 }
 @injectable()
 export class NoduTutorHintsContribution implements FrontendApplicationContribution, CommandContribution, KeybindingContribution, MenuContribution {

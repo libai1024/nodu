@@ -1,0 +1,32 @@
+[
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/style/tutor.css",
+    "line": 84,
+    "snippet": "border-left: 2px solid var(--theia-testing-iconPassed)"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/style/tutor.css",
+    "line": 85,
+    "snippet": "border-left: 2px solid var(--theia-editorWarning-foreground)"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/style/tutor.css",
+    "line": 86,
+    "snippet": "border-left: 2px solid var(--theia-descriptionForeground)"
+  }
+]

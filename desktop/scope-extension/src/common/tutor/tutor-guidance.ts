@@ -12,6 +12,22 @@ export function ghostSuffix(typed: string, candidate: string): string | undefine
     const expected = candidate.trimStart(), actual = typed.trimStart();
     return expected.startsWith(actual) ? expected.slice(actual.length) || undefined : undefined;
 }
+export interface TraceReferencePart { text: string; state: 'indent' | 'pending' | 'matched' | 'different' | 'next' | 'extra'; }
+/** A display-only reference below the input line; differences are not C diagnostics. */
+export function traceReference(typed: string, candidate: string): TraceReferencePart[] {
+    if (!candidate || /[\r\n]/.test(candidate)) { return []; }
+    const input = Array.from(typed.trimStart()), target = Array.from(candidate.trimStart());
+    const parts: TraceReferencePart[] = [];
+    const add = (text: string, state: TraceReferencePart['state']): void => {
+        if (!text) { return; }
+        const last = parts[parts.length - 1];
+        if (last?.state === state) { last.text += text; } else { parts.push({ text, state }); }
+    };
+    add(typed.match(/^\s+/)?.[0] ?? candidate.match(/^\s+/)?.[0] ?? '', 'indent');
+    target.forEach((text, index) => add(text, index < input.length ? text === input[index] ? 'matched' : 'different' : index === input.length ? 'next' : 'pending'));
+    add(input.slice(target.length).join(''), 'extra');
+    return parts;
+}
 export function reviewableLine(line: string): boolean { return !!line.trim() && !/^\s*(\/\/|\/\*|\*|#)/.test(line); }
 /** Completion events only; an ordinary character edit never creates an AI request. */
 export function completedLines(before: readonly string[], after: readonly string[], startLine: number, endLine: number, inserted: string): number[] {

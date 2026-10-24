@@ -1,0 +1,45 @@
+{
+  "scope": "Actual Electron UI typing, static review and build; no hardware operation in this batch",
+  "project": "/Users/wangwei/.codex/nodu-nightly-20261024/ui-projects/f103-desktop-tutor",
+  "files": {
+    "Core/Src/main.c": {
+      "bytes": 597,
+      "sha256": "acc473d385d898b10d8b774ecd9dbd1d536ab77c655f48ff831d9e299e3bfb48"
+    },
+    "build/debug/firmware.bin": {
+      "bytes": 4164,
+      "sha256": "18ff0484c491786f7e9e878649427357d43ca7a6110f24a9b8da36d816e7226b"
+    },
+    "build/debug/firmware.hex": {
+      "bytes": 11772,
+      "sha256": "74af646705a497a4b1b61bf267a8656dfe4d546caebd27897842c39a87d45f38"
+    },
+    "build/debug/firmware.elf": {
+      "bytes": 751524,
+      "sha256": "3adff6ba4fe5acbcfea8719b9286061a1536f4b66ad52f65962e4b0cc594c0e4"
+    },
+    ".nodu/current-build.json": {
+      "bytes": 461,
+      "sha256": "148813f9eadb6a5959e6d4509e3b74a3af1edf1d25e6616db34723d89b32334b"
+    }
+  },
+  "build": {
+    "bundle": "fd828c166f8965bb3e69e44a9c3a2b13829a646d36b737d9bb7762434635e5c3",
+    "inputDigest": "52fb235d6613389fdcaad9f23699fa6ca5aa1bd297d65ae9f96a8853431bfa91",
+    "finishedAt": "2026-10-24T00:33:54Z",
+    "binaryBytes": 4164,
+    "capacity": {
+      "FLASH": {
+        "used": 4164,
+        "size": 65536,
+        "percent": 6.35
+      },
+      "RAM": {
+        "used": 2648,
+        "size": 20480,
+        "percent": 12.93
+      }
+    },
+    "buildId": "b-20261024-003353-bf831a"
+  }
+}

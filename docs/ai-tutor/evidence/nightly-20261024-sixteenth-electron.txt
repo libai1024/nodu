@@ -1,0 +1,123 @@
+Electron main: loading modules... [0.171 s since electron main start]
+Electron main: container created [0.703 s since electron main start]
+Electron main: modules loaded [0.704 s since electron main start]
+Electron main: resolving application [0.704 s since electron main start]
+Electron main: application resolved [0.706 s since electron main start]
+using electron user data area : '/Users/wangwei/.codex/nodu-nightly-20261024/profile/electron'
+Backend main: entry point loaded [0.175 s since backend process start]
+Backend server: loading modules... [0.176 s since backend process start]
+Backend server: container created [0.269 s since backend process start]
+Backend server: modules loaded [0.325 s since backend process start]
+2026-10-24T00:52:37.023Z core:EnvVariablesServerImpl INFO Configuration directory URI: 'file:///Users/wangwei/.codex/nodu-nightly-20261024/profile/config'
+Backend server: resolving application [0.335 s since backend process start]
+2026-10-24T00:52:37.132Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 95.5 ms [0.438 s since backend process start]
+2026-10-24T00:52:37.133Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 94.7 ms [0.438 s since backend process start]
+2026-10-24T00:52:37.133Z plugin-ext:PluginApiContribution INFO Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-24T00:52:37.133Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 99.4 ms [0.443 s since backend process start]
+2026-10-24T00:52:37.135Z core:BackendApplication INFO configured all backend app contributions
+2026-10-24T00:52:37.139Z core:BackendApplication INFO Theia app listening on http://127.0.0.1:24240.
+2026-10-24T00:52:37.139Z core:SettingServiceImpl INFO Settings file not found at '/Users/wangwei/.codex/nodu-nightly-20261024/profile/config/backend-settings.json'. Falling back to defaults.
+2026-10-24T00:52:37.141Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/Users/wangwei/.codex/nodu-nightly-20261024/profile/config/deployedPlugins does not exist.
+2026-10-24T00:52:37.141Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/Users/wangwei/.codex/nodu-nightly-20261024/profile/config/plugins does not exist.
+2026-10-24T00:52:37.144Z core:Stopwatch INFO Backend application startup sequence completed (async work may still be pending): 9.3 ms [0.456 s since backend process start]
+2026-10-24T00:52:37.144Z core:Stopwatch INFO All backend contributions settled: 119.9 ms [0.456 s since backend process start]
+Starting backend: 552.9 ms [1.329 s since electron main start]
+2026-10-24T00:52:37.145Z core:Stopwatch INFO Resolve plugins list: 5.4 ms [0.457 s since backend process start]
+2026-10-24T00:52:37.147Z core:Stopwatch INFO Deploy batch of 1 accepted plugins: 1.7 ms [0.459 s since backend process start]
+2026-10-24T00:52:37.147Z core:Stopwatch INFO Deploy plugins list: 7.1 ms [0.459 s since backend process start]
+Attaching security token: 11.4 ms [1.340 s since electron main start]
+ElectronMessagingContribution.onStart: 5.8 ms [1.347 s since electron main start]
+TheiaMainApi.onStart: 5.3 ms [1.347 s since electron main start]
+ElectronApi.onStart: 0.3 ms [1.347 s since electron main start]
+Starting contributions: 6.5 ms [1.347 s since electron main start]
+Startup sequence completed: 571.3 ms [1.347 s since electron main start]
+2026-10-24T00:52:37.631Z core:WebsocketFrontendConnectionService INFO creating connection for 1
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-24T00:52:38.291Z core:FrontendStopwatch INFO Start frontend contributions: 271.2 ms [1.055 s since frontend page start]
+2026-10-24T00:52:38.291Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-24T00:52:38.291Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-24T00:52:38.291Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-24T00:52:38.339Z core:FrontendStopwatch INFO [49d0001c-aade-4ddd-b8f4-9b0d9583886d] Waiting for backend deployment: 63.0 ms [1.118 s since frontend page start]
+2026-10-24T00:52:38.409Z core:FrontendStopwatch INFO [49d0001c-aade-4ddd-b8f4-9b0d9583886d] Sync of 1 plugin: 68.7 ms [1.187 s since frontend page start]
+2026-10-24T00:52:38.429Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-24T00:52:38.431Z core:FrontendStopwatch INFO Initialize the workbench layout: 138.4 ms [1.208 s since frontend page start]
+2026-10-24T00:52:38.431Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-24T00:52:38.447Z plugin-ext:HostedPluginSupport INFO [49d0001c-aade-4ddd-b8f4-9b0d9583886d] Loading plugin contributions
+2026-10-24T00:52:38.447Z core:FrontendStopwatch INFO [49d0001c-aade-4ddd-b8f4-9b0d9583886d] Load contributions of 1 plugin: 0.8 ms [1.222 s since frontend page start]
+2026-10-24T00:52:38.565Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 51715] PLUGIN_HOST(51715) starting instance
+2026-10-24T00:52:38.669Z plugin-host INFO PLUGIN_HOST(51715): PluginManagerExtImpl/init()
+2026-10-24T00:52:38.693Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-24T00:52:38.745Z plugin-ext:HostedPluginSupport INFO [49d0001c-aade-4ddd-b8f4-9b0d9583886d] Starting plugins.
+2026-10-24T00:52:38.746Z core:FrontendStopwatch INFO [49d0001c-aade-4ddd-b8f4-9b0d9583886d] Start of 1 plugin: 299.9 ms [1.525 s since frontend page start]
+2026-10-24T00:52:39.283Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1214.2 ms [2.595 s since backend process start]
+2026-10-24T00:52:39.284Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 801.3 ms [2.061 s since frontend page start]
+2026-10-24T00:52:39.285Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-24T00:52:39.285Z core:FrontendStopwatch INFO All frontend contributions settled: 1277.2 ms [2.061 s since frontend page start]
+2026-10-24T00:52:45.952Z core:WebsocketFrontendConnectionService INFO creating connection for 2
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-24T00:52:46.034Z core:WebsocketFrontendConnectionService INFO socket closed
+2026-10-24T00:52:46.035Z core:WebsocketFrontendConnectionService INFO closing connection for 1
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-24T00:52:46.035Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-24T00:52:46.648Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 195.4 ms [1.180 s since frontend page start]
+2026-10-24T00:52:46.662Z core:FrontendStopwatch INFO Start frontend contributions: 408.7 ms [1.187 s since frontend page start]
+2026-10-24T00:52:46.663Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-24T00:52:46.667Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-24T00:52:46.668Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-24T00:52:46.696Z core:FrontendStopwatch INFO [333e8e5c-c6da-4133-a095-58370d0a9ac7] Waiting for backend deployment: 41.3 ms [1.228 s since frontend page start]
+2026-10-24T00:52:46.709Z core:FrontendStopwatch INFO [333e8e5c-c6da-4133-a095-58370d0a9ac7] Sync of 1 plugin: 12.7 ms [1.241 s since frontend page start]
+2026-10-24T00:52:46.727Z plugin-ext:HostedPluginSupport INFO [333e8e5c-c6da-4133-a095-58370d0a9ac7] Loading plugin contributions
+2026-10-24T00:52:46.727Z core:FrontendStopwatch INFO [333e8e5c-c6da-4133-a095-58370d0a9ac7] Load contributions of 1 plugin: 0.9 ms [1.252 s since frontend page start]
+2026-10-24T00:52:46.978Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 51805] PLUGIN_HOST(51805) starting instance
+2026-10-24T00:52:47.068Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-24T00:52:47.074Z core:FrontendStopwatch INFO Initialize the workbench layout: 401.5 ms [1.601 s since frontend page start]
+2026-10-24T00:52:47.075Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-24T00:52:47.136Z plugin-host INFO PLUGIN_HOST(51805): PluginManagerExtImpl/init()
+2026-10-24T00:52:47.223Z plugin-ext:HostedPluginSupport INFO [333e8e5c-c6da-4133-a095-58370d0a9ac7] Starting plugins.
+2026-10-24T00:52:47.241Z core:FrontendStopwatch INFO [333e8e5c-c6da-4133-a095-58370d0a9ac7] Start of 1 plugin: 516.6 ms [1.772 s since frontend page start]
+2026-10-24T00:52:47.361Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-24T00:52:47.396Z plugin-host ERROR (node:51805) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `Electron Helper --trace-deprecation ...` to show where the warning was created)
+2026-10-24T00:52:47.405Z plugin-host INFO Clang Language Server is now active!
+2026-10-24T00:52:47.929Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 801.6 ms [2.460 s since frontend page start]
+2026-10-24T00:52:47.929Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1583.7 ms [11.241 s since backend process start]
+2026-10-24T00:52:47.929Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-24T00:52:47.929Z core:FrontendStopwatch INFO All frontend contributions settled: 1682.7 ms [2.461 s since frontend page start]
+2026-10-24 08:53:16.921 Electron[51496:38613506] TSM AdjustCapsLockLEDForKeyTransitionHandling - _ISSetPhysicalKeyboardCapsLockLED Inhibit

@@ -1,0 +1,13 @@
+✔ generated IDE tokens match the brand source (1.415542ms)
+✔ both themes define the same colour IDs, all valid hex (1.145958ms)
+✔ no superseded colour (v1, or the v2.0 warm-paper light theme) remains in the theme (0.673667ms)
+✔ key pairs meet WCAG targets in both themes (0.384916ms)
+✔ colour helpers (0.089125ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52.270916
