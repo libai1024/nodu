@@ -23,6 +23,7 @@ function mount() {
         if(id.endsWith('nodu-tutor-messages'))return{TutorMessage:'Message'};
         if(id.endsWith('nodu-tutor-chat-controls'))return{ModePicker:'ModePicker',ModelPicker:'Picker',ChatHeader:'Header'};
         if(id.endsWith('nodu-tutor-context-picker'))return{ContextPicker:'Context'};
+        if(id.endsWith('nodu-tutor-history'))return{ConversationSidebar:'ConversationSidebar'};
         if(id.endsWith('nodu-tutor-hints'))return{TUTOR_COMMANDS:{openReference:'open'}};
         return {};
     }});
@@ -33,7 +34,7 @@ function mount() {
     function nodes(){const out=[];function visit(v){if(Array.isArray(v))v.forEach(visit);else if(v&&typeof v==='object'){out.push(v);visit(v.props?.children);}}visit(tree);return out;}
     function render(){cursor=0;tree=exports.TutorPanel({tutor,run(){}});for(const n of nodes()){if(n.props?.ref)n.props.ref.current=n.type==='textarea'?input:log;}for(const effect of effects.splice(0))effect();}
     render();
-    return {tutor,log,input,calls,render,resize(width,height){input.clientWidth=width;input.scrollHeight=height;observers.forEach(f=>f());},find:fn=>nodes().find(fn),key(e){nodes().find(n=>n.type==='textarea').props.onKeyDown({preventDefault(){},nativeEvent:{isComposing:false},keyCode:0,shiftKey:false,...e});}};
+    return {tutor,log,input,calls,render,Widget:exports.NoduTutorWidget,resize(width,height){input.clientWidth=width;input.scrollHeight=height;observers.forEach(f=>f());},find:fn=>nodes().find(fn),key(e){nodes().find(n=>n.type==='textarea').props.onKeyDown({preventDefault(){},nativeEvent:{isComposing:false},keyCode:0,shiftKey:false,...e});}};
 }
 test('streaming follows only the reading bottom and explicit latest restores following',()=>{
     const c=mount();assert.equal(c.log.scrollTop,1400);
@@ -210,4 +211,70 @@ test('compact history searches drafts, filters modes and focuses only after the 
     c.all(n=>n.props?.role==='menuitemradio').find(n=>content(n)==='教学').props.onClick();c.render();assert.equal(rows().length,1);
     const pending=rows()[0].props.onClick();assert.deepEqual(calls,[['two','teach']]);complete();await pending;assert.deepEqual(calls,[['two','teach'],'focus']);
     tutor.busy={kind:'chat'};c.render();assert.equal(rows()[0].props.disabled,true);await rows()[0].props.onClick();assert.equal(calls.length,2);
+});
+
+test('persistent navigation is a sibling of the mounted composer and keeps manual reading position',()=>{
+    const c=mount(),reading=()=>c.find(n=>n.props?.role==='log');
+    reading().props.onWheel();c.log.scrollTop=120;reading().props.onScroll();c.render();
+    c.tutor.drafts.ask='保留草稿';c.tutor.conversationSidebarOpen=true;c.render();
+    assert.ok(c.find(n=>n.type==='ConversationSidebar'));
+    assert.equal(c.find(n=>n.type==='form').props.hidden,undefined);
+    assert.equal(c.find(n=>n.type==='textarea').props.value,'保留草稿');
+    assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,[]);
+    c.tutor.conversationSidebarOpen=false;c.render();
+    assert.equal(c.find(n=>n.type==='ConversationSidebar'),undefined);assert.equal(c.log.scrollTop,120);
+});
+function widgetLayout({width=320,size=width+4,open=false}={}) {
+    const c=mount(),calls=[],animations=[];
+    const right={state:{pendingUpdate:Promise.resolve()},getLayoutData:()=>({size}),resize(value){
+        calls.push(['resize',value]);
+        const update=new Promise(resolve=>animations.push({value,resolve}));
+        this.state.pendingUpdate=this.state.pendingUpdate.then(()=>update);
+    }};
+    const widget={renderedSidebarOpen:open,tutor:{conversationSidebarOpen:open},isVisible:true,
+        node:{getBoundingClientRect:()=>({width})},toggleClass:(...args)=>calls.push(['class',...args]),fit:()=>calls.push(['fit']),
+        shell:{getAreaFor:()=> 'right',rightPanelHandler:right}};
+    const sync=()=>c.Widget.prototype.syncConversationSidebarLayout.call(widget);
+    return{widget,calls,animations,sync,measure(value){width=value;size=value+4;},toggle(open){widget.tutor.conversationSidebarOpen=open;sync();},
+        async finish(index,value=animations[index].value-4){this.measure(value);animations[index].resolve();await new Promise(resolve=>setImmediate(resolve));}};
+}
+test('opening and closing the conversation column resizes the side panel without repeated stream-time layout work',async()=>{
+    const c=widgetLayout();
+    c.toggle(true);assert.deepEqual(c.calls.at(-1),['resize',524]);
+    await c.finish(0);c.calls.length=0;c.sync();assert.deepEqual(c.calls,[]);
+    c.toggle(false);assert.deepEqual(c.calls.at(-1),['resize',324]);
+    await c.finish(1);c.calls.length=0;c.sync();assert.deepEqual(c.calls,[]);
+});
+test('restored conversation layout only grows a visible narrow side panel to its minimum',()=>{
+    const narrow=widgetLayout({open:true});narrow.widget.renderedSidebarOpen=undefined;
+    narrow.sync();assert.deepEqual(narrow.calls.at(-1),['resize',464]);
+    const wide=widgetLayout({width:520,open:true});wide.widget.renderedSidebarOpen=undefined;
+    wide.sync();assert.ok(!wide.calls.some(x=>x[0]==='resize'));
+    wide.widget.isVisible=false;wide.toggle(false);assert.ok(!wide.calls.some(x=>x[0]==='resize'));
+});
+test('rapid conversation column toggles restore the stable chat width throughout unfinished animations',async()=>{
+    const c=widgetLayout();c.toggle(true);c.measure(400);
+    c.calls.length=0;c.sync();assert.deepEqual(c.calls,[]);
+    c.toggle(false);assert.deepEqual(c.calls.at(-1),['resize',324]);
+    // Finishing an older expansion must not mark the newer collapse as settled.
+    await c.finish(0,360);c.toggle(true);assert.deepEqual(c.calls.at(-1),['resize',524]);
+    c.measure(420);c.toggle(false);assert.deepEqual(c.calls.at(-1),['resize',324]);
+    await c.finish(1);await c.finish(2);await c.finish(3);
+    c.calls.length=0;c.sync();assert.deepEqual(c.calls,[]);
+    c.toggle(true);assert.deepEqual(c.calls.at(-1),['resize',524]);
+});
+test('collapsing after a manual expanded resize preserves the new chat width',async()=>{
+    const c=widgetLayout();c.toggle(true);await c.finish(0);
+    c.measure(620);c.toggle(false);assert.deepEqual(c.calls.at(-1),['resize',424]);
+    await c.finish(1);c.toggle(true);assert.deepEqual(c.calls.at(-1),['resize',624]);
+});
+test('titlebar toggles persistent navigation independently of history and retains the history picker when collapsed',()=>{
+    const tutor={historyOpen:true,conversationSidebarOpen:false,mode:'ask',messages:{ask:[]},
+        showHistory(value){this.historyOpen=value;},setConversationSidebarOpen(value){this.conversationSidebarOpen=value;this.historyOpen=false;}};
+    const c=historyHarness('ChatHeader',tutor);
+    const trigger=()=>c.find(n=>n.props?.['aria-label']==='会话列表');
+    trigger().props.onClick();c.render();assert.equal(trigger().props['aria-expanded'],true);
+    assert.equal(c.find(n=>n.props?.['aria-label']==='历史对话'),undefined);assert.equal(tutor.historyOpen,false);
+    trigger().props.onClick();c.render();assert.equal(trigger().props['aria-expanded'],false);
+    assert.ok(c.find(n=>n.props?.['aria-label']==='历史对话'));
 });

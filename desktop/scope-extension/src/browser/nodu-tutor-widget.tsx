@@ -2,7 +2,7 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { CommandRegistry, CommandService, MenuModelRegistry } from '@theia/core/lib/common';
-import { CommonMenus, ReactWidget } from '@theia/core/lib/browser';
+import { ApplicationShell, CommonMenus, ReactWidget } from '@theia/core/lib/browser';
 import { AbstractViewContribution } from '@theia/core/lib/browser/shell/view-contribution';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { Message } from '@theia/core/shared/@lumino/messaging';
@@ -12,6 +12,7 @@ import { TabBarToolbarContribution, TabBarToolbarRegistry } from '@theia/core/li
 import { TutorMessage } from './nodu-tutor-messages';
 import { ModePicker, ModelPicker, ChatHeader } from './nodu-tutor-chat-controls';
 import { ContextPicker } from './nodu-tutor-context-picker';
+import { ConversationSidebar } from './nodu-tutor-history';
 
 /** Plans are confirmed here; an accepted task is managed only by the shared task window. */
 function GoalPlan({ tutor, revise }: { tutor: NoduTutorModel; revise(): void }): React.ReactElement | null {
@@ -70,7 +71,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     const submit = (): void => { if (!isBusy && canSend && draft.trim()) { bottom(); void tutor.send(); } };
     const lastReply = [...messages].reverse().find(m => m.role === 'assistant');
     const duplicateError = lastReply?.status === 'failed' && tutor.error === lastReply.note;
-    return <div className="nodu-ai-panel">
+    return <div className={`nodu-ai-workspace${tutor.conversationSidebarOpen ? ' nodu-ai-workspace-with-sidebar' : ''}`}><div className="nodu-ai-panel">
         <div className="nodu-ai-reading">
             <div className="nodu-ai-log" ref={log} role="log" aria-label="AI 对话" aria-live="off" tabIndex={0}
                 onWheel={() => { scrollIntent.current = Date.now() + 250; }} onTouchStart={() => { scrollIntent.current = Date.now() + 250; }} onPointerDown={e => { if (e.target === e.currentTarget) { scrollIntent.current = Date.now() + 250; } }}
@@ -106,18 +107,41 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
             </div>
             </>}</ContextPicker>
         </form>
-    </div>;
+    </div>{tutor.conversationSidebarOpen && <ConversationSidebar tutor={tutor} selected={() => input.current?.focus()}/>}</div>;
 }
 @injectable()
 export class NoduTutorWidget extends ReactWidget {
     static readonly ID = 'nodu:tutor'; static readonly LABEL = 'AI 对话';
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(CommandService) protected readonly commands!: CommandService;
+    @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    private renderedSidebarOpen?: boolean;
+    private collapsedConversationPanelSize?: number;
+    private conversationPanelResize?: Promise<void>;
     @postConstruct() protected init(): void {
         this.id = NoduTutorWidget.ID; this.title.label = NoduTutorWidget.LABEL; this.title.caption = NoduTutorWidget.LABEL; this.title.iconClass = 'codicon codicon-sparkle'; this.title.closable = true;
         this.addClass('scope-widget'); this.addClass('nodu-tutor-widget'); this.node.tabIndex = -1;
-        this.toDispose.push(this.tutor.onDidChange(() => { this.title.label = this.tutor.activeConversationTitle; this.title.caption = this.title.label; this.update(); }));
-        this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible))); this.update();
+        this.toDispose.push(this.tutor.onDidChange(() => { this.title.label = this.tutor.activeConversationTitle; this.title.caption = this.title.label; this.syncConversationSidebarLayout(); this.update(); }));
+        this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible))); this.syncConversationSidebarLayout(); this.update();
+    }
+    /** Add space for the list instead of taking it from the existing composer. */
+    protected syncConversationSidebarLayout(): void {
+        const open = this.tutor.conversationSidebarOpen, previousOpen = this.renderedSidebarOpen, initial = previousOpen === undefined, changed = !initial && previousOpen !== open;
+        const width = this.node.getBoundingClientRect().width;
+        this.renderedSidebarOpen = open;
+        if (initial || changed) { this.toggleClass('nodu-tutor-with-conversations', open); this.fit(); }
+        if (!this.isVisible || this.shell.getAreaFor(this) !== 'right' || width <= 0) { return; }
+        const right = this.shell.rightPanelHandler, minimum = open ? 460 : 260;
+        if (!changed && (this.conversationPanelResize || width >= minimum)) { return; }
+        const size = right.getLayoutData().size ?? width;
+        // Animated intermediate widths must not replace the last stable chat width.
+        // Once the animation ends, measuring again also respects a manual resize.
+        const collapsed = this.conversationPanelResize && this.collapsedConversationPanelSize !== undefined
+            ? this.collapsedConversationPanelSize : size - ((previousOpen ?? open) ? 200 : 0);
+        this.collapsedConversationPanelSize = Math.max(collapsed, size + 260 - width);
+        right.resize(this.collapsedConversationPanelSize + (open ? 200 : 0));
+        const pending = this.conversationPanelResize = right.state.pendingUpdate;
+        void pending.then(() => { if (this.conversationPanelResize === pending) { this.conversationPanelResize = undefined; } });
     }
     /** Closing the sidebar is remembered; professional mode reopens it only while preferred. */
     protected override onCloseRequest(msg: Message): void { this.tutor.setPanelPreferred(false); super.onCloseRequest(msg); }

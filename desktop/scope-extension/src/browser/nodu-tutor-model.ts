@@ -58,6 +58,8 @@ export class NoduTutorModel {
     error?: string;
     mode: TutorMode = storedMode();
     historyOpen = false;
+    /** Global layout preference, independent of the selected project or conversation. */
+    conversationSidebarOpen = stored('conversation-sidebar', false);
     /** Editor guidance (ghost text, highlights, line review) is off; chat stays available. */
     paused = stored('guidance-off', false);
     panelVisible = false;
@@ -108,6 +110,11 @@ export class NoduTutorModel {
     get activeConversationTitle(): string { return this.conversationRecords[this.mode]?.title ?? '新对话'; }
     get historyEntries() { return this.conversationProject ? this.conversationStore.history(this.conversationProject) : []; }
     showHistory(show: boolean): void { this.historyOpen = show; this.notify(); }
+    setConversationSidebarOpen(show: boolean): void {
+        this.conversationSidebarOpen = show; this.historyOpen = false;
+        try { localStorage.setItem('nodu.tutor.conversation-sidebar', String(show)); } catch { /* Layout remains usable without storage. */ }
+        this.notify();
+    }
     get canSendChat(): boolean { return this.enabled && !!this.workspaceId && this.connectionState === 'connected' && !this.historySyncing && !this.busy; }
     private loading = 0;
     private refreshing = 0;

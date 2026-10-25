@@ -13,7 +13,7 @@ const modelStubs={'@theia/core/shared/inversify':{inject:nop,injectable:nop,post
 const {NoduTutorModel}=source('browser/nodu-tutor-model.ts',modelStubs);
 const tick=()=>new Promise(r=>setImmediate(r));
 const pair=(text='question')=>{const user={id:crypto.randomUUID(),role:'user',text,status:'done'};return [user,{id:crypto.randomUUID(),role:'assistant',text:'answer',status:'done',replyTo:user.id,request:{prompt:text,mode:'ask',kind:'chat',goalRevision:0}}];};
-function model(storage=new Storage()) {const m=new NoduTutorModel();m.layout={mode:'pro'};m.mode='ask';m.workspaceId='workspace-0001';m.connectionState='connected';m.conversationStore=new history.TutorConversationStore(storage);m.restoreConversations('project-inode-one');m.service={cancelChat:async()=>{},setPresentation:async()=>{},restoreChatHistory:async()=>{},clearChat:async()=>{},authorizeChatContexts:async(w,mode,pins)=>context.validateTutorContexts(pins,mode),chat:async()=>({ok:true,answer:{text:'reply',annotations:[]}})};return m;}
+function model(storage=new Storage(),Model=NoduTutorModel) {const m=new Model();m.layout={mode:'pro'};m.mode='ask';m.workspaceId='workspace-0001';m.connectionState='connected';m.conversationStore=new history.TutorConversationStore(storage);m.restoreConversations('project-inode-one');m.service={cancelChat:async()=>{},setPresentation:async()=>{},restoreChatHistory:async()=>{},clearChat:async()=>{},authorizeChatContexts:async(w,mode,pins)=>context.validateTutorContexts(pins,mode),chat:async()=>({ok:true,answer:{text:'reply',annotations:[]}})};return m;}
 test('profile restores stopped state and drafts, scoped by project identity and mode',()=>{const storage=new Storage(),store=new history.TutorConversationStore(storage),c=store.create('project-a','ask');c.messages=pair();c.messages[1].status='pending';c.draft='next question';const saved=store.save(c),reopened=new history.TutorConversationStore(storage),restored=reopened.read(saved.id,'project-a','ask');assert.equal(restored.messages[1].status,'stopped');assert.equal(restored.messages[1].note,'回复未完成');assert.equal(restored.draft,'next question');assert.equal(reopened.read(saved.id,'project-b','ask'),undefined);assert.equal(reopened.read(saved.id,'project-a','teach'),undefined);assert.equal(history.conversationPrompt(restored.messages).length,0);});
 test('two windows selecting same history fork writes without overwriting',()=>{const storage=new Storage(),a=new history.TutorConversationStore(storage),b=new history.TutorConversationStore(storage),c=a.create('project','ask');c.messages=pair('original');const original=a.save(c),copy=b.read(original.id,'project','ask');copy.messages.push(...pair('window b'));const fork=b.save(copy);assert.notEqual(fork.id,original.id);assert.equal(a.read(original.id,'project','ask').messages.length,2);assert.equal(b.read(fork.id,'project','ask').messages.length,4);});
 function browserWindowModel(storage,session) {
@@ -321,4 +321,48 @@ test('terminal context validation keeps file path rules, shared budgets and work
     const calls=[], host=Object.create(TutorWorkspaceHost.prototype); host.authorize=async(...args)=>calls.push(args);
     await host.contexts('workspace-0001','ask',[terminal]); assert.deepEqual(calls,[['workspace-0001']]);
     host.authorize=async()=>{throw Error('revoked');}; await assert.rejects(()=>host.contexts('workspace-0001','ask',[terminal]),/revoked/);
+});
+
+
+test('conversation sidebar toggles only layout, preserving active generation, draft, attachments and conversation identity',()=>{
+    const storage=new Storage(),session=new Storage();
+    const Model=source('browser/nodu-tutor-model.ts',modelStubs,{localStorage:storage,sessionStorage:session}).NoduTutorModel;
+    const m=model(storage,Model);m.messages.ask.push(...pair('keep transcript'));m.drafts.ask='keep unsent text';m.contextDrafts.ask=[pin('main.h','int retained;')];m.persistConversation('ask');
+    const before={id:m.activeConversationId,messages:m.messages.ask,pins:m.pins,epoch:m.epoch,owner:m.conversationStore.owner,session:[...session.data],storage:[...storage.data]};
+    const busy={id:crypto.randomUUID(),mode:'ask',kind:'chat'};m.busy=busy;m.historyOpen=true;let notifications=0,calls=0;m.notify=()=>notifications++;
+    m.service=new Proxy({}, {get(){return()=>{calls++;throw Error('layout must not call the service');};}});
+    assert.equal(m.conversationSidebarOpen,false);m.setConversationSidebarOpen(true);
+    assert.equal(m.conversationSidebarOpen,true);assert.equal(m.historyOpen,false);assert.equal(storage.getItem('nodu.tutor.conversation-sidebar'),'true');
+    m.historyOpen=true;m.setConversationSidebarOpen(false);
+    assert.equal(m.conversationSidebarOpen,false);assert.equal(m.historyOpen,false);assert.equal(storage.getItem('nodu.tutor.conversation-sidebar'),'false');
+    assert.equal(m.activeConversationId,before.id);assert.equal(m.messages.ask,before.messages);assert.equal(m.messages.ask[0].text,'keep transcript');
+    assert.equal(m.pins,before.pins);assert.equal(m.drafts.ask,'keep unsent text');assert.equal(m.busy,busy);assert.equal(m.epoch,before.epoch);assert.equal(m.conversationStore.owner,before.owner);
+    assert.deepEqual([...session.data],before.session);assert.deepEqual([...storage.data].filter(([key])=>key!=='nodu.tutor.conversation-sidebar'),before.storage);
+    assert.equal(calls,0);assert.equal(notifications,2);
+});
+test('conversation sidebar preference survives new, selection, project changes and window reload',async()=>{
+    const storage=new Storage(),session=new Storage();
+    const make=()=>model(storage,source('browser/nodu-tutor-model.ts',modelStubs,{localStorage:storage,sessionStorage:session}).NoduTutorModel);
+    const m=make();m.setConversationSidebarOpen(true);m.messages.ask.push(...pair('first conversation'));m.drafts.ask='return to this draft';m.persistConversation('ask');const original=m.activeConversationId;
+    await m.newConversation();assert.equal(m.conversationSidebarOpen,true);
+    await m.selectConversation(original);assert.equal(m.conversationSidebarOpen,true);assert.equal(m.drafts.ask,'return to this draft');
+    m.restoreConversations('another-project');assert.equal(m.conversationSidebarOpen,true);
+    const reloaded=make();assert.equal(reloaded.conversationSidebarOpen,true);reloaded.setConversationSidebarOpen(false);
+    assert.equal(make().conversationSidebarOpen,false);
+});
+test('conversation sidebar defaults closed for invalid or unavailable storage and stays usable after write failure',()=>{
+    const key='nodu.tutor.conversation-sidebar';
+    for(const value of [null,'', 'TRUE','1','undefined','{}','false']){
+        const storage=new Storage();if(value!==null)storage.setItem(key,value);
+        const Model=source('browser/nodu-tutor-model.ts',modelStubs,{localStorage:storage,sessionStorage:new Storage()}).NoduTutorModel;
+        assert.equal(new Model().conversationSidebarOpen,false,`invalid or closed setting ${value}`);
+    }
+    const unavailable={getItem(){throw Error('read blocked');},setItem(){throw Error('write blocked');}};
+    const Model=source('browser/nodu-tutor-model.ts',modelStubs,{localStorage:unavailable,sessionStorage:new Storage()}).NoduTutorModel;
+    const m=new Model();let notifications=0;m.notify=()=>notifications++;
+    assert.equal(m.conversationSidebarOpen,false);assert.doesNotThrow(()=>m.setConversationSidebarOpen(true));assert.equal(m.conversationSidebarOpen,true);
+    assert.doesNotThrow(()=>m.setConversationSidebarOpen(false));assert.equal(m.conversationSidebarOpen,false);assert.equal(notifications,2);
+    const storage=new Storage();storage.setItem=()=>{throw Error('quota');};
+    const ReadableModel=source('browser/nodu-tutor-model.ts',modelStubs,{localStorage:storage,sessionStorage:new Storage()}).NoduTutorModel;
+    const volatile=new ReadableModel();volatile.setConversationSidebarOpen(true);assert.equal(volatile.conversationSidebarOpen,true);assert.equal(new ReadableModel().conversationSidebarOpen,false);
 });

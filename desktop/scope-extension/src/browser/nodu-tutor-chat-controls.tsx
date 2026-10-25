@@ -114,13 +114,16 @@ export function ChatHeader({ tutor, clear, focusComposer }: { tutor: NoduTutorMo
     const historyAnchor = React.useRef<HTMLButtonElement>(null);
     const close = React.useCallback(() => setAnchor(undefined), []);
     const closeHistory = React.useCallback(() => tutor.showHistory(false), [tutor]);
-    return <div className="nodu-ai-titlebar">
+    return <div className={`nodu-ai-titlebar${tutor.conversationSidebarOpen ? ' nodu-ai-titlebar-with-sidebar' : ''}`}>
         <button type="button" className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!!tutor.busy || tutor.conversationLoading} onClick={async () => { await tutor.newConversation(); focusComposer?.(); }}><i className="codicon codicon-add" aria-hidden="true"/></button>
-        <button ref={historyAnchor} type="button" className="nodu-ai-icon" aria-label="历史对话" title="历史对话" aria-haspopup="menu" aria-expanded={tutor.historyOpen} aria-pressed={tutor.historyOpen}
+        {!tutor.conversationSidebarOpen && <button ref={historyAnchor} type="button" className="nodu-ai-icon" aria-label="历史对话" title="历史对话" aria-haspopup="menu" aria-expanded={tutor.historyOpen} aria-pressed={tutor.historyOpen}
             onClick={() => { close(); tutor.showHistory(!tutor.historyOpen); }}
-            onKeyDown={e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); e.stopPropagation(); close(); tutor.showHistory(true); } }}><i className="codicon codicon-history" aria-hidden="true"/></button>
+            onKeyDown={e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); e.stopPropagation(); close(); tutor.showHistory(true); } }}><i className="codicon codicon-history" aria-hidden="true"/></button>}
         <button type="button" className="nodu-ai-icon" aria-label="对话操作" title="对话操作" aria-haspopup="menu" aria-expanded={!!anchor} onClick={e => { closeHistory(); setAnchor(anchor ? undefined : e.currentTarget); }}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
-        {tutor.historyOpen && historyAnchor.current && <ChatPopover anchor={historyAnchor.current} label="历史对话" width={260} className="nodu-chat-history-popover" close={closeHistory}>
+        <button type="button" className="nodu-ai-icon nodu-ai-sidebar-toggle" aria-label="会话列表" title={tutor.conversationSidebarOpen ? '收起会话列表' : '展开会话列表'}
+            aria-expanded={tutor.conversationSidebarOpen} aria-pressed={tutor.conversationSidebarOpen} aria-controls="nodu-conversation-sidebar"
+            onClick={() => { close(); tutor.setConversationSidebarOpen(!tutor.conversationSidebarOpen); }}><i className={`codicon codicon-layout-sidebar-right${tutor.conversationSidebarOpen ? '' : '-off'}`} aria-hidden="true"/></button>
+        {!tutor.conversationSidebarOpen && tutor.historyOpen && historyAnchor.current && <ChatPopover anchor={historyAnchor.current} label="历史对话" width={260} className="nodu-chat-history-popover" close={closeHistory}>
             <ConversationHistory tutor={tutor} selected={focusComposer}/>
         </ChatPopover>}
         {anchor && <ChatPopover anchor={anchor} label="对话操作" close={close}>
