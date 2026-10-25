@@ -52,6 +52,12 @@ test('history hiding cannot overwrite the reading position and returning restore
     c.tutor.messages.ask[0].text+=' background response';c.render();assert.equal(c.log.scrollTop,0);
     c.tutor.historyOpen=false;c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,['focus']);
 });
+test('selecting a different conversation from history cannot replace the previous reading position with hidden geometry',()=>{
+    const c=mount(),reading=()=>c.find(n=>n.props?.role==='log');reading().props.onWheel();c.log.scrollTop=120;reading().props.onScroll();c.render();
+    c.tutor.historyOpen=true;c.render();c.log.scrollTop=0;reading().props.onScroll();
+    c.tutor.activeConversationId='chat-two';c.tutor.historyOpen=false;c.render();
+    c.tutor.activeConversationId='chat-one';c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,['focus']);
+});
 test('Enter never queues while generating, IME stays intact and stop preserves the draft',()=>{
     const c=mount();c.tutor.drafts.ask='下一条草稿';c.tutor.busy={kind:'chat'};c.render();c.key({key:'Enter'});assert.deepEqual(c.calls,[]);
     let prevented=false; const stop=c.find(n=>n.props?.['aria-label']==='停止');assert.equal(stop.props.type,'button');stop.props.onClick({preventDefault(){prevented=true;}});assert.equal(prevented,true);assert.equal(c.tutor.drafts.ask,'下一条草稿');c.render();
@@ -93,6 +99,14 @@ function modePicker() {
         open(){this.button().props.onClick({currentTarget:anchor});render();},
         key(key){let prevented=false,stopped=false;this.button().props.onKeyDown({key,currentTarget:anchor,preventDefault(){prevented=true;},stopPropagation(){stopped=true;}});render();return{prevented,stopped};}};
 }
+test('new conversation focuses the composer after activation completes, including reuse of an empty conversation',async()=>{
+    const c=modePicker(),calls=[];let complete;
+    const tutor={newConversation:()=>new Promise(resolve=>{calls.push('new');complete=resolve;})};
+    const header=c.exports.ChatHeader({tutor,clear:async()=>{},focusComposer:()=>calls.push('focus')});
+    const button=descendants(header).find(n=>n.props?.['aria-label']==='新对话');
+    const pending=button.props.onClick();assert.deepEqual(calls,['new']);complete();await pending;assert.deepEqual(calls,['new','focus']);
+    const reused=button.props.onClick();complete();await reused;assert.deepEqual(calls,['new','focus','new','focus']);
+});
 test('composer uses the app mode picker and contains no native select',()=>{
     const c=mount();assert.ok(c.find(n=>n.type==='ModePicker'));assert.equal(c.find(n=>n.type==='select'),undefined);
 });

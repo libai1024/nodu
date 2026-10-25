@@ -108,11 +108,11 @@ export function ModelPicker({ tutor, openSettings }: { tutor: NoduTutorModel; op
     </ChatPopover>}</>;
 }
 
-export function ChatHeader({ tutor, clear }: { tutor: NoduTutorModel; clear(): Promise<void> }): React.ReactElement {
+export function ChatHeader({ tutor, clear, focusComposer }: { tutor: NoduTutorModel; clear(): Promise<void>; focusComposer?(): void }): React.ReactElement {
     const [anchor, setAnchor] = React.useState<HTMLElement>();
     const close = React.useCallback(() => setAnchor(undefined), []);
     return <div className="nodu-ai-titlebar">
-        <button type="button" className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!!tutor.busy || tutor.conversationLoading} onClick={() => void tutor.newConversation()}><i className="codicon codicon-add" aria-hidden="true"/></button>
+        <button type="button" className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!!tutor.busy || tutor.conversationLoading} onClick={async () => { await tutor.newConversation(); focusComposer?.(); }}><i className="codicon codicon-add" aria-hidden="true"/></button>
         <button type="button" className="nodu-ai-icon" aria-label="历史对话" title="历史对话" aria-pressed={tutor.historyOpen} onClick={() => tutor.showHistory(!tutor.historyOpen)}><i className="codicon codicon-history" aria-hidden="true"/></button>
         <button type="button" className="nodu-ai-icon" aria-label="对话操作" title="对话操作" aria-haspopup="menu" aria-expanded={!!anchor} onClick={e => setAnchor(anchor ? undefined : e.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
         {anchor && <ChatPopover anchor={anchor} label="对话操作" close={close}>

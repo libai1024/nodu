@@ -26,6 +26,15 @@ export interface TutorPresentation { buffer: TutorBuffer; answer: TutorAnswer; }
 const sameUri = (a: string, b: URI | undefined): boolean => !!b && new URI(a).path.toString().replace(/\/+$/, '') === b.path.toString().replace(/\/+$/, '');
 const stored = (key: string, fallback: boolean): boolean => { try { const v = localStorage.getItem(`nodu.tutor.${key}`); return v === null ? fallback : v === 'true'; } catch { return fallback; } };
 const storedMode = (): TutorMode => { try { return sessionStorage.getItem('nodu.tutor.mode') === 'ask' ? 'ask' : 'teach'; } catch { return 'teach'; } };
+/** Reloads keep this window's writer identity; other windows still fork foreign records. */
+const conversationOwner = (): ReturnType<typeof crypto.randomUUID> => {
+    const key = 'nodu.tutor.conversation.owner';
+    try {
+        const previous = sessionStorage.getItem(key);
+        if (previous && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(previous)) { return previous as ReturnType<typeof crypto.randomUUID>; }
+        const owner = crypto.randomUUID(); sessionStorage.setItem(key, owner); return owner;
+    } catch { return crypto.randomUUID(); }
+};
 
 @injectable()
 export class NoduTutorModel {
@@ -83,7 +92,7 @@ export class NoduTutorModel {
     private settledRootUri?: URI;
     private reconnectBuffer?: TutorBuffer;
     private persistenceError?: string;
-    private readonly conversationStore = new TutorConversationStore((() => { try { return localStorage; } catch { return undefined; } })());
+    private readonly conversationStore = new TutorConversationStore((() => { try { return localStorage; } catch { return undefined; } })(), conversationOwner());
     private conversationRecords: Partial<Record<TutorMode, TutorConversation>> = {};
     private draftSave?: ReturnType<typeof setTimeout>;
     private historySyncing = false;

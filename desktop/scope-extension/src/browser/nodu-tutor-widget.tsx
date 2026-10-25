@@ -50,7 +50,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
         const node = log.current, saved = views.get(key);
         following.current = saved?.following ?? true; scrollIntent.current = 0; setLatest(!following.current); setErrorDetail(false);
         if (node) { node.scrollTop = following.current ? node.scrollHeight : saved?.top ?? 0; }
-        return () => { if (node && !node.closest('[hidden]')) { views.set(key, { top: node.scrollTop, following: following.current }); if (views.size > 64) { views.delete(views.keys().next().value!); } } };
+        return () => { if (node && !wasHistoryOpen.current) { views.set(key, { top: node.scrollTop, following: following.current }); if (views.size > 64) { views.delete(views.keys().next().value!); } } };
     }, [key]);
     React.useLayoutEffect(() => {
         if (tutor.historyOpen) { return; }
@@ -156,7 +156,7 @@ export class NoduTutorToolbarContribution implements TabBarToolbarContribution {
     registerToolbarItems(registry: TabBarToolbarRegistry): void {
         registry.registerItem({
             id: 'nodu.tutor.header', isVisible: widget => widget instanceof NoduTutorWidget, onDidChange: this.tutor.onDidChange,
-            render: widget => widget instanceof NoduTutorWidget ? <ChatHeader key="nodu-tutor-header" tutor={this.tutor} clear={async () => {
+            render: widget => widget instanceof NoduTutorWidget ? <ChatHeader key="nodu-tutor-header" tutor={this.tutor} focusComposer={() => widget.activate()} clear={async () => {
                 if (await new ConfirmDialog({ title: '清空当前对话', msg: '清除此对话的消息？教学任务和工程代码会保留。', ok: '清空', cancel: '取消' }).open()) { await this.tutor.clearChat(); }
             }} /> : null,
         });
