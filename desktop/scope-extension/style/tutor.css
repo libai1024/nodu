@@ -197,7 +197,9 @@
 
 /* Shared small menus, rendered outside the title bar/composer clipping boundaries. */
 .nodu-ai-titlebar { display: inline-flex; align-items: center; gap: 1px; }
-.scope-widget.nodu-ai-popover { min-width: 0; }
+.nodu-ai-popover { scrollbar-color: var(--theia-scrollbarSlider-background) transparent; }
+.nodu-ai-popover *, .nodu-ai-popover *::before, .nodu-ai-popover *::after { box-sizing: border-box; }
+.nodu-ai-popover ::selection { background: var(--theia-editor-selectionBackground); }
 .nodu-ai-popover { position: fixed; z-index: 10000; box-sizing: border-box; overflow: auto; padding: 4px; border: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); border-radius: 7px; color: var(--theia-menu-foreground, var(--theia-foreground)); background: var(--theia-menu-background, var(--theia-editorWidget-background)); box-shadow: 0 4px 16px #0003; font: 12px/1.5 var(--theia-ui-font-family); }
 .nodu-ai-popover button { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 28px; padding: 4px 8px; border: 0; border-radius: 4px; background: transparent; color: inherit; text-align: left; font: inherit; cursor: pointer; }
 .nodu-ai-popover button span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -210,5 +212,7 @@
 .nodu-ai-menu-group, .nodu-ai-menu-empty { color: var(--theia-descriptionForeground); padding: 5px 8px; font-size: 11px; }
 .nodu-ai-menu-divider { border-top: 1px solid var(--theia-menu-separatorBackground, var(--theia-panel-border)); margin: 4px; }
 .nodu-ai-menu-search { box-sizing: border-box; width: calc(100% - 8px); height: 27px; margin: 4px; padding: 0 6px; border: 1px solid var(--theia-input-border, var(--theia-panel-border)); border-radius: 4px; color: var(--theia-input-foreground); background: var(--theia-input-background); font: inherit; }
-.nodu-ai-menu-search:focus-visible { outline: 1px solid var(--theia-focusBorder); }
+.nodu-ai-menu-search { min-width: 0; flex: none; caret-color: var(--theia-input-foreground); }
+.nodu-ai-menu-search::placeholder { color: var(--theia-input-placeholderForeground); opacity: 1; }
+.nodu-ai-menu-search:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
 @media (prefers-reduced-motion: reduce) { .nodu-ai-panel * { scroll-behavior: auto; } }

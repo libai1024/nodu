@@ -124,16 +124,26 @@ test('custom mode menu preserves selected focus, arrow navigation and Escape ret
     // Load this component in its own DOM boundary; no native menu or browser select participates.
     const exports={},source=fs.readFileSync(path.join(__dirname,'../src/browser/nodu-tutor-chat-controls.tsx'),'utf8');
     const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.React}}).outputText;
+    const viewport={innerWidth:900,innerHeight:700,addEventListener(){},removeEventListener(){}};
     vm.runInNewContext(code,{exports,document,HTMLInputElement:class{},ResizeObserver:class{observe(){}disconnect(){}},
-        window:{innerWidth:900,innerHeight:700,addEventListener(){},removeEventListener(){}},require:id=>id.endsWith('/react')?c.React:{createPortal:v=>v}});
+        window:viewport,require:id=>id.endsWith('/react')?c.React:{createPortal:v=>v}});
     c.anchor.getBoundingClientRect=()=>({top:600,bottom:628,left:328,right:400});
     const menu=exports.ChatPopover(props);
-    ref.current={style:{},getBoundingClientRect:()=>({height:70}),contains:()=>false,
+    ref.current={style:{},getBoundingClientRect:()=>({width:112,height:70}),contains:()=>false,
         querySelector:selector=>selector==='input'?undefined:selector.includes('aria-checked')?items.find(n=>n.checked):items[0],querySelectorAll:()=>items};
     effects.forEach(effect=>effect());assert.equal(document.activeElement,items[0]);
-    assert.equal(ref.current.style.width,'184px');assert.equal(ref.current.style.left,'328px');assert.equal(ref.current.style.top,'524px');
+    assert.equal(ref.current.style.width,'112px');assert.equal(ref.current.style.left,'328px');assert.equal(ref.current.style.top,'524px');
     const key=value=>menu.props.onKeyDown({key:value,target:document.activeElement,preventDefault(){},stopPropagation(){}});
     key('ArrowDown');assert.equal(document.activeElement,items[1]);key('ArrowDown');assert.equal(document.activeElement,items[0]);
     key('End');assert.equal(document.activeElement,items[1]);key('Home');assert.equal(document.activeElement,items[0]);
     key('Escape');c.render();assert.equal(c.popup(),undefined);assert.deepEqual(c.calls,['focus']);
+    const node=ref.current;
+    for(const [available,rendered,minimum,maximum,left] of [[900,144,144,288,256],[900,288,144,288,112],[200,184,144,184,8],[100,84,84,84,8]]){
+        effects.length=0;viewport.innerWidth=available;
+        exports.ChatPopover({...props,width:'content',minWidth:144,align:'end'});
+        ref.current={...node,style:{},getBoundingClientRect:()=>({width:rendered,height:70})};
+        effects.forEach(effect=>effect());
+        assert.equal(ref.current.style.width,'max-content');assert.equal(ref.current.style.minWidth,`${minimum}px`);
+        assert.equal(ref.current.style.maxWidth,`${maximum}px`);assert.equal(ref.current.style.left,`${left}px`);
+    }
 });

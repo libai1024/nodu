@@ -19,4 +19,5 @@
 .nodu-chat-context-list { display: flex; flex-direction: column; gap: 6px; padding: 8px; max-height: 240px; overflow-y: auto; }
 .nodu-chat-context-list > div { display: flex; min-width: 0; }
 .nodu-chat-context-list .nodu-chat-context-chip { width: 100%; }
-.nodu-chat-context-list .nodu-chat-context-open { flex: 1; }
+.nodu-chat-context-list .nodu-chat-context-open { flex: 1; justify-content: flex-start; }
+.nodu-chat-context-list .nodu-chat-context-remove { width: 22px; min-width: 22px; padding: 0; }

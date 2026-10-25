@@ -105,14 +105,15 @@ export function ContextPicker({ tutor, open, children }: ContextPickerProps): Re
         {(error || tutor.contextError) && <div className="nodu-chat-context-error" role="status">{error || tutor.contextError}</div>}
         </div>
         {children?.(addButton)}
-        {menu && <ChatPopover anchor={menu.anchor} label={menu.view === 'all' ? '已附带的上下文' : '添加代码上下文'} above close={close}>
+        {menu && <ChatPopover anchor={menu.anchor} label={menu.view === 'all' ? '已附带的上下文' : '添加代码上下文'} above align="start"
+            width={menu.view === 'files' && (files?.length ?? 0) > 8 ? 288 : 'content'} minWidth={menu.view === 'add' ? 144 : 160} close={close}>
             {menu.view === 'add' ? <>
                 <button type="button" role="menuitem" disabled={disabled || !canCurrent} onClick={() => addCurrent('file')}>固定当前文件<i className="codicon codicon-pin" aria-hidden="true"/></button>
                 <button type="button" role="menuitem" disabled={disabled || !canSelection} onClick={() => addCurrent('selection')}>固定当前选区<i className="codicon codicon-selection" aria-hidden="true"/></button>
                 <div className="nodu-ai-menu-divider"/>
                 <button type="button" role="menuitem" disabled={disabled} onClick={listFiles}>从工程选择文件<i className="codicon codicon-folder" aria-hidden="true"/></button>
             </> : menu.view === 'files' ? <>
-                <button type="button" role="menuitem" onClick={() => { setMenu({ ...menu, view: 'add' }); setSearch(''); }}><i className="codicon codicon-arrow-left" aria-hidden="true"/>返回</button>
+                <button type="button" role="menuitem" onClick={() => { setMenu({ ...menu, view: 'add' }); setSearch(''); }}><span className="nodu-ai-menu-option-label"><i className="codicon codicon-arrow-left" aria-hidden="true"/><span>返回</span></span></button>
                 {(files?.length ?? 0) > 8 && <input className="nodu-ai-menu-search" aria-label="搜索工程文件" placeholder="搜索文件" value={search} onChange={event => setSearch(event.target.value)}/>}
                 <div className="nodu-ai-menu-scroll">{visibleFiles.map(path => <button type="button" role="menuitem" key={path} title={path} disabled={disabled}
                     onClick={() => void run(() => tutor.addContextFile(path), '无法附带此文件', added)}><span>{path}</span></button>)}

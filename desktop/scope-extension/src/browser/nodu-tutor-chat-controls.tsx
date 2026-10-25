@@ -4,18 +4,21 @@ import { createPortal } from '@theia/core/shared/react-dom';
 import type { NoduTutorModel } from './nodu-tutor-model';
 
 /** All chat menus use the same bounded overlay, outside the clipped composer. */
-export function ChatPopover({ anchor, label, above, width = 288, align = 'end', close, children }: {
-    anchor: HTMLElement; label: string; above?: boolean; width?: number; align?: 'start' | 'end'; close(): void; children: React.ReactNode;
+export function ChatPopover({ anchor, label, above, width = 'content', minWidth = 144, align = 'end', close, children }: {
+    anchor: HTMLElement; label: string; above?: boolean; width?: number | 'content'; minWidth?: number; align?: 'start' | 'end'; close(): void; children: React.ReactNode;
 }): React.ReactElement {
     const ref = React.useRef<HTMLDivElement>(null);
     React.useLayoutEffect(() => {
         const node = ref.current;
         if (!node) { return; }
         const place = (): void => {
-            const rect = anchor.getBoundingClientRect(), boundedWidth = Math.min(width, window.innerWidth - 16);
-            node.style.width = `${boundedWidth}px`;
+            const rect = anchor.getBoundingClientRect(), availableWidth = Math.max(0, window.innerWidth - 16);
+            // Short actions fit their contents; names and paths can grow up to 288px.
+            node.style.minWidth = `${Math.min(typeof width === 'number' ? width : minWidth, availableWidth)}px`;
+            node.style.maxWidth = `${Math.min(typeof width === 'number' ? width : 288, availableWidth)}px`;
+            node.style.width = typeof width === 'number' ? `${Math.min(width, availableWidth)}px` : 'max-content';
             node.style.maxHeight = `${Math.max(120, window.innerHeight - 24)}px`;
-            const height = node.getBoundingClientRect().height;
+            const { width: boundedWidth, height } = node.getBoundingClientRect();
             const y = above ? rect.top - height - 6 : rect.bottom + 6;
             const x = align === 'start' ? rect.left : rect.right - boundedWidth;
             node.style.left = `${Math.max(8, Math.min(x, window.innerWidth - boundedWidth - 8))}px`;
@@ -27,7 +30,7 @@ export function ChatPopover({ anchor, label, above, width = 288, align = 'end', 
         const observer = new ResizeObserver(place); observer.observe(node);
         document.addEventListener('pointerdown', outside, true); window.addEventListener('resize', place);
         return () => { observer.disconnect(); document.removeEventListener('pointerdown', outside, true); window.removeEventListener('resize', place); };
-    }, [anchor, above, width, align, close]);
+    }, [anchor, above, width, minWidth, align, close]);
     React.useLayoutEffect(() => {
         const node = ref.current;
         // Switching from the attachment menu to its async file list removes the
@@ -37,7 +40,7 @@ export function ChatPopover({ anchor, label, above, width = 288, align = 'end', 
         }
     }, [children, anchor]);
     const dismiss = (): void => { close(); anchor.isConnected && anchor.focus(); };
-    return createPortal(<div ref={ref} className="scope-widget nodu-ai-popover" tabIndex={-1} aria-label={label} role="menu" onKeyDown={e => {
+    return createPortal(<div ref={ref} className="nodu-ai-popover" tabIndex={-1} aria-label={label} role="menu" onKeyDown={e => {
         if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dismiss(); return; }
         if (e.key === 'Tab') { e.preventDefault(); dismiss(); return; }
         if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key) || (e.target instanceof HTMLInputElement && !e.key.startsWith('Arrow'))) { return; }
@@ -69,7 +72,7 @@ export function ModePicker({ tutor }: { tutor: NoduTutorModel }): React.ReactEle
                 e.preventDefault(); e.stopPropagation(); setAnchor(e.currentTarget);
             }
         }}><i className={`codicon codicon-${current.icon}`} aria-hidden="true"/><span>{current.label}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
-    </button>{anchor && <ChatPopover anchor={anchor} label="对话模式" above width={184} align="start" close={close}>
+    </button>{anchor && <ChatPopover anchor={anchor} label="对话模式" above width={112} align="start" close={close}>
         {CHAT_MODES.map(mode => <button key={mode.value} type="button" role="menuitemradio" aria-checked={tutor.mode === mode.value} disabled={disabled}
             onClick={() => { if (disabled) { return; } tutor.setMode(mode.value); close(); if (anchor.isConnected) { anchor.focus(); } }}>
             <span className="nodu-ai-menu-option-label"><i className={`codicon codicon-${mode.icon}`} aria-hidden="true"/><span>{mode.label}</span></span>
@@ -90,7 +93,7 @@ export function ModelPicker({ tutor, openSettings }: { tutor: NoduTutorModel; op
     return <><button type="button" className="nodu-ai-model" aria-label="模型" aria-haspopup="menu" aria-expanded={!!anchor}
         title={tutor.busy ? '停止回复后可切换模型' : selection?.modelId ?? '选择模型'} onClick={e => { if (anchor) { close(); } else { setAnchor(e.currentTarget); } }}>
         <span>{selection?.modelId ?? '选择模型'}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
-    </button>{anchor && <ChatPopover anchor={anchor} label="模型" above close={close}>
+    </button>{anchor && <ChatPopover anchor={anchor} label="模型" above width={total > 8 ? 288 : 'content'} minWidth={160} close={close}>
         {total > 8 && <input className="nodu-ai-menu-search" aria-label="搜索模型" placeholder="搜索模型" value={search} onChange={e => setSearch(e.target.value)}/>}
         <div className="nodu-ai-menu-scroll">{visible.map(p => <React.Fragment key={p.id}>
             <div className="nodu-ai-menu-group">{p.name}</div>{p.models.map(m => <button type="button" role="menuitemradio" aria-checked={selection?.providerId === p.id && selection.modelId === m.id}
@@ -113,7 +116,8 @@ export function ChatHeader({ tutor, clear }: { tutor: NoduTutorModel; clear(): P
         <button type="button" className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!!tutor.busy || tutor.conversationLoading} onClick={() => void tutor.newConversation()}><i className="codicon codicon-add" aria-hidden="true"/></button>
         <button type="button" className="nodu-ai-icon" aria-label="历史对话" title="历史对话" aria-haspopup="menu" aria-expanded={menu?.kind === 'history'} onClick={e => toggle('history', e.currentTarget)}><i className="codicon codicon-history" aria-hidden="true"/></button>
         <button type="button" className="nodu-ai-icon" aria-label="对话操作" title="对话操作" aria-haspopup="menu" aria-expanded={menu?.kind === 'more'} onClick={e => toggle('more', e.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
-        {menu && <ChatPopover anchor={menu.anchor} label={menu.kind === 'history' ? '历史对话' : '对话操作'} close={close}>
+        {menu && <ChatPopover anchor={menu.anchor} label={menu.kind === 'history' ? '历史对话' : '对话操作'}
+            width={menu.kind === 'history' && conversations.length > 8 ? 288 : 'content'} close={close}>
             {menu.kind === 'history' ? <>
                 {conversations.length > 8 && <input className="nodu-ai-menu-search" aria-label="搜索对话" placeholder="搜索对话" value={search} onChange={e => setSearch(e.target.value)}/>}
                 <div className="nodu-ai-menu-scroll">{conversations.filter(c => c.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())).map(c =>
