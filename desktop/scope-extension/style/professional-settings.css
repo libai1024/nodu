@@ -6,7 +6,7 @@
     grid-template-rows: 54px minmax(0, 1fr);
     grid-template-areas: 'title header' 'nav content';
     width: min(800px, 100%);
-    height: 800px;
+    height: 680px;
     max-height: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -26,9 +26,10 @@
 .nodu-professional-settings-tabs { grid-area: nav; display: flex; flex-direction: column; align-items: stretch; min-height: 0; overflow-y: auto; gap: 4px; padding: 10px 12px 24px; }
 .nodu-professional-settings-tabs > button { display: flex; flex: none; align-items: center; gap: 8px; min-width: 0; height: 40px; padding: 0 12px; border: 0; border-radius: 12px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; text-align: left; cursor: pointer; }
 .nodu-professional-settings-tabs > button .codicon { font-size: 16px; flex: none; }
-.nodu-professional-settings-tabs > button[aria-selected="true"] { color: var(--theia-foreground); background: color-mix(in srgb, var(--theia-foreground) 8%, transparent); }
+.nodu-professional-settings-tabs > button[aria-selected="true"] { color: var(--theia-textLink-foreground); background: color-mix(in srgb, var(--theia-button-background) 9%, transparent); }
 .nodu-professional-settings-tabs > button:hover:not([aria-selected="true"]) { background: var(--theia-toolbar-hoverBackground); }
-.nodu-professional-settings-general { grid-area: content; box-sizing: border-box; min-width: 0; min-height: 0; overflow: auto; padding: 0 24px 24px; overscroll-behavior: contain; }
+.nodu-professional-settings-general,
+.nodu-professional-settings-teaching { grid-area: content; box-sizing: border-box; min-width: 0; min-height: 0; overflow: auto; padding: 10px 24px 24px; overscroll-behavior: contain; }
 .nodu-professional-settings-general .nodu-minimal-preferences-row { box-sizing: border-box; min-height: 64px; padding: 14px 0; gap: 12px; }
 .nodu-professional-settings-group + .nodu-professional-settings-group { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--theia-panel-border); }
 .nodu-professional-settings button { font: inherit; cursor: pointer; }
@@ -38,12 +39,18 @@
 .nodu-professional-settings .nodu-minimal-preferences-segments button,
 .nodu-professional-settings .nodu-minimal-preferences-stepper button,
 .nodu-professional-settings .nodu-minimal-preferences-all { color: var(--theia-foreground); }
-.nodu-professional-settings .nodu-minimal-preferences-segments button[aria-pressed="true"] { background: color-mix(in srgb, var(--theia-foreground) 10%, transparent); color: var(--theia-foreground); }
+.nodu-professional-settings .nodu-minimal-preferences-segments button[aria-pressed="true"] { background: color-mix(in srgb, var(--theia-button-background) 7%, var(--theia-editorWidget-background)); color: var(--theia-textLink-foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theia-button-background) 25%, transparent); }
 .nodu-professional-settings-theme .nodu-minimal-preferences-segments button { display: flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 12px; }
 .nodu-professional-settings .nodu-minimal-preferences-all { margin-top: 12px; padding: 0; height: 56px; }
 .nodu-professional-settings-ai { grid-area: content; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
-.nodu-professional-settings-ai-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 24px; padding: 16px 0; flex: none; border-top: 1px solid var(--theia-panel-border); }
-/* Match Harness' 36px selectors and 36 × 20 switches in both categories. */
+.nodu-professional-settings-page-title { margin: 0 0 16px; font: 500 16px/24px var(--theia-ui-font-family); }
+.nodu-professional-settings-description { margin: -4px 0 20px; font-size: 12px; line-height: 18px; color: var(--theia-descriptionForeground); }
+.nodu-professional-settings-teaching-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; padding: 12px 0; box-sizing: border-box; }
+.nodu-professional-settings-teaching-row > div { min-width: 0; }
+.nodu-professional-settings-teaching-row p { margin: 4px 0 0; font-size: 12px; line-height: 18px; color: var(--theia-descriptionForeground); overflow-wrap: anywhere; }
+.nodu-professional-settings-teaching-master { padding-top: 0; padding-bottom: 20px; }
+.nodu-professional-settings-teaching-options { border-top: 1px solid var(--theia-panel-border); padding-top: 8px; margin-bottom: 16px; }
+/* Match Harness' 36px selectors and 36 × 20 switches across settings categories. */
 .scope-widget.nodu-professional-settings .nodu-ai-icon { width: 28px; height: 28px; border-radius: 8px; }
 .nodu-professional-settings .nodu-minimal-preferences-segments button,
 .nodu-professional-settings .nodu-minimal-preferences-stepper button { height: 30px; min-width: 30px; border-radius: 9px; padding-inline: 10px; }
@@ -58,13 +65,12 @@
 .nodu-professional-settings ::selection { background: var(--theia-editor-selectionBackground); color: var(--theia-editor-foreground); }
 @media (max-width: 640px) {
     .nodu-professional-settings-backdrop { padding: 12px; }
-    .scope-widget.nodu-professional-settings { grid-template-columns: 132px minmax(0, 1fr); border-radius: 16px; }
+    .scope-widget.nodu-professional-settings { grid-template-columns: 148px minmax(0, 1fr); border-radius: 16px; }
     .nodu-professional-settings-title { padding-left: 20px; }
     .nodu-professional-settings-tabs { padding-inline: 8px; }
-    .nodu-professional-settings-ai-footer { margin-inline: 16px; }
 }
 @media (max-width: 520px) {
-    .nodu-professional-settings-general { padding: 0 12px 16px; }
+    .nodu-professional-settings-general, .nodu-professional-settings-teaching { padding: 10px 12px 16px; }
     .nodu-professional-settings-general .nodu-minimal-preferences-row { flex-wrap: wrap; row-gap: 6px; }
     .nodu-professional-settings-theme .nodu-minimal-preferences-segments button { padding: 0 7px; }
 }

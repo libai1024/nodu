@@ -15,7 +15,20 @@ import { AISettingsPanel } from './nodu-ai-provider-settings';
 import { MinimalThemeIcon, NoduMinimalPreferencesProps } from './nodu-minimal-preferences';
 import '../../style/professional-settings.css';
 
-export type ProfessionalSettingsPage = 'general' | 'ai';
+// Keep the existing 'ai' deep link for provider configuration commands.
+export type ProfessionalSettingsPage = 'general' | 'ai' | 'teaching';
+const SETTINGS_PAGES: readonly { page: ProfessionalSettingsPage; label: string; icon: string }[] = [
+    { page: 'general', label: '通用', icon: 'settings-gear' },
+    { page: 'ai', label: 'AI 服务商', icon: 'server' },
+    { page: 'teaching', label: 'AI 教学', icon: 'mortar-board' },
+];
+const TEACHING_OPTIONS = [
+    { key: 'hintsVisible', label: '代码虚影', description: '在编辑器中显示供跟写的参考代码。' },
+    { key: 'highlightsVisible', label: '代码高光', description: '高亮当前步骤涉及的代码。' },
+    { key: 'annotationsVisible', label: '浮动批注', description: '悬停教学代码时显示说明。' },
+    { key: 'floatVisible', label: '任务步骤窗', description: '显示当前教学任务与步骤。' },
+    { key: 'autoReview', label: '逐行 AI 检查', description: '完成一行后，将当前文件发送给所选模型进行检查。' },
+] as const;
 type SettingsValues = Pick<NoduMinimalPreferencesProps, 'theme' | 'onTheme' | 'mode' | 'onMode' | 'fontSize' | 'onFontSize' | 'autoSave' | 'onAutoSave' | 'wordWrap' | 'onWordWrap' | 'tabSize' | 'onTabSize'>;
 interface ProfessionalSettingsProps extends SettingsValues {
     tutor: NoduTutorModel;
@@ -45,8 +58,8 @@ export function ProfessionalSettingsDialog(props: ProfessionalSettingsProps): Re
     const segment = (label: string, selected: boolean, action: () => void | Promise<void>, icon?: 'light' | 'dark'): React.ReactElement =>
         <button type="button" aria-label={label} title={label} aria-pressed={selected} aria-disabled={busy || undefined}
             onClick={() => { if (!selected) { void perform(action); } }}>{icon ? <><MinimalThemeIcon theme={icon}/><span>{label}</span></> : label}</button>;
-    const toggle = (label: string, checked: boolean, action: () => void | Promise<void>): React.ReactElement =>
-        <button type="button" className="nodu-minimal-preferences-toggle" role="switch" aria-label={label} aria-checked={checked}
+    const toggle = (label: string, checked: boolean, action: () => void | Promise<void>, descriptionId?: string): React.ReactElement =>
+        <button type="button" className="nodu-minimal-preferences-toggle" role="switch" aria-label={label} aria-checked={checked} aria-describedby={descriptionId}
             aria-disabled={busy || undefined} onClick={() => { void perform(action); }}><span/></button>;
     const keyboard = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         if (event.nativeEvent.isComposing || event.keyCode === 229 || event.defaultPrevented) { return; }
@@ -62,21 +75,25 @@ export function ProfessionalSettingsDialog(props: ProfessionalSettingsProps): Re
         else if (!event.shiftKey && (active === last || !dialog.current.contains(active))) { event.preventDefault(); first.focus(); }
         event.stopPropagation();
     };
-    const tab = (page: ProfessionalSettingsPage, label: string): React.ReactElement => <button type="button" role="tab" id={`${id}-${page}-tab`}
+    const tab = ({ page, label, icon }: typeof SETTINGS_PAGES[number]): React.ReactElement => <button key={page} type="button" role="tab" id={`${id}-${page}-tab`}
         aria-selected={props.page === page} aria-controls={`${id}-${page}`} tabIndex={props.page === page ? 0 : -1}
         onClick={() => props.onPage(page)} onKeyDown={event => {
             if (!['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) { return; }
             event.preventDefault(); event.stopPropagation();
-            const next = event.key === 'Home' ? 'general' : event.key === 'End' ? 'ai' : page === 'general' ? 'ai' : 'general';
+            const index = SETTINGS_PAGES.findIndex(item => item.page === page);
+            const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? SETTINGS_PAGES.length - 1
+                : (index + (event.key === 'ArrowDown' ? 1 : -1) + SETTINGS_PAGES.length) % SETTINGS_PAGES.length;
+            const next = SETTINGS_PAGES[nextIndex].page;
             props.onPage(next);
             dialog.current?.querySelector<HTMLElement>(`[id="${id}-${next}-tab"]`)?.focus();
-        }}><i className={`codicon codicon-${page === 'general' ? 'settings-gear' : 'sparkle'}`} aria-hidden="true"/><span>{label}</span></button>;
+        }}><i className={`codicon codicon-${icon}`} aria-hidden="true"/><span>{label}</span></button>;
     return <div className="nodu-professional-settings-backdrop" onPointerDown={event => { if (event.target === event.currentTarget) { event.preventDefault(); props.close(); } }}>
         <div ref={dialog} className="scope-widget nodu-professional-settings" role="dialog" aria-modal="true" aria-label="设置" tabIndex={-1} onKeyDown={keyboard}>
             <div className="nodu-professional-settings-title"><h2>设置</h2></div>
             <header className="nodu-professional-settings-header"><button type="button" className="nodu-ai-icon" title="关闭 Esc" aria-label="关闭设置" onClick={props.close}><i className="codicon codicon-close" aria-hidden="true"/></button></header>
-            <div className="nodu-professional-settings-tabs" role="tablist" aria-orientation="vertical" aria-label="设置分类">{tab('general', '通用')}{tab('ai', 'AI')}</div>
+            <div className="nodu-professional-settings-tabs" role="tablist" aria-orientation="vertical" aria-label="设置分类">{SETTINGS_PAGES.map(tab)}</div>
             <section id={`${id}-general`} role="tabpanel" aria-labelledby={`${id}-general-tab`} hidden={props.page !== 'general'} className="nodu-professional-settings-general" aria-busy={busy}>
+                <h3 className="nodu-professional-settings-page-title">通用</h3>
                 <div className="nodu-professional-settings-group">
                 <div className="nodu-minimal-preferences-row nodu-professional-settings-theme"><span>主题</span><div className="nodu-minimal-preferences-segments">
                     {segment('明亮', props.theme === 'light', () => props.onTheme('light'), 'light')}{segment('暗色', props.theme === 'dark', () => props.onTheme('dark'), 'dark')}
@@ -97,13 +114,27 @@ export function ProfessionalSettingsDialog(props: ProfessionalSettingsProps): Re
                     {[2, 4, 8].map(size => <React.Fragment key={size}>{segment(String(size), props.tabSize === size, () => props.onTabSize(size))}</React.Fragment>)}
                 </div></div>
                 </div>
-                {error && <div className="nodu-minimal-preferences-error" role="alert">设置未保存，请重试</div>}
+                {error && props.page === 'general' && <div className="nodu-minimal-preferences-error" role="alert">设置未保存，请重试</div>}
                 <button type="button" className="nodu-minimal-preferences-all" onClick={props.allSettings}>全部设置<i className="codicon codicon-chevron-right" aria-hidden="true"/></button>
             </section>
             <section id={`${id}-ai`} role="tabpanel" aria-labelledby={`${id}-ai-tab`} hidden={props.page !== 'ai'} className="nodu-professional-settings-ai">
                 <AISettingsPanel tutor={props.tutor} visible={props.page === 'ai'}/>
-                <div className="nodu-professional-settings-ai-footer"><span title="完成一行后，将当前文件发送给所选模型进行检查">逐行 AI 检查</span>
-                    {toggle('逐行 AI 检查', props.tutor.autoReview, () => props.tutor.setDisplay('autoReview', !props.tutor.autoReview))}</div>
+            </section>
+            <section id={`${id}-teaching`} role="tabpanel" aria-labelledby={`${id}-teaching-tab`} hidden={props.page !== 'teaching'} className="nodu-professional-settings-teaching" aria-busy={busy}>
+                <h3 className="nodu-professional-settings-page-title">AI 教学</h3>
+                <p className="nodu-professional-settings-description">在教学模式中提供代码指导与检查。</p>
+                <div className="nodu-professional-settings-teaching-row nodu-professional-settings-teaching-master">
+                    <div><span>AI 编辑指导</span><p id={`${id}-guidance-description`}>控制编辑器内的教学辅助，关闭后仍可使用 AI 对话。</p></div>
+                    {toggle('AI 编辑指导', !props.tutor.paused, () => props.tutor.setPaused(!props.tutor.paused), `${id}-guidance-description`)}
+                </div>
+                <div className="nodu-professional-settings-teaching-options">
+                    {TEACHING_OPTIONS.map(option => <div key={option.key} className="nodu-professional-settings-teaching-row">
+                        <div><span>{option.label}</span><p id={`${id}-${option.key}-description`}>{option.description}</p></div>
+                        {toggle(option.label, props.tutor[option.key], () => props.tutor.setDisplay(option.key, !props.tutor[option.key]), `${id}-${option.key}-description`)}
+                    </div>)}
+                </div>
+                {props.tutor.paused && <p className="nodu-professional-settings-description" role="status">编辑指导已关闭；以上偏好会保留，重新开启后生效。</p>}
+                {error && props.page === 'teaching' && <div className="nodu-minimal-preferences-error" role="alert">设置未保存，请重试</div>}
             </section>
         </div>
     </div>;

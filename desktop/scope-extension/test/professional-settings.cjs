@@ -85,7 +85,9 @@ function component(overrides = {}) {
     }, useId() { cursor++; return 'settings'; }, useRef(value) { const index = cursor++; return slots[index] ??= { current: value }; },
         useState(value) { const index = cursor++; if (!(index in slots)) slots[index] = value; return [slots[index], next => { if (dead) late++; slots[index] = typeof next === 'function' ? next(slots[index]) : next; }]; }, useLayoutEffect: effect };
     const { ProfessionalSettingsDialog } = load({ '@theia/core/shared/react': React });
-    const props = { tutor: { autoReview: true, setDisplay: (...args) => calls.push(['display', ...args]) }, page: 'general', onPage(page) { props.page = page; }, close: () => calls.push(['close']), allSettings: () => calls.push(['all']), theme: 'light', mode: 'pro', fontSize: 14, autoSave: false, wordWrap: false, tabSize: 4,
+    const props = { tutor: { paused: false, hintsVisible: true, highlightsVisible: true, annotationsVisible: true, floatVisible: true, autoReview: true,
+        setDisplay(key, value) { props.tutor[key] = value; calls.push(['display', key, value]); },
+        setPaused(value) { props.tutor.paused = value; calls.push(['paused', value]); } }, page: 'general', onPage(page) { props.page = page; }, close: () => calls.push(['close']), allSettings: () => calls.push(['all']), theme: 'light', mode: 'pro', fontSize: 14, autoSave: false, wordWrap: false, tabSize: 4,
         onTheme: value => calls.push(['theme', value]), onMode: value => calls.push(['mode', value]), onFontSize: value => calls.push(['font', value]), onAutoSave: value => calls.push(['save', value]), onWordWrap: value => calls.push(['wrap', value]), onTabSize: value => calls.push(['tab', value]), ...overrides };
     const render = () => { cursor = 0; tree = ProfessionalSettingsDialog(props); effects.splice(0).forEach(fn => fn()); return tree; };
     const dialog = () => walk(tree).find(x => x.props?.role === 'dialog');
@@ -95,12 +97,21 @@ function component(overrides = {}) {
     return { props, calls, render, dialog, button, key, doc, tree: () => tree, flush: async () => { for (let i = 0; i < 3; i++) { await new Promise(setImmediate); if (!dead) render(); } },
         unmount() { dead = true; slots.forEach(x => x?.cleanup?.()); }, get late() { return late; } };
 }
-test('general and AI tabs share a dialog, reuse the provider component and keep one selected keyboard tab', () => {
+test('three categories isolate provider and teaching controls while preserving the mounted provider form', () => {
     const c = component(); assert.equal(c.doc.activeElement, c.button('通用').dom);
     assert.equal(walk(c.tree()).filter(x => x.type === AISettingsPanel).length, 1);
     assert.equal(walk(c.tree()).filter(x => x.props?.role === 'tab' && x.props.tabIndex === 0).length, 1);
-    c.button('AI').props.onClick(); c.render(); assert.equal(c.button('AI').props['aria-selected'], true);
+    c.button('AI 服务商').props.onClick(); c.render(); assert.equal(c.button('AI 服务商').props['aria-selected'], true);
     assert.equal(walk(c.tree()).find(x => x.props.id === 'settings-general').props.hidden, true);
+    const panels = walk(c.tree()).filter(x => x.props?.role === 'tabpanel');
+    assert.equal(panels.length, 3);
+    assert.deepEqual(walk(c.tree()).filter(x => x.props?.role === 'tab').map(text), ['通用', 'AI 服务商', 'AI 教学']);
+    const providerPanel = panels.find(x => x.props.id === 'settings-ai');
+    assert.equal(walk(providerPanel).filter(x => x.props?.role === 'switch').length, 0);
+    c.button('AI 教学').props.onClick(); c.render();
+    assert.equal(walk(c.tree()).find(x => x.type === AISettingsPanel).props.visible, false);
+    assert.equal(walk(c.tree()).find(x => x.props.id === 'settings-ai').props.hidden, true);
+    assert.equal(walk(c.tree()).find(x => x.props.id === 'settings-teaching').props.hidden, false);
     c.button('逐行 AI 检查').props.onClick(); assert.deepEqual(c.calls, [['display','autoReview',false]]);
 });
 test('Escape, outside clicks and focus wrap work; nested model dialogs retain their keyboard ownership', () => {
@@ -127,7 +138,7 @@ test('real markup uses modal/tab semantics and stylesheet constrains small viewp
     assert.match(markup, /aria-modal="true"/); assert.match(markup, /role="tablist"/); assert.match(markup, /aria-orientation="vertical"/); assert.match(markup, /role="tabpanel"/);
     assert.equal((markup.match(/role="dialog"/g) || []).length, 1);
     const css = fs.readFileSync(path.join(__dirname,'../style/professional-settings.css'),'utf8');
-    assert.match(css, /width: min\(800px, 100%\)/); assert.match(css, /height: 800px/); assert.match(css, /max-height: 100%/); assert.match(css, /\.scope-widget\.nodu-professional-settings/); assert.match(css, /@media \(max-width: 520px\)/); assert.doesNotMatch(css.match(/\.scope-widget\.nodu-professional-settings \{([^}]+)\}/)[1], /transform:/);
+    assert.match(css, /width: min\(800px, 100%\)/); assert.match(css, /height: 680px/); assert.match(css, /max-height: 100%/); assert.match(css, /\.scope-widget\.nodu-professional-settings/); assert.match(css, /@media \(max-width: 520px\)/); assert.doesNotMatch(css.match(/\.scope-widget\.nodu-professional-settings \{([^}]+)\}/)[1], /transform:/);
 });
 
 test('legacy AI settings command routes to the unified AI page and never opens a separate popover', () => {
@@ -141,13 +152,48 @@ test('legacy AI settings command routes to the unified AI page and never opens a
     assert.deepEqual(calls, [['ai', anchor], ['close', false]]);
 });
 
-test('vertical settings navigation changes only pages with Up/Down/Home/End and keeps the selected tab focused', () => {
+test('vertical navigation visits all three categories, wraps both ways and supports Home/End', () => {
     const c = component();
     const navKey = (label, key) => { const event = { key, preventDefault() { this.prevented = true; }, stopPropagation() {} }; c.button(label).props.onKeyDown(event); return event; };
-    assert.equal(navKey('通用', 'ArrowDown').prevented, true); assert.equal(c.props.page, 'ai'); assert.equal(c.doc.activeElement, c.button('AI').dom); c.render();
-    assert.equal(c.button('AI').props.tabIndex, 0); assert.equal(c.button('通用').props.tabIndex, -1);
-    navKey('AI', 'ArrowUp'); assert.equal(c.props.page, 'general'); c.render();
-    navKey('通用', 'End'); assert.equal(c.props.page, 'ai'); c.render();
-    navKey('AI', 'Home'); assert.equal(c.props.page, 'general'); c.render();
-    assert.equal(navKey('通用', 'ArrowRight').prevented, undefined); assert.equal(c.props.page, 'general');
+    for (const [label, key, page, next] of [
+        ['通用', 'ArrowDown', 'ai', 'AI 服务商'],
+        ['AI 服务商', 'ArrowDown', 'teaching', 'AI 教学'],
+        ['AI 教学', 'ArrowDown', 'general', '通用'],
+        ['通用', 'ArrowUp', 'teaching', 'AI 教学'],
+        ['AI 教学', 'ArrowUp', 'ai', 'AI 服务商'],
+        ['AI 服务商', 'Home', 'general', '通用'],
+        ['通用', 'End', 'teaching', 'AI 教学'],
+    ]) {
+        assert.equal(navKey(label, key).prevented, true);
+        assert.equal(c.props.page, page);
+        assert.equal(c.doc.activeElement, c.button(next).dom);
+        c.render();
+        assert.equal(c.button(next).props.tabIndex, 0);
+        assert.equal(walk(c.tree()).filter(x => x.props?.role === 'tab' && x.props.tabIndex === 0).length, 1);
+    }
+    assert.equal(navKey('AI 教学', 'ArrowRight').prevented, undefined);
+    assert.equal(c.props.page, 'teaching');
+});
+
+test('teaching controls use existing persisted preferences and retain their values when guidance is paused', async () => {
+    const c = component({ page: 'teaching' });
+    for (const [label, key] of [['代码虚影', 'hintsVisible'], ['代码高光', 'highlightsVisible'], ['浮动批注', 'annotationsVisible'], ['任务步骤窗', 'floatVisible'], ['逐行 AI 检查', 'autoReview']]) {
+        const control = c.button(label);
+        assert.equal(control.props['aria-checked'], true);
+        assert.ok(walk(c.tree()).some(x => x.props?.id === control.props['aria-describedby']));
+        control.props.onClick(); await c.flush();
+        assert.deepEqual(c.calls.at(-1), ['display', key, false]);
+        assert.equal(c.button(label).props['aria-checked'], false);
+    }
+    c.button('AI 编辑指导').props.onClick(); await c.flush();
+    assert.deepEqual(c.calls.at(-1), ['paused', true]);
+    assert.equal(c.button('AI 编辑指导').props['aria-checked'], false);
+    assert.ok(walk(c.tree()).some(x => x.props?.role === 'status'));
+    c.button('通用').props.onClick(); c.render();
+    c.button('AI 教学').props.onClick(); c.render();
+    assert.equal(c.button('代码虚影').props['aria-checked'], false);
+    c.button('AI 编辑指导').props.onClick(); await c.flush();
+    assert.deepEqual(c.calls.at(-1), ['paused', false]);
+    assert.equal(c.button('代码虚影').props['aria-checked'], false);
+    assert.equal(c.calls.filter(x => x[0] === 'display').length, 5, 'master toggle never overwrites display preferences');
 });
