@@ -70,15 +70,11 @@
 .nodu-ai-configure:hover { background: var(--theia-toolbar-hoverBackground); color: var(--theia-foreground); }
 .nodu-ai-send { display: inline-grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: var(--theia-foreground); color: var(--theia-editor-background); cursor: pointer; }
 .nodu-ai-send > .codicon { font-size: 16px; }
-.nodu-ai-mode-select { flex: none; position: relative; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 7px; border-radius: 6px; color: var(--theia-foreground); background: transparent; font-size: 12px; cursor: pointer; }
-.nodu-ai-mode-select:hover, .nodu-ai-mode-select:focus-within { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
-.nodu-ai-mode-select > .codicon { font-size: 13px; }
+.nodu-ai-mode-select { flex: none; position: relative; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 7px; border: 0; border-radius: 6px; color: var(--theia-foreground); background: color-mix(in srgb, var(--theia-foreground) 5%, transparent); font: inherit; cursor: pointer; }
+.nodu-ai-mode-select:hover:not(:disabled), .nodu-ai-mode-select[aria-expanded="true"] { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-ai-mode-select > .codicon { flex: none; font-size: 14px; }
 .nodu-ai-mode-select > .codicon-chevron-down { font-size: 10px; }
-/* Native select keeps keyboard and screen-reader behaviour; only its chrome is hidden. */
-.nodu-ai-mode-select select { appearance: none; -webkit-appearance: none; padding: 0; border: 0; border-radius: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; outline: none; }
-.nodu-ai-composer .nodu-ai-mode-select select:focus-visible { outline: none; }
-.nodu-ai-mode-select:has(select:focus-visible) { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
-.nodu-ai-mode-select select option { color: var(--theia-dropdown-foreground); background: var(--theia-dropdown-background); }
+.nodu-ai-composer .nodu-ai-mode-select:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 1px; }
 .nodu-ai-send:hover:not(:disabled) { background: color-mix(in srgb, var(--theia-foreground) 82%, var(--theia-editor-background)); }
 .nodu-ai-send:disabled { background: color-mix(in srgb, var(--theia-foreground) 8%, var(--theia-editor-background)); color: var(--theia-descriptionForeground); cursor: default; }
 .nodu-ai-stop > .codicon { font-size: 13px; }
@@ -201,10 +197,12 @@
 
 /* Shared small menus, rendered outside the title bar/composer clipping boundaries. */
 .nodu-ai-titlebar { display: inline-flex; align-items: center; gap: 1px; }
+.scope-widget.nodu-ai-popover { min-width: 0; }
 .nodu-ai-popover { position: fixed; z-index: 10000; box-sizing: border-box; overflow: auto; padding: 4px; border: 1px solid var(--theia-editorWidget-border, var(--theia-panel-border)); border-radius: 7px; color: var(--theia-menu-foreground, var(--theia-foreground)); background: var(--theia-menu-background, var(--theia-editorWidget-background)); box-shadow: 0 4px 16px #0003; font: 12px/1.5 var(--theia-ui-font-family); }
 .nodu-ai-popover button { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 28px; padding: 4px 8px; border: 0; border-radius: 4px; background: transparent; color: inherit; text-align: left; font: inherit; cursor: pointer; }
 .nodu-ai-popover button span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nodu-ai-popover button .codicon { flex: none; font-size: 14px; }
+.nodu-ai-popover .nodu-ai-menu-option-label { display: inline-flex; align-items: center; gap: 8px; }
 .nodu-ai-popover button:hover:not(:disabled), .nodu-ai-popover button:focus-visible { background: var(--theia-list-hoverBackground); outline: none; }
 .nodu-ai-popover button[aria-checked="true"] { color: var(--theia-list-activeSelectionForeground, var(--theia-foreground)); background: var(--theia-list-activeSelectionBackground); }
 .nodu-ai-popover button:disabled { opacity: .45; cursor: default; }

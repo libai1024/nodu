@@ -10,7 +10,7 @@ import { NoduTutorModel } from './nodu-tutor-model';
 import { TUTOR_COMMANDS } from './nodu-tutor-hints';
 import { TabBarToolbarContribution, TabBarToolbarRegistry } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
 import { TutorMessage } from './nodu-tutor-messages';
-import { ModelPicker, ChatHeader } from './nodu-tutor-chat-controls';
+import { ModePicker, ModelPicker, ChatHeader } from './nodu-tutor-chat-controls';
 import { ContextPicker } from './nodu-tutor-context-picker';
 
 /** Plans are confirmed here; an accepted task is managed only by the shared task window. */
@@ -97,11 +97,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229) { e.preventDefault(); submit(); } }} />
             <div className="nodu-ai-composer-bar">
                 {addButton}
-                <label className="nodu-ai-mode-select" title="对话模式">
-                    <select aria-label="对话模式" value={tutor.mode} disabled={isBusy} onChange={e => tutor.setMode(e.target.value as typeof tutor.mode)}>
-                        <option value="teach">教学</option><option value="ask">提问</option>
-                    </select><i className="codicon codicon-chevron-down" aria-hidden="true"/>
-                </label>
+                <ModePicker tutor={tutor} />
                 <ModelPicker tutor={tutor} openSettings={anchor => run(TUTOR_COMMANDS.settings, anchor)} />
                 {tutor.settings && !tutor.configured && <button type="button" className="nodu-ai-configure" title="配置模型连接" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}><i className="codicon codicon-key" aria-hidden="true"/><span>配置</span></button>}
                 {isBusy
