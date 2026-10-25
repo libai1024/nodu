@@ -42,7 +42,6 @@ export function AISettingsPanel({ tutor, visible = true }: { tutor: NoduTutorMod
     };
     return <div className="nodu-ai-provider-catalog">
         <div className="nodu-ai-catalog-heading"><h3>AI 服务商</h3><button type="button" className="nodu-ai-catalog-add" onClick={() => void addProvider()}><i className="codicon codicon-add" aria-hidden="true"/>添加供应商</button></div>
-        {settings.storage === 'session' && <div className="nodu-ai-catalog-note" role="status">API Key 仅在本次运行中有效</div>}
         {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
         {settings.providers.map((provider, index) => {
             const expanded = active === provider.id, status = statusOf(provider);

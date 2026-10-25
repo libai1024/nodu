@@ -6,7 +6,6 @@
 .nodu-ai-catalog-heading h3 { margin: 0; font: 500 16px/24px var(--theia-ui-font-family); }
 .nodu-ai-catalog-add { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; min-height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--theia-descriptionForeground); font: inherit; white-space: nowrap; }
 .nodu-ai-catalog-add:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
-.nodu-ai-catalog-note { margin-bottom: 24px; color: var(--theia-descriptionForeground); font-size: 12px; line-height: 18px; }
 .nodu-ai-provider-card { margin-bottom: 8px; border: 1px solid var(--theia-panel-border); border-radius: 16px; overflow: hidden; }
 .nodu-ai-provider-card > .nodu-ai-provider-summary { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 48px; padding: 12px 14px; border: 0; border-radius: 0; text-align: left; background: transparent; color: var(--theia-foreground); font: inherit; }
 .nodu-ai-provider-card > .nodu-ai-provider-summary:hover { background: var(--theia-toolbar-hoverBackground); }
