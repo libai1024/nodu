@@ -46,17 +46,19 @@ test('scroll position survives conversation switching without sending or focusin
     const c=mount(),reading=c.find(n=>n.props?.role==='log');reading.props.onWheel();c.log.scrollTop=120;reading.props.onScroll();c.render();
     c.tutor.activeConversationId='chat-two';c.render();c.tutor.activeConversationId='chat-one';c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,[]);
 });
-test('history hiding cannot overwrite the reading position and returning restores composer focus',()=>{
+test('history overlay leaves transcript and composer visible without changing scroll or focus',()=>{
     const c=mount(),reading=()=>c.find(n=>n.props?.role==='log');reading().props.onWheel();c.log.scrollTop=120;reading().props.onScroll();c.render();
-    c.tutor.historyOpen=true;c.render();c.log.scrollTop=0;reading().props.onScroll();
-    c.tutor.messages.ask[0].text+=' background response';c.render();assert.equal(c.log.scrollTop,0);
-    c.tutor.historyOpen=false;c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,['focus']);
+    c.tutor.historyOpen=true;c.render();
+    assert.equal(c.find(n=>n.props?.className==='nodu-ai-reading').props.hidden,undefined);
+    assert.equal(c.find(n=>n.type==='form').props.hidden,undefined);
+    c.tutor.messages.ask[0].text+=' background response';c.render();assert.equal(c.log.scrollTop,120);
+    c.tutor.historyOpen=false;c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,[]);
 });
-test('selecting a different conversation from history cannot replace the previous reading position with hidden geometry',()=>{
+test('selecting a conversation through the overlay preserves the previous reading position',()=>{
     const c=mount(),reading=()=>c.find(n=>n.props?.role==='log');reading().props.onWheel();c.log.scrollTop=120;reading().props.onScroll();c.render();
-    c.tutor.historyOpen=true;c.render();c.log.scrollTop=0;reading().props.onScroll();
+    c.tutor.historyOpen=true;c.render();
     c.tutor.activeConversationId='chat-two';c.tutor.historyOpen=false;c.render();
-    c.tutor.activeConversationId='chat-one';c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,['focus']);
+    c.tutor.activeConversationId='chat-one';c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,[]);
 });
 test('Enter never queues while generating, IME stays intact and stop preserves the draft',()=>{
     const c=mount();c.tutor.drafts.ask='下一条草稿';c.tutor.busy={kind:'chat'};c.render();c.key({key:'Enter'});assert.deepEqual(c.calls,[]);
@@ -86,7 +88,7 @@ function content(tree) {
 function modePicker() {
     let cursor=0,tree;const slots=[],calls=[],exports={};
     const React={createElement:(type,props,...children)=>({type,props:{...props,children}}),Fragment:'fragment',
-        useState(initial){const i=cursor++;if(!(i in slots))slots[i]=initial;return[slots[i],v=>slots[i]=v];},useCallback:fn=>fn};
+        useState(initial){const i=cursor++;if(!(i in slots))slots[i]=initial;return[slots[i],v=>slots[i]=v];},useRef(initial){const i=cursor++;return slots[i]??={current:initial};},useCallback:fn=>fn};
     const source=fs.readFileSync(path.join(__dirname,'../src/browser/nodu-tutor-chat-controls.tsx'),'utf8');
     const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.React}}).outputText;
     vm.runInNewContext(code,{exports,require:id=>id.endsWith('/react')?React:{createPortal:v=>v}});
@@ -166,4 +168,46 @@ test('custom mode menu preserves selected focus, arrow navigation and Escape ret
         assert.equal(ref.current.style.width,'max-content');assert.equal(ref.current.style.minWidth,`${minimum}px`);
         assert.equal(ref.current.style.maxWidth,`${maximum}px`);assert.equal(ref.current.style.left,`${left}px`);
     }
+});
+
+function historyHarness(component, tutor, callbacks = {}) {
+    let cursor=0,tree;const slots=[],calls=[],exports={};
+    const React={createElement:(type,props,...children)=>({type,props:{...props,children}}),Fragment:'fragment',
+        useState(initial){const i=cursor++;if(!(i in slots))slots[i]=initial;return[slots[i],v=>slots[i]=v];},
+        useRef(initial){const i=cursor++;return slots[i]??={current:initial};},useCallback:fn=>fn,useEffect(){}};
+    const filename=component==='ChatHeader'?'nodu-tutor-chat-controls.tsx':'nodu-tutor-history.tsx';
+    const code=ts.transpileModule(fs.readFileSync(path.join(__dirname,'../src/browser',filename),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.React}}).outputText;
+    vm.runInNewContext(code,{exports,require:id=>id.endsWith('/react')?React:id.endsWith('nodu-tutor-history')?{ConversationHistory:'History'}:{createPortal:v=>v}});
+    const anchor={isConnected:true,focus(){calls.push('anchor-focus');}};
+    function render(){cursor=0;tree=exports[component]({tutor,clear:async()=>{},...callbacks});for(const n of descendants(tree)){if(n.type==='button'&&n.props.ref)n.props.ref.current=anchor;}}
+    render();return{render,calls,anchor,find:fn=>descendants(tree).find(fn),all:fn=>descendants(tree).filter(fn),exports};
+}
+test('history opens in the titlebar overlay; dismissal never steals focus from an outside target',()=>{
+    const tutor={historyOpen:false,messages:{ask:[]},mode:'ask',showHistory(value){this.historyOpen=value;}};
+    const c=historyHarness('ChatHeader',tutor,{focusComposer:()=>c.calls.push('composer-focus')});
+    const trigger=()=>c.find(n=>n.props?.['aria-label']==='历史对话');
+    trigger().props.onClick();c.render();
+    const popup=c.find(n=>n.type===c.exports.ChatPopover);
+    assert.equal(popup.props.width,260);assert.equal(popup.props.anchor,c.anchor);assert.equal(popup.props.className,'nodu-chat-history-popover');
+    assert.equal(trigger().props['aria-expanded'],true);assert.equal(c.find(n=>n.type==='History').props.selected instanceof Function,true);
+    popup.props.close();c.render();assert.equal(tutor.historyOpen,false);assert.deepEqual(c.calls,[]);
+    trigger().props.onKeyDown({key:'ArrowDown',preventDefault(){},stopPropagation(){}});c.render();assert.equal(trigger().props['aria-expanded'],true);
+    c.find(n=>n.props?.['aria-label']==='对话操作').props.onClick({currentTarget:c.anchor});c.render();
+    assert.equal(tutor.historyOpen,false);assert.equal(c.find(n=>n.type==='History'),undefined);
+});
+test('compact history searches drafts, filters modes and focuses only after the selected conversation activates',async()=>{
+    let complete;const calls=[];
+    const tutor={mode:'ask',activeConversationId:'one',historyOpen:true,historyEntries:[
+        {id:'one',mode:'ask',title:'已发问题',preview:'回复',hasDraft:false,updatedAt:Date.now()},
+        {id:'two',mode:'teach',title:'新对话',preview:'串口草稿',hasDraft:true,updatedAt:Date.now()},
+    ],async selectConversation(id,mode){calls.push([id,mode]);await new Promise(resolve=>complete=resolve);this.activeConversationId=id;this.mode=mode;this.historyOpen=false;}};
+    const c=historyHarness('ConversationHistory',tutor,{selected:()=>calls.push('focus')});
+    const rows=()=>c.all(n=>n.props?.className==='nodu-chat-history-item');
+    assert.deepEqual(rows().map(content),['已发问题','串口草稿']);
+    c.find(n=>n.type==='input').props.onChange({target:{value:'串口'}});c.render();assert.equal(rows().length,1);
+    c.find(n=>n.type==='input').props.onChange({target:{value:''}});c.render();
+    c.find(n=>n.props?.['aria-label']==='筛选对话模式').props.onClick();c.render();
+    c.all(n=>n.props?.role==='menuitemradio').find(n=>content(n)==='教学').props.onClick();c.render();assert.equal(rows().length,1);
+    const pending=rows()[0].props.onClick();assert.deepEqual(calls,[['two','teach']]);complete();await pending;assert.deepEqual(calls,[['two','teach'],'focus']);
+    tutor.busy={kind:'chat'};c.render();assert.equal(rows()[0].props.disabled,true);await rows()[0].props.onClick();assert.equal(calls.length,2);
 });

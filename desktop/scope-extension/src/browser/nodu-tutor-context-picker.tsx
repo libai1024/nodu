@@ -96,7 +96,7 @@ export function ContextPicker({ tutor, open, children }: ContextPickerProps): Re
     const visibleCount = narrow ? 1 : 2;
     const addButton = <button type="button" className="nodu-chat-context-add" title="添加上下文" aria-label="添加上下文" aria-haspopup="menu" aria-expanded={menu?.view === 'add' || menu?.view === 'files'}
                 disabled={!tutor.workspaceId} onClick={event => { if (menu?.view === 'add') { close(); } else { setMenu({ anchor: event.currentTarget, view: 'add' }); setError(''); } }}>
-                <i className="codicon codicon-add" aria-hidden="true"/>
+                <i className="codicon codicon-attach" aria-hidden="true"/>
             </button>;
     return <><div ref={row} className="nodu-chat-context">
         {(entries.length > 0 || !children) && <div className="nodu-chat-context-row">

@@ -2,10 +2,11 @@
 import * as React from '@theia/core/shared/react';
 import { createPortal } from '@theia/core/shared/react-dom';
 import type { NoduTutorModel } from './nodu-tutor-model';
+import { ConversationHistory } from './nodu-tutor-history';
 
 /** All chat menus use the same bounded overlay, outside the clipped composer. */
-export function ChatPopover({ anchor, label, above, width = 'content', minWidth = 144, align = 'end', layer = 'chat', close, children }: {
-    anchor: HTMLElement; label: string; above?: boolean; width?: number | 'content'; minWidth?: number; align?: 'start' | 'end'; layer?: 'chat' | 'settings'; close(): void; children: React.ReactNode;
+export function ChatPopover({ anchor, label, above, width = 'content', minWidth = 144, align = 'end', layer = 'chat', className, close, children }: {
+    anchor: HTMLElement; label: string; above?: boolean; width?: number | 'content'; minWidth?: number; align?: 'start' | 'end'; layer?: 'chat' | 'settings'; className?: string; close(): void; children: React.ReactNode;
 }): React.ReactElement {
     const ref = React.useRef<HTMLDivElement>(null);
     React.useLayoutEffect(() => {
@@ -40,7 +41,7 @@ export function ChatPopover({ anchor, label, above, width = 'content', minWidth 
         }
     }, [children, anchor]);
     const dismiss = (): void => { close(); anchor.isConnected && anchor.focus(); };
-    return createPortal(<div ref={ref} className={`nodu-ai-popover${layer === 'settings' ? ' nodu-ai-popover-settings' : ''}`} tabIndex={-1} aria-label={label} role="menu" onKeyDown={e => {
+    return createPortal(<div ref={ref} className={`nodu-ai-popover${layer === 'settings' ? ' nodu-ai-popover-settings' : ''}${className ? ` ${className}` : ''}`} tabIndex={-1} aria-label={label} role="menu" onKeyDown={e => {
         if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dismiss(); return; }
         // Portal events still bubble through React's parent dialog. It must not
         // process this Tab again after focus has returned to the menu trigger.
@@ -110,11 +111,18 @@ export function ModelPicker({ tutor, openSettings }: { tutor: NoduTutorModel; op
 
 export function ChatHeader({ tutor, clear, focusComposer }: { tutor: NoduTutorModel; clear(): Promise<void>; focusComposer?(): void }): React.ReactElement {
     const [anchor, setAnchor] = React.useState<HTMLElement>();
+    const historyAnchor = React.useRef<HTMLButtonElement>(null);
     const close = React.useCallback(() => setAnchor(undefined), []);
+    const closeHistory = React.useCallback(() => tutor.showHistory(false), [tutor]);
     return <div className="nodu-ai-titlebar">
         <button type="button" className="nodu-ai-icon" aria-label="新对话" title="新对话" disabled={!!tutor.busy || tutor.conversationLoading} onClick={async () => { await tutor.newConversation(); focusComposer?.(); }}><i className="codicon codicon-add" aria-hidden="true"/></button>
-        <button type="button" className="nodu-ai-icon" aria-label="历史对话" title="历史对话" aria-pressed={tutor.historyOpen} onClick={() => tutor.showHistory(!tutor.historyOpen)}><i className="codicon codicon-history" aria-hidden="true"/></button>
-        <button type="button" className="nodu-ai-icon" aria-label="对话操作" title="对话操作" aria-haspopup="menu" aria-expanded={!!anchor} onClick={e => setAnchor(anchor ? undefined : e.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
+        <button ref={historyAnchor} type="button" className="nodu-ai-icon" aria-label="历史对话" title="历史对话" aria-haspopup="menu" aria-expanded={tutor.historyOpen} aria-pressed={tutor.historyOpen}
+            onClick={() => { close(); tutor.showHistory(!tutor.historyOpen); }}
+            onKeyDown={e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); e.stopPropagation(); close(); tutor.showHistory(true); } }}><i className="codicon codicon-history" aria-hidden="true"/></button>
+        <button type="button" className="nodu-ai-icon" aria-label="对话操作" title="对话操作" aria-haspopup="menu" aria-expanded={!!anchor} onClick={e => { closeHistory(); setAnchor(anchor ? undefined : e.currentTarget); }}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
+        {tutor.historyOpen && historyAnchor.current && <ChatPopover anchor={historyAnchor.current} label="历史对话" width={260} className="nodu-chat-history-popover" close={closeHistory}>
+            <ConversationHistory tutor={tutor} selected={focusComposer}/>
+        </ChatPopover>}
         {anchor && <ChatPopover anchor={anchor} label="对话操作" close={close}>
             <button type="button" role="menuitem" disabled={!!tutor.busy || tutor.conversationLoading || !tutor.messages[tutor.mode].length} onClick={() => { close(); anchor.focus(); void clear(); }}>清空当前对话<i className="codicon codicon-clear-all" aria-hidden="true"/></button>
         </ChatPopover>}

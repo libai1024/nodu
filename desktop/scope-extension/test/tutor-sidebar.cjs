@@ -97,8 +97,19 @@ test('local history storage failure offers saving without reconnect or replay', 
     assert.doesNotMatch(html, /重连|role="alert"|codicon-warning/);
 });
 
-test('history replaces transcript and composer while showing both modes, dates and draft state', () => {
-    const html=render(tutor({historyOpen:true,activeConversationId:'active',historyEntries:[{id:'active',title:'串口问题',mode:'teach',updatedAt:Date.now(),preview:'继续分析',hasDraft:true},{id:'other',title:'分析报错',mode:'ask',updatedAt:Date.now()-86400000,preview:'编译失败',hasDraft:false}]}));
-    assert.match(html,/搜索历史对话/);assert.match(html,/今天/);assert.match(html,/昨天/);assert.match(html,/草稿/);assert.match(html,/aria-current="true"/);
-    assert.match(html,/class="nodu-ai-reading" hidden/);assert.match(html,/<form hidden/);assert.match(html,/分析报错/);
+test('history overlay leaves the transcript and composer visible in the panel', () => {
+    const html=render(tutor({historyOpen:true,drafts:{teach:'未发送草稿',ask:''},messages:{teach:[{id:'message',role:'user',status:'done',text:'当前问题'}],ask:[]}}));
+    assert.match(html,/当前问题/);assert.match(html,/未发送草稿/);
+    assert.doesNotMatch(html,/class="nodu-ai-reading" hidden|<form hidden|nodu-chat-history/);
+});
+
+test('history picker uses compact titles and draft content without duplicate preview or mode rows', () => {
+    const {ConversationHistory}=actualRequire('./nodu-tutor-history');
+    const html=renderToStaticMarkup(React.createElement(ConversationHistory,{tutor:tutor({activeConversationId:'active',historyEntries:[
+        {id:'active',title:'串口问题',mode:'teach',updatedAt:Date.now(),preview:'继续分析',hasDraft:true},
+        {id:'other',title:'新对话',mode:'ask',updatedAt:Date.now()-86400000,preview:'分析编译失败',hasDraft:true},
+    ]})}));
+    assert.match(html,/搜索历史对话/);assert.match(html,/今天/);assert.match(html,/昨天/);assert.match(html,/aria-current="true"/);
+    assert.match(html,/分析编译失败/);assert.match(html,/aria-label="草稿"/);assert.doesNotMatch(html,/继续分析|新对话|nodu-chat-history-preview|nodu-chat-history-meta|nodu-chat-history-filters/);
+    assert.doesNotMatch(html,/placeholder=/);
 });
