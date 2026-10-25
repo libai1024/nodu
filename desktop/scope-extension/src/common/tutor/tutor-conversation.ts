@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 import type { TutorBuffer, TutorChatRequest, TutorMode } from './tutor-ai-protocol';
-import { TutorContext, validateTutorContexts } from './tutor-context';
+import { TutorContext, validateTutorContexts, isTerminalContextName, terminalContextLabel } from './tutor-context';
 import { isSafeCoursePath } from './tutor-course';
 import type { TutorHistoryStorage } from './tutor-line-history';
 export type TutorChatStatus = 'pending' | 'done' | 'stopped' | 'failed';
 export interface TutorChatSnapshot {
-    prompt: string; mode: TutorMode; kind: TutorChatRequest['kind']; buffer?: TutorBuffer; contexts?: TutorContext[]; goalRevision: number;
+    prompt: string; mode: TutorMode; kind: TutorChatRequest['kind'] | 'goal'; buffer?: TutorBuffer; contexts?: TutorContext[]; goalRevision: number;
 }
 export interface TutorChatItem {
     id: string; role: 'user' | 'assistant'; text: string; status: TutorChatStatus; note?: string;
@@ -13,21 +13,26 @@ export interface TutorChatItem {
     /** Immutable display metadata of the actual sent context; never another source copy. */
     contextRefs?: TutorContextRef[];
 }
-export interface TutorContextRef { kind: 'file' | 'selection'; path: string; startLine: number; endLine: number; }
+export interface TutorContextRef { kind: TutorContext['kind']; path: string; startLine: number; endLine: number; terminalName?: string; terminalSelection?: boolean; }
 export function isTutorContextRef(value: unknown): value is TutorContextRef {
     const ref = value as TutorContextRef;
     return !!ref && typeof ref === 'object' && !Array.isArray(ref)
-        && Object.keys(ref).every(key => ['kind','path','startLine','endLine'].includes(key))
-        && ['file','selection'].includes(ref.kind) && typeof ref.path === 'string' && isSafeCoursePath(ref.path)
-        && /\.(c|h|cpp|hpp|cc|py)$/i.test(ref.path) && Number.isSafeInteger(ref.startLine) && ref.startLine > 0
+        && Object.keys(ref).every(key => ['kind','path','startLine','endLine','terminalName','terminalSelection'].includes(key))
+        && ['file','selection','terminal'].includes(ref.kind) && typeof ref.path === 'string'
+        && (ref.kind === 'terminal' ? isTerminalContextName(ref.path) : isSafeCoursePath(ref.path) && /\.(c|h|cpp|hpp|cc|py)$/i.test(ref.path))
+        && (ref.terminalName === undefined || ref.kind === 'terminal' && isTerminalContextName(ref.terminalName))
+        && (ref.terminalSelection === undefined || ref.kind === 'terminal' && typeof ref.terminalSelection === 'boolean')
+        && Number.isSafeInteger(ref.startLine) && ref.startLine > 0
         && Number.isSafeInteger(ref.endLine) && ref.endLine >= ref.startLine && ref.endLine <= 1000000
         && (ref.kind !== 'file' || ref.startLine === 1);
 }
 export function chatContextRefs(buffer?: TutorBuffer, contexts: readonly TutorContext[] = []): TutorContextRef[] {
     return [...(buffer ? [{ kind: 'file' as const, path: buffer.path, startLine: 1, endLine: buffer.text.split('\n').length }] : []),
-        ...contexts.map(({ kind, path, startLine, endLine }) => ({ kind, path, startLine, endLine }))].filter(isTutorContextRef);
+        ...contexts.map(({ kind, path, startLine, endLine, terminalName, terminalSelection }) => ({ kind, path, startLine, endLine,
+            ...(terminalName !== undefined ? { terminalName } : {}), ...(terminalSelection !== undefined ? { terminalSelection } : {}) }))].filter(isTutorContextRef);
 }
 export interface TutorConversationSummary { id: string; title: string; updatedAt: number; }
+export interface TutorHistoryEntry extends TutorConversationSummary { mode: TutorMode; preview: string; hasDraft: boolean; }
 export interface TutorConversation extends TutorConversationSummary {
     schema: 1; project: string; mode: TutorMode; owner: string; messages: TutorChatItem[]; draft: string; contexts?: TutorContext[]; includeCode?: boolean;
 }
@@ -70,7 +75,7 @@ export class TutorConversationStore {
     }
     private validSnapshot(s: TutorChatSnapshot): boolean {
         const b = s.buffer;
-        return !!s && typeof s.prompt === 'string' && s.prompt.length <= 6000 && ['teach','ask'].includes(s.mode) && ['chat','step','line'].includes(s.kind)
+        return !!s && typeof s.prompt === 'string' && s.prompt.length <= 6000 && ['teach','ask'].includes(s.mode) && ['chat','step','line','goal'].includes(s.kind)
             && (s.contexts === undefined || this.validContexts(s.contexts, s.mode))
             && Number.isSafeInteger(s.goalRevision) && s.goalRevision >= 0 && (!b || typeof b.path === 'string' && b.path.length <= 1024
                 && typeof b.text === 'string' && b.text.length <= 32000 && Number.isSafeInteger(b.version) && b.version > 0 && Number.isSafeInteger(b.line) && b.line > 0);
@@ -96,6 +101,12 @@ export class TutorConversationStore {
         try { for (let i = 0; i < (this.storage?.length ?? 0); ++i) { const key = this.storage!.key(i); if (key?.startsWith(PREFIX)) { ids.add(key.slice(PREFIX.length)); } } } catch { /* memory fallback */ }
         return [...ids].map(id => this.read(id, project, mode)).filter((c): c is TutorConversation => !!c)
             .sort((a,b) => b.updatedAt - a.updatedAt).map(({id,title,updatedAt}) => ({id,title,updatedAt}));
+    }
+    history(project: string): TutorHistoryEntry[] {
+        return (['ask', 'teach'] as const).flatMap(mode => this.list(project, mode).map(summary => {
+            const c = this.read(summary.id, project, mode)!;
+            return { ...summary, mode, preview: (c.draft || c.messages.at(-1)?.text || c.contexts?.map(item => item.kind === 'terminal' ? terminalContextLabel(item) : item.path.split('/').pop()).join(' · ') || '').replace(/\s+/g, ' ').slice(0, 120), hasDraft: !!c.draft };
+        })).sort((a, b) => b.updatedAt - a.updatedAt);
     }
     /** At most 40 already-validated records; no network activity or replay of conversation requests. */
     flush(): void {

@@ -56,12 +56,48 @@ test('C goal requests include pinned context while Python and connection gates r
  let calls=0;m.goalAction=async()=>calls++;m.connectionState='connecting';m.drafts.teach='goal';await m.send();assert.equal(calls,0);
  m.contextDrafts.teach=[pin('boot.py','print(1)')];assert.throws(()=>m.goalRequestContexts('propose'),/Python/);
 });
+test('teaching proposal preserves sent terminal and file snapshots across draft edits and history restore without replay',async()=>{
+ const storage=new Storage(),m=model(storage),prompt='teach me to fix this build';m.mode='teach';m.goalState={...m.goalState,revision:7,status:'none'};
+ const terminal={kind:'terminal',path:'terminal:build-widget',text:'undefined reference\nlink failed',version:1,startLine:621,endLine:622},header=pin('Board/board.h','void init(void);');
+ m.contextDrafts.teach=[terminal,header];m.buffer={path:'App/main.c',text:'int main(void) {\n}',version:1,line:1,selection:{startLine:1,endLine:1,text:'int'}};m.drafts.teach=prompt;
+ let enter,release;const entered=new Promise(resolve=>enter=resolve),pending=new Promise(resolve=>release=resolve),goals=[],restores=[];let chats=0;
+ m.service.goal=request=>{goals.push(request);enter();return pending;};m.service.chat=async()=>{chats++;throw Error('goal history must not enter chat');};m.service.restoreChatHistory=async(...args)=>restores.push(args);
+ const sending=m.send();await entered;
+ assert.equal(goals.length,1);assert.equal(goals[0].action,'propose');assert.equal(goals[0].revision,7);assert.equal(goals[0].buffer.selection,undefined);
+ const sentPayload=JSON.parse(JSON.stringify({buffer:goals[0].buffer,contexts:goals[0].contexts}));
+ terminal.text='different terminal output';terminal.startLine=801;terminal.endLine=801;header.text='void later(void);';m.buffer.text='int later;';m.buffer.version=2;
+ m.contextDrafts.teach=[pin('Other/next.h','int next;')];m.drafts.teach='another unsent goal';m.goalState.revision=8;
+ release({ok:true,state:{revision:8,status:'draft',current:0,steps:[]}});await sending;
+ assert.equal(m.error,undefined);assert.equal(m.messages.teach.length,1);assert.equal(m.drafts.teach,'another unsent goal');
+ const user=m.messages.teach[0],expectedSnapshot={prompt,mode:'teach',kind:'goal',goalRevision:7,...sentPayload},expectedRefs=[
+  {kind:'file',path:'App/main.c',startLine:1,endLine:2},
+  {kind:'terminal',path:'terminal:build-widget',startLine:621,endLine:622},
+  {kind:'file',path:'Board/board.h',startLine:1,endLine:1},
+ ];
+ assert.equal(user.role,'user');assert.equal(user.text,prompt);assert.deepEqual(JSON.parse(JSON.stringify(user.request)),expectedSnapshot);
+ assert.deepEqual(JSON.parse(JSON.stringify(user.contextRefs)),expectedRefs);assert.equal(history.conversationPrompt(m.messages.teach).length,0);assert.equal(m.canRetry(user),false);
+ m.pins[0].text='int newer;';m.persistConversation('teach');
+ const id=m.activeConversationId,restored=new history.TutorConversationStore(storage).read(id,'project-inode-one','teach');
+ assert.ok(restored);assert.deepEqual(JSON.parse(JSON.stringify(restored.messages[0].request)),expectedSnapshot);assert.deepEqual(JSON.parse(JSON.stringify(restored.messages[0].contextRefs)),expectedRefs);
+ assert.equal(restored.contexts[0].text,'int newer;');assert.equal(history.conversationPrompt(restored.messages).length,0);
+ await m.newConversation();await m.selectConversation(id,'teach');await m.retryChat(user.id);
+ assert.deepEqual(JSON.parse(JSON.stringify(m.messages.teach[0].request)),expectedSnapshot);assert.deepEqual(JSON.parse(JSON.stringify(m.messages.teach[0].contextRefs)),expectedRefs);
+ assert.equal(goals.length,1);assert.equal(chats,0);assert.ok(restores.length>=2);assert.ok(restores.every(args=>args[3].length===0));
+ sessionStorage.removeItem('nodu.tutor.mode');
+});
+test('goal snapshots cannot enter ordinary chat prompt replay or assistant retry paths',async()=>{
+ const m=model(),ordinary=pair('ordinary question'),user={id:crypto.randomUUID(),role:'user',text:'goal proposal',status:'done',request:{prompt:'goal proposal',mode:'teach',kind:'goal',goalRevision:0}},
+  reply={id:crypto.randomUUID(),role:'assistant',text:'goal response',status:'done',replyTo:user.id,request:user.request};
+ assert.deepEqual(JSON.parse(JSON.stringify(history.conversationPrompt([user,reply,...ordinary]))),[{role:'user',content:'ordinary question'},{role:'assistant',content:'answer'}]);
+ m.mode='teach';reply.status='failed';m.messages.teach.push(user,reply);let calls=0;m.service.chat=async()=>calls++;m.service.goal=async()=>calls++;
+ assert.equal(m.canRetry(reply),false);await m.retryChat(reply.id);assert.equal(calls,0);
+});
 test('chat model receives authorized attachment snapshot and late revoked attachment cancels success',async()=>{
  const received=[];let revocation=false;
  const session=new Chat({complete:async messages=>{received.push(messages);revocation=true;return 'answer';}},{onChatDelta(){}},async()=>{},async()=>({files:['main.h']}),async(w,mode,pins)=>{if(revocation)throw Error('revoked attachment');return pins;});
  await session.setPresentation('workspace-0001',1,'ask',false);
  const result=await session.chat({id:crypto.randomUUID(),workspaceId:'workspace-0001',epoch:1,mode:'ask',kind:'chat',prompt:'explain',contexts:[pin('main.h','void init(void);')]});
- assert.equal(result.ok,false);assert.match(result.error,/revoked/);assert.match(received[0].at(-1).content,/固定代码附件/);assert.match(received[0].at(-1).content,/void init/);session.dispose();
+ assert.equal(result.ok,false);assert.match(result.error,/revoked/);assert.match(received[0].at(-1).content,/固定上下文附件/);assert.match(received[0].at(-1).content,/void init/);session.dispose();
 });
 test('real workspace authorizes Python ask/navigation, skips C checker, rejects traversal and symlinks',async t=>{
  const fsp=require('node:fs/promises'),os=require('node:os'),{pathToFileURL}=require('node:url');
@@ -137,4 +173,120 @@ test('pending recovery and omitted default metadata do not fork or create empty 
 test('an unchanged dirty save still retries persistence without changing identity or creating duplicates',()=>{
  const storage=new Storage(),a=new history.TutorConversationStore(storage),c=a.create('project','ask');c.messages=pair('draft');const first=a.save(c),write=storage.setItem.bind(storage);storage.setItem=()=>{throw Error('quota');};first.draft='latest';const dirty=a.save(first);const time=dirty.updatedAt;
  assert.equal(a.save(dirty).id,dirty.id);assert.match(a.storageError,/暂未保存/);storage.setItem=write;const recovered=a.save(dirty);assert.equal(recovered.id,dirty.id);assert.equal(recovered.updatedAt,time);assert.equal(a.storageError,undefined);assert.equal(a.list('project','ask').length,1);
+});
+
+test('history lists both modes and cross-mode switching preserves drafts, pins and active mode on reload', async () => {
+    const m=model(), sent=[]; m.service.chat=async()=>{sent.push(1);};
+    m.messages.ask.push(...pair('ask history')); m.drafts.ask='ask draft'; m.contextDrafts.ask=[pin('main.h')]; m.persistConversation('ask'); const ask=m.activeConversationId;
+    m.mode='teach'; m.messages.teach.push(...pair('teach history')); m.drafts.teach='teach draft'; m.persistConversation('teach'); const teach=m.activeConversationId;
+    assert.equal(m.historyEntries.length,2); assert.ok(m.historyEntries.every(c=>c.hasDraft));
+    await m.selectConversation(ask,'ask'); assert.equal(m.mode,'ask'); assert.equal(m.drafts.ask,'ask draft'); assert.equal(m.pins[0].path,'main.h');
+    assert.equal(new NoduTutorModel().mode,'ask');
+    await m.selectConversation(teach,'teach'); assert.equal(m.drafts.teach,'teach draft'); assert.equal(m.pins.length,0); assert.deepEqual(sent,[]);
+    sessionStorage.removeItem('nodu.tutor.mode');
+});
+test('explicit terminal selection captures immutable name, range and text and redacts credentials before sending', async () => {
+    const storage=new Storage(),m=model(storage),secret='sk-'+'z'.repeat(24), terminal={id:'term-1',terminalId:7,title:{label:'build'},getSelection:()=> 'error: missing symbol\nAPI_KEY='+secret,
+        getTerminal:()=>({getSelectionPosition:()=>({start:{x:0,y:46},end:{x:30,y:47}})}),buffer:{length:300,getLines(){throw Error('must prefer selection');}}};
+    m.terminals={all:[terminal],getById:id=>id===terminal.id?terminal:undefined};
+    assert.equal(await m.addTerminalContext('term-1',true),true); assert.equal(m.pins[0].kind,'terminal'); assert.match(m.pins[0].text,/missing symbol/); assert.ok(!m.pins[0].text.includes(secret));
+    assert.equal(m.pins[0].startLine,47);assert.equal(m.pins[0].endLine,48);
+    assert.equal(m.pins[0].terminalName,'build');assert.equal(m.pins[0].terminalSelection,true);
+    assert.equal(m.historyEntries.find(entry=>entry.id===m.activeConversationId).preview,'build (47-48)');
+    const captured=JSON.parse(JSON.stringify(m.pins[0]));
+    terminal.title.label='renamed terminal';terminal.getSelection=()=> 'different text';terminal.getTerminal=()=>({getSelectionPosition:()=>({start:{x:0,y:299},end:{x:14,y:299}})});assert.match(m.pins[0].text,/missing symbol/);
+    m.drafts.ask='explain'; const requests=[]; m.service.chat=async request=>{requests.push(request);return {ok:true,answer:{text:'ok'}};}; await m.send();
+    assert.equal(JSON.stringify(requests[0].contexts[0]),JSON.stringify(captured));
+    const expectedRef={kind:captured.kind,path:captured.path,startLine:47,endLine:48,terminalName:'build',terminalSelection:true};
+    assert.equal(JSON.stringify(m.messages.ask[0].contextRefs[0]),JSON.stringify(expectedRef));
+    const id=m.activeConversationId,restored=new history.TutorConversationStore(storage).read(id,'project-inode-one','ask');
+    assert.equal(JSON.stringify(restored.contexts[0]),JSON.stringify(captured));
+    assert.equal(JSON.stringify(restored.messages[0].contextRefs[0]),JSON.stringify(expectedRef));
+    assert.equal(JSON.stringify(restored.messages[1].request.contexts[0]),JSON.stringify(captured));
+    await m.newConversation(); await m.selectConversation(id); assert.equal(JSON.stringify(m.pins[0]),JSON.stringify(captured));
+});
+test('terminal output is bounded to last 200 lines; closed and empty terminals do not add attachments',async()=>{
+    const m=model(),calls=[],lines=Array.from({length:200},(_,index)=>`output ${601+index}`),terminal={id:'term',terminalId:1,title:{label:'zsh'},getSelection:()=>'',buffer:{length:800,getLines:(...args)=>{calls.push(args);return lines;}}};
+    m.terminals={getById:()=>terminal}; assert.equal(await m.addTerminalContext('term'),true); assert.deepEqual(calls,[[600,200,true]]); assert.equal(m.pins.length,1);
+    assert.equal(m.pins[0].startLine,601);assert.equal(m.pins[0].endLine,800);assert.equal(m.pins[0].text,lines.join('\n'));
+    assert.equal(m.pins[0].terminalName,'zsh');assert.equal(m.pins[0].terminalSelection,false);assert.equal(context.terminalContextLabel(m.pins[0]),'zsh');
+    terminal.isDisposed=true; assert.equal(await m.addTerminalContext('term'),false); assert.match(m.contextError,/已关闭/);
+    terminal.isDisposed=false; terminal.buffer.getLines=()=>['']; assert.equal(await m.addTerminalContext('term'),false); assert.match(m.contextError,/没有输出/); assert.equal(m.pins.length,1);
+});
+test('recent terminal range excludes trimmed empty grid rows while retaining its real starting row',async()=>{
+    const m=model(),lines=Array.from({length:200},(_,index)=>index<198?`output ${601+index}`:'   ');
+    m.terminals={getById:()=>({terminalId:3,title:{label:'build'},getSelection:()=>'',buffer:{length:800,getLines:()=>lines}})};
+    assert.equal(await m.addTerminalContext('term'),true);assert.equal(m.pins[0].startLine,601);assert.equal(m.pins[0].endLine,798);
+    assert.equal(m.pins[0].text,lines.slice(0,198).join('\n'));assert.equal(m.pins[0].text.split('\n').length,198);
+});
+test('terminal selection range excludes an end at column zero and preserves wrapped buffer rows',async()=>{
+    const m=model(),terminal={terminalId:4,title:{label:'build'},getSelection:()=> 'first selected line\r\nsecond selected line\r\n',
+        getTerminal:()=>({getSelectionPosition:()=>({start:{x:3,y:39},end:{x:0,y:41}})}),buffer:{length:300,getLines(){throw Error('must prefer selection');}}};
+    m.terminals={getById:()=>terminal};assert.equal(await m.addTerminalContext('term',true),true);
+    assert.equal(m.pins[0].startLine,40);assert.equal(m.pins[0].endLine,41);assert.equal(m.pins[0].text,'first selected line\nsecond selected line');
+    terminal.getSelection=()=> 'one logical line wrapped across three terminal rows';
+    terminal.getTerminal=()=>({getSelectionPosition:()=>({start:{x:4,y:70},end:{x:9,y:72}})});
+    assert.equal(await m.addTerminalContext('term',true),true);assert.equal(m.pins.length,2);assert.equal(m.pins[1].startLine,71);assert.equal(m.pins[1].endLine,73);
+    assert.equal(m.pins[1].text,terminal.getSelection());assert.equal(m.pins[0].text,'first selected line\nsecond selected line');
+});
+test('whole terminal refresh keeps selected excerpts and repeated selection replaces only the same range',async()=>{
+    const m=model(),terminal={id:'shell',title:{label:'zsh'},getSelection:()=> 'selected output',
+        getTerminal:()=>({getSelectionPosition:()=>({start:{x:0,y:0},end:{x:15,y:0}})}),buffer:{length:1,getLines:()=>['whole output']}};
+    m.terminals={getById:()=>terminal};assert.equal(await m.addTerminalContext('shell',true),true);
+    assert.equal(await m.addTerminalContext('shell'),true);assert.equal(m.pins.length,2);
+    terminal.buffer.getLines=()=>['refreshed whole output'];assert.equal(await m.addTerminalContext('shell'),true);assert.equal(m.pins.length,2);
+    assert.equal(m.pins[0].text,'selected output');assert.equal(m.pins[1].text,'refreshed whole output');
+    terminal.getSelection=()=> 'new selection';assert.equal(await m.addTerminalContext('shell',true),true);assert.equal(m.pins.length,2);
+    assert.equal(m.pins[0].text,'refreshed whole output');assert.equal(m.pins[1].text,'new selection');
+});
+test('terminal selection without a verified range cannot attach different recent output or fabricate row one',async()=>{
+    for(const getTerminal of [undefined,()=>({getSelectionPosition:()=>undefined})]){
+        const m=model();let bufferReads=0;
+        m.terminals={getById:()=>({terminalId:5,title:{label:'build'},getSelection:()=> 'selected text',getTerminal,buffer:{length:800,getLines:()=>{bufferReads++;return ['unselected output'];}}})};
+        assert.equal(await m.addTerminalContext('term',true),false);assert.equal(m.pins.length,0);assert.equal(bufferReads,0);assert.ok(m.contextError);
+    }
+});
+test('whole terminal attachment ignores any selection and explicit empty selection never falls back to whole output',async()=>{
+    const m=model(),reads=[],terminal={id:'shell',title:{label:'zsh'},getSelection(){throw Error('whole terminal must not read selection');},buffer:{length:240,getLines:(...args)=>{reads.push(args);return ['whole terminal output'];}}};
+    m.terminals={getById:()=>terminal};assert.equal(await m.addTerminalContext('shell'),true);assert.deepEqual(reads,[[40,200,true]]);
+    assert.equal(m.pins[0].text,'whole terminal output');assert.equal(m.pins[0].startLine,41);assert.equal(m.pins[0].endLine,41);assert.equal(m.pins[0].terminalSelection,false);
+    terminal.getSelection=()=>'';assert.equal(await m.addTerminalContext('shell',true),false);assert.equal(reads.length,1);assert.equal(m.pins[0].text,'whole terminal output');assert.match(m.contextError,/选择/);
+});
+test('terminal source activation uses its widget id and never creates terminals or opens file paths',async()=>{
+    const m=model(),terminal={id:'shell:one',isDisposed:false},opened=[],lookups=[];
+    m.terminals={getById:id=>{lookups.push(id);return id===terminal.id?terminal:undefined;},open:async(...args)=>opened.push(args),newTerminal(){throw Error('must not create a terminal');}};
+    assert.equal(await m.openTerminalContext('terminal:shell:one'),true);assert.equal(opened.length,1);assert.equal(opened[0][0],terminal);assert.equal(opened[0][1].mode,'activate');
+    for(const path of ['App/main.c','build #1 · 选区','terminal:']){assert.equal(await m.openTerminalContext(path),false);}assert.deepEqual(lookups,['shell:one']);
+    assert.equal(await m.openTerminalContext('terminal:closed'),false);terminal.isDisposed=true;assert.equal(await m.openTerminalContext('terminal:shell:one'),false);assert.equal(opened.length,1);
+    terminal.isDisposed=false;m.terminals.open=async()=>{throw Error('disposed during activation');};assert.equal(await m.openTerminalContext('terminal:shell:one'),false);
+});
+test('terminal name and selection metadata are validated, labels are bounded to captured names and old snapshots use a neutral fallback',()=>{
+    const selected={kind:'terminal',path:'terminal:source-id',terminalName:'zsh',terminalSelection:true,text:'chosen output',version:1,startLine:3,endLine:3};
+    assert.equal(context.terminalContextLabel(selected),'zsh (3)');assert.equal(context.terminalContextLabel({...selected,startLine:2}),'zsh (2-3)');
+    assert.equal(context.terminalContextLabel({...selected,terminalSelection:false}),'zsh');assert.equal(context.terminalContextLabel({path:'terminal:source-id',startLine:2,endLine:3}),'终端');
+    assert.deepEqual(JSON.parse(JSON.stringify(context.validateTutorContexts([selected],'ask')[0])),selected);
+    const refs=history.chatContextRefs(undefined,[selected]);assert.equal(refs[0].terminalName,'zsh');assert.equal(refs[0].terminalSelection,true);assert.equal(history.isTutorContextRef(refs[0]),true);
+    for(const terminalName of ['', 'bad\nname','x'.repeat(161),42]){
+        assert.throws(()=>context.validateTutorContexts([{...selected,terminalName}],'ask'));assert.equal(history.isTutorContextRef({...refs[0],terminalName}),false);
+    }
+    for(const terminalSelection of ['true',1,null]){
+        assert.throws(()=>context.validateTutorContexts([{...selected,terminalSelection}],'ask'));assert.equal(history.isTutorContextRef({...refs[0],terminalSelection}),false);
+    }
+    assert.throws(()=>context.validateTutorContexts([{...pin(),terminalName:'zsh'}],'ask'));assert.throws(()=>context.validateTutorContexts([{...pin(),terminalSelection:false}],'ask'));
+    assert.equal(history.isTutorContextRef({kind:'file',path:'main.c',startLine:1,endLine:1,terminalName:'zsh'}),false);
+    assert.equal(history.isTutorContextRef({kind:'file',path:'main.c',startLine:1,endLine:1,terminalSelection:false}),false);
+});
+test('terminal context validation keeps file path rules, shared budgets and workspace authorization',async()=>{
+    const terminal={...pin('/not/a/file','terminal output'),kind:'terminal'};
+    assert.equal(context.validateTutorContexts([terminal],'teach')[0].kind,'terminal');
+    assert.equal(context.validateTutorContexts([{...terminal,startLine:71,endLine:73}],'ask')[0].endLine,73,'soft wrapped terminal output retains physical buffer range');
+    assert.throws(()=>context.validateTutorContexts([{...terminal,text:'two\nlines',startLine:71,endLine:71}],'ask'));
+    assert.throws(()=>context.validateTutorContexts([{...pin(),startLine:1,endLine:3}],'ask'),'file line counts remain exact');
+    assert.throws(()=>context.validateTutorContexts([{...terminal,path:'bad\nname'}],'ask'));
+    assert.throws(()=>context.validateTutorContexts([{...terminal,kind:'file'}],'ask'));
+    assert.throws(()=>context.validateTutorContexts([{...terminal,text:'x'.repeat(65537)}],'ask'),/64 KiB/);
+    const {TutorWorkspaceHost}=source('node/tutor/tutor-workspace-host.ts',{'../../common/tutor/tutor-context':context});
+    const calls=[], host=Object.create(TutorWorkspaceHost.prototype); host.authorize=async(...args)=>calls.push(args);
+    await host.contexts('workspace-0001','ask',[terminal]); assert.deepEqual(calls,[['workspace-0001']]);
+    host.authorize=async()=>{throw Error('revoked');}; await assert.rejects(()=>host.contexts('workspace-0001','ask',[terminal]),/revoked/);
 });

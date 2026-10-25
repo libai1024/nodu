@@ -2,9 +2,10 @@
 import * as React from '@theia/core/shared/react';
 import type { NoduTutorModel } from './nodu-tutor-model';
 import { ChatPopover } from './nodu-tutor-chat-controls';
+import { terminalContextLabel } from '../common/tutor/tutor-context';
 import '../../style/tutor-context.css';
 
-interface ContextEntry { path: string; startLine: number; endLine: number; kind: 'file' | 'selection'; index?: number; }
+interface ContextEntry { path: string; startLine: number; endLine: number; kind: 'file' | 'selection' | 'terminal'; terminalName?: string; terminalSelection?: boolean; text?: string; index?: number; }
 export interface ContextPickerProps { tutor: NoduTutorModel; open(path: string, line: number): void | Promise<void>; children?: (addButton: React.ReactElement) => React.ReactNode; }
 
 /** Use the shortest suffix that still distinguishes same-name files. */
@@ -18,7 +19,7 @@ export function tutorContextLabel(path: string, paths: readonly string[]): strin
 }
 
 export function ContextPicker({ tutor, open, children }: ContextPickerProps): React.ReactElement {
-    const [menu, setMenu] = React.useState<{ anchor: HTMLElement; view: 'add' | 'files' | 'all' }>();
+    const [menu, setMenu] = React.useState<{ anchor: HTMLElement; view: 'add' | 'files' | 'all' | 'terminals' | 'preview'; entry?: ContextEntry }>();
     const [files, setFiles] = React.useState<string[]>();
     const [search, setSearch] = React.useState('');
     const [working, setWorking] = React.useState(false);
@@ -27,7 +28,7 @@ export function ContextPicker({ tutor, open, children }: ContextPickerProps): Re
     const row = React.useRef<HTMLDivElement>(null);
     const mounted = React.useRef(true), sequence = React.useRef(0), pending = React.useRef(false);
     const currentMenu = React.useRef(menu); currentMenu.current = menu;
-    const identity = `${tutor.workspaceId ?? ''}:${tutor.mode}`;
+    const identity = `${tutor.workspaceId ?? ''}:${tutor.mode}:${tutor.activeConversationId ?? ''}`;
     const currentIdentity = React.useRef(identity); currentIdentity.current = identity;
     const close = React.useCallback(() => { setMenu(undefined); setSearch(''); }, []);
     React.useEffect(() => { mounted.current = true; return () => { mounted.current = false; sequence.current++; }; }, []);
@@ -80,23 +81,25 @@ export function ContextPicker({ tutor, open, children }: ContextPickerProps): Re
         if (entry.index === undefined) { tutor.setIncludeCode(false); }
         else { tutor.removeContext(entry.index); }
     };
-    const label = (entry: ContextEntry): string => `${tutorContextLabel(entry.path, paths)}${entry.kind === 'selection' ? `:${entry.startLine}–${entry.endLine}` : ''}`;
+    const label = (entry: ContextEntry): string => entry.kind === 'terminal' ? terminalContextLabel(entry) : `${tutorContextLabel(entry.path, paths)}${entry.kind === 'selection' ? `:${entry.startLine}–${entry.endLine}` : ''}`;
     const renderChip = (entry: ContextEntry, inMenu = false): React.ReactElement => <span className="nodu-chat-context-chip" key={`${entry.index ?? 'current'}:${entry.path}`}>
-        <button type="button" role={inMenu ? 'menuitem' : undefined} className="nodu-chat-context-open" title={`${entry.path}${entry.kind === 'selection' ? `:${entry.startLine}–${entry.endLine}` : ''}${entry.index === undefined ? '（当前文件）' : '（固定快照）'}`}
-            aria-label={`打开 ${label(entry)}`} onClick={() => { if (inMenu) { close(); } void navigate(entry); }}>
-            <i className={`codicon codicon-${entry.kind === 'selection' ? 'selection' : 'file-code'}`} aria-hidden="true"/><span>{label(entry)}</span>
-        </button>
+        {entry.kind === 'terminal' ? <span className="nodu-chat-context-open nodu-chat-context-terminal" title={label(entry)}>
+            <i className="codicon codicon-terminal" aria-hidden="true"/><span>{label(entry)}</span>
+        </span> : <button type="button" role={inMenu ? 'menuitem' : undefined} className="nodu-chat-context-open" title={`${entry.path}${entry.kind === 'selection' ? `:${entry.startLine}–${entry.endLine}` : ''}`}
+            aria-label={`${entry.index === undefined ? '打开' : '预览'} ${label(entry)}`} onClick={event => { if (entry.index !== undefined) { setMenu({ anchor: menu?.anchor ?? event.currentTarget, view: 'preview', entry }); } else { if (inMenu) { close(); } void navigate(entry); } }}>
+            <i className={`codicon codicon-${entry.kind === 'selection' ? 'selection' : 'file-code'}`} aria-hidden="true"/><span>{label(entry)}</span>{entry.index === undefined && <span className="nodu-chat-context-live">当前</span>}
+        </button>}
         <button type="button" role={inMenu ? 'menuitem' : undefined} className="nodu-chat-context-remove" aria-label={`移除 ${label(entry)}`} title="移除上下文"
             onClick={event => { event.stopPropagation(); remove(entry); }}><i className="codicon codicon-close" aria-hidden="true"/></button>
     </span>;
     const visibleFiles = (files ?? []).filter(path => path.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
     const visibleCount = narrow ? 1 : 2;
-    const addButton = <button type="button" className="nodu-chat-context-add" title="添加代码上下文" aria-label="添加代码上下文" aria-haspopup="menu" aria-expanded={menu?.view === 'add' || menu?.view === 'files'}
+    const addButton = <button type="button" className="nodu-chat-context-add" title="添加上下文" aria-label="添加上下文" aria-haspopup="menu" aria-expanded={menu?.view === 'add' || menu?.view === 'files'}
                 disabled={!tutor.workspaceId} onClick={event => { if (menu?.view === 'add') { close(); } else { setMenu({ anchor: event.currentTarget, view: 'add' }); setError(''); } }}>
                 <i className="codicon codicon-add" aria-hidden="true"/>
             </button>;
     return <><div ref={row} className="nodu-chat-context">
-        {(entries.length > 0 || !children) && <div className="nodu-ai-context-row nodu-chat-context-row">
+        {(entries.length > 0 || !children) && <div className="nodu-chat-context-row">
             {!children && addButton}
             {entries.slice(0, visibleCount).map(entry => renderChip(entry))}
             {entries.length > visibleCount && <button type="button" className="nodu-chat-context-more" aria-label={`查看全部 ${entries.length} 项上下文`} aria-haspopup="menu" aria-expanded={menu?.view === 'all'}
@@ -105,21 +108,33 @@ export function ContextPicker({ tutor, open, children }: ContextPickerProps): Re
         {(error || tutor.contextError) && <div className="nodu-chat-context-error" role="status">{error || tutor.contextError}</div>}
         </div>
         {children?.(addButton)}
-        {menu && <ChatPopover anchor={menu.anchor} label={menu.view === 'all' ? '已附带的上下文' : '添加代码上下文'} above align="start"
-            width={menu.view === 'files' && (files?.length ?? 0) > 8 ? 288 : 'content'} minWidth={menu.view === 'add' ? 144 : 160} close={close}>
+        {menu && <ChatPopover anchor={menu.anchor} label={menu.view === 'preview' ? '引用快照' : menu.view === 'all' ? '已附带的上下文' : '添加上下文'} above align="start"
+            width={menu.view === 'files' || menu.view === 'preview' ? 288 : 'content'} minWidth={menu.view === 'add' ? 144 : 160} close={close}>
             {menu.view === 'add' ? <>
-                <button type="button" role="menuitem" disabled={disabled || !canCurrent} onClick={() => addCurrent('file')}>固定当前文件<i className="codicon codicon-pin" aria-hidden="true"/></button>
-                <button type="button" role="menuitem" disabled={disabled || !canSelection} onClick={() => addCurrent('selection')}>固定当前选区<i className="codicon codicon-selection" aria-hidden="true"/></button>
+                <button type="button" role="menuitem" disabled={disabled || !canCurrent} onClick={() => addCurrent('file')}>引用当前文件<i className="codicon codicon-pin" aria-hidden="true"/></button>
+                <button type="button" role="menuitem" disabled={disabled || !canSelection} onClick={() => addCurrent('selection')}>引用选中代码<i className="codicon codicon-selection" aria-hidden="true"/></button>
                 <div className="nodu-ai-menu-divider"/>
+                <button type="button" role="menuitem" disabled={disabled} onClick={() => setMenu({ ...menu, view: 'terminals' })}>终端<i className="codicon codicon-terminal" aria-hidden="true"/></button>
                 <button type="button" role="menuitem" disabled={disabled} onClick={listFiles}>从工程选择文件<i className="codicon codicon-folder" aria-hidden="true"/></button>
             </> : menu.view === 'files' ? <>
                 <button type="button" role="menuitem" onClick={() => { setMenu({ ...menu, view: 'add' }); setSearch(''); }}><span className="nodu-ai-menu-option-label"><i className="codicon codicon-arrow-left" aria-hidden="true"/><span>返回</span></span></button>
-                {(files?.length ?? 0) > 8 && <input className="nodu-ai-menu-search" aria-label="搜索工程文件" placeholder="搜索文件" value={search} onChange={event => setSearch(event.target.value)}/>}
+                {<input className="nodu-ai-menu-search" aria-label="搜索工程文件" value={search} onChange={event => setSearch(event.target.value)}/>}
                 <div className="nodu-ai-menu-scroll">{visibleFiles.map(path => <button type="button" role="menuitem" key={path} title={path} disabled={disabled}
                     onClick={() => void run(() => tutor.addContextFile(path), '无法附带此文件', added)}><span>{path}</span></button>)}
-                    {!files && working ? <div className="nodu-ai-menu-empty" role="status">读取工程文件…</div> : !visibleFiles.length && !working && <div className="nodu-ai-menu-empty">{search ? '没有匹配的文件' : files ? '没有可附带的代码文件' : '文件列表不可用'}</div>}
+                    {!files && working ? <div className="nodu-ai-menu-empty" role="status">读取工程文件…</div> : !visibleFiles.length && !working && <div className="nodu-ai-menu-empty">{search ? '无结果' : files ? '无文件' : '文件列表不可用'}</div>}
                 </div>
                 {!files && !working && <button type="button" role="menuitem" onClick={listFiles}>重新读取</button>}
+            </> : menu.view === 'terminals' ? <>
+                <button type="button" role="menuitem" onClick={() => setMenu({ ...menu, view: 'add' })}><span className="nodu-ai-menu-option-label"><i className="codicon codicon-arrow-left" aria-hidden="true"/>返回</span></button>
+                {(tutor.listContextTerminals?.() ?? []).map(terminal => <button type="button" role="menuitem" key={terminal.id} disabled={disabled} title={terminal.title}
+                    onClick={() => void run(() => tutor.addTerminalContext(terminal.id), '无法引用终端输出', added)}><span className="nodu-ai-menu-option-label"><i className="codicon codicon-terminal" aria-hidden="true"/><span>{terminal.title}</span></span></button>)}
+                {!tutor.listContextTerminals?.().length && <div className="nodu-ai-menu-empty">无终端</div>}
+            </> : menu.view === 'preview' && menu.entry ? <>
+                <div className="nodu-chat-context-preview-heading"><i className={`codicon codicon-${menu.entry.kind === 'terminal' ? 'terminal' : 'file-code'}`} aria-hidden="true"/><strong>{label(menu.entry)}</strong></div>
+                {menu.entry.kind !== 'terminal' && <div className="nodu-ai-menu-group">{menu.entry.endLine - menu.entry.startLine + 1} 行</div>}
+                <pre className="nodu-chat-context-preview" tabIndex={0}>{menu.entry.text}</pre>
+                {menu.entry.kind !== 'terminal' && <button type="button" role="menuitem" onClick={() => { void navigate(menu.entry!); close(); }}>打开源文件<i className="codicon codicon-go-to-file" aria-hidden="true"/></button>}
+                <button type="button" role="menuitem" onClick={() => { remove(menu.entry!); close(); }}>移除此引用<i className="codicon codicon-close" aria-hidden="true"/></button>
             </> : <div className="nodu-chat-context-list">{entries.map(entry => <div key={`${entry.index ?? 'current'}:${entry.path}`}>{renderChip(entry, true)}</div>)}</div>}
         </ChatPopover>}
     </>;

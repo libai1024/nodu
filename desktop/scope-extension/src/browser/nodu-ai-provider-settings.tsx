@@ -6,6 +6,7 @@ import {
 } from '../common/tutor/tutor-ai-config';
 import type { TutorRemoteModel } from '../common/tutor/tutor-ai-protocol';
 import { NoduTutorModel } from './nodu-tutor-model';
+import { ChatPopover } from './nodu-tutor-chat-controls';
 import '../../style/ai-provider-settings.css';
 
 const message = (error: unknown): string => error instanceof Error ? error.message : String(error);
@@ -13,9 +14,6 @@ const message = (error: unknown): string => error instanceof Error ? error.messa
 function Switch({ checked, label, disabled, onChange }: { checked: boolean; label: string; disabled?: boolean; onChange(value: boolean): void }): React.ReactElement {
     return <button type="button" role="switch" aria-checked={checked} aria-label={label} title={label} disabled={disabled}
         className={`nodu-ai-switch${checked ? ' nodu-ai-switch-on' : ''}`} onClick={() => onChange(!checked)}><span/></button>;
-}
-function Help({ text }: { text: string }): React.ReactElement {
-    return <i className="codicon codicon-question nodu-ai-help" title={text} aria-label={text} tabIndex={0}/>;
 }
 /** Green: usable. Orange: needs an API key. Grey: disabled. */
 function statusOf(p: TutorProviderView): 'ok' | 'warn' | 'off' {
@@ -75,9 +73,12 @@ function ProviderDetail({ tutor, provider, visible, onDeleted }: { tutor: NoduTu
     const [tests, setTests] = React.useState<Record<string, { ok: boolean; message: string } | 'running'>>({});
     const [editing, setEditing] = React.useState<TutorModelConfig | 'new' | undefined>();
     const [connectionOpen, setConnectionOpen] = React.useState(provider.kind === 'custom' && !provider.models.length);
+    const [formatAnchor, setFormatAnchor] = React.useState<HTMLElement>();
+    const closeFormat = React.useCallback(() => setFormatAnchor(undefined), []);
     const connectionId = React.useId();
     const [remote, setRemote] = React.useState<TutorRemoteModel[]>([]);
     const savedConnection = React.useRef({ name: provider.name, baseUrl: provider.baseUrl, format: provider.apiFormat });
+    React.useEffect(() => { if (!visible || !connectionOpen) { closeFormat(); } }, [visible, connectionOpen, closeFormat]);
     React.useEffect(() => {
         const previous = savedConnection.current;
         // Retain drafts when another provider/page is opened; refresh only untouched fields.
@@ -119,9 +120,9 @@ function ProviderDetail({ tutor, provider, visible, onDeleted }: { tutor: NoduTu
             {!locked && <button type="button" className="nodu-ai-icon" aria-label="删除供应商" title="删除供应商" disabled={!!busy}
                 onClick={() => void run('remove', async () => { await tutor.removeProvider(provider.id); onDeleted(); })}><i className="codicon codicon-trash" aria-hidden="true"/></button>}
         </header>
-        <label className="nodu-ai-field"><span>API Key{allowsNoKey(provider.baseUrl) && <Help text="本机服务可以不填"/>}</span>
+        <label className="nodu-ai-field"><span>API Key{provider.hasKey && <span className="nodu-ai-key-status">已设置</span>}</span>
             <div className="nodu-ai-key-row">
-                <input type={showKey ? 'text' : 'password'} autoComplete="off" spellCheck={false} value={key} placeholder={provider.hasKey ? '已设置，输入新值可替换' : '输入 API Key'}
+                <input type={showKey ? 'text' : 'password'} autoComplete="off" spellCheck={false} value={key}
                     onChange={e => { setKey(e.target.value); setShowKey(false); }} onKeyDown={e => { if (e.key === 'Enter' && key) { e.preventDefault(); void saveKey(); } }}/>
                 {key && <button type="button" className="nodu-ai-icon" aria-label={showKey ? '隐藏' : '显示'} title={showKey ? '隐藏' : '显示'} onClick={() => setShowKey(!showKey)}><i className={`codicon codicon-${showKey ? 'eye-closed' : 'eye'}`} aria-hidden="true"/></button>}
                 {key && <button type="button" className="theia-button" disabled={!!busy} onClick={() => void saveKey()}>保存</button>}
@@ -130,11 +131,10 @@ function ProviderDetail({ tutor, provider, visible, onDeleted }: { tutor: NoduTu
         {error && <div className="nodu-ai-form-error" role="alert">{error}</div>}
         <div className="nodu-ai-models-head">
             <span>模型列表</span>
-            <button type="button" className="nodu-ai-text-action" disabled={!!busy} title="从供应商读取可用模型 ID" onClick={() => void fetchRemote()}>{busy === 'remote' ? '读取中…' : '获取模型'}</button>
+            <button type="button" className="nodu-ai-text-action" disabled={!!busy} onClick={() => void fetchRemote()}>{busy === 'remote' ? '读取中…' : '获取模型'}</button>
             <button type="button" className="nodu-ai-chip" disabled={!!busy} onClick={() => setEditing('new')}><i className="codicon codicon-add" aria-hidden="true"/>添加模型</button>
         </div>
         <ul className="nodu-ai-models" aria-label="模型列表">
-            {!provider.models.length && <li className="nodu-ai-models-empty">还没有模型，点击“添加模型”</li>}
             {provider.models.map((m, index) => {
                 const current = selection?.providerId === provider.id && selection.modelId === m.id;
                 const result = tests[m.id];
@@ -161,12 +161,20 @@ function ProviderDetail({ tutor, provider, visible, onDeleted }: { tutor: NoduTu
         </button>
         <div id={connectionId} hidden={!connectionOpen} className="nodu-ai-connection-fields">
             {!locked && <label className="nodu-ai-field"><span>供应商名称</span><input value={name} maxLength={40} onChange={e => setName(e.target.value)}/></label>}
-        <label className="nodu-ai-field"><span>Base URL{locked && <Help text="内置套餐使用固定地址，密钥不会发送到其他服务器"/>}</span>
-            <input value={baseUrl} readOnly={locked} spellCheck={false} placeholder="https://api.example.com/v1" onChange={e => setBaseUrl(e.target.value)}/></label>
-        <label className="nodu-ai-field"><span>API 格式<Help text="中转站兼容的接口格式。多数 OpenAI 兼容中转站使用 Chat Completions"/></span>
-            <select value={format} disabled={locked} onChange={e => setFormat(e.target.value as TutorApiFormat)}>
-                {API_FORMATS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
-            </select></label>
+        <label className="nodu-ai-field"><span>Base URL</span>
+            <input value={baseUrl} readOnly={locked} spellCheck={false} onChange={e => setBaseUrl(e.target.value)}/></label>
+        <label className="nodu-ai-field"><span>API 格式</span>
+            <button type="button" className="nodu-ai-format-trigger" value={format} disabled={locked} aria-label="API 格式" aria-haspopup="menu" aria-expanded={!!formatAnchor}
+                onClick={e => setFormatAnchor(formatAnchor ? undefined : e.currentTarget)}
+                onKeyDown={e => { if (!locked && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) { e.preventDefault(); e.stopPropagation(); setFormatAnchor(e.currentTarget); } }}>
+                <span>{API_FORMATS.find(f => f.value === format)?.label}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
+            </button></label>
+        {formatAnchor && visible && connectionOpen && !locked && <ChatPopover anchor={formatAnchor} label="API 格式" layer="settings" align="start" close={closeFormat}>
+            {API_FORMATS.map(f => <button key={f.value} type="button" role="menuitemradio" aria-checked={format === f.value} value={f.value}
+                onClick={() => { setFormat(f.value); closeFormat(); if (formatAnchor.isConnected) { formatAnchor.focus(); } }}>
+                <span>{f.label}</span><i className={`codicon ${format === f.value ? 'codicon-check' : ''}`} aria-hidden="true"/>
+            </button>)}
+        </ChatPopover>}
         <div className="nodu-ai-endpoint" title="实际请求地址">{endpoint}</div>
         {dirty && <div className="nodu-ai-form-actions">
             <button type="button" className="theia-button secondary" onClick={() => { setName(provider.name); setBaseUrl(provider.baseUrl); setFormat(provider.apiFormat); }}>还原</button>
@@ -191,6 +199,9 @@ function ModelDialog({ format, initial, remote, taken, onSave, onClose }: { form
     const [level, setLevel] = React.useState('');
     const [error, setError] = React.useState('');
     const [saving, setSaving] = React.useState(false);
+    const [modelAnchor, setModelAnchor] = React.useState<HTMLElement>();
+    const [search, setSearch] = React.useState('');
+    const closeModels = React.useCallback(() => { setModelAnchor(undefined); setSearch(''); }, []);
     const dialog = React.useRef<HTMLDivElement>(null);
     const [previous] = React.useState(() => document.activeElement instanceof HTMLElement ? document.activeElement : undefined);
     React.useLayoutEffect(() => {
@@ -212,6 +223,8 @@ function ModelDialog({ format, initial, remote, taken, onSave, onClose }: { form
         // Smart config fills what the provider reports and leaves the rest to the user.
         set({ id, ...(found?.contextWindow ? { contextWindow: found.contextWindow } : {}) });
     };
+    const available = remote.filter(r => !taken.includes(r.id) || r.id === initial?.id);
+    const matches = available.filter(r => r.id.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
     const addLevel = () => { const v = level.trim(); if (v && !model.reasoningLevels.includes(v)) { set({ reasoningLevels: [...model.reasoningLevels, v] }); } setLevel(''); };
     const save = async (): Promise<void> => {
         if (!model.id.trim()) { setError('请输入模型 ID'); return; }
@@ -223,20 +236,33 @@ function ModelDialog({ format, initial, remote, taken, onSave, onClose }: { form
         <div ref={dialog} className="nodu-ai-dialog" role="dialog" aria-modal="true" aria-label={initial ? '编辑模型' : '添加模型'} onKeyDown={keyboard}>
             <header><h3>{initial ? '编辑模型' : '添加模型'}</h3><button type="button" className="nodu-ai-icon" aria-label="关闭" onClick={onClose}><i className="codicon codicon-close" aria-hidden="true"/></button></header>
             <div className="nodu-ai-dialog-body">
-                <div className="nodu-ai-field-inline"><span>智能配置<Help text="从供应商返回的模型列表自动填写上下文窗口等信息，其余项可手动修改"/></span><Switch checked={smart} label="智能配置" onChange={setSmart}/></div>
-                <label className="nodu-ai-field"><span>模型 ID</span>
-                    <input autoFocus list="nodu-ai-remote-models" value={model.id} spellCheck={false} placeholder="模型 ID" onChange={e => pickId(e.target.value)}/>
-                    <datalist id="nodu-ai-remote-models">{remote.filter(r => !taken.includes(r.id)).map(r => <option key={r.id} value={r.id}/>)}</datalist></label>
-                <label className="nodu-ai-field"><span>上下文窗口<Help text="供应商声明的上下文容量，仅作记录。附带代码合计最多 64 KiB；完整请求含系统提示、工程信息、历史与 JSON 编码最多 1 MiB。仍受模型实际上下文容量限制"/></span>
-                    <input inputMode="numeric" value={model.contextWindow ?? ''} placeholder="例如 128000" onChange={e => set({ contextWindow: number(e.target.value) })}/></label>
-                <label className="nodu-ai-field"><span>最大输出 Tokens<Help text="单次回复的最大长度，默认 2048，最大 8192"/></span>
-                    <input inputMode="numeric" value={model.maxOutputTokens ?? ''} placeholder="2048" onChange={e => set({ maxOutputTokens: number(e.target.value) })}/></label>
+                <div className="nodu-ai-field-inline"><span>智能配置</span><Switch checked={smart} label="智能配置" onChange={setSmart}/></div>
+                <div className="nodu-ai-model-id-field">
+                    <label className="nodu-ai-field"><span>模型 ID</span>
+                        <input autoFocus value={model.id} spellCheck={false} onChange={e => pickId(e.target.value)}/></label>
+                    {available.length > 0 && <button type="button" className="nodu-ai-model-candidates" aria-label="选择模型 ID" aria-haspopup="menu" aria-expanded={!!modelAnchor}
+                        onClick={e => { if (modelAnchor) { closeModels(); } else { setModelAnchor(e.currentTarget); } }}
+                        onKeyDown={e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); e.stopPropagation(); setModelAnchor(e.currentTarget); } }}>
+                        <i className="codicon codicon-chevron-down" aria-hidden="true"/>
+                    </button>}
+                </div>
+                {modelAnchor && <ChatPopover anchor={modelAnchor} label="模型 ID" layer="settings" width={288} close={closeModels}>
+                    <input className="nodu-ai-menu-search" aria-label="搜索模型 ID" value={search} onChange={e => setSearch(e.target.value)}/>
+                    <div className="nodu-ai-menu-scroll">{matches.map(r => <button key={r.id} type="button" role="menuitemradio" aria-checked={model.id === r.id}
+                        onClick={() => { pickId(r.id); closeModels(); if (modelAnchor.isConnected) { modelAnchor.focus(); } }}>
+                        <span>{r.id}</span><i className={`codicon ${model.id === r.id ? 'codicon-check' : ''}`} aria-hidden="true"/>
+                    </button>)}{!matches.length && <div className="nodu-ai-menu-empty" role="status">没有匹配的模型</div>}</div>
+                </ChatPopover>}
+                <label className="nodu-ai-field"><span>上下文窗口</span>
+                    <input inputMode="numeric" value={model.contextWindow ?? ''} onChange={e => set({ contextWindow: number(e.target.value) })}/></label>
+                <label className="nodu-ai-field"><span>最大输出 Tokens</span>
+                    <input inputMode="numeric" value={model.maxOutputTokens ?? ''} onChange={e => set({ maxOutputTokens: number(e.target.value) })}/></label>
                 {format !== 'anthropic-messages' && <button type="button" className="nodu-ai-disclosure" aria-expanded={advanced} onClick={() => setAdvanced(!advanced)}><i className={`codicon codicon-chevron-${advanced ? 'down' : 'right'}`} aria-hidden="true"/>高级配置</button>}
                 {advanced && format !== 'anthropic-messages' && <>
-                    <div className="nodu-ai-field"><span>推理等级（从低到高）<Help text="模型支持的推理强度名称，例如 low、medium、high。留空表示不支持"/></span>
+                    <div className="nodu-ai-field"><span>推理等级</span>
                         <div className="nodu-ai-levels">
                             {model.reasoningLevels.map(l => <span key={l} className="nodu-ai-level">{l}<button type="button" aria-label={`移除 ${l}`} onClick={() => set({ reasoningLevels: model.reasoningLevels.filter(x => x !== l) })}><i className="codicon codicon-close" aria-hidden="true"/></button></span>)}
-                            <input value={level} placeholder="添加" aria-label="添加推理等级" onChange={e => setLevel(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addLevel(); } }}/>
+                            <input value={level} aria-label="添加推理等级" onChange={e => setLevel(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addLevel(); } }}/>
                             <button type="button" className="nodu-ai-icon" aria-label="添加推理等级" disabled={!level.trim()} onClick={addLevel}><i className="codicon codicon-add" aria-hidden="true"/></button>
                         </div></div>
                 </>}

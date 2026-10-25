@@ -55,9 +55,9 @@ test('draft plans retain confirm, revise and cancel without becoming a second pr
     const busy = render(tutor({ goalState: goal('draft'), busy: { goal: 'propose' } }));
     assert.match(busy, /disabled="">开始跟写/);
 });
-test('empty sidebar has one composer prompt with mode before model and no canned suggestions', () => {
+test('empty sidebar has an accessible unprompted composer with mode before model', () => {
     const html = render(tutor());
-    assert.equal((html.match(/想实现什么功能/g) ?? []).length, 1);
+    assert.match(html, /aria-label="教学消息"/); assert.doesNotMatch(html, /placeholder=|想实现什么功能|想了解什么/);
     assert.doesNotMatch(html, /nodu-ai-empty|nodu-ai-suggestion|nodu-ai-author/);
     assert.ok(html.indexOf('aria-label="对话模式"') < html.indexOf('aria-label="模型"'));
 });
@@ -75,7 +75,7 @@ test('standalone course controls live only in the floating task window', () => {
 test('new operation errors remain inspectable after a failed reply', () => {
     const html = render(tutor({ error: '代码已更改', connectionState: 'connected', messages: { teach: [{ id: 'failed', role: 'assistant', status: 'failed', text: '', note: '响应中断' }], ask: [] } }));
     assert.match(html, /查看请求详情/);
-    assert.match(html, /未能完成请求/);
+    assert.match(html, /代码已更改/);
 });
 test('backend reconnect stays next to composer and never becomes an alert card', () => {
     const html = render(tutor({ connectionState: 'connecting', canSendChat: false, drafts: { teach: '保留草稿', ask: '' } }));
@@ -95,4 +95,10 @@ test('local history storage failure offers saving without reconnect or replay', 
     assert.match(html, /对话暂未保存/);
     assert.match(html, /重试保存/);
     assert.doesNotMatch(html, /重连|role="alert"|codicon-warning/);
+});
+
+test('history replaces transcript and composer while showing both modes, dates and draft state', () => {
+    const html=render(tutor({historyOpen:true,activeConversationId:'active',historyEntries:[{id:'active',title:'串口问题',mode:'teach',updatedAt:Date.now(),preview:'继续分析',hasDraft:true},{id:'other',title:'分析报错',mode:'ask',updatedAt:Date.now()-86400000,preview:'编译失败',hasDraft:false}]}));
+    assert.match(html,/搜索历史对话/);assert.match(html,/今天/);assert.match(html,/昨天/);assert.match(html,/草稿/);assert.match(html,/aria-current="true"/);
+    assert.match(html,/class="nodu-ai-reading" hidden/);assert.match(html,/<form hidden/);assert.match(html,/分析报错/);
 });

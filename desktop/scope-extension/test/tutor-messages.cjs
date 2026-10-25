@@ -222,7 +222,32 @@ test('sent user context references render safe snapshot paths/ranges and ignore 
         { kind: 'selection', path: 'bad.c', startLine: -1, endLine: 1 },
         { kind: 'file', path: 'embedded.c', startLine: 1, endLine: 1, text: '<script>hidden source</script>' },
     ] }) });
-    assert.match(html, /本条消息附带的代码/); assert.match(html, /title="Core\/Src\/main.c:10"/); assert.match(html, /main.c:10–18/); assert.match(html, /boot.py/);
+    assert.match(html, /本条消息附带的上下文/); assert.match(html, /title="Core\/Src\/main.c:10"/); assert.match(html, /main.c:10–18/); assert.match(html, /boot.py/);
     assert.doesNotMatch(html, /secret.c|javascript:|bad.c|embedded.c|hidden source|<strong>|href=/);
     assert.match(html, /\*\*保持原问题\*\*/);
+});
+
+test('sent terminal references expand immutable escaped output without a filesystem navigation action',()=>{
+    const context={kind:'terminal',path:'build #123 · 最近输出',terminalName:'zsh',terminalSelection:true,startLine:601,endLine:602,text:'error: <missing symbol>\nlink failed',version:1};
+    const {text,version,...ref}=context;
+    const html=render({item:item({role:'user',text:'分析',contextRefs:[ref]}),snapshot:{contexts:[context]}});
+    assert.match(html,/<details/);assert.match(html,/<summary><i[^>]*><\/i>zsh \(601-602\)<\/summary>/);
+    assert.match(html,/error: &lt;missing symbol&gt;/);assert.doesNotMatch(html,/打开源文件|build|#123|最近输出|固定快照|发送时的快照|2 行/);
+});
+test('sent terminal references without snapshot text retain selection labels and whole terminal names with a safe legacy fallback',()=>{
+    const html=render({item:item({role:'user',text:'分析',contextRefs:[
+        {kind:'terminal',path:'build #123 · 选区',terminalName:'zsh',terminalSelection:true,startLine:47,endLine:48},
+        {kind:'terminal',path:'terminal:internal-widget-id',terminalName:'bash',terminalSelection:false,startLine:90,endLine:90},
+        {kind:'terminal',path:'terminal:legacy-widget-id',startLine:21,endLine:21},
+    ]})});
+    assert.match(html,/zsh \(47-48\)/);assert.match(html,/>bash<\/span>/);assert.match(html,/>终端<\/span>/);
+    assert.doesNotMatch(html,/<details|打开源文件|build|#123|选区|internal-widget-id|legacy-widget-id|terminal:|固定快照|发送时的快照|90|21/);
+});
+test('terminal display names are escaped and invalid metadata is not rendered',()=>{
+    const html=render({item:item({role:'user',text:'分析',contextRefs:[
+        {kind:'terminal',path:'terminal:html-name',terminalName:'<img src=x>',terminalSelection:true,startLine:3,endLine:3},
+        {kind:'terminal',path:'terminal:bad-name',terminalName:'bad\nname',startLine:1,endLine:1},
+        {kind:'terminal',path:'terminal:bad-scope',terminalName:'bad scope',terminalSelection:'true',startLine:1,endLine:1},
+    ]})});
+    assert.match(html,/&lt;img src=x&gt; \(3\)/);assert.doesNotMatch(html,/<img|bad.scope|bad.name|terminal:/);
 });

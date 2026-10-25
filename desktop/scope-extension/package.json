@@ -28,7 +28,7 @@
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json",
-    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs test/tutor-goal.cjs test/tutor-runtime-evidence.cjs test/tutor-local-checker.cjs test/tutor-bundled-courses.cjs test/tutor-pure-runner.cjs test/tutor-task-window.cjs test/tutor-sidebar.cjs test/tutor-messages.cjs test/tutor-conversations.cjs test/tutor-chat-interaction.cjs test/tutor-context-picker.cjs",
+    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs test/tutor-goal.cjs test/tutor-runtime-evidence.cjs test/tutor-local-checker.cjs test/tutor-bundled-courses.cjs test/tutor-pure-runner.cjs test/tutor-task-window.cjs test/tutor-sidebar.cjs test/tutor-messages.cjs test/tutor-conversations.cjs test/tutor-chat-interaction.cjs test/tutor-context-picker.cjs test/tutor-terminal-selection.cjs",
     "test:tutor-native": "npm run compile && node --test test/tutor-local-native.cjs",
     "test:launcher": "npm run compile && node --test test/launcher.cjs test/launcher-view.cjs",
     "test:tutor-wasi": "npm run compile && node --test test/tutor-pure-native.cjs",

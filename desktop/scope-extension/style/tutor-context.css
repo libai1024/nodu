@@ -1,10 +1,16 @@
 /* SPDX-License-Identifier: MIT */
+.nodu-ai-composer .nodu-chat-context-more { font: 12px/18px var(--theia-ui-font-family); }
+.nodu-chat-context-live { color: var(--theia-descriptionForeground); font-size: 10px; margin-left: 2px; }
+.nodu-chat-context-preview-heading { display: flex; align-items: center; gap: 6px; padding: 8px; }
+.nodu-chat-context-preview-heading strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 500; }
+.nodu-chat-context-preview { margin: 0 4px 6px; padding: 8px; max-height: 240px; overflow: auto; white-space: pre; font: 12px/18px var(--theia-code-font-family); background: var(--theia-editor-background); color: var(--theia-editor-foreground); border-radius: 4px; }
 .nodu-chat-context { min-width: 0; }
-.nodu-chat-context-row { align-items: center; min-width: 0; gap: 6px; padding: 10px 14px 0; }
+.nodu-chat-context-row { display: flex; flex-wrap: nowrap; align-items: center; min-width: 0; gap: 6px; padding: 10px 12px 0; }
 .nodu-chat-context-chip { display: inline-flex; flex: 0 1 auto; align-items: center; min-width: 0; max-width: 100%; height: 24px; border: 0; border-radius: 5px; color: var(--theia-descriptionForeground); background: color-mix(in srgb, var(--theia-foreground) 5%, transparent); }
 .nodu-chat-context .nodu-chat-context-open, .nodu-chat-context-list .nodu-chat-context-open { display: flex; align-items: center; gap: 4px; min-width: 0; height: 24px; padding: 0 2px 0 6px; border: 0; border-radius: 4px; color: inherit; background: transparent; cursor: pointer; font: inherit; font-size: 12px; text-align: left; }
 .nodu-chat-context-open > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nodu-chat-context-open > .codicon { flex: none; font-size: 12px; }
+.nodu-chat-context .nodu-chat-context-terminal, .nodu-chat-context-list .nodu-chat-context-terminal { cursor: default; }
 .nodu-chat-context-remove, .nodu-chat-context-add, .nodu-chat-context-more { display: inline-grid; place-items: center; flex: none; height: 24px; min-width: 22px; padding: 0 3px; border: 0; border-radius: 3px; color: var(--theia-descriptionForeground); background: transparent; cursor: pointer; font: inherit; font-size: 12px; }
 .nodu-chat-context-remove > .codicon { font-size: 12px; }
 .nodu-chat-context-add > .codicon { font-size: 14px; }

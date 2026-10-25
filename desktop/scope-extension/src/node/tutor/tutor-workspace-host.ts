@@ -170,7 +170,8 @@ export class TutorWorkspaceHost {
 
     async contexts(id: string, mode: 'teach' | 'ask', input: TutorContext[]): Promise<TutorContext[]> {
         const contexts = validateTutorContexts(input, mode);
-        for (const c of contexts) { await this.authorize(id, { path: c.path, text: '', version: 1, line: 1 }, mode === 'ask'); }
+        // Terminal text is an explicitly attached snapshot, not a path to read or execute.
+        for (const c of contexts) { if (c.kind !== 'terminal') { await this.authorize(id, { path: c.path, text: '', version: 1, line: 1 }, mode === 'ask'); } }
         await this.authorize(id); return contexts;
     }
     async readContext(id: string, relative: string): Promise<TutorContext> {

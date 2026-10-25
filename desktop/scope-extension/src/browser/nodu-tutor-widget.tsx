@@ -11,6 +11,7 @@ import { TUTOR_COMMANDS } from './nodu-tutor-hints';
 import { TabBarToolbarContribution, TabBarToolbarRegistry } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
 import { TutorMessage } from './nodu-tutor-messages';
 import { ModePicker, ModelPicker, ChatHeader } from './nodu-tutor-chat-controls';
+import { ConversationHistory } from './nodu-tutor-history';
 import { ContextPicker } from './nodu-tutor-context-picker';
 
 /** Plans are confirmed here; an accepted task is managed only by the shared task window. */
@@ -40,6 +41,7 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     const [, redraw] = React.useReducer(n => n + 1, 0);
     const log = React.useRef<HTMLDivElement>(null), input = React.useRef<HTMLTextAreaElement>(null);
     const following = React.useRef(true), scrollIntent = React.useRef(0);
+    const wasHistoryOpen = React.useRef(tutor.historyOpen);
     const [latest, setLatest] = React.useState(false), [errorDetail, setErrorDetail] = React.useState(false);
     const key = `${tutor.rootUri ?? tutor.workspaceId ?? ''}:${tutor.mode}:${tutor.activeConversationId ?? ''}`;
     const views = chatViews.get(tutor) ?? new Map<string, ChatViewState>(); chatViews.set(tutor, views);
@@ -48,12 +50,21 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
         const node = log.current, saved = views.get(key);
         following.current = saved?.following ?? true; scrollIntent.current = 0; setLatest(!following.current); setErrorDetail(false);
         if (node) { node.scrollTop = following.current ? node.scrollHeight : saved?.top ?? 0; }
-        return () => { if (node) { views.set(key, { top: node.scrollTop, following: following.current }); if (views.size > 64) { views.delete(views.keys().next().value!); } } };
+        return () => { if (node && !node.closest('[hidden]')) { views.set(key, { top: node.scrollTop, following: following.current }); if (views.size > 64) { views.delete(views.keys().next().value!); } } };
     }, [key]);
     React.useLayoutEffect(() => {
+        if (tutor.historyOpen) { return; }
         if (following.current && log.current) { log.current.scrollTop = log.current.scrollHeight; }
         else if (messages.length) { setLatest(true); }
     }, [key, messages.length, last?.text, last?.status, tutor.goalState.revision]);
+    React.useLayoutEffect(() => {
+        if (wasHistoryOpen.current && !tutor.historyOpen) {
+            const node = log.current;
+            if (node) { node.scrollTop = following.current ? node.scrollHeight : views.get(key)?.top ?? 0; }
+            input.current?.focus();
+        }
+        wasHistoryOpen.current = tutor.historyOpen;
+    }, [tutor.historyOpen, key]);
     React.useLayoutEffect(() => { const node = input.current; if (node) { node.style.height = 'auto'; node.style.height = `${Math.min(node.scrollHeight, 180)}px`; } }, [draft]);
     React.useLayoutEffect(() => {
         const node = input.current;
@@ -71,12 +82,14 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
     const lastReply = [...messages].reverse().find(m => m.role === 'assistant');
     const duplicateError = lastReply?.status === 'failed' && tutor.error === lastReply.note;
     return <div className="nodu-ai-panel">
-        <div className="nodu-ai-reading">
+        {tutor.historyOpen && <ConversationHistory tutor={tutor}/> }
+        <div className="nodu-ai-reading" hidden={tutor.historyOpen}>
             <div className="nodu-ai-log" ref={log} role="log" aria-label="AI 对话" aria-live="off" tabIndex={0}
                 onWheel={() => { scrollIntent.current = Date.now() + 250; }} onTouchStart={() => { scrollIntent.current = Date.now() + 250; }} onPointerDown={e => { if (e.target === e.currentTarget) { scrollIntent.current = Date.now() + 250; } }}
                 onKeyDown={e => { if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) { scrollIntent.current = Date.now() + 250; } }}
-                onScroll={() => { const n = log.current; if (n) { if (Date.now() < scrollIntent.current) { following.current = n.scrollHeight - n.scrollTop - n.clientHeight < 32; setLatest(!following.current); } views.set(key, { top: n.scrollTop, following: following.current }); } }}>
+                onScroll={() => { const n = log.current; if (n && !tutor.historyOpen) { if (Date.now() < scrollIntent.current) { following.current = n.scrollHeight - n.scrollTop - n.clientHeight < 32; setLatest(!following.current); } views.set(key, { top: n.scrollTop, following: following.current }); } }}>
                 {messages.map(m => <TutorMessage key={m.id} item={m} busy={isBusy}
+                    snapshot={m.role === 'user' ? m.request ?? messages.find(reply => reply.replyTo === m.id)?.request : undefined}
                     open={async (path, line) => { if (await run(TUTOR_COMMANDS.openReference, path, line) === false) { throw new Error('无法打开此文件'); } }}
                     retry={tutor.canRetry?.(m) ? () => tutor.retryChat(m.id) : undefined}
                     onReask={m.role === 'user' ? () => { if (tutor.editMessage(m.id)) { input.current?.focus(); } } : undefined} />)}
@@ -88,18 +101,17 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
         </div>
         {tutor.connectionState === 'connecting' ? <div className="nodu-ai-connection" role="status"><i className="codicon codicon-loading codicon-modifier-spin" aria-hidden="true"/>正在重新连接…</div>
             : tutor.connectionState === 'disconnected' ? <div className="nodu-ai-connection" role="status">连接已断开<button type="button" className="scope-text-button" onClick={() => void tutor.load()}>重连</button></div>
-            : tutor.error && !duplicateError && <div className="nodu-ai-connection" role="status"><span>未能完成请求</span><button type="button" className="nodu-ai-icon" aria-label="查看请求详情" aria-expanded={errorDetail} onClick={() => setErrorDetail(!errorDetail)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>{errorDetail && <span className="nodu-ai-error-detail">{tutor.error}</span>}</div>}
+            : tutor.error && !duplicateError && <div className="nodu-ai-connection" role="status"><span>{tutor.error.length <= 120 ? tutor.error : '请求未完成，请查看详情'}</span><button type="button" className="nodu-ai-icon" aria-label="查看请求详情" hidden={tutor.error.length <= 120} aria-expanded={errorDetail} onClick={() => setErrorDetail(!errorDetail)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>{errorDetail && <span className="nodu-ai-error-detail">{tutor.error}</span>}</div>}
         {tutor.historyStorageError && <div className="nodu-ai-connection" role="status"><span>{tutor.historyStorageError}</span><button type="button" className="scope-text-button" onClick={() => tutor.retryHistorySave()}>重试保存</button></div>}
-        <form className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); submit(); }}>
+        <form hidden={tutor.historyOpen} className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); submit(); }}>
             <ContextPicker tutor={tutor} open={async (path, line) => { if (await run(TUTOR_COMMANDS.openReference, path, line) === false) { throw new Error('无法打开此文件'); } }}>{addButton => <>
-            <textarea ref={input} rows={1} aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} placeholder={tutor.mode === 'teach' ? (tutor.goalState.status === 'active' ? '问问这一步怎么写…' : '想实现什么功能？') : '想了解什么？'} value={draft}
+            <textarea ref={input} rows={1} aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} value={draft}
                 onChange={e => { tutor.setDraft(e.target.value); redraw(); }}
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229) { e.preventDefault(); submit(); } }} />
             <div className="nodu-ai-composer-bar">
                 {addButton}
                 <ModePicker tutor={tutor} />
                 <ModelPicker tutor={tutor} openSettings={anchor => run(TUTOR_COMMANDS.settings, anchor)} />
-                {tutor.settings && !tutor.configured && <button type="button" className="nodu-ai-configure" title="配置模型连接" onClick={e => run(TUTOR_COMMANDS.settings, e.currentTarget)}><i className="codicon codicon-key" aria-hidden="true"/><span>配置</span></button>}
                 {isBusy
                     ? <button key="stop" type="button" className="nodu-ai-send nodu-ai-stop" aria-label="停止" title="停止" onClick={e => { e.preventDefault(); tutor.cancel(); }}><i className="codicon codicon-debug-stop" aria-hidden="true"/></button>
                     : <button key="send" type="button" onClick={submit} className="nodu-ai-send" aria-label="发送" title="发送 Enter" disabled={!canSend || !draft.trim()}><i className="codicon codicon-arrow-up" aria-hidden="true"/></button>}
@@ -116,7 +128,7 @@ export class NoduTutorWidget extends ReactWidget {
     @postConstruct() protected init(): void {
         this.id = NoduTutorWidget.ID; this.title.label = NoduTutorWidget.LABEL; this.title.caption = NoduTutorWidget.LABEL; this.title.iconClass = 'codicon codicon-sparkle'; this.title.closable = true;
         this.addClass('scope-widget'); this.addClass('nodu-tutor-widget'); this.node.tabIndex = -1;
-        this.toDispose.push(this.tutor.onDidChange(() => this.update()));
+        this.toDispose.push(this.tutor.onDidChange(() => { this.title.label = this.tutor.historyOpen ? '历史对话' : this.tutor.activeConversationTitle; this.title.caption = this.title.label; this.update(); }));
         this.toDispose.push(this.onDidChangeVisibility(visible => this.tutor.setPanelVisible(visible))); this.update();
     }
     /** Closing the sidebar is remembered; professional mode reopens it only while preferred. */

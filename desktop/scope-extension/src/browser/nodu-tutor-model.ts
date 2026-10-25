@@ -5,6 +5,8 @@ import URI from '@theia/core/lib/common/uri';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
+import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
+import type { TerminalWidgetImpl } from '@theia/terminal/lib/browser/terminal-widget-impl';
 import { TutorAIClient, TutorAIResult, TutorAnswer, TutorBuffer, TutorChatRequest, TutorMode, TutorModelTest, TutorRemoteModel, TutorService, TUTOR_SERVICE_PATH } from '../common/tutor/tutor-ai-protocol';
 import { TutorAISettingsView, TutorModelSelection, TutorProviderConfig, TutorProviderView, allowsNoKey } from '../common/tutor/tutor-ai-config';
 import { TutorCourseTarget, TutorCourseV2 } from '../common/tutor/tutor-course';
@@ -15,7 +17,7 @@ import { emptyGoal, TutorGoalRequest, TutorGoalState } from '../common/tutor/tut
 import { TutorLocalRule } from '../common/tutor/tutor-local-check';
 import { TutorLineHistoryCache } from '../common/tutor/tutor-line-history';
 import { TutorContext, validateTutorContexts, requestBuffer } from '../common/tutor/tutor-context';
-import { TutorChatItem, TutorChatSnapshot, TutorConversation, TutorConversationStore, conversationPrompt, chatContextRefs } from '../common/tutor/tutor-conversation';
+import { TutorChatItem, TutorChatSnapshot, TutorConversation, TutorConversationStore, conversationPrompt, chatContextRefs, redactChatSecrets } from '../common/tutor/tutor-conversation';
 export type { TutorChatItem, TutorChatStatus } from '../common/tutor/tutor-conversation';
 import { ScopeLayoutState } from './scope-layout-state';
 
@@ -23,11 +25,13 @@ export interface TutorPresentation { buffer: TutorBuffer; answer: TutorAnswer; }
 /** file: URIs from the host and from Theia may differ in encoding and trailing slashes. */
 const sameUri = (a: string, b: URI | undefined): boolean => !!b && new URI(a).path.toString().replace(/\/+$/, '') === b.path.toString().replace(/\/+$/, '');
 const stored = (key: string, fallback: boolean): boolean => { try { const v = localStorage.getItem(`nodu.tutor.${key}`); return v === null ? fallback : v === 'true'; } catch { return fallback; } };
+const storedMode = (): TutorMode => { try { return sessionStorage.getItem('nodu.tutor.mode') === 'ask' ? 'ask' : 'teach'; } catch { return 'teach'; } };
 
 @injectable()
 export class NoduTutorModel {
     @inject(WorkspaceService) protected readonly workspace!: WorkspaceService;
     @inject(FileService) protected readonly files!: FileService;
+    @inject(TerminalService) protected readonly terminals!: TerminalService;
     @inject(WebSocketConnectionProvider) protected readonly connections!: WebSocketConnectionProvider;
     @inject(ScopeLayoutState) protected readonly layout!: ScopeLayoutState;
     private service!: TutorService;
@@ -43,7 +47,8 @@ export class NoduTutorModel {
     workspaceId?: string;
     session?: TutorSessionSnapshot;
     error?: string;
-    mode: TutorMode = 'teach';
+    mode: TutorMode = storedMode();
+    historyOpen = false;
     /** Editor guidance (ghost text, highlights, line review) is off; chat stays available. */
     paused = stored('guidance-off', false);
     panelVisible = false;
@@ -91,6 +96,9 @@ export class NoduTutorModel {
     get conversationLoading(): boolean { return this.historySyncing; }
     get conversations() { return this.conversationProject ? this.conversationStore.list(this.conversationProject, this.mode) : []; }
     get activeConversationId(): string | undefined { return this.conversationRecords[this.mode]?.id; }
+    get activeConversationTitle(): string { return this.conversationRecords[this.mode]?.title ?? '新对话'; }
+    get historyEntries() { return this.conversationProject ? this.conversationStore.history(this.conversationProject) : []; }
+    showHistory(show: boolean): void { this.historyOpen = show; this.notify(); }
     get canSendChat(): boolean { return this.enabled && !!this.workspaceId && this.connectionState === 'connected' && !this.historySyncing && !this.busy; }
     private loading = 0;
     private refreshing = 0;
@@ -301,14 +309,16 @@ export class NoduTutorModel {
         this.busy = { id, mode: 'teach', kind: 'chat', goal: action }; this.error = undefined; this.notify();
         let advance = false;
         try {
-            const result = await this.service.goal({ id, workspaceId: workspace, revision: this.goalState.revision, action, ...(stepId ? { stepId } : {}), ...(placement ? { placement } : {}),
-                ...(prompt ? { prompt } : {}), ...this.goalRequestContexts(action) });
+            const context = this.goalRequestContexts(action), revision = this.goalState.revision;
+            const result = await this.service.goal({ id, workspaceId: workspace, revision, action, ...(stepId ? { stepId } : {}), ...(placement ? { placement } : {}),
+                ...(prompt ? { prompt } : {}), ...context });
             if (this.busy?.id !== id || workspace !== this.workspaceId || epoch !== this.epoch) { return; }
             if (!result.ok) { if (!result.cancelled) { this.error = result.error; } await this.refreshGoal(); return; }
             advance = action === 'confirm' || (action === 'check' && result.state.current > previousStep);
             this.invalidate(); this.goalState = result.state; this.restoreGoalGuidance();
             if (action === 'propose') {
-                this.messages.teach.push({ id: crypto.randomUUID(), role: 'user', text: prompt ?? '', status: 'done' });
+                this.messages.teach.push({ id: crypto.randomUUID(), role: 'user', text: prompt ?? '', status: 'done', contextRefs: chatContextRefs(context.buffer, context.contexts),
+                    request: { prompt: prompt ?? '', mode: 'teach', kind: 'goal', goalRevision: revision, ...context } });
                 if (this.drafts.teach.trim() === prompt?.trim()) { this.drafts.teach = ''; }
             }
             const text = result.state.feedback;
@@ -342,7 +352,9 @@ export class NoduTutorModel {
         if (mode === this.mode) { return; }
         if (this.conversationProject) { this.persistConversation(this.mode); }
         this.mode = mode; this.contextError = undefined; this.transition();
+        this.rememberMode();
     }
+    private rememberMode(): void { try { sessionStorage.setItem('nodu.tutor.mode', this.mode); } catch { /* optional per-window preference */ } }
     /** The toolbar AI switch: stops editor guidance and line review, never the conversation. */
     setPaused(paused: boolean): void {
         if (paused === this.paused) { return; }
@@ -441,6 +453,33 @@ export class NoduTutorModel {
         return this.addContext({ kind, path: buffer.path, text: selection?.text ?? buffer.text, version: buffer.version,
             startLine: selection?.startLine ?? 1, endLine: selection?.endLine ?? buffer.text.split('\n').length });
     }
+    listContextTerminals(): { id: string; title: string }[] {
+        return (this.terminals?.all ?? []).filter(t => !t.isDisposed).map(t => ({ id: t.id, title: t.title.label || '终端' }));
+    }
+    async openTerminalContext(path: string): Promise<boolean> {
+        if (!path.startsWith('terminal:') || path.length === 'terminal:'.length) { return false; }
+        const terminal = this.terminals?.getById(path.slice('terminal:'.length));
+        if (!terminal || terminal.isDisposed) { return false; }
+        try { await this.terminals.open(terminal, { mode: 'activate' }); return true; }
+        catch { return false; }
+    }
+    async addTerminalContext(id: string, selectionOnly = false): Promise<boolean> {
+        try {
+            const terminal = this.terminals.getById(id);
+            if (!terminal || terminal.isDisposed) { throw new Error('此终端已关闭，请重新选择'); }
+            const selected = selectionOnly ? terminal.getSelection() : '';
+            if (selectionOnly && !selected) { throw new Error('请先选择终端输出'); }
+            const position = selected ? (terminal as Partial<Pick<TerminalWidgetImpl, 'getTerminal'>>).getTerminal?.().getSelectionPosition() : undefined;
+            if (selected && !position) { throw new Error('无法读取终端选区'); }
+            const startLine = position ? position.start.y + 1 : Math.max(0, terminal.buffer.length - 200) + 1;
+            const text = redactChatSecrets((selected || terminal.buffer.getLines(startLine - 1, 200, true).join('\n'))
+                .replace(/\r\n?/g, '\n').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').replace(/[\x00-\x08\x0b-\x1f\x7f]/g, '').trimEnd());
+            if (!text.trim()) { throw new Error('此终端还没有输出'); }
+            const endLine = position ? Math.max(startLine, position.end.y + (position.end.x === 0 ? 0 : 1)) : startLine + text.split('\n').length - 1;
+            const terminalName = redactChatSecrets(terminal.title.label || '终端').replace(/[\x00-\x1f\x7f]/g, '').trim().slice(0, 160) || '终端';
+            return this.addContext({ kind: 'terminal', path: `terminal:${terminal.id}`, terminalName, terminalSelection: selectionOnly, text, version: 1, startLine, endLine });
+        } catch (error) { this.contextError = error instanceof Error ? error.message : '无法读取终端输出'; this.notify(); return false; }
+    }
     async addContextFile(path: string): Promise<boolean> {
         const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
         if (!workspace) { return false; }
@@ -456,7 +495,9 @@ export class NoduTutorModel {
         try {
             const [authorized] = await this.service.authorizeChatContexts(workspace, mode, [context]);
             if (workspace !== this.workspaceId || mode !== this.mode || epoch !== this.epoch) { return false; }
-            const next = this.pins.filter(p => !(p.path === authorized.path && p.startLine === authorized.startLine && p.endLine === authorized.endLine));
+            const next = this.pins.filter(p => !((p.kind === 'terminal') === (authorized.kind === 'terminal') && p.path === authorized.path
+                && (authorized.kind !== 'terminal' || !!p.terminalSelection === !!authorized.terminalSelection)
+                && (authorized.kind === 'terminal' && !authorized.terminalSelection || p.startLine === authorized.startLine && p.endLine === authorized.endLine)));
             next.push(authorized);
             validateTutorContexts(next, mode);
             this.contextDrafts[mode] = next; this.contextError = undefined; this.persistConversation(mode); this.notify(); return true;
@@ -502,21 +543,25 @@ export class NoduTutorModel {
     }
     async newConversation(): Promise<void> {
         if (!this.conversationProject || this.historySyncing) { return; }
+        this.historyOpen = false;
         const mode = this.mode;
-        if (!this.messages[mode].length && !this.drafts[mode] && !this.pins.length) { return; }
+        if (!this.messages[mode].length && !this.drafts[mode] && !this.pins.length) { this.notify(); return; }
         this.cancelAll(); this.persistConversation(mode);
         this.conversationRecords[mode] = this.conversationStore.create(this.conversationProject, mode);
         this.messages[mode].length = 0; this.drafts[mode] = ''; this.contextDrafts[mode] = []; this.contextError = undefined; this.persistConversation(mode);
         await this.activateConversation();
     }
-    async selectConversation(id: string): Promise<void> {
-        if (!this.conversationProject || this.historySyncing || id === this.activeConversationId) { return; }
-        const c = this.conversationStore.read(id, this.conversationProject, this.mode);
+    async selectConversation(id: string, mode: TutorMode = this.mode): Promise<void> {
+        if (!this.conversationProject || this.historySyncing) { return; }
+        if (id === this.activeConversationId && mode === this.mode) { this.showHistory(false); return; }
+        const c = this.conversationStore.read(id, this.conversationProject, mode);
         if (!c) { this.error = '对话已不可用'; this.notify(); return; }
         this.cancelAll(); this.persistConversation(this.mode);
+        this.mode = mode; this.rememberMode(); this.historyOpen = false;
         this.conversationRecords[this.mode] = c; this.rememberSelection(c);
         this.messages[this.mode].splice(0, this.messages[this.mode].length, ...c.messages); this.drafts[this.mode] = c.draft;
         this.contextDrafts[this.mode] = c.contexts ?? []; this.includeCode = c.includeCode ?? true; this.contextError = undefined;
+        this.invalidate(); this.restoreGoalGuidance();
         await this.activateConversation();
     }
     private async activateConversation(): Promise<void> {

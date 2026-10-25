@@ -26,7 +26,7 @@ function mount() {
         if(id.endsWith('nodu-tutor-hints'))return{TUTOR_COMMANDS:{openReference:'open'}};
         return {};
     }});
-    const log={scrollTop:0,scrollHeight:1400,clientHeight:400},input={style:{},clientWidth:360,scrollHeight:56,focus(){calls.push('focus');}};
+    const log={scrollTop:0,scrollHeight:1400,clientHeight:400,closest(){return tutor.historyOpen?{}:null;}},input={style:{},clientWidth:360,scrollHeight:56,focus(){calls.push('focus');}};
     const tutor={workspaceId:'project',rootUri:'root',mode:'ask',activeConversationId:'chat-one',canSendChat:true,connectionState:'connected',
         goalState:{status:'none',revision:0},messages:{ask:[{id:'1',role:'assistant',text:'first',status:'pending'}],teach:[]},drafts:{ask:'',teach:''},
         canRetry:()=>false,setDraft(v){this.drafts[this.mode]=v;},send(){calls.push('send');this.drafts[this.mode]='';},cancel(){calls.push('stop');this.busy=undefined;}};
@@ -45,6 +45,12 @@ test('streaming follows only the reading bottom and explicit latest restores fol
 test('scroll position survives conversation switching without sending or focusing the composer',()=>{
     const c=mount(),reading=c.find(n=>n.props?.role==='log');reading.props.onWheel();c.log.scrollTop=120;reading.props.onScroll();c.render();
     c.tutor.activeConversationId='chat-two';c.render();c.tutor.activeConversationId='chat-one';c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,[]);
+});
+test('history hiding cannot overwrite the reading position and returning restores composer focus',()=>{
+    const c=mount(),reading=()=>c.find(n=>n.props?.role==='log');reading().props.onWheel();c.log.scrollTop=120;reading().props.onScroll();c.render();
+    c.tutor.historyOpen=true;c.render();c.log.scrollTop=0;reading().props.onScroll();
+    c.tutor.messages.ask[0].text+=' background response';c.render();assert.equal(c.log.scrollTop,0);
+    c.tutor.historyOpen=false;c.render();assert.equal(c.log.scrollTop,120);assert.deepEqual(c.calls,['focus']);
 });
 test('Enter never queues while generating, IME stays intact and stop preserves the draft',()=>{
     const c=mount();c.tutor.drafts.ask='下一条草稿';c.tutor.busy={kind:'chat'};c.render();c.key({key:'Enter'});assert.deepEqual(c.calls,[]);

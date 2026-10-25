@@ -2,6 +2,8 @@
 import * as React from '@theia/core/shared/react';
 import { isSafeCoursePath } from '../common/tutor/tutor-course';
 import { isTutorContextRef } from '../common/tutor/tutor-conversation';
+import type { TutorChatSnapshot } from '../common/tutor/tutor-conversation';
+import { terminalContextLabel } from '../common/tutor/tutor-context';
 import type { TutorChatItem } from './nodu-tutor-model';
 import '../../style/tutor-messages.css';
 
@@ -11,6 +13,7 @@ export interface TutorMessageItem extends TutorChatItem {
 }
 export interface TutorMessageProps {
     item: TutorMessageItem;
+    snapshot?: TutorChatSnapshot;
     /** The host must resolve the reference against the current authorized project. */
     open(path: string, line: number): void | Promise<void>;
     retry?(item: TutorMessageItem): void | Promise<void>;
@@ -228,7 +231,7 @@ function Markdown({ text, open, messageId }: { text: string; open: TutorMessageP
     })}</>;
 }
 
-export function TutorMessage({ item, open, retry, onReask, busy = false }: TutorMessageProps): React.ReactElement {
+export function TutorMessage({ item, snapshot, open, retry, onReask, busy = false }: TutorMessageProps): React.ReactElement {
     const [expanded, toggle] = useExpansion(`${item.id}:message`);
     const [details, setDetails] = React.useState(false);
     const [action, setAction] = React.useState<'retry' | 'reask'>();
@@ -259,11 +262,19 @@ export function TutorMessage({ item, open, retry, onReask, busy = false }: Tutor
             {long && <button type="button" className="nodu-chat-text-action nodu-chat-message-toggle" aria-expanded={expanded}
                 onClick={toggle}>{expanded ? '收起' : '展开'}</button>}
         </div>
-        {references.length > 0 && <div className="nodu-chat-context-references" aria-label="本条消息附带的代码">
-            {references.map((reference, index) => <span key={`${index}:${reference.path}:${reference.startLine}`}>
-                <i className="codicon codicon-file-code" aria-hidden="true"/><FileReference open={open} node={{ kind: 'reference', path: reference.path, line: reference.startLine,
-                    text: `${reference.path.split('/').pop()}${reference.kind === 'selection' ? `:${reference.startLine}–${reference.endLine}` : ''}` }} />
-            </span>)}
+        {references.length > 0 && <div className="nodu-chat-context-references" aria-label="本条消息附带的上下文">
+            {references.map((reference, index) => {
+                const text = snapshot?.contexts?.find(c => c.kind === reference.kind && c.path === reference.path && c.startLine === reference.startLine && c.endLine === reference.endLine
+                    && (c.kind !== 'terminal' || !!c.terminalSelection === !!reference.terminalSelection))?.text
+                    ?? (reference.kind === 'file' && snapshot?.buffer?.path === reference.path ? snapshot.buffer.text : undefined);
+                const label = reference.kind === 'terminal' ? terminalContextLabel(reference) : `${reference.path.split('/').pop()}${reference.kind === 'selection' ? `:${reference.startLine}–${reference.endLine}` : ''}`;
+                return text !== undefined ? <details className="nodu-chat-sent-context" key={`${index}:${reference.path}`}><summary><i className={`codicon codicon-${reference.kind === 'terminal' ? 'terminal' : reference.kind === 'selection' ? 'selection' : 'file-code'}`} aria-hidden="true"/>{label}</summary>
+                    <div className="nodu-chat-sent-context-body">{reference.kind !== 'terminal' && <span>{reference.endLine - reference.startLine + 1} 行</span>}<pre>{text}</pre>
+                        {reference.kind !== 'terminal' && <FileReference open={open} node={{ kind: 'reference', path: reference.path, line: reference.startLine, text: '打开源文件' }}/>}</div>
+                </details> : <span key={`${index}:${reference.path}:${reference.startLine}`}>
+                <i className={`codicon codicon-${reference.kind === 'terminal' ? 'terminal' : reference.kind === 'selection' ? 'selection' : 'file-code'}`} aria-hidden="true"/>{reference.kind === 'terminal' ? <span>{label}</span> : <FileReference open={open} node={{ kind: 'reference', path: reference.path, line: reference.startLine,
+                    text: `${reference.path.split('/').pop()}${reference.kind === 'selection' ? `:${reference.startLine}–${reference.endLine}` : ''}` }} />}
+            </span>; })}
         </div>}
         {(interrupted || stopped) && <div className="nodu-chat-recovery" role="status">
             <span>{stopped ? '已停止' : item.text ? '回复中断' : '未收到回复'}</span>

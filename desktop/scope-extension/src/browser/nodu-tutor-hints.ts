@@ -4,17 +4,24 @@ import { createRoot, Root } from '@theia/core/shared/react-dom/client';
 import { TutorTaskWindow } from './nodu-tutor-task-window';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import * as monaco from '@theia/monaco-editor-core';
-import { CommandContribution, CommandRegistry, CommandService, Disposable, DisposableCollection, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
+import { CommandContribution, CommandRegistry, CommandService, Disposable, DisposableCollection, MenuContribution, MenuModelRegistry, isOSX } from '@theia/core/lib/common';
 import { ApplicationShell, FrontendApplicationContribution, KeybindingContribution, KeybindingRegistry } from '@theia/core/lib/browser';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { EditorWidget } from '@theia/editor/lib/browser/editor-widget';
+import { EditorContextMenu } from '@theia/editor/lib/browser/editor-menu';
 import { MonacoEditor } from '@theia/monaco/lib/browser/monaco-editor';
+import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
+import type { TerminalWidget } from '@theia/terminal/lib/browser/base/terminal-widget';
+import { TerminalMenus } from '@theia/terminal/lib/browser/terminal-frontend-contribution';
 import { NoduTutorModel } from './nodu-tutor-model';
+import { TutorTerminalSelectionAction } from './nodu-tutor-terminal-selection';
 import { completedLines, pendingReviewCount, reviewableLine, tutorMarkerLine, traceReference } from '../common/tutor/tutor-guidance';
 import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
 
 export const TUTOR_MENU = ['nodu-ai-controls'];
 export const TUTOR_COMMANDS = {
+    quoteSelection: 'nodu.tutor.quote-selection',
+    quoteTerminalSelection: 'nodu.tutor.quote-terminal-selection',
     openReference: 'nodu.tutor.open-reference',
     prepareGoal: 'nodu.tutor.prepare-goal',
     openPanel: 'nodu.tutor.open-panel', togglePanel: 'nodu.tutor.toggle-panel', toggleHints: 'nodu.tutor.toggle-hints',
@@ -319,9 +326,12 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(CommandService) protected readonly commands!: CommandService;
+    @inject(TerminalService) protected readonly terminals!: TerminalService;
     private readonly disposables = new DisposableCollection();
     private readonly controllers = new Map<EditorWidget, TutorEditorController>();
     onStart(): void {
+        this.disposables.push(new TutorTerminalSelectionAction(this.terminals, this.shell, this.tutor,
+            id => this.quoteTerminalSelection(id), isOSX ? '⌘⌥L' : 'Ctrl+Alt+L'));
         this.disposables.push(this.tutor.onDidRequestGoalFragment(() => { void this.prepareGoal(); }));
         this.editors.all.forEach(widget => this.attach(widget));
         this.disposables.push(this.editors.onCurrentEditorChanged(() => this.renderTask()));
@@ -419,7 +429,35 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         } catch (error) { if (current()) { this.tutor.error = error instanceof Error ? error.message : '无法准备教学位置'; this.tutor.notify(); } }
         finally { this.preparingGoal = false; }
     }
+    private selectedTerminal(id?: string): TerminalWidget | undefined {
+        const terminal = id ? this.terminals.getById(id) : this.terminals.currentTerminal;
+        const active = id ? this.terminals.currentTerminal === terminal : this.shell.activeWidget === terminal;
+        return terminal && !terminal.isDisposed && active && terminal.getSelection().trim() ? terminal : undefined;
+    }
+    private quotingTerminal = false;
+    private async quoteTerminalSelection(id?: string): Promise<void> {
+        const terminal = this.selectedTerminal(id);
+        if (this.quotingTerminal || !terminal || !this.tutor.enabled || !this.tutor.workspaceId) { return; }
+        this.quotingTerminal = true;
+        try {
+            if (await this.tutor.addTerminalContext(terminal.id, true)) {
+                this.tutor.showHistory(false);
+                await this.commands.executeCommand(TUTOR_COMMANDS.openPanel);
+            }
+        } catch (error) { this.tutor.contextError = error instanceof Error ? error.message : '无法引用终端选区'; this.tutor.notify(); }
+        finally { this.quotingTerminal = false; }
+    }
     registerCommands(commands: CommandRegistry): void {
+        commands.registerCommand({ id: TUTOR_COMMANDS.quoteTerminalSelection, label: '添加到对话', category: 'Nodu' }, {
+            execute: () => this.quoteTerminalSelection(),
+            isEnabled: () => this.tutor.enabled && !!this.tutor.workspaceId && !!this.selectedTerminal() && !this.quotingTerminal,
+            isVisible: () => this.tutor.enabled && !!this.selectedTerminal(),
+        });
+        commands.registerCommand({ id: TUTOR_COMMANDS.quoteSelection, label: '引用选中代码到 AI 对话', category: 'Nodu' }, {
+            execute: async () => { if (await this.tutor.addCurrentContext('selection')) { this.tutor.showHistory(false); await this.commands.executeCommand(TUTOR_COMMANDS.openPanel); } },
+            isEnabled: () => this.tutor.enabled && !!this.tutor.buffer?.selection?.text && !!this.tutor.workspaceId,
+            isVisible: () => this.tutor.enabled && !!this.tutor.buffer?.selection?.text,
+        });
         commands.registerCommand({ id: TUTOR_COMMANDS.prepareGoal }, { execute: () => this.prepareGoal(), isEnabled: () => this.tutor.teaching && !this.tutor.busy });
         const available = { isEnabled: () => this.tutor.enabled, isVisible: () => this.tutor.enabled };
         commands.registerCommand({ id: TUTOR_COMMANDS.openReference }, { execute: async (path: string, line = 1) => {
@@ -459,11 +497,15 @@ export class NoduTutorHintsContribution implements FrontendApplicationContributi
         }, ...available });
     }
     registerKeybindings(keys: KeybindingRegistry): void {
+        keys.registerKeybinding({ command: TUTOR_COMMANDS.quoteSelection, keybinding: 'ctrlcmd+alt+l', when: 'editorTextFocus && editorHasSelection' });
+        keys.registerKeybinding({ command: TUTOR_COMMANDS.quoteTerminalSelection, keybinding: 'ctrlcmd+alt+l', when: 'terminalFocus' });
         keys.registerKeybinding({ command: TUTOR_COMMANDS.togglePanel, keybinding: 'ctrlcmd+shift+a' });
         keys.registerKeybinding({ command: TUTOR_COMMANDS.toggleHints, keybinding: 'ctrlcmd+k h' });
         keys.registerKeybinding({ command: TUTOR_COMMANDS.check, keybinding: 'ctrlcmd+alt+enter', when: 'editorTextFocus' });
     }
     registerMenus(menus: MenuModelRegistry): void {
+        menus.registerMenuAction(EditorContextMenu.COMMANDS, { commandId: TUTOR_COMMANDS.quoteSelection, order: '0_nodu_quote' });
+        menus.registerMenuAction(TerminalMenus.TERMINAL_CONTRIBUTIONS, { commandId: TUTOR_COMMANDS.quoteTerminalSelection, order: '0_nodu_quote' });
         menus.registerMenuAction([...TUTOR_MENU, '0_chat'], { commandId: TUTOR_COMMANDS.togglePanel });
         menus.registerMenuAction([...TUTOR_MENU, '1_guidance'], { commandId: TUTOR_COMMANDS.guidance });
         for (const [i, command] of [TUTOR_COMMANDS.toggleHints,TUTOR_COMMANDS.highlight,TUTOR_COMMANDS.annotations,TUTOR_COMMANDS.float].entries()) { menus.registerMenuAction([...TUTOR_MENU, '2_display'], { commandId: command, order: String(i) }); }

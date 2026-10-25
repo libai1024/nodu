@@ -1,0 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+.nodu-terminal-selection-action { position: fixed; z-index: 4900; display: inline-flex; align-items: center; gap: 12px; box-sizing: border-box; height: 28px; padding: 0 9px; border: 1px solid var(--theia-widget-border, var(--theia-panel-border)); border-radius: 6px; color: var(--theia-button-secondaryForeground, var(--theia-foreground)); background: var(--theia-button-secondaryBackground, var(--theia-editorWidget-background)); font: 12px/18px var(--theia-ui-font-family); white-space: nowrap; cursor: pointer; user-select: none; }
+.nodu-terminal-selection-action[hidden] { display: none; }
+.nodu-terminal-selection-action:hover { background: var(--theia-button-secondaryHoverBackground, var(--theia-toolbar-hoverBackground)); }
+.nodu-terminal-selection-action:focus-visible { outline: 2px solid var(--theia-focusBorder); outline-offset: 2px; }
+.nodu-terminal-selection-action kbd { padding: 0; color: inherit; background: transparent; font: inherit; }
