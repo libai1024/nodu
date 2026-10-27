@@ -29,6 +29,7 @@ const deferred = () => { let resolve, reject; const promise = new Promise((r, j)
 const flush = () => new Promise(setImmediate);
 function model() {
     const m = new NoduEmbeddedModel(); m.project = project(); m.editors = { all: [] }; m.calls = [];
+    m.systemDiagnostics = { report() {}, resolve() {} };
     m.ensureMonitor = async () => {};
     m.call = async (method, args) => {
         m.calls.push([method, args]);

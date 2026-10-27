@@ -1,0 +1,21 @@
+✔ emulator writes official generated addresses and verifies every segment with array arguments (29.425334ms)
+✔ serial upload delegates the profile, port and build directory to the official CLI recipe (26.601542ms)
+✔ remote endpoints, injection ports and unsupported TinyUSB fail before any process (4.702875ms)
+✔ wrong chip and corrupted image are rejected before an upload can erase flash (24.808917ms)
+✔ image hash corruption cannot pass even when the XOR checksum is intact (19.606666ms)
+✔ mismatched build ownership fails before execution (87.3555ms)
+✔ a configured board option set passes ownership validation and reaches the uploader (13.51575ms)
+✔ configured build ownership rejects changed, missing, duplicate or malformed options (27.478584ms)
+✔ out of range, overlapping, escaping and response-file layouts are rejected (29.192125ms)
+✔ symlink images cannot redirect an upload out of the build directory (10.273542ms)
+✔ cancellation before upload has no side effects; cancellation after write skips verification (21.956417ms)
+✔ missing endpoint and failed readback remain failures and never emit complete (44.190833ms)
+✔ missing bootloader cannot be silently replaced with a guessed flash offset (12.358667ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 429.089458

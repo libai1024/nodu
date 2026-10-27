@@ -1,0 +1,24 @@
+
+> @scope/electron-app@0.2.2 build
+> npm run rebuild && theia build --mode development
+
+
+> @scope/electron-app@0.2.2 rebuild
+> theia rebuild:electron --cacheRoot ..
+
+native node modules are already rebuilt for electron
+Found cached ffmpeg library.
+Hashes are equal, not replacing the ffmpeg library.
+"/Users/wangwei/Model/k210-studio/desktop/node_modules/electron/dist/Electron.app/Contents/Frameworks/Electron Framework.framework/Libraries/libffmpeg.dylib" does not contain proprietary codecs (13 found).
+[build/browser] Build started
+
+[build/browser] Finished with 0 errors in 2010ms.
+
+[build/node] Build started
+
+[build/node] Finished with 0 errors in 1042ms.
+
+[build/electron] Build started
+
+[build/electron] Finished with 0 errors in 10ms.
+

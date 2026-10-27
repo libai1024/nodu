@@ -58,7 +58,7 @@ export function parseTutorInline(text: string): TutorInline[] {
         else if (raw.startsWith('**')) { node = { kind: 'strong', text: raw.slice(2, -2) }; }
         else {
             const reference = /^\[([^\]]+)\]\(([^#]+)(?:#L([1-9]\d{0,5}))?\)$/.exec(raw);
-            if (reference && isSafeCoursePath(reference[2]) && /\.(c|h|cpp|hpp|cc|py)$/i.test(reference[2])) {
+            if (reference && isSafeCoursePath(reference[2]) && /\.(c|h|cpp|hpp|cc|py|ino)$/i.test(reference[2])) {
                 node = { kind: 'reference', text: reference[1], path: reference[2], line: Number(reference[3] ?? 1) };
             }
         }

@@ -1,0 +1,29 @@
+{
+  "executable": "/usr/bin/sandbox-exec",
+  "args": [
+    "-f",
+    "/private/tmp/nodu-arduino-offline-z4vng7/sandbox.sb",
+    "/opt/homebrew/Cellar/node@24/24.21.0/bin/node",
+    "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/arduino-offline.e2e.cjs",
+    "--worker",
+    "--root",
+    "/private/tmp/nodu-arduino-offline-z4vng7",
+    "--resources",
+    "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/resources/arduino",
+    "--bundles",
+    "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/.tools/arduino-release"
+  ],
+  "path": "/usr/bin:/bin:/usr/sbin:/sbin",
+  "deniedPaths": [
+    "/Users/wangwei/Library/Arduino15",
+    "/Users/wangwei/.arduino15",
+    "/Users/wangwei/.local/share/bysj-common-app/arduino",
+    "/Users/wangwei/.nodu/arduino",
+    "/Applications/Arduino IDE.app",
+    "/private/tmp/nodu-arduino-e2e-20261026",
+    "/opt/homebrew/bin/arduino-cli",
+    "/opt/homebrew/Cellar/arduino-cli/1.5.1/bin/arduino-cli",
+    "/usr/local/bin/arduino-cli"
+  ],
+  "runnerSha256": "2f94a46e1198105350622eabb33c51c429d4541a6468db91f0601a895974d938"
+}

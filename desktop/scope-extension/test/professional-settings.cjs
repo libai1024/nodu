@@ -64,6 +64,21 @@ test('professional controls use the existing user preferences and layout command
     c.value.layout.projectPath = '/two'; c.layoutEvent.fire(); assert.equal(c.value.isOpen, false); assert.equal(c.anchor.focused, undefined);
     c.value.open(); c.value.layout.mode = 'simple'; c.layoutEvent.fire(); assert.equal(c.value.isOpen, false); assert.equal(c.background.inert, false);
 });
+test('professional auto-save defaults on, reacts to shared preference changes and preserves explicit off after reopening', async () => {
+    const c = service(), values = new Map(), writes = [];
+    c.value.preferences.get = (key, fallback) => values.has(key) ? values.get(key) : fallback;
+    c.value.preferences.set = async (key, value, scope) => { writes.push([key, value, scope]); values.set(key, value); c.preferencesEvent.fire(); };
+    c.value.open(); assert.equal(c.renders.at(-1).props.autoSave, true); assert.deepEqual(writes, []);
+    await c.renders.at(-1).props.onAutoSave(false); assert.equal(c.renders.at(-1).props.autoSave, false);
+    c.value.close(); c.value.open(); assert.equal(c.renders.at(-1).props.autoSave, false);
+    assert.deepEqual(writes, [['files.autoSave', 'off', 1]], 'opening settings must not overwrite the user choice');
+    values.set('files.autoSave', 'afterDelay'); c.preferencesEvent.fire();
+    assert.equal(c.renders.at(-1).props.autoSave, true, 'changes from the other settings surface use the same preference');
+    for (const value of ['onFocusChange', 'onWindowChange']) {
+        values.set('files.autoSave', value); c.preferencesEvent.fire(); assert.equal(c.renders.at(-1).props.autoSave, true);
+    }
+    c.value.close();
+});
 test('closed modal releases subscriptions and reopening starts with fresh rendering', () => {
     const c = service(); c.value.open(); c.value.close(); const count = c.renders.length;
     c.preferencesEvent.fire(); c.themeEvent.fire(); c.tutorEvent.fire(); assert.equal(c.renders.length, count);

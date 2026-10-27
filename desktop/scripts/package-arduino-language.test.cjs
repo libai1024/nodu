@@ -1,0 +1,43 @@
+// SPDX-License-Identifier: MIT
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const { execFileSync } = require('node:child_process');
+const { refreshManifests } = require('./package-arduino-language.cjs');
+const hash = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+test('signed Arduino language copies retain source/build identity and verify their actual installed bytes', t => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-language-signing-'));t.after(() => fs.rmSync(root, {recursive:true,force:true}));
+    const resources = path.join(root, 'Nodu.app/Contents/Resources/app/resources');
+    const directory = path.join(resources, 'bin/darwin-arm64'), language = path.join(resources, 'arduino/language');
+    fs.mkdirSync(path.join(directory, 'arduino-clangd/bin'), {recursive:true});fs.mkdirSync(language, {recursive:true});
+    const sourceResources = path.join(__dirname, '../scope-extension/resources');
+    const original = path.join(sourceResources, 'bin/darwin-arm64/arduino-language-server');
+    const binary = path.join(directory, 'arduino-language-server'), clangd = path.join(directory, 'arduino-clangd/bin/clangd');
+    const catalog = JSON.parse(fs.readFileSync(path.join(sourceResources,'arduino/language/tools.json'),'utf8'));
+    fs.writeFileSync(path.join(language,'tools.json'), JSON.stringify(catalog));
+    const native = process.platform === 'darwin' && fs.existsSync(original);
+    if (native) fs.copyFileSync(original, binary);else fs.writeFileSync(binary,'unsigned ALS fixture');
+    fs.writeFileSync(clangd,'unsigned clangd fixture');
+    const originalHash = hash(binary);
+    const manifest = {host:'darwin-arm64',alsVersion:catalog.alsVersion,als:{...catalog.alsSource,binarySha256:originalHash},clangd:{binarySha256:hash(clangd)}};
+    const manifestFile = path.join(directory,'ARDUINO-LANGUAGE-TOOLS.json');fs.writeFileSync(manifestFile,JSON.stringify(manifest));
+    if (native) {
+        execFileSync('codesign',['--force','--sign','-','--identifier','org.nodu.arduino.signing-fixture',binary],{stdio:'pipe'});
+        execFileSync('codesign',['--verify','--strict',binary],{stdio:'pipe'});
+    } else fs.appendFileSync(binary,'; signed fixture');
+    assert.notEqual(hash(binary),originalHash,'Signing fixture must really change the bytes');
+    fs.appendFileSync(clangd,'; signed fixture');
+    assert.equal(refreshManifests(root),1);
+    const updated = JSON.parse(fs.readFileSync(manifestFile,'utf8'));
+    assert.equal(updated.als.binarySha256,hash(binary));assert.equal(updated.als.buildBinarySha256,originalHash);
+    assert.equal(updated.als.sha256,manifest.als.sha256);assert.equal(updated.als.patchSha256,manifest.als.patchSha256);
+    assert.equal(updated.als.upstreamSourceSha256,manifest.als.upstreamSourceSha256);
+    assert.equal(updated.clangd.binarySha256,hash(clangd));assert.equal(updated.clangd.buildBinarySha256,manifest.clangd.binarySha256);
+    refreshManifests(root);assert.equal(JSON.parse(fs.readFileSync(manifestFile,'utf8')).als.buildBinarySha256,originalHash);
+    if (native) assert.equal(hash(original),originalHash,'Shipping resource must remain unchanged by temporary signing');
+    updated.als.patchSha256='wrong';fs.writeFileSync(manifestFile,JSON.stringify(updated));assert.throws(()=>refreshManifests(root),/source identity/);
+    t.diagnostic(native?'Real temporary Mach-O codesign verified; no installation package was produced.':'Byte-change fixture verified; native codesign was not available on this host.');
+});

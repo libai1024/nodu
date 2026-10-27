@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-26",
+  "core": "3.3.12",
+  "cli": "1.5.1",
+  "emulator": [
+    {
+      "chip": "esp32c3",
+      "exit_code": 0,
+      "elapsed_seconds": 0.11,
+      "hello_seen": true,
+      "image_sha256": "d75c70ba6b4b12aaf19b3ca33ca1c821e3680bebd45cf2f5a3625ede8f07ab7f",
+      "image_unchanged": true
+    },
+    {
+      "chip": "esp32s3",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1,
+      "hello_seen": true,
+      "image_sha256": "bcad73c7e2fa4ed325880af326c7e3da1d54a6d91236b1b82561a652420bfd18",
+      "image_unchanged": true
+    }
+  ],
+  "scope": "Nodu generator + actual Arduino CLI profile compile + ESP-EMU startup; no physical hardware or workbench UI test",
+  "compile": {
+    "esp32c3": {
+      "exit_code": 0,
+      "elapsed_seconds": 97.24,
+      "flash_bytes": 276958,
+      "ram_bytes": 13200
+    },
+    "esp32s3": {
+      "exit_code": 0,
+      "elapsed_seconds": 54.96,
+      "flash_bytes": 273317,
+      "ram_bytes": 21592
+    }
+  },
+  "node_service": {
+    "request": {
+      "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+      "operationId": "e2e-service-c3"
+    },
+    "home": "/tmp/nodu-arduino-e2e-20261026",
+    "elapsed_seconds": 44.266,
+    "result": {
+      "ok": true,
+      "stale": false,
+      "diagnostics": [],
+      "buildPath": "/tmp/nodu-arduino-e2e-20261026/builds/276645d7951c6c666103e88c"
+    },
+    "events": [
+      {
+        "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+        "operationId": "e2e-service-c3",
+        "line": "Arduino \u00b7 esp32:esp32:esp32c3"
+      },
+      {
+        "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+        "operationId": "e2e-service-c3",
+        "line": "Sketch uses 276958 bytes (21%) of program storage space. Maximum is 1310720 bytes."
+      },
+      {
+        "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+        "operationId": "e2e-service-c3",
+        "line": "Global variables use 13200 bytes (4%) of dynamic memory, leaving 314480 bytes for local variables. Maximum is 327680 bytes."
+      }
+    ],
+    "profile_unchanged": true,
+    "firmware": {
+      "path": "/tmp/nodu-arduino-e2e-20261026/builds/276645d7951c6c666103e88c/nodu_esp32c3_hello.ino.merged.bin",
+      "sha256": "2a908648d225485f98cd8e7813b348d0d4d33e52f7a6d03ec268c0a508ae9578"
+    }
+  }
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "file": "arduino-context-profile.txt",
+    "bytes": 9491,
+    "sha256": "ee95d55ae3d680915e9bf9ee4afc7ecaf47c862dcabd3d827e46c8a2bca4f293"
+  },
+  {
+    "file": "arduino-tests.txt",
+    "bytes": 9989,
+    "sha256": "1e2549273176dedd6ca794e421bc6f339cb5e7897f255b18c15ee5e6c7898117"
+  },
+  {
+    "file": "cli-real-install.txt",
+    "bytes": 722,
+    "sha256": "bd2c8623102267eae7c6f5187bcd8d432d86745f4ff2a8308e9469b0422df642"
+  },
+  {
+    "file": "compile.txt",
+    "bytes": 65,
+    "sha256": "28db22e78159d6e4bdeb3e63c59757ceb36b33f0c16a74ecf87a1fef46bdc02a"
+  },
+  {
+    "file": "context-regression.txt",
+    "bytes": 14570,
+    "sha256": "abd5579ab47f2438ed72542cec000f144d096a3bbe1ea68aa804e037e2d789a0"
+  },
+  {
+    "file": "electron-build.txt",
+    "bytes": 527,
+    "sha256": "5094f083708688ec0f650cfff20cdf593f0b0124f0c24066b400a4e69344ec71"
+  },
+  {
+    "file": "full-build-media-fetch-failure.txt",
+    "bytes": 2849,
+    "sha256": "a01342959dbbe80c373c033c20471089d0044960d78c450c81cbc28235d66ba9"
+  },
+  {
+    "file": "language-tool-build.txt",
+    "bytes": 110,
+    "sha256": "8e32b3eb4601d82fcfee0bdd2f24b732bef4b2d208a78ebd744828b74d85622a"
+  },
+  {
+    "file": "library-profile-tests.txt",
+    "bytes": 1379,
+    "sha256": "fe92839a735791bef5f42c20358dee73c314cf8dd04c814b4a25a1015da85f9e"
+  },
+  {
+    "file": "native-tests.txt",
+    "bytes": 3259,
+    "sha256": "23a35261e9ed79a4f0cdc9717200a99128924174d97d5a5244d1b0cc60212e5d"
+  },
+  {
+    "file": "serial-tests.txt",
+    "bytes": 3184,
+    "sha256": "81cb6d017f8b40da8757c93f4794ca2afc03069c72a6ae10d80e72077c11acf9"
+  },
+  {
+    "file": "ui-regression.txt",
+    "bytes": 3771,
+    "sha256": "1c2513ffcb8e877b619650b4e48dbf209d0eddc6422395890fb775abc67f37b2"
+  },
+  {
+    "file": "workbench-tests.txt",
+    "bytes": 13539,
+    "sha256": "d59f68478e28759928d3112594dc858dc4dcf8ad9c1b942b35e8a65ad08a2a51"
+  }
+]

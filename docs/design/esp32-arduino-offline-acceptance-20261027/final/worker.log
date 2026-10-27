@@ -1,0 +1,6 @@
+esp32c3: opening an unfinished sketch initializes bundled tools
+esp32c3: cold home compile with bundled tools and all 11 libraries
+esp32s3: opening an unfinished sketch initializes bundled tools
+esp32s3: cold home compile with bundled tools and all 11 libraries
+esp32c3: reopened service reuses the bundled environment
+{"ok":true,"evidence":"/private/tmp/nodu-arduino-offline-z4vng7/evidence","cases":[{"chip":"esp32c3","ok":true,"elapsedMs":72827},{"chip":"esp32s3","ok":true,"elapsedMs":81600}]}

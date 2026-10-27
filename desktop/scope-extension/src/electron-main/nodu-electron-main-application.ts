@@ -205,11 +205,18 @@ export class NoduElectronMainApplication extends ElectronMainApplication impleme
 
     /** The project Theia recorded last (recentworkspace.json, written when a project window opens or closes). */
     protected lastProject(): string | undefined {
+        let roots: unknown[] = [];
         try {
-            const data = parseJsonc(readFileSync(join(this.configDir(), 'recentworkspace.json'), 'utf8')) as { recentRoots?: unknown[] } | null;
-            const first = data?.recentRoots?.[0];
-            const path = typeof first === 'string' && first.startsWith('file:') ? fileURLToPath(first) : undefined;
-            return path && existsSync(path) && statSync(path).isDirectory() ? path : undefined;
+            const data = parseJsonc(readFileSync(join(this.configDir(), 'recentworkspace.json'), 'utf8')) as { recentRoots?: unknown } | null;
+            roots = Array.isArray(data?.recentRoots) ? data.recentRoots : [];
         } catch { return undefined; }
+        // Empty or stale history entries must not hide the next available project.
+        for (const root of roots) {
+            try {
+                const path = typeof root === 'string' && root.startsWith('file:') ? fileURLToPath(root) : undefined;
+                if (path && existsSync(path) && statSync(path).isDirectory()) { return path; }
+            } catch { /* A malformed URI or unavailable folder does not invalidate later entries. */ }
+        }
+        return undefined;
     }
 }

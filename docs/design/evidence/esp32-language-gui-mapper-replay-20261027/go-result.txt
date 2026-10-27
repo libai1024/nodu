@@ -1,0 +1,12 @@
+=== RUN   TestGuiEnterPasteTailSymbols
+2026/10/27 01:28:04 Ino Range: 10:2-10:2 -> Cpp Range:16:2-16:2
+    nodu_gui_tail_test.go:16: Enter: ino 14 -> cpp 20 "  JsonDocument doc;"
+    nodu_gui_tail_test.go:16: Enter: ino 17 -> cpp 23 "  serializeJson(doc, Serial);"
+    nodu_gui_tail_test.go:16: Enter: ino 21 -> cpp 27 "void loop() {"
+2026/10/27 01:28:04 Ino Range: 10:2-10:2 -> Cpp Range:16:2-16:2
+    nodu_gui_tail_test.go:16: paste: ino 16 -> cpp 22 "  JsonDocument doc;"
+    nodu_gui_tail_test.go:16: paste: ino 19 -> cpp 25 "  serializeJson(doc, Serial);"
+    nodu_gui_tail_test.go:16: paste: ino 23 -> cpp 29 "void loop() {"
+--- PASS: TestGuiEnterPasteTailSymbols (0.00s)
+PASS
+ok  	github.com/arduino/arduino-language-server/sourcemapper	1.063s

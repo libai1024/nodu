@@ -18,6 +18,7 @@ const path = require('node:path');
 const { pipeline } = require('node:stream/promises');
 const { parseArgs } = require('node:util');
 const tutorTools = require('./package-tutor-tools.cjs');
+const arduinoTools = require('./package-arduino.cjs');
 const { courseExamplesStamp, copyCourseExamples } = require('./course-examples.cjs');
 
 const desktop = path.resolve(__dirname, '..');
@@ -113,6 +114,7 @@ function requireInputs(arch) {
     if (host === 'darwin') { tutorTools.validate(tutorTools.rootFor(desktop, `darwin-${arch}`), `darwin-${arch}`); }
     const stm32 = require('./package-stm32.cjs');
     stm32.validateToolkit(stm32.toolkitSource(desktop, host, arch));
+    arduinoTools.validateBundle(arduinoTools.bundleSource(desktop, `${host}-${arch}`), `${host}-${arch}`);
     const required = [];
     if (host === 'darwin') {
         for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded', 'nodu-tutor',
@@ -133,6 +135,22 @@ function requireInputs(arch) {
     }
     required.push('scope-extension/resources/nodu-resources/examples');
     required.push('plugins/vscode-clangd/package.json');
+    required.push('plugins/nodu-arduino-language/package.json');
+    required.push('plugins/nodu-arduino-language/extension.cjs');
+    required.push('plugins/nodu-arduino-language/grammar/manifest.json');
+    required.push('plugins/nodu-arduino-language/grammar/syntaxes/cpp.tmLanguage.json');
+    required.push('scope-extension/resources/arduino/libraries/manifest.json');
+    required.push('scope-extension/resources/arduino/language/ARDUINO-LANGUAGE-SERVER-LICENSE.txt');
+    required.push('scope-extension/resources/arduino/language/ARDUINO-LANGUAGE-SERVER-SOURCE.tar.gz');
+    required.push('scope-extension/resources/arduino/language/ARDUINO-LANGUAGE-SERVER-NODU-SOURCE.tar.gz');
+    required.push('scope-extension/resources/arduino/language/nodu-utf16-mapper.patch');
+    required.push('scope-extension/resources/arduino/language/LLVM-LICENSE.txt');
+    const arduinoBin = `scope-extension/resources/bin/${host}-${arch}`;
+    const arduinoExe = host === 'win32' ? '.exe' : '';
+    required.push(`${arduinoBin}/arduino-language-server${arduinoExe}`);
+    required.push(`${arduinoBin}/arduino-clangd/bin/clangd${arduinoExe}`);
+    required.push(`${arduinoBin}/ARDUINO-LANGUAGE-TOOLS.json`);
+    if (host === 'win32') { required.push(`${arduinoBin}/arduino-clangd-launcher.exe`); }
     required.push('scripts/launch.cjs');
     required.push('scripts/packaged-entry.cjs');
     required.push('electron-app/package.json');
@@ -140,7 +158,7 @@ function requireInputs(arch) {
         !fs.existsSync(path.join(desktop, file)));
     if (missing.length) {
         fail(`missing packaged inputs:\n  ${missing.join('\n  ')}\n`
-            + 'run npm run build:electron first (native + media).');
+            + `run npm run build:electron first; prepare cross-arch language tools with npm run build:arduino-tools -- --host=${host}-${arch}.`);
     }
     const electronDep = (appPkg.devDependencies || {}).electron;
     if (electronDep !== ELECTRON_VERSION) {
@@ -379,6 +397,10 @@ function runtimeResourcesStamp() {
     }
     hash.update(courseExamplesStamp(desktop));
     if (host === 'darwin') { hash.update(tutorTools.stamp(desktop, thinArchs.map(a => `darwin-${a}`))); }
+    for (const arch of thinArchs) {
+        const manifest = path.join(arduinoTools.bundleSource(desktop, `${host}-${arch}`), 'manifest.json');
+        hash.update(`${host}-${arch}`); hash.update(fs.existsSync(manifest) ? fs.readFileSync(manifest) : 'missing Arduino offline bundle');
+    }
     return hash.digest('hex');
 }
 
@@ -854,6 +876,10 @@ function buildAppInput(arch, workDesktop, universal) {
 
     const stm32 = require('./package-stm32.cjs');
     stm32.copyToolkit(stm32.toolkitSource(desktop, host, arch), resDest, host, arch);
+    const arduinoHosts = (universal ? ['arm64', 'x64'] : [arch]).map(value => `${host}-${value}`);
+    for (const arduinoHost of arduinoHosts) {
+        arduinoTools.copyBundle(arduinoTools.bundleSource(desktop, arduinoHost), resDest, arduinoHost, arduinoHosts);
+    }
     copyRes(path.join(desktop, 'plugins'), path.join(appInput, 'plugins'));
     copyRuntimePackages(workDesktop, appInput);
     require('./package-licenses.cjs').collectPackageLicenses({ desktop, workDesktop, appInput });
@@ -951,6 +977,9 @@ async function packageThin(arch, appInput) {
 
 function ignorePackagedPath(file) {
     const name = file.replaceAll('\\', '/');
+    // The offline bundle is a checked immutable payload. Even upstream lock
+    // files and support objects are part of its manifest and must survive.
+    if (/\/resources\/arduino\/offline\//.test(name)) { return false; }
     // Packager's default *.o exclusion removes the cross-compiler's crt and
     // support objects. These are runtime toolchain inputs, not build debris.
     if (/\.o(bj)?$/.test(name)) {
@@ -998,6 +1027,8 @@ function signAppDarwin(appPath) {
             '--preserve-metadata=entitlements,flags', file]);
     }
     require('./package-stm32.cjs').refreshManifests(appPath);
+    require('./package-arduino-language.cjs').refreshManifests(appPath);
+    arduinoTools.refreshManifests(appPath);
     tutorTools.refreshManifests(appPath);
     const nestedApps = [];
     const findApps = dir => {

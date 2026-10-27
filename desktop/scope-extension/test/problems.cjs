@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { collectProblems, countProblems } = require('../lib/common/nodu-problems');
+const { collectProblems, countProblems, formatProblem, formatProblems } = require('../lib/common/nodu-problems');
 
 function marker(owner, severity, line, message, uri = 'file:///project/main.c', end = 2) {
     return { owner, uri, data: { severity, message, source: owner,
@@ -31,4 +31,20 @@ test('same message at another file or position remains distinct; hints and missi
     assert.deepEqual(countProblems(rows), { errors: 3, warnings: 1, infos: 2, total: 6 });
     assert.equal(rows[0].diagnostic.severity, 1);
     assert.equal(rows.at(-1).diagnostic.severity, 4);
+});
+
+test('copied problems retain one-based locations, full multiline messages, sources and diagnostic codes', () => {
+    const input = marker('clangd', 1, 7, 'unknown identifier\n建议检查定义');
+    input.data.code = 0;
+    const [problem] = collectProblems([input, { ...input, owner: 'build', data: { ...input.data, source: 'build' } }]);
+    assert.equal(formatProblem(problem, '/项目/src/main.c'), '/项目/src/main.c:8:2 [错误] unknown identifier\n建议检查定义\n来源：build、clangd · 代码：0');
+    assert.equal(problem.diagnostic.message, input.data.message);
+});
+
+test('copying all diagnostics preserves order and empty collections never produce filler text', () => {
+    const rows = collectProblems([marker('clangd', 2, 2, 'warning'), marker('build', 1, 5, 'error')]);
+    assert.equal(formatProblems(rows, () => 'main.c'), 'main.c:6:2 [错误] error\n来源：build\n\nmain.c:3:2 [警告] warning\n来源：clangd');
+    assert.equal(formatProblems([]), '');
+    const info = { ...rows[0], sources: [], diagnostic: { ...rows[0].diagnostic, severity: undefined, code: undefined } };
+    assert.equal(formatProblem(info), 'file:///project/main.c:6:2 [提示] error');
 });

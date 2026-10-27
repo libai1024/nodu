@@ -22,7 +22,16 @@
 .nodu-problem-file-count { flex: none; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }
 .nodu-problem-file ul { margin: 0; padding: 0; list-style: none; }
 .nodu-problem-file ul[hidden] { display: none; }
-.nodu-problem-row { display: flex; align-items: baseline; gap: 7px; width: 100%; min-height: 28px; padding: 5px 12px 5px 32px; box-sizing: border-box; border: 0; color: var(--theia-foreground); background: transparent; font: inherit; line-height: 20px; text-align: left; cursor: pointer; }
+.nodu-problem-entry { display: flex; align-items: flex-start; padding-right: 8px; }
+.nodu-problem-entry:hover, .nodu-problem-entry:focus-within { background: var(--theia-list-hoverBackground); }
+.nodu-problem-row { display: flex; flex: 1; min-width: 0; align-items: baseline; gap: 7px; min-height: 28px; padding: 5px 8px 5px 32px; box-sizing: border-box; border: 0; color: var(--theia-foreground); background: transparent; font: inherit; line-height: 20px; text-align: left; cursor: pointer; }
+.nodu-problem-copy { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 26px; height: 26px; margin: 2px 0; padding: 0; border: 0; border-radius: 3px; color: var(--theia-descriptionForeground); background: transparent; cursor: pointer; }
+.nodu-problem-copy > .codicon { font-size: 14px; }
+.nodu-problem-copy:hover { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-problem-copy:disabled { opacity: .45; cursor: default; background: transparent; }
+.nodu-problem-entry > .nodu-problem-copy { opacity: 0; }
+.nodu-problem-entry:hover > .nodu-problem-copy, .nodu-problem-entry:focus-within > .nodu-problem-copy { opacity: 1; }
+.nodu-problems-copy-all { margin-left: auto; }
 .nodu-problem-row > .codicon { flex: none; align-self: flex-start; line-height: 20px; }
 .nodu-problem-message { flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: pre-line; }
 .nodu-problem-position { flex: none; color: var(--theia-descriptionForeground); font-variant-numeric: tabular-nums; }

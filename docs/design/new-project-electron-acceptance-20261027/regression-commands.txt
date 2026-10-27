@@ -1,0 +1,14 @@
+Completed on 2026-10-27. These commands were not rerun while collecting this record.
+
+Working directory:
+/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop
+
+1. Compile the extension:
+PATH=/opt/homebrew/opt/node@24/bin:$PATH npm run compile --workspace @scope/studio-extension
+
+2. Run the focused workbench, launcher and STM32 command regression suites:
+PATH=/opt/homebrew/opt/node@24/bin:$PATH node --test scope-extension/test/minimal-workbench.cjs scope-extension/test/launcher.cjs scope-extension/test/launcher-view.cjs scripts/stm32-flash-command.test.cjs
+
+3. Check the touched source and test diff for whitespace errors:
+Working directory: /Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio
+git diff --check -- desktop/scope-extension/src/browser/scope-workbench.tsx desktop/scope-extension/test/minimal-workbench.cjs

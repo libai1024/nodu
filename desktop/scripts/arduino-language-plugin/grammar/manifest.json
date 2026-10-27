@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "source": "microsoft/vscode",
+  "version": "1.105.1",
+  "grammarCommit": "f1d127a8af2b184db570345f0bb179503c47fdf6",
+  "license": "MIT",
+  "files": [
+    {
+      "file": "language-configuration.json",
+      "url": "https://raw.githubusercontent.com/microsoft/vscode/1.105.1/extensions/cpp/language-configuration.json",
+      "sha256": "ffd8e6c6c43a9ee6b99ce0b103fdb9fff8051468558ceea648b00f719efd5b92",
+      "bytes": 1864
+    },
+    {
+      "file": "licenses/better-cpp-syntax-MIT.txt",
+      "url": "https://raw.githubusercontent.com/jeff-hykin/better-cpp-syntax/f1d127a8af2b184db570345f0bb179503c47fdf6/LICENSE",
+      "sha256": "b5d4ec869a5b6f92119765a87f793669d730f480627e70a7f5dc9f74265f504a",
+      "bytes": 1067
+    },
+    {
+      "file": "licenses/vscode-MIT.txt",
+      "url": "https://raw.githubusercontent.com/microsoft/vscode/1.105.1/LICENSE.txt",
+      "sha256": "9480271317925265e806a9a196aaa33410a962fa9d4d1e248a4a5187bc8c9df9",
+      "bytes": 1088
+    },
+    {
+      "file": "syntaxes/cpp.embedded.macro.tmLanguage.json",
+      "url": "https://raw.githubusercontent.com/microsoft/vscode/1.105.1/extensions/cpp/syntaxes/cpp.embedded.macro.tmLanguage.json",
+      "sha256": "5eea760dd0fe8f10df3cc39afbd01c5b5feeab5bb80fd15a95601e386828c903",
+      "bytes": 307070
+    },
+    {
+      "file": "syntaxes/cpp.tmLanguage.json",
+      "url": "https://raw.githubusercontent.com/microsoft/vscode/1.105.1/extensions/cpp/syntaxes/cpp.tmLanguage.json",
+      "sha256": "82b39c8f2aec095b45a287ab155fcf868c197b216ba8d6fe0c95674b82863182",
+      "bytes": 551879
+    }
+  ]
+}

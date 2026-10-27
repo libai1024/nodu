@@ -1,0 +1,400 @@
+{
+  "started": "2026-10-26T16:57:14.861Z",
+  "finished": "2026-10-26T16:59:07.274Z",
+  "ok": true,
+  "hardware_accessed": false,
+  "raw_evidence": "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/run-fixed",
+  "sourceHashes": {
+    "nodu-arduino-server": "5c86435e58b8ba7af7185a0ee17d83912243a92313e261864d7a5706871d33ac",
+    "nodu-arduino-libraries": "e864c08314f0d272cbed41738459dc4471c95f774aecd9c1c136abaea259909b",
+    "nodu-project-generator": "37c5bf0478b401b73d269fec01ed6d36ef3ac23b34040382c7ae1895aa02440c"
+  },
+  "before": {
+    "name": "ArduinoJson",
+    "installedVersion": "7.4.3",
+    "bundled": true,
+    "bundledVersion": "7.4.3"
+  },
+  "remove": {
+    "ok": true,
+    "changed": true,
+    "dependency_count": 10
+  },
+  "after_remove": {
+    "installed_match": false,
+    "all": {
+      "name": "ArduinoJson",
+      "bundled": true,
+      "bundledVersion": "7.4.3"
+    }
+  },
+  "add": {
+    "ok": true,
+    "changed": true,
+    "dependency_count": 11
+  },
+  "after_add": {
+    "name": "ArduinoJson",
+    "installedVersion": "7.4.3",
+    "bundled": true,
+    "bundledVersion": "7.4.3"
+  },
+  "checks": {
+    "after-remove": {
+      "standard_profile_preserved": true,
+      "comments": {
+        "Preserve the project note.": true,
+        "Preserve the board note.": true,
+        "Preserve the other profile note.": true,
+        "Preserve the unchanged MQTT pin note.": true
+      },
+      "all_comments_preserved": true
+    },
+    "after-add": {
+      "standard_profile_preserved": true,
+      "comments": {
+        "Preserve the project note.": true,
+        "Preserve the board note.": true,
+        "Preserve the other profile note.": true,
+        "Preserve the unchanged MQTT pin note.": true
+      },
+      "all_comments_preserved": true
+    },
+    "dependency_versions_restored": true,
+    "ino_sha256": "62028d9dacb72570fd4e03db289bde50df4c3ffd0d72b768a5c150aa28286978",
+    "source_unchanged": true
+  },
+  "compile": {
+    "ok": true,
+    "stale": false,
+    "diagnostics": [],
+    "buildPath": "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/builds/5cabfb9c6fc2e0888a95ebc2",
+    "application_bytes": 282016,
+    "application_sha256": "138c442a6904c2ba317cd0353dace1ad941c3a0d8a270f5b931d33af62a78af7"
+  },
+  "cache_reuse": {
+    "library_commands": 21,
+    "already_downloaded_messages": 21,
+    "requested_versions": [
+      "Adafruit GFX Library@1.13.0",
+      "Adafruit NeoPixel@1.15.5",
+      "Adafruit SSD1306@2.5.17",
+      "ArduinoMqttClient@0.1.8",
+      "DallasTemperature@4.0.6",
+      "DHT sensor library@1.4.7",
+      "ESP32Servo@3.2.1",
+      "Adafruit BusIO@1.17.4",
+      "Adafruit Unified Sensor@1.1.15",
+      "OneWire@2.3.8",
+      "ArduinoJson@7.4.3"
+    ]
+  },
+  "cli_calls": [
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "code": 0,
+      "elapsed_ms": 30
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit GFX Library@1.13.0"
+      ],
+      "code": 0,
+      "elapsed_ms": 676
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit NeoPixel@1.15.5"
+      ],
+      "code": 0,
+      "elapsed_ms": 839
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit SSD1306@2.5.17"
+      ],
+      "code": 0,
+      "elapsed_ms": 571
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "ArduinoMqttClient@0.1.8"
+      ],
+      "code": 0,
+      "elapsed_ms": 511
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "DallasTemperature@4.0.6"
+      ],
+      "code": 0,
+      "elapsed_ms": 474
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "DHT sensor library@1.4.7"
+      ],
+      "code": 0,
+      "elapsed_ms": 428
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "ESP32Servo@3.2.1"
+      ],
+      "code": 0,
+      "elapsed_ms": 418
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit BusIO@1.17.4"
+      ],
+      "code": 0,
+      "elapsed_ms": 446
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit Unified Sensor@1.1.15"
+      ],
+      "code": 0,
+      "elapsed_ms": 406
+    },
+    {
+      "operation": "library-remove-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "OneWire@2.3.8"
+      ],
+      "code": 0,
+      "elapsed_ms": 481
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "code": 0,
+      "elapsed_ms": 21
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit GFX Library@1.13.0"
+      ],
+      "code": 0,
+      "elapsed_ms": 423
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit NeoPixel@1.15.5"
+      ],
+      "code": 0,
+      "elapsed_ms": 573
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit SSD1306@2.5.17"
+      ],
+      "code": 0,
+      "elapsed_ms": 470
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "ArduinoJson@7.4.3"
+      ],
+      "code": 0,
+      "elapsed_ms": 421
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "ArduinoMqttClient@0.1.8"
+      ],
+      "code": 0,
+      "elapsed_ms": 519
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "DallasTemperature@4.0.6"
+      ],
+      "code": 0,
+      "elapsed_ms": 432
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "DHT sensor library@1.4.7"
+      ],
+      "code": 0,
+      "elapsed_ms": 394
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "ESP32Servo@3.2.1"
+      ],
+      "code": 0,
+      "elapsed_ms": 430
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit BusIO@1.17.4"
+      ],
+      "code": 0,
+      "elapsed_ms": 433
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "Adafruit Unified Sensor@1.1.15"
+      ],
+      "code": 0,
+      "elapsed_ms": 443
+    },
+    {
+      "operation": "library-add-json",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "lib",
+        "download",
+        "OneWire@2.3.8"
+      ],
+      "code": 0,
+      "elapsed_ms": 437
+    },
+    {
+      "operation": "library-json-compile",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "code": 0,
+      "elapsed_ms": 21
+    },
+    {
+      "operation": "library-json-compile",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/builds/5cabfb9c6fc2e0888a95ebc2",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed"
+      ],
+      "code": 0,
+      "elapsed_ms": 101154
+    }
+  ]
+}

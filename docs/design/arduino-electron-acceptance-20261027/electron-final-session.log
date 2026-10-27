@@ -1,0 +1,142 @@
+Electron main: loading modules... [0.245 s since electron main start]
+Electron main: container created [0.995 s since electron main start]
+Electron main: modules loaded [0.996 s since electron main start]
+Electron main: resolving application [0.996 s since electron main start]
+Electron main: application resolved [0.998 s since electron main start]
+using electron user data area : '/private/tmp/nodu-arduino-electron-20261027/profile/electron'
+Backend main: entry point loaded [0.226 s since backend process start]
+Backend server: loading modules... [0.227 s since backend process start]
+Backend server: container created [0.349 s since backend process start]
+Backend server: modules loaded [0.536 s since backend process start]
+2026-10-26T17:31:18.343Z core:EnvVariablesServerImpl INFO Configuration directory URI: 'file:///private/tmp/nodu-arduino-electron-20261027/profile/config'
+Backend server: resolving application [0.549 s since backend process start]
+2026-10-26T17:31:18.618Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 245.2 ms [0.807 s since backend process start]
+2026-10-26T17:31:18.618Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 244.0 ms [0.807 s since backend process start]
+2026-10-26T17:31:18.620Z plugin-ext:PluginApiContribution INFO Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-26T17:31:18.621Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 249.3 ms [0.813 s since backend process start]
+2026-10-26T17:31:18.631Z core:BackendApplication INFO configured all backend app contributions
+2026-10-26T17:31:18.635Z core:BackendApplication INFO Theia app listening on http://127.0.0.1:24385.
+2026-10-26T17:31:18.635Z core:SettingServiceImpl INFO Settings file not found at '/private/tmp/nodu-arduino-electron-20261027/profile/config/backend-settings.json'. Falling back to defaults.
+2026-10-26T17:31:18.638Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/private/tmp/nodu-arduino-electron-20261027/profile/config/plugins does not exist.
+2026-10-26T17:31:18.638Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/private/tmp/nodu-arduino-electron-20261027/profile/config/deployedPlugins does not exist.
+2026-10-26T17:31:18.642Z core:Stopwatch INFO Backend application startup sequence completed (async work may still be pending): 11.6 ms [0.847 s since backend process start]
+2026-10-26T17:31:18.642Z core:Stopwatch INFO All backend contributions settled: 297.1 ms [0.847 s since backend process start]
+Starting backend: 896.6 ms [1.998 s since electron main start]
+2026-10-26T17:31:18.646Z core:Stopwatch INFO Resolve plugins list: 9.7 ms [0.851 s since backend process start]
+Attaching security token: 11.2 ms [2.009 s since electron main start]
+ElectronMessagingContribution.onStart: 3.8 ms [2.014 s since electron main start]
+TheiaMainApi.onStart: 3.1 ms [2.014 s since electron main start]
+ElectronApi.onStart: 0.1 ms [2.014 s since electron main start]
+Starting contributions: 4.5 ms [2.014 s since electron main start]
+Startup sequence completed: 912.9 ms [2.014 s since electron main start]
+2026-10-26T17:31:18.659Z core:Stopwatch INFO Deploy batch of 2 accepted plugins: 13.3 ms [0.864 s since backend process start]
+2026-10-26T17:31:18.659Z core:Stopwatch INFO Deploy plugins list: 23.2 ms [0.864 s since backend process start]
+2026-10-26T17:31:19.297Z core:WebsocketFrontendConnectionService INFO creating connection for 1
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-26T17:31:19.851Z core:FrontendStopwatch WARN Frontend keybindings.onStart took longer than the expected maximum 100 milliseconds: 112.9 ms [1.121 s since frontend page start]
+2026-10-26T17:31:20.281Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 393.3 ms [1.560 s since frontend page start]
+2026-10-26T17:31:20.298Z core:FrontendStopwatch INFO Start frontend contributions: 698.3 ms [1.564 s since frontend page start]
+2026-10-26T17:31:20.298Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-26T17:31:20.300Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-26T17:31:20.300Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-26T17:31:20.350Z core:FrontendStopwatch INFO [fc38c0d6-32d0-4225-a772-707a785ab832] Waiting for backend deployment: 61.6 ms [1.625 s since frontend page start]
+2026-10-26T17:31:20.415Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-26T17:31:20.415Z core:FrontendStopwatch INFO Initialize the workbench layout: 78.9 ms [1.657 s since frontend page start]
+2026-10-26T17:31:20.415Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-26T17:31:20.415Z core:FrontendStopwatch INFO [fc38c0d6-32d0-4225-a772-707a785ab832] Sync of 2 plugins: 40.8 ms [1.666 s since frontend page start]
+2026-10-26T17:31:20.453Z plugin-ext:HostedPluginSupport INFO [fc38c0d6-32d0-4225-a772-707a785ab832] Loading plugin contributions
+2026-10-26T17:31:20.453Z core:FrontendStopwatch INFO [fc38c0d6-32d0-4225-a772-707a785ab832] Load contributions of 2 plugins: 1.5 ms [1.728 s since frontend page start]
+2026-10-26T17:31:20.455Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-26T17:31:20.455Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-26T17:31:20.914Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-26T17:31:20.974Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 61513] PLUGIN_HOST(61513) starting instance
+2026-10-26T17:31:20.997Z plugin-host INFO PLUGIN_HOST(61513): PluginManagerExtImpl/init()
+2026-10-26T17:31:21.137Z plugin-ext:HostedPluginSupport INFO [fc38c0d6-32d0-4225-a772-707a785ab832] Starting plugins.
+2026-10-26T17:31:21.140Z core:FrontendStopwatch INFO [fc38c0d6-32d0-4225-a772-707a785ab832] Start of 2 plugins: 687.1 ms [2.418 s since frontend page start]
+2026-10-26T17:31:21.210Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 820.5 ms [2.489 s since frontend page start]
+2026-10-26T17:31:21.210Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-26T17:31:21.210Z core:FrontendStopwatch INFO All frontend contributions settled: 1623.3 ms [2.489 s since frontend page start]
+2026-10-26T17:31:21.210Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1443.0 ms [3.416 s since backend process start]
+2026-10-26T17:31:26.543Z core:WebsocketFrontendConnectionService INFO creating connection for 2
+2026-10-26T17:31:26.598Z core:WebsocketFrontendConnectionService INFO socket closed
+2026-10-26T17:31:26.598Z core:WebsocketFrontendConnectionService INFO closing connection for 1
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino-language'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-26T17:31:26.598Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+[61397:1027/013126.647430:ERROR:base/process/process_mac.cc:53] task_policy_set TASK_CATEGORY_POLICY: (os/kern) invalid argument (4)
+[61397:1027/013126.647459:ERROR:base/process/process_mac.cc:98] task_policy_set TASK_SUPPRESSION_POLICY: (os/kern) invalid argument (4)
+2026-10-26T17:31:26.995Z core:FrontendStopwatch WARN Frontend CommonFrontendContribution.configure took longer than the expected maximum 100 milliseconds: 110.7 ms [1.391 s since frontend page start]
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-26T17:31:28.153Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 1005.9 ms [2.556 s since frontend page start]
+2026-10-26T17:31:28.171Z core:FrontendStopwatch INFO Start frontend contributions: 1329.2 ms [2.564 s since frontend page start]
+2026-10-26T17:31:28.171Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-26T17:31:28.171Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-26T17:31:28.171Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-26T17:31:28.210Z core:FrontendStopwatch INFO [a42f915b-c6db-4132-a025-3113a170db21] Waiting for backend deployment: 48.4 ms [2.612 s since frontend page start]
+2026-10-26T17:31:28.225Z core:FrontendStopwatch INFO [a42f915b-c6db-4132-a025-3113a170db21] Sync of 2 plugins: 13.9 ms [2.626 s since frontend page start]
+2026-10-26T17:31:28.244Z plugin-ext:HostedPluginSupport INFO [a42f915b-c6db-4132-a025-3113a170db21] Loading plugin contributions
+2026-10-26T17:31:28.244Z core:FrontendStopwatch INFO [a42f915b-c6db-4132-a025-3113a170db21] Load contributions of 2 plugins: 1.3 ms [2.644 s since frontend page start]
+2026-10-26T17:31:28.280Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-26T17:31:28.280Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-26T17:31:28.640Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-26T17:31:28.640Z core:FrontendStopwatch INFO Initialize the workbench layout: 430.6 ms [3.006 s since frontend page start]
+2026-10-26T17:31:28.640Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-26T17:31:28.794Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 61609] PLUGIN_HOST(61609) starting instance
+2026-10-26T17:31:28.847Z plugin-host INFO PLUGIN_HOST(61609): PluginManagerExtImpl/init()
+2026-10-26T17:31:28.908Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-26T17:31:28.937Z plugin-ext:HostedPluginSupport INFO [a42f915b-c6db-4132-a025-3113a170db21] Starting plugins.
+2026-10-26T17:31:28.956Z core:FrontendStopwatch INFO [a42f915b-c6db-4132-a025-3113a170db21] Start of 2 plugins: 712.9 ms [3.360 s since frontend page start]
+2026-10-26T17:31:29.471Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 806.8 ms [3.873 s since frontend page start]
+2026-10-26T17:31:29.471Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-26T17:31:29.471Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 2491.4 ms [11.676 s since backend process start]
+2026-10-26T17:31:29.471Z core:FrontendStopwatch INFO All frontend contributions settled: 2638.8 ms [3.873 s since frontend page start]
+2026-10-27 01:31:44.574 Electron[61397:49885997] TSM AdjustCapsLockLEDForKeyTransitionHandling - _ISSetPhysicalKeyboardCapsLockLED Inhibit
+2026-10-26T17:34:10.315Z plugin-ext:LanguagesMainImpl ERROR Error: invalid range file:///private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/arduino_ui_c3.ino:28:0-28:0: could not be mapped to Arduino-preprocessed sketck.ino.cpp
+    at handleResponse (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:2078:40)
+    at handleMessage (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:1888:11)
+    at processMessageQueue (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:1903:13)
+    at Immediate.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:1879:11)
+    at process.processImmediate (node:internal/timers:504:21)
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-26T17:38:42.100Z core:WebsocketFrontendConnectionService INFO socket closed
+2026-10-26T17:38:42.102Z core:BackendApplication INFO >>> Stopping backend contributions...
+2026-10-26T17:38:42.106Z core:BackendApplication INFO <<< All backend contributions have been stopped.

@@ -1,0 +1,53 @@
+   Compiling nodu-embedded v0.2.1 (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.81s
+     Running unittests src/lib.rs (target/debug/deps/nodu_embedded-754ca71da3d745ae)
+
+running 45 tests
+test catalog::tests::rejects_path_like_ids ... ok
+test auto_boot::tests::configuration_is_opt_in_and_chip_scoped ... ok
+test auto_boot::tests::failure_releases_reset_without_another_pulse ... ok
+test auto_boot::tests::enter_exit_and_polarities ... ok
+test build::tests::bundle_digest_matches_p0_record ... ok
+test diag::tests::utf16_columns_skip_chinese_bytes ... ok
+test catalog::tests::erase_plans ... ok
+test exchange::tests::copy_excludes_machine_state_and_rejects_links ... ok
+test diag::tests::memory_usage_table ... ok
+test locks::tests::tty_and_cu_share_a_lock ... ok
+test locks::tests::port_lock_excludes_second_owner_and_names_holder ... ok
+test catalog::tests::shipped_packs_load_and_list ... ok
+test flash::tests::short_backup_is_discarded ... ok
+test monitor::tests::lent_monitor_keeps_status_and_rejects_connection_changes ... ok
+test flash::tests::identity_checks_reject_before_erase ... ok
+test probes::tests::mac_locations_distinguish_serialless_probes ... ok
+test probes::tests::pnp_reports_missing_driver ... ok
+test probes::tests::ioreg_finds_stlink_with_empty_serial ... ok
+test project::tests::hal_conf_keeps_disabled_modules_as_comments ... ok
+test diag::tests::enabled_module_falls_back_to_generic_rule ... ok
+test diag::tests::cmake_error_block ... ok
+test project::tests::names ... ok
+test stlink::tests::classification_order ... ok
+test stlink::tests::words_and_paths ... ok
+test process::tests::collects_both_streams_and_exit_code ... ok
+test service::arduino_port_tests::external_upload_keeps_cross_process_reservation_until_owned_release ... ok
+test diag::tests::linker_errors ... ok
+test diag::tests::compiler_lines_with_notes_and_flags ... ok
+test uart::tests::advertised_commands_and_page_erase_packets ... ok
+test uart::tests::automatic_sync_cancelled_before_writing ... ok
+test uart::tests::cancellation_before_wait_does_not_open_a_port ... ok
+test uart::tests::identifies_f103_over_rom_protocol ... ok
+test uart::tests::read_protection_is_reported_not_bypassed ... ok
+test uart::tests::stm32flash_arguments_carry_exact_length ... ok
+test uart::tests::write_packet_pads_to_four_and_rejects_nack_or_invalid_input ... ok
+test stlink::tests::selection_never_guesses_on_ambiguous_or_unreadable_targets ... ok
+test util::tests::civil_dates ... ok
+test util::tests::windows_tool_paths_preserve_drive_and_unc_identity ... ok
+test flash::tests::backups_seal_list_and_verify ... ok
+test project::tests::dacir_runtime_outputs_do_not_invalidate_build_inputs ... ok
+test flash::tests::automatic_isp_backs_up_programs_verifies_and_only_then_resets ... ok
+test uart::tests::already_synced_rom_answers_nack_and_counts_as_present ... ok
+test process::tests::carriage_return_progress_arrives_before_process_exit ... ok
+test process::tests::cancel_flag_stops_the_run ... ok
+test process::tests::timeout_ends_the_process_group ... ok
+
+test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.65s
+

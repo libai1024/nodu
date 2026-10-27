@@ -26,6 +26,7 @@ struct Running {
     port: String,
     baud: u32,
     profile: Option<AutoBoot>,
+    dtr: Option<bool>,
     stop: Arc<AtomicBool>,
     writer: Arc<Mutex<Option<Port>>>,
     thread: JoinHandle<ResourceLock>,
@@ -35,12 +36,13 @@ struct Running {
 pub struct Monitor {
     running: Option<Running>,
     lent: Option<(String, u32)>,
+    lent_dtr: Option<bool>,
 }
 
-fn open(port: &str, baud: u32, profile: Option<AutoBoot>) -> serialport::Result<Port> {
+fn open(port: &str, baud: u32, profile: Option<AutoBoot>, dtr: Option<bool>) -> serialport::Result<Port> {
     let mut handle = serialport::new(port, baud)
         .timeout(Duration::from_millis(40))
-        .dtr_on_open(profile.is_some_and(AutoBoot::idle_dtr))
+        .dtr_on_open(dtr.unwrap_or_else(|| profile.is_some_and(AutoBoot::idle_dtr)))
         .open()?;
     // No reset pulse; explicit auto-boot profiles keep BOOT0 low and reset inactive.
     if let Some(p) = profile { handle.write_request_to_send(p.idle_rts())?; }
@@ -69,17 +71,21 @@ impl Monitor {
     }
 
     pub fn open(&mut self, out: &Arc<Output>, port: &str, baud: u32, profile: Option<AutoBoot>) -> Outcome<Value> {
+        self.open_with_dtr(out, port, baud, profile, None)
+    }
+
+    pub fn open_with_dtr(&mut self, out: &Arc<Output>, port: &str, baud: u32, profile: Option<AutoBoot>, dtr: Option<bool>) -> Outcome<Value> {
         self.available()?;
         if !(1200..=4_000_000).contains(&baud) {
             return Err(Failure::new("badRequest", "波特率应在 1200–4000000 之间。"));
         }
-        if self.running.as_ref().is_some_and(|r| r.port == port && r.baud == baud && r.profile == profile) {
+        if self.running.as_ref().is_some_and(|r| r.port == port && r.baud == baud && r.profile == profile && r.dtr == dtr) {
             return Ok(self.status());
         }
         let previous = self.running.as_ref().map(|r| r.port.clone());
         let lock = match self.suspend() {
             Some((old, lock)) if canonical_port(&old) == canonical_port(port) => lock,
-            _ => match lock_port(port, "STM32 串口监视器") {
+            _ => match lock_port(port, "串口监视器") {
                 Ok(lock) => lock,
                 Err(error) => {
                     if let Some(old) = &previous { state(out, old, 0, "closed", None); }
@@ -88,27 +94,27 @@ impl Monitor {
             },
         };
         // Report a wrong path now; a port that later disappears is retried.
-        let first = match open(port, baud, profile) {
+        let first = match open(port, baud, profile, dtr) {
             Ok(handle) => handle,
             Err(error) => {
                 if let Some(old) = &previous { state(out, old, 0, "closed", None); }
                 return Err(Failure::new("portOpen", format!("无法打开串口 {port}：{error}")));
             }
         };
-        self.start(out, port, baud, lock, Some(first), profile);
+        self.start(out, port, baud, lock, Some(first), profile, dtr);
         Ok(self.status())
     }
 
-    fn start(&mut self, out: &Arc<Output>, port: &str, baud: u32, lock: ResourceLock, first: Option<Port>, profile: Option<AutoBoot>) {
+    fn start(&mut self, out: &Arc<Output>, port: &str, baud: u32, lock: ResourceLock, first: Option<Port>, profile: Option<AutoBoot>, dtr: Option<bool>) {
         let stop = Arc::new(AtomicBool::new(false));
         let writer: Arc<Mutex<Option<Port>>> = Arc::new(Mutex::new(None));
         let (thread_stop, thread_writer, thread_out) = (Arc::clone(&stop), Arc::clone(&writer), Arc::clone(out));
         let name = port.to_string();
         let thread = thread::spawn(move || {
-            run(&thread_out, &name, baud, &thread_stop, &thread_writer, first, profile);
+            run(&thread_out, &name, baud, &thread_stop, &thread_writer, first, profile, dtr);
             lock
         });
-        self.running = Some(Running { port: port.to_string(), baud, profile, stop, writer, thread });
+        self.running = Some(Running { port: port.to_string(), baud, profile, dtr, stop, writer, thread });
     }
 
     /// Stop reading and hand back the port lock (closing, or lending to ISP).
@@ -124,7 +130,16 @@ impl Monitor {
 
     pub fn resume(&mut self, out: &Arc<Output>, port: &str, baud: u32, lock: ResourceLock, profile: Option<AutoBoot>) {
         self.lent = None;
-        self.start(out, port, baud, lock, None, profile);
+        let dtr = self.lent_dtr.take();
+        self.start(out, port, baud, lock, None, profile, dtr);
+    }
+
+    /// A separate uploader can return the reservation without reopening a user-closed monitor.
+    pub fn finish_external(&mut self, out: &Arc<Output>, port: &str, baud: u32, lock: ResourceLock, restore: bool) {
+        self.lent = None;
+        let dtr = self.lent_dtr.take();
+        if restore { self.start(out, port, baud, lock, None, None, dtr); }
+        else { drop(lock); state(out, port, baud, "closed", None); }
     }
 
     pub fn available(&self) -> Outcome<()> {
@@ -133,6 +148,7 @@ impl Monitor {
 
     pub fn lend(&mut self, out: &Output) -> Option<(String, ResourceLock)> {
         let baud = self.running.as_ref()?.baud;
+        self.lent_dtr = self.running.as_ref()?.dtr;
         let (port, lock) = self.suspend()?;
         self.lent = Some((port.clone(), baud));
         state(out, &port, baud, "lent", None);
@@ -155,10 +171,10 @@ impl Monitor {
 }
 
 
-fn run(out: &Output, port: &str, baud: u32, stop: &AtomicBool, writer: &Mutex<Option<Port>>, mut first: Option<Port>, profile: Option<AutoBoot>) {
+fn run(out: &Output, port: &str, baud: u32, stop: &AtomicBool, writer: &Mutex<Option<Port>>, mut first: Option<Port>, profile: Option<AutoBoot>, dtr: Option<bool>) {
     let mut announced_missing = false;
     while !stop.load(Ordering::Relaxed) {
-        let handle = match first.take().map_or_else(|| open(port, baud, profile), Ok) {
+        let handle = match first.take().map_or_else(|| open(port, baud, profile, dtr), Ok) {
             Ok(handle) => handle,
             Err(e) => {
                 if !announced_missing {
@@ -221,7 +237,7 @@ mod tests {
     use super::*;
     #[test]
     fn lent_monitor_keeps_status_and_rejects_connection_changes() {
-        let mut monitor = Monitor { running: None, lent: Some(("/dev/cu.test".into(), 9600)) };
+        let mut monitor = Monitor { running: None, lent: Some(("/dev/cu.test".into(), 9600)), lent_dtr: Some(true) };
         let out = Arc::new(Output::new(Box::new(Vec::<u8>::new())));
         assert_eq!(monitor.status(), json!({"open":true,"port":"/dev/cu.test","baud":9600,"state":"lent"}));
         assert_eq!(monitor.open(&out, "/dev/cu.other", 115_200, None).unwrap_err().code, "portBusy");

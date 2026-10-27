@@ -1,0 +1,5 @@
+arduino_ui_c3.ino:6:3 [错误] 'nodu_ui_missing_setup' was not declared in this scope
+来源：Nodu 编译
+
+arduino_ui_c3.ino:10:3 [错误] 'nodu_ui_missing_loop' was not declared in this scope
+来源：Nodu 编译

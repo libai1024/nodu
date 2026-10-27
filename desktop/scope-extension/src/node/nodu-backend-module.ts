@@ -12,11 +12,28 @@ import { NoduEmbeddedServer } from './nodu-embedded-server';
 import { EmbeddedClient, NODU_EMBEDDED_PATH, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
 import { NODU_PROJECTS_PATH, NoduProjectsService } from '../common/nodu-launcher-protocol';
 import { NoduProjectsServer } from './nodu-projects-server';
+import { NoduArduinoServer, arduinoConnection } from './nodu-arduino-server';
+import { ArduinoClient, NODU_ARDUINO_PATH } from '../common/nodu-arduino-protocol';
+import { NoduArduinoLanguageServer } from './nodu-arduino-language';
+import { NODU_ARDUINO_LANGUAGE_PATH } from '../common/nodu-arduino-language-protocol';
 
 import { bindTutorBackend } from './tutor/tutor-backend-binding';
 
 export default new ContainerModule(bind => {
     bindTutorBackend(bind);
+    bind(NoduArduinoLanguageServer).toSelf().inSingletonScope();
+    bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler(NODU_ARDUINO_LANGUAGE_PATH, () => {
+        const server = ctx.container.get(NoduArduinoLanguageServer);
+        return Object.assign(Object.create(null), { spec: server.spec.bind(server) });
+    })).inSingletonScope();
+    bind(NoduArduinoServer).toSelf().inSingletonScope();
+    bind(BackendApplicationContribution).toDynamicValue(ctx => ({ onStop: () => ctx.container.get(NoduArduinoServer).onStop() })).inSingletonScope();
+    bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler<ArduinoClient>(NODU_ARDUINO_PATH, client => {
+        const server = ctx.container.get(NoduArduinoServer);
+        const connection = arduinoConnection(server, client);
+        client.onDidCloseConnection(() => connection.dispose());
+        return connection.service;
+    })).inSingletonScope();
     bind(NoduDeviceServer).toSelf().inSingletonScope();
     bind(BackendApplicationContribution).toService(NoduDeviceServer);
     bind(NoduResourcesServer).toSelf().inSingletonScope();

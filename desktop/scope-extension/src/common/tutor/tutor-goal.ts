@@ -5,6 +5,7 @@ import type { TutorLocalCheck } from './tutor-local-check';
 import { isSafeCoursePath } from './tutor-course';
 
 export interface TutorProjectContext { key: string; mcu: string; sdk: string; files: string[];
+    arduino?: { profile: string; fqbn: string; coreVersion: string; libraries: { name: string; version: string; direct: boolean }[] };
     localCheck?: TutorLocalCheck;
     declarations?: { path: string; text: string }[];
     build?: { status: 'current' | 'stale' | 'none' | 'unavailable'; scope: 'saved-project'; bundle?: string; currentBufferSaved?: boolean;

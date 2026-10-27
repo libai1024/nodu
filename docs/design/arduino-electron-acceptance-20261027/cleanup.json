@@ -1,0 +1,14 @@
+{
+  "remainingOwnedProcesses": [],
+  "ports": {
+    "24385": {
+      "listening": false,
+      "output": ""
+    },
+    "24379": {
+      "listening": false,
+      "output": ""
+    }
+  },
+  "closedOnlyAcceptanceApplication": true
+}

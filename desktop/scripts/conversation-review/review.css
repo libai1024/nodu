@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: MIT */
+html, body, #review { margin: 0; min-height: 100%; }
+body { background: var(--theia-editor-background); color: var(--theia-foreground); font: 13px/20px -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+nav { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--theia-panel-border); }
+nav span { flex: 1; color: var(--theia-descriptionForeground); }
+nav button { background: var(--theia-button-secondaryBackground); color: var(--theia-button-secondaryForeground); border: 1px solid var(--theia-panel-border); border-radius: 4px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.review-stage { display: flex; justify-content: center; padding: 24px; }
+.review-frame { display: flex; flex-direction: column; height: 720px; border: 1px solid var(--theia-panel-border); background: var(--theia-sideBar-background); }
+.review-titlebar { display: flex; flex: none; align-items: center; height: 35px; padding: 0 6px 0 12px; gap: 6px; border-bottom: 1px solid var(--theia-panel-border); }
+.review-titlebar > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.review-frame .nodu-ai-workspace { flex: 1; min-height: 0; }

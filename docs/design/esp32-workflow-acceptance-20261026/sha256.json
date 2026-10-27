@@ -1,0 +1,14 @@
+{
+  "result.json": "f1c208f881394bb3a04d5a929afb3c0d0d14b4a796122d1144cbb31157458540",
+  "service-c3-result.json": "e79c8c63b8d1df1577b1cdc52a322e55e3a7c6e38d5dbac84ed20c48cff414f5",
+  "nodu-esp32-workbench-tests.txt": "489fe718b7d3a504024a37ed11a685ed3fdf58d1ce683f8ba4cf726c4c4322ec",
+  "emulator-s3.txt": "ba2a6216172f12983efef0d5fb570cec54244606b5c662466470e220e8087024",
+  "compile-c3.txt": "67a03dc0d3438b224a7b03d859ece29d227da7c9392770ecb5c2539c6cdb9d9a",
+  "service-c3.txt": "d4b52656412cf3f19d3c986ebea6b27c0b1e744a2788f9d2906246236edadae1",
+  "verification.json": "b9bb5b83dc7fa94a0a1ab28e52b75df435f6851583a94738b09e637df2bef90c",
+  "compile-s3.txt": "cb8c92d4242b130f0954cec67abb8e537be193a345710f3e917014ff96179fd6",
+  "nodu-arduino-final-tests.txt": "dcfa0151ca2fed0419231fef38bf56a7e73cce76b92458b6cb18dbb24cc5818f",
+  "nodu-esp32-electron-build.txt": "9c2eefdcc7014dd06ef7017938036c15bc7a402090d167ee97035e918579463b",
+  "emulator-c3.txt": "818ffa858601c97df780f52e864f7cf526f1b4bf5cb6b0ee3eba475c810d18d3",
+  "nodu-esp32-phase1-tests.txt": "601312a0482fe40cc4a4b5114789231f55bbf4fba33696cd73149b3356603453"
+}

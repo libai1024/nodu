@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-26",
+  "implemented": [
+    "ESP32 framework picker with official local logos; Arduino default",
+    "Standard Arduino sketch/profile generation",
+    "Isolated pinned CLI compile; source save, diagnostics, cancellation and per-connection ownership"
+  ],
+  "tests": {
+    "targeted": 102,
+    "workbench": 123,
+    "finalArduino": 9,
+    "countsOverlap": true
+  },
+  "realEvidence": [
+    "Generated C3 sketch compiled and prints Hello, ESP32! in ESP-EMU",
+    "Generated S3 sketch compiled and prints Hello, ESP32! in ESP-EMU",
+    "NoduArduinoServer.compile real C3 invocation succeeds"
+  ],
+  "uiReview": {
+    "disposition": "ship",
+    "scope": "NewProjectForm light/dark captures and implementation; not full workbench UI"
+  },
+  "notYetImplemented": [
+    "Library Manager sidebar",
+    "Preinstalled third-party library bundle",
+    "Tool package installer UI",
+    "Upload and serial restore",
+    "Arduino Language Server"
+  ],
+  "notYetVerified": [
+    "ROM writing",
+    "Physical board upload and reconnect",
+    "Full Electron button flow"
+  ]
+}

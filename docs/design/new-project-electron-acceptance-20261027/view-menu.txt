@@ -1,0 +1,48 @@
+Window: "main.py - ui_entry_k210 - 见微 Nodu", App: Nodu New Project Check.
+0 查看, Secondary Actions: Cancel, Pick
+	1 菜单 Secondary Actions: Cancel
+		2 打开视图…, ID: itemSelected:
+		3 命令面板…, ID: itemSelected:
+		4 外观
+			5 菜单 Secondary Actions: Cancel
+				6 进入全屏, ID: itemSelected:
+				7 切换最大化, ID: itemSelected:
+				8 切换底部面板, ID: itemSelected:
+				9 切换状态栏可见性, ID: itemSelected:
+				10 折叠所有侧面板, ID: itemSelected:
+				11 放大, ID: itemSelected:
+				12 缩小, ID: itemSelected:
+				13 重置缩放, ID: itemSelected:
+		14 编辑器布局
+			15 菜单 Secondary Actions: Cancel
+				16 向右拆分编辑器, ID: itemSelected:
+				17 向左拆分编辑器, ID: itemSelected:
+				18 向上拆分编辑器, ID: itemSelected:
+				19 向下拆分编辑器, ID: itemSelected:
+				20 水平拆分编辑器, ID: itemSelected:
+				21 垂直拆分编辑器, ID: itemSelected:
+		22 大纲, ID: itemSelected:
+		23 开发板文件, ID: itemSelected:
+		24 设备与连接, ID: itemSelected:
+		25 输出, ID: itemSelected:
+		26 搜索, ID: itemSelected:
+		27 问题, ID: itemSelected:
+		28 帧缓冲, ID: itemSelected:
+		29 资源管理器, ID: itemSelected:
+		30 Call Hierarchy, ID: itemSelected:
+		31 Debug, ID: itemSelected:
+		32 Debug Console, ID: itemSelected:
+		33 Plugins, ID: itemSelected:
+		34 Source Control, ID: itemSelected:
+		35 Type Hierarchy, ID: itemSelected:
+		36 简洁模式, ID: itemSelected:
+		37 专业模式, ID: itemSelected:
+		38 文件列表, ID: itemSelected:
+		39 开发面板, ID: itemSelected:
+		40 帧缓冲, ID: itemSelected:
+		41 查看：切换自动换行, ID: itemSelected:
+		42 切换缩略图, ID: itemSelected:
+		43 切换面包屑导航, ID: itemSelected:
+		44 切换呈现空格, ID: itemSelected:
+		45 切换粘性滚动, ID: itemSelected:
+		46 重新加载窗口, ID: itemSelected:

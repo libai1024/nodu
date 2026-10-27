@@ -1,0 +1,242 @@
+Window: "arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu", App: Nodu Arduino Check.
+0 标准窗口 arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu, Secondary Actions: Raise
+	1 container arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu
+		2 container
+			3 HTML 内容 arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu, URL: file:///Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/frontend/index.html?port=24385#/private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3
+				4 container
+					5 container
+						6 container Nodu 工具栏
+							7 切换按钮 Description: 开发板与串口，ESP32C3 Dev Module，未选择串口, Help: ESP32C3 Dev Module，未选择串口, Value: 0
+							8 container 编译与烧录
+								9 按钮 Description: 编译, Help: 编译（Ctrl / ⌘ B）
+								10 按钮 (disabled) Description: 烧录, Help: 烧录现有构建
+								11 按钮 (disabled) Description: 运行（编译并烧录）, Help: 运行：编译并烧录（Ctrl / ⌘ R）
+								12 按钮 (disabled) 停止
+							13 弹出式按钮 视图与更多操作
+							14 弹出式按钮 设置
+						15 按钮 Description: 搜索项目 arduino_ui_c3 中的文件, Help: 搜索文件 (⌘P)
+					16 container
+						17 container $(debug-disconnect) 未连接, 管理设备
+							18 text  未连接
+						19 container $(codicon-error) 1 $(codicon-warning) 0, 1 Errors
+							20 text  1  0
+						21 按钮 固件版本 无
+						22 container 行 9，列 10, Go to Line/Column
+							23 文本 行 9，列 10
+						24 container 串行端口 无
+							25 文本 串行端口：
+						26 container 帧缓冲帧率
+							27 文本 FPS：
+						28 container LF, 选择行尾序列
+							29 文本 LF
+						30 container UTF-8, 选择编码
+							31 文本 UTF-8
+						32 container 空格：2, Select Indentation
+							33 文本 空格：2
+						34 container $(bracket), [object HTMLDivElement]
+							35 文本 
+						36 container C++, 选择语言模式
+							37 文本 C++
+						38 container 无通知
+							39 文本 
+						40 按钮 切换底部面板
+					41 container
+						42 container
+							43 标签组
+								44 文本 
+								45 文本 
+								46 文本 
+								47 文本 
+								48 文本 
+								49 文本 
+								50 文本 
+							51 弹出式按钮 Description: 项目菜单, Help: arduino_ui_c3
+								52 图像 见微 Nodu
+						53 container
+							54 文本 资源管理器
+							55 按钮 更多操作...
+							56 container 资源管理器
+								57 container
+									58 container
+										59 文本 
+										60 文本 打开的编辑器
+									61 container
+										62 文本 
+										63 文本 ARDUINO_UI_C3
+									64 container
+										65 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/.nodu
+											66 文本 
+											67 文本 
+											68 文本 .nodu
+										69 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/.theia
+											70 文本 
+											71 文本 
+											72 文本 .theia
+										73 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/.vscode
+											74 文本 
+											75 文本 
+											76 文本 .vscode
+										77 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/.gitignore
+											78 文本 
+											79 文本 .gitignore
+										80 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/arduino_ui_c3.ino
+											81 文本 
+											82 文本 arduino_ui_c3.ino
+											83 文本 1
+										84 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/clipboard-check.txt
+											85 文本 
+											86 文本 clipboard-check.txt
+										87 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/lsp-crash.txt.py
+											88 文本 
+											89 文本 lsp-crash.txt.py
+										90 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/nodu.json
+											91 文本 
+											92 文本 nodu.json
+										93 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/review-helper.h
+											94 文本 
+											95 文本 review-helper.h
+										96 container /private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3/sketch.yaml
+											97 文本 
+											98 文本 sketch.yaml
+						99 container
+							100 标签组
+								101 container
+									102 文本 
+									103 文本 
+									104 text  arduino_ui_c3.ino
+									105 文本 1
+								106 文本 
+								107 文本 
+								108 文本 lsp-crash.txt.py
+								109 文本 
+								110 文本 clipboard-check.txt
+							111 内容列表
+								112 container
+									113 文本 
+									114 文本 arduino_ui_c3.ino
+									115 文本 
+								116 container
+									117 文本 
+									118 文本 setup
+							119 container
+								120 editor (settable) 编辑器内容
+								121 container
+									122 container class JsonDocument provided by "ArduinoJson/Document/JsonDocument.hpp" A JSON document. https://arduinojson.org/v7/api/jsondocument/ // In namespace ArduinoJson class JsonDocument : public detail::VariantOperators<const JsonDocument &> {}
+										123 container
+											124 标题 class JsonDocument, Value: 3
+												125 文本 class 
+												126 文本 JsonDocument
+											127 文本 provided by 
+											128 文本 "ArduinoJson/Document/JsonDocument.hpp"
+											129 文本 A JSON document.
+											130 link Description: https://arduinojson.org/v7/api/jsondocument/, Value: file:///Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/frontend/index.html?port=24385
+											131 container
+												132 text //  In namespace ArduinoJson class JsonDocument : public  detail :: VariantOperators < const JsonDocument & > {}
+								133 container
+									134 列表框 Suggest
+										135 container
+											136 (selected)  available (), Method
+												137 文本 
+												138 文本  available
+												139 文本 ()
+											140  availableForWrite (), Method
+												141 文本 
+												142 文本  availableForWrite
+												143 文本 ()
+											144  baudRate (), Method
+												145 文本 
+												146 文本  baudRate
+												147 文本 ()
+											148  begin (unsigned long baud, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1, bool invert = false, unsigned long timeout_ms = 20000UL, uint8_t rxfifo_full_thrhd = 120), Method
+												149 文本 
+												150 文本  begin
+												151 文本 (unsigned long baud, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1, bool invert = false, unsigned long timeout_ms = 20000UL, uint8_t rxfifo_full_thrhd = 120)
+											152  enableRxInternalPull (bool enable = true), Method
+												153 文本 
+												154 文本  enableRxInternalPull
+												155 文本 (bool enable = true)
+											156  end (), Method
+												157 文本 
+												158 文本  end
+												159 文本 ()
+											160  eventQueueReset (), Method
+												161 文本 
+												162 文本  eventQueueReset
+												163 文本 ()
+											164  flush (…), Method
+												165 文本 
+												166 文本  flush
+												167 文本 (…)
+											168  onReceive (OnReceiveCb function, bool onlyOnTimeout = false), Method
+												169 文本 
+												170 文本  onReceive
+												171 文本 (OnReceiveCb function, bool onlyOnTimeout = false)
+											172  onReceiveError (OnReceiveErrorCb function), Method
+												173 文本 
+												174 文本  onReceiveError
+												175 文本 (OnReceiveErrorCb function)
+											176  peek (), Method
+												177 文本 
+												178 文本  peek
+												179 文本 ()
+											180  read (…), Method
+												181 文本 
+												182 文本  read
+												183 文本 (…)
+						184 container 开发面板
+							185 container
+								186 标签组 K210 开发面板
+									187 标签 (settable, integer) 编译输出, Value: 0
+									188 标签 (selected) 串口监视, Value: 1
+									189 标签 (settable, integer) 终端, Value: 0
+									190 标签 (settable, integer) 问题 1 个问题, Help: 问题, Value: 0
+								191 切换按钮 Description: 时间戳, Value: 0
+								192 切换按钮 Description: 暂停显示, Help: 暂停显示，继续接收, Value: 0
+								193 切换按钮 Description: 十六进制显示, Value: 0
+								194 按钮 保存日志
+								195 按钮 复制输出
+								196 按钮 清空
+								197 按钮 面板更多操作
+								198 按钮 最大化面板
+								199 按钮 Description: 收起面板, Help: 收起面板（⌘/Ctrl+J）
+							200 container 串口监视
+								201 container
+									202 文本 未连接
+									203 组合框 (settable) Description: 串口, Value: 选择串口
+										204 文本 选择串口
+									205 组合框 (settable) Description: 波特率, Value: 57600
+										206 文本 57600
+									207 组合框 (settable) Description: 编码, Value: GBK
+										208 文本 GBK
+									209 按钮 (disabled) 打开
+									210 container 串口输出
+									211 文本栏 (disabled) Description: 发送到串口, Placeholder: 发送到开发板
+									212 组合框 (settable) Description: 发送行尾, Value: \r\n
+										213 文本 \r\n
+									214 按钮 (disabled) 发送
+						215 container
+							216 标签组
+								217 文本 
+								218 文本 
+								219 文本 
+						220 container
+							221 文本 帧缓冲
+							222 container 帧缓冲
+								223 文本 当前工程暂无图像来源
+					224 文本 Loading...
+	225 关闭按钮
+	226 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	227 最小化按钮
+228 menu bar
+	229 Nodu Arduino Check
+	230 文件
+	231 编辑
+	232 选择
+	233 查看
+	234 转到
+	235 工具
+	236 终端
+	237 窗口
+	238 帮助
+
+The focused UI element is 136 (selected)  available (), Method

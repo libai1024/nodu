@@ -20,6 +20,7 @@
           "editor.scrollBeyondLastLine": false,
           "editor.renderWhitespace": "none",
           "editor.wordWrap": "on",
+          "files.autoSave": "afterDelay",
           "window.title": "${activeEditorShort}${separator}${rootName}${separator}见微 Nodu",
           "workbench.colorTheme": "scope-dark",
           "security.workspace.trust.enabled": false

@@ -1,0 +1,138 @@
+{
+  "started": "2026-10-26T16:05:56.971Z",
+  "finished": "2026-10-26T16:10:43.957Z",
+  "ok": true,
+  "hardware_accessed": false,
+  "tools": {
+    "arduino_cli": {
+      "Application": "arduino-cli",
+      "VersionString": "1.5.1",
+      "Commit": "Homebrew",
+      "Status": "",
+      "Date": "2026-06-05T09:39:33Z"
+    },
+    "arduino_esp32_core": "3.3.12",
+    "esptool": "5.3.1",
+    "esp_emu": "0.46.0"
+  },
+  "raw_evidence": "/private/tmp/nodu-arduino-config-service-20261027-KouCEv/run-FUjuie",
+  "cases": [
+    {
+      "chip": "esp32c3",
+      "options": {
+        "FlashFreq": "40",
+        "DebugLevel": "warn"
+      },
+      "profile_fqbn": "esp32:esp32:esp32c3:JTAGAdapter=default,CDCOnBoot=default,PartitionScheme=default,CPUFreq=160,FlashMode=qio,FlashFreq=40,FlashSize=4M,UploadSpeed=921600,DebugLevel=warn,EraseFlash=none,ZigbeeMode=default",
+      "build_fqbn": "esp32:esp32:esp32c3:JTAGAdapter=default,CDCOnBoot=default,PartitionScheme=default,CPUFreq=160,FlashMode=qio,FlashFreq=40,FlashSize=4M,UploadSpeed=921600,DebugLevel=warn,EraseFlash=none,ZigbeeMode=default",
+      "order_changed": false,
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "elapsed_ms": 88783
+      },
+      "upload": {
+        "ok": true,
+        "stale": false
+      },
+      "flash": {
+        "bytes": 4194304,
+        "sha256": "273a45d5d442f6d6d3230d0f8de50e0614a9c6c7f187a0fa7e2371c49d11534a",
+        "options": [
+          "--flash-mode",
+          "dio",
+          "--flash-freq",
+          "40m",
+          "--flash-size",
+          "4MB"
+        ],
+        "segments": [
+          {
+            "address": 0,
+            "size": 19536,
+            "file": "configured_esp32c3.ino.bootloader.bin"
+          },
+          {
+            "address": 32768,
+            "size": 3072,
+            "file": "configured_esp32c3.ino.partitions.bin"
+          },
+          {
+            "address": 57344,
+            "size": 8192,
+            "file": "boot_app0.bin"
+          },
+          {
+            "address": 65536,
+            "size": 293520,
+            "file": "configured_esp32c3.ino.bin"
+          }
+        ]
+      },
+      "hello": true,
+      "ok": true,
+      "verify_output": "esptool v5.3.1\nSerial port socket://127.0.0.1:50352:\nNote: Pre-connection option \"no-reset\" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.\nNote: It's not possible to reset the chip over a TCP socket. Automatic resetting to bootloader has been disabled, reset the chip manually.\nConnecting...\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\nConnected to ESP32-C3 on socket://127.0.0.1:50352:\nChip type:          ESP32-C3 (QFN32) (revision v0.3)\nFeatures:           Wi-Fi, BT 5 (LE), Single Core, 160MHz\nCrystal frequency:  40MHz\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\nMAC:                24:0a:c4:00:00:01\n\n\nEnabling default SPI flash mode...\nConfiguring flash size...\nSHA digest in image updated.\nVerifying 0x4c50 (19536) bytes at 0x00000000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/e55df6ceb2521759262491ca/configured_esp32c3.ino.bootloader.bin'...\nVerification successful (digest matched).\nVerifying 0xc00 (3072) bytes at 0x00008000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/e55df6ceb2521759262491ca/configured_esp32c3.ino.partitions.bin'...\nVerification successful (digest matched).\nVerifying 0x2000 (8192) bytes at 0x0000e000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/e55df6ceb2521759262491ca/boot_app0.bin'...\nVerification successful (digest matched).\nVerifying 0x47a90 (293520) bytes at 0x00010000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/e55df6ceb2521759262491ca/configured_esp32c3.ino.bin'...\nVerification successful (digest matched).\n\nStaying in bootloader.\n",
+      "boot_output": "\n    ╻ ╻ ╻ ╻\n   ┏┻━┻━┻━┻┓    ┏━╸┏━┓┏━┓   ┏━╸┏┳┓╻ ╻\n  ━┫       ┣━   ┣╸ ┗━┓┣━┛╺━╸┣╸ ┃┃┃┃ ┃\n  ━┫ ESP32 ┣━   ┗━╸┗━┛╹     ┗━╸╹ ╹┗━┛\n  ━┫       ┣━\n   ┗┳━┳━┳━┳┛    ESP32 series emulator · v0.46.0\n    ╹ ╹ ╹ ╹     https://github.com/espressif/esp-emulator\n\nESP-ROM:esp32c3-api1-20210207\r\nBuild:Feb  7 2021\r\nrst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)\r\nSPIWP:0xee\r\nmode:DIO, clock div:2\r\nload:0x3fcd5820,len:0x110c\r\nload:0x403cbf10,len:0xb54\r\nload:0x403ce710,len:0x2f9c\r\nentry 0x403cbf10\r\nHello, ESP32!\r\n"
+    },
+    {
+      "chip": "esp32s3",
+      "options": {
+        "CPUFreq": "160",
+        "FlashMode": "dio",
+        "DebugLevel": "warn"
+      },
+      "profile_fqbn": "esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=disabled,FlashMode=dio,FlashSize=4M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=160,UploadSpeed=921600,DebugLevel=warn,EraseFlash=none,ZigbeeMode=default",
+      "build_fqbn": "esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=disabled,FlashMode=dio,FlashSize=4M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=160,UploadSpeed=921600,DebugLevel=warn,EraseFlash=none,ZigbeeMode=default",
+      "order_changed": false,
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "elapsed_ms": 95827
+      },
+      "upload": {
+        "ok": true,
+        "stale": false
+      },
+      "flash": {
+        "bytes": 4194304,
+        "sha256": "93067b580fa4258cd99aff9b9e9a97949c7e2267ee1c74e0f36c9247647c1e52",
+        "options": [
+          "--flash-mode",
+          "dio",
+          "--flash-freq",
+          "80m",
+          "--flash-size",
+          "4MB"
+        ],
+        "segments": [
+          {
+            "address": 0,
+            "size": 18720,
+            "file": "configured_esp32s3.ino.bootloader.bin"
+          },
+          {
+            "address": 32768,
+            "size": 3072,
+            "file": "configured_esp32s3.ino.partitions.bin"
+          },
+          {
+            "address": 57344,
+            "size": 8192,
+            "file": "boot_app0.bin"
+          },
+          {
+            "address": 65536,
+            "size": 284928,
+            "file": "configured_esp32s3.ino.bin"
+          }
+        ]
+      },
+      "hello": true,
+      "ok": true,
+      "verify_output": "esptool v5.3.1\nSerial port socket://127.0.0.1:53189:\nNote: Pre-connection option \"no-reset\" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.\nNote: It's not possible to reset the chip over a TCP socket. Automatic resetting to bootloader has been disabled, reset the chip manually.\nConnecting...\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\nConnected to ESP32-S3 on socket://127.0.0.1:53189:\nChip type:          ESP32-S3 (QFN56) (revision v0.0)\nFeatures:           Wi-Fi, BT 5 (LE), Dual Core + LP Core, 240MHz\nCrystal frequency:  40MHz\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\n\nDevice VID/PID identification is only supported on COM and absolute device paths.\nMAC:                24:0a:c4:00:00:01\n\n\nEnabling default SPI flash mode...\nConfiguring flash size...\nSHA digest in image updated.\nVerifying 0x4920 (18720) bytes at 0x00000000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/0d8b2557495958b055b6965b/configured_esp32s3.ino.bootloader.bin'...\nVerification successful (digest matched).\nVerifying 0xc00 (3072) bytes at 0x00008000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/0d8b2557495958b055b6965b/configured_esp32s3.ino.partitions.bin'...\nVerification successful (digest matched).\nVerifying 0x2000 (8192) bytes at 0x0000e000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/0d8b2557495958b055b6965b/boot_app0.bin'...\nVerification successful (digest matched).\nVerifying 0x45900 (284928) bytes at 0x00010000 in flash against '/private/tmp/nodu-arduino-config-service-20261027-KouCEv/home/builds/0d8b2557495958b055b6965b/configured_esp32s3.ino.bin'...\nVerification successful (digest matched).\n\nStaying in bootloader.\n",
+      "boot_output": "\n    ╻ ╻ ╻ ╻\n   ┏┻━┻━┻━┻┓    ┏━╸┏━┓┏━┓   ┏━╸┏┳┓╻ ╻\n  ━┫       ┣━   ┣╸ ┗━┓┣━┛╺━╸┣╸ ┃┃┃┃ ┃\n  ━┫ ESP32 ┣━   ┗━╸┗━┛╹     ┗━╸╹ ╹┗━┛\n  ━┫       ┣━\n   ┗┳━┳━┳━┳┛    ESP32 series emulator · v0.46.0\n    ╹ ╹ ╹ ╹     https://github.com/espressif/esp-emulator\n\nESP-ROM:esp32s3-20210327\r\nBuild:Mar 27 2021\r\nrst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)\r\nSPIWP:0xee\r\nmode:DIO, clock div:1\r\nload:0x3fce2820,len:0xfb0\r\nload:0x403c8700,len:0xaf4\r\nload:0x403cb700,len:0x2e24\r\nentry 0x403c8898\r\nHello, ESP32!\r\n"
+    }
+  ]
+}

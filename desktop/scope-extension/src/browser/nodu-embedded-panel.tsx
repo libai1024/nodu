@@ -14,8 +14,13 @@ import { Message } from '@theia/core/shared/@lumino/messaging';
 import { C_COMMANDS } from './nodu-embedded-commands';
 import { Diagnostic } from '../common/nodu-embedded-protocol';
 import { NoduEmbeddedModel, PanelTab, formatBytes } from './nodu-embedded-model';
+import { NoduSelect } from './nodu-select';
 
-const LINE_ENDINGS: Record<string, string> = { lf: '\n', crlf: '\r\n', none: '' };
+const LINE_ENDINGS: Record<string, string> = { lf: '\n', cr: '\r', crlf: '\r\n', none: '' };
+const LINE_ENDING_OPTIONS = [
+    { value: 'crlf', label: '\\r\\n' }, { value: 'lf', label: '\\n' },
+    { value: 'cr', label: '\\r' }, { value: 'none', label: '无' },
+];
 
 /** Bottom panel for C projects: 问题 · 串口监视器 · 编译输出 (UI-DESIGN §7). */
 @injectable()
@@ -154,7 +159,7 @@ export class NoduEmbeddedPanel extends ReactWidget {
             </>;
         }
         if (model.panelTab === 'output') {
-            return <><button className="nodu-panel-icon" aria-label="打开产物目录" title="打开 BIN/HEX 所在目录" onClick={() => void this.commands.executeCommand(C_COMMANDS.openBuildLocation)}><i className="codicon codicon-folder-opened" aria-hidden="true"/></button>
+            return <>{model.isC && <button className="nodu-panel-icon" aria-label="打开产物目录" title="打开 BIN/HEX 所在目录" onClick={() => void this.commands.executeCommand(C_COMMANDS.openBuildLocation)}><i className="codicon codicon-folder-opened" aria-hidden="true"/></button>}
                 <button className="nodu-panel-icon" aria-label="复制输出" title="复制输出" onClick={() => void this.clipboard.writeText(model.output.join('\n'))}><i className="codicon codicon-copy" aria-hidden="true"/></button></>;
         }
         return null;
@@ -201,17 +206,18 @@ export class NoduEmbeddedPanel extends ReactWidget {
 
     private monitor(): React.ReactNode {
         const model = this.model;
-        const project = model.project;
         const state = model.monitor;
         const snapshot = this.snapshot();
-        const canSend = state.state === 'open' && !model.monitorBusy && !model.flashing && model.awaitUser !== 'exitBoot';
+        const canSend = state.open && state.state === 'open' && !model.monitorLocked;
         const send = async (): Promise<void> => {
             if (!this.draft || this.sending || !canSend) { return; }
             const draft = this.draft;
             this.sending = true; this.update();
-            const sent = await model.sendMonitor(draft + (LINE_ENDINGS[this.lineEnding] ?? ''));
-            if (sent && this.draft === draft) { this.draft = ''; }
-            this.sending = false; this.update();
+            try {
+                const sent = await model.sendMonitor(draft + (LINE_ENDINGS[this.lineEnding] ?? ''));
+                if (sent && this.draft === draft) { this.draft = ''; }
+            } catch (error) { model.monitorError = error instanceof Error ? error.message : '发送失败'; }
+            finally { this.sending = false; this.update(); }
         };
         return <div className="nodu-c-monitor">
             {/* Hosted: shown only when the panel is too narrow for the header row (CSS container query). */}
@@ -226,10 +232,9 @@ export class NoduEmbeddedPanel extends ReactWidget {
             <div className="nodu-c-monitor-input">
                 <input aria-label="发送到串口" placeholder="发送到开发板" value={this.draft} disabled={!canSend || this.sending}
                     onChange={event => { this.draft = event.currentTarget.value; this.update(); }}
-                    onKeyDown={event => { if (event.key === 'Enter' && !(event.nativeEvent as KeyboardEvent).isComposing) { event.preventDefault(); void send(); } }}/>
-                <select aria-label="行尾" value={this.lineEnding} onChange={event => { this.lineEnding = event.currentTarget.value; this.update(); }}>
-                    <option value="crlf">CR LF</option><option value="lf">LF</option><option value="none">无</option>
-                </select>
+                    onKeyDown={event => { if (event.key === 'Enter' && !(event.nativeEvent as KeyboardEvent).isComposing && event.keyCode !== 229) { event.preventDefault(); void send(); } }}/>
+                <NoduSelect aria-label="发送行尾" className="nodu-c-monitor-ending" value={this.lineEnding} options={LINE_ENDING_OPTIONS}
+                    onChange={value => { this.lineEnding = value; this.update(); }}/>
                 <button className="theia-button secondary" disabled={!canSend || !this.draft || this.sending} onClick={() => void send()}>发送</button>
             </div>
         </div>;
@@ -238,31 +243,31 @@ export class NoduEmbeddedPanel extends ReactWidget {
     /** Port, baud, encoding and open/close; in the bottom panel these sit in its header row. */
     private connection(): React.ReactNode {
         const model = this.model;
-        const project = model.project;
+        const config = model.monitorConfig;
         const state = model.monitor;
         const status = state.state === 'open' ? '已连接'
             : state.state === 'disconnected' ? '等待重连'
             : state.state === 'lent' ? '下载中' : '未连接';
         return <>
                 <span className={`nodu-c-monitor-state nodu-c-monitor-${state.state}`} role="status" title={status}><span className="scope-status-dot" aria-hidden="true"/><span className="nodu-c-monitor-label">{status}</span></span>
-            <select aria-label="串口" disabled={model.monitorBusy || model.flashing || state.state === 'lent'} value={model.monitorPort} onChange={event => model.setMonitorPort(event.currentTarget.value)}>
-                <option value="">选择串口</option>
-                {model.monitorPort && !model.ports.some(port => port.path === model.monitorPort) && <option value={model.monitorPort}>{model.monitorPort.replace('/dev/', '')}（未连接）</option>}
-                {model.ports.map(port => <option key={port.path} value={port.path}>{port.path.replace('/dev/', '')}</option>)}
-            </select>
-            <select aria-label="波特率" disabled={model.monitorBusy || model.flashing || state.state === 'lent'} value={project?.manifest.monitor?.baud ?? 115200} onChange={event => void model.setOption('monitorBaud', Number(event.currentTarget.value))}>
-                {[9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600].map(b => <option key={b} value={b}>{b}</option>)}
-            </select>
-            <select aria-label="编码" value={project?.manifest.monitor?.encoding ?? 'utf-8'} onChange={event => void model.setOption('monitorEncoding', event.currentTarget.value)}>
-                <option value="utf-8">UTF-8</option><option value="gbk">GBK</option>
-            </select>
-            <button className="theia-button secondary" aria-busy={model.monitorBusy} disabled={!model.monitorPort || model.monitorBusy || model.flashing || state.state === 'lent'} onClick={() => void model.toggleMonitor()}>{state.open ? '关闭' : '打开'}</button>
+            <NoduSelect aria-label="串口" className="nodu-c-monitor-port" disabled={model.monitorSettingsLocked || state.state === 'lent'} value={model.monitorPort}
+                options={[{ value: '', label: '选择串口' },
+                    ...(model.monitorPort && !model.ports.some(port => port.path === model.monitorPort) ? [{ value: model.monitorPort, label: `${model.monitorPort.replace('/dev/', '')}（未连接）` }] : []),
+                    ...model.ports.map(port => ({ value: port.path, label: port.path.replace('/dev/', '') }))]}
+                onChange={value => model.setMonitorPort(value)}/>
+            <NoduSelect aria-label="波特率" className="nodu-c-monitor-baud" disabled={model.monitorSettingsLocked || state.state === 'lent'} value={config.baud}
+                options={[9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600].map(value => ({ value, label: String(value) }))}
+                onChange={value => void model.setOption('monitorBaud', Number(value))}/>
+            <NoduSelect aria-label="编码" className="nodu-c-monitor-encoding" disabled={model.monitorSettingsLocked || state.state === 'lent'} value={config.encoding}
+                options={[{ value: 'utf-8', label: 'UTF-8' }, { value: 'gbk', label: 'GBK' }]}
+                onChange={value => void model.setOption('monitorEncoding', value)}/>
+            <button className="theia-button secondary" aria-busy={model.monitorBusy} disabled={!model.monitorPort || model.monitorLocked || state.state === 'lent'} onClick={() => void model.toggleMonitor()}>{state.open ? '关闭' : '打开'}</button>
         </>;
     }
 
     private snapshot(): MonitorSnapshot {
         return this.paused ?? { lines: [...this.model.monitorLines], partial: this.model.monitorPartial,
-            partialAt: this.model.monitorPartialAt, hex: this.model.monitorBytes.hex() };
+            partialAt: this.model.monitorPartialAt, hex: this.model.monitorHex ?? this.model.monitorBytes.hex() };
     }
 
     private async saveLog(): Promise<void> {

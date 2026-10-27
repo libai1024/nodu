@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-27",
+  "sourceArchives": 39,
+  "sourceBytes": 425136248,
+  "licenseFiles": 142,
+  "totalComponents": 25,
+  "completeComponents": 5,
+  "releaseReady": false,
+  "sourceLockSha256": "ec465ad97d2ed2fe41f6de51c3a2a9cba58be24d22d97b3b9872fbb1898f95af",
+  "sourceManifestSha256": "5e08fc0acce2b64f11b4edb9becd12c8e0b9e15f32d37cb642170a3d9527a0fa",
+  "integrityTests": {
+    "command": "python3 desktop/scripts/collect-arduino-release-sources.test.py -v",
+    "passed": 7,
+    "failed": 0
+  },
+  "realSourceVerification": {
+    "command": "python3 desktop/scripts/collect-arduino-release-sources.py --verify-only --require-complete",
+    "exitCode": 1,
+    "expected": true,
+    "reason": "All retained archives verify; 20 component source closures remain explicitly incomplete."
+  },
+  "nativeSyntaxCheck": {
+    "command": "node --check desktop/scripts/build-arduino-native-ctags.cjs",
+    "exitCode": 0
+  },
+  "nativeRebuild": {
+    "runs": 2,
+    "identicalHash": true,
+    "binarySha256": "b765ca33d809b23160a6c953ebcd6f180913a1e02488949efcc49ac1127e18eb",
+    "scope": "Same build host/toolchain. Does not assert reproducibility across Xcode versions."
+  }
+}

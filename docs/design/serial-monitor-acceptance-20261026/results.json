@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-26",
+  "serial_tests": {
+    "pass": 28,
+    "fail": 0,
+    "skip": 0
+  },
+  "workbench_tests": {
+    "pass": 123,
+    "fail": 0,
+    "skip": 0
+  },
+  "device_context_and_monitor_tests": {
+    "pass": 32,
+    "fail": 0,
+    "overlaps_serial_tests": true
+  },
+  "typescript": "pass",
+  "electron_build": "pass",
+  "diff_check": "pass",
+  "ui": "production components with simulated serial service; light 1080px / dark 400px; no native selects; 72x24px line-ending control; no text or row overflow",
+  "hardware": "not tested",
+  "artifacts": {
+    "dark-narrow.png": "0a8d458bd8ac847c207b44568f2ecaa65e581343f8b9128da2134b71f6bf048a",
+    "serial-tests.log": "0797e2e976e6eb15880630146b5cf9d1fdd56b00e900b51bfeed4196ddef6801",
+    "workbench-tests.log": "2595e95a7243ea23c966d1531e942f92facd722858a97f740249b82a1f7df4d1",
+    "electron-build.log": "1d613a32c08e72914c8f968438097fbc4a924620bf243fdb80ebf5a1197cb1e3",
+    "device-tests.log": "1f0a9ca203eda0f0574b553b1235beae3105fdfaf2f072e90db095927738bfda",
+    "light-wide.png": "f0a4f1c034aa2118df103fe9dc1e9b826e922dee0ef33c813bad050ad41e947d"
+  }
+}

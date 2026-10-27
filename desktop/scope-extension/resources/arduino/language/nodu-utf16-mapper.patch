@@ -1,0 +1,80 @@
+--- a/vendor/go.bug.st/lsp/textedits/textedits.go
++++ b/vendor/go.bug.st/lsp/textedits/textedits.go
+@@ -48,40 +48,36 @@
+ // GetOffset computes the offset in the text expressed by the lsp.Position.
+ // Returns OutOfRangeError if the position is out of range.
+ func GetOffset(text string, pos lsp.Position) (int, error) {
+-	// Find line
+ 	lineOffset, err := GetLineOffset(text, pos.Line)
+ 	if err != nil {
+ 		return -1, err
+ 	}
+ 	character := pos.Character
+-	if character == 0 {
+-		return lineOffset, nil
+-	}
+-
+-	// Find the character and return its offset within the text
+-	var count = len(text[lineOffset:])
+-	for offset, c := range text[lineOffset:] {
+-		if character == offset {
+-			// We've found the character
++	lineText := text[lineOffset:]
++	units, lineEnd := 0, len(text)
++	for offset, c := range lineText {
++		// LSP columns exclude the newline, including the CR of CRLF.
++		if c == '\n' || c == '\r' && offset+1 < len(lineText) && lineText[offset+1] == '\n' {
++			lineEnd = lineOffset + offset
++			break
++		}
++		if character == units {
+ 			return lineOffset + offset, nil
+ 		}
+-		if c == '\n' {
+-			// We've reached the end of line. LSP spec says we should default back to the line length.
+-			// See https://microsoft.github.io/language-server-protocol/specifications/specification-3-14/#position
+-			if character > offset {
+-				return lineOffset + offset, nil
+-			}
+-			count = offset
+-			break
++		width := 1
++		if c > 0xffff {
++			width = 2
+ 		}
++		if character > units && character < units+width {
++			return -1, fmt.Errorf("character %d splits a UTF-16 surrogate pair", character)
++		}
++		units += width
+ 	}
+-	if character > 0 {
+-		// We've reached the end of the last line. Default to the text length (see above).
+-		return len(text), nil
++	if character < 0 {
++		return -1, OutOfRangeError{"Character", units, character}
+ 	}
+-
+-	// We haven't found the character in the text (character index was negative)
+-	return -1, OutOfRangeError{"Character", count, character}
++	// Exact EOL or a column beyond EOL clamps to this line, never later lines.
++	return lineEnd, nil
+ }
+ 
+ // GetLineOffset finds the offset/position of the beginning of a line within the text.
+--- a/sourcemapper/ino.go
++++ b/sourcemapper/ino.go
+@@ -255,12 +255,12 @@
+ 
+ 	// Update line references
+ 	for deletedLines > 0 {
+-		dirty = dirty || s.deleteCppLine(cppRange.Start.Line)
++		dirty = s.deleteCppLine(cppRange.Start.Line) || dirty
+ 		deletedLines--
+ 	}
+ 	addedLines := strings.Count(inoChange.Text, "\n")
+ 	for addedLines > 0 {
+-		dirty = dirty || s.addInoLine(cppRange.Start.Line)
++		dirty = s.addInoLine(cppRange.Start.Line) || dirty
+ 		addedLines--
+ 	}
+ 	return

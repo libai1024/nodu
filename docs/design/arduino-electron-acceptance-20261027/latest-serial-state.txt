@@ -1,0 +1,156 @@
+Window: "arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu", App: Nodu Arduino Check.
+0 标准窗口 arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu, Secondary Actions: Raise
+	1 container arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu
+		2 container
+			3 HTML 内容 arduino_ui_c3.ino - arduino_ui_c3 - 见微 Nodu, URL: file:///Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/frontend/index.html?port=24385#/private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3
+				4 container
+					5 container
+						6 按钮 Description: 搜索项目 arduino_ui_c3 中的文件, Help: 搜索文件 (⌘P)
+						7 container Nodu 工具栏
+							8 切换按钮 Description: 开发板与串口，ESP32C3 Dev Module，未选择串口, Help: ESP32C3 Dev Module，未选择串口, Value: 0
+							9 container 编译与烧录
+								10 按钮 Description: 编译, Help: 编译（Ctrl / ⌘ B）
+								11 按钮 (disabled) Description: 烧录, Help: 烧录现有构建
+								12 按钮 (disabled) Description: 运行（编译并烧录）, Help: 运行：编译并烧录（Ctrl / ⌘ R）
+								13 按钮 (disabled) 停止
+							14 弹出式按钮 视图与更多操作
+							15 弹出式按钮 设置
+							16 文本 编译完成
+					17 container
+						18 container $(debug-disconnect) 未连接, 管理设备
+							19 text  未连接
+						20 container $(codicon-error) 0 $(codicon-warning) 0, 无问题
+							21 text  0  0
+						22 按钮 固件版本 无
+						23 container 行 14，列 25, Go to Line/Column
+							24 文本 行 14，列 25
+						25 container 串行端口 无
+							26 文本 串行端口：
+						27 container 帧缓冲帧率
+							28 文本 FPS：
+						29 container LF, 选择行尾序列
+							30 文本 LF
+						31 container UTF-8, 选择编码
+							32 文本 UTF-8
+						33 container 空格：2, Select Indentation
+							34 文本 空格：2
+						35 container $(bracket), [object HTMLDivElement]
+							36 文本 
+						37 container C++, 选择语言模式
+							38 文本 C++
+						39 container 无通知
+							40 文本 
+						41 按钮 切换底部面板
+					42 container
+						43 container
+							44 标签组
+								45 文本 
+								46 文本 
+								47 文本 
+								48 文本 
+								49 文本 
+								50 文本 
+								51 文本 
+							52 弹出式按钮 Description: 项目菜单, Help: arduino_ui_c3
+								53 图像 见微 Nodu
+						54 container
+							55 文本 库管理
+							56 container 库管理
+								57 container 库管理
+									58 文本栏 (settable) Description: 搜索库, Value: ArduinoJson
+									59 组合框 (settable) Description: 筛选库, Value: 全部
+										60 文本 全部
+									61 按钮 刷新库索引
+									62 内容列表
+										63 container
+											64 text ArduinoJson 7.4.3 Benoit Blanchon A simple and efficient JSON library for embedded C++.
+											65 组合框 (settable) Description: ArduinoJson 版本, Value: 7.4.3
+												66 文本 7.4.3
+											67 按钮 (disabled) 已安装
+											68 按钮 Description: 移除 ArduinoJson, Help: 从项目移除
+										69 container
+											70 text JsonLogic Gabriel Kim , json-logic-cpp contributors Evaluate portable JsonLogic rules against ArduinoJson data.
+											71 组合框 (settable) Description: JsonLogic 版本, Value: 0.1.0
+												72 文本 0.1.0
+											73 按钮 安装
+										74 container
+											75 text QuarkDB Anirban A No-SQL Json Document DB based on ArduinoJson 6 with command line interface and APIs for esp8266 and esp32 using SPIFFS
+											76 组合框 (settable) Description: QuarkDB 版本, Value: 1.0.4
+												77 文本 1.0.4
+											78 按钮 安装
+						79 container
+							80 标签组
+								81 文本 
+								82 文本 arduino_ui_c3.ino
+								83 文本 
+								84 文本 
+								85 文本 lsp-crash.txt.py
+								86 文本 
+								87 文本 clipboard-check.txt
+							88 内容列表
+								89 container
+									90 文本 
+									91 文本 arduino_ui_c3.ino
+									92 文本 
+								93 container
+									94 文本 
+									95 文本 setup
+							96 container
+								97 editor (settable) 编辑器内容
+						98 container 开发面板
+							99 container
+								100 标签组 K210 开发面板
+									101 标签 (settable, integer) 编译输出, Value: 0
+									102 标签 (selected) 串口监视, Value: 1
+									103 标签 (settable, integer) 终端, Value: 0
+									104 标签 (settable, integer) 问题, Value: 0
+								105 切换按钮 Description: 时间戳, Value: 0
+								106 切换按钮 Description: 暂停显示, Help: 暂停显示，继续接收, Value: 0
+								107 切换按钮 Description: 十六进制显示, Value: 0
+								108 按钮 保存日志
+								109 按钮 复制输出
+								110 按钮 清空
+								111 按钮 面板更多操作
+								112 按钮 最大化面板
+								113 按钮 Description: 收起面板, Help: 收起面板（⌘/Ctrl+J）
+							114 container 串口监视
+								115 container
+									116 文本 未连接
+									117 组合框 (settable) Description: 串口, Value: 选择串口
+										118 文本 选择串口
+									119 组合框 (settable) Description: 波特率, Value: 57600
+										120 文本 57600
+									121 组合框 (settable) Description: 编码, Value: GBK
+										122 文本 GBK
+									123 按钮 (disabled) 打开
+									124 container 串口输出
+									125 文本栏 (disabled) Description: 发送到串口, Placeholder: 发送到开发板
+									126 组合框 (settable) Description: 发送行尾, Value: \r\n
+										127 文本 \r\n
+									128 按钮 (disabled) 发送
+						129 container
+							130 标签组
+								131 文本 
+								132 文本 
+								133 文本 
+						134 container
+							135 文本 帧缓冲
+							136 container 帧缓冲
+								137 文本 当前工程暂无图像来源
+					138 文本 Serial.println(reviewValue());
+	139 关闭按钮
+	140 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	141 最小化按钮
+142 menu bar
+	143 Nodu Arduino Check
+	144 文件
+	145 编辑
+	146 选择
+	147 查看
+	148 转到
+	149 工具
+	150 终端
+	151 窗口
+	152 帮助
+
+The focused UI element is 102 标签 (selected) 串口监视, Value: 1

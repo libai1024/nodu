@@ -145,4 +145,5 @@ export interface MonitorSnapshot {
     message?: string;
 }
 export interface MonitorData { port: string; session: string; data: string }
-export interface MonitorWriteResult { sent: number }
+/** New backends include the exact encoded wire bytes for TX display. */
+export interface MonitorWriteResult { sent: number; data?: string }

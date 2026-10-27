@@ -1,0 +1,36 @@
+{
+  "request": {
+    "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+    "operationId": "e2e-service-c3"
+  },
+  "home": "/tmp/nodu-arduino-e2e-20261026",
+  "elapsed_seconds": 44.266,
+  "result": {
+    "ok": true,
+    "stale": false,
+    "diagnostics": [],
+    "buildPath": "/tmp/nodu-arduino-e2e-20261026/builds/276645d7951c6c666103e88c"
+  },
+  "events": [
+    {
+      "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+      "operationId": "e2e-service-c3",
+      "line": "Arduino · esp32:esp32:esp32c3"
+    },
+    {
+      "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+      "operationId": "e2e-service-c3",
+      "line": "Sketch uses 276958 bytes (21%) of program storage space. Maximum is 1310720 bytes."
+    },
+    {
+      "path": "/tmp/nodu-arduino-e2e-20261026/nodu_esp32c3_hello",
+      "operationId": "e2e-service-c3",
+      "line": "Global variables use 13200 bytes (4%) of dynamic memory, leaving 314480 bytes for local variables. Maximum is 327680 bytes."
+    }
+  ],
+  "profile_unchanged": true,
+  "firmware": {
+    "path": "/tmp/nodu-arduino-e2e-20261026/builds/276645d7951c6c666103e88c/nodu_esp32c3_hello.ino.merged.bin",
+    "sha256": "2a908648d225485f98cd8e7813b348d0d4d33e52f7a6d03ec268c0a508ae9578"
+  }
+}

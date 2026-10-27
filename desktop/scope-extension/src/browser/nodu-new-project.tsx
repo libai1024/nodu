@@ -4,9 +4,11 @@ import { DialogProps } from '@theia/core/lib/browser/dialogs';
 import { ReactDialog } from '@theia/core/lib/browser/dialogs/react-dialog';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { URI } from '@theia/core/lib/common/uri';
-import { PROJECT_CHIPS, PROJECT_FAMILIES, ProjectFamily, projectTemplates, validProjectName } from '../common/nodu-project-catalog';
+import { ESP_PROJECT_FRAMEWORKS, EspProjectFramework, PROJECT_CHIPS, PROJECT_FAMILIES, ProjectFamily, projectTemplates, validProjectName } from '../common/nodu-project-catalog';
 import { EmbeddedError, NoduEmbeddedModel } from './nodu-embedded-model';
-import { ChipMark } from './nodu-project-icon';
+import { ChipMark, FrameworkMark } from './nodu-project-icon';
+import { NoduSelect } from './nodu-select';
+import '../../style/new-project.css';
 
 interface Deps { model: NoduEmbeddedModel; dialogs: FileDialogService; parent: string; family?: ProjectFamily; onBusyChange?: (busy: boolean) => void; onCreated: (project: { path: string }) => void }
 
@@ -14,7 +16,7 @@ export class NoduNewProjectDialog extends ReactDialog<undefined> {
     constructor(props: DialogProps, private readonly deps: Deps) {
         super(props);
         this.node.classList.add('nodu-new-project-dialog');
-        this.contentNode.classList.add('scope-widget');
+        this.contentNode.classList.add('nodu-new-project-content');
     }
     get value(): undefined { return undefined; }
     protected render(): React.ReactNode { return <NewProjectForm {...this.deps} close={() => this.close()} />; }
@@ -27,6 +29,8 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
     const [chipId, setChipId] = React.useState(PROJECT_CHIPS.find(c => c.family === initialFamily)!.id);
     const [expanded, setExpanded] = React.useState({ stm32: initialFamily.startsWith('stm32'), esp32: initialFamily === 'esp32' });
     const [templateId, setTemplateId] = React.useState('empty');
+    const [framework, setFramework] = React.useState<EspProjectFramework>('arduino');
+    const frameworkButtons = React.useRef<(HTMLButtonElement | null)[]>([]);
     const [name, setName] = React.useState(`hello-${initialFamily}`);
     const [nameEdited, setNameEdited] = React.useState(false);
     const [parent, setParent] = React.useState(initialParent);
@@ -38,12 +42,17 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
     const changeBusy = (value: boolean): void => { pending.current = value; if (mounted.current) { setBusy(value); onBusyChange?.(value); } };
     const [nameTouched, setNameTouched] = React.useState(false);
     const nameOk = validProjectName(name);
-    const templates = projectTemplates(family, chipId);
+    const templates = projectTemplates(family, chipId, framework);
     const chips = PROJECT_CHIPS.filter(chip => chip.family === family);
     const switchFamily = (next: ProjectFamily): void => {
         setFamily(next); setChipId(PROJECT_CHIPS.find(c => c.family === next)!.id); setError('');
-        if (!projectTemplates(next).some(t => t.id === templateId)) { setTemplateId('empty'); }
+        if (!projectTemplates(next, undefined, framework).some(t => t.id === templateId)) { setTemplateId('empty'); }
         if (!nameEdited) { setName(`hello-${next}`); }
+    };
+    const switchFramework = (next: EspProjectFramework): void => {
+        if (pending.current) { return; }
+        setFramework(next); setError('');
+        if (!projectTemplates(family, chipId, next).some(t => t.id === templateId)) { setTemplateId('empty'); }
     };
     const choose = async (): Promise<void> => {
         if (pending.current) { return; }
@@ -59,7 +68,7 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
         if (!nameOk || !parent.trim() || pending.current) { return; }
         changeBusy(true); setError('');
         try {
-            const project = await model.call<{ path: string }>('createWorkspace', { parent, name, chip: chipId, template: templateId });
+            const project = await model.call<{ path: string }>('createWorkspace', { parent, name, chip: chipId, template: templateId, ...(family === 'esp32' ? { framework } : {}) });
             if (mounted.current) { close(); onCreated(project); }
         } catch (e) {
             if (mounted.current) { setError(e instanceof EmbeddedError || e instanceof Error ? e.message : String(e)); }
@@ -87,6 +96,23 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
                 </div>
             </nav>
             <div className="nodu-np-fields">
+                {family === 'esp32' && <div className="nodu-np-control">
+                    <span className="nodu-np-label" id="nodu-project-framework-label">开发框架</span>
+                    <div className="nodu-np-frameworks" role="radiogroup" aria-labelledby="nodu-project-framework-label">
+                        {ESP_PROJECT_FRAMEWORKS.map((item, index) => <button key={item.id} type="button" role="radio"
+                            ref={button => { frameworkButtons.current[index] = button; }}
+                            className={`nodu-np-framework${framework === item.id ? ' is-selected' : ''}`}
+                            aria-checked={framework === item.id} tabIndex={framework === item.id ? 0 : -1} disabled={busy}
+                            onClick={() => switchFramework(item.id)} onKeyDown={event => {
+                                if (busy || event.nativeEvent.isComposing || event.keyCode === 229) { return; }
+                                const delta = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
+                                if (!delta && event.key !== 'Home' && event.key !== 'End') { return; }
+                                event.preventDefault(); event.stopPropagation();
+                                const next = event.key === 'Home' ? 0 : event.key === 'End' ? ESP_PROJECT_FRAMEWORKS.length - 1 : (index + delta + ESP_PROJECT_FRAMEWORKS.length) % ESP_PROJECT_FRAMEWORKS.length;
+                                switchFramework(ESP_PROJECT_FRAMEWORKS[next].id); frameworkButtons.current[next]?.focus();
+                            }}><FrameworkMark framework={item.id}/><span>{item.name}</span></button>)}
+                    </div>
+                </div>}
                 <div className="nodu-np-control">
                     <label className="nodu-np-label" htmlFor="nodu-project-name">名称</label>
                     <input id="nodu-project-name" value={name} disabled={busy} onChange={event => { setName(event.currentTarget.value); setNameEdited(true); setError(''); }}
@@ -102,15 +128,13 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
                 <div className="nodu-np-row">
                     {chips.length > 1 && <div className="nodu-np-control">
                         <label className="nodu-np-label" htmlFor="nodu-project-chip">型号</label>
-                        <select id="nodu-project-chip" value={chipId} disabled={busy} onChange={event => { setChipId(event.currentTarget.value); setError(''); }}>
-                            {chips.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                        </select>
+                        <NoduSelect id="nodu-project-chip" aria-label="型号" value={chipId} disabled={busy}
+                            onChange={value => { setChipId(value); setError(''); }} options={chips.map(c => ({ value: c.id, label: c.name }))}/>
                     </div>}
                     <div className="nodu-np-control">
                         <label className="nodu-np-label" htmlFor="nodu-project-template">模板</label>
-                        <select id="nodu-project-template" value={templateId} disabled={busy} onChange={event => { setTemplateId(event.currentTarget.value); setError(''); }}>
-                            {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                        </select>
+                        <NoduSelect id="nodu-project-template" aria-label="模板" value={templateId} disabled={busy}
+                            onChange={value => { setTemplateId(value); setError(''); }} options={templates.map(t => ({ value: t.id, label: t.name }))}/>
                     </div>
                 </div>
                 {error && <p className="nodu-np-error scope-error" role="alert">{error}</p>}

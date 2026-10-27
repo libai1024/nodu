@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-26",
+  "method": "Native Edge via CUA; actual TSX components and product CSS; isolated model/backend fixtures",
+  "scope": [
+    "ArduinoLibraries",
+    "NoduArduinoDevicePanel",
+    "NoduSelect"
+  ],
+  "checks": [
+    {
+      "name": "light and dark themes",
+      "passed": true
+    },
+    {
+      "name": "official Arduino mark visible in device popover",
+      "passed": true
+    },
+    {
+      "name": "board keyboard selection sends esp32:esp32:esp32c3",
+      "passed": true
+    },
+    {
+      "name": "advanced FlashSize menu sends options.FlashSize=4M",
+      "passed": true
+    },
+    {
+      "name": "search SSD1306 narrows library list",
+      "passed": true
+    },
+    {
+      "name": "selected version 2.5.14 is passed to library change command",
+      "passed": true
+    },
+    {
+      "name": "successful installation displays pinned version and removal control",
+      "passed": true
+    },
+    {
+      "name": "removal returns the library to installable state",
+      "passed": true
+    },
+    {
+      "name": "operation lock disables board, port, options, install and refresh",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "This verifies rendered frontend components with mocked service results, not an integrated Electron upload or hardware operation.",
+    "Model and contribution sequencing, dual-port settings, cancellation and stale-source behavior are separately covered in source-based unit tests."
+  ],
+  "fixesDuringReview": [
+    "Advanced options now declare grid display and wrap long labels.",
+    "Framework logo styling moved to shared project-icon CSS.",
+    "Library mutation refresh preserves visible rows and query debouncing no longer flashes a false empty state."
+  ]
+}

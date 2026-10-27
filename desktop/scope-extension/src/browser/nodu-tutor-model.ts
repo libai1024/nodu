@@ -17,7 +17,7 @@ import { emptyGoal, TutorGoalRequest, TutorGoalState } from '../common/tutor/tut
 import { TutorLocalRule } from '../common/tutor/tutor-local-check';
 import { TutorLineHistoryCache } from '../common/tutor/tutor-line-history';
 import { TutorContext, validateTutorContexts, requestBuffer } from '../common/tutor/tutor-context';
-import { TutorChatItem, TutorChatSnapshot, TutorConversation, TutorConversationStore, conversationPrompt, chatContextRefs, redactChatSecrets } from '../common/tutor/tutor-conversation';
+import { TutorChatItem, TutorChatSnapshot, TutorConversation, TutorConversationStore, TutorHistoryEntry, conversationDisplayTitle, conversationPrompt, chatContextRefs, redactChatSecrets } from '../common/tutor/tutor-conversation';
 export type { TutorChatItem, TutorChatStatus } from '../common/tutor/tutor-conversation';
 import { ScopeLayoutState } from './scope-layout-state';
 
@@ -107,15 +107,66 @@ export class NoduTutorModel {
     get conversationLoading(): boolean { return this.historySyncing; }
     get conversations() { return this.conversationProject ? this.conversationStore.list(this.conversationProject, this.mode) : []; }
     get activeConversationId(): string | undefined { return this.conversationRecords[this.mode]?.id; }
-    get activeConversationTitle(): string { return this.conversationRecords[this.mode]?.title ?? '新对话'; }
-    get historyEntries() { return this.conversationProject ? this.conversationStore.history(this.conversationProject) : []; }
+    get activeConversationTitle(): string {
+        const record = this.conversationRecords[this.mode];
+        return record ? conversationDisplayTitle({ ...record, messages: this.messages[this.mode], draft: this.drafts[this.mode], contexts: [...this.pins] }) : '新对话';
+    }
+    get activeConversationArchived(): boolean { return !!this.conversationRecords[this.mode]?.archived; }
+    get canManageActiveConversation(): boolean {
+        return !!this.activeConversationId && (!!this.messages[this.mode].length || !!this.drafts[this.mode].trim() || !!this.pins.length
+            || !!this.historyEntries.find(entry => entry.id === this.activeConversationId && entry.mode === this.mode));
+    }
+    conversationName(id: string, mode: TutorMode): string {
+        const record = this.conversationProject && this.conversationStore.read(id, this.conversationProject, mode);
+        return record ? record.customTitle ?? conversationDisplayTitle(record) : this.activeConversationTitle;
+    }
+    get historyEntries(): TutorHistoryEntry[] {
+        const entries = this.conversationProject ? this.conversationStore.history(this.conversationProject) : [];
+        return entries.map(entry => entry.id === this.activeConversationId && entry.mode === this.mode
+            ? { ...entry, title: this.activeConversationTitle, status: this.busy ? 'pending' : [...this.messages[this.mode]].reverse().find(m => m.role === 'assistant')?.status } : entry);
+    }
+    renameConversation(id: string, mode: TutorMode, title: string): void {
+        this.updateConversationMetadata(id, mode, () => this.conversationStore.rename(id, this.conversationProject!, mode, title));
+    }
+    setConversationArchived(id: string, mode: TutorMode, archived: boolean): void {
+        this.updateConversationMetadata(id, mode, () => this.conversationStore.setArchived(id, this.conversationProject!, mode, archived));
+    }
+    private updateConversationMetadata(id: string, mode: TutorMode, update: () => TutorConversation): void {
+        if (!this.conversationProject || this.busy || this.historySyncing) { throw new Error('请等待当前对话完成后再操作'); }
+        const record = this.conversationRecords[mode];
+        if (record?.id === id) {
+            this.persistConversation(mode);
+            if (this.historyStorageError) { this.notify(); throw new Error(this.historyStorageError); }
+        }
+        const current = this.conversationRecords[mode];
+        if (record?.id === id && current?.id !== id) { throw new Error('对话已另存，请重新选择后操作'); }
+        const saved = update();
+        if (current?.id === id) { this.conversationRecords[mode] = { ...current, customTitle: saved.customTitle, title: saved.title, archived: saved.archived }; }
+        this.persistenceError = undefined; this.notify();
+        if (this.historyStorageError) { throw new Error(this.historyStorageError); }
+    }
     showHistory(show: boolean): void { this.historyOpen = show; this.notify(); }
     setConversationSidebarOpen(show: boolean): void {
         this.conversationSidebarOpen = show; this.historyOpen = false;
         try { localStorage.setItem('nodu.tutor.conversation-sidebar', String(show)); } catch { /* Layout remains usable without storage. */ }
         this.notify();
     }
-    get canSendChat(): boolean { return this.enabled && !!this.workspaceId && this.connectionState === 'connected' && !this.historySyncing && !this.busy; }
+    private readonly pendingContexts = new Map<string, number>();
+    private contextIdentity(): string { return JSON.stringify([this.workspaceId, this.mode, this.epoch, this.activeConversationId]); }
+    get contextLoading(): boolean { return !!this.pendingContexts.get(this.contextIdentity()); }
+    beginContextTransfer(): () => void {
+        const identity = this.contextIdentity();
+        this.pendingContexts.set(identity, (this.pendingContexts.get(identity) ?? 0) + 1); this.notify();
+        let finished = false;
+        return () => {
+            if (finished) { return; }
+            finished = true;
+            const pending = (this.pendingContexts.get(identity) ?? 1) - 1;
+            if (pending) { this.pendingContexts.set(identity, pending); } else { this.pendingContexts.delete(identity); }
+            this.notify();
+        };
+    }
+    get canSendChat(): boolean { return this.enabled && !!this.workspaceId && this.connectionState === 'connected' && !this.historySyncing && !this.contextLoading && !this.busy; }
     private loading = 0;
     private refreshing = 0;
     private sync: Promise<void> = Promise.resolve();
@@ -460,7 +511,7 @@ export class NoduTutorModel {
         const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
         if (!workspace) { return []; }
         const files = await this.service.listChatContextFiles(workspace);
-        return workspace === this.workspaceId && mode === this.mode && epoch === this.epoch ? files.filter(path => mode === 'ask' || !/\.py$/i.test(path)) : [];
+        return workspace === this.workspaceId && mode === this.mode && epoch === this.epoch ? files.filter(path => mode === 'ask' || !/\.(py|ino)$/i.test(path)) : [];
     }
     async addCurrentContext(kind: 'file' | 'selection'): Promise<boolean> {
         const buffer = this.buffer;
@@ -497,27 +548,28 @@ export class NoduTutorModel {
         } catch (error) { this.contextError = error instanceof Error ? error.message : '无法读取终端输出'; this.notify(); return false; }
     }
     async addContextFile(path: string): Promise<boolean> {
-        const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
-        if (!workspace) { return false; }
-        try {
-            const context = await this.service.readChatContext(workspace, path);
-            if (workspace !== this.workspaceId || mode !== this.mode || epoch !== this.epoch) { return false; }
-            return this.addContext(context);
-        } catch (error) { if (workspace === this.workspaceId && mode === this.mode && epoch === this.epoch) { this.contextError = error instanceof Error ? error.message : '附件读取失败'; this.notify(); } return false; }
+        const workspace = this.workspaceId;
+        return this.addContext(() => this.service.readChatContext(workspace!, path));
     }
-    private async addContext(context: TutorContext): Promise<boolean> {
-        const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch;
-        if (!workspace) { return false; }
+    async addContextSnapshot(context: TutorContext): Promise<boolean> { return this.addContext(context); }
+    private async addContext(source: TutorContext | (() => Promise<TutorContext>)): Promise<boolean> {
+        const workspace = this.workspaceId, mode = this.mode, epoch = this.epoch, conversation = this.activeConversationId;
+        const current = (): boolean => workspace === this.workspaceId && mode === this.mode && epoch === this.epoch && conversation === this.activeConversationId && !this.historySyncing;
+        if (!workspace || this.historySyncing) { return false; }
+        const finish = this.beginContextTransfer();
         try {
+            const context = typeof source === 'function' ? await source() : source;
+            if (!current()) { return false; }
             const [authorized] = await this.service.authorizeChatContexts(workspace, mode, [context]);
-            if (workspace !== this.workspaceId || mode !== this.mode || epoch !== this.epoch) { return false; }
+            if (!current()) { return false; }
             const next = this.pins.filter(p => !((p.kind === 'terminal') === (authorized.kind === 'terminal') && p.path === authorized.path
                 && (authorized.kind !== 'terminal' || !!p.terminalSelection === !!authorized.terminalSelection)
                 && (authorized.kind === 'terminal' && !authorized.terminalSelection || p.startLine === authorized.startLine && p.endLine === authorized.endLine)));
             next.push(authorized);
             validateTutorContexts(next, mode);
             this.contextDrafts[mode] = next; this.contextError = undefined; this.persistConversation(mode); this.notify(); return true;
-        } catch (error) { if (workspace === this.workspaceId && mode === this.mode && epoch === this.epoch) { this.contextError = error instanceof Error ? error.message : '附件不可用'; this.notify(); } return false; }
+        } catch (error) { if (current()) { this.contextError = error instanceof Error ? error.message : '附件不可用'; this.notify(); } return false; }
+        finally { finish(); }
     }
     removeContext(index: number): void {
         if (!Number.isInteger(index) || index < 0 || index >= this.pins.length) { return; }
@@ -622,7 +674,7 @@ export class NoduTutorModel {
         }
     }
     async send(kind: TutorChatRequest['kind'] = 'chat', buffer?: TutorBuffer, retry?: TutorChatSnapshot): Promise<TutorAIResult | undefined> {
-        if (this.historySyncing || this.connectionState === 'connecting' || this.connectionState === 'disconnected') { return; }
+        if (this.historySyncing || this.connectionState === 'connecting' || this.connectionState === 'disconnected' || (kind === 'chat' && !retry && this.contextLoading)) { return; }
         if (!retry && this.mode === 'teach' && !this.plan && kind === 'chat' && ['none','draft','cancelled','complete'].includes(this.goalState.status)) {
             await this.goalAction('propose', this.drafts.teach.trim()); return;
         }
@@ -634,7 +686,7 @@ export class NoduTutorModel {
         const prompt = retry ? retry.prompt : kind === 'chat' ? this.drafts[mode].trim() : review ? `检查第 ${buffer?.line} 行的 C 代码语义。` : this.currentStep()?.goal ?? '检查当前代码。';
         if (!prompt) { return; }
         try { await this.sync; } catch { return; }
-        if (!this.enabled || laneBusy() || mode !== this.mode || workspace !== this.workspaceId || epoch !== this.epoch || (review && this.paused)) { return; }
+        if (!this.enabled || laneBusy() || mode !== this.mode || workspace !== this.workspaceId || epoch !== this.epoch || (review && this.paused) || (kind === 'chat' && !retry && this.contextLoading)) { return; }
         if (retry && !this.retrySnapshotCurrent(retry)) { this.error = '代码或教学步骤已变更，请重新检查'; this.notify(); return; }
         const rawContext = retry ? retry.buffer : buffer ?? (kind !== 'chat' || this.currentContextIncluded ? this.buffer : undefined);
         const context = rawContext ? requestBuffer(rawContext) : undefined;

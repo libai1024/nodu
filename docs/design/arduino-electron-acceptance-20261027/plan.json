@@ -1,0 +1,26 @@
+{
+  "status": "completed",
+  "application": "/private/tmp/nodu-arduino-electron-20261027/Nodu Arduino Check.app",
+  "bundleId": "dev.nodu.arduino-electron-check-20261027",
+  "profile": "/private/tmp/nodu-arduino-electron-20261027/profile",
+  "port": 24385,
+  "arduinoHome": "/private/tmp/nodu-arduino-e2e-20261026",
+  "projectParent": "/private/tmp/nodu-arduino-electron-20261027/projects",
+  "projectName": "arduino_ui_c3",
+  "constraints": [
+    "No actual hardware open/send/upload",
+    "No original 24379 or Nodu Review window interaction",
+    "UI interaction only through CUA native app API",
+    "Production source unchanged by acceptance agent"
+  ],
+  "checks": [
+    "UI project creation ESP32-C3 Arduino",
+    "Library left sidebar in professional/simple mode",
+    "Library search/filter/version controls",
+    "Device advanced parameter save and reopen",
+    "Serial bottom page and configuration save",
+    "Actual compile error and problem navigation",
+    "Repair editor source then successful compile"
+  ],
+  "completedAt": "2026-10-27T01:39:29.338012+08:00"
+}

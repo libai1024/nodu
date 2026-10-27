@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "bundle": "esp32-common-20261026",
+  "validation": {
+    "status": "compile-passed",
+    "date": "2026-10-26",
+    "host": "darwin-arm64",
+    "cli": "1.5.1",
+    "core": "3.3.12",
+    "targets": [
+      "esp32:esp32:esp32c3",
+      "esp32:esp32:esp32s3"
+    ],
+    "hardwareTested": false,
+    "notes": [
+      "OneWire 2.3.8 upstream #undef warnings remain visible",
+      "ESP32Servo 3.2.1 uses deprecated MCPWM API on ESP32-S3; compile succeeds"
+    ],
+    "sourceSha256": "dd586db7199950d5b41260609c32afed0a255fd55851159220da70d285220a7f"
+  },
+  "targets": {
+    "esp32c3": {
+      "compile": true,
+      "flashBytes": 497652,
+      "ramBytes": 22924
+    },
+    "esp32s3": {
+      "compile": true,
+      "flashBytes": 472633,
+      "ramBytes": 31704
+    }
+  },
+  "artifacts": {
+    "compile-s3.log": "3906dd1b5f7743817f511fcca68ca9dd9009565b4c48ef6b5b924b851e75c23b",
+    "compile-c3.txt": "35195e36a2a8affceae5cb8f864a0daf88e010c5965fd382c8b629f7b30e297e",
+    "libraries.ino": "dd586db7199950d5b41260609c32afed0a255fd55851159220da70d285220a7f",
+    "compile-s3.txt": "3906dd1b5f7743817f511fcca68ca9dd9009565b4c48ef6b5b924b851e75c23b",
+    "compile-offline-c3.txt": "35195e36a2a8affceae5cb8f864a0daf88e010c5965fd382c8b629f7b30e297e",
+    "compile-c3.log": "35195e36a2a8affceae5cb8f864a0daf88e010c5965fd382c8b629f7b30e297e",
+    "unit-tests.txt": "3f3fe1fd17ea5c0bb64548a8b1499f6df92814a0616df7741b13d1f32509a92d"
+  },
+  "offlineCachedCompile": {
+    "esp32c3": true,
+    "network": "HTTP_PROXY, HTTPS_PROXY, ALL_PROXY pointed at unreachable 127.0.0.1:9",
+    "scope": "Core and profile resources previously cached; new build directory"
+  },
+  "unitTests": {
+    "pass": 15,
+    "fail": 0
+  }
+}

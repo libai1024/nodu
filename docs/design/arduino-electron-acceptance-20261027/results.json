@@ -1,0 +1,70 @@
+{
+  "status": "passed_with_documented_limits",
+  "port": 24385,
+  "profile": "/private/tmp/nodu-arduino-electron-20261027/profile",
+  "project": "/private/tmp/nodu-arduino-electron-20261027/projects/arduino_ui_c3",
+  "hardwareOperations": false,
+  "original24379Untouched": true,
+  "finalSession": 36956,
+  "checks": {
+    "uiNewProject": "passed ESP32-C3 Arduino",
+    "libraryEntrySimpleProfessional": "passed",
+    "librarySearchFiltersBuiltin": "passed",
+    "deviceUploadSpeedPersistence": "passed 115200",
+    "compileErrorNavigation": "passed 5:3",
+    "problemCopySingleAll": "passed through native paste and disk content",
+    "serialSettingsPersistence": "passed 57600 GBK after restart",
+    "compileMonitorSettingsLock": "passed disabled during compile, restored after",
+    "libraryOperationSingleRow": "passed narrow sidebar",
+    "lightDarkAndNarrow": "passed screenshots",
+    "cppLanguageAndSyntaxColors": "passed final813317 plugin",
+    "threeConsecutiveEditSaves": "passed including auto-save unicode function-body edits",
+    "externalHeaderAdded": "passed review-helper.h",
+    "serialMethodCompletion": "passed methods and begin signature",
+    "externalHeaderFunctionCompletion": "passed reviewValue()",
+    "realCompileAfterHeaderAndEdits": "passed",
+    "problemsAfterCompile": "0 errors 0 warnings",
+    "multilineEnterPasteMapping": "passed JsonDocument15 after Enter; JsonDocument17/serializeJson20/loop24 after paste",
+    "wholeReplaceUndoRedoDuringBackgroundRebuild": "passed JsonDocument19/serializeJson22/loop26, Serial11, diagnostic23:3 after resync",
+    "realCompileAfterFinalRepair": "passed 282534 bytes,13208 globals,0 errors"
+  },
+  "compile": {
+    "programBytes": 282534,
+    "programMax": 1310720,
+    "globalBytes": 13208,
+    "globalMax": 327680
+  },
+  "resolvedDuringAcceptance": [
+    "RelativePattern toLanguageSelector startup exception",
+    "unsupported workspace/semanticTokens/refresh panic",
+    "unsupported workspace/didChangeWatchedFiles panic",
+    "Plain Text .ino language and missing grammar",
+    "silent serial settings mutation during compile",
+    "library buttons wrapping at narrow sidebar"
+  ],
+  "pending": [],
+  "knownVisualLimitations": [
+    "Version dropdown truncates 7.4.3 to 7.4… at 172 CSS px sidebar while card heading shows full version."
+  ],
+  "applicationState": "Closed isolated application and all tracked descendants; port24385 no longer listening. Files retained.",
+  "completedAt": "2026-10-27T01:39:29.338012+08:00",
+  "cleanup": {
+    "remainingOwnedProcesses": [],
+    "ports": {
+      "24385": {
+        "listening": false,
+        "output": ""
+      },
+      "24379": {
+        "listening": false,
+        "output": ""
+      }
+    },
+    "closedOnlyAcceptanceApplication": true
+  },
+  "finalLanguageEvidence": "final-mapping-results.json",
+  "knownLanguageLimitations": [
+    "Whole-document/top-level structural edits require Arduino preprocessing; recovery observed in (22.637,46.632]seconds.",
+    "Transient selectionRange accessibility/output text and one invalid-range log appeared during rapid replacement; no toast/crash, final semantic results correct."
+  ]
+}

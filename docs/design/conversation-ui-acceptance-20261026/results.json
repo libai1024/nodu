@@ -1,0 +1,53 @@
+{
+  "head": "ba63cd6bac3ce1aafed17ce5c56b61bd2b8c8a44",
+  "capturedAt": "2026-10-26T18:47:22+08:00",
+  "tests": {
+    "tutor-tests": {
+      "tests": 367,
+      "pass": 367,
+      "fail": 0,
+      "skipped": 0
+    },
+    "workbench-tests": {
+      "tests": 112,
+      "pass": 112,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "build": {
+    "desktop/electron-app/lib/frontend/bundle.js": {
+      "sha256": "a41d29a498030117132f6dbf0651c230d642e35e236b7465424042414be788db",
+      "bytes": 34267227,
+      "modifiedAt": "2026-10-26T16:13:14.692437+08:00"
+    },
+    "desktop/electron-app/lib/frontend/bundle.css": {
+      "sha256": "9d1407c029de9faf7273323b76af5f199c703d82f4f62ce431d1078080cd304e",
+      "bytes": 2913719,
+      "modifiedAt": "2026-10-26T16:13:14.608965+08:00"
+    }
+  },
+  "geometry": [
+    {
+      "theme": "light",
+      "panel": 620,
+      "chat": 420,
+      "sidebar": 200,
+      "horizontalOverflow": 0
+    },
+    {
+      "theme": "light",
+      "panel": 460,
+      "chat": 260,
+      "sidebar": 200,
+      "horizontalOverflow": 0
+    },
+    {
+      "theme": "dark",
+      "panel": 460,
+      "chat": 260,
+      "sidebar": 200,
+      "horizontalOverflow": 0
+    }
+  ]
+}

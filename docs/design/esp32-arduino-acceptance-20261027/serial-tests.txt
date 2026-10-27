@@ -1,0 +1,45 @@
+
+> @scope/studio-extension@0.2.2 test:serial
+> npm run compile && node --test ../scripts/monitor-send.test.cjs ../scripts/monitor-controls.test.cjs ../scripts/monitor-decoder.test.cjs ../scripts/functional-gaps.test.cjs ../scripts/serial-panel.test.cjs
+
+
+> @scope/studio-extension@0.2.2 compile
+> tsc -p tsconfig.json
+
+✔ source edits invalidate diagnostics; generated and unrelated files do not (0.850208ms)
+✔ unsaved edits during build stay stale; next fresh build replaces diagnostics (0.30025ms)
+✔ timestamped text and HEX exports preserve partial text and original bytes (1.505709ms)
+✔ pause freezes display/export while reception continues; resume and clear work independently (1.744667ms)
+✔ compatible-chip UI cancellation prevents download and acceptance passes a one-shot confirmation (1.379333ms)
+✔ build log retains completion and an explicit no-monitor choice survives refresh (0.242375ms)
+✔ hotplug suggests the sole USB port without replacing the user or active port (1.609958ms)
+✔ hex display preserves actual wire bytes, including invalid text and line endings (0.141125ms)
+✔ raw receive buffer retains only its bounded newest bytes (0.069625ms)
+✔ directional HEX transcript keeps TX and RX separate and bounds their combined bytes (0.165542ms)
+✔ single-byte receive reads coalesce into 16-byte display rows while TX boundaries remain visible (55.003125ms)
+✔ send encoding produces exact UTF-8/GBK bytes and retains line endings (8.901709ms)
+✔ ROM noise is not treated as application startup output (0.714541ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.219375ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.087916ms)
+✔ a serial sidecar crash cannot clear an independent Arduino CLI build (2.62625ms)
+✔ successful sends add a TX record with exact encoded bytes while raw RX remains unchanged (22.915083ms)
+✔ a TX record between receive chunks does not finish an incomplete UTF-8 or GBK character (0.470833ms)
+✔ write failures preserve logs and report the error without a TX success entry (0.170834ms)
+✔ closed, disconnected, lent, busy, flashing and boot-wait states refuse sending before RPC (0.279ms)
+✔ only one send is in flight and older backends can still return their sent count (0.128167ms)
+✔ late send success or error cannot refill cleared logs or pollute changed sessions (2.72675ms)
+✔ Node returns actual UTF-8 or GBK wire bytes only after a successful write (0.407167ms)
+✔ serial controls use the custom selector and expose exact line endings (86.781833ms)
+✔ each line ending adds exactly its selected wire suffix (104.475041ms)
+✔ a pending send cannot be duplicated and only clears the draft it actually sent (29.505958ms)
+✔ refused sends preserve the draft and empty or unavailable ports do not send (199.795917ms)
+✔ IME confirmation keeps the draft while Enter sends exactly once (11.824708ms)
+✔ unexpected send rejection releases the input and presents the error without clearing text (14.041667ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 719.198458

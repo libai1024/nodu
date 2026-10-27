@@ -40,3 +40,17 @@ export function countProblems(problems: readonly NoduProblem[]): NoduProblemCoun
     }
     return counts;
 }
+
+/** Keep copied diagnostics useful outside the Problems view, including in chat. */
+export function formatProblem(problem: NoduProblem, path = problem.uri): string {
+    const { diagnostic } = problem;
+    const start = diagnostic.range.start;
+    const severity = diagnostic.severity === 1 ? '错误' : diagnostic.severity === 2 ? '警告' : '提示';
+    const details = [problem.sources.length ? `来源：${problem.sources.join('、')}` : '',
+        diagnostic.code !== undefined ? `代码：${diagnostic.code}` : ''].filter(Boolean);
+    return `${path}:${start.line + 1}:${start.character + 1} [${severity}] ${diagnostic.message}${details.length ? `\n${details.join(' · ')}` : ''}`;
+}
+
+export function formatProblems(problems: readonly NoduProblem[], path: (problem: NoduProblem) => string = problem => problem.uri): string {
+    return problems.map(problem => formatProblem(problem, path(problem))).join('\n\n');
+}

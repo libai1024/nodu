@@ -4,9 +4,10 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { KeybindingRegistry, LabelProvider, ReactWidget } from '@theia/core/lib/browser';
 import { CommandRegistry, Emitter, MessageService, URI } from '@theia/core/lib/common';
 import { ContextKeyService } from '@theia/core/lib/browser/context-key-service';
+import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
 import { ProblemManager } from '@theia/markers/lib/browser/problem/problem-manager';
-import { collectProblems, countProblems, NoduProblem, NoduProblemCounts } from '../common/nodu-problems';
+import { collectProblems, countProblems, formatProblems, NoduProblem, NoduProblemCounts } from '../common/nodu-problems';
 import '../../style/problems-panel.css';
 
 /** One read-only view of build and language-service diagnostics. */
@@ -21,6 +22,7 @@ export class NoduProblemsPanel extends ReactWidget {
     @inject(CommandRegistry) protected readonly commands!: CommandRegistry;
     @inject(KeybindingRegistry) protected readonly keybindings!: KeybindingRegistry;
     @inject(ContextKeyService) protected readonly contextKeys!: ContextKeyService;
+    @inject(ClipboardService) protected readonly clipboard!: ClipboardService;
     private readonly changed = new Emitter<NoduProblemCounts>();
     readonly onDidChangeProblems = this.changed.event;
     private readonly filterRef = React.createRef<HTMLInputElement>();
@@ -28,6 +30,9 @@ export class NoduProblemsPanel extends ReactWidget {
     private readonly hiddenSeverities = new Set<number>();
     private items: NoduProblem[] = [];
     private query = '';
+    private copied?: string;
+    private copySequence = 0;
+    private copyFeedback?: ReturnType<typeof setTimeout>;
 
     get counts(): NoduProblemCounts { return countProblems(this.items); }
 
@@ -45,6 +50,7 @@ export class NoduProblemsPanel extends ReactWidget {
         const context = this.contextKeys.createScoped(this.node);
         context.createKey('nodu.problemsPanelFocus', true);
         this.toDispose.push(context);
+        this.toDispose.push({ dispose: () => { ++this.copySequence; if (this.copyFeedback) { clearTimeout(this.copyFeedback); } } });
         this.toDispose.push(this.commands.registerCommand({ id: 'nodu.problems.find', label: '筛选问题' }, {
             execute: () => { this.filterRef.current?.focus(); this.filterRef.current?.select(); },
             isEnabled: () => this.node.contains(this.node.ownerDocument.activeElement),
@@ -77,6 +83,22 @@ export class NoduProblemsPanel extends ReactWidget {
         }
     }
 
+    private async copy(problems: readonly NoduProblem[], key: string): Promise<void> {
+        if (!problems.length) { return; }
+        const text = formatProblems(problems, problem => this.labels.getLongName(new URI(problem.uri)));
+        const sequence = ++this.copySequence;
+        try {
+            await this.clipboard.writeText(text);
+            if (sequence !== this.copySequence || this.isDisposed) { return; }
+            this.copied = key;
+            if (this.copyFeedback) { clearTimeout(this.copyFeedback); }
+            this.copyFeedback = setTimeout(() => { this.copied = undefined; this.copyFeedback = undefined; this.update(); }, 1500);
+            this.update();
+        } catch {
+            if (sequence === this.copySequence && !this.isDisposed) { void this.messages.error('复制问题失败，请重试'); }
+        }
+    }
+
     private renderProblem(problem: NoduProblem): React.ReactNode {
         const severity = this.severity(problem);
         const label = severity === 1 ? '错误' : severity === 2 ? '警告' : '提示';
@@ -84,7 +106,7 @@ export class NoduProblemsPanel extends ReactWidget {
         const start = problem.diagnostic.range.start;
         const position = `${start.line + 1}:${start.character + 1}`;
         const sources = problem.sources.join('、');
-        return <li key={problem.key}>
+        return <li key={problem.key} className="nodu-problem-entry">
             <button className={`nodu-problem-row nodu-problem-severity-${severity}`} onClick={() => void this.open(problem)}
                 title={`${sources ? `${sources} · ` : ''}${position}\n${problem.diagnostic.message}`}
                 aria-label={`${label}：${problem.diagnostic.message}，第 ${start.line + 1} 行，第 ${start.character + 1} 列${sources ? `，来源：${sources}` : ''}`}>
@@ -92,6 +114,8 @@ export class NoduProblemsPanel extends ReactWidget {
                 <span className="nodu-problem-message">{problem.diagnostic.message}</span>
                 <span className="nodu-problem-position">{position}</span>
             </button>
+            <button type="button" className="nodu-problem-copy" aria-label="复制问题" title={this.copied === problem.key ? '已复制' : '复制问题'}
+                onClick={() => void this.copy([problem], problem.key)}><i className={`codicon codicon-${this.copied === problem.key ? 'check' : 'copy'}`} aria-hidden="true"/></button>
         </li>;
     }
 
@@ -120,6 +144,8 @@ export class NoduProblemsPanel extends ReactWidget {
                             else { this.hiddenSeverities.add(item.severity); }
                             this.update();
                         }}><i className={`codicon codicon-${item.icon}`} aria-hidden="true"/><span>{item.count}</span></button>)}
+                <button type="button" className="nodu-problem-copy nodu-problems-copy-all" aria-label="复制全部问题" title={this.copied === 'all' ? '已复制全部问题' : '复制全部问题'} disabled={!this.items.length}
+                    onClick={() => void this.copy(this.items, 'all')}><i className={`codicon codicon-${this.copied === 'all' ? 'check' : 'copy'}`} aria-hidden="true"/></button>
             </div>
             <div className="nodu-problems-list" tabIndex={0} aria-label="问题列表">
                 {!visible.length ? <div className="nodu-problems-empty" role="status">

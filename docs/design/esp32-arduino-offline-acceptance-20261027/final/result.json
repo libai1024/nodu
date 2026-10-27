@@ -1,0 +1,1137 @@
+{
+  "schema": 1,
+  "started": "2026-10-27T01:21:56.625Z",
+  "root": "/private/tmp/nodu-arduino-offline-z4vng7",
+  "home": "/private/tmp/nodu-arduino-offline-z4vng7/home",
+  "hardwareAccessed": false,
+  "networkPolicy": "macOS sandbox-exec deny network* (inherited by all subprocesses)",
+  "commands": [
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "operation": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "log": "01-base-3f53eef5-dd13-43f0-a546-5b20d482adc0.log",
+      "code": 0,
+      "elapsedMs": 1328
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--only-compilation-database",
+        "--build-path",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/bootstrap/environment-jHQOg3/build",
+        "--no-color",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/bootstrap/environment-jHQOg3/environment"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/home/bootstrap/environment-jHQOg3/environment",
+      "operation": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "log": "02-base-3f53eef5-dd13-43f0-a546-5b20d482adc0.log",
+      "code": 0,
+      "elapsedMs": 53267
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "operation": "offline-esp32c3",
+      "log": "03-offline-esp32c3.log",
+      "code": 0,
+      "elapsedMs": 9
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/builds/42be52152d5db19e1b8a9f04",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "operation": "offline-esp32c3",
+      "log": "04-offline-esp32c3.log",
+      "code": 0,
+      "elapsedMs": 71821
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "operation": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "log": "05-base-87a82a98-00b8-46dc-819a-76a15abe722b.log",
+      "code": 0,
+      "elapsedMs": 12
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--only-compilation-database",
+        "--build-path",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/bootstrap/environment-Q9Zx8z/build",
+        "--no-color",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/bootstrap/environment-Q9Zx8z/environment"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/home/bootstrap/environment-Q9Zx8z/environment",
+      "operation": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "log": "06-base-87a82a98-00b8-46dc-819a-76a15abe722b.log",
+      "code": 0,
+      "elapsedMs": 14469
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "operation": "offline-esp32s3",
+      "log": "07-offline-esp32s3.log",
+      "code": 0,
+      "elapsedMs": 10
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/builds/8d074924934decb4b192e0df",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "operation": "offline-esp32s3",
+      "log": "08-offline-esp32s3.log",
+      "code": 0,
+      "elapsedMs": 80655
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "operation": "offline-reopen-c3",
+      "log": "09-offline-reopen-c3.log",
+      "code": 0,
+      "elapsedMs": 13
+    },
+    {
+      "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/private/tmp/nodu-arduino-offline-z4vng7/home/builds/42be52152d5db19e1b8a9f04",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "operation": "offline-reopen-c3",
+      "log": "10-offline-reopen-c3.log",
+      "code": 0,
+      "elapsedMs": 40868
+    }
+  ],
+  "cases": [
+    {
+      "chip": "esp32c3",
+      "name": "offline_esp32c3",
+      "project": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "profile": {
+        "fqbn": "esp32:esp32:esp32c3",
+        "platforms": [
+          {
+            "platform": "esp32:esp32 (3.3.12)",
+            "platform_index_url": "https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+          }
+        ],
+        "libraries": [
+          "ArduinoJson (7.4.3)",
+          "ArduinoMqttClient (0.1.8)",
+          "Adafruit SSD1306 (2.5.17)",
+          "Adafruit GFX Library (1.13.0)",
+          {
+            "dependency": "Adafruit BusIO (1.17.4)"
+          },
+          "Adafruit NeoPixel (1.15.5)",
+          "DHT sensor library (1.4.7)",
+          {
+            "dependency": "Adafruit Unified Sensor (1.1.15)"
+          },
+          {
+            "dependency": "OneWire (2.3.8)"
+          },
+          "DallasTemperature (4.0.6)",
+          "ESP32Servo (3.2.1)"
+        ]
+      },
+      "draftSha256": "b22267f964ded0f1a5b65f7e4c17ce2c02a23010c8fc845469234eef7125f45a",
+      "openInspect": {
+        "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32c3",
+        "chip": "esp32c3",
+        "coreVersion": "3.3.12",
+        "boardName": "ESP32C3 Dev Module",
+        "ready": true,
+        "monitor": {
+          "baud": 115200,
+          "encoding": "utf-8"
+        }
+      },
+      "openElapsedMs": 60102,
+      "openLanguage": {
+        "ok": true,
+        "command": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/resources/bin/darwin-arm64/arduino-language-server",
+        "args": [
+          "-clangd",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/language/clangd-18907a18f17753602bd9.sh",
+          "-cli",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+          "-cli-config",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+          "-fqbn",
+          "esp32:esp32:esp32c3",
+          "-jobs",
+          "1"
+        ],
+        "project": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+        "fingerprint": "167326001b0e48daf67f9dfc37e750e264dbd5f1f625a02d815b965dc60966a5",
+        "incrementalSync": true,
+        "environment": {}
+      },
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "absolute": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "line": 599,
+            "column": 22,
+            "message": "extra tokens at end of #undef directive"
+          },
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "absolute": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "line": 600,
+            "column": 20,
+            "message": "extra tokens at end of #undef directive"
+          }
+        ],
+        "buildToken": "af64210e-fc53-42fe-b803-69cc94404a42",
+        "buildPath": "/private/tmp/nodu-arduino-offline-z4vng7/home/builds/42be52152d5db19e1b8a9f04"
+      },
+      "elapsedMs": 72827,
+      "cli": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "inspect": {
+        "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32c3",
+        "chip": "esp32c3",
+        "coreVersion": "3.3.12",
+        "boardName": "ESP32C3 Dev Module",
+        "ready": true,
+        "monitor": {
+          "baud": 115200,
+          "encoding": "utf-8"
+        }
+      },
+      "language": {
+        "ok": true,
+        "command": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/resources/bin/darwin-arm64/arduino-language-server",
+        "args": [
+          "-clangd",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/language/clangd-18907a18f17753602bd9.sh",
+          "-cli",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+          "-cli-config",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+          "-fqbn",
+          "esp32:esp32:esp32c3",
+          "-jobs",
+          "1"
+        ],
+        "project": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+        "fingerprint": "167326001b0e48daf67f9dfc37e750e264dbd5f1f625a02d815b965dc60966a5",
+        "incrementalSync": true,
+        "environment": {}
+      },
+      "buildFqbn": "esp32:esp32:esp32c3",
+      "artifacts": [
+        {
+          "name": "boot_app0.bin",
+          "size": 8192,
+          "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0"
+        },
+        {
+          "name": "offline_esp32c3.ino.bin",
+          "size": 497808,
+          "sha256": "07aa3599ef99cad33bb1e4a8d163ebbc8ffcfa20b0faae1ec216ba9272c5372d"
+        },
+        {
+          "name": "offline_esp32c3.ino.bootloader.bin",
+          "size": 19536,
+          "sha256": "9b2fa5e4af7cf282b2db5ed726b26bcca0aec7946eb3fdacc14444195ba754b3"
+        },
+        {
+          "name": "offline_esp32c3.ino.elf",
+          "size": 10627972,
+          "sha256": "95d614ac6ba99e660b9c011e6617c0c95fc10dbd46f544e2953011dda2b34f00"
+        },
+        {
+          "name": "offline_esp32c3.ino.merged.bin",
+          "size": 4194304,
+          "sha256": "c4354a3bf2b717e857178db1b089297089ec2a8f80ea9c14ef2e200fa2cd4d78"
+        },
+        {
+          "name": "offline_esp32c3.ino.partitions.bin",
+          "size": 3072,
+          "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+        }
+      ],
+      "ok": true
+    },
+    {
+      "chip": "esp32s3",
+      "name": "offline_esp32s3",
+      "project": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "profile": {
+        "fqbn": "esp32:esp32:esp32s3",
+        "platforms": [
+          {
+            "platform": "esp32:esp32 (3.3.12)",
+            "platform_index_url": "https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+          }
+        ],
+        "libraries": [
+          "ArduinoJson (7.4.3)",
+          "ArduinoMqttClient (0.1.8)",
+          "Adafruit SSD1306 (2.5.17)",
+          "Adafruit GFX Library (1.13.0)",
+          {
+            "dependency": "Adafruit BusIO (1.17.4)"
+          },
+          "Adafruit NeoPixel (1.15.5)",
+          "DHT sensor library (1.4.7)",
+          {
+            "dependency": "Adafruit Unified Sensor (1.1.15)"
+          },
+          {
+            "dependency": "OneWire (2.3.8)"
+          },
+          "DallasTemperature (4.0.6)",
+          "ESP32Servo (3.2.1)"
+        ]
+      },
+      "draftSha256": "b22267f964ded0f1a5b65f7e4c17ce2c02a23010c8fc845469234eef7125f45a",
+      "openInspect": {
+        "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32s3",
+        "chip": "esp32s3",
+        "coreVersion": "3.3.12",
+        "boardName": "ESP32S3 Dev Module",
+        "ready": true,
+        "monitor": {
+          "baud": 115200,
+          "encoding": "utf-8"
+        }
+      },
+      "openElapsedMs": 15784,
+      "openLanguage": {
+        "ok": true,
+        "command": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/resources/bin/darwin-arm64/arduino-language-server",
+        "args": [
+          "-clangd",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/language/clangd-18907a18f17753602bd9.sh",
+          "-cli",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+          "-cli-config",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+          "-fqbn",
+          "esp32:esp32:esp32s3",
+          "-jobs",
+          "1"
+        ],
+        "project": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+        "fingerprint": "972b9fd6bf4584d7069dc7fa3cd662532a7b21c7109120153e137649e0af7712",
+        "incrementalSync": true,
+        "environment": {}
+      },
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h",
+            "absolute": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h",
+            "line": 15,
+            "column": 2,
+            "message": "#warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"
+          },
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "absolute": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "line": 599,
+            "column": 22,
+            "message": "extra tokens at end of #undef directive"
+          },
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "absolute": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp",
+            "line": 600,
+            "column": 20,
+            "message": "extra tokens at end of #undef directive"
+          }
+        ],
+        "buildToken": "87776271-c54c-440a-806e-74713b077736",
+        "buildPath": "/private/tmp/nodu-arduino-offline-z4vng7/home/builds/8d074924934decb4b192e0df"
+      },
+      "elapsedMs": 81600,
+      "cli": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "inspect": {
+        "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32s3",
+        "chip": "esp32s3",
+        "coreVersion": "3.3.12",
+        "boardName": "ESP32S3 Dev Module",
+        "ready": true,
+        "monitor": {
+          "baud": 115200,
+          "encoding": "utf-8"
+        }
+      },
+      "language": {
+        "ok": true,
+        "command": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/resources/bin/darwin-arm64/arduino-language-server",
+        "args": [
+          "-clangd",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/language/clangd-18907a18f17753602bd9.sh",
+          "-cli",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+          "-cli-config",
+          "/private/tmp/nodu-arduino-offline-z4vng7/home/arduino-cli.yaml",
+          "-fqbn",
+          "esp32:esp32:esp32s3",
+          "-jobs",
+          "1"
+        ],
+        "project": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+        "fingerprint": "972b9fd6bf4584d7069dc7fa3cd662532a7b21c7109120153e137649e0af7712",
+        "incrementalSync": true,
+        "environment": {}
+      },
+      "buildFqbn": "esp32:esp32:esp32s3",
+      "artifacts": [
+        {
+          "name": "boot_app0.bin",
+          "size": 8192,
+          "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0"
+        },
+        {
+          "name": "offline_esp32s3.ino.bin",
+          "size": 472800,
+          "sha256": "ccc12378051d2f075f1867b1f5552d91495f61bbb913cb99b9e2d20d73cd316c"
+        },
+        {
+          "name": "offline_esp32s3.ino.bootloader.bin",
+          "size": 19968,
+          "sha256": "66cf6c060fc857c8ea6d6812aab8e9b27448431846426218b6fb81526b31e564"
+        },
+        {
+          "name": "offline_esp32s3.ino.elf",
+          "size": 10749964,
+          "sha256": "461c2c060dc868c9cf3e798bbbd5d582a01bafab2e26f5bbc494d32509903958"
+        },
+        {
+          "name": "offline_esp32s3.ino.merged.bin",
+          "size": 4194304,
+          "sha256": "2845dd953ca21bf9ae9bdc37d4a108bb26dbd2b92f935054446d09a7c06d53e9"
+        },
+        {
+          "name": "offline_esp32s3.ino.partitions.bin",
+          "size": 3072,
+          "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+        }
+      ],
+      "ok": true
+    }
+  ],
+  "events": [
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 400 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 800 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1200 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1600 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 2000 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-3f53eef5-dd13-43f0-a546-5b20d482adc0",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "安装 Arduino CLI",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "准备 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 400 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 800 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1200 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1600 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 2000 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "Arduino · esp32:esp32:esp32c3",
+      "phase": "compiling"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library ArduinoJson has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library ArduinoMqttClient has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit SSD1306 has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit GFX Library has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit BusIO has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit NeoPixel has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library DHT sensor library has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit Unified Sensor has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library OneWire has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library DallasTemperature has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library ESP32Servo has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp:599:22: warning: extra tokens at end of #undef directive"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "  599 | #  undef noInterrupts() {portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;portENTER_CRITICAL(&mux)"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "      |                      ^"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp:600:20: warning: extra tokens at end of #undef directive"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "  600 | #  undef interrupts() portEXIT_CRITICAL(&mux);}"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "      |                    ^"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "Sketch uses 497668 bytes (37%) of program storage space. Maximum is 1310720 bytes."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes."
+    },
+    {
+      "operationId": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 400 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 800 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 1200 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 1600 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-87a82a98-00b8-46dc-819a-76a15abe722b",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 2000 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "准备 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 400 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 800 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 1200 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 1600 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "初始化 Arduino 环境 2000 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "Arduino · esp32:esp32:esp32s3",
+      "phase": "compiling"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library ArduinoJson has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library ArduinoMqttClient has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library Adafruit SSD1306 has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library Adafruit GFX Library has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library Adafruit BusIO has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library Adafruit NeoPixel has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library DHT sensor library has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library Adafruit Unified Sensor has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library OneWire has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library DallasTemperature has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "The library ESP32Servo has been added from sketch project."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "In file included from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32PWM.h:52,"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "                 from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32Servo.h:84,"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "                 from /private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3/offline_esp32s3.ino:13:"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h:15:2: warning: #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "   15 | #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\""
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "      |  ^~~~~~~"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp:599:22: warning: extra tokens at end of #undef directive"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "  599 | #  undef noInterrupts() {portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;portENTER_CRITICAL(&mux)"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "      |                      ^"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp:600:20: warning: extra tokens at end of #undef directive"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "  600 | #  undef interrupts() portEXIT_CRITICAL(&mux);}"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "      |                    ^"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "In file included from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32PWM.h:52,"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "                 from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32Servo.h:84,"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "                 from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32Servo.cpp:53:"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h:15:2: warning: #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "   15 | #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\""
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "      |  ^~~~~~~"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "In file included from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32PWM.h:52,"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "                 from /private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/ESP32Servo_3.2.1_5dbe94048172dcc2/ESP32Servo/src/ESP32PWM.cpp:8:"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h:15:2: warning: #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "   15 | #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\""
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "      |  ^~~~~~~"
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "Sketch uses 472649 bytes (36%) of program storage space. Maximum is 1310720 bytes."
+    },
+    {
+      "operationId": "offline-esp32s3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32s3",
+      "line": "Global variables use 31704 bytes (9%) of dynamic memory, leaving 295976 bytes for local variables. Maximum is 327680 bytes."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "准备 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 400 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 800 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1200 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1600 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 2000 / 2216",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "Arduino · esp32:esp32:esp32c3",
+      "phase": "compiling"
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library ArduinoJson has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library ArduinoMqttClient has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit SSD1306 has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit GFX Library has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit BusIO has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit NeoPixel has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library DHT sensor library has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library Adafruit Unified Sensor has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library OneWire has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library DallasTemperature has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "The library ESP32Servo has been added from sketch project."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "Sketch uses 497668 bytes (37%) of program storage space. Maximum is 1310720 bytes."
+    },
+    {
+      "operationId": "offline-reopen-c3",
+      "path": "/private/tmp/nodu-arduino-offline-z4vng7/projects with spaces/offline_esp32c3",
+      "line": "Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes."
+    }
+  ],
+  "networkProbes": [
+    {
+      "host": "127.0.0.1",
+      "port": 9,
+      "code": "EPERM"
+    },
+    {
+      "host": "1.1.1.1",
+      "port": 9,
+      "code": "EPERM"
+    }
+  ],
+  "cleanPath": "/usr/bin:/bin:/usr/sbin:/sbin",
+  "bundle": {
+    "path": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/.tools/arduino-release/darwin-arm64/manifest.json",
+    "id": "arduino-esp32-3.3.12-cli-1.5.1-darwin-arm64",
+    "host": "darwin-arm64",
+    "sha256": "a26940ebe73b48498c7880e4ac15efde34dbab77f43d81465e7d54353077d6a9",
+    "files": 2219,
+    "cliVersion": "1.5.1",
+    "coreVersion": "3.3.12",
+    "releaseReady": false,
+    "runtimeManifestSha256": "80009251bbeea91e49c48d3a3645f208378d33c0dfec94d07931b942cda00c33",
+    "runtimeFiles": 2216,
+    "runtimeBytes": 1954708118
+  },
+  "nativeCtags": {
+    "executable": "/private/tmp/nodu-arduino-offline-z4vng7/home/tools/ctags/darwin-arm64/ctags",
+    "sha256": "b765ca33d809b23160a6c953ebcd6f180913a1e02488949efcc49ac1127e18eb",
+    "cpuType": "ARM64 (0x0100000c)",
+    "file": "/private/tmp/nodu-arduino-offline-z4vng7/home/tools/ctags/darwin-arm64/ctags: Mach-O 64-bit executable arm64",
+    "version": "Exuberant Ctags Development, Copyright (C) 1996-2009 Darren Hiebert\n  Compiled: Jan  1 1970, 00:00:00\n  Addresses: <dhiebert@users.sourceforge.net>, http://ctags.sourceforge.net\n  Optional compiled features: +wildcards, +regex, +internal-sort",
+    "platformLocal": "# Nodu: use the bundled native Apple Silicon Arduino ctags.\ntools.ctags.path={runtime.platform.path}/../../../tools/ctags/darwin-arm64\n",
+    "officialX64Execution": "denied by sandbox policy"
+  },
+  "reopen": {
+    "ok": true,
+    "cli": "/private/tmp/nodu-arduino-offline-z4vng7/home/bin/1.5.1/darwin-arm64/arduino-cli",
+    "result": {
+      "ok": true,
+      "stale": false,
+      "diagnostics": [],
+      "buildToken": "314ab2c7-916e-474f-9a23-fc3e99515a47",
+      "buildPath": "/private/tmp/nodu-arduino-offline-z4vng7/home/builds/42be52152d5db19e1b8a9f04"
+    }
+  },
+  "ok": true,
+  "finished": "2026-10-27T01:26:30.828Z"
+}

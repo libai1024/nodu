@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-27",
+  "kind": "read-only independent client lexical-boundary audit",
+  "ok": true,
+  "cases": [
+    {
+      "name": "namespace",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "class",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "global initializer",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "function name",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "include",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "macro continuation",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "comment continuation",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "same-line boundary",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "body directive",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "CRLF conversion",
+      "ok": true,
+      "reopen": true
+    },
+    {
+      "name": "unicode body",
+      "ok": true,
+      "reopen": false
+    },
+    {
+      "name": "body newline",
+      "ok": true,
+      "reopen": false
+    },
+    {
+      "name": "CRLF body text",
+      "ok": true,
+      "reopen": false
+    },
+    {
+      "name": "raw string",
+      "ok": true,
+      "reopen": true
+    }
+  ],
+  "source": "desktop/scripts/arduino-language-sync.cjs",
+  "sourceSha256": "3e9594c4384503d7fe8132ac409e09a1a5c980ab494ee1181baf84ae9deeb4d0",
+  "limits": "Pure helper calls only; actual ALS/clangd protocol and Go regression evidence are recorded by the language implementation agent."
+}

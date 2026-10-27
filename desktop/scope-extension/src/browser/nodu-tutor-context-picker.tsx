@@ -42,7 +42,7 @@ export function ContextPicker({ tutor, open, children }: ContextPickerProps): Re
     React.useEffect(() => {
         sequence.current++; pending.current = false; setWorking(false); setFiles(undefined); setError(''); close();
     }, [identity, close]);
-    const allowed = (path: string): boolean => /\.(c|h|cpp|hpp|cc)$/i.test(path) || tutor.mode === 'ask' && /\.py$/i.test(path);
+    const allowed = (path: string): boolean => /\.(c|h|cpp|hpp|cc)$/i.test(path) || tutor.mode === 'ask' && /\.(py|ino)$/i.test(path);
     const buffer = tutor.buffer;
     const current = buffer && tutor.currentContextIncluded && allowed(buffer.path)
         ? { kind: 'file' as const, path: buffer.path, startLine: 1, endLine: buffer.text.split('\n').length } : undefined;

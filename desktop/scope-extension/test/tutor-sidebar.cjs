@@ -22,6 +22,7 @@ const stubs = {
     '@theia/core/lib/browser/shell/view-contribution': { AbstractViewContribution: class {} },
     '@theia/core/lib/browser/dialogs': { ConfirmDialog: class {} },
     './nodu-tutor-model': { NoduTutorModel: class {} },
+    './nodu-tutor-context-transfer': { NoduTutorContextTransfer: class {} },
     './nodu-tutor-hints': { TUTOR_COMMANDS: {} },
 };
 vm.runInNewContext(`${fs.readFileSync(filename, 'utf8')}\nexports.TutorPanel = TutorPanel; exports.GoalPlan = GoalPlan;`, {
@@ -111,5 +112,5 @@ test('history picker uses compact titles and draft content without duplicate pre
     ]})}));
     assert.match(html,/搜索历史对话/);assert.match(html,/今天/);assert.match(html,/昨天/);assert.match(html,/aria-current="true"/);
     assert.match(html,/分析编译失败/);assert.match(html,/aria-label="草稿"/);assert.doesNotMatch(html,/继续分析|新对话|nodu-chat-history-preview|nodu-chat-history-meta|nodu-chat-history-filters/);
-    assert.doesNotMatch(html,/placeholder=/);
+    assert.match(html,/placeholder="搜索对话…"/);
 });

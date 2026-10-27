@@ -1,0 +1,17 @@
+{
+  "host": "darwin-arm64",
+  "alsVersion": "0.7.7",
+  "clangdVersion": "21.1.8",
+  "als": {
+    "archive": "arduino-language-server_0.7.7_macOS_ARM64.tar.gz",
+    "url": "https://github.com/arduino/arduino-language-server/releases/download/0.7.7/arduino-language-server_0.7.7_macOS_ARM64.tar.gz",
+    "sha256": "77f3a9fa71bd4c61dd293c6b623cebfaf424f6b794ede1a7b042e9b42a76e4c5",
+    "binarySha256": "8c0ed4b0a0123891703d9935db0abf9e0e3d59b607739cf5a918fe662febe2d7"
+  },
+  "clangd": {
+    "archive": "clangd-mac-21.1.8.zip",
+    "url": "https://github.com/clangd/clangd/releases/download/21.1.8/clangd-mac-21.1.8.zip",
+    "sha256": "b435e8eff9bb8db59d6f0f874b3a6b1cfaaa94980e08e38f0fa015dde185d36d",
+    "binarySha256": "1d37030fb652202d6b6884d3451ae2d6db279139ecf289c713e07e65f52d9237"
+  }
+}

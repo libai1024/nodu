@@ -1,0 +1,15 @@
+✔ language spec uses prepared isolated CLI config and preserves profile while allowing only owned toolchain roots (68.58625ms)
+✔ Arduino sync preserves UTF-16 text, final newlines, paste, undo and only accepts the latest rebuild (6.01975ms)
+✔ Arduino LSP is lazy, scoped to one project, reuses identical spec and disposes switched sessions (8.738167ms)
+✔ patched ALS keeps body Unicode/newlines fast and conservatively resynchronizes declarations (0.609375ms)
+✔ patched sync rejects same-line body escape, directives and EOL conversions (0.105458ms)
+✔ GUI Enter then paste remains incremental with the exact captured document (0.612375ms)
+✔ bundled official C++ grammar tokenizes Arduino directives, types, strings and comments (225.713209ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 317.077292

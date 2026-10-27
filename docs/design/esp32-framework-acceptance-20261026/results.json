@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-26",
+  "surface": "Actual NewProjectForm + NoduSelect + product CSS with a local createWorkspace service stub",
+  "scope": "UI and source-project generation; no compile, upload or hardware claim",
+  "frameworkControl": {
+    "default": "arduino",
+    "options": [
+      "Arduino",
+      "ESP-IDF"
+    ],
+    "groupWidth": 217.99,
+    "itemWidth": 106,
+    "itemHeight": 34,
+    "nativeSelectCount": 0
+  },
+  "verified": [
+    "Arduino default selection",
+    "ESP-IDF explicit selection",
+    "S3 chip selection preserved across framework changes",
+    "Arduino serial template label",
+    "ESP-IDF Hello World template label",
+    "createWorkspace payload carries matching chip/template/framework",
+    "Light and dark local framework marks",
+    "Sidebar fills form height and scrolls independently"
+  ],
+  "automatedTests": {
+    "passed": 36,
+    "skipped": 2,
+    "failed": 0
+  },
+  "files": {
+    "arduino-light.jpg": "df06917c15a4ad55f54e90b5358c1e58c64df1ae7161482170f5fe13bf3b3990",
+    "idf-dark.jpg": "eed58209c0853d217dbba3ac3fb1f0d5fd451554da2b282bd4bad448c54e612b"
+  }
+}

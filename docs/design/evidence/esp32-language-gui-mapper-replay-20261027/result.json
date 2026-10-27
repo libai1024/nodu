@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-27",
+  "ok": true,
+  "kind": "actual patched Go mapper GUI-event replay; not a full ALS protocol test",
+  "events": 2,
+  "tailSymbolsPerEvent": [
+    "JsonDocument",
+    "serializeJson",
+    "void loop"
+  ],
+  "finalZeroBasedMappings": {
+    "JsonDocument": {
+      "ino": 16,
+      "cpp": 22
+    },
+    "serializeJson": {
+      "ino": 19,
+      "cpp": 25
+    },
+    "void loop": {
+      "ino": 23,
+      "cpp": 29
+    }
+  },
+  "sourceHashes": {
+    "sourcemapper/ino.go": "b3e8169c4d51f0a9e548e0076b84835ac33d94775c24c349bf292911f621c776",
+    "vendor/go.bug.st/lsp/textedits/textedits.go": "5b59e390474c0928dee8db8e653294ef074b791b3a881873275aea7d8cde797e"
+  },
+  "finding": "Both direct incremental mapper mutations preserve moved tail symbols. At the time of GUI failure, helper classified first Enter as reopen due to comment-token boundary guard, so full synchronization ordering needs independent coverage."
+}

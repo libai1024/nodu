@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "host": "darwin-arm64",
+  "upstreamSourceUnchanged": true,
+  "version": "5.8-arduino11",
+  "source": {
+    "path": "sources/ctags-5.8-arduino11.tar.gz",
+    "url": "https://codeload.github.com/arduino/ctags/tar.gz/refs/tags/5.8-arduino11",
+    "sha256": "86ca843c62aecb9bc531a73d9b6cef33179bd885b1bf8df9e0c7e9761aa9794d"
+  },
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.3.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+  "sdkVersion": "26.5",
+  "environment": {
+    "CC": "/usr/bin/clang",
+    "CFLAGS": "-O2 -arch arm64 -mmacosx-version-min=11.0 -std=gnu89 -include dirent.h -include stdlib.h",
+    "LDFLAGS": "-arch arm64 -mmacosx-version-min=11.0",
+    "SOURCE_DATE_EPOCH": "0",
+    "LC_ALL": "C",
+    "TMPDIR": "/tmp"
+  },
+  "configure": [
+    "--disable-external-sort",
+    "--disable-etags",
+    "--enable-tmpdir=/tmp"
+  ],
+  "make": [
+    "-j4"
+  ],
+  "architecture": "Mach-O 64-bit executable arm64",
+  "dynamicLibraries": [
+    "/usr/lib/libSystem.B.dylib"
+  ],
+  "banner": "Exuberant Ctags Development, Copyright (C) 1996-2009 Darren Hiebert\n  Compiled: Jan  1 1970, 00:00:00\n  Addresses: <dhiebert@users.sourceforge.net>, http://ctags.sourceforge.net\n  Optional compiled features: +wildcards, +regex, +internal-sort",
+  "binary": {
+    "path": "ctags",
+    "sha256": "b765ca33d809b23160a6c953ebcd6f180913a1e02488949efcc49ac1127e18eb",
+    "size": 261944,
+    "version": "5.8-arduino11",
+    "sourceSha256": "86ca843c62aecb9bc531a73d9b6cef33179bd885b1bf8df9e0c7e9761aa9794d",
+    "sourceUrl": "https://codeload.github.com/arduino/ctags/tar.gz/refs/tags/5.8-arduino11",
+    "buildBinarySha256": "b765ca33d809b23160a6c953ebcd6f180913a1e02488949efcc49ac1127e18eb"
+  }
+}

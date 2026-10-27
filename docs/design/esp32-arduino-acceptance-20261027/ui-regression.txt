@@ -1,0 +1,44 @@
+✔ upload saves dirty buffers, compiles once, then uses the returned token and restores the monitor (4.432583ms)
+✔ editing while compiling for upload cancels and never starts writing (4.852125ms)
+✔ editing after writing starts does not interrupt firmware and marks the completed upload stale (0.801959ms)
+✔ a project switch cancels once and drops old output, markers and completion (0.352542ms)
+✔ flash uses a current compiled token without compiling again (0.149083ms)
+✔ flash with dirty buffers is rejected without saving or calling the uploader (0.085125ms)
+✔ failed save and failed compile leave upload untouched and release busy state (0.207041ms)
+✔ preparation is explicit and a library mutation invalidates a previous build (0.531ms)
+✔ duplicate run is ignored and stopping twice sends one cancellation (0.55775ms)
+✔ configuration failure preserves prior settings; late project responses cannot replace the next project (0.300834ms)
+✔ upload and monitor ports are independent, with upload fallback only before an explicit monitor selection (0.229334ms)
+✔ Arduino monitor configuration reaches the adapter and opening identifies the Arduino CDC context (0.245667ms)
+✔ Arduino monitor changes reconnect only when needed; STM32 can still open its monitor during a flash (0.43125ms)
+✔ a serial service crash does not overwrite the separate Arduino upload operation (0.221792ms)
+✔ Arduino uses the shared professional action row and the same minimal three-action gesture (281.9165ms)
+✔ Arduino opens the shared device popover for a missing upload port while compilation remains available (81.908125ms)
+✔ professional STM32 actions are compile, flash, run with distinct production command dispatch (89.565666ms)
+✔ compiling, flashing and serial boot waits disable all C launch actions and preserve Stop (66.609875ms)
+✔ saving C download options prevents execution without pretending there is a cancellable build (60.060709ms)
+✔ K210 retains memory execution and its own stop, never C compile or flash (89.958916ms)
+✔ ESP task controls do not inherit unrelated connected K210 state or STM32 flash (120.039958ms)
+✔ professional gear opens unified settings while simple mode keeps the compact preference card (48.136583ms)
+✔ native titlebars use the same settings host in both modes (52.266084ms)
+✔ AI teaching switches guidance without closing conversation; more menus remain target-specific (152.191833ms)
+✔ Electron switches the same toolbar between title row and rail without moving or recreating editors (41.099333ms)
+✔ browser keeps a standalone toolbar instead of attempting the Electron title row (57.517375ms)
+✔ professional overflow links registered menus lazily once per platform and retries absent sources (53.47425ms)
+✔ Windows and Linux retain visible standalone toolbar with native titlebar and merge only for a custom titlebar (108.515084ms)
+✔ a saved Arduino port absent from the current port list is shown as disconnected (45.342875ms)
+✔ serial controls use the custom selector and expose exact line endings (257.451334ms)
+✔ each line ending adds exactly its selected wire suffix (108.15775ms)
+✔ a pending send cannot be duplicated and only clears the draft it actually sent (22.524292ms)
+✔ refused sends preserve the draft and empty or unavailable ports do not send (223.898375ms)
+✔ IME confirmation keeps the draft while Enter sends exactly once (34.349042ms)
+✔ unexpected send rejection releases the input and presents the error without clearing text (71.895792ms)
+✔ compiling locks serial configuration while an already-open monitor can still send (13.990917ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1666.252042

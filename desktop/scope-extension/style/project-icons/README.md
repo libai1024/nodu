@@ -9,3 +9,10 @@ These locally bundled SVG silhouettes identify the silicon manufacturer. Model l
 - **Espressif**: [Simple Icons SVG](https://github.com/simple-icons/simple-icons/blob/develop/icons/espressif.svg), checked against the [official logo guidelines](https://www.espressif.com/en/about-espressif/logo-guidelines).
 
 Retrieved 2026-10-24. Simple Icons is distributed under CC0; brand marks remain the property of their respective owners. All Espressif's logos are trademarks of Espressif Systems (Shanghai) Co., Ltd.
+
+## Framework marks
+
+- **Arduino**: `arduino.svg` is the unmodified [compressed logo](https://content.arduino.cc/brand/arduino_compressed-color.svg) from the [official Arduino brand assets](https://content.arduino.cc/brand/), retrieved 2026-10-26. Rendered as a monochrome silhouette in the framework selector, with its original geometry.
+- **ESP-IDF**: uses the locally bundled Espressif symbol above, matching Espressif's own framework tooling identity. The framework name appears beside the symbol.
+
+These marks identify compatible third-party frameworks; they do not identify Nodu or imply endorsement. Brand ownership remains with Arduino and Espressif respectively.

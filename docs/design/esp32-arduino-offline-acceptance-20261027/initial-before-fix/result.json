@@ -1,0 +1,379 @@
+{
+  "schema": 1,
+  "started": "2026-10-27T01:11:27.152Z",
+  "root": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA",
+  "home": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home",
+  "hardwareAccessed": false,
+  "networkPolicy": "macOS sandbox-exec deny network* (inherited by all subprocesses)",
+  "commands": [
+    {
+      "executable": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "operation": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "log": "01-base-ebaff527-b773-438d-b4c8-6ff4c1658bfa.log",
+      "code": 0,
+      "elapsedMs": 3518
+    },
+    {
+      "executable": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--only-compilation-database",
+        "--build-path",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bootstrap/environment-KoJui8/build",
+        "--no-color",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bootstrap/environment-KoJui8/environment"
+      ],
+      "cwd": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bootstrap/environment-KoJui8/environment",
+      "operation": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "log": "02-base-ebaff527-b773-438d-b4c8-6ff4c1658bfa.log",
+      "code": 0,
+      "elapsedMs": 51973
+    },
+    {
+      "executable": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "operation": "offline-esp32c3",
+      "log": "03-offline-esp32c3.log",
+      "code": 0,
+      "elapsedMs": 10
+    },
+    {
+      "executable": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bin/1.5.1/darwin-arm64/arduino-cli",
+      "args": [
+        "--config-file",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/builds/e898e5619f78522ad3e9c26e",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3"
+      ],
+      "cwd": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "operation": "offline-esp32c3",
+      "log": "04-offline-esp32c3.log",
+      "code": 1,
+      "elapsedMs": 15132
+    }
+  ],
+  "cases": [
+    {
+      "chip": "esp32c3",
+      "name": "offline_esp32c3",
+      "project": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "profile": {
+        "fqbn": "esp32:esp32:esp32c3",
+        "platforms": [
+          {
+            "platform": "esp32:esp32 (3.3.12)",
+            "platform_index_url": "https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+          }
+        ],
+        "libraries": [
+          "ArduinoJson (7.4.3)",
+          "ArduinoMqttClient (0.1.8)",
+          "Adafruit SSD1306 (2.5.17)",
+          "Adafruit GFX Library (1.13.0)",
+          {
+            "dependency": "Adafruit BusIO (1.17.4)"
+          },
+          "Adafruit NeoPixel (1.15.5)",
+          "DHT sensor library (1.4.7)",
+          {
+            "dependency": "Adafruit Unified Sensor (1.1.15)"
+          },
+          {
+            "dependency": "OneWire (2.3.8)"
+          },
+          "DallasTemperature (4.0.6)",
+          "ESP32Servo (3.2.1)"
+        ]
+      },
+      "draftSha256": "b22267f964ded0f1a5b65f7e4c17ce2c02a23010c8fc845469234eef7125f45a",
+      "openInspect": {
+        "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32c3",
+        "chip": "esp32c3",
+        "coreVersion": "3.3.12",
+        "boardName": "ESP32C3 Dev Module",
+        "ready": true,
+        "monitor": {
+          "baud": 115200,
+          "encoding": "utf-8"
+        }
+      },
+      "openElapsedMs": 59023,
+      "openLanguage": {
+        "ok": true,
+        "command": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scope-extension/resources/bin/darwin-arm64/arduino-language-server",
+        "args": [
+          "-clangd",
+          "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/language/clangd-548f660415e7fe80a2fb.sh",
+          "-cli",
+          "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/bin/1.5.1/darwin-arm64/arduino-cli",
+          "-cli-config",
+          "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/arduino-cli.yaml",
+          "-fqbn",
+          "esp32:esp32:esp32c3",
+          "-jobs",
+          "1"
+        ],
+        "project": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+        "fingerprint": "aa4b60e2fd1a355c7d80c042b33f0df85ea91b73c7464212fcf04e6de61ea1b8",
+        "incrementalSync": true,
+        "environment": {}
+      },
+      "compile": {
+        "ok": false,
+        "stale": false,
+        "diagnostics": [
+          {
+            "source": "compiler",
+            "severity": "error",
+            "file": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/Adafruit_SSD1306_2.5.17_e01cd9e72ae36617/Adafruit SSD1306/Adafruit_SSD1306.h",
+            "absolute": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/Adafruit_SSD1306_2.5.17_e01cd9e72ae36617/Adafruit SSD1306/Adafruit_SSD1306.h",
+            "line": 42,
+            "column": 10,
+            "message": "Adafruit_GFX.h: No such file or directory"
+          }
+        ],
+        "error": "编译失败，请查看构建输出。"
+      },
+      "elapsedMs": 15850
+    }
+  ],
+  "events": [
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 400 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 800 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1200 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1600 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 2000 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "base-ebaff527-b773-438d-b4c8-6ff4c1658bfa",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "安装 Arduino CLI",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "准备 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "正在初始化 Arduino 环境",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 400 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 800 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1200 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 1600 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "初始化 Arduino 环境 2000 / 2214",
+      "phase": "preparing"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Arduino · esp32:esp32:esp32c3",
+      "phase": "compiling"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Downloading tool esp32:mklittlefs@4.0.2-db0513a..."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "esp32:mklittlefs@4.0.2-db0513a Download failed: performing HEAD request: Head \"https://github.com/earlephilhower/mklittlefs/releases/download/4.0.2/x86_64-apple-darwin-mklittlefs-db0513a.tar.gz\": dial tcp: lookup github.com: no such host"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Error downloading tool esp32:mklittlefs@4.0.2-db0513a..."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Error initializing instance: Error loading hardware platform: loading required tool esp32:mklittlefs@4.0.2-db0513a: Error installing tool esp32:mklittlefs@4.0.2-db0513a: Download failed: performing HEAD request: Head \"https://github.com/earlephilhower/mklittlefs/releases/download/4.0.2/x86_64-apple-darwin-mklittlefs-db0513a.tar.gz\": dial tcp: lookup github.com: no such host"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Downloading library Adafruit GFX Library@1.13.0..."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Library Adafruit GFX Library@1.13.0 not found..."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Error initializing instance: Library 'Adafruit GFX Library' not found"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "In file included from /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3/offline_esp32c3.ino:5:"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/Adafruit_SSD1306_2.5.17_e01cd9e72ae36617/Adafruit SSD1306/Adafruit_SSD1306.h:42:10: fatal error: Adafruit_GFX.h: No such file or directory"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "   42 | #include <Adafruit_GFX.h>"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "      |          ^~~~~~~~~~~~~~~~"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "compilation terminated."
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Used library Version Path"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "WiFi         3.3.12  /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/esp32_esp32_3.3.12_feadd113249efafd/libraries/WiFi"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Networking   3.3.12  /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/esp32_esp32_3.3.12_feadd113249efafd/libraries/Network"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Used platform Version Path"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "esp32:esp32   3.3.12  /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/esp32_esp32_3.3.12_feadd113249efafd"
+    },
+    {
+      "operationId": "offline-esp32c3",
+      "path": "/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3",
+      "line": "Error during build: exit status 1"
+    }
+  ],
+  "networkProbes": [
+    {
+      "host": "127.0.0.1",
+      "port": 9,
+      "code": "EPERM"
+    },
+    {
+      "host": "1.1.1.1",
+      "port": 9,
+      "code": "EPERM"
+    }
+  ],
+  "cleanPath": "/usr/bin:/bin:/usr/sbin:/sbin",
+  "bundle": {
+    "path": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/.tools/arduino-release/darwin-arm64/manifest.json",
+    "id": "arduino-esp32-3.3.12-cli-1.5.1-darwin-arm64",
+    "host": "darwin-arm64",
+    "sha256": "b0d14b95f3998a606c6019a6136d3477fce76cbdbab6fd2e048139d5ca7dee87",
+    "files": 2214,
+    "cliVersion": "1.5.1",
+    "coreVersion": "3.3.12",
+    "releaseReady": false,
+    "runtimeManifestSha256": "7a809c85d3cbe0093a2aa7286cc9d2a2652c00e555eeabbdb63122276bc8f5b7",
+    "runtimeFiles": 2214,
+    "runtimeBytes": 1954440855
+  },
+  "ok": false,
+  "error": "AssertionError [ERR_ASSERTION]: {\"ok\":false,\"stale\":false,\"diagnostics\":[{\"source\":\"compiler\",\"severity\":\"error\",\"file\":\"/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/Adafruit_SSD1306_2.5.17_e01cd9e72ae36617/Adafruit SSD1306/Adafruit_SSD1306.h\",\"absolute\":\"/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/Adafruit_SSD1306_2.5.17_e01cd9e72ae36617/Adafruit SSD1306/Adafruit_SSD1306.h\",\"line\":42,\"column\":10,\"message\":\"Adafruit_GFX.h: No such file or directory\"}],\"error\":\"编译失败，请查看构建输出。\"}\n\nfalse !== true\n\n    at worker (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/arduino-offline.e2e.cjs:157:20)",
+  "finished": "2026-10-27T01:12:42.165Z"
+}

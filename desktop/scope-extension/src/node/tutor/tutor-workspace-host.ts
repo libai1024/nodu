@@ -12,6 +12,8 @@ import { parse as parseJsonc } from 'jsonc-parser';
 import type { TutorBuffer } from '../../common/tutor/tutor-ai-protocol';
 import { TutorStorageConnection } from './tutor-storage-server';
 import { readRegularFile } from './tutor-file-io';
+import { readArduinoProject } from '../nodu-arduino-project';
+import { readArduinoLibraryProfile } from '../nodu-arduino-libraries';
 
 /** Uses the existing Theia workspace-open lifecycle, never recent-workspace history as a grant. */
 export class TutorWorkspaceHost {
@@ -119,7 +121,7 @@ export class TutorWorkspaceHost {
                 if (entry.name.startsWith('.') || /^(node_modules|build|target|Drivers|Middlewares|vendor|reference)$/i.test(entry.name) || entry.isSymbolicLink()) { continue; }
                 const name = relative ? `${relative}/${entry.name}` : entry.name;
                 if (entry.isDirectory()) { await walk(name, depth + 1); }
-                else if (entry.isFile() && (allowPython ? /\.(c|h|cpp|hpp|cc|py)$/i : /\.(c|h|cpp|hpp|cc)$/i).test(name) && name.length <= 240) { files.push(name); pathBytes += name.length; }
+                else if (entry.isFile() && (allowPython ? /\.(c|h|cpp|hpp|cc|py|ino)$/i : /\.(c|h|cpp|hpp|cc)$/i).test(name) && name.length <= 240) { files.push(name); pathBytes += name.length; }
             }
         };
         await walk('', 0);
@@ -128,7 +130,17 @@ export class TutorWorkspaceHost {
             const data = JSON.parse(await this.readProjectFile(grant, 'nodu.json', 32000));
             if (typeof data?.target?.mcu === 'string') { mcu = data.target.mcu.slice(0, 80); }
             if (typeof data?.sdk === 'string') { sdk = data.sdk.slice(0, 80); }
+            else if (data?.kind === 'esp32-arduino') { sdk = 'Arduino'; }
         } catch { /* Missing metadata is explicitly unknown, never inferred from a board name. */ }
+        let arduino: TutorProjectContext['arduino'];
+        if (allowPython && sdk === 'Arduino') {
+            try {
+                const project = await readArduinoProject(grant.root), profile = await readArduinoLibraryProfile(grant.root);
+                // Only structured build identity is attached, never raw local settings or credentials.
+                arduino = { profile: project.profile, fqbn: project.fqbn, coreVersion: project.coreVersion,
+                    libraries: profile.libraries.slice(0, 100).map(({ name, version, direct }) => ({ name, version, direct })) };
+            } catch { /* An invalid profile stays unavailable; a question can still refer to the source file. */ }
+        }
         const declarations: { path: string; text: string }[] = [];
         if (buffer && !/\.py$/i.test(buffer.path)) {
             const names = new Set(['main.h', 'board.h', ...Array.from(buffer.text.matchAll(/^\s*#\s*include\s*"([^"]+)"/gm), m => m[1])]);
@@ -152,11 +164,11 @@ export class TutorWorkspaceHost {
                 if (!build.currentBufferSaved) { delete build.runtime; }
             }
         }
-        const localCheck = buffer && !/\.py$/i.test(buffer.path) ? await this.checker.inspect(buffer) : undefined;
+        const localCheck = buffer && !/\.(py|ino)$/i.test(buffer.path) ? await this.checker.inspect(buffer) : undefined;
         const execution = buffer ? this.executions.get(`${id}:${buffer.path}`) : undefined;
         if (localCheck && execution && execution.result.sourceDigest === localCheck.sourceDigest && Date.now() - execution.time < 60000) { localCheck.execution = execution.result; }
         await this.assertGrant(grant);
-        return { key: grant.key, mcu, sdk, files: files.sort(),
+        return { key: grant.key, mcu, sdk, files: files.sort(), ...(arduino ? { arduino } : {}),
             ...(localCheck ? { localCheck } : {}), ...(declarations.length ? { declarations } : {}), ...(build ? { build } : {}) };
     }
     async reference(id: string, relative: string, line: number): Promise<{ path: string; line: number }> {
@@ -189,7 +201,7 @@ export class TutorWorkspaceHost {
         if (buffer === undefined) { return; }
         if (!buffer || Object.keys(buffer).some(k => !['path','text','version','line'].includes(k)) || typeof buffer.path !== 'string' || !buffer.path
             || buffer.path.length > 1024 || buffer.path.includes('\\') || buffer.path.includes('\0') || buffer.path.split('/').some(p => p === '..' || p === '.' || p === '')
-            || path.isAbsolute(buffer.path) || !(allowPython ? /\.(c|h|cpp|hpp|cc|py)$/i : /\.(c|h|cpp|hpp|cc)$/i).test(buffer.path)
+            || path.isAbsolute(buffer.path) || !(allowPython ? /\.(c|h|cpp|hpp|cc|py|ino)$/i : /\.(c|h|cpp|hpp|cc)$/i).test(buffer.path)
             || typeof buffer.text !== 'string' || buffer.text.length > 32000 || buffer.text.includes('\0')
             || !Number.isSafeInteger(buffer.version) || buffer.version < 1 || !Number.isInteger(buffer.line) || buffer.line < 1 || buffer.line > buffer.text.split('\n').length) { throw new Error('代码上下文无效或超过 32 KB'); }
         const target = path.resolve(grant.root, buffer.path);

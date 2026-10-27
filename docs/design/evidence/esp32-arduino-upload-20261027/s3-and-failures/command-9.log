@@ -1,0 +1,31 @@
+esptool v5.3.1
+Serial port socket://127.0.0.1:62585:
+Note: Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Note: It's not possible to reset the chip over a TCP socket. Automatic resetting to bootloader has been disabled, reset the chip manually.
+Connecting...
+Device VID/PID identification is only supported on COM and absolute device paths.
+
+Device VID/PID identification is only supported on COM and absolute device paths.
+
+
+Device VID/PID identification is only supported on COM and absolute device paths.
+Connected to ESP32-C3 on socket://127.0.0.1:62585:
+Chip type:          ESP32-C3 (QFN32) (revision v0.3)
+Features:           Wi-Fi, BT 5 (LE), Single Core, 160MHz
+Crystal frequency:  40MHz
+
+Device VID/PID identification is only supported on COM and absolute device paths.
+
+Device VID/PID identification is only supported on COM and absolute device paths.
+MAC:                24:0a:c4:00:00:01
+
+
+Enabling default SPI flash mode...
+Configuring flash size...
+
+Writing '/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bootloader.bin' at 0x00000000...
+SHA digest in image updated.
+Flash will be erased from 0x00000000 to 0x00004fff...
+Erasing flash...
+Took 0.00s to erase flash block.
+Writing at 0x00000000 [                              ]   0.0% 0/19536 bytes... 

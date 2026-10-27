@@ -1,0 +1,4387 @@
+[
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "capabilities": {
+        "textDocumentSync": {
+          "openClose": true,
+          "change": 2,
+          "save": {
+            "includeText": true
+          }
+        },
+        "completionProvider": {
+          "triggerCharacters": [
+            ".",
+            "<",
+            ">",
+            ":",
+            "\"",
+            "/"
+          ],
+          "allCommitCharacters": [
+            " ",
+            "\t",
+            "(",
+            ")",
+            "[",
+            "]",
+            "{",
+            "}",
+            "<",
+            ">",
+            ":",
+            ";",
+            ",",
+            "+",
+            "-",
+            "/",
+            "*",
+            "%",
+            "^",
+            "&",
+            "#",
+            "?",
+            ".",
+            "=",
+            "\"",
+            "'",
+            "|"
+          ],
+          "completionItem": {}
+        },
+        "hoverProvider": {},
+        "signatureHelpProvider": {
+          "triggerCharacters": [
+            "(",
+            ","
+          ]
+        },
+        "definitionProvider": {},
+        "documentHighlightProvider": {},
+        "documentSymbolProvider": {},
+        "codeActionProvider": {
+          "codeActionKinds": [
+            "quickfix",
+            "refactor",
+            "info"
+          ]
+        },
+        "documentFormattingProvider": {},
+        "documentRangeFormattingProvider": {},
+        "documentOnTypeFormattingProvider": {
+          "firstTriggerCharacter": "\n"
+        },
+        "renameProvider": {},
+        "executeCommandProvider": {
+          "commands": [
+            "clangd.applyFix",
+            "clangd.applyTweak"
+          ]
+        },
+        "workspaceSymbolProvider": {}
+      },
+      "serverInfo": {
+        "name": "arduino-language-server",
+        "version": "0.7.7"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/arduino-language-server37487983/build/.clangd",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "1",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "backgroundIndexProgress"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 2
+        },
+        "end": {
+          "line": 5,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "begin",
+        "title": "indexing",
+        "percentage": 0
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "3/62",
+        "percentage": 4
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "result": {
+      "isIncomplete": false,
+      "items": [
+        {
+          "label": " available()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60available",
+          "filterText": "available",
+          "insertText": "available()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "available()"
+          }
+        },
+        {
+          "label": " availableForWrite()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60availableForWrite",
+          "filterText": "availableForWrite",
+          "insertText": "availableForWrite()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "availableForWrite()"
+          }
+        },
+        {
+          "label": " baudRate()",
+          "kind": 2,
+          "detail": "uint32_t",
+          "sortText": "40902d60baudRate",
+          "filterText": "baudRate",
+          "insertText": "baudRate()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "baudRate()"
+          }
+        },
+        {
+          "label": " begin(unsigned long baud, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1, bool invert = false, unsigned long timeout_ms = 20000UL, uint8_t rxfifo_full_thrhd = 120)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60begin",
+          "filterText": "begin",
+          "insertText": "begin(${1:unsigned long baud})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "begin(${1:unsigned long baud})"
+          }
+        },
+        {
+          "label": " enableRxInternalPull(bool enable = true)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60enableRxInternalPull",
+          "filterText": "enableRxInternalPull",
+          "insertText": "enableRxInternalPull()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "enableRxInternalPull()"
+          }
+        },
+        {
+          "label": " end()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60end",
+          "filterText": "end",
+          "insertText": "end()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "end()"
+          }
+        },
+        {
+          "label": " eventQueueReset()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60eventQueueReset",
+          "filterText": "eventQueueReset",
+          "insertText": "eventQueueReset()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "eventQueueReset()"
+          }
+        },
+        {
+          "label": " flush()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60flush",
+          "filterText": "flush",
+          "insertText": "flush()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "flush()"
+          }
+        },
+        {
+          "label": " flush(bool txOnly)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60flush",
+          "filterText": "flush",
+          "insertText": "flush(${1:bool txOnly})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "flush(${1:bool txOnly})"
+          }
+        },
+        {
+          "label": " onReceive(OnReceiveCb function, bool onlyOnTimeout = false)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60onReceive",
+          "filterText": "onReceive",
+          "insertText": "onReceive(${1:OnReceiveCb function})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "onReceive(${1:OnReceiveCb function})"
+          }
+        },
+        {
+          "label": " onReceiveError(OnReceiveErrorCb function)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60onReceiveError",
+          "filterText": "onReceiveError",
+          "insertText": "onReceiveError(${1:OnReceiveErrorCb function})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "onReceiveError(${1:OnReceiveErrorCb function})"
+          }
+        },
+        {
+          "label": " peek()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60peek",
+          "filterText": "peek",
+          "insertText": "peek()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "peek()"
+          }
+        },
+        {
+          "label": " read(uint8_t *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read(${1:uint8_t *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "read(${1:uint8_t *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " read(char *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read(${1:char *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "read(${1:char *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " read()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "read()"
+          }
+        },
+        {
+          "label": " readBytes(char *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60readBytes",
+          "filterText": "readBytes",
+          "insertText": "readBytes(${1:char *buffer}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytes(${1:char *buffer}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " readBytes(uint8_t *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60readBytes",
+          "filterText": "readBytes",
+          "insertText": "readBytes(${1:uint8_t *buffer}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytes(${1:uint8_t *buffer}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " setClockSource(SerialClkSrc clkSrc)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setClockSource",
+          "filterText": "setClockSource",
+          "insertText": "setClockSource(${1:SerialClkSrc clkSrc})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setClockSource(${1:SerialClkSrc clkSrc})"
+          }
+        },
+        {
+          "label": " setCtsInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setCtsInvert",
+          "filterText": "setCtsInvert",
+          "insertText": "setCtsInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setCtsInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setDebugOutput(bool)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60setDebugOutput",
+          "filterText": "setDebugOutput",
+          "insertText": "setDebugOutput(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setDebugOutput(${1:bool})"
+          }
+        },
+        {
+          "label": " setHwFlowCtrlMode(SerialHwFlowCtrl mode = UART_HW_FLOWCTRL_CTS_RTS, uint8_t threshold = 64)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setHwFlowCtrlMode",
+          "filterText": "setHwFlowCtrlMode",
+          "insertText": "setHwFlowCtrlMode()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setHwFlowCtrlMode()"
+          }
+        },
+        {
+          "label": " setIrdaDirection(esp32_uart_irda_direction_t irdaDirection)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setIrdaDirection",
+          "filterText": "setIrdaDirection",
+          "insertText": "setIrdaDirection(${1:esp32_uart_irda_direction_t irdaDirection})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setIrdaDirection(${1:esp32_uart_irda_direction_t irdaDirection})"
+          }
+        },
+        {
+          "label": " setMode(SerialMode mode)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setMode",
+          "filterText": "setMode",
+          "insertText": "setMode(${1:SerialMode mode})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setMode(${1:SerialMode mode})"
+          }
+        },
+        {
+          "label": " setPins(int8_t rxPin, int8_t txPin, int8_t ctsPin = -1, int8_t rtsPin = -1)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setPins",
+          "filterText": "setPins",
+          "insertText": "setPins(${1:int8_t rxPin}, ${2:int8_t txPin})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setPins(${1:int8_t rxPin}, ${2:int8_t txPin})"
+          }
+        },
+        {
+          "label": " setRtsInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRtsInvert",
+          "filterText": "setRtsInvert",
+          "insertText": "setRtsInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRtsInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setRxBufferSize(size_t new_size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60setRxBufferSize",
+          "filterText": "setRxBufferSize",
+          "insertText": "setRxBufferSize(${1:size_t new_size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxBufferSize(${1:size_t new_size})"
+          }
+        },
+        {
+          "label": " setRxFIFOFull(uint8_t fifoBytes)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRxFIFOFull",
+          "filterText": "setRxFIFOFull",
+          "insertText": "setRxFIFOFull(${1:uint8_t fifoBytes})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxFIFOFull(${1:uint8_t fifoBytes})"
+          }
+        },
+        {
+          "label": " setRxInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRxInvert",
+          "filterText": "setRxInvert",
+          "insertText": "setRxInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setRxTimeout(uint8_t symbols_timeout)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRxTimeout",
+          "filterText": "setRxTimeout",
+          "insertText": "setRxTimeout(${1:uint8_t symbols_timeout})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxTimeout(${1:uint8_t symbols_timeout})"
+          }
+        },
+        {
+          "label": " setTxBufferSize(size_t new_size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60setTxBufferSize",
+          "filterText": "setTxBufferSize",
+          "insertText": "setTxBufferSize(${1:size_t new_size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setTxBufferSize(${1:size_t new_size})"
+          }
+        },
+        {
+          "label": " setTxInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setTxInvert",
+          "filterText": "setTxInvert",
+          "insertText": "setTxInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setTxInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " updateBaudRate(unsigned long baud)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60updateBaudRate",
+          "filterText": "updateBaudRate",
+          "insertText": "updateBaudRate(${1:unsigned long baud})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "updateBaudRate(${1:unsigned long baud})"
+          }
+        },
+        {
+          "label": " write(const char *s)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const char *s})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const char *s})"
+          }
+        },
+        {
+          "label": " write(const char *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const char *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const char *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " write(const uint8_t *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const uint8_t *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const uint8_t *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " write(int n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:int n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:int n})"
+          }
+        },
+        {
+          "label": " write(uint8_t)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:uint8_t})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:uint8_t})"
+          }
+        },
+        {
+          "label": " write(unsigned int n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:unsigned int n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:unsigned int n})"
+          }
+        },
+        {
+          "label": " write(unsigned long n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:unsigned long n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:unsigned long n})"
+          }
+        },
+        {
+          "label": " write(long n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:long n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:long n})"
+          }
+        },
+        {
+          "label": " clearWriteError()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "412843cdclearWriteError",
+          "filterText": "clearWriteError",
+          "insertText": "clearWriteError()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "clearWriteError()"
+          }
+        },
+        {
+          "label": " find(const uint8_t *target, size_t length)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const uint8_t *target}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const uint8_t *target}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " find(char target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:char target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:char target})"
+          }
+        },
+        {
+          "label": " find(const char *target, size_t length)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const char *target}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const char *target}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " find(const uint8_t *target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const uint8_t *target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const uint8_t *target})"
+          }
+        },
+        {
+          "label": " find(const char *target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const char *target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const char *target})"
+          }
+        },
+        {
+          "label": " findUntil(const uint8_t *target, size_t targetLen, const char *terminate, size_t termLen)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const uint8_t *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const uint8_t *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})"
+          }
+        },
+        {
+          "label": " findUntil(const uint8_t *target, const char *terminator)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const uint8_t *target}, ${2:const char *terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const uint8_t *target}, ${2:const char *terminator})"
+          }
+        },
+        {
+          "label": " findUntil(const char *target, size_t targetLen, const char *terminate, size_t termLen)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const char *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const char *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})"
+          }
+        },
+        {
+          "label": " findUntil(const char *target, const char *terminator)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const char *target}, ${2:const char *terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const char *target}, ${2:const char *terminator})"
+          }
+        },
+        {
+          "label": " getTimeout()",
+          "kind": 2,
+          "detail": "unsigned long",
+          "sortText": "412843cdgetTimeout",
+          "filterText": "getTimeout",
+          "insertText": "getTimeout()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "getTimeout()"
+          }
+        },
+        {
+          "label": " getWriteError()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "412843cdgetWriteError",
+          "filterText": "getWriteError",
+          "insertText": "getWriteError()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "getWriteError()"
+          }
+        },
+        {
+          "label": " parseFloat(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR)",
+          "kind": 2,
+          "detail": "float",
+          "sortText": "412843cdparseFloat",
+          "filterText": "parseFloat",
+          "insertText": "parseFloat()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "parseFloat()"
+          }
+        },
+        {
+          "label": " parseInt(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR)",
+          "kind": 2,
+          "detail": "long",
+          "sortText": "412843cdparseInt",
+          "filterText": "parseInt",
+          "insertText": "parseInt()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "parseInt()"
+          }
+        },
+        {
+          "label": " print(unsigned long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned long})"
+          }
+        },
+        {
+          "label": " print(const __FlashStringHelper *ifsh)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const __FlashStringHelper *ifsh})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const __FlashStringHelper *ifsh})"
+          }
+        },
+        {
+          "label": " print(long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:long long})"
+          }
+        },
+        {
+          "label": " print(const char *)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const char *})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const char *})"
+          }
+        },
+        {
+          "label": " print(struct tm *timeinfo, const char *format = NULL)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:struct tm *timeinfo})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:struct tm *timeinfo})"
+          }
+        },
+        {
+          "label": " print(const String &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const String &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const String &})"
+          }
+        },
+        {
+          "label": " print(const Printable &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const Printable &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const Printable &})"
+          }
+        },
+        {
+          "label": " print(double, int = 2)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:double})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:double})"
+          }
+        },
+        {
+          "label": " print(unsigned long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned long long})"
+          }
+        },
+        {
+          "label": " print(long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:long})"
+          }
+        },
+        {
+          "label": " print(unsigned int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned int})"
+          }
+        },
+        {
+          "label": " print(int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:int})"
+          }
+        },
+        {
+          "label": " print(unsigned char, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned char})"
+          }
+        },
+        {
+          "label": " print(char)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:char})"
+          }
+        },
+        {
+          "label": " printf(const __FlashStringHelper *ifsh, ...)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintf",
+          "filterText": "printf",
+          "insertText": "printf(${1:const __FlashStringHelper *ifsh, ...})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "printf(${1:const __FlashStringHelper *ifsh, ...})"
+          }
+        },
+        {
+          "label": " printf(const char *format, ...)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintf",
+          "filterText": "printf",
+          "insertText": "printf(${1:const char *format, ...})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "printf(${1:const char *format, ...})"
+          }
+        },
+        {
+          "label": " println(unsigned long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned long long})"
+          }
+        },
+        {
+          "label": " println()",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println()"
+          }
+        },
+        {
+          "label": " println(struct tm *timeinfo, const char *format = NULL)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:struct tm *timeinfo})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:struct tm *timeinfo})"
+          }
+        },
+        {
+          "label": " println(const Printable &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const Printable &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const Printable &})"
+          }
+        },
+        {
+          "label": " println(double, int = 2)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:double})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:double})"
+          }
+        },
+        {
+          "label": " println(long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:long long})"
+          }
+        },
+        {
+          "label": " println(unsigned long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned long})"
+          }
+        },
+        {
+          "label": " println(long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:long})"
+          }
+        },
+        {
+          "label": " println(unsigned int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned int})"
+          }
+        },
+        {
+          "label": " println(int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:int})"
+          }
+        },
+        {
+          "label": " println(unsigned char, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned char})"
+          }
+        },
+        {
+          "label": " println(char)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:char})"
+          }
+        },
+        {
+          "label": " println(const char *)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const char *})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const char *})"
+          }
+        },
+        {
+          "label": " println(const String &s)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const String &s})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const String &s})"
+          }
+        },
+        {
+          "label": " println(const __FlashStringHelper *ifsh)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const __FlashStringHelper *ifsh})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const __FlashStringHelper *ifsh})"
+          }
+        },
+        {
+          "label": " readBytesUntil(char terminator, uint8_t *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdreadBytesUntil",
+          "filterText": "readBytesUntil",
+          "insertText": "readBytesUntil(${1:char terminator}, ${2:uint8_t *buffer}, ${3:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytesUntil(${1:char terminator}, ${2:uint8_t *buffer}, ${3:size_t length})"
+          }
+        },
+        {
+          "label": " readBytesUntil(char terminator, char *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdreadBytesUntil",
+          "filterText": "readBytesUntil",
+          "insertText": "readBytesUntil(${1:char terminator}, ${2:char *buffer}, ${3:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytesUntil(${1:char terminator}, ${2:char *buffer}, ${3:size_t length})"
+          }
+        },
+        {
+          "label": " readString()",
+          "kind": 2,
+          "detail": "String",
+          "sortText": "412843cdreadString",
+          "filterText": "readString",
+          "insertText": "readString()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readString()"
+          }
+        },
+        {
+          "label": " readStringUntil(char terminator)",
+          "kind": 2,
+          "detail": "String",
+          "sortText": "412843cdreadStringUntil",
+          "filterText": "readStringUntil",
+          "insertText": "readStringUntil(${1:char terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readStringUntil(${1:char terminator})"
+          }
+        },
+        {
+          "label": " setTimeout(unsigned long timeout)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "412843cdsetTimeout",
+          "filterText": "setTimeout",
+          "insertText": "setTimeout(${1:unsigned long timeout})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setTimeout(${1:unsigned long timeout})"
+          }
+        },
+        {
+          "label": " vprintf(const char *format, va_list arg)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdvprintf",
+          "filterText": "vprintf",
+          "insertText": "vprintf(${1:const char *format}, ${2:va_list arg})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "vprintf(${1:const char *format}, ${2:va_list arg})"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "result": [
+      {
+        "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-final-replace/esp32c3-1793032251064/lsp_esp32c3/lsp_esp32c3.ino",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 4
+          },
+          "end": {
+            "line": 2,
+            "character": 9
+          }
+        }
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "4/62",
+        "percentage": 6
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "5/62",
+        "percentage": 8
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "6/62",
+        "percentage": 9
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 5,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\nA JSON document.\nhttps://arduinojson.org/v7/api/jsondocument/\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 2
+        },
+        "end": {
+          "line": 5,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "7/62",
+        "percentage": 11
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-final-replace/esp32c3-1793032251064/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": [
+        {
+          "range": {
+            "start": {
+              "line": 10,
+              "character": 2
+            },
+            "end": {
+              "line": 10,
+              "character": 18
+            }
+          },
+          "severity": 1,
+          "code": "undeclared_var_use",
+          "source": "clang",
+          "message": "Use of undeclared identifier 'missing_function'"
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "2",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "arduinoLanguageServerRebuild"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "begin",
+        "title": "Building sketch"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 6,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "variable doc\n\nType: JsonDocument\n\n// In setup\nJsonDocument doc"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 2
+        },
+        "end": {
+          "line": 6,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "result": {
+      "isIncomplete": true,
+      "items": [
+        {
+          "label": " ArduinoJson",
+          "kind": 9,
+          "sortText": "4004000bArduinoJson",
+          "filterText": "ArduinoJson",
+          "insertText": "ArduinoJson",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ArduinoJson"
+          }
+        },
+        {
+          "label": " std",
+          "kind": 9,
+          "sortText": "4004000bstd",
+          "filterText": "std",
+          "insertText": "std",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "std"
+          }
+        },
+        {
+          "label": " FILE",
+          "kind": 8,
+          "sortText": "403a2760FILE",
+          "filterText": "FILE",
+          "insertText": "FILE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "FILE"
+          }
+        },
+        {
+          "label": " pid_t",
+          "kind": 8,
+          "sortText": "403a2760pid_t",
+          "filterText": "pid_t",
+          "insertText": "pid_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "pid_t"
+          }
+        },
+        {
+          "label": " pthread_t",
+          "kind": 8,
+          "sortText": "403a2760pthread_t",
+          "filterText": "pthread_t",
+          "insertText": "pthread_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "pthread_t"
+          }
+        },
+        {
+          "label": " size_t",
+          "kind": 8,
+          "sortText": "403a2760size_t",
+          "filterText": "size_t",
+          "insertText": "size_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "size_t"
+          }
+        },
+        {
+          "label": " ARDUINO",
+          "kind": 1,
+          "sortText": "4064768dARDUINO",
+          "filterText": "ARDUINO",
+          "insertText": "ARDUINO",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO"
+          }
+        },
+        {
+          "label": " ARDUINO_ARCH_ESP32",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_ARCH_ESP32",
+          "filterText": "ARDUINO_ARCH_ESP32",
+          "insertText": "ARDUINO_ARCH_ESP32",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_ARCH_ESP32"
+          }
+        },
+        {
+          "label": " ARDUINO_BOARD",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_BOARD",
+          "filterText": "ARDUINO_BOARD",
+          "insertText": "ARDUINO_BOARD",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_BOARD"
+          }
+        },
+        {
+          "label": " ARDUINO_CORE_BUILD",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_CORE_BUILD",
+          "filterText": "ARDUINO_CORE_BUILD",
+          "insertText": "ARDUINO_CORE_BUILD",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_CORE_BUILD"
+          }
+        },
+        {
+          "label": " ARDUINO_ESP32C3_DEV",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_ESP32C3_DEV",
+          "filterText": "ARDUINO_ESP32C3_DEV",
+          "insertText": "ARDUINO_ESP32C3_DEV",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_ESP32C3_DEV"
+          }
+        },
+        {
+          "label": " ARDUINO_FQBN",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_FQBN",
+          "filterText": "ARDUINO_FQBN",
+          "insertText": "ARDUINO_FQBN",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_FQBN"
+          }
+        },
+        {
+          "label": " ARDUINO_HOST_OS",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_HOST_OS",
+          "filterText": "ARDUINO_HOST_OS",
+          "insertText": "ARDUINO_HOST_OS",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_HOST_OS"
+          }
+        },
+        {
+          "label": " ARDUINO_PARTITION_default",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_PARTITION_default",
+          "filterText": "ARDUINO_PARTITION_default",
+          "insertText": "ARDUINO_PARTITION_default",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_PARTITION_default"
+          }
+        },
+        {
+          "label": " ARDUINO_USB_CDC_ON_BOOT",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_USB_CDC_ON_BOOT",
+          "filterText": "ARDUINO_USB_CDC_ON_BOOT",
+          "insertText": "ARDUINO_USB_CDC_ON_BOOT",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_USB_CDC_ON_BOOT"
+          }
+        },
+        {
+          "label": " ARDUINO_USB_MODE",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_USB_MODE",
+          "filterText": "ARDUINO_USB_MODE",
+          "insertText": "ARDUINO_USB_MODE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_USB_MODE"
+          }
+        },
+        {
+          "label": " ARDUINO_VARIANT",
+          "kind": 1,
+          "sortText": "4064768dARDUINO_VARIANT",
+          "filterText": "ARDUINO_VARIANT",
+          "insertText": "ARDUINO_VARIANT",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ARDUINO_VARIANT"
+          }
+        },
+        {
+          "label": " CHIP_CONFIG_SOFTWARE_VERSION_NUMBER",
+          "kind": 1,
+          "sortText": "4064768dCHIP_CONFIG_SOFTWARE_VERSION_NUMBER",
+          "filterText": "CHIP_CONFIG_SOFTWARE_VERSION_NUMBER",
+          "insertText": "CHIP_CONFIG_SOFTWARE_VERSION_NUMBER",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CHIP_CONFIG_SOFTWARE_VERSION_NUMBER"
+          }
+        },
+        {
+          "label": " CHIP_DNSSD_DEFAULT_MINIMAL",
+          "kind": 1,
+          "sortText": "4064768dCHIP_DNSSD_DEFAULT_MINIMAL",
+          "filterText": "CHIP_DNSSD_DEFAULT_MINIMAL",
+          "insertText": "CHIP_DNSSD_DEFAULT_MINIMAL",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CHIP_DNSSD_DEFAULT_MINIMAL"
+          }
+        },
+        {
+          "label": " CHIP_DNSSD_DEFAULT_NONE",
+          "kind": 1,
+          "sortText": "4064768dCHIP_DNSSD_DEFAULT_NONE",
+          "filterText": "CHIP_DNSSD_DEFAULT_NONE",
+          "insertText": "CHIP_DNSSD_DEFAULT_NONE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CHIP_DNSSD_DEFAULT_NONE"
+          }
+        },
+        {
+          "label": " CHIP_DNSSD_DEFAULT_PLATFORM",
+          "kind": 1,
+          "sortText": "4064768dCHIP_DNSSD_DEFAULT_PLATFORM",
+          "filterText": "CHIP_DNSSD_DEFAULT_PLATFORM",
+          "insertText": "CHIP_DNSSD_DEFAULT_PLATFORM",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CHIP_DNSSD_DEFAULT_PLATFORM"
+          }
+        },
+        {
+          "label": " CHIP_HAVE_CONFIG_H",
+          "kind": 1,
+          "sortText": "4064768dCHIP_HAVE_CONFIG_H",
+          "filterText": "CHIP_HAVE_CONFIG_H",
+          "insertText": "CHIP_HAVE_CONFIG_H",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CHIP_HAVE_CONFIG_H"
+          }
+        },
+        {
+          "label": " CONFIG_MMU_PAGE_SIZE",
+          "kind": 1,
+          "sortText": "4064768dCONFIG_MMU_PAGE_SIZE",
+          "filterText": "CONFIG_MMU_PAGE_SIZE",
+          "insertText": "CONFIG_MMU_PAGE_SIZE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CONFIG_MMU_PAGE_SIZE"
+          }
+        },
+        {
+          "label": " CONFIG_XTAL_FREQ",
+          "kind": 1,
+          "sortText": "4064768dCONFIG_XTAL_FREQ",
+          "filterText": "CONFIG_XTAL_FREQ",
+          "insertText": "CONFIG_XTAL_FREQ",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CONFIG_XTAL_FREQ"
+          }
+        },
+        {
+          "label": " CORE_DEBUG_LEVEL",
+          "kind": 1,
+          "sortText": "4064768dCORE_DEBUG_LEVEL",
+          "filterText": "CORE_DEBUG_LEVEL",
+          "insertText": "CORE_DEBUG_LEVEL",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "CORE_DEBUG_LEVEL"
+          }
+        },
+        {
+          "label": " ESP32",
+          "kind": 1,
+          "sortText": "4064768dESP32",
+          "filterText": "ESP32",
+          "insertText": "ESP32",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ESP32"
+          }
+        },
+        {
+          "label": " ESP32_ARDUINO_LIB_BUILDER",
+          "kind": 1,
+          "sortText": "4064768dESP32_ARDUINO_LIB_BUILDER",
+          "filterText": "ESP32_ARDUINO_LIB_BUILDER",
+          "insertText": "ESP32_ARDUINO_LIB_BUILDER",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ESP32_ARDUINO_LIB_BUILDER"
+          }
+        },
+        {
+          "label": " ESP_MDNS_VERSION_NUMBER",
+          "kind": 1,
+          "sortText": "4064768dESP_MDNS_VERSION_NUMBER",
+          "filterText": "ESP_MDNS_VERSION_NUMBER",
+          "insertText": "ESP_MDNS_VERSION_NUMBER",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ESP_MDNS_VERSION_NUMBER"
+          }
+        },
+        {
+          "label": " ESP_PLATFORM",
+          "kind": 1,
+          "sortText": "4064768dESP_PLATFORM",
+          "filterText": "ESP_PLATFORM",
+          "insertText": "ESP_PLATFORM",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "ESP_PLATFORM"
+          }
+        },
+        {
+          "label": " F_CPU",
+          "kind": 1,
+          "sortText": "4064768dF_CPU",
+          "filterText": "F_CPU",
+          "insertText": "F_CPU",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "F_CPU"
+          }
+        },
+        {
+          "label": " IDF_VER",
+          "kind": 1,
+          "sortText": "4064768dIDF_VER",
+          "filterText": "IDF_VER",
+          "insertText": "IDF_VER",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "IDF_VER"
+          }
+        },
+        {
+          "label": " MBEDTLS_CONFIG_FILE",
+          "kind": 1,
+          "sortText": "4064768dMBEDTLS_CONFIG_FILE",
+          "filterText": "MBEDTLS_CONFIG_FILE",
+          "insertText": "MBEDTLS_CONFIG_FILE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "MBEDTLS_CONFIG_FILE"
+          }
+        },
+        {
+          "label": " MB_MDNS_IS_INCLUDED",
+          "kind": 1,
+          "sortText": "4064768dMB_MDNS_IS_INCLUDED",
+          "filterText": "MB_MDNS_IS_INCLUDED",
+          "insertText": "MB_MDNS_IS_INCLUDED",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "MB_MDNS_IS_INCLUDED"
+          }
+        },
+        {
+          "label": " MD5_ENABLED",
+          "kind": 1,
+          "sortText": "4064768dMD5_ENABLED",
+          "filterText": "MD5_ENABLED",
+          "insertText": "MD5_ENABLED",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "MD5_ENABLED"
+          }
+        },
+        {
+          "label": " OPENTHREAD_CONFIG_FILE",
+          "kind": 1,
+          "sortText": "4064768dOPENTHREAD_CONFIG_FILE",
+          "filterText": "OPENTHREAD_CONFIG_FILE",
+          "insertText": "OPENTHREAD_CONFIG_FILE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "OPENTHREAD_CONFIG_FILE"
+          }
+        },
+        {
+          "label": " OPENTHREAD_PROJECT_LIB_CONFIG_FILE",
+          "kind": 1,
+          "sortText": "4064768dOPENTHREAD_PROJECT_LIB_CONFIG_FILE",
+          "filterText": "OPENTHREAD_PROJECT_LIB_CONFIG_FILE",
+          "insertText": "OPENTHREAD_PROJECT_LIB_CONFIG_FILE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "OPENTHREAD_PROJECT_LIB_CONFIG_FILE"
+          }
+        },
+        {
+          "label": " SERIAL_FLASHER_BOOT_HOLD_TIME_MS",
+          "kind": 1,
+          "sortText": "4064768dSERIAL_FLASHER_BOOT_HOLD_TIME_MS",
+          "filterText": "SERIAL_FLASHER_BOOT_HOLD_TIME_MS",
+          "insertText": "SERIAL_FLASHER_BOOT_HOLD_TIME_MS",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "SERIAL_FLASHER_BOOT_HOLD_TIME_MS"
+          }
+        },
+        {
+          "label": " SERIAL_FLASHER_RESET_HOLD_TIME_MS",
+          "kind": 1,
+          "sortText": "4064768dSERIAL_FLASHER_RESET_HOLD_TIME_MS",
+          "filterText": "SERIAL_FLASHER_RESET_HOLD_TIME_MS",
+          "insertText": "SERIAL_FLASHER_RESET_HOLD_TIME_MS",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "SERIAL_FLASHER_RESET_HOLD_TIME_MS"
+          }
+        },
+        {
+          "label": " SOC_MMU_PAGE_SIZE",
+          "kind": 1,
+          "sortText": "4064768dSOC_MMU_PAGE_SIZE",
+          "filterText": "SOC_MMU_PAGE_SIZE",
+          "insertText": "SOC_MMU_PAGE_SIZE",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "SOC_MMU_PAGE_SIZE"
+          }
+        },
+        {
+          "label": " SOC_XTAL_FREQ_MHZ",
+          "kind": 1,
+          "sortText": "4064768dSOC_XTAL_FREQ_MHZ",
+          "filterText": "SOC_XTAL_FREQ_MHZ",
+          "insertText": "SOC_XTAL_FREQ_MHZ",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "SOC_XTAL_FREQ_MHZ"
+          }
+        },
+        {
+          "label": " Serial",
+          "kind": 1,
+          "sortText": "4064768dSerial",
+          "filterText": "Serial",
+          "insertText": "Serial",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "Serial"
+          }
+        },
+        {
+          "label": " TF_LITE_STATIC_MEMORY",
+          "kind": 1,
+          "sortText": "4064768dTF_LITE_STATIC_MEMORY",
+          "filterText": "TF_LITE_STATIC_MEMORY",
+          "insertText": "TF_LITE_STATIC_MEMORY",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "TF_LITE_STATIC_MEMORY"
+          }
+        },
+        {
+          "label": " UNITY_INCLUDE_CONFIG_H",
+          "kind": 1,
+          "sortText": "4064768dUNITY_INCLUDE_CONFIG_H",
+          "filterText": "UNITY_INCLUDE_CONFIG_H",
+          "insertText": "UNITY_INCLUDE_CONFIG_H",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "UNITY_INCLUDE_CONFIG_H"
+          }
+        },
+        {
+          "label": " alloca(size)",
+          "kind": 3,
+          "sortText": "4064768dalloca",
+          "filterText": "alloca",
+          "insertText": "alloca(${1:size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "alloca(${1:size})"
+          }
+        },
+        {
+          "label": " va_end(ap)",
+          "kind": 3,
+          "sortText": "4064768dva_end",
+          "filterText": "va_end",
+          "insertText": "va_end(${1:ap})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "va_end(${1:ap})"
+          }
+        },
+        {
+          "label": " va_start(ap, param)",
+          "kind": 3,
+          "sortText": "4064768dva_start",
+          "filterText": "va_start",
+          "insertText": "va_start(${1:ap}, ${2:param})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "va_start(${1:ap}, ${2:param})"
+          }
+        },
+        {
+          "label": " HardwareSerial",
+          "kind": 7,
+          "sortText": "407abd20HardwareSerial",
+          "filterText": "HardwareSerial",
+          "insertText": "HardwareSerial",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "HardwareSerial"
+          }
+        },
+        {
+          "label": " pthread_attr_t",
+          "kind": 8,
+          "sortText": "407abd20pthread_attr_t",
+          "filterText": "pthread_attr_t",
+          "insertText": "pthread_attr_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "pthread_attr_t"
+          }
+        },
+        {
+          "label": " alignas(expression)",
+          "kind": 15,
+          "sortText": "40ba4c7aalignas",
+          "filterText": "alignas",
+          "insertText": "alignas($0)",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "alignas($0)"
+          }
+        },
+        {
+          "label": " asm(string-literal)",
+          "kind": 15,
+          "sortText": "40ba4c7aasm",
+          "filterText": "asm",
+          "insertText": "asm($0)",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "asm($0)"
+          }
+        },
+        {
+          "label": " auto",
+          "kind": 14,
+          "sortText": "40ba4c7aauto",
+          "filterText": "auto",
+          "insertText": "auto",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "auto"
+          }
+        },
+        {
+          "label": " bool",
+          "kind": 14,
+          "sortText": "40ba4c7abool",
+          "filterText": "bool",
+          "insertText": "bool",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "bool"
+          }
+        },
+        {
+          "label": " char",
+          "kind": 14,
+          "sortText": "40ba4c7achar",
+          "filterText": "char",
+          "insertText": "char",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "char"
+          }
+        },
+        {
+          "label": " char16_t",
+          "kind": 14,
+          "sortText": "40ba4c7achar16_t",
+          "filterText": "char16_t",
+          "insertText": "char16_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "char16_t"
+          }
+        },
+        {
+          "label": " char32_t",
+          "kind": 14,
+          "sortText": "40ba4c7achar32_t",
+          "filterText": "char32_t",
+          "insertText": "char32_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "char32_t"
+          }
+        },
+        {
+          "label": " char8_t",
+          "kind": 14,
+          "sortText": "40ba4c7achar8_t",
+          "filterText": "char8_t",
+          "insertText": "char8_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "char8_t"
+          }
+        },
+        {
+          "label": " class",
+          "kind": 14,
+          "sortText": "40ba4c7aclass",
+          "filterText": "class",
+          "insertText": "class",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "class"
+          }
+        },
+        {
+          "label": " const",
+          "kind": 14,
+          "sortText": "40ba4c7aconst",
+          "filterText": "const",
+          "insertText": "const",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "const"
+          }
+        },
+        {
+          "label": " consteval",
+          "kind": 14,
+          "sortText": "40ba4c7aconsteval",
+          "filterText": "consteval",
+          "insertText": "consteval",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "consteval"
+          }
+        },
+        {
+          "label": " constexpr",
+          "kind": 14,
+          "sortText": "40ba4c7aconstexpr",
+          "filterText": "constexpr",
+          "insertText": "constexpr",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "constexpr"
+          }
+        },
+        {
+          "label": " constinit",
+          "kind": 14,
+          "sortText": "40ba4c7aconstinit",
+          "filterText": "constinit",
+          "insertText": "constinit",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "constinit"
+          }
+        },
+        {
+          "label": " decltype(expression)",
+          "kind": 15,
+          "sortText": "40ba4c7adecltype",
+          "filterText": "decltype",
+          "insertText": "decltype($0)",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "decltype($0)"
+          }
+        },
+        {
+          "label": " double",
+          "kind": 14,
+          "sortText": "40ba4c7adouble",
+          "filterText": "double",
+          "insertText": "double",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "double"
+          }
+        },
+        {
+          "label": " enum",
+          "kind": 14,
+          "sortText": "40ba4c7aenum",
+          "filterText": "enum",
+          "insertText": "enum",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "enum"
+          }
+        },
+        {
+          "label": " export",
+          "kind": 14,
+          "sortText": "40ba4c7aexport",
+          "filterText": "export",
+          "insertText": "export",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "export"
+          }
+        },
+        {
+          "label": " extern",
+          "kind": 14,
+          "sortText": "40ba4c7aextern",
+          "filterText": "extern",
+          "insertText": "extern",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "extern"
+          }
+        },
+        {
+          "label": " float",
+          "kind": 14,
+          "sortText": "40ba4c7afloat",
+          "filterText": "float",
+          "insertText": "float",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "float"
+          }
+        },
+        {
+          "label": " import name;",
+          "kind": 15,
+          "sortText": "40ba4c7aimport",
+          "filterText": "import",
+          "insertText": "import $0;\n",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "import $0;\n"
+          }
+        },
+        {
+          "label": " inline",
+          "kind": 14,
+          "sortText": "40ba4c7ainline",
+          "filterText": "inline",
+          "insertText": "inline",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "inline"
+          }
+        },
+        {
+          "label": " int",
+          "kind": 14,
+          "sortText": "40ba4c7aint",
+          "filterText": "int",
+          "insertText": "int",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "int"
+          }
+        },
+        {
+          "label": " long",
+          "kind": 14,
+          "sortText": "40ba4c7along",
+          "filterText": "long",
+          "insertText": "long",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "long"
+          }
+        },
+        {
+          "label": " module name;",
+          "kind": 15,
+          "sortText": "40ba4c7amodule",
+          "filterText": "module",
+          "insertText": "module $0;\n",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "module $0;\n"
+          }
+        },
+        {
+          "label": " module;",
+          "kind": 15,
+          "sortText": "40ba4c7amodule",
+          "filterText": "module",
+          "insertText": "module;\n",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "module;\n"
+          }
+        },
+        {
+          "label": " namespace name = namespace;",
+          "kind": 15,
+          "sortText": "40ba4c7anamespace",
+          "filterText": "namespace",
+          "insertText": "namespace ${1:name} = $0;",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "namespace ${1:name} = $0;"
+          }
+        },
+        {
+          "label": " namespace identifier {declarations}",
+          "kind": 15,
+          "sortText": "40ba4c7anamespace",
+          "filterText": "namespace",
+          "insertText": "namespace ${1:identifier} {\n$0\n}",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "namespace ${1:identifier} {\n$0\n}"
+          }
+        },
+        {
+          "label": " operator",
+          "kind": 14,
+          "sortText": "40ba4c7aoperator",
+          "filterText": "operator",
+          "insertText": "operator",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "operator"
+          }
+        },
+        {
+          "label": " short",
+          "kind": 14,
+          "sortText": "40ba4c7ashort",
+          "filterText": "short",
+          "insertText": "short",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "short"
+          }
+        },
+        {
+          "label": " signed",
+          "kind": 14,
+          "sortText": "40ba4c7asigned",
+          "filterText": "signed",
+          "insertText": "signed",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "signed"
+          }
+        },
+        {
+          "label": " static",
+          "kind": 14,
+          "sortText": "40ba4c7astatic",
+          "filterText": "static",
+          "insertText": "static",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "static"
+          }
+        },
+        {
+          "label": " static_assert(expression, message);",
+          "kind": 15,
+          "sortText": "40ba4c7astatic_assert",
+          "filterText": "static_assert",
+          "insertText": "static_assert(${1:expression}, $0);",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "static_assert(${1:expression}, $0);"
+          }
+        },
+        {
+          "label": " struct",
+          "kind": 14,
+          "sortText": "40ba4c7astruct",
+          "filterText": "struct",
+          "insertText": "struct",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "struct"
+          }
+        },
+        {
+          "label": " template declaration",
+          "kind": 15,
+          "sortText": "40ba4c7atemplate",
+          "filterText": "template",
+          "insertText": "template $0",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "template $0"
+          }
+        },
+        {
+          "label": " template<parameters>",
+          "kind": 15,
+          "sortText": "40ba4c7atemplate",
+          "filterText": "template",
+          "insertText": "template<$0>",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "template<$0>"
+          }
+        },
+        {
+          "label": " thread_local",
+          "kind": 14,
+          "sortText": "40ba4c7athread_local",
+          "filterText": "thread_local",
+          "insertText": "thread_local",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "thread_local"
+          }
+        },
+        {
+          "label": " typedef type name;",
+          "kind": 15,
+          "sortText": "40ba4c7atypedef",
+          "filterText": "typedef",
+          "insertText": "typedef ${1:type} $0;",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "typedef ${1:type} $0;"
+          }
+        },
+        {
+          "label": " typename name",
+          "kind": 15,
+          "sortText": "40ba4c7atypename",
+          "filterText": "typename",
+          "insertText": "typename $0",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "typename $0"
+          }
+        },
+        {
+          "label": " typeof expression",
+          "kind": 15,
+          "sortText": "40ba4c7atypeof",
+          "filterText": "typeof",
+          "insertText": "typeof $0",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "typeof $0"
+          }
+        },
+        {
+          "label": " typeof(type)",
+          "kind": 15,
+          "sortText": "40ba4c7atypeof",
+          "filterText": "typeof",
+          "insertText": "typeof($0)",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "typeof($0)"
+          }
+        },
+        {
+          "label": " union",
+          "kind": 14,
+          "sortText": "40ba4c7aunion",
+          "filterText": "union",
+          "insertText": "union",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "union"
+          }
+        },
+        {
+          "label": " unsigned",
+          "kind": 14,
+          "sortText": "40ba4c7aunsigned",
+          "filterText": "unsigned",
+          "insertText": "unsigned",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "unsigned"
+          }
+        },
+        {
+          "label": " using name = type;",
+          "kind": 15,
+          "sortText": "40ba4c7ausing",
+          "filterText": "using",
+          "insertText": "using ${1:name} = $0;",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "using ${1:name} = $0;"
+          }
+        },
+        {
+          "label": " using qualifier::name;",
+          "kind": 15,
+          "sortText": "40ba4c7ausing",
+          "filterText": "using",
+          "insertText": "using ${1:qualifier}::$0;",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "using ${1:qualifier}::$0;"
+          }
+        },
+        {
+          "label": " using namespace identifier;",
+          "kind": 15,
+          "sortText": "40ba4c7ausing namespace",
+          "filterText": "using namespace",
+          "insertText": "using namespace $0;",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "using namespace $0;"
+          }
+        },
+        {
+          "label": " void",
+          "kind": 14,
+          "sortText": "40ba4c7avoid",
+          "filterText": "void",
+          "insertText": "void",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "void"
+          }
+        },
+        {
+          "label": " volatile",
+          "kind": 14,
+          "sortText": "40ba4c7avolatile",
+          "filterText": "volatile",
+          "insertText": "volatile",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "volatile"
+          }
+        },
+        {
+          "label": " wchar_t",
+          "kind": 14,
+          "sortText": "40ba4c7awchar_t",
+          "filterText": "wchar_t",
+          "insertText": "wchar_t",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "wchar_t"
+          }
+        },
+        {
+          "label": "•base64_encodestep",
+          "kind": 8,
+          "documentation": {
+            "kind": "plaintext",
+            "value": "From \"libb64/cencode.h\""
+          },
+          "sortText": "40d2bf64base64_encodestep",
+          "filterText": "base64_encodestep",
+          "insertText": "base64_encodestep",
+          "insertTextFormat": 1,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 0
+              },
+              "end": {
+                "line": 12,
+                "character": 0
+              }
+            },
+            "newText": "base64_encodestep"
+          }
+        }
+      ]
+    }
+  }
+]

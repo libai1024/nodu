@@ -1,0 +1,41 @@
+
+> scope-studio@0.2.2 build:electron
+> npm run build:native && npm run build:media && npm run build:arduino-tools && npm run compile && npm run build --workspace @scope/electron-app
+
+
+> scope-studio@0.2.2 build:native
+> node scripts/build-native.cjs
+
+build-native: cargo build --release --locked -p nodu-device -p nodu-resources -p nodu-embedded -p nodu-tutor --features nodu-device/mock --bins --target aarch64-apple-darwin
+   Compiling nodu-embedded v0.2.1 (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `release` profile [optimized] target(s) in 7.95s
+build-native: cargo build --release --locked -p nodu-device -p nodu-resources -p nodu-embedded -p nodu-tutor --features nodu-device/mock --bins --target x86_64-apple-darwin
+   Compiling nodu-embedded v0.2.1 (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `release` profile [optimized] target(s) in 6.18s
+build-native: staged scope-extension/resources/bin/darwin-arm64/nodu-device
+build-native: staged scope-extension/resources/bin/darwin-x64/nodu-device
+build-native: staged scope-extension/resources/bin/darwin-arm64/nodu-terminal
+build-native: staged scope-extension/resources/bin/darwin-x64/nodu-terminal
+build-native: staged scope-extension/resources/bin/darwin-arm64/nodu-resources
+build-native: staged scope-extension/resources/bin/darwin-x64/nodu-resources
+build-native: staged scope-extension/resources/bin/darwin-arm64/nodu-embedded
+build-native: staged scope-extension/resources/bin/darwin-x64/nodu-embedded
+build-native: staged scope-extension/resources/bin/darwin-arm64/nodu-tutor
+build-native: staged scope-extension/resources/bin/darwin-x64/nodu-tutor
+
+> scope-studio@0.2.2 build:media
+> node scripts/build-media.cjs
+
+build-media: building arm64 slice
+build-media: TypeError: fetch failed
+build-media: Error: Command failed: /opt/homebrew/Cellar/node@24/24.21.0/bin/node /Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/build-media.cjs --arch arm64
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at buildUniversal (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/build-media.cjs:882:9)
+    at main (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/build-media.cjs:989:15)
+    at Object.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/build-media.cjs:995:1)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)

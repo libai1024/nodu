@@ -1,0 +1,6 @@
+{
+  "chip": "esp32c3",
+  "ok": false,
+  "error": "TypeError: Cannot read properties of null (reading 'contents')\n    at run (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/arduino-language.e2e.cjs:73:149)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/arduino-language.e2e.cjs:108:60",
+  "project": "/private/tmp/nodu-arduino-e2e-20261026/language-patched-incremental/esp32c3-1793034290644/lsp_esp32c3"
+}

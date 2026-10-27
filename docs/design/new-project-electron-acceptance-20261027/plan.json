@@ -1,0 +1,26 @@
+{
+  "status": "passed_and_cleaned",
+  "root": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p",
+  "application": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p/Nodu New Project Check.app",
+  "bundleId": "dev.nodu.new-project-check-20261027",
+  "profile": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile",
+  "port": 24386,
+  "arduinoHome": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p/arduino-home",
+  "projectParent": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p/projects",
+  "originalPreviewUntouched": true,
+  "uiControl": "CUA native API only",
+  "checks": [
+    "launcher and IDE shared creation form",
+    "dark and light",
+    "minimum window",
+    "chip list scrolling",
+    "Arduino default with framework logos",
+    "custom selectors",
+    "error recovery and cancel",
+    "create isolated C3 project"
+  ],
+  "evidenceFormat": "Unmodified native CUA JPEG screenshots plus AX text",
+  "isolatedRoot": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p",
+  "retainedTemporaryDirectory": "/private/tmp/nodu-new-project-electron-20261027-tDbP3p",
+  "autoOpenFix": "passed"
+}

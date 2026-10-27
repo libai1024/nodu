@@ -1,0 +1,2 @@
+Verified cached Arduino language tools for darwin-arm64
+Verified cached Arduino language tools for darwin-x64

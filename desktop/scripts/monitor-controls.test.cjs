@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { MonitorBytes } = require('../scope-extension/lib/common/nodu-monitor-bytes.js');
+const { MonitorBytes, MonitorHexTranscript } = require('../scope-extension/lib/common/nodu-monitor-bytes.js');
 const { preferredMonitorPort } = require('../scope-extension/lib/common/nodu-monitor-ports.js');
 const { encodeMonitorText } = require('../scope-extension/lib/node/nodu-monitor-encoding.js');
 
@@ -32,6 +32,29 @@ test('raw receive buffer retains only its bounded newest bytes', () => {
     assert.equal(bytes.hex(), '02 03 04 05');
     bytes.append(Uint8Array.of(6, 7, 8, 9, 10, 11));
     assert.equal(bytes.hex(), '08 09 0a 0b');
+});
+
+test('directional HEX transcript keeps TX and RX separate and bounds their combined bytes', () => {
+    const transcript = new MonitorHexTranscript(4);
+    transcript.append('RX', Uint8Array.of(1, 2, 3)); transcript.append('TX', Uint8Array.of(4, 5));
+    assert.equal(transcript.hex(), 'RX 02 03\nTX 04 05');
+    transcript.append('RX', Uint8Array.of(6, 7, 8, 9, 10)); assert.equal(transcript.hex(), 'RX 07 08 09 0a');
+    const source = Uint8Array.of(255); transcript.append('TX', source); source[0] = 0;
+    assert.equal(transcript.hex(), 'RX 08 09 0a\nTX ff', 'the transcript owns a snapshot of mutable transport chunks');
+    transcript.clear(); assert.equal(transcript.hex(), '');
+});
+
+test('single-byte receive reads coalesce into 16-byte display rows while TX boundaries remain visible', () => {
+    const transcript = new MonitorHexTranscript();
+    for (let i = 0; i < 65536; i++) transcript.append('RX', Uint8Array.of(i % 256));
+    const rows = transcript.hex().split('\n');
+    assert.equal(rows.length, 4096, 'transport chunk size must not create one visual row per received byte');
+    assert.ok(rows.every(row => row.split(' ').length === 17));
+    assert.ok(transcript.chunks.length <= 256, 'one-byte reads must not retain one object each');
+    transcript.append('TX', Uint8Array.of(255)); transcript.append('RX', Uint8Array.of(1, 2));
+    assert.match(transcript.hex(), /TX ff\nRX 01 02$/);
+    const payloadBytes = transcript.hex().split('\n').reduce((sum, row) => sum + row.split(' ').length - 1, 0);
+    assert.equal(payloadBytes, 65536);
 });
 
 test('send encoding produces exact UTF-8/GBK bytes and retains line endings', () => {

@@ -1,0 +1,32 @@
+✔ Core profile identity is portable and matches the official CLI cache identity (0.493833ms)
+✔ host selection prefers native arm64 and includes every official dependency plus builtin discovery tools (17.153833ms)
+✔ complete bundle validates and copies only the immutable manifest payload with required host marker (20.420167ms)
+✔ release packaging fails closed when any source coverage is incomplete; development validation remains explicit (8.7955ms)
+✔ missing official dependency cannot be hidden by deleting its manifest entry (11.279666ms)
+✔ corrupt payload, wrong host, duplicate targets and path traversal are rejected (9.010875ms)
+✔ symlink payloads and targets outside the intended profile Core are rejected (8.627041ms)
+✔ a source claim cannot reference missing source files or license-only material (13.440167ms)
+✔ Apple Silicon release requires native ctags and its portable platform override (14.438417ms)
+✔ post-signing refresh updates native bytes only and retains the original build identity (43.554958ms)
+✔ packager keeps upstream files covered by the Arduino bundle manifest (5.980542ms)
+✔ portable archive rejects TAR content mislabeled as ZIP (4.864917ms)
+✔ packager retains STM32 and WASI runtime objects while excluding build debris (0.2715ms)
+✔ universal merge retains both exact architecture license inventories in both apps (9.662334ms)
+✔ canonical JS accepts comment and whitespace-only differences (161.917708ms)
+✔ canonical JS rejects literal and keyword differences (2.849458ms)
+✔ canonical JS rejects an ASI semantic split (1.507583ms)
+✔ canonical JS preserves loop slots and literal whitespace (2.515041ms)
+✔ native module normalization touches generated metadata keys only (1.135292ms)
+✔ generated native labels normalize identically for both architectures (0.553333ms)
+✔ packaged bootstrap keeps one binary prefix and sets the profile (2.620833ms)
+✔ packaged app without a project opens the launcher without creating a Documents workspace (0.644417ms)
+✔ dev (unpackaged) bootstrap keeps two binary prefix entries (1.3675ms)
+✔ npm-cli resolves under the POSIX and Windows Node layouts (4.759417ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 317.428

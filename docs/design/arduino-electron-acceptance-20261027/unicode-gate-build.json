@@ -1,0 +1,7 @@
+{
+  "capturedAt": "2026-10-27T00:59:15.738554+08:00",
+  "size": 807531,
+  "sha256": "469a33411fd3dba66ab1aecfe31ec32c51a1d98cd2fd87fe55f418cef5a1072c",
+  "session": 60404,
+  "test": "2 unicode edit saves; full replacement; undo; redo; save; new line hover/completion/diagnostic"
+}

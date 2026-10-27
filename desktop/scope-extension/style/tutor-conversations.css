@@ -1,31 +1,47 @@
 /* SPDX-License-Identifier: MIT */
-/* Persistent conversation navigation beside the transcript, matching the IDE sidebar. */
 .nodu-chat-sidebar { box-sizing: border-box; display: flex; flex: 0 0 200px; flex-direction: column; min-width: 0; min-height: 0; padding: 8px; border-left: 1px solid var(--theia-panel-border); background: var(--theia-sideBar-background); color: var(--theia-foreground); font: 400 13px/20px var(--nodu-chat-font); scrollbar-color: var(--theia-scrollbarSlider-background) transparent; }
-.nodu-chat-sidebar-search-row { display: flex; flex: none; align-items: center; gap: 4px; height: 28px; padding-left: 6px; border: 1px solid var(--theia-panel-border); border-radius: 6px; background: var(--theia-input-background); color: var(--theia-descriptionForeground); }
+.nodu-chat-sidebar-search-row { display: flex; flex: none; align-items: center; gap: 4px; height: 28px; padding-left: 6px; border: 1px solid transparent; border-radius: 6px; background: color-mix(in srgb, var(--theia-foreground) 6%, var(--theia-sideBar-background)); color: var(--theia-descriptionForeground); }
 .nodu-chat-sidebar-search-row:focus-within { border-color: var(--theia-focusBorder); }
 .nodu-chat-sidebar-search-row > .codicon { flex: none; font-size: 13px; }
 #nodu-conversation-sidebar .nodu-chat-sidebar-search { flex: 1; min-width: 0; width: 0; height: 22px; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--theia-input-foreground); font: inherit; outline: none; box-shadow: none; caret-color: var(--theia-input-foreground); }
 #nodu-conversation-sidebar .nodu-chat-sidebar-search:focus-visible { outline: none; }
+.nodu-chat-sidebar-search::placeholder, .nodu-chat-history-search::placeholder { color: var(--theia-descriptionForeground); opacity: 1; }
 .nodu-chat-sidebar button { font: inherit; }
 .nodu-chat-sidebar-search-row .nodu-ai-icon { flex: none; width: 24px; height: 24px; }
 .nodu-chat-sidebar-search-row .nodu-ai-icon > .codicon { font-size: 13px; }
-.nodu-chat-sidebar-actions { flex: none; margin: 8px 0 12px; }
-.nodu-chat-sidebar-new { display: flex; align-items: center; width: 100%; min-height: 28px; gap: 7px; padding: 4px 6px; border: 0; border-radius: 5px; background: transparent; color: var(--theia-foreground); text-align: left; cursor: pointer; }
+.nodu-chat-sidebar-actions { display: flex; align-items: center; flex: none; gap: 4px; margin: 8px 0 12px; }
+.nodu-chat-sidebar-new { display: flex; flex: 1; align-items: center; min-width: 0; min-height: 28px; gap: 7px; padding: 4px 6px; border: 0; border-radius: 5px; background: transparent; color: var(--theia-foreground); text-align: left; cursor: pointer; }
 .nodu-chat-sidebar-new .codicon { font-size: 14px; color: var(--theia-descriptionForeground); }
 .nodu-chat-sidebar-filters { display: flex; flex: none; gap: 2px; padding-top: 6px; }
 .nodu-chat-sidebar-filters button { display: inline-flex; align-items: center; min-height: 24px; gap: 3px; padding: 2px 5px; border: 0; border-radius: 4px; background: transparent; color: var(--theia-descriptionForeground); cursor: pointer; font-size: 12px; }
 .nodu-chat-sidebar-filters .codicon { font-size: 12px; }
-.nodu-chat-sidebar-filters button[aria-pressed="true"] { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
+.nodu-chat-sidebar-filters button[aria-pressed="true"], .nodu-chat-sidebar-actions [aria-pressed="true"] { color: var(--theia-foreground); background: var(--theia-toolbar-hoverBackground); }
 .nodu-chat-sidebar-list { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-.nodu-chat-sidebar-list h3 { margin: 14px 6px 5px; color: var(--theia-descriptionForeground); font: inherit; font-size: 12px; }
+.nodu-chat-sidebar-list h3, .nodu-chat-sidebar-section { margin: 16px 6px 6px; color: var(--theia-descriptionForeground); font: inherit; font-size: 12px; }
 .nodu-chat-sidebar-list h3:first-child { margin-top: 0; }
-.nodu-chat-sidebar-item { display: flex; flex-direction: column; align-items: stretch; gap: 2px; width: 100%; min-height: 30px; margin: 1px 0; padding: 5px 6px; border: 0; border-radius: 5px; background: transparent; color: var(--theia-foreground); text-align: left; cursor: pointer; }
-.nodu-chat-sidebar-title { display: flex; align-items: center; min-width: 0; gap: 6px; }
+.nodu-chat-sidebar-section { margin: 0 6px 10px; }
+.nodu-chat-sidebar-row { position: relative; margin: 2px 0; border-radius: 6px; }
+.nodu-chat-sidebar-item { display: flex; flex-direction: column; align-items: stretch; gap: 3px; width: 100%; min-height: 48px; margin: 0; padding: 6px; border: 0; border-radius: inherit; background: transparent; color: var(--theia-foreground); text-align: left; cursor: pointer; }
+.nodu-chat-sidebar-title { display: flex; align-items: center; min-width: 0; gap: 6px; padding-right: 22px; }
 .nodu-chat-sidebar-title > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nodu-chat-sidebar-title > .codicon { flex: none; font-size: 12px; color: var(--theia-descriptionForeground); }
-.nodu-chat-sidebar-preview { margin-left: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--theia-descriptionForeground); font-size: 12px; }
-.nodu-chat-sidebar button:hover:not(:disabled), .nodu-chat-sidebar-item[aria-current="true"] { background: var(--theia-list-hoverBackground); }
+.nodu-chat-sidebar-meta { display: flex; align-items: baseline; min-width: 0; gap: 8px; margin-left: 18px; color: var(--theia-descriptionForeground); font-size: 11px; line-height: 16px; }
+.nodu-chat-sidebar-preview { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nodu-chat-sidebar-meta time { flex: none; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.nodu-chat-sidebar-row .nodu-chat-sidebar-more { position: absolute; right: 3px; top: 4px; width: 24px; height: 24px; opacity: 0; }
+.nodu-chat-sidebar-row:hover .nodu-chat-sidebar-more, .nodu-chat-sidebar-row:focus-within .nodu-chat-sidebar-more, .nodu-chat-sidebar-row[data-menu-open] .nodu-chat-sidebar-more { opacity: 1; }
+.nodu-chat-sidebar button:hover:not(:disabled), .nodu-chat-sidebar-row[data-current] { background: var(--theia-list-hoverBackground); }
+.nodu-chat-sidebar-row[data-current] .nodu-chat-sidebar-title > span { font-weight: 500; }
 .nodu-chat-sidebar button:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: -1px; }
 .nodu-chat-sidebar button:disabled { opacity: .45; cursor: default; }
-.nodu-chat-sidebar-empty, .nodu-chat-sidebar-error { margin: 8px 6px; color: var(--theia-descriptionForeground); font-size: 12px; overflow-wrap: anywhere; }
+.nodu-chat-sidebar-empty, .nodu-chat-sidebar-error { margin: 16px 6px; color: var(--theia-descriptionForeground); font-size: 12px; overflow-wrap: anywhere; }
 .nodu-chat-sidebar ::selection { background: var(--theia-editor-selectionBackground); }
+.nodu-chat-rename { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
+.nodu-chat-rename label { color: var(--theia-foreground); font-size: 12px; }
+.nodu-ai-popover .nodu-chat-rename .nodu-ai-menu-search { width: 100%; box-sizing: border-box; margin: 0; }
+.nodu-chat-rename-actions { display: flex; justify-content: flex-end; gap: 6px; }
+.nodu-ai-popover .nodu-chat-rename-actions button { width: auto; min-height: 28px; padding: 4px 10px; border-radius: 4px; }
+.nodu-ai-popover .nodu-chat-rename-actions button[type="submit"] { color: var(--theia-button-foreground); background: var(--theia-button-background); }
+.nodu-ai-popover .nodu-chat-rename-actions button:focus-visible { outline: 1px solid var(--theia-focusBorder); outline-offset: 2px; }
+@media (hover: none) { .nodu-chat-sidebar-row .nodu-chat-sidebar-more { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .nodu-chat-sidebar .codicon-modifier-spin { animation: none; } }

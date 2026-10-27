@@ -15,6 +15,8 @@ export interface NoduMinimalActionProps {
     busy: boolean;
     disabled?: boolean;
     allowSelection: boolean;
+    /** A fixed build action keeps its icon and label without exposing other actions. */
+    fixedAction?: boolean;
     scopeKey: string;
     stopLabel?: string;
     stopDisabled?: boolean;
@@ -116,11 +118,11 @@ export function NoduMinimalAction(props: NoduMinimalActionProps): React.ReactEle
     }, [fan, close]);
 
     const title = props.busy ? props.stopDisabled ? '操作进行中' : props.stopLabel || '取消操作'
-        : props.allowSelection ? `${MINIMAL_ACTION_LABELS[props.action]}（长按或右键选择）` : '运行当前代码';
+        : props.allowSelection ? `${MINIMAL_ACTION_LABELS[props.action]}（长按或右键选择）` : props.fixedAction ? MINIMAL_ACTION_LABELS[props.action] : '运行当前代码';
     const visible = fan && fan.scopeKey === props.scopeKey && !props.busy && !props.disabled && props.allowSelection;
     return <>
         <button ref={trigger} type="button" className={`nodu-minimal-action${props.busy ? ' busy' : ''}${visible ? ' open' : ''}`}
-            data-action={props.allowSelection && props.action !== 'build-flash' ? props.action : 'run'}
+            data-action={(props.allowSelection || props.fixedAction) && props.action !== 'build-flash' ? props.action : 'run'}
             data-state={props.busy ? 'busy' : props.disabled ? 'disabled' : 'idle'}
             disabled={Boolean(props.busy ? props.stopDisabled : props.disabled)} title={title} aria-label={title}
             aria-haspopup={props.allowSelection ? 'menu' : undefined} aria-expanded={props.allowSelection ? Boolean(visible) : undefined}
@@ -160,7 +162,7 @@ export function NoduMinimalAction(props: NoduMinimalActionProps): React.ReactEle
                     gesture.current?.consumeClick();
                 }
             }}>
-            <ActionIcon action={props.action} stop={props.busy} play={!props.allowSelection} />
+            <ActionIcon action={props.action} stop={props.busy} play={!props.allowSelection && !props.fixedAction} />
         </button>
         {visible && createPortal(<div id={menuId} ref={menu} className="nodu-minimal-fan" role="menu" aria-label="选择操作"
             style={{ left: fan.geometry.left, top: fan.geometry.top, width: fan.geometry.size, height: fan.geometry.size }}

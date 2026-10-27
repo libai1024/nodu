@@ -1,0 +1,226 @@
+{
+  "schema": 1,
+  "date": "2026-10-27",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1089,
+      "sha256": "c0ff7e2ee5187645c8edbad494cecfa814edb81dad4451efa6e1faa527247efa"
+    },
+    {
+      "path": "edges/esp32c3-messages.json",
+      "bytes": 152084,
+      "sha256": "26b9d6f30a6fb012782e50a724cb73f0911bb2586b6fa03b339f5223afaa7c3a"
+    },
+    {
+      "path": "edges/esp32c3-result.json",
+      "bytes": 457,
+      "sha256": "112e884fa13928ad7b3f18be9d8343b5dedc50a6373e22859cffbe1d1f001008"
+    },
+    {
+      "path": "edges/esp32c3-stderr.txt",
+      "bytes": 1259072,
+      "sha256": "6a0ac0a09b72095e7f94779e04e00bb6a0b65cfdb4b42b131cf4fedd5a665159"
+    },
+    {
+      "path": "edges/esp32s3-messages.json",
+      "bytes": 150726,
+      "sha256": "766acdad0964d38f6dac4779ae7951a11a849b4db1f50f29017cd9ed8fbf541c"
+    },
+    {
+      "path": "edges/esp32s3-result.json",
+      "bytes": 457,
+      "sha256": "de2114d3de0592895590473d0e1e8b25c70afba4d6da760bf62f8cd201f6cf02"
+    },
+    {
+      "path": "edges/esp32s3-stderr.txt",
+      "bytes": 1315389,
+      "sha256": "2e120982ce363a23a7cac1415749e9d5ac5556ad2eff4ec76dd66772f322f6a5"
+    },
+    {
+      "path": "edges/result.json",
+      "bytes": 1081,
+      "sha256": "f2f2c32033ea090c5fffd434aec87e568993742af4a667dc353175fa15f9080e"
+    },
+    {
+      "path": "esp32c3-messages.json",
+      "bytes": 134529,
+      "sha256": "9aeec04f2fa56addc731b83ef2539c098b3c4f0e218077ebae55b53b618f6a35"
+    },
+    {
+      "path": "esp32c3-result.json",
+      "bytes": 584,
+      "sha256": "41ed3c66633444d4d40722b7f51247aa9c5d8f5eb78d5f1c6b3a4fcd7a5188c0"
+    },
+    {
+      "path": "esp32c3-stderr.txt",
+      "bytes": 920611,
+      "sha256": "9f3980fc7dc84559b77a11442ed0e8765cfa93da95041421a1483cd2ec261ee5"
+    },
+    {
+      "path": "esp32c3.ino",
+      "bytes": 245,
+      "sha256": "c4cc62b348c104317938fce8a290dce9fe67392041b274fee70b4a8da5ea7990"
+    },
+    {
+      "path": "esp32s3-messages.json",
+      "bytes": 132715,
+      "sha256": "e514414685884d9b7f3c67caf53e48bcd9667de2e67b3ff998d64d78fcba3867"
+    },
+    {
+      "path": "esp32s3-result.json",
+      "bytes": 584,
+      "sha256": "75b846a1dc3301c9e6b926b661c69830d16c60ac09dddf7f9ef38062c3629292"
+    },
+    {
+      "path": "esp32s3-stderr.txt",
+      "bytes": 938069,
+      "sha256": "7f1bb3c67e5ec4d07690106d7c3e275e660417aab24fcf4e547001777a2a17d3"
+    },
+    {
+      "path": "esp32s3.ino",
+      "bytes": 245,
+      "sha256": "c4cc62b348c104317938fce8a290dce9fe67392041b274fee70b4a8da5ea7990"
+    },
+    {
+      "path": "gui-mapper-replay/README.md",
+      "bytes": 850,
+      "sha256": "91be052d3d73b8239186cdf532a0a6053d391086d8e9b5828cb2f735f01b50cd"
+    },
+    {
+      "path": "gui-mapper-replay/after.ino",
+      "bytes": 517,
+      "sha256": "3cfb4547e354436140f51403dc4adf097b63e455c0d031a6556894d6f0918432"
+    },
+    {
+      "path": "gui-mapper-replay/before.cpp",
+      "bytes": 859,
+      "sha256": "553f50716179aa69813d1e3247c49ad5de21f2ab9a2cdc8abd6b5d448af08fff"
+    },
+    {
+      "path": "gui-mapper-replay/before.ino",
+      "bytes": 451,
+      "sha256": "c603626d7702a329302ba71d184bb62da5abcb95bc61bdda87c825ca3d4ed2a0"
+    },
+    {
+      "path": "gui-mapper-replay/events.json",
+      "bytes": 3004,
+      "sha256": "92d6ee0ffd11f469ccb14124e9e36f58914876708718a386f11c2a4a44df8ac7"
+    },
+    {
+      "path": "gui-mapper-replay/go-test.txt",
+      "bytes": 751,
+      "sha256": "62303647157d182bb578c4d5a2d5ab7944c5f1d737337a268d43477090c99da5"
+    },
+    {
+      "path": "gui-mapper-replay/nodu_gui_tail_test.go",
+      "bytes": 1309,
+      "sha256": "8c87587be64e8648ca515d6c14a3846c8391e7516c30749127c76ebac41b5cff"
+    },
+    {
+      "path": "language-tests.txt",
+      "bytes": 872,
+      "sha256": "b05f423add0e81eccda076998ed6dbe49c5184c58d85730738f4df044749e95a"
+    },
+    {
+      "path": "middleware/esp32c3-messages.json",
+      "bytes": 23836,
+      "sha256": "803be8ff5e4226cc69cc2d540012994d6ed83c3f0fbaad5ee6f6220b56551e14"
+    },
+    {
+      "path": "middleware/esp32c3-result.json",
+      "bytes": 729,
+      "sha256": "d4169ce9c6629934514af46acbf41e3e49a8d80c615bb4fe06b322bf95744bef"
+    },
+    {
+      "path": "middleware/esp32c3-stderr.txt",
+      "bytes": 798727,
+      "sha256": "06f9dbfbf29822fd2d5c607a14e1e9b3e9738151d359cc9a030a9f9155b8a73b"
+    },
+    {
+      "path": "middleware/result.json",
+      "bytes": 911,
+      "sha256": "ea3be0e9c04918d45b7ee9303ab40c20c185f79fc0a075bbbd35435fe75486d6"
+    },
+    {
+      "path": "official-baseline/darwin-arm64-tools.json",
+      "bytes": 795,
+      "sha256": "dc825b24d91e0a6348f1cd6c62057dd92e74ac1e463598964c0f41f64cbd8ec7"
+    },
+    {
+      "path": "official-baseline/darwin-x64-tools.json",
+      "bytes": 793,
+      "sha256": "da1bae507bfd13bc5bc014ac110d3501c8cca5c03476a5958ee30a59acccea58"
+    },
+    {
+      "path": "official-baseline/unit-tests.txt",
+      "bytes": 650,
+      "sha256": "c257df42732482d1761a6af204c8da476b1a88f1f4bb9df1c201fee8f2ef2d66"
+    },
+    {
+      "path": "package-signing-tests.txt",
+      "bytes": 317,
+      "sha256": "7b40dc1e4bfbbee602ba0e74bf9e69c7d811f68a79df626964868e07e66a86e4"
+    },
+    {
+      "path": "patched-go-tests.jsonl",
+      "bytes": 67003,
+      "sha256": "0ec41a996d51e5e8a4b84f31f2dc96057add9a3eaf13614f91f8b5ae3dcf9705"
+    },
+    {
+      "path": "prototype-alias-before-conservative-boundary/esp32c3-messages.json",
+      "bytes": 63765,
+      "sha256": "b07eb3a1db7fca154ff5d62b333fe0da18114350feba9e4bf0622e2d82b8eb90"
+    },
+    {
+      "path": "prototype-alias-before-conservative-boundary/esp32c3-result.json",
+      "bytes": 570,
+      "sha256": "99cb858aa263bc07e33325f2435ae907ebbfe17efdb387d3c34a18b2dcf2dc36"
+    },
+    {
+      "path": "prototype-alias-before-conservative-boundary/esp32c3-stderr.txt",
+      "bytes": 567213,
+      "sha256": "8bb805d32193ba4c87fcccdccc604d3c0059c2228dbda97f38b2beeb6b100411"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1383,
+      "sha256": "1a056d45981eba67b3bfe2e8585c76f055f6bc311a785c185ab1e6f19a76b292"
+    },
+    {
+      "path": "sync-boundary-audit.cjs",
+      "bytes": 2032,
+      "sha256": "f91b8cafe33985ab7f107c36da2d662b80dedd98d2c31b7c8312a180ae1ef366"
+    },
+    {
+      "path": "tool-catalog.json",
+      "bytes": 3536,
+      "sha256": "619882fbd588f8e530660c34193d1f1e0a97a21e04ce191e0fc7055d1c3b9576"
+    },
+    {
+      "path": "tools-darwin-arm64.json",
+      "bytes": 1008,
+      "sha256": "6a9626d7a7807e1562db8306356633b959f29ad8e14669460624feebdf0296c9"
+    },
+    {
+      "path": "tools-darwin-x64.json",
+      "bytes": 1006,
+      "sha256": "668fc300a33758aa15e9b641d361a03e2116c2d9683b4b2cc570fb9a7dd985e1"
+    },
+    {
+      "path": "unicode-before-fix/esp32c3-messages.json",
+      "bytes": 118323,
+      "sha256": "4f290ec728eb558366e642897e57b62fb00318c47fcc40be4f875833911a9df0"
+    },
+    {
+      "path": "unicode-before-fix/esp32c3-result.json",
+      "bytes": 686,
+      "sha256": "39fe156a8c74430b41b648a94e523b0467acecd7cf28d7a1c44563def602da57"
+    },
+    {
+      "path": "unicode-before-fix/esp32c3-stderr.txt",
+      "bytes": 571058,
+      "sha256": "b2ac51df2aa1269d6a9569ad9ff935687df5c51826f9df19ee55523da90fc290"
+    }
+  ]
+}

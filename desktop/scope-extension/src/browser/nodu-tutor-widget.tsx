@@ -13,6 +13,7 @@ import { TutorMessage } from './nodu-tutor-messages';
 import { ModePicker, ModelPicker, ChatHeader } from './nodu-tutor-chat-controls';
 import { ContextPicker } from './nodu-tutor-context-picker';
 import { ConversationSidebar } from './nodu-tutor-history';
+import { NoduTutorContextTransfer } from './nodu-tutor-context-transfer';
 
 /** Plans are confirmed here; an accepted task is managed only by the shared task window. */
 function GoalPlan({ tutor, revise }: { tutor: NoduTutorModel; revise(): void }): React.ReactElement | null {
@@ -37,8 +38,9 @@ function Migration({ tutor }: { tutor: NoduTutorModel }): React.ReactElement {
 }
 interface ChatViewState { top: number; following: boolean }
 const chatViews = new WeakMap<NoduTutorModel, Map<string, ChatViewState>>();
-function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string, ...args: unknown[]): Promise<unknown> | void }): React.ReactElement {
+export function TutorPanel({ tutor, run, transfer }: { tutor: NoduTutorModel; run(command: string, ...args: unknown[]): Promise<unknown> | void; transfer?: NoduTutorContextTransfer }): React.ReactElement {
     const [, redraw] = React.useReducer(n => n + 1, 0);
+    const [dragging, setDragging] = React.useState(false);
     const log = React.useRef<HTMLDivElement>(null), input = React.useRef<HTMLTextAreaElement>(null);
     const following = React.useRef(true), scrollIntent = React.useRef(0);
     const [latest, setLatest] = React.useState(false), [errorDetail, setErrorDetail] = React.useState(false);
@@ -92,9 +94,16 @@ function TutorPanel({ tutor, run }: { tutor: NoduTutorModel; run(command: string
             : tutor.connectionState === 'disconnected' ? <div className="nodu-ai-connection" role="status">连接已断开<button type="button" className="scope-text-button" onClick={() => void tutor.load()}>重连</button></div>
             : tutor.error && !duplicateError && <div className="nodu-ai-connection" role="status"><span>{tutor.error.length <= 120 ? tutor.error : '请求未完成，请查看详情'}</span><button type="button" className="nodu-ai-icon" aria-label="查看请求详情" hidden={tutor.error.length <= 120} aria-expanded={errorDetail} onClick={() => setErrorDetail(!errorDetail)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>{errorDetail && <span className="nodu-ai-error-detail">{tutor.error}</span>}</div>}
         {tutor.historyStorageError && <div className="nodu-ai-connection" role="status"><span>{tutor.historyStorageError}</span><button type="button" className="scope-text-button" onClick={() => tutor.retryHistorySave()}>重试保存</button></div>}
-        <form className="nodu-ai-composer" onSubmit={e => { e.preventDefault(); submit(); }}>
+        {tutor.activeConversationArchived && <div className="nodu-ai-connection" role="status"><i className="codicon codicon-archive" aria-hidden="true"/><span>此对话已归档</span><button type="button" className="scope-text-button" disabled={isBusy || tutor.conversationLoading} onClick={() => {
+            try { tutor.setConversationArchived(tutor.activeConversationId!, tutor.mode, false); } catch (error) { tutor.error = error instanceof Error ? error.message : '恢复对话失败'; tutor.notify(); }
+        }}>恢复对话</button></div>}
+        <form className={`nodu-ai-composer${dragging ? ' nodu-ai-composer-dragging' : ''}`} aria-busy={tutor.contextLoading || undefined} onSubmit={e => { e.preventDefault(); submit(); }}
+            onDragOver={e => { if (transfer?.acceptsDrop(e.dataTransfer)) { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = 'copy'; setDragging(true); } }}
+            onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) { setDragging(false); } }}
+            onDrop={e => { setDragging(false); if (transfer?.drop(e.nativeEvent, tutor)) { input.current?.focus(); } }}>
             <ContextPicker tutor={tutor} open={async (path, line) => { if (await run(TUTOR_COMMANDS.openReference, path, line) === false) { throw new Error('无法打开此文件'); } }}>{addButton => <>
             <textarea ref={input} rows={1} aria-label={tutor.mode === 'teach' ? '教学消息' : '提问消息'} value={draft}
+                onPaste={e => transfer?.paste(e.nativeEvent, tutor)}
                 onChange={e => { tutor.setDraft(e.target.value); redraw(); }}
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229) { e.preventDefault(); submit(); } }} />
             <div className="nodu-ai-composer-bar">
@@ -115,6 +124,7 @@ export class NoduTutorWidget extends ReactWidget {
     @inject(NoduTutorModel) protected readonly tutor!: NoduTutorModel;
     @inject(CommandService) protected readonly commands!: CommandService;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    @inject(NoduTutorContextTransfer) protected readonly contextTransfer!: NoduTutorContextTransfer;
     private renderedSidebarOpen?: boolean;
     private collapsedConversationPanelSize?: number;
     private conversationPanelResize?: Promise<void>;
@@ -146,7 +156,7 @@ export class NoduTutorWidget extends ReactWidget {
     /** Closing the sidebar is remembered; professional mode reopens it only while preferred. */
     protected override onCloseRequest(msg: Message): void { this.tutor.setPanelPreferred(false); super.onCloseRequest(msg); }
     protected onActivateRequest(): void { this.node.querySelector<HTMLTextAreaElement>('textarea')?.focus(); }
-    protected render(): React.ReactNode { return <TutorPanel tutor={this.tutor} run={(id, ...args) => this.commands.executeCommand(id, ...args)} />; }
+    protected render(): React.ReactNode { return <TutorPanel tutor={this.tutor} transfer={this.contextTransfer} run={(id, ...args) => this.commands.executeCommand(id, ...args)} />; }
 }
 @injectable()
 export class NoduTutorViewContribution extends AbstractViewContribution<NoduTutorWidget> {

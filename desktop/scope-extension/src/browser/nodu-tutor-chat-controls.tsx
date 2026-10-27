@@ -3,10 +3,11 @@ import * as React from '@theia/core/shared/react';
 import { createPortal } from '@theia/core/shared/react-dom';
 import type { NoduTutorModel } from './nodu-tutor-model';
 import { ConversationHistory } from './nodu-tutor-history';
+import type { TutorHistoryEntry } from '../common/tutor/tutor-conversation';
 
 /** All chat menus use the same bounded overlay, outside the clipped composer. */
-export function ChatPopover({ anchor, label, above, width = 'content', minWidth = 144, align = 'end', layer = 'chat', className, close, children }: {
-    anchor: HTMLElement; label: string; above?: boolean; width?: number | 'content'; minWidth?: number; align?: 'start' | 'end'; layer?: 'chat' | 'settings'; className?: string; close(): void; children: React.ReactNode;
+export function ChatPopover({ anchor, label, above, width = 'content', minWidth = 144, align = 'end', layer = 'chat', role = 'menu', className, close, children }: {
+    anchor: HTMLElement; label: string; above?: boolean; width?: number | 'content'; minWidth?: number; align?: 'start' | 'end'; layer?: 'chat' | 'settings'; role?: 'menu' | 'dialog'; className?: string; close(): void; children: React.ReactNode;
 }): React.ReactElement {
     const ref = React.useRef<HTMLDivElement>(null);
     React.useLayoutEffect(() => {
@@ -41,11 +42,20 @@ export function ChatPopover({ anchor, label, above, width = 'content', minWidth 
         }
     }, [children, anchor]);
     const dismiss = (): void => { close(); anchor.isConnected && anchor.focus(); };
-    return createPortal(<div ref={ref} className={`nodu-ai-popover${layer === 'settings' ? ' nodu-ai-popover-settings' : ''}${className ? ` ${className}` : ''}`} tabIndex={-1} aria-label={label} role="menu" onKeyDown={e => {
+    return createPortal(<div ref={ref} className={`nodu-ai-popover${layer === 'settings' ? ' nodu-ai-popover-settings' : ''}${className ? ` ${className}` : ''}`} tabIndex={-1} aria-label={label} role={role} onKeyDown={e => {
         if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dismiss(); return; }
         // Portal events still bubble through React's parent dialog. It must not
         // process this Tab again after focus has returned to the menu trigger.
-        if (e.key === 'Tab') { e.preventDefault(); e.stopPropagation(); dismiss(); return; }
+        if (e.key === 'Tab') {
+            e.preventDefault(); e.stopPropagation();
+            if (role === 'dialog') {
+                const controls = Array.from(ref.current?.querySelectorAll<HTMLElement>('input:not(:disabled), button:not(:disabled)') ?? []);
+                const index = controls.indexOf(document.activeElement as HTMLElement);
+                if (controls.length) { controls[(index + (e.shiftKey ? controls.length - 1 : 1)) % controls.length].focus(); }
+            } else { dismiss(); }
+            return;
+        }
+        if (role === 'dialog') { return; }
         if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key) || (e.target instanceof HTMLInputElement && !e.key.startsWith('Arrow'))) { return; }
         const items = Array.from(ref.current?.querySelectorAll<HTMLElement>('[role^="menuitem"]:not(:disabled)') ?? []);
         if (!items.length) { return; }
@@ -109,6 +119,35 @@ export function ModelPicker({ tutor, openSettings }: { tutor: NoduTutorModel; op
     </ChatPopover>}</>;
 }
 
+export function ConversationActions({ tutor, entry, anchor, close, clear, completed }: {
+    tutor: NoduTutorModel; entry: Pick<TutorHistoryEntry, 'id' | 'mode' | 'title' | 'archived'>; anchor: HTMLElement; close(): void; clear?(): Promise<void>; completed?(): void;
+}): React.ReactElement {
+    const [renaming, setRenaming] = React.useState(false), [title, setTitle] = React.useState(() => tutor.conversationName(entry.id, entry.mode)), [error, setError] = React.useState('');
+    const project = React.useRef(tutor.workspaceId);
+    const disabled = !!tutor.busy || tutor.conversationLoading;
+    const finish = (): void => { close(); if (anchor.isConnected) { anchor.focus(); } };
+    const apply = (action: () => void): void => {
+        if (disabled || tutor.busy || tutor.conversationLoading || project.current !== tutor.workspaceId) { return; }
+        try { action(); finish(); completed?.(); } catch (cause) { setError(cause instanceof Error ? cause.message : '操作未保存，请重试'); }
+    };
+    return <ChatPopover anchor={anchor} label={renaming ? '重命名对话' : '会话操作'} role={renaming ? 'dialog' : 'menu'} width={renaming ? 260 : 'content'} close={close}>
+        {renaming ? <form className="nodu-chat-rename" onSubmit={e => { e.preventDefault(); apply(() => tutor.renameConversation(entry.id, entry.mode, title)); }}
+            onKeyDown={e => {
+                if (e.key === 'Enter' && (e.nativeEvent.isComposing || e.keyCode === 229)) { e.preventDefault(); e.stopPropagation(); return; }
+                if (e.key !== 'Escape' && e.key !== 'Tab') { e.stopPropagation(); }
+            }}>
+            <label htmlFor="nodu-conversation-name">对话名称</label>
+            <input id="nodu-conversation-name" className="nodu-ai-menu-search" value={title} maxLength={60} disabled={disabled} onChange={e => setTitle(e.target.value)} onFocus={e => e.target.select()}/>
+            <div className="nodu-chat-rename-actions"><button type="button" onClick={finish}>取消</button><button type="submit" disabled={disabled || !title.trim()}>保存</button></div>
+        </form> : <>
+            <button type="button" role="menuitem" disabled={disabled} onClick={() => { setRenaming(true); setError(''); }}>重命名<i className="codicon codicon-edit" aria-hidden="true"/></button>
+            <button type="button" role="menuitem" disabled={disabled} onClick={() => apply(() => tutor.setConversationArchived(entry.id, entry.mode, !entry.archived))}>{entry.archived ? '恢复对话' : '归档对话'}<i className={`codicon codicon-${entry.archived ? 'discard' : 'archive'}`} aria-hidden="true"/></button>
+            {clear && <><div className="nodu-ai-menu-divider"/><button type="button" role="menuitem" disabled={disabled || !tutor.messages[tutor.mode].length} onClick={() => { finish(); void clear(); }}>清空当前对话<i className="codicon codicon-clear-all" aria-hidden="true"/></button></>}
+        </>}
+        {error && <div className="nodu-ai-menu-empty" role="status">{error}</div>}
+    </ChatPopover>;
+}
+
 export function ChatHeader({ tutor, clear, focusComposer }: { tutor: NoduTutorModel; clear(): Promise<void>; focusComposer?(): void }): React.ReactElement {
     const [anchor, setAnchor] = React.useState<HTMLElement>();
     const historyAnchor = React.useRef<HTMLButtonElement>(null);
@@ -126,8 +165,8 @@ export function ChatHeader({ tutor, clear, focusComposer }: { tutor: NoduTutorMo
         {!tutor.conversationSidebarOpen && tutor.historyOpen && historyAnchor.current && <ChatPopover anchor={historyAnchor.current} label="历史对话" width={260} className="nodu-chat-history-popover" close={closeHistory}>
             <ConversationHistory tutor={tutor} selected={focusComposer}/>
         </ChatPopover>}
-        {anchor && <ChatPopover anchor={anchor} label="对话操作" close={close}>
-            <button type="button" role="menuitem" disabled={!!tutor.busy || tutor.conversationLoading || !tutor.messages[tutor.mode].length} onClick={() => { close(); anchor.focus(); void clear(); }}>清空当前对话<i className="codicon codicon-clear-all" aria-hidden="true"/></button>
-        </ChatPopover>}
+        {anchor && (tutor.activeConversationId && tutor.canManageActiveConversation !== false ? <ConversationActions key={`${tutor.workspaceId}:${tutor.activeConversationId}`} tutor={tutor}
+            entry={{ id: tutor.activeConversationId, mode: tutor.mode, title: tutor.activeConversationTitle, archived: tutor.activeConversationArchived }} anchor={anchor} close={close} clear={clear}/>
+            : <ChatPopover anchor={anchor} label="对话操作" close={close}><div className="nodu-ai-menu-empty">发送消息后可管理此对话</div></ChatPopover>)}
     </div>;
 }

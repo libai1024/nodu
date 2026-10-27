@@ -1,0 +1,19 @@
+The library ArduinoJson has been added from sketch project.
+The library ArduinoMqttClient has been added from sketch project.
+The library Adafruit SSD1306 has been added from sketch project.
+The library Adafruit GFX Library has been added from sketch project.
+The library Adafruit BusIO has been added from sketch project.
+The library Adafruit NeoPixel has been added from sketch project.
+The library DHT sensor library has been added from sketch project.
+The library Adafruit Unified Sensor has been added from sketch project.
+The library OneWire has been added from sketch project.
+The library DallasTemperature has been added from sketch project.
+The library ESP32Servo has been added from sketch project.
+/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp:599:22: warning: extra tokens at end of #undef directive
+  599 | #  undef noInterrupts() {portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;portENTER_CRITICAL(&mux)
+      |                      ^
+/private/tmp/nodu-arduino-offline-z4vng7/home/data/internal/OneWire_2.3.8_b02012c4e88745c5/OneWire/OneWire.cpp:600:20: warning: extra tokens at end of #undef directive
+  600 | #  undef interrupts() portEXIT_CRITICAL(&mux);}
+      |                    ^
+Sketch uses 497668 bytes (37%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes.

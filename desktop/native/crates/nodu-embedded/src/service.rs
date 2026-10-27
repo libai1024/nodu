@@ -44,6 +44,7 @@ struct Inner {
     rules: Rules,
     toolkit: Mutex<Option<(Toolkit, Value)>>,
     monitor: Mutex<Monitor>,
+    external_port: Mutex<Option<ExternalPort>>,
     build_busy: AtomicBool,
     device_busy: AtomicBool,
     build_cancel: AtomicBool,
@@ -51,6 +52,9 @@ struct Inner {
     backups: Backups,
     trust: TrustStore,
 }
+
+#[derive(Debug)]
+struct ExternalPort { token: String, port: String, baud: u32, was_open: bool, lock: locks::ResourceLock }
 
 #[derive(Debug)]
 pub struct Service {
@@ -71,6 +75,7 @@ impl Service {
                 rules,
                 toolkit: Mutex::new(None),
                 monitor: Mutex::new(Monitor::default()),
+                external_port: Mutex::new(None),
                 build_busy: AtomicBool::new(false),
                 device_busy: AtomicBool::new(false),
                 build_cancel: AtomicBool::new(false),
@@ -201,6 +206,48 @@ impl Inner {
 
     fn quick(&self, method: &str, args: &Value) -> Outcome<Value> {
         match method {
+            "acquireExternalPort" => {
+                let port = arg_str(args, "port")?;
+                let token = arg_str(args, "token")?;
+                if self.device_busy.compare_exchange(false, true, Ordering::AcqRel, Ordering::Relaxed).is_err() {
+                    return Err(Failure::new("deviceBusy", "设备操作正在进行。"));
+                }
+                let result = (|| {
+                    let mut external = self.external_port.lock().map_err(|_| Failure::new("internal", "串口状态不可用"))?;
+                    let mut monitor = self.monitor.lock().map_err(|_| Failure::new("internal", "监视器不可用"))?;
+                    monitor.available()?;
+                    let was_open = monitor.is_on(port);
+                    let baud = monitor.status()["baud"].as_u64().unwrap_or(115_200) as u32;
+                    let lock = if was_open { monitor.lend(&self.out).ok_or_else(|| Failure::new("internal", "串口交接失败"))?.1 }
+                        else { locks::lock_port(port, "Arduino 上传")? };
+                    *external = Some(ExternalPort { token: token.to_string(), port: port.to_string(), baud, was_open, lock });
+                    Ok(json!({"wasOpen": was_open, "baud": baud}))
+                })();
+                if result.is_err() { self.device_busy.store(false, Ordering::Release); }
+                result
+            }
+            "releaseExternalPort" => {
+                let token = arg_str(args, "token")?;
+                let mut external = self.external_port.lock().map_err(|_| Failure::new("internal", "串口状态不可用"))?;
+                if external.as_ref().is_none_or(|e| e.token != token) { return Err(Failure::new("badRequest", "串口交接已失效。")); }
+                let lease = external.take().expect("checked above");
+                let result = (|| {
+                    if lease.was_open {
+                        let mut monitor = self.monitor.lock().map_err(|_| Failure::new("internal", "监视器不可用"))?;
+                        let restore = arg_bool(args, "restore");
+                        let target = arg_opt_str(args, "port").unwrap_or(&lease.port);
+                        if restore && locks::canonical_port(target) != locks::canonical_port(&lease.port) {
+                            match locks::lock_port(target, "Arduino 串口监视器") {
+                                Ok(next) => { drop(lease.lock); monitor.finish_external(&self.out, target, lease.baud, next, true); }
+                                Err(error) => { monitor.finish_external(&self.out, &lease.port, lease.baud, lease.lock, false); return Err(error); }
+                            }
+                        } else { monitor.finish_external(&self.out, &lease.port, lease.baud, lease.lock, restore); }
+                    }
+                    Ok(json!({"released": true}))
+                })();
+                self.device_busy.store(false, Ordering::Release);
+                result
+            }
             "ping" => Ok(json!({"version": env!("CARGO_PKG_VERSION")})),
             "catalog" => self.catalog.listing(),
             "readToolkitLicense" => Toolkit::open(&self.toolkit_root)?.license_text(arg_str(args, "file")?),
@@ -326,7 +373,9 @@ impl Inner {
                 let profile = if args["path"].is_string() { let project = self.project(args)?;
                     crate::auto_boot::AutoBoot::parse(&project.manifest["flash"]["autoBoot"], project.chip.id())?
                 } else { None };
-                monitor.open(&self.out, port, baud, profile)
+                if args.get("arduinoCdc").and_then(Value::as_bool) == Some(true) {
+                    monitor.open_with_dtr(&self.out, port, baud, profile, Some(true))
+                } else { monitor.open(&self.out, port, baud, profile) }
             }
             "closeMonitor" => {
                 if let Ok(mut monitor) = self.monitor.lock() {
@@ -497,4 +546,27 @@ fn check_compatible(manifest: &Value, args: &Value) -> Outcome<()> {
         return Err(Failure::new("compatibilityConfirmation", "兼容芯片尚未验证，请确认具体型号后再下载。"));
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod arduino_port_tests {
+    use super::*;
+
+    #[test]
+    fn external_upload_keeps_cross_process_reservation_until_owned_release() {
+        let root = std::env::temp_dir().join(new_id("arduino-lease"));
+        let service = Service::new(root.join("resources"), root.join("toolkit"), root.join("data"), Box::new(std::io::sink()));
+        // A reservation does not open hardware; absent monitor state remains closed.
+        let port = format!("/dev/{}", new_id("nodu-test"));
+        let acquired = service.inner.quick("acquireExternalPort", &json!({"port": port, "token": "owner"})).unwrap();
+        assert_eq!(acquired["wasOpen"], false);
+        assert!(service.inner.device_busy.load(Ordering::Acquire));
+        assert!(locks::lock_port(&port, "second client").is_err());
+        assert!(service.inner.quick("releaseExternalPort", &json!({"token": "stale", "restore": false})).is_err());
+        assert!(locks::lock_port(&port, "second client").is_err());
+        service.inner.quick("releaseExternalPort", &json!({"token": "owner", "restore": false})).unwrap();
+        assert!(!service.inner.device_busy.load(Ordering::Acquire));
+        assert!(locks::lock_port(&port, "second client").is_ok());
+        assert!(service.inner.quick("releaseExternalPort", &json!({"token": "owner", "restore": false})).is_err());
+    }
 }

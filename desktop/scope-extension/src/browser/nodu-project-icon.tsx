@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
 import { projectIconIdentity } from '../common/nodu-project-icon';
+import { EspProjectFramework } from '../common/nodu-project-catalog';
 import '../../style/project-icon.css';
 
 /** Compact mark for editor chrome, where the full model is already shown alongside it. */
@@ -8,6 +9,11 @@ export function ChipMark({ tag }: { tag?: string }): React.ReactElement {
     const identity = projectIconIdentity(tag);
     const label = identity.vendor === 'unknown' ? '芯片' : `${identity.manufacturer}${identity.model ? ` · ${identity.model}` : ''}`;
     return <span className={`nodu-chip-mark nodu-project-icon--${identity.vendor}`} role="img" aria-label={label} title={label}/>;
+}
+
+/** Framework marks are bundled locally and accompany the visible framework name. */
+export function FrameworkMark({ framework }: { framework: EspProjectFramework }): React.ReactElement {
+    return <span className={`nodu-framework-mark nodu-framework-mark--${framework}`} aria-hidden="true"/>;
 }
 
 /** Shared identity for recent projects and examples; availability is a separate overlay. */

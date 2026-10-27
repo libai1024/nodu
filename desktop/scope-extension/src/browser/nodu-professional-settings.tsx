@@ -203,7 +203,7 @@ export class NoduProfessionalSettings {
             theme={getThemeMode(this.themes.getCurrentTheme().type)} onTheme={theme => this.themes.setCurrentTheme(theme === 'light' ? SCOPE_LIGHT_THEME_ID : SCOPE_THEME_ID)}
             mode={this.layout.mode} onMode={async mode => { await this.commands.executeCommand(`scope.layout.${mode}`); this.editors.currentEditor?.activate(); }}
             fontSize={this.preferences.get<number>('editor.fontSize', 14)} onFontSize={value => preference('editor.fontSize', value)}
-            autoSave={this.preferences.get<string>('files.autoSave', 'off') !== 'off'} onAutoSave={value => preference('files.autoSave', value ? 'afterDelay' : 'off')}
+            autoSave={this.preferences.get<string>('files.autoSave', 'afterDelay') !== 'off'} onAutoSave={value => preference('files.autoSave', value ? 'afterDelay' : 'off')}
             wordWrap={this.preferences.get<string>('editor.wordWrap', 'off') !== 'off'} onWordWrap={value => preference('editor.wordWrap', value ? 'on' : 'off')}
             tabSize={this.preferences.get<number>('editor.tabSize', 4)} onTabSize={value => preference('editor.tabSize', value)}
             allSettings={() => { this.close(); void this.commands.executeCommand('preferences:open').catch(() => this.messages.error('无法打开全部设置')); }}/>);

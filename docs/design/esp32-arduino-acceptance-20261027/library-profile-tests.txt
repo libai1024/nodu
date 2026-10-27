@@ -1,0 +1,21 @@
+✔ Arduino comparison grammar respects precedence, prereleases and unsupported syntax (1.514292ms)
+✔ dependency resolution backtracks and preserves compatible existing versions (9.287583ms)
+✔ bundled files match fixed catalog and each archive checksum; damaged cache is repaired (117.527625ms)
+✔ offline list retains bundled/core records and exact project version without network (18.19675ms)
+✔ failed index refresh still shows local search results (40.817667ms)
+✔ add and upgrade pin dependency closure, preserve comments and other profiles (52.604458ms)
+✔ network failure, cancellation and concurrent edit never publish a replacement profile (74.340125ms)
+✔ library edits retain unchanged entries, version comments, local paths and other profiles (147.978667ms)
+✔ changing a shared YAML anchor cannot silently alter another profile or leave a dangling alias (47.145791ms)
+✔ remove refuses shared dependency, prunes unneeded children, and cannot remove core (62.930167ms)
+✔ incompatible architecture and malformed versions cannot modify project (43.295042ms)
+✔ a corrupt bundled archive fails before touching project or publishing cache (15.196625ms)
+✔ C3 exposes SPI SD while only S3 exposes the supported SDMMC Core API (18.481958ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 807.592208

@@ -7,8 +7,9 @@ import { openBuildLocation } from './nodu-build-location';
 import { dirname, isAbsolute, join } from 'path';
 import { createInterface } from 'readline';
 import { createRequire } from 'module';
+import { randomUUID } from 'crypto';
 import { BackendApplicationContribution } from '@theia/core/lib/node/backend-application';
-import { CallOutcome, EMBEDDED_METHODS, EmbeddedClient, EmbeddedMethod, NoduEmbeddedService } from '../common/nodu-embedded-protocol';
+import { CallOutcome, EMBEDDED_METHODS, EmbeddedClient, EmbeddedMethod, NoduEmbeddedService, PortInfo } from '../common/nodu-embedded-protocol';
 import { encodeMonitorText } from './nodu-monitor-encoding';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
 import { TutorRuntimeEvidence } from './tutor/tutor-runtime-evidence';
@@ -34,6 +35,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     private sequence = 0;
     private readonly pending = new Map<number, Pending>();
     private readonly clients = new Set<EmbeddedClient>();
+    private arduinoLease?: { token: string; port: string; restore: boolean; lost: boolean; onLost?: () => void };
 
     addClient(client: EmbeddedClient): () => void {
         this.clients.add(client);
@@ -52,7 +54,9 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     }
 
     private extensionDir(): string {
-        return dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json'));
+        const candidates = [join(__dirname, '../..'), join(__dirname, '../../../scope-extension'), join(__dirname, '../../scope-extension'),
+            dirname(createRequire(__filename).resolve('@scope/studio-extension/package.json'))];
+        return candidates.find(path => existsSync(join(path, 'resources/stm32')) && existsSync(join(path, 'resources/bin'))) ?? candidates[candidates.length - 1];
     }
 
     private platformDir(): string {
@@ -121,6 +125,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     private failSidecar(child: ChildProcessWithoutNullStreams, message: string): void {
         if (this.sidecar !== child) { return; }
         this.sidecar = undefined;
+        if (this.arduinoLease) { this.arduinoLease.lost = true; this.arduinoLease.restore = false; this.arduinoLease.onLost?.(); }
         for (const item of this.pending.values()) { clearTimeout(item.timer); item.reject(Object.assign(new Error(message), { code: 'service' })); }
         this.pending.clear();
         this.publish('service.state', { running: false, message });
@@ -146,11 +151,21 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
         if (!EMBEDDED_METHODS.includes(method)) { return refuse(`不支持的方法 ${String(method)}`); }
         if (!args || typeof args !== 'object' || Array.isArray(args)) { return refuse('参数必须是对象。'); }
         if (JSON.stringify(args).length > MAX_REQUEST) { return refuse('请求太大。'); }
+        if (this.arduinoLease && ['openMonitor', 'closeMonitor', 'writeMonitor'].includes(method)) {
+            if (method === 'closeMonitor') { this.arduinoLease.restore = false; }
+            return { ok: false, error: { code: 'portBusy', message: '串口正在用于 Arduino 上传。' } };
+        }
         for (const key of ['path', 'parent', 'destination']) {
             const value = args[key];
             if (value !== undefined && (typeof value !== 'string' || !isAbsolute(value) || value.includes('\0'))) { return refuse(`${key} 必须是绝对路径。`); }
         }
         try {
+            if (method === 'openMonitor' && args.arduino === true) {
+                const ports = await this.request('listPorts', {}) as PortInfo[];
+                const port = ports.find(item => item.path === args.port);
+                // Native Espressif CDC needs DTR for Arduino's while (!Serial) readiness.
+                args = { port: args.port, baud: args.baud, arduinoCdc: port?.vid === 0x303a };
+            }
             if (method === 'openBuildLocation') {
                 if (typeof args.path !== 'string') { return refuse('缺少工程路径。'); }
                 return { ok: true, result: await openBuildLocation(args.path) };
@@ -175,6 +190,9 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
             }
             const result = await this.request(method, args, TIMEOUTS[method]);
             this.teachingEvidence.result(method, args, result);
+            if (method === 'writeMonitor' && typeof args.data === 'string') {
+                return { ok: true, result: { ...(result as { sent: number }), data: args.data } };
+            }
             return { ok: true, result };
         } catch (error) {
             const e = error as Error & { code?: string; detail?: unknown };
@@ -183,6 +201,48 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     }
 
     homeDirectory(): Promise<string> { return Promise.resolve(homedir()); }
+
+    /** Only the Node Arduino service can borrow a port; the methods are absent from the public RPC facade. */
+    async acquireArduinoPort(port: string): Promise<{ release(restore: boolean, canRestore?: () => boolean): Promise<{ restored: boolean; port?: string }>; onLost(callback: () => void): void }> {
+        if (this.arduinoLease) { throw new Error('另一个 Arduino 上传正在使用串口。'); }
+        const lease: NonNullable<NoduEmbeddedServer['arduinoLease']> = { token: randomUUID(), port, restore: true, lost: false }; this.arduinoLease = lease;
+        let status: { wasOpen: boolean; baud: number };
+        let identity: PortInfo | undefined;
+        try {
+            const ports = await this.request('listPorts', {}) as PortInfo[];
+            identity = ports.find(item => item.path === port);
+            if (!identity) { throw new Error('所选串口已断开，请重新选择。'); }
+            status = await this.request('acquireExternalPort', { port, token: lease.token }) as typeof status;
+        } catch (error) {
+            await this.request('releaseExternalPort', { token: lease.token, restore: false }).catch(() => undefined);
+            this.arduinoLease = undefined; throw error;
+        }
+        let released = false;
+        return { onLost: callback => { lease.onLost = callback; if (lease.lost) { callback(); } }, release: async (restore: boolean, canRestore = () => true) => {
+            if (released) { return { restored: false }; } released = true;
+            let target: string | undefined;
+            const allowed = (): boolean => restore && lease.restore && !lease.lost && canRestore();
+            try {
+                if (allowed() && status.wasOpen && identity?.serial_number) {
+                    const deadline = Date.now() + 8000;
+                    do {
+                        const ports = await this.request('listPorts', {}) as PortInfo[];
+                        const matches = ports.filter(item => item.serial_number === identity!.serial_number && item.vid === identity!.vid);
+                        if (matches.length === 1) { target = matches[0].path; break; }
+                        if (matches.length > 1) { break; }
+                        await new Promise(resolve => setTimeout(resolve, 250));
+                    } while (Date.now() < deadline && allowed());
+                }
+                await this.request('releaseExternalPort', { token: lease.token, restore: !!target && allowed(), port: target });
+                if (target && !allowed()) { await this.request('closeMonitor', {}); }
+                return { restored: !!target && allowed(), port: target };
+            } finally {
+                // Also drop a reservation after failed discovery or a disappearing device.
+                await this.request('releaseExternalPort', { token: lease.token, restore: false }).catch(() => undefined);
+                if (this.arduinoLease === lease) { this.arduinoLease = undefined; }
+            }
+        } };
+    }
 
     onStop(): void {
         const child = this.sidecar;

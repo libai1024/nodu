@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
-import { ChipMark } from './nodu-project-icon';
+import { ChipMark, FrameworkMark } from './nodu-project-icon';
+import { ARDUINO_COMMANDS } from '../common/nodu-arduino-protocol';
+import { NoduArduinoModel } from './nodu-arduino-model';
+import { NoduArduinoDevicePanel } from './nodu-arduino-device';
+import { ARDUINO_FLASH_COMMAND } from './nodu-arduino-contribution';
 import { projectIconIdentity } from '../common/nodu-project-icon';
 import { BoxLayout, Widget } from '@theia/core/shared/@lumino/widgets';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
@@ -117,6 +121,7 @@ export class ScopeToolbar extends ReactWidget {
     @inject(NoduProfessionalSettings) protected readonly professionalSettings!: NoduProfessionalSettings;
     @inject(MessageService) protected readonly messages!: MessageService;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    @inject(NoduArduinoModel) protected readonly arduino!: NoduArduinoModel;
     private readonly selectedActions = new Map<string, MinimalAction>();
 
     @postConstruct()
@@ -125,6 +130,7 @@ export class ScopeToolbar extends ReactWidget {
         this.addClass('scope-toolbar-widget');
         this.toDispose.push(this.device.onDidChange(() => this.update()));
         this.toDispose.push(this.embedded.onDidChange(() => this.update()));
+        this.toDispose.push(this.arduino.onDidChange(() => this.update()));
         this.toDispose.push(this.layoutState.onDidChange(() => this.update()));
         this.toDispose.push(this.themes.onDidColorThemeChange(() => this.update()));
         this.toDispose.push(this.preferences.onPreferenceChanged(() => this.update()));
@@ -158,8 +164,8 @@ export class ScopeToolbar extends ReactWidget {
     protected render(): React.ReactNode {
         return <React.Fragment>
             {this.layoutState.mode === 'simple' ? this.renderMinimal() : this.renderProfessional()}
-            {!this.embedded.isEsp && <NoduToolbarPopover open={this.layoutState.deviceOpen} simple={this.layoutState.mode === 'simple'} compact={this.layoutState.mode === 'simple' && this.embedded.isC} owner={this.node}>
-                {this.embedded.isC
+            {(!this.embedded.isEsp || this.embedded.isArduino) && <NoduToolbarPopover open={this.layoutState.deviceOpen} simple={this.layoutState.mode === 'simple'} compact={this.embedded.isArduino || this.layoutState.mode === 'simple' && this.embedded.isC} owner={this.node}>
+                {this.embedded.isArduino ? <NoduArduinoDevicePanel model={this.arduino} open={this.layoutState.deviceOpen} exec={id => { this.layoutState.setDeviceOpen(false); this.execute(id); }}/> : this.embedded.isC
                     ? <NoduCDevicePanel model={this.embedded} simple={this.layoutState.mode === 'simple'}
                         exec={id => { this.layoutState.setDeviceOpen(false); this.execute(id); }}
                         confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(value => {
@@ -194,9 +200,10 @@ export class ScopeToolbar extends ReactWidget {
         const icon = (name: string): React.ReactNode => <i className={`codicon codicon-${name}`} aria-hidden="true" />;
         const panelVisible = c ? this.commandRegistry.isToggled(C_COMMANDS.togglePanel) : this.layoutState.consoleVisible;
         const savingOptions = c && this.embedded.savingOptions;
-        const busy = c ? (this.embedded.busy && !savingOptions) || !!this.embedded.awaitUser : !this.embedded.isEsp && (this.device.state.running || this.device.busy);
+        const busy = c ? (this.embedded.busy && !savingOptions) || !!this.embedded.awaitUser : this.embedded.isArduino ? !!this.arduino.operation : !this.embedded.isEsp && (this.device.state.running || this.device.busy);
         const toggleDevice = (): void => {
             this.layoutState.setDeviceOpen(!this.layoutState.deviceOpen);
+            if (this.embedded.isArduino && this.layoutState.deviceOpen) { void this.arduino.refresh(); }
             if (c && this.layoutState.deviceOpen) { void this.embedded.refreshDevices(); void this.embedded.loadBackups(); }
         };
         return <nav className="nodu-minimal-rail" aria-label="工作区">
@@ -205,21 +212,22 @@ export class ScopeToolbar extends ReactWidget {
             <div className="nodu-minimal-tools">
                 <button className="nodu-minimal-tool" aria-label="文件" title="文件" aria-pressed={this.layoutState.filesVisible} onClick={() => this.execute('scope.toggle-files')}>{icon('folder')}</button>
                 <button className="nodu-minimal-tool" aria-label="搜索" title="搜索" onClick={() => this.execute('search-in-workspace.toggle')}>{icon('search')}</button>
-                {!this.embedded.isEsp && <div className="scope-device-picker">
+                {(!this.embedded.isEsp || this.embedded.isArduino) && <div className="scope-device-picker">
                     <button className="nodu-minimal-tool scope-device-chip" aria-label="设备" title="设备" aria-haspopup="dialog" aria-controls="scope-device-popover"
                         aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={toggleDevice}>{icon('circuit-board')}</button>
                 </div>}
+                {this.embedded.isArduino && <button className="nodu-minimal-tool" aria-label="库管理" title="库管理" onClick={() => this.execute(ARDUINO_COMMANDS.libraries)}>{icon('library')}</button>}
                 {!c && !this.embedded.isEsp && <button className="nodu-minimal-tool" aria-label="图像" title="图像" aria-pressed={this.layoutState.visionVisible} onClick={() => this.execute('scope.toggle-vision')}>{icon('device-camera')}</button>}
                 <button className="nodu-minimal-tool" aria-label="终端与输出" title="终端与输出" aria-pressed={panelVisible}
                     onClick={() => this.execute(c ? C_COMMANDS.togglePanel : 'scope.toggle-console')}>{icon('terminal')}</button>
             </div>
             {this.renderSettings()}
             <div className="nodu-minimal-primary">
-                <NoduMinimalAction action={action} allowSelection={c} busy={busy} disabled={savingOptions} scopeKey={scope}
+                <NoduMinimalAction action={action} allowSelection={c || this.embedded.isArduino} busy={busy} disabled={this.embedded.isArduino ? this.arduino.loading || this.arduino.configuring : savingOptions} scopeKey={scope}
                     stopDisabled={!c && !this.embedded.isEsp && !this.device.canStop}
                     onSelect={next => { this.selectedActions.set(scope, next); try { localStorage.setItem(`nodu.minimal-action:${scope}`, next); } catch { /* Keep the session selection. */ } this.update(); }}
-                    onExecute={() => this.execute(c ? action === 'build' ? C_COMMANDS.build : action === 'flash' ? C_COMMANDS.flash : C_COMMANDS.run : this.embedded.isEsp ? 'task:run:build' : 'scope.run-current')}
-                    onStop={() => this.execute(c ? C_COMMANDS.stop : 'scope.stop-device')} />
+                    onExecute={() => this.embedded.isArduino ? this.executeArduino(action) : this.execute(c ? action === 'build' ? C_COMMANDS.build : action === 'flash' ? C_COMMANDS.flash : C_COMMANDS.run : this.embedded.isEsp ? 'task:run:build' : 'scope.run-current')}
+                    onStop={() => this.execute(c ? C_COMMANDS.stop : this.embedded.isArduino ? ARDUINO_COMMANDS.stop : 'scope.stop-device')} />
             </div>
             {c && <BootGuide model={this.embedded} exec={id => this.execute(id)} />}
         </nav>;
@@ -238,7 +246,7 @@ export class ScopeToolbar extends ReactWidget {
                     onTheme={mode => this.themes.setCurrentTheme(mode === 'light' ? SCOPE_LIGHT_THEME_ID : SCOPE_THEME_ID)}
                     mode={this.layoutState.mode} onMode={async mode => { await this.commands.executeCommand(`scope.layout.${mode}`); this.editors.currentEditor?.activate(); }}
                     fontSize={this.preferences.get<number>('editor.fontSize', 14)} onFontSize={value => preference('editor.fontSize', value)}
-                    autoSave={this.preferences.get<string>('files.autoSave', 'off') !== 'off'} onAutoSave={value => preference('files.autoSave', value ? 'afterDelay' : 'off')}
+                    autoSave={this.preferences.get<string>('files.autoSave', 'afterDelay') !== 'off'} onAutoSave={value => preference('files.autoSave', value ? 'afterDelay' : 'off')}
                     wordWrap={this.preferences.get<string>('editor.wordWrap', 'off') !== 'off'} onWordWrap={value => preference('editor.wordWrap', value ? 'on' : 'off')}
                     tabSize={this.preferences.get<number>('editor.tabSize', 4)} onTabSize={value => preference('editor.tabSize', value)}
                     onAllSettings={() => this.execute('preferences:open')} onOpen={() => this.layoutState.setDeviceOpen(false)} scopeKey={scope} />;
@@ -266,7 +274,7 @@ export class ScopeToolbar extends ReactWidget {
     private renderProfessional(): React.ReactNode {
         return <>
             {this.renderProjectLogo()}
-            {this.embedded.isC ? this.renderC() : this.renderPythonOrEsp()}
+            {this.embedded.isC ? this.renderC() : this.embedded.isArduino ? this.renderArduino() : this.renderPythonOrEsp()}
         </>;
     }
 
@@ -302,6 +310,33 @@ export class ScopeToolbar extends ReactWidget {
             {this.renderAI()}
             {this.renderMore()}
             {this.renderSettings()}
+        </header>;
+    }
+
+    private executeArduino(action: MinimalAction): void {
+        if (action !== 'build' && !this.arduino.selectedPort) { this.layoutState.setDeviceOpen(true); void this.arduino.refresh(); return; }
+        if (action === 'flash' && !this.arduino.canFlash) { this.embedded.setTask('请先编译', 'warn', { target: 'output' }); return; }
+        this.execute(action === 'build' ? ARDUINO_COMMANDS.build : action === 'flash' ? ARDUINO_FLASH_COMMAND : ARDUINO_COMMANDS.upload);
+    }
+
+    private renderArduino(): React.ReactNode {
+        const model = this.arduino, busy = model.busy || model.loading;
+        const portAvailable = model.ports.some(port => port.path === model.selectedPort);
+        const portStatus = model.selectedPort ? portAvailable ? '串口可用' : '串口未连接' : '未选择串口';
+        const chip = this.embedded.flashing ? 'writing' : model.operation ? 'connecting' : portAvailable ? 'connected' : 'disconnected';
+        return <header className="nodu-professional-bar nodu-c-toolbar" aria-label="Nodu 工具栏">
+            <div className="scope-device-picker"><button className={`scope-action scope-device-chip nodu-chip-${chip}`} aria-label={`开发板与串口，${model.boardName}，${portStatus}`} aria-haspopup="dialog" aria-controls="scope-device-popover" aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen}
+                title={`${model.boardName}${model.selectedPort ? `，${model.selectedPort}` : ''}，${portStatus}`} onClick={() => { const open = !this.layoutState.deviceOpen; this.layoutState.setDeviceOpen(open); if (open) { void model.refresh(); } }}>
+                <span className="scope-status-dot" aria-hidden="true"/><FrameworkMark framework="arduino"/><span className="scope-device-chip-board">{model.boardName}</span><i className="codicon codicon-chevron-down" aria-hidden="true"/>
+            </button></div>
+            <div className="nodu-pro-actions" role="group" aria-label="编译与烧录">
+                <button className="nodu-pro-action" data-action="build" aria-label="编译" title="编译（Ctrl / ⌘ B）" disabled={busy} aria-busy={this.embedded.building || undefined} onClick={() => this.execute(ARDUINO_COMMANDS.build)}>{this.embedded.building ? <i className="codicon codicon-loading codicon-modifier-spin" aria-hidden="true"/> : <ActionIcon action="build"/>}</button>
+                <button className="nodu-pro-action" data-action="flash" aria-label="烧录" title="烧录现有构建" disabled={busy || !model.canFlash || !model.selectedPort} onClick={() => this.execute(ARDUINO_FLASH_COMMAND)}><ActionIcon action="flash"/></button>
+                <button className="nodu-pro-action" data-action="run" aria-label="运行（编译并烧录）" title="运行：编译并烧录（Ctrl / ⌘ R）" disabled={busy || !model.selectedPort} aria-busy={this.embedded.flashing || undefined} onClick={() => this.execute(ARDUINO_COMMANDS.upload)}><ActionIcon action="build-flash"/></button>
+                <button className="nodu-pro-action nodu-pro-stop" aria-label="停止" title="停止" disabled={!model.operation} onClick={() => this.execute(ARDUINO_COMMANDS.stop)}><ActionIcon action="build-flash" stop/></button>
+            </div>
+            {this.renderMore()}{this.renderSettings()}
+            <span role="status" aria-live="polite" className="scope-visually-hidden">{this.embedded.task?.text}</span>
         </header>;
     }
 
@@ -555,11 +590,23 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         this.shell.resize(340, 'right');
         (await this.consoleView.widget).restoreHeight();
         const root = (await this.workspace.roots)[0];
-        if (root) {
+        if (root && !this.editors.all.length) {
+            const opened = new Set<EditorWidget>();
+            const current = (): boolean => this.workspace.tryGetRoots()[0]?.resource.toString() === root.resource.toString()
+                && this.editors.all.every(widget => opened.has(widget));
+            const sketch = `${root.resource.path.base}.ino`;
             // Only open files that exist; never create or overwrite a user's project on startup.
-            for (const file of ['thresholds.py', 'camera.py', 'main.py', 'main/main.c']) {
+            // This default-layout hook is shared by IDE and launcher project opens; restored layouts bypass it.
+            for (const file of [sketch, 'thresholds.py', 'camera.py', 'main.py', 'main/main.c']) {
+                if (!current()) { return; }
                 const uri = root.resource.resolve(file);
-                if (await this.files.exists(uri)) { await this.editors.open(uri, { mode: 'activate' }); }
+                const exists = await this.files.exists(uri);
+                // A user-opened/restored editor or another workspace wins over a late filesystem response.
+                if (!current()) { return; }
+                if (exists) {
+                    opened.add(await this.editors.open(uri, { mode: 'activate' }));
+                    if (file === sketch) { return; }
+                }
             }
         }
     }

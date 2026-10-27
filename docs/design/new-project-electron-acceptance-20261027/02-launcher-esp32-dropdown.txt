@@ -1,0 +1,81 @@
+Window: "Nodu", App: Nodu New Project Check.
+0 标准窗口 Nodu, Secondary Actions: Raise
+	1 container Nodu
+		2 container
+			3 HTML 内容 Nodu, URL: file:///Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/frontend/index.html?noduLauncher=1&port=24386#
+				4 container
+					5 container Nodu 工作台
+						6 container 工作台导航
+							7 图像 见微 Nodu
+							8 文本 0.2.2
+							9 按钮 最近项目
+							10 按钮 新建项目
+							11 按钮 打开项目
+							12 按钮 示例项目
+							13 按钮 设置
+							14 按钮 切换到浅色主题
+						15 container 新建项目
+							16 container
+								17 标题 新建项目, Value: 1
+									18 文本 新建项目
+								19 按钮 返回项目列表
+							20 container
+								21 container 芯片系列
+									22 文本 芯片系列
+									23 切换按钮 嘉楠 · Kendryte · K210 K210, Value: 0
+										24 图像 嘉楠 · Kendryte · K210
+										25 文本 K210
+									26 按钮 意法半导体 · ST · STM32 STM32
+										27 图像 意法半导体 · ST · STM32
+										28 文本 STM32
+									29 container
+										30 切换按钮 STM32F103, Value: 0
+										31 切换按钮 STM32F407, Value: 0
+									32 按钮 乐鑫 · Espressif · ESP32 ESP32
+										33 图像 乐鑫 · Espressif · ESP32
+										34 文本 ESP32
+									35 container
+										36 切换按钮 ESP32, Value: 0
+										37 切换按钮 ESP32-S2, Value: 0
+										38 切换按钮 ESP32-S3, Value: 0
+										39 切换按钮 ESP32-C2, Value: 0
+										40 切换按钮 ESP32-C3, Value: 1
+										41 切换按钮 ESP32-C6, Value: 0
+										42 切换按钮 ESP32-H2, Value: 0
+										43 切换按钮 ESP32-P4, Value: 0
+								44 文本 开发框架
+								45 开发框架
+									46 单选按钮 Arduino, Value: 1
+									47 单选按钮 ESP-IDF, Value: 0
+								48 文本 名称
+								49 文本栏 (settable) 名称, Value: hello-esp32
+								50 文本 位置
+								51 文本栏 (settable) 位置, Value: /Users/wangwei/Documents/Nodu
+								52 按钮 Description: 浏览项目位置, Help: 浏览
+								53 文本 型号
+								54 组合框 (settable) Description: 型号, Value: ESP32-C3
+									55 文本 ESP32-C3
+								56 文本 模板
+								57 组合框 (settable) Description: 模板, Value: 默认项目
+									58 文本 默认项目
+								59 按钮 取消
+								60 按钮 创建项目
+					61 列表框 模板
+						62 (selected) 默认项目
+						63 串口示例
+	64 关闭按钮
+	65 缩放按钮 (disabled)
+	66 最小化按钮
+67 menu bar
+	68 Nodu New Project Check
+	69 文件
+	70 编辑
+	71 选择
+	72 查看
+	73 转到
+	74 工具
+	75 终端
+	76 窗口
+	77 帮助
+
+The focused UI element is 62 (selected) 默认项目

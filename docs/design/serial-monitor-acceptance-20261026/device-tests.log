@@ -1,0 +1,40 @@
+✔ hotplug suggests the sole USB port without replacing the user or active port (0.905583ms)
+✔ hex display preserves actual wire bytes, including invalid text and line endings (0.183ms)
+✔ raw receive buffer retains only its bounded newest bytes (0.068875ms)
+✔ directional HEX transcript keeps TX and RX separate and bounds their combined bytes (0.183ms)
+✔ single-byte receive reads coalesce into 16-byte display rows while TX boundaries remain visible (51.216375ms)
+✔ send encoding produces exact UTF-8/GBK bytes and retains line endings (10.470292ms)
+✔ ROM noise is not treated as application startup output (0.574541ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.198875ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.651125ms)
+✔ successful sends add a TX record with exact encoded bytes while raw RX remains unchanged (26.364834ms)
+✔ a TX record between receive chunks does not finish an incomplete UTF-8 or GBK character (0.570333ms)
+✔ write failures preserve logs and report the error without a TX success entry (0.207792ms)
+✔ closed, disconnected, lent, busy, flashing and boot-wait states refuse sending before RPC (0.550834ms)
+✔ only one send is in flight and older backends can still return their sent count (0.736792ms)
+✔ late send success or error cannot refill cleared logs or pollute changed sessions (0.633125ms)
+✔ Node returns actual UTF-8 or GBK wire bytes only after a successful write (0.356208ms)
+✔ unidentified device keeps history restoration available; known UID exposes only that exact device (1.172875ms)
+✔ late backup success or error cannot replace another project or newer identity results (0.299666ms)
+✔ newest backup refresh wins when two requests for the same identity complete out of order (0.10175ms)
+✔ selecting a different probe immediately clears old identity and reloads clearly scoped history (8.359833ms)
+✔ probe disappearance clears the old chip identity without silently switching explicit choice to auto (0.845791ms)
+✔ automatic probe mode invalidates only the vanished identified target; an unrelated probe removal preserves it (0.911958ms)
+✔ a late probe enumeration cannot erase a newer connected target (0.332042ms)
+✔ ST-LINK monitor-port changes preserve chip identity; ISP changes and unplugging invalidate it (1.783208ms)
+✔ successful method changes invalidate old identity while failed settings save preserves it (0.803708ms)
+✔ identify response after workspace change or cancellation cannot restore an obsolete identity (0.408334ms)
+✔ historical ISP backup can still be submitted for authoritative backend UID verification (0.214375ms)
+✔ a new identity never temporarily labels another devices history as its own backups (0.046916ms)
+✔ pending monitor connection rejects another port change without changing selected target (0.133083ms)
+✔ BOOT waiting locks ISP port selection even after the device worker has ended (0.0455ms)
+✔ detect at the same path invalidates device identity when on-disk target or method changed (2.451167ms)
+✔ reload invalidates same-path target/method changes but preserves identity for unrelated settings (5.03075ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 136.736125

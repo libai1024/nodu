@@ -17,6 +17,7 @@ import { NoduTutorModel } from './nodu-tutor-model';
 import { TutorTerminalSelectionAction } from './nodu-tutor-terminal-selection';
 import { completedLines, pendingReviewCount, reviewableLine, tutorMarkerLine, traceReference } from '../common/tutor/tutor-guidance';
 import { TutorBuffer } from '../common/tutor/tutor-ai-protocol';
+import { tutorSelection } from '../common/tutor/tutor-context';
 
 export const TUTOR_MENU = ['nodu-ai-controls'];
 export const TUTOR_COMMANDS = {
@@ -69,9 +70,9 @@ class TutorEditorController implements Disposable {
     private buffer(line = this.control.getPosition()?.lineNumber ?? 1, chat = false): TutorBuffer | undefined {
         const model = this.control.getModel(), root = this.tutor.rootUri;
         const relative = root?.relative(this.widget.editor.uri)?.toString();
-        if (!model || model.isDisposed() || !relative || relative.startsWith('../') || !(/\.(c|h|cpp|hpp|cc)$/i.test(relative) || chat && this.tutor.mode === 'ask' && /\.py$/i.test(relative)) || model.getValueLength() > 32000) { return; }
+        if (!model || model.isDisposed() || !relative || relative.startsWith('../') || !(/\.(c|h|cpp|hpp|cc)$/i.test(relative) || chat && this.tutor.mode === 'ask' && /\.(py|ino)$/i.test(relative)) || model.getValueLength() > 32000) { return; }
         const range = this.control.getSelection?.();
-        const selection = range && !range.isEmpty() ? { startLine: range.startLineNumber, endLine: range.endLineNumber, text: model.getValueInRange(range) } : undefined;
+        const selection = range && !range.isEmpty() ? tutorSelection(model.getValueInRange(range), range.startLineNumber, range.endLineNumber, range.endColumn) : undefined;
         return { path: relative, text: model.getValue(), version: model.getVersionId(), line: Math.min(line, model.getLineCount()), ...(selection ? { selection } : {}) };
     }
     private historyKey(): string | undefined {

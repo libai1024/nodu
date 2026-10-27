@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "results": [
+    {
+      "chip": "esp32c3",
+      "ok": true,
+      "middleware": true,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "guiEnterPaste": [
+        {
+          "name": "Enter",
+          "ms": 76,
+          "lines": {
+            "JsonDocument": 15,
+            "serializeJson": 18,
+            "void loop": 22
+          }
+        },
+        {
+          "name": "paste",
+          "ms": 92,
+          "lines": {
+            "JsonDocument": 17,
+            "serializeJson": 20,
+            "void loop": 24
+          }
+        }
+      ],
+      "overlapUndoRedoMs": 32360,
+      "finalLines": {
+        "JsonDocument": 19,
+        "serializeJson": 22,
+        "void loop": 26
+      },
+      "project": "/private/tmp/nodu-arduino-e2e-20261026/language-middleware-final-v2/esp32c3-1793035692980/lsp_esp32c3"
+    }
+  ]
+}

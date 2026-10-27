@@ -1,0 +1,4640 @@
+[
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "capabilities": {
+        "textDocumentSync": {
+          "openClose": true,
+          "change": 2,
+          "save": {
+            "includeText": true
+          }
+        },
+        "completionProvider": {
+          "triggerCharacters": [
+            ".",
+            "<",
+            ">",
+            ":",
+            "\"",
+            "/"
+          ],
+          "allCommitCharacters": [
+            " ",
+            "\t",
+            "(",
+            ")",
+            "[",
+            "]",
+            "{",
+            "}",
+            "<",
+            ">",
+            ":",
+            ";",
+            ",",
+            "+",
+            "-",
+            "/",
+            "*",
+            "%",
+            "^",
+            "&",
+            "#",
+            "?",
+            ".",
+            "=",
+            "\"",
+            "'",
+            "|"
+          ],
+          "completionItem": {}
+        },
+        "hoverProvider": {},
+        "signatureHelpProvider": {
+          "triggerCharacters": [
+            "(",
+            ","
+          ]
+        },
+        "definitionProvider": {},
+        "documentHighlightProvider": {},
+        "documentSymbolProvider": {},
+        "codeActionProvider": {
+          "codeActionKinds": [
+            "quickfix",
+            "refactor",
+            "info"
+          ]
+        },
+        "documentFormattingProvider": {},
+        "documentRangeFormattingProvider": {},
+        "documentOnTypeFormattingProvider": {
+          "firstTriggerCharacter": "\n"
+        },
+        "renameProvider": {},
+        "executeCommandProvider": {
+          "commands": [
+            "clangd.applyFix",
+            "clangd.applyTweak"
+          ]
+        },
+        "workspaceSymbolProvider": {}
+      },
+      "serverInfo": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/arduino-language-server3607365740/build/.clangd",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "1",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "backgroundIndexProgress"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 2
+        },
+        "end": {
+          "line": 5,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "begin",
+        "title": "indexing",
+        "percentage": 0
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "1/62",
+        "percentage": 1
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "result": {
+      "isIncomplete": false,
+      "items": [
+        {
+          "label": " available()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60available",
+          "filterText": "available",
+          "insertText": "available()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "available()"
+          }
+        },
+        {
+          "label": " availableForWrite()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60availableForWrite",
+          "filterText": "availableForWrite",
+          "insertText": "availableForWrite()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "availableForWrite()"
+          }
+        },
+        {
+          "label": " baudRate()",
+          "kind": 2,
+          "detail": "uint32_t",
+          "sortText": "40902d60baudRate",
+          "filterText": "baudRate",
+          "insertText": "baudRate()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "baudRate()"
+          }
+        },
+        {
+          "label": " begin(unsigned long baud, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1, bool invert = false, unsigned long timeout_ms = 20000UL, uint8_t rxfifo_full_thrhd = 120)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60begin",
+          "filterText": "begin",
+          "insertText": "begin(${1:unsigned long baud})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "begin(${1:unsigned long baud})"
+          }
+        },
+        {
+          "label": " enableRxInternalPull(bool enable = true)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60enableRxInternalPull",
+          "filterText": "enableRxInternalPull",
+          "insertText": "enableRxInternalPull()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "enableRxInternalPull()"
+          }
+        },
+        {
+          "label": " end()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60end",
+          "filterText": "end",
+          "insertText": "end()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "end()"
+          }
+        },
+        {
+          "label": " eventQueueReset()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60eventQueueReset",
+          "filterText": "eventQueueReset",
+          "insertText": "eventQueueReset()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "eventQueueReset()"
+          }
+        },
+        {
+          "label": " flush()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60flush",
+          "filterText": "flush",
+          "insertText": "flush()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "flush()"
+          }
+        },
+        {
+          "label": " flush(bool txOnly)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60flush",
+          "filterText": "flush",
+          "insertText": "flush(${1:bool txOnly})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "flush(${1:bool txOnly})"
+          }
+        },
+        {
+          "label": " onReceive(OnReceiveCb function, bool onlyOnTimeout = false)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60onReceive",
+          "filterText": "onReceive",
+          "insertText": "onReceive(${1:OnReceiveCb function})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "onReceive(${1:OnReceiveCb function})"
+          }
+        },
+        {
+          "label": " onReceiveError(OnReceiveErrorCb function)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60onReceiveError",
+          "filterText": "onReceiveError",
+          "insertText": "onReceiveError(${1:OnReceiveErrorCb function})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "onReceiveError(${1:OnReceiveErrorCb function})"
+          }
+        },
+        {
+          "label": " peek()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60peek",
+          "filterText": "peek",
+          "insertText": "peek()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "peek()"
+          }
+        },
+        {
+          "label": " read(char *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read(${1:char *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "read(${1:char *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " read()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "read()"
+          }
+        },
+        {
+          "label": " read(uint8_t *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read(${1:uint8_t *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "read(${1:uint8_t *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " readBytes(uint8_t *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60readBytes",
+          "filterText": "readBytes",
+          "insertText": "readBytes(${1:uint8_t *buffer}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytes(${1:uint8_t *buffer}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " readBytes(char *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60readBytes",
+          "filterText": "readBytes",
+          "insertText": "readBytes(${1:char *buffer}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytes(${1:char *buffer}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " setClockSource(SerialClkSrc clkSrc)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setClockSource",
+          "filterText": "setClockSource",
+          "insertText": "setClockSource(${1:SerialClkSrc clkSrc})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setClockSource(${1:SerialClkSrc clkSrc})"
+          }
+        },
+        {
+          "label": " setCtsInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setCtsInvert",
+          "filterText": "setCtsInvert",
+          "insertText": "setCtsInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setCtsInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setDebugOutput(bool)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60setDebugOutput",
+          "filterText": "setDebugOutput",
+          "insertText": "setDebugOutput(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setDebugOutput(${1:bool})"
+          }
+        },
+        {
+          "label": " setHwFlowCtrlMode(SerialHwFlowCtrl mode = UART_HW_FLOWCTRL_CTS_RTS, uint8_t threshold = 64)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setHwFlowCtrlMode",
+          "filterText": "setHwFlowCtrlMode",
+          "insertText": "setHwFlowCtrlMode()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setHwFlowCtrlMode()"
+          }
+        },
+        {
+          "label": " setIrdaDirection(esp32_uart_irda_direction_t irdaDirection)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setIrdaDirection",
+          "filterText": "setIrdaDirection",
+          "insertText": "setIrdaDirection(${1:esp32_uart_irda_direction_t irdaDirection})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setIrdaDirection(${1:esp32_uart_irda_direction_t irdaDirection})"
+          }
+        },
+        {
+          "label": " setMode(SerialMode mode)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setMode",
+          "filterText": "setMode",
+          "insertText": "setMode(${1:SerialMode mode})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setMode(${1:SerialMode mode})"
+          }
+        },
+        {
+          "label": " setPins(int8_t rxPin, int8_t txPin, int8_t ctsPin = -1, int8_t rtsPin = -1)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setPins",
+          "filterText": "setPins",
+          "insertText": "setPins(${1:int8_t rxPin}, ${2:int8_t txPin})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setPins(${1:int8_t rxPin}, ${2:int8_t txPin})"
+          }
+        },
+        {
+          "label": " setRtsInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRtsInvert",
+          "filterText": "setRtsInvert",
+          "insertText": "setRtsInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRtsInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setRxBufferSize(size_t new_size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60setRxBufferSize",
+          "filterText": "setRxBufferSize",
+          "insertText": "setRxBufferSize(${1:size_t new_size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxBufferSize(${1:size_t new_size})"
+          }
+        },
+        {
+          "label": " setRxFIFOFull(uint8_t fifoBytes)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRxFIFOFull",
+          "filterText": "setRxFIFOFull",
+          "insertText": "setRxFIFOFull(${1:uint8_t fifoBytes})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxFIFOFull(${1:uint8_t fifoBytes})"
+          }
+        },
+        {
+          "label": " setRxInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRxInvert",
+          "filterText": "setRxInvert",
+          "insertText": "setRxInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setRxTimeout(uint8_t symbols_timeout)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRxTimeout",
+          "filterText": "setRxTimeout",
+          "insertText": "setRxTimeout(${1:uint8_t symbols_timeout})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setRxTimeout(${1:uint8_t symbols_timeout})"
+          }
+        },
+        {
+          "label": " setTxBufferSize(size_t new_size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60setTxBufferSize",
+          "filterText": "setTxBufferSize",
+          "insertText": "setTxBufferSize(${1:size_t new_size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setTxBufferSize(${1:size_t new_size})"
+          }
+        },
+        {
+          "label": " setTxInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setTxInvert",
+          "filterText": "setTxInvert",
+          "insertText": "setTxInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setTxInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " updateBaudRate(unsigned long baud)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60updateBaudRate",
+          "filterText": "updateBaudRate",
+          "insertText": "updateBaudRate(${1:unsigned long baud})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "updateBaudRate(${1:unsigned long baud})"
+          }
+        },
+        {
+          "label": " write(const char *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const char *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const char *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " write(const uint8_t *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const uint8_t *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const uint8_t *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " write(uint8_t)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:uint8_t})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:uint8_t})"
+          }
+        },
+        {
+          "label": " write(const char *s)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const char *s})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const char *s})"
+          }
+        },
+        {
+          "label": " write(unsigned long n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:unsigned long n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:unsigned long n})"
+          }
+        },
+        {
+          "label": " write(long n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:long n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:long n})"
+          }
+        },
+        {
+          "label": " write(int n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:int n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:int n})"
+          }
+        },
+        {
+          "label": " write(unsigned int n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:unsigned int n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:unsigned int n})"
+          }
+        },
+        {
+          "label": " clearWriteError()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "412843cdclearWriteError",
+          "filterText": "clearWriteError",
+          "insertText": "clearWriteError()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "clearWriteError()"
+          }
+        },
+        {
+          "label": " find(const uint8_t *target, size_t length)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const uint8_t *target}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const uint8_t *target}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " find(char target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:char target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:char target})"
+          }
+        },
+        {
+          "label": " find(const char *target, size_t length)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const char *target}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const char *target}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " find(const uint8_t *target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const uint8_t *target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const uint8_t *target})"
+          }
+        },
+        {
+          "label": " find(const char *target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const char *target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const char *target})"
+          }
+        },
+        {
+          "label": " findUntil(const uint8_t *target, size_t targetLen, const char *terminate, size_t termLen)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const uint8_t *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const uint8_t *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})"
+          }
+        },
+        {
+          "label": " findUntil(const uint8_t *target, const char *terminator)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const uint8_t *target}, ${2:const char *terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const uint8_t *target}, ${2:const char *terminator})"
+          }
+        },
+        {
+          "label": " findUntil(const char *target, size_t targetLen, const char *terminate, size_t termLen)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const char *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const char *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})"
+          }
+        },
+        {
+          "label": " findUntil(const char *target, const char *terminator)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const char *target}, ${2:const char *terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const char *target}, ${2:const char *terminator})"
+          }
+        },
+        {
+          "label": " getTimeout()",
+          "kind": 2,
+          "detail": "unsigned long",
+          "sortText": "412843cdgetTimeout",
+          "filterText": "getTimeout",
+          "insertText": "getTimeout()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "getTimeout()"
+          }
+        },
+        {
+          "label": " getWriteError()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "412843cdgetWriteError",
+          "filterText": "getWriteError",
+          "insertText": "getWriteError()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "getWriteError()"
+          }
+        },
+        {
+          "label": " parseFloat(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR)",
+          "kind": 2,
+          "detail": "float",
+          "sortText": "412843cdparseFloat",
+          "filterText": "parseFloat",
+          "insertText": "parseFloat()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "parseFloat()"
+          }
+        },
+        {
+          "label": " parseInt(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR)",
+          "kind": 2,
+          "detail": "long",
+          "sortText": "412843cdparseInt",
+          "filterText": "parseInt",
+          "insertText": "parseInt()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "parseInt()"
+          }
+        },
+        {
+          "label": " print(const char *)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const char *})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const char *})"
+          }
+        },
+        {
+          "label": " print(const String &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const String &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const String &})"
+          }
+        },
+        {
+          "label": " print(const __FlashStringHelper *ifsh)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const __FlashStringHelper *ifsh})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const __FlashStringHelper *ifsh})"
+          }
+        },
+        {
+          "label": " print(char)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:char})"
+          }
+        },
+        {
+          "label": " print(unsigned char, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned char})"
+          }
+        },
+        {
+          "label": " print(struct tm *timeinfo, const char *format = NULL)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:struct tm *timeinfo})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:struct tm *timeinfo})"
+          }
+        },
+        {
+          "label": " print(const Printable &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const Printable &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const Printable &})"
+          }
+        },
+        {
+          "label": " print(double, int = 2)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:double})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:double})"
+          }
+        },
+        {
+          "label": " print(long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:long long})"
+          }
+        },
+        {
+          "label": " print(unsigned long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned long long})"
+          }
+        },
+        {
+          "label": " print(unsigned long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned long})"
+          }
+        },
+        {
+          "label": " print(long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:long})"
+          }
+        },
+        {
+          "label": " print(unsigned int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned int})"
+          }
+        },
+        {
+          "label": " print(int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:int})"
+          }
+        },
+        {
+          "label": " printf(const __FlashStringHelper *ifsh, ...)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintf",
+          "filterText": "printf",
+          "insertText": "printf(${1:const __FlashStringHelper *ifsh, ...})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "printf(${1:const __FlashStringHelper *ifsh, ...})"
+          }
+        },
+        {
+          "label": " printf(const char *format, ...)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintf",
+          "filterText": "printf",
+          "insertText": "printf(${1:const char *format, ...})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "printf(${1:const char *format, ...})"
+          }
+        },
+        {
+          "label": " println(const Printable &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const Printable &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const Printable &})"
+          }
+        },
+        {
+          "label": " println()",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println()"
+          }
+        },
+        {
+          "label": " println(struct tm *timeinfo, const char *format = NULL)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:struct tm *timeinfo})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:struct tm *timeinfo})"
+          }
+        },
+        {
+          "label": " println(double, int = 2)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:double})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:double})"
+          }
+        },
+        {
+          "label": " println(unsigned long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned long long})"
+          }
+        },
+        {
+          "label": " println(long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:long long})"
+          }
+        },
+        {
+          "label": " println(unsigned long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned long})"
+          }
+        },
+        {
+          "label": " println(long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:long})"
+          }
+        },
+        {
+          "label": " println(unsigned int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned int})"
+          }
+        },
+        {
+          "label": " println(int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:int})"
+          }
+        },
+        {
+          "label": " println(unsigned char, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned char})"
+          }
+        },
+        {
+          "label": " println(char)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:char})"
+          }
+        },
+        {
+          "label": " println(const char *)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const char *})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const char *})"
+          }
+        },
+        {
+          "label": " println(const String &s)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const String &s})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const String &s})"
+          }
+        },
+        {
+          "label": " println(const __FlashStringHelper *ifsh)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const __FlashStringHelper *ifsh})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const __FlashStringHelper *ifsh})"
+          }
+        },
+        {
+          "label": " readBytesUntil(char terminator, uint8_t *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdreadBytesUntil",
+          "filterText": "readBytesUntil",
+          "insertText": "readBytesUntil(${1:char terminator}, ${2:uint8_t *buffer}, ${3:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytesUntil(${1:char terminator}, ${2:uint8_t *buffer}, ${3:size_t length})"
+          }
+        },
+        {
+          "label": " readBytesUntil(char terminator, char *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdreadBytesUntil",
+          "filterText": "readBytesUntil",
+          "insertText": "readBytesUntil(${1:char terminator}, ${2:char *buffer}, ${3:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readBytesUntil(${1:char terminator}, ${2:char *buffer}, ${3:size_t length})"
+          }
+        },
+        {
+          "label": " readString()",
+          "kind": 2,
+          "detail": "String",
+          "sortText": "412843cdreadString",
+          "filterText": "readString",
+          "insertText": "readString()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readString()"
+          }
+        },
+        {
+          "label": " readStringUntil(char terminator)",
+          "kind": 2,
+          "detail": "String",
+          "sortText": "412843cdreadStringUntil",
+          "filterText": "readStringUntil",
+          "insertText": "readStringUntil(${1:char terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "readStringUntil(${1:char terminator})"
+          }
+        },
+        {
+          "label": " setTimeout(unsigned long timeout)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "412843cdsetTimeout",
+          "filterText": "setTimeout",
+          "insertText": "setTimeout(${1:unsigned long timeout})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "setTimeout(${1:unsigned long timeout})"
+          }
+        },
+        {
+          "label": " vprintf(const char *format, va_list arg)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdvprintf",
+          "filterText": "vprintf",
+          "insertText": "vprintf(${1:const char *format}, ${2:va_list arg})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 10,
+                "character": 9
+              },
+              "end": {
+                "line": 10,
+                "character": 9
+              }
+            },
+            "newText": "vprintf(${1:const char *format}, ${2:va_list arg})"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "result": [
+      {
+        "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32c3-1793034922625/lsp_esp32c3/lsp_esp32c3.ino",
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 4
+          },
+          "end": {
+            "line": 2,
+            "character": 9
+          }
+        }
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "2/62",
+        "percentage": 3
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 5,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "variable body_value\n\nType: int\nValue = 7\n\n// In loop\nint body_value = 7"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 6
+        },
+        "end": {
+          "line": 11,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 6,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\nA JSON document.\nhttps://arduinojson.org/v7/api/jsondocument/\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 2
+        },
+        "end": {
+          "line": 5,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32c3-1793034922625/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": [
+        {
+          "range": {
+            "start": {
+              "line": 10,
+              "character": 2
+            },
+            "end": {
+              "line": 10,
+              "character": 18
+            }
+          },
+          "severity": 1,
+          "code": "undeclared_var_use",
+          "source": "clang",
+          "message": "Use of undeclared identifier 'missing_function'"
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32c3-1793034922625/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32c3-1793034922625/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": [
+        {
+          "range": {
+            "start": {
+              "line": 10,
+              "character": 2
+            },
+            "end": {
+              "line": 10,
+              "character": 18
+            }
+          },
+          "severity": 1,
+          "code": "undeclared_var_use",
+          "source": "clang",
+          "message": "Use of undeclared identifier 'missing_function'"
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "2",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "arduinoLanguageServerRebuild"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "begin",
+        "title": "Building sketch"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "3/62",
+        "percentage": 4
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "4/62",
+        "percentage": 6
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "5/62",
+        "percentage": 8
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "6/62",
+        "percentage": 9
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "7/62",
+        "percentage": 11
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "8/62",
+        "percentage": 12
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "9/62",
+        "percentage": 14
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "10/62",
+        "percentage": 16
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "11/62",
+        "percentage": 17
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "12/62",
+        "percentage": 19
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "end",
+        "message": "done"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "12/63",
+        "percentage": 19
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\nA JSON document.\nhttps://arduinojson.org/v7/api/jsondocument/\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 2
+        },
+        "end": {
+          "line": 6,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32c3-1793034922625/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 8,
+    "result": {
+      "isIncomplete": false,
+      "items": [
+        {
+          "label": " available()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60available",
+          "filterText": "available",
+          "insertText": "available()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "available()"
+          }
+        },
+        {
+          "label": " availableForWrite()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60availableForWrite",
+          "filterText": "availableForWrite",
+          "insertText": "availableForWrite()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "availableForWrite()"
+          }
+        },
+        {
+          "label": " baudRate()",
+          "kind": 2,
+          "detail": "uint32_t",
+          "sortText": "40902d60baudRate",
+          "filterText": "baudRate",
+          "insertText": "baudRate()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "baudRate()"
+          }
+        },
+        {
+          "label": " begin(unsigned long baud, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1, bool invert = false, unsigned long timeout_ms = 20000UL, uint8_t rxfifo_full_thrhd = 120)",
+          "kind": 2,
+          "detail": "void",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "When pins are changed, it will detach the previous ones if pin is negative, it won't be set/changed and will be kept as is timeout_ms is used in baudrate detection (ESP32, ESP32S2 only) invert will invert RX/TX polarity rxfifo_full_thrhd if the UART Flow Control Threshold in the UART FIFO (max 127)"
+          },
+          "sortText": "40902d60begin",
+          "filterText": "begin",
+          "insertText": "begin(${1:unsigned long baud})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "begin(${1:unsigned long baud})"
+          }
+        },
+        {
+          "label": " enableRxInternalPull(bool enable = true)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60enableRxInternalPull",
+          "filterText": "enableRxInternalPull",
+          "insertText": "enableRxInternalPull()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "enableRxInternalPull()"
+          }
+        },
+        {
+          "label": " end()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60end",
+          "filterText": "end",
+          "insertText": "end()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "end()"
+          }
+        },
+        {
+          "label": " eventQueueReset()",
+          "kind": 2,
+          "detail": "void",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "eventQueueReset clears all events in the queue (the events that trigger onReceive and onReceiveError) - maybe useful in some use cases"
+          },
+          "sortText": "40902d60eventQueueReset",
+          "filterText": "eventQueueReset",
+          "insertText": "eventQueueReset()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "eventQueueReset()"
+          }
+        },
+        {
+          "label": " flush(bool txOnly)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60flush",
+          "filterText": "flush",
+          "insertText": "flush(${1:bool txOnly})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "flush(${1:bool txOnly})"
+          }
+        },
+        {
+          "label": " flush()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60flush",
+          "filterText": "flush",
+          "insertText": "flush()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "flush()"
+          }
+        },
+        {
+          "label": " onReceive(OnReceiveCb function, bool onlyOnTimeout = false)",
+          "kind": 2,
+          "detail": "void",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "onReceive will setup a callback that will be called whenever an UART interruption occurs (UART_INTR_RXFIFO_FULL or UART_INTR_RXFIFO_TOUT) UART_INTR_RXFIFO_FULL interrupt triggers at UART_FULL_THRESH_DEFAULT bytes received (defined as 120 bytes by default in IDF) UART_INTR_RXFIFO_TOUT interrupt triggers at UART_TOUT_THRESH_DEFAULT symbols passed without any reception (defined as 10 symbols by default in IDF) onlyOnTimeout parameter will define how onReceive will behave:\nDefault: true -- The callback will only be called when RX Timeout happens.\nWhole stream of bytes will be ready for being read on the callback function at once.\nThis option may lead to Rx Overflow depending on the Rx Buffer Size and number of bytes received in the streaming false -- The callback will be called when FIFO reaches 120 bytes and also on RX Timeout.\nThe stream of incommig bytes will be \"split\" into blocks of 120 bytes on each callback.\nThis option avoid any sort of Rx Overflow, but leaves the UART packet reassembling work to the Application."
+          },
+          "sortText": "40902d60onReceive",
+          "filterText": "onReceive",
+          "insertText": "onReceive(${1:OnReceiveCb function})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "onReceive(${1:OnReceiveCb function})"
+          }
+        },
+        {
+          "label": " onReceiveError(OnReceiveErrorCb function)",
+          "kind": 2,
+          "detail": "void",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "onReceive will be called on error events (see hardwareSerial_error_t)"
+          },
+          "sortText": "40902d60onReceiveError",
+          "filterText": "onReceiveError",
+          "insertText": "onReceiveError(${1:OnReceiveErrorCb function})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "onReceiveError(${1:OnReceiveErrorCb function})"
+          }
+        },
+        {
+          "label": " peek()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60peek",
+          "filterText": "peek",
+          "insertText": "peek()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "peek()"
+          }
+        },
+        {
+          "label": " read()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "read()"
+          }
+        },
+        {
+          "label": " read(uint8_t *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read(${1:uint8_t *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "read(${1:uint8_t *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " read(char *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60read",
+          "filterText": "read",
+          "insertText": "read(${1:char *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "read(${1:char *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " readBytes(uint8_t *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Overrides Stream::readBytes() to be faster using IDF"
+          },
+          "sortText": "40902d60readBytes",
+          "filterText": "readBytes",
+          "insertText": "readBytes(${1:uint8_t *buffer}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "readBytes(${1:uint8_t *buffer}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " readBytes(char *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60readBytes",
+          "filterText": "readBytes",
+          "insertText": "readBytes(${1:char *buffer}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "readBytes(${1:char *buffer}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " setClockSource(SerialClkSrc clkSrc)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Used to set the UART clock source mode. It must be set before calling begin(), otherwise it won't have any effect.\nNot all clock source are available to every SoC. The compatible option are listed here:\nUART_CLK_SRC_DEFAULT :: any SoC - it will set whatever IDF defines as the default UART Clock Source UART_CLK_SRC_APB :: ESP32, ESP32-S2, ESP32-C3 and ESP32-S3 UART_CLK_SRC_PLL :: ESP32-C2, ESP32-C5, ESP32-C6, ESP32-C61, ESP32-H2 and ESP32-P4 UART_CLK_SRC_XTAL :: ESP32-C2, ESP32-C3, ESP32-C5, ESP32-C6, ESP32-C61, ESP32-H2, ESP32-S3 and ESP32-P4 UART_CLK_SRC_RTC :: ESP32-C2, ESP32-C3, ESP32-C5, ESP32-C6, ESP32-C61, ESP32-H2, ESP32-S3 and ESP32-P4 UART_CLK_SRC_REF_TICK :: ESP32 and ESP32-S2 Note: CLK_SRC_PLL Freq depends on the SoC - ESP32-C2 has 40MHz, ESP32-H2 has 48MHz and ESP32-C5, C6, C61 and P4 has 80MHz Note: ESP32-C6, C61, ESP32-P4 and ESP32-C5 have LP UART that will use only RTC_FAST or XTAL/2 as Clock Source"
+          },
+          "sortText": "40902d60setClockSource",
+          "filterText": "setClockSource",
+          "insertText": "setClockSource(${1:SerialClkSrc clkSrc})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setClockSource(${1:SerialClkSrc clkSrc})"
+          }
+        },
+        {
+          "label": " setCtsInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setCtsInvert",
+          "filterText": "setCtsInvert",
+          "insertText": "setCtsInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setCtsInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setDebugOutput(bool)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60setDebugOutput",
+          "filterText": "setDebugOutput",
+          "insertText": "setDebugOutput(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setDebugOutput(${1:bool})"
+          }
+        },
+        {
+          "label": " setHwFlowCtrlMode(SerialHwFlowCtrl mode = UART_HW_FLOWCTRL_CTS_RTS, uint8_t threshold = 64)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Enables or disables Hardware Flow Control using RTS and/or CTS pins (must use setAllPins() before) UART_HW_FLOWCTRL_DISABLE = 0x0 disable hardware flow control UART_HW_FLOWCTRL_RTS = 0x1 enable RX hardware flow control (rts) UART_HW_FLOWCTRL_CTS = 0x2 enable TX hardware flow control (cts) UART_HW_FLOWCTRL_CTS_RTS = 0x3 enable hardware flow control"
+          },
+          "sortText": "40902d60setHwFlowCtrlMode",
+          "filterText": "setHwFlowCtrlMode",
+          "insertText": "setHwFlowCtrlMode()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setHwFlowCtrlMode()"
+          }
+        },
+        {
+          "label": " setIrdaDirection(esp32_uart_irda_direction_t irdaDirection)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Functions to set the UART IRDA direction: TX or RX.\nIt works in exclusive directions, meaning that if set to TX (ESP32_UART_IRDA_TX),\nthe UART will only transmit data and won't receive any data,\nand vice versa for RX (ESP32_UART_IRDA_RX).\nIt can only be used after setMode(UART_MODE_IRDA) is called.\nParameters: ESP32_UART_IRDA_TX (transmit mode) or ESP32_UART_IRDA_RX (receive mode)"
+          },
+          "sortText": "40902d60setIrdaDirection",
+          "filterText": "setIrdaDirection",
+          "insertText": "setIrdaDirection(${1:esp32_uart_irda_direction_t irdaDirection})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setIrdaDirection(${1:esp32_uart_irda_direction_t irdaDirection})"
+          }
+        },
+        {
+          "label": " setMode(SerialMode mode)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Used to set RS485 modes such as UART_MODE_RS485_HALF_DUPLEX for Auto RTS function on ESP32 UART_MODE_UART = 0x00 mode: regular UART mode UART_MODE_RS485_HALF_DUPLEX = 0x01 mode: half duplex RS485 UART mode control by RTS pin UART_MODE_IRDA = 0x02 mode: IRDA UART mode UART_MODE_RS485_COLLISION_DETECT = 0x03 mode: RS485 collision detection UART mode (used for test purposes) UART_MODE_RS485_APP_CTRL = 0x04 mode: application control RS485 UART mode (used for test purposes)"
+          },
+          "sortText": "40902d60setMode",
+          "filterText": "setMode",
+          "insertText": "setMode(${1:SerialMode mode})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setMode(${1:SerialMode mode})"
+          }
+        },
+        {
+          "label": " setPins(int8_t rxPin, int8_t txPin, int8_t ctsPin = -1, int8_t rtsPin = -1)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Negative Pin Number will keep it unmodified, thus this function can set individual pins setPins() can be called after or before begin() When pins are changed, it will detach the previous ones"
+          },
+          "sortText": "40902d60setPins",
+          "filterText": "setPins",
+          "insertText": "setPins(${1:int8_t rxPin}, ${2:int8_t txPin})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setPins(${1:int8_t rxPin}, ${2:int8_t txPin})"
+          }
+        },
+        {
+          "label": " setRtsInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setRtsInvert",
+          "filterText": "setRtsInvert",
+          "insertText": "setRtsInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setRtsInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setRxBufferSize(size_t new_size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60setRxBufferSize",
+          "filterText": "setRxBufferSize",
+          "insertText": "setRxBufferSize(${1:size_t new_size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setRxBufferSize(${1:size_t new_size})"
+          }
+        },
+        {
+          "label": " setRxFIFOFull(uint8_t fifoBytes)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "setRxFIFOFull(uint8_t fifoBytes) will set the number of bytes that will trigger UART_INTR_RXFIFO_FULL interrupt and fill up RxRingBuffer This affects some functions such as Serial::available() and Serial.read() because, in a UART flow of receiving data, Serial internal RxRingBuffer will be filled only after these number of bytes arrive or a RX Timeout happens.\nThis parameter can be set to 1 in order to receive byte by byte, but it will also consume more CPU time as the ISR will be activates often."
+          },
+          "sortText": "40902d60setRxFIFOFull",
+          "filterText": "setRxFIFOFull",
+          "insertText": "setRxFIFOFull(${1:uint8_t fifoBytes})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setRxFIFOFull(${1:uint8_t fifoBytes})"
+          }
+        },
+        {
+          "label": " setRxInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "functions used to enable or disable UART pins signal inversion returns the requested operation success status"
+          },
+          "sortText": "40902d60setRxInvert",
+          "filterText": "setRxInvert",
+          "insertText": "setRxInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setRxInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " setRxTimeout(uint8_t symbols_timeout)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "setRxTimeout sets the timeout after which onReceive callback will be called (after receiving data, it waits for this time of UART rx inactivity to call the callback fnc) param symbols_timeout defines a timeout threshold in uart symbol periods. Setting 0 symbol timeout disables the callback call by timeout.\nMaximum timeout setting is calculacted automatically by IDF. If set above the maximum, it is ignored and an error is printed on Serial0 (check console).\nExamples: Maximum for 11 bits symbol is 92 (SERIAL_8N2, SERIAL_8E1, SERIAL_8O1, etc), Maximum for 10 bits symbol is 101 (SERIAL_8N1).\nFor example symbols_timeout=1 defines a timeout equal to transmission time of one symbol (~11 bit) on current baudrate.\nFor a baudrate of 9600, SERIAL_8N1 (10 bit symbol) and symbols_timeout = 3, the timeout would be 3 / (9600 / 10) = 3.125 ms"
+          },
+          "sortText": "40902d60setRxTimeout",
+          "filterText": "setRxTimeout",
+          "insertText": "setRxTimeout(${1:uint8_t symbols_timeout})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setRxTimeout(${1:uint8_t symbols_timeout})"
+          }
+        },
+        {
+          "label": " setTxBufferSize(size_t new_size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60setTxBufferSize",
+          "filterText": "setTxBufferSize",
+          "insertText": "setTxBufferSize(${1:size_t new_size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setTxBufferSize(${1:size_t new_size})"
+          }
+        },
+        {
+          "label": " setTxInvert(bool)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "40902d60setTxInvert",
+          "filterText": "setTxInvert",
+          "insertText": "setTxInvert(${1:bool})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setTxInvert(${1:bool})"
+          }
+        },
+        {
+          "label": " updateBaudRate(unsigned long baud)",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "40902d60updateBaudRate",
+          "filterText": "updateBaudRate",
+          "insertText": "updateBaudRate(${1:unsigned long baud})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "updateBaudRate(${1:unsigned long baud})"
+          }
+        },
+        {
+          "label": " write(const char *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const char *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const char *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " write(const uint8_t *buffer, size_t size)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const uint8_t *buffer}, ${2:size_t size})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const uint8_t *buffer}, ${2:size_t size})"
+          }
+        },
+        {
+          "label": " write(uint8_t)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:uint8_t})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:uint8_t})"
+          }
+        },
+        {
+          "label": " write(int n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:int n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:int n})"
+          }
+        },
+        {
+          "label": " write(const char *s)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:const char *s})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:const char *s})"
+          }
+        },
+        {
+          "label": " write(unsigned int n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:unsigned int n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:unsigned int n})"
+          }
+        },
+        {
+          "label": " write(unsigned long n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:unsigned long n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:unsigned long n})"
+          }
+        },
+        {
+          "label": " write(long n)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "40902d60write",
+          "filterText": "write",
+          "insertText": "write(${1:long n})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "write(${1:long n})"
+          }
+        },
+        {
+          "label": " clearWriteError()",
+          "kind": 2,
+          "detail": "void",
+          "sortText": "412843cdclearWriteError",
+          "filterText": "clearWriteError",
+          "insertText": "clearWriteError()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "clearWriteError()"
+          }
+        },
+        {
+          "label": " find(char target)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "returns true if target string is found, false if timed out"
+          },
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:char target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:char target})"
+          }
+        },
+        {
+          "label": " find(const uint8_t *target, size_t length)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const uint8_t *target}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const uint8_t *target}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " find(const uint8_t *target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const uint8_t *target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const uint8_t *target})"
+          }
+        },
+        {
+          "label": " find(const char *target)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const char *target})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const char *target})"
+          }
+        },
+        {
+          "label": " find(const char *target, size_t length)",
+          "kind": 2,
+          "detail": "bool",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "returns true if target string is found, false if timed out (see setTimeout)"
+          },
+          "sortText": "412843cdfind",
+          "filterText": "find",
+          "insertText": "find(${1:const char *target}, ${2:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "find(${1:const char *target}, ${2:size_t length})"
+          }
+        },
+        {
+          "label": " findUntil(const uint8_t *target, size_t targetLen, const char *terminate, size_t termLen)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const uint8_t *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const uint8_t *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})"
+          }
+        },
+        {
+          "label": " findUntil(const char *target, size_t targetLen, const char *terminate, size_t termLen)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const char *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const char *target}, ${2:size_t targetLen}, ${3:const char *terminate}, ${4:size_t termLen})"
+          }
+        },
+        {
+          "label": " findUntil(const uint8_t *target, const char *terminator)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const uint8_t *target}, ${2:const char *terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const uint8_t *target}, ${2:const char *terminator})"
+          }
+        },
+        {
+          "label": " findUntil(const char *target, const char *terminator)",
+          "kind": 2,
+          "detail": "bool",
+          "sortText": "412843cdfindUntil",
+          "filterText": "findUntil",
+          "insertText": "findUntil(${1:const char *target}, ${2:const char *terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "findUntil(${1:const char *target}, ${2:const char *terminator})"
+          }
+        },
+        {
+          "label": " getTimeout()",
+          "kind": 2,
+          "detail": "unsigned long",
+          "sortText": "412843cdgetTimeout",
+          "filterText": "getTimeout",
+          "insertText": "getTimeout()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "getTimeout()"
+          }
+        },
+        {
+          "label": " getWriteError()",
+          "kind": 2,
+          "detail": "int",
+          "sortText": "412843cdgetWriteError",
+          "filterText": "getWriteError",
+          "insertText": "getWriteError()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "getWriteError()"
+          }
+        },
+        {
+          "label": " parseFloat(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR)",
+          "kind": 2,
+          "detail": "float",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "returns the first valid (long) integer value from the current position.\nlookahead determines how parseInt looks ahead in the stream.\nSee LookaheadMode enumeration at the top of the file.\nLookahead is terminated by the first character that is not a valid part of an integer.\nOnce parsing commences, 'ignore' will be skipped in the stream."
+          },
+          "sortText": "412843cdparseFloat",
+          "filterText": "parseFloat",
+          "insertText": "parseFloat()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "parseFloat()"
+          }
+        },
+        {
+          "label": " parseInt(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR)",
+          "kind": 2,
+          "detail": "long",
+          "sortText": "412843cdparseInt",
+          "filterText": "parseInt",
+          "insertText": "parseInt()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "parseInt()"
+          }
+        },
+        {
+          "label": " print(struct tm *timeinfo, const char *format = NULL)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:struct tm *timeinfo})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:struct tm *timeinfo})"
+          }
+        },
+        {
+          "label": " print(const Printable &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const Printable &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const Printable &})"
+          }
+        },
+        {
+          "label": " print(unsigned long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned long long})"
+          }
+        },
+        {
+          "label": " print(long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:long long})"
+          }
+        },
+        {
+          "label": " print(unsigned long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned long})"
+          }
+        },
+        {
+          "label": " print(long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:long})"
+          }
+        },
+        {
+          "label": " print(unsigned int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned int})"
+          }
+        },
+        {
+          "label": " print(int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:int})"
+          }
+        },
+        {
+          "label": " print(unsigned char, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:unsigned char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:unsigned char})"
+          }
+        },
+        {
+          "label": " print(const char *)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const char *})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const char *})"
+          }
+        },
+        {
+          "label": " print(const String &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const String &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const String &})"
+          }
+        },
+        {
+          "label": " print(const __FlashStringHelper *ifsh)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:const __FlashStringHelper *ifsh})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:const __FlashStringHelper *ifsh})"
+          }
+        },
+        {
+          "label": " print(char)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:char})"
+          }
+        },
+        {
+          "label": " print(double, int = 2)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprint",
+          "filterText": "print",
+          "insertText": "print(${1:double})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "print(${1:double})"
+          }
+        },
+        {
+          "label": " printf(const __FlashStringHelper *ifsh, ...)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintf",
+          "filterText": "printf",
+          "insertText": "printf(${1:const __FlashStringHelper *ifsh, ...})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "printf(${1:const __FlashStringHelper *ifsh, ...})"
+          }
+        },
+        {
+          "label": " printf(const char *format, ...)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintf",
+          "filterText": "printf",
+          "insertText": "printf(${1:const char *format, ...})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "printf(${1:const char *format, ...})"
+          }
+        },
+        {
+          "label": " println(unsigned char, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned char})"
+          }
+        },
+        {
+          "label": " println(char)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:char})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:char})"
+          }
+        },
+        {
+          "label": " println(const char *)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const char *})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const char *})"
+          }
+        },
+        {
+          "label": " println(const String &s)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const String &s})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const String &s})"
+          }
+        },
+        {
+          "label": " println(const __FlashStringHelper *ifsh)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const __FlashStringHelper *ifsh})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const __FlashStringHelper *ifsh})"
+          }
+        },
+        {
+          "label": " println()",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println()"
+          }
+        },
+        {
+          "label": " println(struct tm *timeinfo, const char *format = NULL)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:struct tm *timeinfo})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:struct tm *timeinfo})"
+          }
+        },
+        {
+          "label": " println(const Printable &)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:const Printable &})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:const Printable &})"
+          }
+        },
+        {
+          "label": " println(double, int = 2)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:double})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:double})"
+          }
+        },
+        {
+          "label": " println(unsigned long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned long long})"
+          }
+        },
+        {
+          "label": " println(long long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:long long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:long long})"
+          }
+        },
+        {
+          "label": " println(unsigned long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned long})"
+          }
+        },
+        {
+          "label": " println(long, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:long})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:long})"
+          }
+        },
+        {
+          "label": " println(unsigned int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:unsigned int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:unsigned int})"
+          }
+        },
+        {
+          "label": " println(int, int = DEC)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdprintln",
+          "filterText": "println",
+          "insertText": "println(${1:int})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "println(${1:int})"
+          }
+        },
+        {
+          "label": " readBytesUntil(char terminator, uint8_t *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdreadBytesUntil",
+          "filterText": "readBytesUntil",
+          "insertText": "readBytesUntil(${1:char terminator}, ${2:uint8_t *buffer}, ${3:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "readBytesUntil(${1:char terminator}, ${2:uint8_t *buffer}, ${3:size_t length})"
+          }
+        },
+        {
+          "label": " readBytesUntil(char terminator, char *buffer, size_t length)",
+          "kind": 2,
+          "detail": "size_t",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "terminates if length characters have been read or timeout (see setTimeout) returns the number of characters placed in the buffer (0 means no valid data found)"
+          },
+          "sortText": "412843cdreadBytesUntil",
+          "filterText": "readBytesUntil",
+          "insertText": "readBytesUntil(${1:char terminator}, ${2:char *buffer}, ${3:size_t length})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "readBytesUntil(${1:char terminator}, ${2:char *buffer}, ${3:size_t length})"
+          }
+        },
+        {
+          "label": " readString()",
+          "kind": 2,
+          "detail": "String",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "Arduino String functions to be added here"
+          },
+          "sortText": "412843cdreadString",
+          "filterText": "readString",
+          "insertText": "readString()",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "readString()"
+          }
+        },
+        {
+          "label": " readStringUntil(char terminator)",
+          "kind": 2,
+          "detail": "String",
+          "sortText": "412843cdreadStringUntil",
+          "filterText": "readStringUntil",
+          "insertText": "readStringUntil(${1:char terminator})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "readStringUntil(${1:char terminator})"
+          }
+        },
+        {
+          "label": " setTimeout(unsigned long timeout)",
+          "kind": 2,
+          "detail": "void",
+          "documentation": {
+            "kind": "plaintext",
+            "value": "parsing methods"
+          },
+          "sortText": "412843cdsetTimeout",
+          "filterText": "setTimeout",
+          "insertText": "setTimeout(${1:unsigned long timeout})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "setTimeout(${1:unsigned long timeout})"
+          }
+        },
+        {
+          "label": " vprintf(const char *format, va_list arg)",
+          "kind": 2,
+          "detail": "size_t",
+          "sortText": "412843cdvprintf",
+          "filterText": "vprintf",
+          "insertText": "vprintf(${1:const char *format}, ${2:va_list arg})",
+          "insertTextFormat": 2,
+          "textEdit": {
+            "range": {
+              "start": {
+                "line": 12,
+                "character": 9
+              },
+              "end": {
+                "line": 12,
+                "character": 9
+              }
+            },
+            "newText": "vprintf(${1:const char *format}, ${2:va_list arg})"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "end",
+        "message": "Shutdown"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 9,
+    "result": null
+  }
+]

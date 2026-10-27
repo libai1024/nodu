@@ -42,7 +42,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     private readonly stack = new StackedPanel();
     private header!: BottomPanelHeader;
     private workspacePath = '';
-    private platform: 'k210' | 'stm32' = 'k210';
+    private platform: 'k210' | 'stm32' | 'arduino' = 'k210';
     private selected: BottomPage = 'output';
     private statusSignature = '';
     private resizeObserver?: ResizeObserver;
@@ -74,7 +74,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
         this.toDispose.push(this.menuEntries);
         this.terminalPanel.setChromeHosted(true);
         this.toDispose.push(this.terminalPanel.onDidChangeChrome(() => { if (this.selected === 'terminal') { this.header.update(); } }));
-        this.toDispose.push(this.embeddedPanel.onDidChangeChrome(() => { if (this.isSTM32 && (this.selected === 'monitor' || this.selected === 'output')) { this.header.update(); } }));
+        this.toDispose.push(this.embeddedPanel.onDidChangeChrome(() => { if (this.isEmbedded && (this.selected === 'monitor' || this.selected === 'output')) { this.header.update(); } }));
         this.toDispose.push(this.problemsPanel.onDidChangeProblems(() => this.refreshStatus()));
         this.toDispose.push(this.shell.bottomPanel.onDidChangeCurrent(() => this.syncDockTabs()));
         this.toDispose.push(this.terminalPanel.onDidChangeTrackableWidgets(() => this.tracked.fire(this.getTrackableWidgets())));
@@ -108,18 +108,19 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     }
 
     get isSTM32(): boolean { return this.platform === 'stm32'; }
+    get isEmbedded(): boolean { return this.isSTM32 || this.platform === 'arduino'; }
     get activePage(): BottomPage { return this.selected; }
     get maximized(): boolean { return this.shell.bottomPanel.node.classList.contains('theia-maximized'); }
     get problemCounts(): { errors: number; warnings: number; infos: number; total: number } { return this.problemsPanel.counts; }
     /** The active page's own actions, shown in the header like VS Code panel view actions. */
     pageActions(): React.ReactNode {
         if (this.selected === 'terminal') { return this.terminalPanel.headerToolbar(); }
-        if (this.isSTM32 && (this.selected === 'monitor' || this.selected === 'output')) { return this.embeddedPanel.headerActions(); }
+        if (this.isEmbedded && (this.selected === 'monitor' || this.selected === 'output')) { return this.embeddedPanel.headerActions(); }
         return null;
     }
     get tabs(): ReadonlyArray<{ id: BottomPage; label: string; status?: string }> {
-        const tabs: Array<{ id: BottomPage; label: string; status?: string }> = this.isSTM32 ? [
-            { id: 'output', label: '构建与下载', status: this.embedded.errors.length ? `${this.embedded.errors.length} 个错误` : this.embedded.busy ? '任务进行中' : undefined },
+        const tabs: Array<{ id: BottomPage; label: string; status?: string }> = this.isEmbedded ? [
+            { id: 'output', label: this.platform === 'arduino' ? '编译输出' : '构建与下载', status: this.embedded.errors.length ? `${this.embedded.errors.length} 个错误` : this.embedded.busy ? '任务进行中' : undefined },
             { id: 'monitor', label: '串口监视', status: this.embedded.monitor.state === 'open' ? '串口已连接' : undefined },
             { id: 'terminal', label: '终端' },
         ] : [
@@ -127,7 +128,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
             { id: 'repl', label: 'Python 交互' },
             { id: 'terminal', label: '终端' },
         ];
-        if (this.selected === 'problems') { tabs.push({ id: 'problems', label: '问题' }); }
+        tabs.push({ id: 'problems', label: '问题' });
         return tabs;
     }
 
@@ -153,7 +154,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
         this.restorePage();
     }
     private refreshPlatform(): void {
-        const next = this.embedded.isC ? 'stm32' : 'k210';
+        const next = this.embedded.isC ? 'stm32' : this.embedded.isArduino ? 'arduino' : 'k210';
         if (next !== this.platform) {
             this.platform = next;
             this.restorePage();
@@ -188,7 +189,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
     }
     private showSelected(embeddedTab?: PanelTab): void {
         if (!this.header) { return; }
-        const child = this.selected === 'problems' ? this.problemsPanel : this.selected === 'terminal' ? this.terminalPanel : this.isSTM32 ? this.embeddedPanel : this.console;
+        const child = this.selected === 'problems' ? this.problemsPanel : this.selected === 'terminal' ? this.terminalPanel : this.isEmbedded ? this.embeddedPanel : this.console;
         if (child === this.console) { this.console.setView(this.selected === 'repl' ? 'repl' : 'output'); }
         if (child === this.embeddedPanel) { this.embeddedPanel.setView(embeddedTab ?? (this.selected === 'monitor' ? 'monitor' : 'output')); }
         for (const widget of this.stack.widgets) { widget.setHidden(widget !== child); }
@@ -222,7 +223,7 @@ export class NoduBottomPanelWidget extends BaseWidget implements ApplicationShel
             void this.selectPage('terminal', false);
             return id === this.terminalPanel.id ? this.terminalPanel : this.terminalPanel.revealWidget(id);
         }
-        if (id === this.console.id || id === this.embeddedPanel.id) { this.showSelected(); return this.selected === 'terminal' ? undefined : this.isSTM32 ? this.embeddedPanel : this.console; }
+        if (id === this.console.id || id === this.embeddedPanel.id) { this.showSelected(); return this.selected === 'terminal' ? undefined : this.isEmbedded ? this.embeddedPanel : this.console; }
         return undefined;
     }
     activateWidget(id: string): Widget | undefined {
@@ -287,14 +288,11 @@ class BottomPanelHeader extends ReactWidget {
                     role="tab" aria-selected={this.owner.activePage === tab.id} aria-controls="nodu-bottom-page"
                     tabIndex={this.owner.activePage === tab.id ? 0 : -1} title={tab.id === 'repl' ? 'Python 交互（REPL）' : tab.status ? `${tab.label}（${tab.status}）` : tab.label}
                     onKeyDown={event => this.key(event, index)} onClick={() => void this.owner.selectPage(tab.id)}>
-                    <span>{tab.label}</span>{tab.status && <span className="nodu-bottom-tab-status" aria-label={tab.status}/>}
+                    <span>{tab.label}</span>{tab.id === 'problems' && this.owner.problemCounts.total > 0 && <span className="nodu-bottom-tab-count" aria-label={`${this.owner.problemCounts.total} 个问题`}>{this.owner.problemCounts.total}</span>}{tab.status && <span className="nodu-bottom-tab-status" aria-label={tab.status}/>}
                 </button>)}
             </div>
             <div className="nodu-bottom-actions">{this.owner.pageActions()}</div>
             <div className="nodu-bottom-chrome">
-                {this.owner.activePage !== 'problems' && this.owner.problemCounts.total > 0 && <button className="nodu-panel-icon nodu-problems-toggle"
-                    aria-label={`问题：${this.owner.problemCounts.errors} 个错误，${this.owner.problemCounts.warnings} 个警告`} title="问题（⌘/Ctrl+Shift+M）"
-                    onClick={() => void this.owner.selectPage('problems', false)}><i className={`codicon codicon-${this.owner.problemCounts.errors ? 'error' : 'warning'}`} aria-hidden="true"/><span>{this.owner.problemCounts.total}</span></button>}
                 <button className="nodu-panel-icon" aria-label="面板更多操作" title="面板更多操作" onClick={event => this.owner.openMenu(event.currentTarget)}><i className="codicon codicon-ellipsis" aria-hidden="true"/></button>
                 <button className="nodu-panel-icon" aria-label={this.owner.maximized ? '恢复面板大小' : '最大化面板'} title={this.owner.maximized ? '恢复面板大小' : '最大化面板'} onClick={() => this.owner.toggleMaximized()}><i className={`codicon codicon-${this.owner.maximized ? 'screen-normal' : 'screen-full'}`} aria-hidden="true"/></button>
                 <button className="nodu-panel-icon" aria-label="收起面板" title="收起面板（⌘/Ctrl+J）" onClick={() => this.owner.collapse()}><i className="codicon codicon-chevron-down" aria-hidden="true"/></button>

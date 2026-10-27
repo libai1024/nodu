@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "results": [
+    {
+      "chip": "esp32c3",
+      "ok": true,
+      "incremental": true,
+      "bodyMultilineHoverMs": 56,
+      "unicodeHoverMs": 565,
+      "replaceHoverMs": 13913,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "hoverLine": 6,
+      "completionItems": 91,
+      "definitionLine": 3,
+      "unsavedDiagnosticLine": 11,
+      "rapidUnicodeEdits": 12,
+      "replaceAllAndSave": true,
+      "replacedHoverLine": 7,
+      "baselineErrors": 0,
+      "sourceMapping": "original .ino",
+      "project": "/private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32c3-1793034922625/lsp_esp32c3"
+    },
+    {
+      "chip": "esp32s3",
+      "ok": true,
+      "incremental": true,
+      "bodyMultilineHoverMs": 78,
+      "unicodeHoverMs": 566,
+      "replaceHoverMs": 17735,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "hoverLine": 6,
+      "completionItems": 91,
+      "definitionLine": 3,
+      "unsavedDiagnosticLine": 11,
+      "rapidUnicodeEdits": 12,
+      "replaceAllAndSave": true,
+      "replacedHoverLine": 7,
+      "baselineErrors": 0,
+      "sourceMapping": "original .ino",
+      "project": "/private/tmp/nodu-arduino-e2e-20261026/language-patched-final-v2/esp32s3-1793034962595/lsp_esp32s3"
+    }
+  ]
+}

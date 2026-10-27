@@ -1,0 +1,251 @@
+{
+  "schema": 1,
+  "id": "esp32-common-20261026",
+  "core": "3.3.12",
+  "cli": "1.5.1",
+  "validation": {
+    "status": "compile-passed",
+    "date": "2026-10-26",
+    "host": "darwin-arm64",
+    "cli": "1.5.1",
+    "core": "3.3.12",
+    "targets": [
+      "esp32:esp32:esp32c3",
+      "esp32:esp32:esp32s3"
+    ],
+    "hardwareTested": false,
+    "notes": [
+      "OneWire 2.3.8 upstream #undef warnings remain visible",
+      "ESP32Servo 3.2.1 uses deprecated MCPWM API on ESP32-S3; compile succeeds"
+    ],
+    "sourceSha256": "dd586db7199950d5b41260609c32afed0a255fd55851159220da70d285220a7f"
+  },
+  "libraries": [
+    {
+      "name": "ArduinoJson",
+      "version": "7.4.3",
+      "author": "Benoit Blanchon <blog.benoitblanchon.fr>",
+      "sentence": "A simple and efficient JSON library for embedded C++.",
+      "website": "https://arduinojson.org/?utm_source=meta&utm_medium=library.properties",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/bblanchon/ArduinoJson-7.4.3.zip",
+      "archiveFileName": "ArduinoJson-7.4.3.zip",
+      "size": 517250,
+      "checksum": "SHA-256:cd8d2f7e4f06eb7e215beecb0de5326a82d047a994e84246572ad73ddc52746f",
+      "license": "MIT",
+      "dependencies": [],
+      "licenseFiles": [
+        "ArduinoJson-7.4.3/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "ArduinoMqttClient",
+      "version": "0.1.8",
+      "author": "Arduino",
+      "sentence": "[BETA] Allows you to send and receive MQTT messages using Arduino.",
+      "website": "https://github.com/arduino-libraries/ArduinoMqttClient",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/arduino-libraries/ArduinoMqttClient-0.1.8.zip",
+      "archiveFileName": "ArduinoMqttClient-0.1.8.zip",
+      "size": 34829,
+      "checksum": "SHA-256:97a19eab1ecb74bcdd6311cd5873dd15d265bd4f5f8a4a45fa0ac0871847c936",
+      "license": "LGPL-2.1",
+      "dependencies": [],
+      "licenseFiles": [
+        "ArduinoMqttClient-0.1.8/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "Adafruit SSD1306",
+      "version": "2.5.17",
+      "author": "Adafruit",
+      "sentence": "SSD1306 oled driver library for monochrome 128x64 and 128x32 displays",
+      "website": "https://github.com/adafruit/Adafruit_SSD1306",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/adafruit/Adafruit_SSD1306-2.5.17.zip",
+      "archiveFileName": "Adafruit_SSD1306-2.5.17.zip",
+      "size": 41831,
+      "checksum": "SHA-256:9b8a9c29a16576d66bce16ed9f6a731632fecbb477171f38a6bc033fda15dd06",
+      "license": "BSD-3-Clause",
+      "dependencies": [
+        {
+          "name": "Adafruit GFX Library"
+        }
+      ],
+      "licenseFiles": [
+        "Adafruit_SSD1306-2.5.17/license.txt"
+      ]
+    },
+    {
+      "name": "Adafruit GFX Library",
+      "version": "1.13.0",
+      "author": "Adafruit",
+      "sentence": "Adafruit GFX graphics core library, this is the 'core' class that all our other graphics libraries derive from.",
+      "website": "https://github.com/adafruit/Adafruit-GFX-Library",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/adafruit/Adafruit_GFX_Library-1.13.0.zip",
+      "archiveFileName": "Adafruit_GFX_Library-1.13.0.zip",
+      "size": 357665,
+      "checksum": "SHA-256:202ec716ff222fb08ffc544a5f315cb47b8630c35fbbc9944fc9f8c93d903924",
+      "license": "BSD-2-Clause",
+      "dependencies": [
+        {
+          "name": "Adafruit BusIO"
+        }
+      ],
+      "licenseFiles": [
+        "Adafruit_GFX_Library-1.13.0/license.txt"
+      ]
+    },
+    {
+      "name": "Adafruit BusIO",
+      "version": "1.17.4",
+      "author": "Adafruit",
+      "sentence": "This is a library for abstracting away UART, I2C and SPI interfacing",
+      "website": "https://github.com/adafruit/Adafruit_BusIO",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/adafruit/Adafruit_BusIO-1.17.4.zip",
+      "archiveFileName": "Adafruit_BusIO-1.17.4.zip",
+      "size": 31084,
+      "checksum": "SHA-256:c7bab1b6c6eee64b50964c8e149b795719a01f1d9dfcdcef170b35daa696349b",
+      "license": "MIT",
+      "dependencies": [],
+      "licenseFiles": [
+        "Adafruit_BusIO-1.17.4/LICENSE"
+      ]
+    },
+    {
+      "name": "Adafruit NeoPixel",
+      "version": "1.15.5",
+      "author": "Adafruit",
+      "sentence": "Arduino library for controlling single-wire-based LED pixels and strip.",
+      "website": "https://github.com/adafruit/Adafruit_NeoPixel",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/adafruit/Adafruit_NeoPixel-1.15.5.zip",
+      "archiveFileName": "Adafruit_NeoPixel-1.15.5.zip",
+      "size": 85934,
+      "checksum": "SHA-256:3d767caa011ab3078df7fe3c3e0456359ce2bc309eba343932690a2c1612fd16",
+      "license": "LGPL-3.0-or-later",
+      "dependencies": [],
+      "licenseFiles": [
+        "Adafruit_NeoPixel-1.15.5/COPYING"
+      ]
+    },
+    {
+      "name": "DHT sensor library",
+      "version": "1.4.7",
+      "author": "Adafruit",
+      "sentence": "Arduino library for DHT11, DHT22, etc Temp & Humidity Sensors",
+      "website": "https://github.com/adafruit/DHT-sensor-library",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/adafruit/DHT_sensor_library-1.4.7.zip",
+      "archiveFileName": "DHT_sensor_library-1.4.7.zip",
+      "size": 18874,
+      "checksum": "SHA-256:5c5d3881b49840c7be98cc0848a48930bbac364fadc7edb7965fe98f9bb1463f",
+      "license": "MIT",
+      "dependencies": [
+        {
+          "name": "Adafruit Unified Sensor"
+        }
+      ],
+      "licenseFiles": [
+        "DHT_sensor_library-1.4.7/license.txt"
+      ]
+    },
+    {
+      "name": "Adafruit Unified Sensor",
+      "version": "1.1.15",
+      "author": "Adafruit <info@adafruit.com>",
+      "sentence": "Required for all Adafruit Unified Sensor based libraries.",
+      "website": "https://github.com/adafruit/Adafruit_Sensor",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/adafruit/Adafruit_Unified_Sensor-1.1.15.zip",
+      "archiveFileName": "Adafruit_Unified_Sensor-1.1.15.zip",
+      "size": 15418,
+      "checksum": "SHA-256:d64cdec0b817535f568fc3b8b8d44e7e097749f5ab8040aea573f412a3cbaec6",
+      "license": "Apache-2.0",
+      "dependencies": [],
+      "licenseFiles": [
+        "Adafruit_Unified_Sensor-1.1.15/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "OneWire",
+      "version": "2.3.8",
+      "author": "Jim Studt, Tom Pollard, Robin James, Glenn Trewitt, Jason Dangel, Guillermo Lovato, Paul Stoffregen, Scott Roberts, Bertrik Sikken, Mark Tillotson, Ken Butcher, Roger Clark, Love Nystrom",
+      "sentence": "Access 1-wire temperature sensors, memory and other chips.",
+      "website": "http://www.pjrc.com/teensy/td_libs_OneWire.html",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/PaulStoffregen/OneWire-2.3.8.zip",
+      "archiveFileName": "OneWire-2.3.8.zip",
+      "size": 23091,
+      "checksum": "SHA-256:dd76d1480a2f4c94348e8c8307ea74206d2936d9c80c73be67783fd200f2be17",
+      "license": "MIT",
+      "dependencies": [],
+      "licenseFiles": [
+        "OneWire-2.3.8/OneWire.cpp"
+      ]
+    },
+    {
+      "name": "DallasTemperature",
+      "version": "4.0.6",
+      "author": "Miles Burton <mail@milesburton.com>, Tim Newsome <nuisance@casualhacker.net>, Guil Barros <gfbarros@bappos.com>, Rob Tillaart <rob.tillaart@gmail.com>",
+      "sentence": "Arduino library for Dallas/Maxim temperature ICs",
+      "website": "https://github.com/milesburton/Arduino-Temperature-Control-Library",
+      "architectures": [
+        "*"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/milesburton/DallasTemperature-4.0.6.zip",
+      "archiveFileName": "DallasTemperature-4.0.6.zip",
+      "size": 46621,
+      "checksum": "SHA-256:fb90dffd2bbd10b8eb5943968e8300ada5e4af17793b0f80c10359702d9de4e4",
+      "license": "MIT",
+      "dependencies": [
+        {
+          "name": "OneWire",
+          "version": "=2.3.8"
+        }
+      ],
+      "licenseFiles": [
+        "DallasTemperature-4.0.6/LICENSE"
+      ]
+    },
+    {
+      "name": "ESP32Servo",
+      "version": "3.2.1",
+      "author": "Kevin Harrington,John K. Bennett",
+      "sentence": "Allows ESP32 PWM library with MCPWM support for optimal servo performance.",
+      "website": "https://madhephaestus.github.io/ESP32Servo/annotated.html",
+      "architectures": [
+        "esp32"
+      ],
+      "url": "https://downloads.arduino.cc/libraries/github.com/madhephaestus/ESP32Servo-3.2.1.zip",
+      "archiveFileName": "ESP32Servo-3.2.1.zip",
+      "size": 57102,
+      "checksum": "SHA-256:2fdebd81b1fb17cc52737ed1412ef23cd475ddec44e3a298f12d88cc881d9fa6",
+      "license": "LGPL-2.1-or-later",
+      "dependencies": [],
+      "licenseFiles": [
+        "ESP32Servo-3.2.1/src/ESP32Servo.h"
+      ]
+    }
+  ]
+}

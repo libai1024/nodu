@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Enter",
+    "before": "#include <Arduino.h>\n#include <ArduinoJson.h>\n#include \"review-helper.h\"\n\n// 中文测试 🌟\n// 整段替换后检查新行号 🚀\n\nvoid setup() {\n  Serial.begin(115200);\n  // 普通中文 🌟 增量验证 ✅\n  // 第二次 🚀\n  int localValue = 42;\n  Serial.println(localValue);\n  JsonDocument doc;\n  doc[\"device\"] = \"ESP32-C3\";\n  Serial.println(reviewValue());\n  serializeJson(doc, Serial);\n  reviewValue();\n}\n\nvoid loop() {\n  delay(1000);\n}\n",
+    "after": "#include <Arduino.h>\n#include <ArduinoJson.h>\n#include \"review-helper.h\"\n\n// 中文测试 🌟\n// 整段替换后检查新行号 🚀\n\nvoid setup() {\n  Serial.begin(115200);\n  // 普通中文 🌟 增量验证 ✅\n  \n  // 第二次 🚀\n  int localValue = 42;\n  Serial.println(localValue);\n  JsonDocument doc;\n  doc[\"device\"] = \"ESP32-C3\";\n  Serial.println(reviewValue());\n  serializeJson(doc, Serial);\n  reviewValue();\n}\n\nvoid loop() {\n  delay(1000);\n}\n",
+    "update": {
+      "reopen": true
+    },
+    "raw": {
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 2
+        },
+        "end": {
+          "line": 10,
+          "character": 2
+        }
+      },
+      "text": "\n  "
+    }
+  },
+  {
+    "name": "paste",
+    "before": "#include <Arduino.h>\n#include <ArduinoJson.h>\n#include \"review-helper.h\"\n\n// 中文测试 🌟\n// 整段替换后检查新行号 🚀\n\nvoid setup() {\n  Serial.begin(115200);\n  // 普通中文 🌟 增量验证 ✅\n  \n  // 第二次 🚀\n  int localValue = 42;\n  Serial.println(localValue);\n  JsonDocument doc;\n  doc[\"device\"] = \"ESP32-C3\";\n  Serial.println(reviewValue());\n  serializeJson(doc, Serial);\n  reviewValue();\n}\n\nvoid loop() {\n  delay(1000);\n}\n",
+    "after": "#include <Arduino.h>\n#include <ArduinoJson.h>\n#include \"review-helper.h\"\n\n// 中文测试 🌟\n// 整段替换后检查新行号 🚀\n\nvoid setup() {\n  Serial.begin(115200);\n  // 普通中文 🌟 增量验证 ✅\n    // 回车与多行粘贴 🧩\n  Serial.println(\"body-edit\");\n\n  // 第二次 🚀\n  int localValue = 42;\n  Serial.println(localValue);\n  JsonDocument doc;\n  doc[\"device\"] = \"ESP32-C3\";\n  Serial.println(reviewValue());\n  serializeJson(doc, Serial);\n  reviewValue();\n}\n\nvoid loop() {\n  delay(1000);\n}\n",
+    "update": {
+      "change": {
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 2
+          },
+          "end": {
+            "line": 10,
+            "character": 2
+          }
+        },
+        "text": "  // 回车与多行粘贴 🧩\n  Serial.println(\"body-edit\");\n"
+      }
+    },
+    "raw": {
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 2
+        },
+        "end": {
+          "line": 10,
+          "character": 2
+        }
+      },
+      "text": "  // 回车与多行粘贴 🧩\n  Serial.println(\"body-edit\");\n"
+    }
+  }
+]

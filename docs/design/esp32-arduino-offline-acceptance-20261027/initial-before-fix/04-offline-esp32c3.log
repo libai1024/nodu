@@ -1,0 +1,20 @@
+Downloading tool esp32:mklittlefs@4.0.2-db0513a...
+esp32:mklittlefs@4.0.2-db0513a Download failed: performing HEAD request: Head "https://github.com/earlephilhower/mklittlefs/releases/download/4.0.2/x86_64-apple-darwin-mklittlefs-db0513a.tar.gz": dial tcp: lookup github.com: no such host
+Error downloading tool esp32:mklittlefs@4.0.2-db0513a...
+Error initializing instance: Error loading hardware platform: loading required tool esp32:mklittlefs@4.0.2-db0513a: Error installing tool esp32:mklittlefs@4.0.2-db0513a: Download failed: performing HEAD request: Head "https://github.com/earlephilhower/mklittlefs/releases/download/4.0.2/x86_64-apple-darwin-mklittlefs-db0513a.tar.gz": dial tcp: lookup github.com: no such host
+Downloading library Adafruit GFX Library@1.13.0...
+Library Adafruit GFX Library@1.13.0 not found...
+Error initializing instance: Library 'Adafruit GFX Library' not found
+In file included from /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/projects with spaces/offline_esp32c3/offline_esp32c3.ino:5:
+/private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/Adafruit_SSD1306_2.5.17_e01cd9e72ae36617/Adafruit SSD1306/Adafruit_SSD1306.h:42:10: fatal error: Adafruit_GFX.h: No such file or directory
+   42 | #include <Adafruit_GFX.h>
+      |          ^~~~~~~~~~~~~~~~
+compilation terminated.
+
+Used library Version Path
+WiFi         3.3.12  /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/esp32_esp32_3.3.12_feadd113249efafd/libraries/WiFi
+Networking   3.3.12  /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/esp32_esp32_3.3.12_feadd113249efafd/libraries/Network
+
+Used platform Version Path
+esp32:esp32   3.3.12  /private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/nodu-arduino-offline-UIKItA/home/data/internal/esp32_esp32_3.3.12_feadd113249efafd
+Error during build: exit status 1

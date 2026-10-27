@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-26",
+  "base_commit": "ba63cd6bac3ce1aafed17ce5c56b61bd2b8c8a44",
+  "ai_tests": {
+    "pass": 398,
+    "fail": 0,
+    "skip": 0
+  },
+  "workbench_tests": {
+    "pass": 123,
+    "fail": 0,
+    "skip": 0
+  },
+  "compile": "pass",
+  "electron_build": "pass",
+  "diff_check": "pass",
+  "artifacts": {
+    "ai-tests.log": "82e612986beb0094937bf6f5f25bae15c4fa3517d4579fda657f716e71567422",
+    "compile.log": "28db22e78159d6e4bdeb3e63c59757ceb36b33f0c16a74ecf87a1fef46bdc02a",
+    "problems-always-visible.png": "712ef6ff455d349326da4b85bf551ced29e7d24eac38a25b2de669566ae7e931",
+    "problems-copy-all.png": "84ce0c6bb75ad029efa73c8cf687413c1253cbd0600d5030a5623bb18ba8d206",
+    "selection-reference.png": "4f34acb115d0f6224553497384b4b9a5b304ad4d068a62b3d2c627c25da1b7ed",
+    "workbench-tests.log": "dee16bc8eb8c00b11f98230e911498162fae7fa07831b7d5c61d2583d5d756c7",
+    "autosave-default.png": "7aea8dec909071d75939ecceae2918105015bc00be1cc12dedcb620fea8747ee",
+    "electron-build.log": "08b1e335b77872a9b61571b9708f1e735bbb862383bc84981ac01f727afd0527"
+  },
+  "native_drag_gui": "not_verified",
+  "native_drag_automated": "pass",
+  "scope": "Uncommitted integration worktree. No model requests, hardware tests, release packaging or push."
+}

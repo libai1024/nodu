@@ -1,0 +1,129 @@
+{
+  "ok": true,
+  "scope": "Real ESP-EMU ROM write, esptool verification, independent 4MB readback, saved Flash cold boot, repetitions and expected failures; no physical serial hardware",
+  "c3_evidence": "/tmp/nodu-arduino-upload-20261027-c3-ERNxQJ",
+  "s3_and_failures_evidence": "/tmp/nodu-arduino-upload-20261027-J7XhaA",
+  "initial_harness_failure": "Initial S3 readback started after the emulator 90s lifetime; S3 plus failure cases reran with a 240s bounded lifecycle.",
+  "cases": [
+    {
+      "name": "esp32c3-upload-1",
+      "result": {
+        "ok": true,
+        "stage": "complete"
+      },
+      "stages": [
+        "validate",
+        "upload",
+        "verify",
+        "complete"
+      ]
+    },
+    {
+      "name": "esp32c3-upload-2",
+      "result": {
+        "ok": true,
+        "stage": "complete"
+      },
+      "stages": [
+        "validate",
+        "upload",
+        "verify",
+        "complete"
+      ]
+    },
+    {
+      "name": "esp32c3-readback",
+      "ok": true,
+      "bytes": 4194304,
+      "sha256": "d75c70ba6b4b12aaf19b3ca33ca1c821e3680bebd45cf2f5a3625ede8f07ab7f"
+    },
+    {
+      "name": "esp32c3-saved-flash-boot",
+      "ok": true,
+      "sha256": "d75c70ba6b4b12aaf19b3ca33ca1c821e3680bebd45cf2f5a3625ede8f07ab7f",
+      "hello": true
+    },
+    {
+      "name": "esp32s3-upload-1",
+      "result": {
+        "ok": true,
+        "stage": "complete"
+      },
+      "stages": [
+        "validate",
+        "upload",
+        "verify",
+        "complete"
+      ]
+    },
+    {
+      "name": "esp32s3-upload-2",
+      "result": {
+        "ok": true,
+        "stage": "complete"
+      },
+      "stages": [
+        "validate",
+        "upload",
+        "verify",
+        "complete"
+      ]
+    },
+    {
+      "name": "esp32s3-readback",
+      "ok": true,
+      "bytes": 4194304,
+      "sha256": "bcad73c7e2fa4ed325880af326c7e3da1d54a6d91236b1b82561a652420bfd18"
+    },
+    {
+      "name": "esp32s3-saved-flash-boot",
+      "ok": true,
+      "sha256": "bcad73c7e2fa4ed325880af326c7e3da1d54a6d91236b1b82561a652420bfd18",
+      "hello": true
+    },
+    {
+      "name": "actual-wrong-chip",
+      "result": {
+        "ok": false,
+        "stage": "upload",
+        "error": "\u4e0a\u4f20\u5931\u8d25\uff0c\u8bf7\u67e5\u770b\u4e0a\u4f20\u8f93\u51fa\u3002"
+      }
+    },
+    {
+      "name": "absent-endpoint",
+      "result": {
+        "ok": false,
+        "stage": "upload",
+        "error": "\u4e0a\u4f20\u5931\u8d25\uff0c\u8bf7\u67e5\u770b\u4e0a\u4f20\u8f93\u51fa\u3002"
+      }
+    },
+    {
+      "name": "corrupt-image-no-process",
+      "result": {
+        "ok": false,
+        "stage": "validate",
+        "error": "\u56fa\u4ef6\u6821\u9a8c\u5931\u8d25\uff0c\u8bf7\u91cd\u65b0\u7f16\u8bd1\u3002"
+      },
+      "calls": 0
+    },
+    {
+      "name": "cancel-during-write",
+      "result": {
+        "ok": false,
+        "stage": "upload",
+        "cancelled": true,
+        "error": "\u5df2\u53d6\u6d88\u4e0a\u4f20\u3002"
+      },
+      "stages": [
+        "validate",
+        "upload"
+      ]
+    }
+  ],
+  "unit_tests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "hardware_accessed": false,
+  "process_cleanup_verified": true
+}

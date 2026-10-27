@@ -1,0 +1,6 @@
+{
+  "ok": true,
+  "buildBinarySha256": "b765ca33d809b23160a6c953ebcd6f180913a1e02488949efcc49ac1127e18eb",
+  "signedSha256": "1ffb9e52da8b7aed6707980b71a066295512d1c9cb8e65106152907838a79e7f",
+  "version": "Exuberant Ctags Development, Copyright (C) 1996-2009 Darren Hiebert\n  Compiled: Jan  1 1970, 00:00:00\n  Addresses: <dhiebert@users.sourceforge.net>, http://ctags.sourceforge.net\n  Optional compiled features: +wildcards, +regex, +internal-sort"
+}

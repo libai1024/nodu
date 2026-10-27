@@ -1,0 +1,6 @@
+{
+  "chip": "esp32c3",
+  "ok": false,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert((replacementCompletion.items??replacementCompletion).some(item=>item.label.includes('println')))\n\n    at run (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/arduino-language.e2e.cjs:62:154)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/scripts/arduino-language.e2e.cjs:76:76",
+  "project": "/private/tmp/nodu-arduino-e2e-20261026/language-final-replace/esp32c3-1793032251064/lsp_esp32c3"
+}

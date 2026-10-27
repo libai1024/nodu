@@ -1,0 +1,1131 @@
+[
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "capabilities": {
+        "textDocumentSync": {
+          "openClose": true,
+          "change": 2,
+          "save": {
+            "includeText": true
+          }
+        },
+        "completionProvider": {
+          "triggerCharacters": [
+            ".",
+            "<",
+            ">",
+            ":",
+            "\"",
+            "/"
+          ],
+          "allCommitCharacters": [
+            " ",
+            "\t",
+            "(",
+            ")",
+            "[",
+            "]",
+            "{",
+            "}",
+            "<",
+            ">",
+            ":",
+            ";",
+            ",",
+            "+",
+            "-",
+            "/",
+            "*",
+            "%",
+            "^",
+            "&",
+            "#",
+            "?",
+            ".",
+            "=",
+            "\"",
+            "'",
+            "|"
+          ],
+          "completionItem": {}
+        },
+        "hoverProvider": {},
+        "signatureHelpProvider": {
+          "triggerCharacters": [
+            "(",
+            ","
+          ]
+        },
+        "definitionProvider": {},
+        "documentHighlightProvider": {},
+        "documentSymbolProvider": {},
+        "codeActionProvider": {
+          "codeActionKinds": [
+            "quickfix",
+            "refactor",
+            "info"
+          ]
+        },
+        "documentFormattingProvider": {},
+        "documentRangeFormattingProvider": {},
+        "documentOnTypeFormattingProvider": {
+          "firstTriggerCharacter": "\n"
+        },
+        "renameProvider": {},
+        "executeCommandProvider": {
+          "commands": [
+            "clangd.applyFix",
+            "clangd.applyTweak"
+          ]
+        },
+        "workspaceSymbolProvider": {}
+      },
+      "serverInfo": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/var/folders/b0/df_pc2213nj1ld31vtwzl5cm0000gn/T/arduino-language-server1432408200/build/.clangd",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "1",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "backgroundIndexProgress"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 2
+        },
+        "end": {
+          "line": 13,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "begin",
+        "title": "indexing",
+        "percentage": 0
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "1/62",
+        "percentage": 1
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function serializeJson\nprovided by \"ArduinoJson/Json/JsonSerializer.hpp\"\n\n→ size_t (aka unsigned int)\nParameters:\n- JsonVariantConst source\n- HardwareSerial & destination\n\n// In namespace ArduinoJson\ntemplate <>\nsize_t serializeJson<HardwareSerial, 0>(JsonVariantConst source,\n                                        HardwareSerial &destination)"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 2
+        },
+        "end": {
+          "line": 16,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function loop\nprovided by <Arduino.h>\n\n→ void\n\nvoid loop()"
+      },
+      "range": {
+        "start": {
+          "line": 20,
+          "character": 5
+        },
+        "end": {
+          "line": 20,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 5,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 2
+        },
+        "end": {
+          "line": 14,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 6,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function serializeJson\nprovided by \"ArduinoJson/Json/JsonSerializer.hpp\"\n\n→ size_t (aka unsigned int)\nParameters:\n- JsonVariantConst source\n- HardwareSerial & destination\n\n// In namespace ArduinoJson\ntemplate <>\nsize_t serializeJson<HardwareSerial, 0>(JsonVariantConst source,\n                                        HardwareSerial &destination)"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 2
+        },
+        "end": {
+          "line": 17,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function loop\nprovided by <Arduino.h>\n\n→ void\n\nvoid loop()"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 5
+        },
+        "end": {
+          "line": 21,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 8,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 2
+        },
+        "end": {
+          "line": 16,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 9,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function serializeJson\nprovided by \"ArduinoJson/Json/JsonSerializer.hpp\"\n\n→ size_t (aka unsigned int)\nParameters:\n- JsonVariantConst source\n- HardwareSerial & destination\n\n// In namespace ArduinoJson\ntemplate <>\nsize_t serializeJson<HardwareSerial, 0>(JsonVariantConst source,\n                                        HardwareSerial &destination)"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 2
+        },
+        "end": {
+          "line": 19,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 10,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function loop\nprovided by <Arduino.h>\n\n→ void\n\nvoid loop()"
+      },
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 5
+        },
+        "end": {
+          "line": 23,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "2",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "arduinoLanguageServerRebuild"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "begin",
+        "title": "Building sketch"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-middleware-final-v2/esp32c3-1793035692980/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "end",
+        "message": "done"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///private/tmp/nodu-arduino-e2e-20261026/language-middleware-final-v2/esp32c3-1793035692980/lsp_esp32c3/lsp_esp32c3.ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": "3",
+    "method": "window/workDoneProgress/create",
+    "params": {
+      "token": "arduinoLanguageServerRebuild"
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "begin",
+        "title": "Building sketch"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "2/62",
+        "percentage": 3
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "3/62",
+        "percentage": 4
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "3/62",
+        "percentage": 4
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "4/62",
+        "percentage": 6
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "5/62",
+        "percentage": 8
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "6/62",
+        "percentage": 9
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "7/62",
+        "percentage": 11
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "8/62",
+        "percentage": 12
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "9/62",
+        "percentage": 14
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "10/62",
+        "percentage": 16
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "11/62",
+        "percentage": 17
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "12/62",
+        "percentage": 19
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "13/62",
+        "percentage": 20
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "14/62",
+        "percentage": 22
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "14/62",
+        "percentage": 22
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "15/62",
+        "percentage": 24
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "16/62",
+        "percentage": 25
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "17/62",
+        "percentage": 27
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "18/62",
+        "percentage": 29
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "19/62",
+        "percentage": 30
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "20/62",
+        "percentage": 32
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "21/62",
+        "percentage": 33
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "22/62",
+        "percentage": 35
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "23/62",
+        "percentage": 37
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "24/62",
+        "percentage": 38
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "25/62",
+        "percentage": 40
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "26/62",
+        "percentage": 41
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "27/62",
+        "percentage": 43
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "28/62",
+        "percentage": 45
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "29/62",
+        "percentage": 46
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "30/62",
+        "percentage": 48
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "30/62",
+        "percentage": 48
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "31/62",
+        "percentage": 50
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "32/62",
+        "percentage": 51
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "33/62",
+        "percentage": 53
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "33/62",
+        "percentage": 53
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "34/62",
+        "percentage": 54
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "35/62",
+        "percentage": 56
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "36/62",
+        "percentage": 58
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "37/62",
+        "percentage": 59
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "38/62",
+        "percentage": 61
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "39/62",
+        "percentage": 62
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "40/62",
+        "percentage": 64
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "41/62",
+        "percentage": 66
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "41/62",
+        "percentage": 66
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "42/62",
+        "percentage": 67
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "43/62",
+        "percentage": 69
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "44/62",
+        "percentage": 70
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "45/62",
+        "percentage": 72
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "46/62",
+        "percentage": 74
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "arduinoLanguageServerRebuild",
+      "value": {
+        "kind": "end",
+        "message": "done"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "report",
+        "message": "46/63",
+        "percentage": 73
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "textDocument/publishDiagnostics",
+    "params": {
+      "uri": "file:///not-ino",
+      "diagnostics": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 11,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "class JsonDocument\nprovided by \"ArduinoJson/Document/JsonDocument.hpp\"\n\nA JSON document.\nhttps://arduinojson.org/v7/api/jsondocument/\n\n// In namespace ArduinoJson\nclass JsonDocument : public detail::VariantOperators<const JsonDocument &> {}"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 2
+        },
+        "end": {
+          "line": 18,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 12,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function serializeJson\nprovided by \"ArduinoJson/Json/JsonSerializer.hpp\"\n\n→ size_t (aka unsigned int)\nParameters:\n- JsonVariantConst source\n- HardwareSerial & destination\nProduces a minified JSON document.\nhttps://arduinojson.org/v7/api/json/serializejson/\n\n// In namespace ArduinoJson\ntemplate <>\nsize_t serializeJson<HardwareSerial, 0>(JsonVariantConst source,\n                                        HardwareSerial &destination)"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 2
+        },
+        "end": {
+          "line": 21,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 13,
+    "result": {
+      "contents": {
+        "kind": "plaintext",
+        "value": "function loop\nprovided by <Arduino.h>\n\n→ void\n\nvoid loop()"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 5
+        },
+        "end": {
+          "line": 25,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "$/progress",
+    "params": {
+      "token": "backgroundIndexProgress",
+      "value": {
+        "kind": "end",
+        "message": "Shutdown"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 14,
+    "result": null
+  }
+]

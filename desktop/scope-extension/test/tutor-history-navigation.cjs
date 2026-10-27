@@ -20,8 +20,9 @@ function mount(overrides = {}) {
         useState(initial) { const i = cursor++; if (!(i in slots)) slots[i] = initial; return [slots[i], value => slots[i] = value]; },
         useRef(initial) { const i = cursor++; return slots[i] ??= { current: initial }; },
         useEffect(fn) { const i = cursor++; if (!(i in slots)) { slots[i] = true; cleanups.push(fn()); } },
+        useCallback: fn => fn,
     };
-    vm.runInNewContext(code, { exports, require: () => React });
+    vm.runInNewContext(code, { exports, setInterval: () => 1, clearInterval() {}, require: id => id.endsWith('nodu-tutor-chat-controls') ? { ConversationActions: 'ConversationActions' } : React });
     const tutor = {
         workspaceId: 'project-one', activeConversationId: 'one', mode: 'ask', conversationSidebarOpen: true, historyOpen: false,
         messages: { ask: [], teach: [] }, drafts: { ask: '保留当前草稿', teach: '' }, pins: [],
@@ -49,17 +50,18 @@ function mount(overrides = {}) {
         node.props.onKeyDown({ key: value, currentTarget: rowElements.get(node.props.title), preventDefault() { prevented = true; }, stopPropagation() { stopped = true; } });
         render(); return { prevented, stopped };
     };
-    return { tutor, calls, rows, all, find, input, key, render, text: () => content(tree), unmount: () => cleanups.forEach(fn => fn?.()), search(value) { input().props.onChange({ target: { value } }); render(); } };
+    return { tutor, calls, rows, all, find, input, key, render, exports, text: () => content(tree), unmount: () => cleanups.forEach(fn => fn?.()), search(value) { input().props.onChange({ target: { value } }); render(); } };
 }
 
 test('persistent list is a labelled navigation surface with ordinary buttons, dates and identifiable drafts', () => {
     const c = mount();
     assert.equal(c.find(n => n.type === 'aside').props['aria-label'], '会话列表');
-    assert.equal(c.input().props.placeholder, undefined);
+    assert.equal(c.input().props.placeholder, '搜索对话…');
     assert.equal(c.all(n => n.props?.role?.startsWith('menu')).length, 0);
     assert.deepEqual(c.rows().map(n => n.props.title), ['串口初始化', '配置 GPIO 引脚', 'Blink Timer']);
     assert.equal(c.rows()[0].props['aria-current'], 'true');
-    assert.equal(c.find(n => n.props?.className === 'nodu-chat-sidebar-preview').props.children[0], '继续检查 DMA');
+    assert.equal(c.find(n => n.props?.className === 'nodu-chat-sidebar-preview').props.children[0], '草稿 · 继续检查 DMA');
+    assert.equal(c.all(n => n.type === 'time').length, 3);
     assert.ok(c.text().includes('今天')); assert.ok(c.text().includes('昨天'));
     assert.deepEqual(c.calls, [], 'mount must not steal focus from the composer');
 });
@@ -128,4 +130,35 @@ test('closing the list or changing workspace during activation cancels deferred 
         const pending = c.rows()[1].props.onClick(); if (leave === 'unmount') c.unmount(); else c.tutor.workspaceId = 'project-two';
         complete(); await pending; assert.deepEqual(c.calls, []);
     }
+});
+
+
+test('archived and empty records stay out of the default list without deleting data', () => {
+    const c = mount();
+    c.tutor.historyEntries.push({ id: 'archive', mode: 'ask', title: '旧任务', preview: '保留内容', hasDraft: false, archived: true, updatedAt: Date.now() });
+    c.tutor.historyEntries.push({ id: 'empty', mode: 'ask', title: '新对话', preview: '', hasDraft: false, empty: true, updatedAt: Date.now() });
+    c.render(); assert.equal(c.rows().length, 3);
+    c.find(n => n.props?.['aria-label'] === '查看已归档对话').props.onClick(); c.render();
+    assert.deepEqual(c.rows().map(n => n.props.title), ['旧任务']); assert.equal(c.tutor.historyEntries.length, 5); assert.deepEqual(c.calls, []);
+    c.find(n => n.props?.['aria-label'] === '返回对话列表').props.onClick(); c.render(); assert.equal(c.rows().length, 3);
+});
+
+test('row management opens a separate action surface and never selects the conversation', () => {
+    const c = mount(), anchor = { isConnected: true };
+    const more = c.find(n => n.props?.['aria-label'] === '管理对话：串口初始化');
+    assert.equal(more.props['aria-haspopup'], 'menu'); more.props.onClick({ currentTarget: anchor }); c.render();
+    const menu = c.find(n => n.type === 'ConversationActions');
+    assert.equal(menu.props.entry.id, 'one'); assert.equal(menu.props.anchor, anchor); assert.deepEqual(c.calls, []);
+    assert.ok(c.all(n => n.type === 'button').every(n => !descendants(n.props.children).some(child => child.type === 'button')), 'row controls cannot be nested buttons');
+});
+
+test('relative time and state labels come from actual messages and drafts', () => {
+    const { conversationAge: age, conversationState: state } = mount().exports, now = 200000000;
+    assert.equal(age(now, now), '刚刚'); assert.equal(age(now + 60000, now), '刚刚');
+    assert.equal(age(now - 60000, now), '1分'); assert.equal(age(now - 3600000, now), '1时'); assert.equal(age(now - 86400000, now), '1天');
+    assert.equal(state({ mode: 'ask', status: 'pending', hasDraft: true }).label, '正在回复');
+    assert.equal(state({ mode: 'ask', status: 'done', hasDraft: true }).label, '草稿');
+    assert.equal(state({ mode: 'ask', status: 'failed' }).label, '回复失败');
+    assert.equal(state({ mode: 'teach', status: 'stopped' }).label, '回复已停止');
+    assert.equal(state({ mode: 'teach', status: 'done' }).label, '已回复');
 });

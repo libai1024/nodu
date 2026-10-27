@@ -24,6 +24,7 @@ import { NoduBoardGuideContribution, NoduBoardWidget } from './nodu-board-widget
 import { ScopeConsoleContribution } from './scope-workbench';
 import { NoduBoardFilesContribution, NoduBoardFilesWidget } from './nodu-board-files';
 import { NoduTutorModel } from './nodu-tutor-model';
+import { NoduTutorContextTransfer } from './nodu-tutor-context-transfer';
 import { NoduTutorHintsContribution } from './nodu-tutor-hints';
 import { NoduTutorToolbarContribution, NoduTutorViewContribution, NoduTutorWidget } from './nodu-tutor-widget';
 import { NoduAiSettingsContribution, NoduAiSettingsPopover, NoduSidebarBottomMenuWidget } from './nodu-ai-settings';
@@ -39,6 +40,9 @@ import '../../style/tutor-task.css';
 import '../../style/embedded.css';
 import '../../style/select.css';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
+import { NoduArduinoContribution } from './nodu-arduino-contribution';
+import { NoduArduinoModel } from './nodu-arduino-model';
+import { NoduArduinoLibrariesWidget, NoduArduinoLibrariesContribution } from './nodu-arduino-libraries';
 import { NoduEmbeddedPanel } from './nodu-embedded-panel';
 import { NoduEmbeddedContribution } from './nodu-embedded-contribution';
 import { NoduStartPage, NoduStartContribution } from './nodu-start-page';
@@ -47,6 +51,7 @@ import { NoduShellPanelWidget } from './nodu-shell-panel';
 import { NoduProblemsPanel } from './nodu-problems-panel';
 import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-creation-handler';
 import { NoduClangdClient } from './nodu-clangd-client';
+import { NoduArduinoLanguageClient } from './nodu-arduino-language-client';
 import { NoduDiagnostics } from './nodu-diagnostics';
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
@@ -55,6 +60,14 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bind(NoduDeviceModel).toSelf().inSingletonScope();
     // STM32 C workbench (0.2.1): inert until a folder with nodu.json kind stm32-hal is open.
     bind(NoduEmbeddedModel).toSelf().inSingletonScope();
+    bind(NoduArduinoModel).toSelf().inSingletonScope();
+    bind(NoduArduinoContribution).toSelf().inSingletonScope();
+    bind(CommandContribution).toService(NoduArduinoContribution);
+    bind(KeybindingContribution).toService(NoduArduinoContribution);
+    bind(NoduArduinoLibrariesWidget).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduArduinoLibrariesWidget.ID, createWidget: () => ctx.container.get(NoduArduinoLibrariesWidget) })).inSingletonScope();
+    bindViewContribution(bind, NoduArduinoLibrariesContribution);
+    bind(FrontendApplicationContribution).toService(NoduArduinoLibrariesContribution);
     bind(NoduEmbeddedPanel).toSelf();
     bind(NoduShellPanelWidget).toSelf().inSingletonScope();
     bind(NoduProblemsPanel).toSelf().inSingletonScope();
@@ -75,6 +88,9 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bind(NoduClangdClient).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(NoduClangdClient);
     bind(CommandContribution).toService(NoduClangdClient);
+    bind(NoduArduinoLanguageClient).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(NoduArduinoLanguageClient);
+    bind(CommandContribution).toService(NoduArduinoLanguageClient);
     bind(ScopeSession).toSelf().inSingletonScope();
     bind(ScopeLayoutState).toSelf().inSingletonScope();
     bind(ScopeToolbar).toSelf().inSingletonScope();
@@ -130,6 +146,9 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bind(PreferenceContribution).toConstantValue({ schema: NODU_UPDATE_SCHEMA });
     // Teaching steps (T1): bound last so its first-open runs after the workbench applied its layout.
     bind(NoduTutorModel).toSelf().inSingletonScope();
+    bind(NoduTutorContextTransfer).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(NoduTutorContextTransfer);
+    bind(CommandContribution).toService(NoduTutorContextTransfer);
     bind(NoduTutorWidget).toSelf();
     bind(WidgetFactory).toDynamicValue(ctx => ({ id: NoduTutorWidget.ID, createWidget: () => ctx.container.get(NoduTutorWidget) })).inSingletonScope();
     bindViewContribution(bind, NoduTutorViewContribution);

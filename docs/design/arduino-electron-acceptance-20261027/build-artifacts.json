@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-10-27T01:39:29.338012+08:00",
+  "files": [
+    {
+      "path": "desktop/electron-app/lib/frontend/bundle.js",
+      "size": 34367269,
+      "sha256": "f5b4d2bfcef71e33c2849a2df12ede734e80aed9b499d7b5b8d8e89aac56ecba"
+    },
+    {
+      "path": "desktop/electron-app/lib/backend/main.js",
+      "size": 19590942,
+      "sha256": "eb5bc1655c12d5e265005dbffa5e66d4d68ede726168ab97a9713f71d948554a"
+    },
+    {
+      "path": "desktop/plugins/nodu-arduino-language/package.json",
+      "size": 1216,
+      "sha256": "60779c43930cd5a0b619d7ebe3c667d6bda28f23c763ea9674255fcacb715de1"
+    },
+    {
+      "path": "desktop/plugins/nodu-arduino-language/extension.cjs",
+      "size": 813317,
+      "sha256": "f409b05f45b25f4deeba9ae11c8b6a01d1b5aa8a23b1ad758fdbbc66c360975a"
+    },
+    {
+      "path": "desktop/scope-extension/resources/bin/darwin-arm64/arduino-language-server",
+      "size": 19790562,
+      "sha256": "2fa517a13d97da0f3ed5656bb92da367cc7c3b90a2217749970181498595a0ec"
+    },
+    {
+      "path": "desktop/scope-extension/resources/bin/darwin-arm64/arduino-clangd/bin/clangd",
+      "size": 156406144,
+      "sha256": "1d37030fb652202d6b6884d3451ae2d6db279139ecf289c713e07e65f52d9237"
+    },
+    {
+      "path": "desktop/scope-extension/resources/bin/darwin-arm64/ARDUINO-LANGUAGE-TOOLS.json",
+      "size": 1008,
+      "sha256": "6a9626d7a7807e1562db8306356633b959f29ad8e14669460624feebdf0296c9"
+    }
+  ]
+}

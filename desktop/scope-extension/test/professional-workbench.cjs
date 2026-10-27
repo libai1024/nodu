@@ -51,7 +51,9 @@ function harness(electron = true, mac = true) {
         './nodu-minimal-action': { NoduMinimalAction, ActionIcon },
         './nodu-minimal-preferences': { NoduMinimalPreferences },
         './nodu-minimal-settings-host': { NoduMinimalSettingsHost },
-        './nodu-project-icon': { ChipMark },
+        './nodu-project-icon': { ChipMark, FrameworkMark: () => {} },
+        '../common/nodu-arduino-protocol': { ARDUINO_COMMANDS: { build: 'nodu.arduino.build', upload: 'nodu.arduino.upload', stop: 'nodu.arduino.stop', libraries: 'nodu.arduino.libraries' } },
+        './nodu-arduino-contribution': { ARDUINO_FLASH_COMMAND: 'nodu.arduino.flash' },
         './nodu-tutor-hints': { TUTOR_COMMANDS, TUTOR_MENU: ['nodu-ai-controls'] },
         './nodu-tutor-widget': { NoduTutorWidget: { ID: 'tutor' } },
         './scope-theme': { SCOPE_LIGHT_THEME_ID: 'scope-light', SCOPE_THEME_ID: 'scope-dark' },
@@ -75,9 +77,10 @@ function harness(electron = true, mac = true) {
 function toolbar(kind = 'stm32', h = harness()) {
     const owner = new h.ScopeToolbar(), calls = [], preferences = [], themes = [], menu = [];
     owner.layoutState = new h.ScopeLayoutState(); owner.layoutState.setMode('pro'); owner.layoutState.setProject('unique-project-name', '/project');
-    owner.embedded = { isC: kind === 'stm32', isEsp: kind === 'esp', espChip: 'esp32', busy: false, savingOptions: false,
+    owner.embedded = { isC: kind === 'stm32', isEsp: kind === 'esp' || kind === 'arduino', isArduino: kind === 'arduino', espChip: 'esp32', busy: false, savingOptions: false,
         project: { path: '/project', chip: { name: 'STM32F103C8T6' }, board: { name: 'STM32F103C8T6 最小系统板' }, flashMethod: 'stlink' },
-        probes: [], monitorPort: '', flashSteps: {}, refreshDevices: async () => {}, loadBackups: async () => {} };
+        probes: [], monitorPort: '', flashSteps: {}, refreshDevices: async () => {}, loadBackups: async () => {}, setTask(text) { this.task = { text }; } };
+    owner.arduino = { busy: false, loading: false, configuring: false, selectedPort: '/dev/upload', ports: [{ path: '/dev/upload' }], canFlash: true, boardName: 'ESP32S3 Dev Module', refresh: async () => calls.push('refresh-arduino') };
     owner.device = { state: { running: false, phase: 'idle' }, busy: false, canStop: false, boardLabel: 'K210', connected: false };
     owner.tutor = { paused: false };
     owner.commands = { executeCommand: async command => { calls.push(command); } };
@@ -89,10 +92,35 @@ function toolbar(kind = 'stm32', h = harness()) {
     owner.editors = { currentEditor: { activate: () => calls.push('activate-editor') } };
     owner.shell = { mainPanel: { node: {} }, topPanel: { node: { id: 'titlebar' }, hasClass: () => false }, leftPanelHandler: { container: { node: { querySelector: () => ({ id: 'rail' }) } } } };
     owner.contextMenu = { render: options => menu.push(options) };
-    const render = () => kind === 'stm32' ? h.NoduCToolbar(owner.renderC().props) : owner.renderPythonOrEsp();
+    const render = () => kind === 'stm32' ? h.NoduCToolbar(owner.renderC().props) : kind === 'arduino' ? owner.renderArduino() : owner.renderPythonOrEsp();
     const button = label => walk(render()).find(node => node.type === 'button' && node.props['aria-label'] === label);
     return { h, owner, calls, preferences, themes, menu, render, button };
 }
+test('Arduino uses the shared professional action row and the same minimal three-action gesture', () => {
+    const c = toolbar('arduino');
+    const actions = walk(c.render()).filter(node => node.props?.['data-action']);
+    assert.deepEqual(actions.map(node => node.props['data-action']), ['build', 'flash', 'run']);
+    actions.forEach(node => { assert.equal(node.props.disabled, false); node.props.onClick(); });
+    assert.deepEqual(c.calls.splice(0), ['nodu.arduino.build', 'nodu.arduino.flash', 'nodu.arduino.upload']);
+    c.owner.layoutState.setMode('simple');
+    const primary = () => walk(c.owner.renderMinimal()).find(node => node.type === c.h.NoduMinimalAction).props;
+    assert.equal(primary().allowSelection, true);
+    for (const [action, command] of [['build', 'nodu.arduino.build'], ['flash', 'nodu.arduino.flash'], ['build-flash', 'nodu.arduino.upload']]) {
+        primary().onSelect(action); primary().onExecute(); assert.deepEqual(c.calls.splice(0), [command]);
+    }
+    c.owner.arduino.operation = 'upload'; assert.equal(primary().busy, true); primary().onStop(); assert.deepEqual(c.calls.splice(0), ['nodu.arduino.stop']);
+});
+test('Arduino opens the shared device popover for a missing upload port while compilation remains available', () => {
+    const c = toolbar('arduino'); c.owner.arduino.selectedPort = '';
+    const actions = walk(c.render()).filter(node => node.props?.['data-action']);
+    assert.equal(actions[0].props.disabled, false); assert.equal(actions[1].props.disabled, true); assert.equal(actions[2].props.disabled, true);
+    c.owner.layoutState.setMode('simple');
+    const primary = () => walk(c.owner.renderMinimal()).find(node => node.type === c.h.NoduMinimalAction).props;
+    assert.equal(primary().disabled, false); primary().onExecute();
+    assert.equal(c.owner.layoutState.deviceOpen, true); assert.deepEqual(c.calls.splice(0), ['refresh-arduino']);
+    primary().onSelect('build'); primary().onExecute(); assert.deepEqual(c.calls.splice(0), ['nodu.arduino.build']);
+    assert.ok(walk(c.owner.renderMinimal()).some(node => node.props?.['aria-label'] === '库管理'));
+});
 test('professional STM32 actions are compile, flash, run with distinct production command dispatch', () => {
     const c = toolbar();
     const actions = walk(c.render()).filter(node => node.props?.['data-action']);
@@ -240,4 +268,13 @@ test('Windows and Linux retain visible standalone toolbar with native titlebar a
     const custom = layout(true, false, true); custom.owner.layoutState.setMode('pro'); custom.owner.positionToolbar();
     assert.equal(custom.toolbar.parent, custom.top); assert.equal(custom.toolbar.classes.has('nodu-titlebar-toolbar'), true);
     assert.deepEqual(custom.top.layout.widgets, [custom.search, custom.toolbar]);
+});
+
+
+test('a saved Arduino port absent from the current port list is shown as disconnected', () => {
+    const c = toolbar('arduino'); c.owner.arduino.ports = [];
+    const trigger = walk(c.render()).find(n => n.type === 'button' && n.props['aria-controls'] === 'scope-device-popover');
+    assert.match(trigger.props.className, /nodu-chip-disconnected/); assert.match(trigger.props['aria-label'], /串口未连接/);
+    c.owner.arduino.ports = [{ path: '/dev/upload' }];
+    assert.match(walk(c.render()).find(n => n.type === 'button' && n.props['aria-controls'] === 'scope-device-popover').props.className, /nodu-chip-connected/);
 });

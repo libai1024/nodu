@@ -1,0 +1,242 @@
+Electron main: loading modules... [0.189 s since electron main start]
+Electron main: container created [0.925 s since electron main start]
+Electron main: modules loaded [0.926 s since electron main start]
+Electron main: resolving application [0.926 s since electron main start]
+Electron main: application resolved [0.927 s since electron main start]
+using electron user data area : '/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/electron'
+Backend main: entry point loaded [0.199 s since backend process start]
+Backend server: loading modules... [0.200 s since backend process start]
+Backend server: container created [0.298 s since backend process start]
+Backend server: modules loaded [0.360 s since backend process start]
+2026-10-27T01:40:32.146Z core:EnvVariablesServerImpl INFO Configuration directory URI: 'file:///private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config'
+Backend server: resolving application [0.371 s since backend process start]
+2026-10-27T01:40:32.250Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 90.7 ms [0.469 s since backend process start]
+2026-10-27T01:40:32.250Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 89.9 ms [0.469 s since backend process start]
+2026-10-27T01:40:32.250Z plugin-ext:PluginApiContribution INFO Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-27T01:40:32.250Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 94.2 ms [0.473 s since backend process start]
+2026-10-27T01:40:32.253Z core:BackendApplication INFO configured all backend app contributions
+2026-10-27T01:40:32.256Z core:BackendApplication INFO Theia app listening on http://127.0.0.1:24386.
+2026-10-27T01:40:32.256Z core:SettingServiceImpl INFO Settings file not found at '/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config/backend-settings.json'. Falling back to defaults.
+2026-10-27T01:40:32.258Z core:Stopwatch INFO Backend application startup sequence completed (async work may still be pending): 5.5 ms [0.482 s since backend process start]
+2026-10-27T01:40:32.258Z core:Stopwatch INFO All backend contributions settled: 110.6 ms [0.482 s since backend process start]
+Starting backend: 525.3 ms [1.508 s since electron main start]
+2026-10-27T01:40:32.259Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config/plugins does not exist.
+2026-10-27T01:40:32.259Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config/deployedPlugins does not exist.
+2026-10-27T01:40:32.264Z core:Stopwatch INFO Resolve plugins list: 6.8 ms [0.488 s since backend process start]
+Attaching security token: 22.4 ms [1.530 s since electron main start]
+2026-10-27T01:40:32.284Z core:Stopwatch INFO Deploy batch of 2 accepted plugins: 19.4 ms [0.508 s since backend process start]
+2026-10-27T01:40:32.284Z core:Stopwatch INFO Deploy plugins list: 26.4 ms [0.508 s since backend process start]
+ElectronMessagingContribution.onStart: 5.4 ms [1.536 s since electron main start]
+TheiaMainApi.onStart: 4.8 ms [1.536 s since electron main start]
+ElectronApi.onStart: 0.2 ms [1.536 s since electron main start]
+Starting contributions: 6.0 ms [1.536 s since electron main start]
+Startup sequence completed: 554.2 ms [1.536 s since electron main start]
+2026-10-27T01:40:32.984Z core:WebsocketFrontendConnectionService INFO creating connection for 1
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-27T01:40:33.736Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 218.5 ms [1.306 s since frontend page start]
+2026-10-27T01:40:33.752Z core:FrontendStopwatch INFO Start frontend contributions: 447.2 ms [1.310 s since frontend page start]
+2026-10-27T01:40:33.752Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-27T01:40:33.752Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-27T01:40:33.753Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-27T01:40:33.753Z core:ShellLayoutRestorer INFO <<< Nothing to restore.
+2026-10-27T01:40:33.770Z core:FrontendStopwatch INFO [d2c00b47-245b-446b-aa5a-9361fadea5e5] Waiting for backend deployment: 30.0 ms [1.340 s since frontend page start]
+2026-10-27T01:40:33.794Z core:FrontendStopwatch INFO [d2c00b47-245b-446b-aa5a-9361fadea5e5] Sync of 2 plugins: 23.0 ms [1.363 s since frontend page start]
+2026-10-27T01:40:33.848Z plugin-ext:HostedPluginSupport INFO [d2c00b47-245b-446b-aa5a-9361fadea5e5] Loading plugin contributions
+2026-10-27T01:40:33.848Z core:FrontendStopwatch INFO [d2c00b47-245b-446b-aa5a-9361fadea5e5] Load contributions of 2 plugins: 1.6 ms [1.392 s since frontend page start]
+2026-10-27T01:40:33.848Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-27T01:40:33.848Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-27T01:40:33.878Z core:FrontendStopwatch INFO Initialize the workbench layout: 120.4 ms [1.444 s since frontend page start]
+2026-10-27T01:40:33.878Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-27T01:40:34.115Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-27T01:40:34.142Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 3217] PLUGIN_HOST(3217) starting instance
+2026-10-27T01:40:34.169Z plugin-host INFO PLUGIN_HOST(3217): PluginManagerExtImpl/init()
+2026-10-27T01:40:34.244Z plugin-ext:HostedPluginSupport INFO [d2c00b47-245b-446b-aa5a-9361fadea5e5] Starting plugins.
+2026-10-27T01:40:34.246Z core:FrontendStopwatch INFO [d2c00b47-245b-446b-aa5a-9361fadea5e5] Start of 2 plugins: 421.9 ms [1.817 s since frontend page start]
+2026-10-27T01:40:34.774Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 805.1 ms [2.345 s since frontend page start]
+2026-10-27T01:40:34.774Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1392.1 ms [2.999 s since backend process start]
+2026-10-27T01:40:34.774Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-27T01:40:34.775Z core:FrontendStopwatch INFO All frontend contributions settled: 1482.3 ms [2.345 s since frontend page start]
+2026-10-27 09:42:09.798 Electron[3067:52008747] TSM AdjustCapsLockLEDForKeyTransitionHandling - _ISSetPhysicalKeyboardCapsLockLED Inhibit
+2026-10-27T01:42:19.472Z core:WebsocketFrontendConnectionService INFO creating connection for 2
+2026-10-27T01:42:19.545Z core:WebsocketFrontendConnectionService INFO socket closed
+2026-10-27T01:42:19.545Z core:WebsocketFrontendConnectionService INFO closing connection for 1
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino-language'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/terminals/2147229798'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-27T01:42:19.545Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-27T01:42:20.027Z core:FrontendStopwatch WARN Frontend CommonFrontendContribution.configure took longer than the expected maximum 100 milliseconds: 119.8 ms [0.960 s since frontend page start]
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-27T01:42:20.420Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 285.3 ms [1.355 s since frontend page start]
+2026-10-27T01:42:20.434Z core:FrontendStopwatch INFO Start frontend contributions: 564.6 ms [1.365 s since frontend page start]
+2026-10-27T01:42:20.434Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-27T01:42:20.444Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-27T01:42:20.444Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-27T01:42:20.444Z core:ShellLayoutRestorer INFO <<< Nothing to restore.
+2026-10-27T01:42:20.460Z core:FrontendStopwatch INFO [2e8b0486-fb95-4d88-bfb6-281150d2e919] Waiting for backend deployment: 30.1 ms [1.395 s since frontend page start]
+2026-10-27T01:42:20.482Z core:FrontendStopwatch INFO [2e8b0486-fb95-4d88-bfb6-281150d2e919] Sync of 2 plugins: 16.6 ms [1.412 s since frontend page start]
+2026-10-27T01:42:20.513Z plugin-ext:HostedPluginSupport INFO [2e8b0486-fb95-4d88-bfb6-281150d2e919] Loading plugin contributions
+2026-10-27T01:42:20.513Z core:FrontendStopwatch INFO [2e8b0486-fb95-4d88-bfb6-281150d2e919] Load contributions of 2 plugins: 1.5 ms [1.438 s since frontend page start]
+2026-10-27T01:42:20.513Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-27T01:42:20.513Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-27T01:42:20.686Z core:FrontendStopwatch WARN Frontend ScopeWorkbenchContribution.initializeLayout took longer than the expected maximum 100 milliseconds: 160.3 ms [1.616 s since frontend page start]
+2026-10-27T01:42:20.701Z core:FrontendStopwatch INFO Initialize the workbench layout: 255.0 ms [1.631 s since frontend page start]
+2026-10-27T01:42:20.702Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-27T01:42:20.869Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 4234] PLUGIN_HOST(4234) starting instance
+2026-10-27T01:42:20.911Z plugin-host INFO PLUGIN_HOST(4234): PluginManagerExtImpl/init()
+2026-10-27T01:42:20.937Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-27T01:42:21.010Z plugin-ext:HostedPluginSupport INFO [2e8b0486-fb95-4d88-bfb6-281150d2e919] Starting plugins.
+2026-10-27T01:42:21.016Z core:FrontendStopwatch INFO [2e8b0486-fb95-4d88-bfb6-281150d2e919] Start of 2 plugins: 511.1 ms [1.952 s since frontend page start]
+2026-10-27T01:42:21.581Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 804.0 ms [2.517 s since frontend page start]
+2026-10-27T01:42:21.582Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-27T01:42:21.582Z core:FrontendStopwatch INFO All frontend contributions settled: 1716.4 ms [2.517 s since frontend page start]
+2026-10-27T01:42:21.582Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1651.2 ms [109.806 s since backend process start]
+2026-10-27T01:50:16.635Z core:WebsocketFrontendConnectionService INFO socket closed
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-27T01:50:16.762Z core:WebsocketFrontendConnectionService INFO closing connection for 2
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino-language'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/terminals/76586545'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-27T01:50:16.763Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+2026-10-27T01:50:16.763Z core:WebsocketFrontendConnectionService INFO creating connection for 2
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-27T01:50:17.671Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 563.5 ms [1.041 s since frontend page start]
+2026-10-27T01:50:17.689Z core:FrontendStopwatch INFO Start frontend contributions: 739.6 ms [1.055 s since frontend page start]
+2026-10-27T01:50:17.689Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-27T01:50:17.694Z core:FrontendStopwatch INFO [4aa46749-9105-44f0-b0f9-97a8a9feb218] Waiting for backend deployment: 7.9 ms [1.063 s since frontend page start]
+2026-10-27T01:50:17.695Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-27T01:50:17.696Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-27T01:50:17.696Z core:ShellLayoutRestorer INFO <<< Nothing to restore.
+2026-10-27T01:50:17.715Z core:FrontendStopwatch INFO [4aa46749-9105-44f0-b0f9-97a8a9feb218] Sync of 2 plugins: 19.1 ms [1.082 s since frontend page start]
+2026-10-27T01:50:17.738Z plugin-ext:HostedPluginSupport INFO [4aa46749-9105-44f0-b0f9-97a8a9feb218] Loading plugin contributions
+2026-10-27T01:50:17.738Z core:FrontendStopwatch INFO [4aa46749-9105-44f0-b0f9-97a8a9feb218] Load contributions of 2 plugins: 1.0 ms [1.099 s since frontend page start]
+2026-10-27T01:50:17.738Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-27T01:50:17.738Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-27T01:50:17.789Z core:FrontendStopwatch INFO Initialize the workbench layout: 83.2 ms [1.146 s since frontend page start]
+2026-10-27T01:50:17.789Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-27T01:50:18.069Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 12912] PLUGIN_HOST(12912) starting instance
+2026-10-27T01:50:18.081Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-27T01:50:18.106Z plugin-host INFO PLUGIN_HOST(12912): PluginManagerExtImpl/init()
+2026-10-27T01:50:18.216Z plugin-ext:HostedPluginSupport INFO [4aa46749-9105-44f0-b0f9-97a8a9feb218] Starting plugins.
+2026-10-27T01:50:18.217Z core:FrontendStopwatch INFO [4aa46749-9105-44f0-b0f9-97a8a9feb218] Start of 2 plugins: 486.0 ms [1.587 s since frontend page start]
+2026-10-27T01:50:18.599Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 807.5 ms [1.968 s since frontend page start]
+2026-10-27T01:50:18.599Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-27T01:50:18.599Z core:FrontendStopwatch INFO All frontend contributions settled: 1653.3 ms [1.968 s since frontend page start]
+2026-10-27T01:50:18.600Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1589.3 ms [586.838 s since backend process start]
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-27T01:56:52.906Z core:WebsocketFrontendConnectionService INFO socket closed
+2026-10-27T01:56:52.907Z core:WebsocketFrontendConnectionService INFO closing connection for 2
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino-language'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/terminals/1885183282'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-27T01:56:52.907Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+2026-10-27T01:56:52.907Z core:BackendApplication INFO >>> Stopping backend contributions...
+2026-10-27T01:56:52.910Z core:BackendApplication INFO <<< All backend contributions have been stopped.

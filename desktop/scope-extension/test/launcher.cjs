@@ -106,6 +106,72 @@ function applicationMethods(names, dependencies={}) {
     const js=ts.transpile(`${constants}\nclass Subject extends Base { ${members} }`,{target:ts.ScriptTarget.ES2022});
     return new Function('Base',...Object.keys(dependencies),js+';return Subject;')(class {},...Object.values(dependencies));
 }
+async function recentWorkspaceFixture(t, overrides = {}) {
+    const fsSync = require('node:fs'), { fileURLToPath } = require('node:url');
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'nodu-recent-startup-'));
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const first = path.join(directory, '项目 first'), second = path.join(directory, 'second');
+    await fs.mkdir(first); await fs.mkdir(second);
+    const App = applicationMethods(['lastProject', 'reopenLastEnabled', 'handleMainCommand'], {
+        parseJsonc: util.parseJsonc, join: path.join, resolve: path.resolve, fileURLToPath,
+        readFileSync: fsSync.readFileSync, existsSync: fsSync.existsSync, statSync: fsSync.statSync,
+        NODU_REOPEN_LAST_PREF: 'nodu.startup.reopenLastProject', ...overrides,
+    });
+    const app = new App(); app.configDir = () => directory;
+    const write = value => fs.writeFile(path.join(directory, 'recentworkspace.json'), JSON.stringify(value));
+    return { app, directory, first, second, write };
+}
+
+test('startup skips empty, invalid and missing recent entries and chooses the first existing directory', async t => {
+    const f = await recentWorkspaceFixture(t), regularFile = path.join(f.directory, 'not-a-folder.txt');
+    await fs.writeFile(regularFile, 'fixture');
+    await f.write({ recentRoots: ['', null, 42, {}, 'https://example.invalid/project', 'file:///broken%ZZ',
+        pathToFileURL(path.join(f.directory, 'removed')).href, pathToFileURL(regularFile).href,
+        pathToFileURL(f.first).href, pathToFileURL(f.second).href] });
+    assert.equal(f.app.lastProject(), f.first);
+    await fs.rmdir(f.first);
+    assert.equal(f.app.lastProject(), f.second, 'a removed first project must not hide the next recent project');
+});
+
+test('missing or malformed recent-workspace data has no startup project', async t => {
+    const f = await recentWorkspaceFixture(t);
+    assert.equal(f.app.lastProject(), undefined);
+    for (const data of [null, {}, { recentRoots: null }, { recentRoots: pathToFileURL(f.first).href },
+        { recentRoots: { 0: pathToFileURL(f.first).href } }, { recentRoots: [] }]) {
+        await f.write(data); assert.equal(f.app.lastProject(), undefined);
+    }
+    await fs.writeFile(path.join(f.directory, 'recentworkspace.json'), '{broken');
+    assert.equal(f.app.lastProject(), undefined);
+});
+
+test('a recent directory that becomes unreadable during stat does not stop later candidates', async t => {
+    const fsSync = require('node:fs'); let unavailable;
+    const f = await recentWorkspaceFixture(t, { statSync: file => {
+        if (file === unavailable) { throw Object.assign(new Error('unavailable'), { code: 'EACCES' }); }
+        return fsSync.statSync(file);
+    } });
+    unavailable = f.first;
+    await f.write({ recentRoots: [pathToFileURL(f.first).href, pathToFileURL(f.second).href] });
+    assert.equal(f.app.lastProject(), f.second);
+});
+
+test('recent-project fallback remains opt-in and only applies to the initial app instance', async t => {
+    const f = await recentWorkspaceFixture(t), opened = [], launchArgs = { _: [] };
+    await f.write({ recentRoots: ['', pathToFileURL(f.first).href] });
+    f.app.openProjectWindow = async (project, options) => { opened.push({ project, options }); };
+    f.app.showLauncher = async () => { opened.push('launcher'); };
+    await fs.writeFile(path.join(f.directory, 'settings.json'), JSON.stringify({ 'nodu.startup.reopenLastProject': true }));
+    await f.app.handleMainCommand({ cwd: f.directory, launchArgs });
+    assert.deepEqual(opened, [{ project: f.first, options: { launchArgs } }]);
+    opened.length = 0;
+    await f.app.handleMainCommand({ cwd: f.directory, launchArgs, secondInstance: true });
+    assert.deepEqual(opened, ['launcher']);
+    opened.length = 0;
+    await fs.writeFile(path.join(f.directory, 'settings.json'), JSON.stringify({ 'nodu.startup.reopenLastProject': false }));
+    await f.app.handleMainCommand({ cwd: f.directory, launchArgs });
+    assert.deepEqual(opened, ['launcher']);
+});
+
 test('concurrent welcome requests create one window', async () => {
     const App=applicationMethods(['showLauncher']);const app=new App();let created=0,revealed=0;
     const window={}; app.firstLauncher=()=>undefined;

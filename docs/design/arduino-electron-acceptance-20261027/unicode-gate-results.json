@@ -1,0 +1,34 @@
+{
+  "status": "correctness_passed_latency_unacceptable_replacement_patch_pending",
+  "pluginBytes": 807531,
+  "pluginSha256": "469a33411fd3dba66ab1aecfe31ec32c51a1d98cd2fd87fe55f418cef5a1072c",
+  "sequence": [
+    "two Chinese and emoji comment edits with save",
+    "whole document paste changing line count",
+    "undo",
+    "redo",
+    "save",
+    "Show or Focus Hover on JsonDocument at line10",
+    "Trigger Suggest at Serial. line9",
+    "click clang diagnostic14:3",
+    "repair deliberate error via editor and save"
+  ],
+  "timing": {
+    "observedPendingSeconds": 62.537,
+    "observedReadySeconds": 98.235,
+    "note": "Observation interval, not exact latency. Rebuild completed in (62.537,98.235] seconds since final save."
+  },
+  "checks": {
+    "hover": "JsonDocument class from ArduinoJson at current line10",
+    "completion": "Serial methods and begin signature at current line9",
+    "diagnostic": "nodu_unicode_missing at current14:3, click selects correct identifier",
+    "recovery": "No permanent Loading and no panic observed",
+    "repair": "editor replaced missing identifier with reviewValue; saved valid source"
+  },
+  "evidence": [
+    "23-unicode-gate-completion.png",
+    "unicode-gate-completion-state.txt",
+    "24-unicode-diagnostic-line14.png"
+  ],
+  "next": "Await minimal ALS source patch to avoid slow close/open rebuild, rerun only this scenario"
+}

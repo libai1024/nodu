@@ -1,0 +1,6 @@
+esptool v5.3.1
+Serial port socket://127.0.0.1:53960:
+
+A fatal error occurred: Could not open socket://127.0.0.1:53960, the port is busy or doesn't exist.
+(Could not open port socket://127.0.0.1:53960: [Errno 61] Connection refused)
+

@@ -1,0 +1,62 @@
+Window: "ui_esp32_c3.ino - ui_esp32_c3 - 见微 Nodu", App: Nodu New Project Check.
+0 标准窗口 ui_esp32_c3.ino - ui_esp32_c3 - 见微 Nodu, Secondary Actions: Raise
+	1 container ui_esp32_c3.ino - ui_esp32_c3 - 见微 Nodu
+		2 container
+			3 HTML 内容 ui_esp32_c3.ino - ui_esp32_c3 - 见微 Nodu, URL: file:///Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/frontend/index.html?port=24386#/private/tmp/nodu-new-project-electron-20261027-tDbP3p/projects/ui_esp32_c3
+				4 container
+					5 container
+						6 按钮 Description: 搜索项目 ui_esp32_c3 中的文件, Help: 搜索文件 (⌘P)
+						7 弹出式按钮 设置
+					8 container
+						9 container $(chip) ESP32C3, 设备
+							10 文本 ESP32C3
+						11 container 行 1，列 1, Go to Line/Column
+							12 文本 行 1，列 1
+						13 container LF, 选择行尾序列
+							14 文本 LF
+						15 container UTF-8, 选择编码
+							16 文本 UTF-8
+						17 container 空格：4, Select Indentation
+							18 文本 空格：4
+						19 container $(bracket), [object HTMLDivElement]
+							20 文本 
+						21 container C++, 选择语言模式
+							22 文本 C++
+						23 container 无通知
+							24 文本 
+					25 container
+						26 container
+							27 文本 资源管理器
+							28 按钮 更多操作...
+						29 container
+							30 标签组
+								31 文本 
+								32 文本 ui_esp32_c3.ino
+								33 文本 
+							34 container
+								35 editor (settable) 编辑器内容
+						36 container 工作区
+							37 弹出式按钮 Description: 项目菜单, Help: ui_esp32_c3
+								38 图像 见微 Nodu
+							39 切换按钮 Description: 文件, Value: 0
+							40 按钮 搜索
+							41 切换按钮 Description: 设备, Value: 0
+							42 按钮 库管理
+							43 切换按钮 Description: 终端与输出, Value: 0
+							44 弹出式按钮 (disabled) 运行（编译并烧录）（长按或右键选择）
+	45 关闭按钮
+	46 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	47 最小化按钮
+48 menu bar
+	49 Nodu New Project Check
+	50 文件
+	51 编辑
+	52 选择
+	53 查看
+	54 转到
+	55 工具
+	56 终端
+	57 窗口
+	58 帮助
+
+The focused UI element is 35 editor (settable) 编辑器内容

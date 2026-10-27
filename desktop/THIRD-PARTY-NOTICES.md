@@ -134,3 +134,31 @@ STM32 toolkit. Nodu's own license does not replace these licenses.
 The upstream NUN_DX library source URL and exact driver commit are retained in
 DACIR's driver history; the bundled template manifest records that commit. The
 source repository is https://gitee.com/yang-changzhi11/NUN_DX_STM32F1c8t6__-open-source-library.git.
+
+## Arduino libraries and editor services
+
+`scope-extension/resources/arduino/libraries` contains 11 original Arduino
+Library Manager source archives with exact versions, checksums, upstream URLs,
+dependency metadata and original license material. See its manifest and licenses
+directory; the original licenses remain in each ZIP. These licenses apply to the
+libraries independently of Nodu's MIT license.
+
+Arduino Language Server 0.7.7-nodu.1 (AGPL-3.0) and LLVM clangd 21.1.8 (Apache-2.0 WITH
+LLVM-exception) run as separate processes. Their official versioned archive URLs
+and checksums are recorded in `resources/arduino/language/tools.json`; licenses
+the original ALS 0.7.7 source archive, the exact two-fix patch, and the modified
+corresponding source with vendored dependencies and regression tests are included
+in that directory. The changes correct UTF-16 offsets and a short-circuit in
+line-map updates; original notices and dependency licenses are retained.
+Each `resources/bin/<host>/ARDUINO-LANGUAGE-TOOLS.json` records the installed
+binary hashes. The complete clangd builtin headers and license are retained.
+`plugins/nodu-arduino-language` contains the Nodu lifecycle adapter and the pinned
+vscode-languageclient 9.0.1 bundle, with exact dependency versions, license texts,
+and bundle hash in its provenance record. Modified ALS binaries are reproducibly
+built from the supplied source with pinned Go 1.24.1 (build-time only). See `resources/arduino/language/README.md` for sources and build details.
+
+The Arduino plugin also includes the MIT-licensed C++ TextMate grammar and
+language configuration from Microsoft VS Code 1.105.1. The grammar's upstream is
+Jeff Hykin's better-cpp-syntax, commit f1d127a8af2b184db570345f0bb179503c47fdf6.
+Original Microsoft and Jeff Hykin license notices, source URLs and file hashes
+are preserved under the plugin's `grammar/` directory.

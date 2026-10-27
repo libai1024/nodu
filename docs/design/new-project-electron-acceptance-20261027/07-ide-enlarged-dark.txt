@@ -1,0 +1,66 @@
+Window: "main.py - ui_entry_k210 - 见微 Nodu", App: Nodu New Project Check.
+0 标准窗口 main.py - ui_entry_k210 - 见微 Nodu, Secondary Actions: Raise
+	1 container main.py - ui_entry_k210 - 见微 Nodu
+		2 container
+			3 HTML 内容 main.py - ui_entry_k210 - 见微 Nodu, URL: file:///Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/frontend/index.html?port=24386#/private/tmp/nodu-new-project-electron-20261027-tDbP3p/projects/ui_entry_k210
+				4 container
+					5 文本 新建项目
+					6 文本 
+					7 container
+						8 container 芯片系列
+							9 文本 芯片系列
+							10 切换按钮 嘉楠 · Kendryte · K210 K210, Value: 0
+								11 图像 嘉楠 · Kendryte · K210
+								12 文本 K210
+							13 按钮 意法半导体 · ST · STM32 STM32
+								14 图像 意法半导体 · ST · STM32
+								15 文本 STM32
+							16 container
+								17 切换按钮 STM32F103, Value: 0
+								18 切换按钮 STM32F407, Value: 0
+							19 按钮 乐鑫 · Espressif · ESP32 ESP32
+								20 图像 乐鑫 · Espressif · ESP32
+								21 文本 ESP32
+							22 container
+								23 切换按钮 ESP32, Value: 0
+								24 切换按钮 ESP32-S2, Value: 0
+								25 切换按钮 ESP32-S3, Value: 0
+								26 切换按钮 ESP32-C2, Value: 0
+								27 切换按钮 ESP32-C3, Value: 1
+								28 切换按钮 ESP32-C6, Value: 0
+								29 切换按钮 ESP32-H2, Value: 0
+								30 切换按钮 ESP32-P4, Value: 0
+						31 文本 开发框架
+						32 开发框架
+							33 单选按钮 Arduino, Value: 1
+							34 单选按钮 ESP-IDF, Value: 0
+						35 文本 名称
+						36 文本栏 (settable) 名称, Value: hello-esp32
+						37 文本 位置
+						38 container
+							39 文本栏 (settable) 位置, Value: /Users/wangwei
+							40 按钮 Description: 浏览项目位置, Help: 浏览
+						41 文本 型号
+						42 组合框 (settable) Description: 型号, Value: ESP32-C3
+							43 文本 ESP32-C3
+						44 文本 模板
+						45 组合框 (settable) Description: 模板, Value: 默认项目
+							46 文本 默认项目
+						47 按钮 取消
+						48 按钮 创建项目
+	49 关闭按钮
+	50 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	51 最小化按钮
+52 menu bar
+	53 Nodu New Project Check
+	54 文件
+	55 编辑
+	56 选择
+	57 查看
+	58 转到
+	59 工具
+	60 终端
+	61 窗口
+	62 帮助
+
+The focused UI element is 27 切换按钮 ESP32-C3, Value: 1

@@ -1,0 +1,2 @@
+# Nodu: use the bundled native Apple Silicon Arduino ctags.
+tools.ctags.path={runtime.platform.path}/../../../tools/ctags/darwin-arm64

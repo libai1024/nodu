@@ -13,8 +13,8 @@
   ],
   "scripts": {
     "compile": "npm run build:plugins && npm run build:imaging && npm run compile --workspace @scope/studio-extension",
-    "build:browser": "npm run build:native && npm run compile && npm run build --workspace @scope/browser-app",
-    "build:electron": "npm run build:native && npm run build:media && npm run compile && npm run build --workspace @scope/electron-app",
+    "build:browser": "npm run build:native && npm run build:arduino-tools && npm run compile && npm run build --workspace @scope/browser-app",
+    "build:electron": "npm run build:native && npm run build:media && npm run build:arduino-tools && npm run compile && npm run build --workspace @scope/electron-app",
     "start:browser": "npm run start --workspace @scope/browser-app",
     "start:electron": "npm run start --workspace @scope/electron-app",
     "rebuild:browser": "npm run rebuild --workspace @scope/browser-app",
@@ -30,11 +30,17 @@
     "check:licenses": "node scripts/check-licenses.cjs",
     "check:brand": "node scripts/check-brand.cjs",
     "package:electron": "node scripts/package-electron.cjs",
-    "build:plugins": "node scripts/build-clangd-plugin.cjs",
+    "build:plugins": "node scripts/build-clangd-plugin.cjs && node scripts/build-arduino-language-plugin.cjs",
+    "build:arduino-tools": "node scripts/build-arduino-language-tools.cjs",
+    "prepare:arduino-release": "node scripts/prepare-arduino-release.cjs",
+    "test:arduino-package": "node --test scripts/package-arduino.test.cjs",
+    "test:arduino-language": "node --test scope-extension/test/arduino-language.cjs scripts/arduino-language-adapter.test.cjs scripts/arduino-language-grammar.test.cjs",
+    "test:arduino-language:e2e": "node scripts/arduino-language.e2e.cjs",
     "templates:daxin:check": "node scripts/sync-daxin-templates.cjs --check",
     "templates:daxin:sync": "node scripts/sync-daxin-templates.cjs --write",
     "prepare:tutor-tools": "python3 scripts/prepare-tutor-tools.py",
-    "test:tutor-tools": "python3 scripts/test-prepare-tutor-tools.py && node --test scripts/package-tutor-tools.test.cjs"
+    "test:tutor-tools": "python3 scripts/test-prepare-tutor-tools.py && node --test scripts/package-tutor-tools.test.cjs",
+    "test:arduino-language:package": "node --test scripts/package-arduino-language.test.cjs"
   },
   "devDependencies": {
     "@electron/packager": "20.3.0",

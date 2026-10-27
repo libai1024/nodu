@@ -1,0 +1,259 @@
+{
+  "manifestFile": "/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/.tools/arduino-release/darwin-arm64/manifest.json",
+  "manifestSha256": "9c98a645dc82f7aa80157cceba2b41d9d95d0f74801d4905eef669400f2fbef3",
+  "runtimeManifestSha256": "80009251bbeea91e49c48d3a3645f208378d33c0dfec94d07931b942cda00c33",
+  "verifiedAgainstTestedRuntime": true,
+  "files": 2400,
+  "totalBytes": 2382262398,
+  "releaseReady": false,
+  "sourceCoverage": [
+    {
+      "component": "arduino-cli@1.5.1",
+      "files": [
+        "sources/sources/arduino-cli-v1.5.1.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream tag source is retained. Go module dependency source closure is not yet vendored. Required Go1.26.1 download failed twice; no replacement binary was built."
+    },
+    {
+      "component": "esp32:esp32@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": true,
+      "notes": "Unmodified Arduino Core source, libraries, build/package scripts and licenses. The separately packaged per-chip precompiled SDKs are tracked independently below."
+    },
+    {
+      "component": "esp32:esp-x32@2601",
+      "files": [
+        "sources/sources/crosstool-NG-tag-esp-14.2.0_20260121.tar.gz",
+        "sources/sources/gcc-esp-14.2.0_20260121.tar.gz",
+        "sources/sources/binutils-esp-2.43.1_20260121.tar.gz",
+        "sources/sources/newlib-esp-4.3.0_20260121.tar.gz",
+        "sources/sources/picolibc-esp-1.8.10_20260121.tar.gz",
+        "sources/sources/gmp-6.3.0.tar.xz",
+        "sources/sources/mpfr-4.2.1.tar.xz",
+        "sources/sources/mpc-1.3.1.tar.gz",
+        "sources/sources/isl-0.26.tar.xz",
+        "sources/sources/zlib-1.3.1.tar.xz",
+        "sources/sources/zstd-1.5.6.tar.gz",
+        "sources/sources/esp-toolchain-bin-wrappers-78ce39a850adcf42480865bb4d0f89b961de24d1.tar.gz",
+        "sources/sources/xtensa-dynconfig-c545876fb73c0ada60cb6413c61554f5b93d4e8a.tar.gz",
+        "sources/sources/xtensa-overlays-dd1cf19f6eb327a9db51043439974a6de13f5c7f.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Actual GCC14.2.0/binutils2.43.1/newlib4.3/picolibc1.8.10 tags, matching crosstool-NG tag, fixed submodules and GNU companion source are retained. Upstream Rust wrapper Cargo.toml has semver ranges and no Cargo.lock; exact libc/runtime closure and binary-to-source rebuild provenance remain unverified. The mismatched release -src.tar.xz is not used as build provenance."
+    },
+    {
+      "component": "esp32:esp-rv32@2601",
+      "files": [
+        "sources/sources/crosstool-NG-tag-esp-14.2.0_20260121.tar.gz",
+        "sources/sources/gcc-esp-14.2.0_20260121.tar.gz",
+        "sources/sources/binutils-esp-2.43.1_20260121.tar.gz",
+        "sources/sources/newlib-esp-4.3.0_20260121.tar.gz",
+        "sources/sources/picolibc-esp-1.8.10_20260121.tar.gz",
+        "sources/sources/gmp-6.3.0.tar.xz",
+        "sources/sources/mpfr-4.2.1.tar.xz",
+        "sources/sources/mpc-1.3.1.tar.gz",
+        "sources/sources/isl-0.26.tar.xz",
+        "sources/sources/zlib-1.3.1.tar.xz",
+        "sources/sources/zstd-1.5.6.tar.gz",
+        "sources/sources/esp-toolchain-bin-wrappers-78ce39a850adcf42480865bb4d0f89b961de24d1.tar.gz",
+        "sources/sources/xtensa-dynconfig-c545876fb73c0ada60cb6413c61554f5b93d4e8a.tar.gz",
+        "sources/sources/xtensa-overlays-dd1cf19f6eb327a9db51043439974a6de13f5c7f.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Actual GCC14.2.0/binutils2.43.1/newlib4.3/picolibc1.8.10 tags, matching crosstool-NG tag, fixed submodules and GNU companion source are retained. Upstream Rust wrapper Cargo.toml has semver ranges and no Cargo.lock; exact libc/runtime closure and binary-to-source rebuild provenance remain unverified. The mismatched release -src.tar.xz is not used as build provenance."
+    },
+    {
+      "component": "esp32:xtensa-esp-elf-gdb@17.1_20260402",
+      "files": [
+        "sources/sources/gdb-esp-gdb-v17.1_20260402.tar.gz",
+        "sources/sources/gmp-6.3.0.tar.xz",
+        "sources/sources/mpfr-4.2.2.tar.gz",
+        "sources/sources/mpc-1.3.0.tar.gz",
+        "sources/sources/expat-2.7.1.tar.xz",
+        "sources/sources/ncurses-6.5.tar.gz",
+        "sources/sources/esp-toolchain-bin-wrappers-925bd7cd9eddcd758e0557781c38cbeea8dda7d4.tar.gz",
+        "sources/sources/xtensa-dynconfig-905b913aa65638be53ac22029c379fa16dab31db.tar.gz",
+        "sources/sources/xtensa-overlays-dd1cf19f6eb327a9db51043439974a6de13f5c7f.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream source and fixed submodules plus documented GNU companion sources are retained. Exact Rust wrapper dependencies and Python/libiconv variant build closure remain unverified."
+    },
+    {
+      "component": "esp32:riscv32-esp-elf-gdb@17.1_20260402",
+      "files": [
+        "sources/sources/gdb-esp-gdb-v17.1_20260402.tar.gz",
+        "sources/sources/gmp-6.3.0.tar.xz",
+        "sources/sources/mpfr-4.2.2.tar.gz",
+        "sources/sources/mpc-1.3.0.tar.gz",
+        "sources/sources/expat-2.7.1.tar.xz",
+        "sources/sources/ncurses-6.5.tar.gz",
+        "sources/sources/esp-toolchain-bin-wrappers-925bd7cd9eddcd758e0557781c38cbeea8dda7d4.tar.gz",
+        "sources/sources/xtensa-dynconfig-905b913aa65638be53ac22029c379fa16dab31db.tar.gz",
+        "sources/sources/xtensa-overlays-dd1cf19f6eb327a9db51043439974a6de13f5c7f.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream source and fixed submodules plus documented GNU companion sources are retained. Exact Rust wrapper dependencies and Python/libiconv variant build closure remain unverified."
+    },
+    {
+      "component": "esp32:openocd-esp32@v0.12.0-esp32-20260424",
+      "files": [
+        "sources/sources/openocd-v0.12.0-esp32-20260424.tar.gz",
+        "sources/sources/libusb-1.0.29.tar.gz",
+        "sources/sources/hidapi-hidapi-0.14.0.tar.gz",
+        "sources/sources/libjaylink-0.3.1.tar.gz",
+        "sources/sources/jimtcl-0.83.tar.gz"
+      ],
+      "complete": true,
+      "notes": "macOS build recipe in pinned .gitlab/ci/build.yml uses the retained libusb1.0.29, hidapi0.14.0, libjaylink0.3.1 and jimtcl0.83 source archives; system frameworks remain system dependencies. Covers darwin-arm64 artifact source availability, not Windows/Linux builds or legal release approval."
+    },
+    {
+      "component": "esp32:esptool_py@5.3.1",
+      "files": [
+        "sources/sources/esptool-v5.3.1.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact esptool source is retained. Frozen macOS Python executable dependency versions, embedded interpreter, compiled extensions and flasher-stub corresponding source still require closure; pyproject.toml version ranges are not a complete lock."
+    },
+    {
+      "component": "esp32:mkspiffs@0.2.3",
+      "files": [
+        "sources/sources/mkspiffs-0.2.3.tar.gz",
+        "sources/sources/spiffs-f5e26c4e933189593a71c6b82cda381a7b21e41c.tar.gz"
+      ],
+      "complete": true,
+      "notes": "Exact mkspiffs tag and its SPIFFS gitlink f5e26c4e933189593a71c6b82cda381a7b21e41c are retained with original build recipes/licenses."
+    },
+    {
+      "component": "esp32:mklittlefs@4.0.2-db0513a",
+      "files": [
+        "sources/sources/mklittlefs-4.0.2.tar.gz",
+        "sources/sources/littlefs-d01280e64934a09ba16cac60cf9d3a37e228bb66.tar.gz"
+      ],
+      "complete": true,
+      "notes": "Exact 4.0.2 source and its littlefs gitlink d01280e64934a09ba16cac60cf9d3a37e228bb66 are retained with original build recipes/licenses."
+    },
+    {
+      "component": "arduino:dfu-util@0.11.0-arduino5",
+      "files": [
+        "sources/sources/dfu-util-0.11.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Original dfu-util0.11 source is retained; Arduino5 cross-build patches and linked libusb variant source are not yet verified. Do not treat base0.11 as the complete Arduino5 corresponding source."
+    },
+    {
+      "component": "esp32:esp32-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32c3-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32c5-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32c6-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32h2-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32p4-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32p4_es-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32s2-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "esp32:esp32s3-libs@3.3.12",
+      "files": [
+        "sources/sources/arduino-esp32-3.3.12.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Core release script points to esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip (SHA256 6650b01ec53cb746cc0e6c7d92b31bffb256617bce552d86e6b24d20dc836121) and removes dependencies.lock when repacking per-SoC SDKs. Retained Core source is provenance only: exact IDF, managed-component, precompiled blob license and source closure has not been collected."
+    },
+    {
+      "component": "builtin:ctags@5.8-arduino11",
+      "files": [
+        "sources/sources/ctags-5.8-arduino11.tar.gz"
+      ],
+      "complete": true,
+      "notes": "Unmodified full ctags source with COPYING. Nodu native arm64 derivative uses the same source; repository build-arduino-native-ctags.cjs and CTAGS-BUILD.json retain flags/provenance, no vendor source edits; binary reproduced twice."
+    },
+    {
+      "component": "builtin:dfu-discovery@0.1.2",
+      "files": [
+        "sources/sources/dfu-discovery-v0.1.2.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream source tag retained; Go runtime dependency sources are not yet collected. Module/version lock alone is not treated as an offline source closure."
+    },
+    {
+      "component": "builtin:mdns-discovery@1.1.0",
+      "files": [
+        "sources/sources/mdns-discovery-v1.1.0.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream source tag retained; Go runtime dependency sources are not yet collected. Module/version lock alone is not treated as an offline source closure."
+    },
+    {
+      "component": "builtin:serial-discovery@1.5.2",
+      "files": [
+        "sources/sources/serial-discovery-v1.5.2.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream source tag retained; Go runtime dependency sources are not yet collected. Module/version lock alone is not treated as an offline source closure."
+    },
+    {
+      "component": "builtin:serial-monitor@0.15.0",
+      "files": [
+        "sources/sources/serial-monitor-v0.15.0.tar.gz"
+      ],
+      "complete": false,
+      "notes": "Exact upstream source tag retained; Go runtime dependency sources are not yet collected. Module/version lock alone is not treated as an offline source closure."
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","version","--format","json"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":30}
+{
+  "Application": "arduino-cli",
+  "VersionString": "1.5.1",
+  "Commit": "Homebrew",
+  "Status": "",
+  "Date": "2026-06-05T09:39:33Z"
+}
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit GFX Library@1.13.0"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":676}
+Adafruit GFX Library@1.13.0 Adafruit GFX Library@1.13.0 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit NeoPixel@1.15.5"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":839}
+Adafruit NeoPixel@1.15.5 Adafruit NeoPixel@1.15.5 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit SSD1306@2.5.17"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":571}
+Adafruit SSD1306@2.5.17 Adafruit SSD1306@2.5.17 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","ArduinoMqttClient@0.1.8"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":511}
+ArduinoMqttClient@0.1.8 ArduinoMqttClient@0.1.8 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","DallasTemperature@4.0.6"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":474}
+DallasTemperature@4.0.6 DallasTemperature@4.0.6 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","DHT sensor library@1.4.7"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":428}
+DHT sensor library@1.4.7 DHT sensor library@1.4.7 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","ESP32Servo@3.2.1"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":418}
+ESP32Servo@3.2.1 ESP32Servo@3.2.1 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit BusIO@1.17.4"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":446}
+Adafruit BusIO@1.17.4 Adafruit BusIO@1.17.4 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit Unified Sensor@1.1.15"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":406}
+Adafruit Unified Sensor@1.1.15 Adafruit Unified Sensor@1.1.15 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","OneWire@2.3.8"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-remove-json","code":0,"elapsed_ms":481}
+OneWire@2.3.8 OneWire@2.3.8 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","version","--format","json"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":21}
+{
+  "Application": "arduino-cli",
+  "VersionString": "1.5.1",
+  "Commit": "Homebrew",
+  "Status": "",
+  "Date": "2026-06-05T09:39:33Z"
+}
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit GFX Library@1.13.0"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":423}
+Adafruit GFX Library@1.13.0 Adafruit GFX Library@1.13.0 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit NeoPixel@1.15.5"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":573}
+Adafruit NeoPixel@1.15.5 Adafruit NeoPixel@1.15.5 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit SSD1306@2.5.17"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":470}
+Adafruit SSD1306@2.5.17 Adafruit SSD1306@2.5.17 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","ArduinoJson@7.4.3"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":421}
+ArduinoJson@7.4.3 ArduinoJson@7.4.3 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","ArduinoMqttClient@0.1.8"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":519}
+ArduinoMqttClient@0.1.8 ArduinoMqttClient@0.1.8 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","DallasTemperature@4.0.6"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":432}
+DallasTemperature@4.0.6 DallasTemperature@4.0.6 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","DHT sensor library@1.4.7"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":394}
+DHT sensor library@1.4.7 DHT sensor library@1.4.7 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","ESP32Servo@3.2.1"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":430}
+ESP32Servo@3.2.1 ESP32Servo@3.2.1 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit BusIO@1.17.4"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":433}
+Adafruit BusIO@1.17.4 Adafruit BusIO@1.17.4 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","Adafruit Unified Sensor@1.1.15"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":443}
+Adafruit Unified Sensor@1.1.15 Adafruit Unified Sensor@1.1.15 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","lib","download","OneWire@2.3.8"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-add-json","code":0,"elapsed_ms":437}
+OneWire@2.3.8 OneWire@2.3.8 already downloaded
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","version","--format","json"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-json-compile","code":0,"elapsed_ms":21}
+{
+  "Application": "arduino-cli",
+  "VersionString": "1.5.1",
+  "Commit": "Homebrew",
+  "Status": "",
+  "Date": "2026-06-05T09:39:33Z"
+}
+
+{"executable":"/opt/homebrew/bin/arduino-cli","args":["--config-file","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/arduino-cli.yaml","compile","--profile","nodu","--build-path","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/home/builds/5cabfb9c6fc2e0888a95ebc2","--warnings","default","--no-color","/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed"],"cwd":"/private/tmp/nodu-arduino-library-service-20261027-m6aawiga/library_service_c3_fixed","operation":"library-json-compile","code":0,"elapsed_ms":101154}
+The library ArduinoJson has been added from sketch project.
+Sketch uses 281870 bytes (21%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 13208 bytes (4%) of dynamic memory, leaving 314472 bytes for local variables. Maximum is 327680 bytes.
+

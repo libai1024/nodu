@@ -24,15 +24,18 @@
     "@theia/terminal": "1.76.0",
     "@theia/workspace": "1.76.0",
     "color-convert": "2.0.1",
-    "iconv-lite": "0.6.3"
+    "iconv-lite": "0.6.3",
+    "yaml": "2.9.1"
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json",
-    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs test/tutor-goal.cjs test/tutor-runtime-evidence.cjs test/tutor-local-checker.cjs test/tutor-bundled-courses.cjs test/tutor-pure-runner.cjs test/tutor-task-window.cjs test/tutor-sidebar.cjs test/tutor-messages.cjs test/tutor-conversations.cjs test/tutor-chat-interaction.cjs test/tutor-history-navigation.cjs test/tutor-context-picker.cjs test/tutor-terminal-selection.cjs",
+    "test:tutor": "npm run compile && node --test test/tutor-plan.cjs test/tutor-course.cjs test/tutor-course-repository.cjs test/tutor-storage.cjs test/tutor-chat-session.cjs test/tutor-model-gateway.cjs test/tutor-ai-settings.cjs test/tutor-editor-guidance.cjs test/tutor-goal.cjs test/tutor-runtime-evidence.cjs test/tutor-local-checker.cjs test/tutor-bundled-courses.cjs test/tutor-pure-runner.cjs test/tutor-task-window.cjs test/tutor-sidebar.cjs test/tutor-messages.cjs test/tutor-conversations.cjs test/tutor-chat-interaction.cjs test/tutor-history-navigation.cjs test/tutor-context-picker.cjs test/tutor-terminal-selection.cjs test/tutor-context-transfer.cjs",
     "test:tutor-native": "npm run compile && node --test test/tutor-local-native.cjs",
     "test:launcher": "npm run compile && node --test test/launcher.cjs test/launcher-view.cjs",
     "test:tutor-wasi": "npm run compile && node --test test/tutor-pure-native.cjs",
-    "test:workbench": "node --test test/minimal-workbench.cjs test/workbench-layout.cjs test/project-search.cjs test/settings-host.cjs test/minimal-preferences.cjs test/tutor-sidebar.cjs test/tutor-task-window.cjs test/professional-workbench.cjs test/professional-settings.cjs test/ai-provider-panel.cjs test/brand-theme.cjs test/framebuffer-platform.cjs"
+    "test:workbench": "node --test test/minimal-workbench.cjs test/workbench-layout.cjs test/project-search.cjs test/settings-host.cjs test/minimal-preferences.cjs test/tutor-sidebar.cjs test/tutor-task-window.cjs test/professional-workbench.cjs test/professional-settings.cjs test/ai-provider-panel.cjs test/brand-theme.cjs test/framebuffer-platform.cjs test/problems.cjs test/problems-panel.cjs",
+    "test:serial": "npm run compile && node --test ../scripts/monitor-send.test.cjs ../scripts/monitor-controls.test.cjs ../scripts/monitor-decoder.test.cjs ../scripts/functional-gaps.test.cjs ../scripts/serial-panel.test.cjs",
+    "test:arduino": "npm run compile && node --test test/arduino-*.cjs test/launcher-view.cjs ../scripts/project-generator.test.cjs ../scripts/arduino-language-adapter.test.cjs ../scripts/arduino-language-grammar.test.cjs"
   },
   "theiaExtensions": [
     {

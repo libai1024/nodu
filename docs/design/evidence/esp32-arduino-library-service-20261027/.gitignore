@@ -1,0 +1,2 @@
+# Bounded CLI output is intentionally preserved as test evidence.
+!*.log

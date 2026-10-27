@@ -1,0 +1,15 @@
+
+> scope-studio@0.2.2 test:arduino-language
+> node --test scope-extension/test/arduino-language.cjs scripts/arduino-language-adapter.test.cjs scripts/arduino-language-grammar.test.cjs
+
+✔ language spec uses prepared isolated CLI config and preserves profile while allowing only owned toolchain roots (54.912166ms)
+✔ Arduino LSP is lazy, scoped to one project, reuses identical spec and disposes switched sessions (5.224833ms)
+✔ bundled official C++ grammar tokenizes Arduino directives, types, strings and comments (154.330791ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 261.711542

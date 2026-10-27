@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
-import { MonitorBytes } from '../common/nodu-monitor-bytes';
+import { MonitorBytes, MonitorHexTranscript } from '../common/nodu-monitor-bytes';
 import { preferredMonitorPort } from '../common/nodu-monitor-ports';
 import { MonitorDecoder, hasMonitorStartupLine } from '../common/nodu-monitor-decoder';
 import { NoduDiagnostics } from './nodu-diagnostics';
+import { ArduinoMonitorConfig } from '../common/nodu-arduino-protocol';
 import { MessageService } from '@theia/core/lib/common';
 import { Emitter } from '@theia/core/lib/common/event';
 import { URI } from '@theia/core/lib/common/uri';
@@ -16,12 +17,12 @@ import { ProblemManager } from '@theia/markers/lib/browser/problem/problem-manag
 import { Diagnostic as LspDiagnostic } from '@theia/core/shared/vscode-languageserver-protocol';
 import {
     BackupRecord, BuildResult, CallOutcome, CatalogBoard, ChipIdentity, Diagnostic, EmbeddedClient, EmbeddedFailure,
-    EmbeddedMethod, FlashResult, NODU_EMBEDDED_PATH, NoduEmbeddedService, PortInfo, ProbeInfo, ProjectStatus
+    EmbeddedMethod, FlashResult, MonitorWriteResult, NODU_EMBEDDED_PATH, NoduEmbeddedService, PortInfo, ProbeInfo, ProjectStatus
 } from '../common/nodu-embedded-protocol';
 
 export type Tone = 'busy' | 'ok' | 'error' | 'warn';
 export interface TaskStrip { text: string; tone: Tone; steps?: { id: string; label: string; state: string }[]; target?: 'problems' | 'output' | 'device' | 'monitor'; at: number }
-export interface MonitorLine { text: string; kind: 'data' | 'separator' | 'system'; at?: number }
+export interface MonitorLine { text: string; kind: 'data' | 'sent' | 'separator' | 'system'; at?: number }
 export type PanelTab = 'problems' | 'monitor' | 'output';
 
 /** Thrown by `call` with the sidecar's stable code and tool output. */
@@ -53,8 +54,13 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     readonly onDidChangeProject = this.projectChanged.event;
     private cProjectKey!: ContextKey<boolean>;
     private espProjectKey!: ContextKey<boolean>;
+    private arduinoProjectKey!: ContextKey<boolean>;
     isEsp = false;
     espChip = '';
+    isArduino = false;
+    espPath = '';
+    arduinoMonitorConfig: ArduinoMonitorConfig = { baud: 115200, encoding: 'utf-8' };
+    arduinoMonitor?: { save(config: Partial<ArduinoMonitorConfig>): Promise<void>; selectPort(port: string): Promise<void>; ports(): Promise<PortInfo[]>; busy(): boolean };
 
     project: ProjectStatus | undefined;
     building = false;
@@ -85,6 +91,9 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     panelTab: PanelTab = 'problems';
     runCount = 0;
     readonly monitorBytes = new MonitorBytes();
+    private readonly monitorTranscript = new MonitorHexTranscript();
+    private monitorRevision = 0;
+    private sendingMonitor = false;
     monitorError = '';
     monitorBusy = false;
     private portRefresh: Promise<void> | undefined;
@@ -127,6 +136,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     protected init(): void {
         this.cProjectKey = this.contextKeys.createKey<boolean>('nodu.cProject', false);
         this.espProjectKey = this.contextKeys.createKey<boolean>('nodu.espProject', false);
+        this.arduinoProjectKey = this.contextKeys.createKey<boolean>('nodu.arduinoProject', false);
         this.service = this.connections.createProxy<NoduEmbeddedService>(NODU_EMBEDDED_PATH, this);
         this.workspace.onWorkspaceChanged(roots => void this.detect(roots[0]?.resource));
         void this.workspace.roots.then(roots => this.detect(roots[0]?.resource));
@@ -139,6 +149,10 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     get busy(): boolean { return this.building || this.flashing || this.identifying || this.preparingFlash || this.savingOptions; }
     get savingOptions(): boolean { return this.optionSaveCount > 0; }
     get projectGeneration(): number { return this.detection; }
+    get sourceGeneration(): number { return this.sourceRevision; }
+    get monitorConfig(): ArduinoMonitorConfig { return this.isArduino ? this.arduinoMonitorConfig : { baud: this.project?.manifest.monitor?.baud ?? 115200, encoding: this.project?.manifest.monitor?.encoding === 'gbk' ? 'gbk' : 'utf-8' }; }
+    get monitorLocked(): boolean { return this.flashing || this.monitorBusy || !!this.awaitUser || (this.isArduino && !!this.arduinoMonitor?.busy()); }
+    get monitorSettingsLocked(): boolean { return this.monitorLocked || this.building || this.identifying || this.preparingFlash; }
     get backupScope(): 'device' | 'history' { return this.identity?.uid ? 'device' : 'history'; }
     get errors(): Diagnostic[] { return this.diagnosticsStale ? [] : this.lastBuild?.diagnostics.filter(d => d.severity === 'error') ?? []; }
     get rpc(): NoduEmbeddedService { return this.service; }
@@ -156,13 +170,14 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         const generation = ++this.detection;
         let project: ProjectStatus | undefined;
         let espChip = '';
+        let arduino = false;
         if (root) {
             try {
                 const manifest = root.resolve('nodu.json');
                 if (await this.files.exists(manifest)) {
                     const text = (await this.files.read(manifest)).value;
                     const metadata = JSON.parse(text) as { kind?: string; target?: { mcu?: string } };
-                    if (metadata.kind === 'esp-idf') { espChip = metadata.target?.mcu || 'esp32'; }
+                    if (metadata.kind === 'esp-idf' || metadata.kind === 'esp32-arduino') { espChip = metadata.target?.mcu || 'esp32'; arduino = metadata.kind === 'esp32-arduino'; }
                     if (metadata.kind === 'stm32-hal') {
                         project = await this.call<ProjectStatus>('openProject', { path: root.path.fsPath() });
                     }
@@ -189,12 +204,14 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         }
         if (generation !== this.detection) { return; }
         if (project && root) { this.systemDiagnostics.resolve('工程', root.toString()); }
-        const switched = project?.path !== this.project?.path;
+        const switched = project?.path !== this.project?.path || (root?.path.fsPath() ?? '') !== this.localRoot;
         const targetChanged = this.hasTargetChanged(project);
         this.localRoot = root?.path.fsPath() ?? '';
         this.project = project;
         this.isEsp = !!espChip; this.espChip = espChip;
+        this.isArduino = arduino; this.espPath = espChip ? root?.path.fsPath() ?? '' : '';
         this.espProjectKey.set(this.isEsp);
+        this.arduinoProjectKey?.set(arduino);
         this.cProjectKey.set(!!project);
         if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
         if (switched) { this.buildId = ''; this.runId = ''; this.cancelledFlashRun = ''; this.awaitUser = undefined; this.lastFlash = undefined; this.clearMarkers(); this.lastBuild = undefined; this.diagnosticsStale = false; this.projectChanged.fire(project); }
@@ -277,6 +294,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                 }
                 break;
             case 'monitor.state':
+                ++this.monitorRevision;
                 this.monitor = { open: d.state === 'open' || d.state === 'disconnected' || d.state === 'lent', port: String(d.port || ''), baud: Number(d.baud || this.monitor.baud), state: String(d.state), message: d.message as string | undefined };
                 if (d.state === 'closed' || d.state === 'disconnected' || d.state === 'lent') { this.partial += this.decoder.finish(); }
                 if (d.state === 'closed') { this.monitor.open = false; }
@@ -289,13 +307,14 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                 break;
             case 'service.state':
                 if (d.running === false) {
-                    const interrupted = this.building || this.flashing;
-                    this.building = false; this.flashing = false;
+                    ++this.monitorRevision;
+                    const interrupted = !this.isArduino && (this.building || this.flashing);
+                    if (!this.isArduino) { this.building = false; this.flashing = false; }
                     if (interrupted) { this.setTask('任务已中断', 'error', { target: 'output' }); }
-                    this.systemDiagnostics.report({ source: 'STM32 服务', key: 'stopped', message: 'STM32 后台服务已停止，请查看日志。',
+                    this.systemDiagnostics.report({ source: this.isArduino ? '串口服务' : 'STM32 服务', key: 'stopped', message: this.isArduino ? '串口服务已停止，请查看日志。' : 'STM32 后台服务已停止，请查看日志。',
                         error: String(d.message || 'service.state: running=false') });
                     this.fire();
-                } else if (d.running === true) { this.systemDiagnostics.resolve('STM32 服务', 'stopped'); }
+                } else if (d.running === true) { this.systemDiagnostics.resolve('STM32 服务', 'stopped'); this.systemDiagnostics.resolve('串口服务', 'stopped'); }
                 break;
         }
     }
@@ -340,7 +359,8 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         if (!this.partial) { this.monitorPartialAt = Date.now(); }
         const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
         this.monitorBytes.append(bytes);
-        const encoding = this.project?.manifest.monitor?.encoding === 'gbk' ? 'gbk' : 'utf-8';
+        this.monitorTranscript.append('RX', bytes);
+        const encoding = this.monitorConfig.encoding;
         const text = this.partial + this.decoder.decode(bytes, encoding);
         const lines = text.split(/\r?\n/);
         this.partial = lines.pop() ?? '';
@@ -355,18 +375,20 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     get monitorPartial(): string { return this.partial; }
+    get monitorHex(): string { return this.monitorTranscript.hex(); }
 
     pushMonitor(text: string, kind: MonitorLine['kind'], notify = true): void {
-        if (kind !== 'data') { this.partial += this.decoder.finish(); }
-        if (kind !== 'data' && this.partial) { this.monitorLines.push({ text: this.partial, kind: 'data', at: this.monitorPartialAt }); this.partial = ''; }
+        // Sending is not a receive-stream boundary: preserve an unfinished UTF-8/GBK character.
+        if (kind !== 'data' && kind !== 'sent') { this.partial += this.decoder.finish(); }
+        if (kind !== 'data' && this.partial) { this.monitorLines.push({ text: this.partial, kind: 'data', at: this.monitorPartialAt }); this.partial = ''; this.monitorPartialAt = undefined; }
         this.monitorLines.push({ text, kind, at: Date.now() });
         if (this.monitorLines.length > MAX_LINES) { this.monitorLines.splice(0, this.monitorLines.length - MAX_LINES); }
         if (notify) { this.monitorChanged.fire(); }
     }
 
-    clearMonitor(): void { this.monitorLines.length = 0; this.partial = ''; this.monitorPartialAt = undefined; this.decoder.clear(); this.monitorBytes.clear(); this.monitorChanged.fire(); }
+    clearMonitor(): void { ++this.monitorRevision; this.monitorLines.length = 0; this.partial = ''; this.monitorPartialAt = undefined; this.decoder.clear(); this.monitorBytes.clear(); this.monitorTranscript.clear(); this.monitorChanged.fire(); }
 
-    private projectInputPath(path: string, root = this.project?.path): string | undefined {
+    private projectInputPath(path: string, root = this.project?.path || (this.isArduino ? this.espPath : undefined)): string | undefined {
         if (!root) { return undefined; }
         const canonical = this.toCanonical(path).replace(/\\/g, '/');
         const normalizedRoot = root.replace(/\\/g, '/');
@@ -380,7 +402,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     private isProjectSource(path: string): boolean {
         const relative = this.projectInputPath(path);
-        return relative !== undefined && /\.(c|h|cpp|hpp|s|ld|cmake)$|(^|\/)(CMakeLists\.txt|CMakePresets\.json|nodu\.json)$/i.test(relative);
+        return relative !== undefined && /\.(ino|c|h|cpp|hpp|s|ld|cmake)$|(^|\/)(CMakeLists\.txt|CMakePresets\.json|nodu\.json|sketch\.yaml)$/i.test(relative);
     }
 
     hasUnsavedSources(path = this.project?.path): boolean {
@@ -465,7 +487,10 @@ export class NoduEmbeddedModel implements EmbeddedClient {
 
     refreshPorts(): Promise<void> {
         if (this.portRefresh) { return this.portRefresh; }
-        this.portRefresh = this.call<PortInfo[]>('listPorts').then(ports => {
+        const generation = this.detection;
+        this.portRefresh = (this.isArduino && this.arduinoMonitor ? this.arduinoMonitor.ports() : this.call<PortInfo[]>('listPorts')).then(ports => {
+            if (generation !== this.detection) { return; }
+            if (this.isArduino) { this.ports = ports; this.fire(); return; }
             const next = this.monitorPortExplicit && !this.monitorPort ? '' : preferredMonitorPort(this.selectableMonitorPort(this.monitorPort, ports), ports.filter(port => !this.isSystemPort(port.path, ports)));
             const changed = JSON.stringify(ports) !== JSON.stringify(this.ports) || next !== this.monitorPort;
             const targetChanged = this.identity?.method === 'uart' && (next !== this.monitorPort || (this.identityPort && !ports.some(port => port.path === this.identityPort)));
@@ -489,7 +514,9 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     setMonitorPort(port: string): void {
-        if (this.flashing || this.identifying || this.preparingFlash || this.monitorBusy || this.awaitUser) { return; }
+        if (this.monitorSettingsLocked) { return; }
+        if (this.isArduino) { if (!this.arduinoMonitor?.busy()) { void this.arduinoMonitor?.selectPort(port); } return; }
+        if (port !== this.monitorPort) { ++this.monitorRevision; }
         const targetChanged = this.project?.flashMethod === 'uart' && port !== this.monitorPort;
         if (targetChanged) { this.clearDeviceIdentity(); }
         this.monitorPortExplicit = true;
@@ -736,6 +763,8 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     private async syncMonitor(): Promise<void> {
         try {
             const status = await this.call<{ open: boolean; port?: string; baud?: number; state?: string }>('monitorStatus');
+            if (status.open !== this.monitor.open || (status.port || '') !== this.monitor.port || (status.baud || 115200) !== this.monitor.baud
+                || (status.state || (status.open ? 'open' : 'closed')) !== this.monitor.state) { ++this.monitorRevision; }
             this.monitor = { open: status.open, port: status.port || '', baud: status.baud || 115200, state: status.state || (status.open ? 'open' : 'closed'), message: undefined };
             if (status.open && status.port && !this.monitorPortExplicit) {
                 const next = this.selectableMonitorPort(status.port);
@@ -748,32 +777,61 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     private async openSelectedMonitor(): Promise<void> {
-        await this.call('openMonitor', { path: this.project?.path, port: this.monitorPort, baud: this.project?.manifest.monitor?.baud ?? 115200 });
+        await this.call('openMonitor', { path: this.project?.path ?? (this.isArduino ? this.espPath : undefined), port: this.monitorPort, baud: this.monitorConfig.baud, ...(this.isArduino ? { arduino: true } : {}) });
     }
 
     private async changeMonitor(action: () => Promise<unknown>): Promise<void> {
         if (this.monitorBusy) { return; }
+        ++this.monitorRevision;
         this.monitorBusy = true; this.monitorError = ''; this.fire();
         try { await action(); } catch (error) { this.monitorError = error instanceof Error ? error.message : String(error); }
         finally { await this.syncMonitor(); this.monitorBusy = false; this.fire(); }
     }
 
     async ensureMonitor(): Promise<void> {
-        const baud = this.project?.manifest.monitor?.baud ?? 115200;
-        if (!this.project || !this.monitorPort || (this.monitor.open && this.monitor.port === this.monitorPort && this.monitor.baud === baud)) { return; }
+        const baud = this.monitorConfig.baud;
+        if ((!this.project && !this.isArduino) || (this.isArduino && this.monitorLocked) || !this.monitorPort || (this.monitor.open && this.monitor.port === this.monitorPort && this.monitor.baud === baud)) { return; }
         await this.openSelectedMonitor();
     }
 
     async toggleMonitor(): Promise<void> {
+        if (this.monitorLocked || this.monitor.state === 'lent') { return; }
         await this.changeMonitor(() => this.monitor.open ? this.call('closeMonitor') : this.openSelectedMonitor());
     }
 
+    async applyArduinoMonitorSettings(config: ArduinoMonitorConfig, uploadPort?: string): Promise<void> {
+        if (!this.isArduino) { return; }
+        const previous = this.arduinoMonitorConfig, oldPort = this.monitorPort;
+        this.arduinoMonitorConfig = config;
+        this.monitorPort = config.port ?? uploadPort ?? '';
+        // Arduino's per-project choice must never inherit STM32's global monitor selection.
+        this.monitorPortExplicit = true;
+        if (previous.encoding !== config.encoding) { this.partial += this.decoder.finish(); this.decoder.clear(); }
+        if (previous.baud !== config.baud || oldPort !== this.monitorPort) {
+            ++this.monitorRevision;
+            if (this.monitor.open) { await this.changeMonitor(() => this.monitorPort ? this.openSelectedMonitor() : this.call('closeMonitor')); }
+        }
+        this.fire();
+    }
+
+    async syncArduinoMonitor(): Promise<void> { if (this.isArduino) { await this.syncMonitor(); } }
+
     async sendMonitor(text: string): Promise<boolean> {
-        if (this.flashing || this.awaitUser === 'exitBoot') { return false; }
+        if (!text || !this.monitor.open || this.monitor.state !== 'open' || this.monitorLocked || this.sendingMonitor) { return false; }
+        const revision = this.monitorRevision, generation = this.detection, path = this.project?.path;
+        const port = this.monitor.port, selectedPort = this.monitorPort, baud = this.monitor.baud;
+        const current = (): boolean => revision === this.monitorRevision && generation === this.detection && path === this.project?.path
+            && port === this.monitor.port && selectedPort === this.monitorPort && baud === this.monitor.baud
+            && this.monitor.open && this.monitor.state === 'open' && !this.monitorLocked;
+        this.sendingMonitor = true;
         try {
-            await this.call('writeMonitor', { text, encoding: this.project?.manifest.monitor?.encoding ?? 'utf-8' });
+            const result = await this.call<MonitorWriteResult>('writeMonitor', { text, encoding: this.monitorConfig.encoding });
+            if (!current()) { return false; }
+            if (result?.data) { this.monitorTranscript.append('TX', Uint8Array.from(atob(result.data), char => char.charCodeAt(0))); }
+            this.pushMonitor(text, 'sent');
             this.monitorError = ''; this.fire(); return true;
-        } catch (error) { this.monitorError = error instanceof Error ? error.message : String(error); this.fire(); return false; }
+        } catch (error) { if (current()) { this.monitorError = error instanceof Error ? error.message : String(error); this.fire(); } return false; }
+        finally { this.sendingMonitor = false; }
     }
 
     async identify(): Promise<void> {
@@ -808,6 +866,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     async setOption(key: string, value: unknown): Promise<void> {
+        if (this.isArduino && (key === 'monitorBaud' || key === 'monitorEncoding')) {
+            if (this.monitorSettingsLocked || !this.arduinoMonitor) { return; }
+            await this.arduinoMonitor.save(key === 'monitorBaud' ? { baud: Number(value) } : { encoding: value === 'gbk' ? 'gbk' : 'utf-8' });
+            return;
+        }
         const project = this.project;
         if (!project) { return; }
         const path = project.path, generation = this.detection;

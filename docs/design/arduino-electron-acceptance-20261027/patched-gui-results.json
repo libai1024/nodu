@@ -1,0 +1,22 @@
+{
+  "status": "blocked_by_multiline_stale_hover",
+  "pluginBytes": 812896,
+  "pluginSha256": "ba56f21e0c180b1a6f1e3bb4077210984e324d4373cca31ea699a4ec784cefa3",
+  "alsVersion": "0.7.7-nodu.1",
+  "alsSha256": "2fa517a13d97da0f3ed5656bb92da367cc7c3b90a2217749970181498595a0ec",
+  "autoSaveVerified": true,
+  "observations": {
+    "firstMultilineBodyHoverMs": 979,
+    "ordinaryScalarCommentCompletionMs": 1238,
+    "wrongHover": "Current line17 JsonDocument yielded old line17 serializeJson twice and still at57.573sec",
+    "backgroundBuild": "didChange/didSave upstream rebuild active; not alone interpreted as semantic blocking"
+  },
+  "evidence": [
+    "25-patched-body-unicode-hover.png",
+    "26-patched-body-completion.png",
+    "27-patched-multiline-wrong-hover-initial.png",
+    "patched-multiline-wrong-hover.ino",
+    "lsp-patched-mapping.txt"
+  ],
+  "next": "Language agent investigating real GUI mapping trace. Full replacement final scenario not yet run."
+}

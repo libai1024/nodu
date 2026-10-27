@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "name": "ui_esp32_c3",
+  "kind": "esp32-arduino",
+  "target": {
+    "mcu": "esp32c3"
+  }
+}

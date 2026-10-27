@@ -1,0 +1,17 @@
+✔ generated Arduino projects resolve the pinned profile; IDF and ambiguous profiles are rejected (40.293917ms)
+✔ compile uses profile and isolated config, never a shell or the user Arduino environment (1849.054041ms)
+✔ failed compilation returns original sketch positions for the Problems panel (580.67775ms)
+✔ a successful process cannot validate a build after input changes (572.916916ms)
+✔ one operation owns the compiler; unrelated cancellation cannot kill it (608.855459ms)
+✔ input digests include dependencies and profile but ignore generated output (15.787417ms)
+✔ diagnostics handle Windows drive paths, ANSI and duplicate messages (0.190708ms)
+✔ custom platform indexes cannot replace the official ESP32 compiler recipe (11.119541ms)
+✔ disconnect cancels owned work; stale or foreign request IDs do not cancel a new build (562.750542ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4409.922458

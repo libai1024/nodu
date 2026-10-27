@@ -318,6 +318,10 @@ test('real React markup exposes only the contextual icon button and keeps busy c
     assert.doesNotMatch(k210, /aria-haspopup|Shift\+F10/);
     assert.match(k210, /aria-label="运行当前代码"/);
     assert.doesNotMatch(k210, /nodu-minimal-raster-icon/);
+    const arduino = renderToStaticMarkup(React.createElement(NoduMinimalAction, { ...base, action: 'build', allowSelection: false, fixedAction: true }));
+    assert.match(arduino, /aria-label="编译"/);
+    assert.match(arduino, /data-action="build"/);
+    assert.doesNotMatch(arduino, /aria-haspopup|运行当前代码|长按/);
     const stop = renderToStaticMarkup(React.createElement(NoduMinimalAction, { ...base, busy: true, disabled: true, stopLabel: '取消下载' }));
     assert.match(stop, /aria-label="取消下载"/);
     assert.doesNotMatch(stop, /disabled=""/);

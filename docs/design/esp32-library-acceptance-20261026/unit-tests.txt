@@ -1,0 +1,23 @@
+✔ chip projects preserve portable K210 and explicit ESP-IDF targets without a board (124.583042ms)
+✔ ESP32 defaults to Arduino with a standard primary sketch and pinned portable profile (177.102125ms)
+✔ framework validation precedes writes and does not leak into non-ESP32 projects (0.47675ms)
+✔ reject traversal, reserved names, unknown chips and templates before writing (0.226834ms)
+✔ same-name concurrent creates have one winner (6.16275ms)
+✔ Arduino comparison grammar respects precedence, prereleases and unsupported syntax (0.996625ms)
+✔ dependency resolution backtracks and preserves compatible existing versions (6.901542ms)
+✔ bundled files match fixed catalog and each archive checksum; damaged cache is repaired (50.533625ms)
+✔ offline list retains bundled/core records and exact project version without network (14.592667ms)
+✔ failed index refresh still shows local search results (9.017583ms)
+✔ add and upgrade pin dependency closure, preserve comments and other profiles (129.046583ms)
+✔ network failure, cancellation and concurrent edit never publish a replacement profile (98.509375ms)
+✔ remove refuses shared dependency, prunes unneeded children, and cannot remove core (109.034ms)
+✔ incompatible architecture and malformed versions cannot modify project (13.465375ms)
+✔ a corrupt bundled archive fails before touching project or publishing cache (19.328709ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 564.339333

@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "results": [
+    {
+      "chip": "esp32c3",
+      "ok": true,
+      "incremental": true,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "noFinalNewline": true,
+      "sameLineEmojiCompletionColumn": 34,
+      "sameLineEmojiDiagnosticColumn": 27,
+      "undoCurrentHover": true,
+      "undoClearsDiagnostic": true,
+      "unsavedDiskUnchanged": true,
+      "project": "/private/tmp/nodu-arduino-e2e-20261026/language-patched-edges/esp32c3-1793035061980/lsp_esp32c3"
+    },
+    {
+      "chip": "esp32s3",
+      "ok": true,
+      "incremental": true,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "noFinalNewline": true,
+      "sameLineEmojiCompletionColumn": 34,
+      "sameLineEmojiDiagnosticColumn": 27,
+      "undoCurrentHover": true,
+      "undoClearsDiagnostic": true,
+      "unsavedDiskUnchanged": true,
+      "project": "/private/tmp/nodu-arduino-e2e-20261026/language-patched-edges/esp32s3-1793035247441/lsp_esp32s3"
+    }
+  ]
+}

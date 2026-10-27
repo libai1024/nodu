@@ -1,0 +1,23 @@
+{
+  "host": "darwin-x64",
+  "alsVersion": "0.7.7-nodu.1",
+  "clangdVersion": "21.1.8",
+  "als": {
+    "archive": "ARDUINO-LANGUAGE-SERVER-NODU-SOURCE.tar.gz",
+    "sha256": "8ceb2428d0ad435452b339bfea8d8ff0cdc67fa513b8619fb6dfa498e56ef5d6",
+    "upstreamVersion": "0.7.7",
+    "upstreamSourceSha256": "8a236e5165090a688b1d13f06288130b4413e354671c1ada3463a526d2513528",
+    "patch": "nodu-utf16-mapper.patch",
+    "patchSha256": "f8a04eac99e89c0ff3532d5f03c945be7a83a978d5f70affd7cd065923c48c92",
+    "commit": "481a5ca-nodu.1",
+    "date": "2026-10-27T00:00:00Z",
+    "goVersion": "1.24.1",
+    "binarySha256": "b53192e13a46a712d876791697b236bee128ef39fc5fb54a0ef8c172583397ba"
+  },
+  "clangd": {
+    "archive": "clangd-mac-21.1.8.zip",
+    "url": "https://github.com/clangd/clangd/releases/download/21.1.8/clangd-mac-21.1.8.zip",
+    "sha256": "b435e8eff9bb8db59d6f0f874b3a6b1cfaaa94980e08e38f0fa015dde185d36d",
+    "binarySha256": "1d37030fb652202d6b6884d3451ae2d6db279139ecf289c713e07e65f52d9237"
+  }
+}

@@ -1,0 +1,21 @@
+# Nodu 会话 UI - 任务
+
+- [x] 会话管理元信息与存储兼容
+  - id: task-storage
+  - boundary: common/tutor/tutor-conversation.ts、test/tutor-conversations.cjs
+  - verify: compile与node --test test/tutor-conversations.cjs，涵盖旧记录、跨窗口、归档恢复、重命名脱敏、存储失败。
+- [x] 会话标题、列表操作、搜索时间状态和样式
+  - id: task-interface
+  - depends-on: task-storage
+  - boundary: tutor前端model/history/controls/widget、tutor相关CSS及对应前端测试
+  - verify: npm run test:tutor与npm run test:workbench，键盘/忙态/切换/草稿保护测试通过。
+- [x] 构建和视觉验收
+  - id: task-visual
+  - depends-on: task-interface
+  - boundary: 隔离视觉fixture、验收截图/报告、electron构建产物；不改用户聊天/源文件
+  - verify: electron构建成功，隔离GUI检查深浅色宽窄与管理交互；桌面加载新构建。
+- [x] 记录结果与检查边界
+  - id: task-evidence
+  - depends-on: task-visual
+  - boundary: 本任务包和docs/design下本轮新建验收记录
+  - verify: git diff --check、任务检查器、全部证据链接有效；不提交或推送。

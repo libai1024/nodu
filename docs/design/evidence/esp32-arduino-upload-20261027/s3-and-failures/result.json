@@ -1,0 +1,465 @@
+{
+  "cases": [
+    {
+      "name": "esp32s3-upload-1",
+      "result": {
+        "ok": true,
+        "stage": "complete"
+      },
+      "stages": [
+        "validate",
+        "upload",
+        "verify",
+        "complete"
+      ]
+    },
+    {
+      "name": "esp32s3-upload-2",
+      "result": {
+        "ok": true,
+        "stage": "complete"
+      },
+      "stages": [
+        "validate",
+        "upload",
+        "verify",
+        "complete"
+      ]
+    },
+    {
+      "name": "esp32s3-readback",
+      "ok": true,
+      "bytes": 4194304,
+      "sha256": "bcad73c7e2fa4ed325880af326c7e3da1d54a6d91236b1b82561a652420bfd18"
+    },
+    {
+      "name": "esp32s3-saved-flash-boot",
+      "ok": true,
+      "sha256": "bcad73c7e2fa4ed325880af326c7e3da1d54a6d91236b1b82561a652420bfd18",
+      "hello": true
+    },
+    {
+      "name": "actual-wrong-chip",
+      "result": {
+        "ok": false,
+        "stage": "upload",
+        "error": "上传失败，请查看上传输出。"
+      }
+    },
+    {
+      "name": "absent-endpoint",
+      "result": {
+        "ok": false,
+        "stage": "upload",
+        "error": "上传失败，请查看上传输出。"
+      }
+    },
+    {
+      "name": "corrupt-image-no-process",
+      "result": {
+        "ok": false,
+        "stage": "validate",
+        "error": "固件校验失败，请重新编译。"
+      },
+      "calls": 0
+    },
+    {
+      "name": "cancel-during-write",
+      "result": {
+        "ok": false,
+        "stage": "upload",
+        "cancelled": true,
+        "error": "已取消上传。"
+      },
+      "stages": [
+        "validate",
+        "upload"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "id": 1,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--port",
+        "socket://127.0.0.1:58147",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "write-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3",
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 16845,
+      "timed_out": false
+    },
+    {
+      "id": 2,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--port",
+        "socket://127.0.0.1:58147",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "verify-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3",
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 11565,
+      "timed_out": false
+    },
+    {
+      "id": 3,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--port",
+        "socket://127.0.0.1:58147",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "write-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3",
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 17153,
+      "timed_out": false
+    },
+    {
+      "id": 4,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--port",
+        "socket://127.0.0.1:58147",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "verify-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3/nodu_esp32s3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32s3",
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 11600,
+      "timed_out": false
+    },
+    {
+      "id": 5,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--port",
+        "socket://127.0.0.1:58147",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--connect-attempts",
+        "2",
+        "read-flash",
+        "--no-progress",
+        "0",
+        "4194304",
+        "/tmp/nodu-arduino-upload-20261027-J7XhaA/esp32s3.readback.bin"
+      ],
+      "cwd": "/tmp/nodu-arduino-upload-20261027-J7XhaA",
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 30887,
+      "timed_out": false
+    },
+    {
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/esp-emulator-0.46.0/esp-emu-0.46.0-aarch64-apple-darwin/esp-emu",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--firmware",
+        "/tmp/nodu-arduino-upload-20261027-J7XhaA/esp32s3.flash.bin",
+        "--save-state",
+        "--strap-mode",
+        "0x02",
+        "--uart-tcp",
+        "127.0.0.1:58147",
+        "--net",
+        "user,restrict=yes",
+        "--timeout",
+        "240s",
+        "--log-color",
+        "never"
+      ],
+      "result": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "id": 6,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/esp-emulator-0.46.0/esp-emu-0.46.0-aarch64-apple-darwin/esp-emu",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--firmware",
+        "/tmp/nodu-arduino-upload-20261027-J7XhaA/esp32s3.flash.bin",
+        "--net",
+        "user,restrict=yes",
+        "--timeout",
+        "10s",
+        "--exit-on",
+        "Hello, ESP32!",
+        "--log-color",
+        "never"
+      ],
+      "cwd": "/tmp/nodu-arduino-upload-20261027-J7XhaA",
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 90,
+      "timed_out": false
+    },
+    {
+      "id": 7,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32c3",
+        "--port",
+        "socket://127.0.0.1:61641",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "write-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3",
+      "code": 2,
+      "signal": null,
+      "elapsed_ms": 11599,
+      "timed_out": false
+    },
+    {
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/esp-emulator-0.46.0/esp-emu-0.46.0-aarch64-apple-darwin/esp-emu",
+      "args": [
+        "--chip",
+        "esp32s3",
+        "--firmware",
+        "/tmp/nodu-arduino-upload-20261027-J7XhaA/wrong-chip.flash.bin",
+        "--save-state",
+        "--strap-mode",
+        "0x02",
+        "--uart-tcp",
+        "127.0.0.1:61641",
+        "--net",
+        "user,restrict=yes",
+        "--timeout",
+        "240s",
+        "--log-color",
+        "never"
+      ],
+      "result": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "id": 8,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32c3",
+        "--port",
+        "socket://127.0.0.1:62163",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "write-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3",
+      "code": 2,
+      "signal": null,
+      "elapsed_ms": 10890,
+      "timed_out": false
+    },
+    {
+      "id": 9,
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/arduino/data/packages/esp32/tools/esptool_py/5.3.1/esptool",
+      "args": [
+        "--chip",
+        "esp32c3",
+        "--port",
+        "socket://127.0.0.1:62585",
+        "--before",
+        "no-reset",
+        "--after",
+        "no-reset",
+        "--no-stub",
+        "--connect-attempts",
+        "2",
+        "write-flash",
+        "--flash-mode",
+        "dio",
+        "--flash-freq",
+        "80m",
+        "--flash-size",
+        "4MB",
+        "0x0",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bootloader.bin",
+        "0x8000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.partitions.bin",
+        "0xe000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/boot_app0.bin",
+        "0x10000",
+        "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3/nodu_esp32c3_hello.ino.bin"
+      ],
+      "cwd": "/private/tmp/nodu-arduino-e2e-20261026/build-esp32c3",
+      "code": -1,
+      "signal": "SIGKILL",
+      "elapsed_ms": 11369,
+      "timed_out": false
+    },
+    {
+      "exe": "/Users/wangwei/.local/share/bysj-common-app/esp-emulator-0.46.0/esp-emu-0.46.0-aarch64-apple-darwin/esp-emu",
+      "args": [
+        "--chip",
+        "esp32c3",
+        "--firmware",
+        "/tmp/nodu-arduino-upload-20261027-J7XhaA/cancelled.flash.bin",
+        "--save-state",
+        "--strap-mode",
+        "0x02",
+        "--uart-tcp",
+        "127.0.0.1:62585",
+        "--net",
+        "user,restrict=yes",
+        "--timeout",
+        "240s",
+        "--log-color",
+        "never"
+      ],
+      "result": {
+        "code": 0,
+        "signal": null
+      }
+    }
+  ],
+  "hardware_accessed": false,
+  "directory": "/tmp/nodu-arduino-upload-20261027-J7XhaA",
+  "ok": true
+}

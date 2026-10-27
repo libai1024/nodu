@@ -114,17 +114,8 @@
 .nodu-launcher-start-action.primary:hover:not(:disabled) .nodu-launcher-start-icon { background: var(--theia-button-hoverBackground); }
 .nodu-launcher-start-action:disabled { opacity: .45; cursor: default; }
 
-/* ---------- new project ---------- */
+/* ---------- new project host ---------- */
 .nodu-launcher-form { display: flex; min-height: 0; flex: 1; flex-direction: column; }
-.nodu-launcher-form .nodu-new-project { display: flex; min-height: 0; flex: 1; flex-direction: column; }
-.nodu-launcher-new .nodu-np-body { min-height: 0; flex: 1; border: 1px solid var(--theia-editorWidget-border); border-radius: 8px; overflow: hidden; }
-.nodu-launcher-new .nodu-np-families { max-height: none; }
-#nodu-launcher .nodu-launcher-new .nodu-np-fields input, #nodu-launcher .nodu-launcher-new .nodu-np-fields select { width: 100%; height: 34px; padding: 0 10px; border: 1px solid var(--theia-editorWidget-border); border-radius: 6px; background: var(--theia-input-background); color: var(--theia-input-foreground); font: inherit; font-size: 12px; }
-#nodu-launcher .nodu-launcher-new .nodu-np-fields input:focus, #nodu-launcher .nodu-launcher-new .nodu-np-fields select:focus { border-color: var(--theia-focusBorder); outline: 1px solid var(--theia-focusBorder); outline-offset: 0; }
-#nodu-launcher .nodu-launcher-new .nodu-np-location input { padding-right: 40px; }
-.nodu-launcher-new .nodu-np-browse { top: 8px; height: 18px; }
-.nodu-launcher-new .nodu-np-actions { padding: 16px 0 0; border-top: 0; }
-.nodu-launcher-new .nodu-np-actions .theia-button { height: 30px; border-radius: 6px; }
 
 /* ---------- settings ---------- */
 .nodu-launcher-settings { gap: 0; }
@@ -162,26 +153,6 @@
 .nodu-launcher-menu button:hover:not(:disabled), .nodu-launcher-menu button:focus { background: var(--theia-menu-selectionBackground); color: var(--theia-menu-selectionForeground); outline: none; }
 .nodu-launcher-menu button:disabled { opacity: .4; cursor: default; }
 
-/* ---------- new project: chip families ---------- */
-.nodu-launcher-new .nodu-np-families { display: flex; flex-direction: column; gap: 1px; padding: 14px 8px; background: transparent; }
-.nodu-launcher-new .nodu-np-group-title { padding: 0 8px 8px; color: var(--theia-descriptionForeground); font-size: 11px; font-weight: 500; }
-.nodu-launcher-new .nodu-np-family { height: 30px; padding: 0 8px; border-radius: 6px; color: var(--theia-sideBar-foreground); font-size: 12px; }
-.nodu-launcher-new .nodu-np-family > .codicon { flex: 0 0 12px; width: 12px; font-size: 12px; }
-.nodu-launcher-new .nodu-np-child { padding: 0 8px 0 50px; }
-.nodu-launcher-new .nodu-np-group.is-open { color: var(--theia-foreground); }
-.nodu-launcher-new .nodu-np-family:hover:not(:disabled) { background: var(--theia-list-hoverBackground); }
-.nodu-launcher-new .nodu-np-family.nodu-np-selected { background: var(--theia-scope-accentBackground); color: var(--theia-foreground); font-weight: 600; }
-.nodu-launcher-new .nodu-np-children:not([hidden]) { display: flex; flex-direction: column; gap: 1px; }
-
-/* ---------- new project: label above control ---------- */
-.nodu-launcher-new .nodu-np-fields { display: flex; flex-direction: column; align-items: stretch; gap: 16px; padding: 22px 24px; }
-.nodu-launcher-new .nodu-np-control { display: flex; min-width: 0; flex-direction: column; gap: 6px; }
-.nodu-launcher-new .nodu-np-label { color: var(--theia-descriptionForeground); font-size: 11px; font-weight: 500; }
-.nodu-launcher-new .nodu-np-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.nodu-launcher-new .nodu-np-row > .nodu-np-control:only-child { grid-column: 1 / -1; }
-.nodu-launcher-new .nodu-np-fields .nodu-np-invalid { margin: 0; }
-.nodu-launcher-new .nodu-np-fields .nodu-np-error { grid-column: auto; margin: 0; }
-
 /* ---------- narrow windows ---------- */
 @media (max-width: 820px) {
     .nodu-launcher { grid-template-columns: 184px minmax(0, 1fr); }
@@ -202,8 +173,6 @@
     .nodu-launcher-count { display: none; }
     .nodu-launcher-row-open { grid-template-columns: 40px minmax(0, 1fr); }
     .nodu-launcher-tag { display: none; }
-    .nodu-launcher-new .nodu-np-row { grid-template-columns: 1fr; gap: 16px; }
-    .nodu-launcher-new .nodu-np-fields { padding: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
     .nodu-launcher *, .nodu-launcher *::before, .nodu-launcher *::after { animation: none !important; transition: none !important; }
@@ -226,24 +195,8 @@
 .nodu-launcher-switch input:disabled + span { opacity: .5; }
 .nodu-launcher-row-more:disabled { cursor: default; }
 .nodu-launcher-link:disabled { opacity: .5; cursor: default; }
-.nodu-launcher-new .nodu-np-fields { overflow-y: auto; }
 @media (max-height: 540px) {
     .nodu-launcher-nav { padding-top: 36px; }
     .nodu-launcher-main { padding-top: 30px; padding-bottom: 14px; }
     .nodu-launcher-head { margin-bottom: 12px; }
-    .nodu-launcher-new .nodu-np-fields { padding-block: 14px; gap: 12px; }
-    .nodu-launcher-new .nodu-np-actions { padding-top: 12px; }
-}
-#nodu-launcher .nodu-new-project .nodu-np-actions .theia-button.main {
-    background: var(--theia-button-background);
-    color: var(--theia-button-foreground);
-}
-#nodu-launcher .nodu-new-project .nodu-np-actions .theia-button.main:hover:not(:disabled) {
-    background: var(--theia-button-hoverBackground);
-    color: var(--theia-button-foreground);
-}
-#nodu-launcher .nodu-new-project .nodu-np-actions .theia-button.main:disabled {
-    background: var(--theia-button-background);
-    color: var(--theia-button-foreground);
-    opacity: .5;
 }

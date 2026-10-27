@@ -1,0 +1,6 @@
+{
+  "monitor": {
+    "baud": 57600,
+    "encoding": "gbk"
+  }
+}

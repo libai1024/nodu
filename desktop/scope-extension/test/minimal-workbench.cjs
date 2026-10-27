@@ -70,7 +70,7 @@ function harness() {
 function toolbar(kind = 'stm32', h = harness()) {
     const owner = new h.ScopeToolbar(), calls = [];
     owner.layoutState = new h.ScopeLayoutState(); owner.layoutState.setProject('same-name', '/a');
-    owner.embedded = { isC: kind === 'stm32', isEsp: kind === 'esp', busy: false, awaitUser: undefined,
+    owner.embedded = { isC: kind === 'stm32', isEsp: kind === 'esp', isArduino: false, busy: false, awaitUser: undefined,
         project: kind === 'stm32' ? { path: '/a' } : undefined, refreshDevices: async () => {}, loadBackups: async () => {} };
     owner.device = { state: { running: false }, busy: false, canStop: false };
     owner.commands = { executeCommand: async command => { calls.push(command); } };
@@ -84,6 +84,34 @@ function toolbar(kind = 'stm32', h = harness()) {
     const action = () => nodes().find(node => node.type === h.NoduMinimalAction).props;
     return { owner, calls, nodes, action, h };
 }
+
+test('both app targets enable delayed auto-save as an overridable default', () => {
+    for (const target of ['electron-app', 'browser-app']) {
+        const config = JSON.parse(readFileSync(resolve(__dirname, '../../', target, 'package.json'), 'utf8')).theia.frontend.config;
+        assert.equal(config.preferences['files.autoSave'], 'afterDelay');
+    }
+});
+
+test('compact auto-save uses the editor preference, defaults on and preserves explicit off across mode changes', async () => {
+    const c = toolbar(), values = new Map(), writes = [];
+    c.owner.preferences = {
+        get: (key, fallback) => values.has(key) ? values.get(key) : fallback,
+        set: async (key, value, scope) => { writes.push([key, value, scope]); values.set(key, value); }
+    };
+    const settings = () => c.owner.renderPreferences().props;
+    assert.equal(settings().autoSave, true);
+    assert.deepEqual(writes, [], 'reading the default must not write user settings');
+    await settings().onAutoSave(false);
+    assert.equal(settings().autoSave, false);
+    c.owner.professionalSettings = { isOpen: false }; c.owner.layoutState.mode = 'pro'; c.owner.renderPreferences();
+    c.owner.layoutState.mode = 'simple'; assert.equal(settings().autoSave, false);
+    assert.deepEqual(writes, [['files.autoSave', 'off', 1]], 'mode changes must not reset the user preference');
+    await settings().onAutoSave(true); assert.equal(settings().autoSave, true);
+    assert.deepEqual(writes.at(-1), ['files.autoSave', 'afterDelay', 1]);
+    for (const value of ['onFocusChange', 'onWindowChange']) {
+        values.set('files.autoSave', value); assert.equal(settings().autoSave, true);
+    }
+});
 
 test('STM32 fan selection changes only its action; short activation maps to distinct production commands', () => {
     const c = toolbar();
@@ -176,6 +204,70 @@ function workbench() {
     owner.showConsole = async () => { calls.push(['open', 'bottom']); visible.bottom = true; };
     return { h, owner, calls, visible, bottom, body, toolbar, side, shell };
 }
+
+function initialLayout(folder, files) {
+    const { URI } = require('@theia/core/lib/common/uri');
+    const h = harness(), owner = new h.ScopeWorkbenchContribution();
+    const resource = new URI(`file:///workspace/${folder}`), roots = [{ resource }], opened = [], checked = [];
+    const available = new Set(files.map(file => resource.resolve(file).toString()));
+    owner.navigator = owner.vision = { openView: async () => {} };
+    owner.consoleView = { openView: async () => {}, widget: Promise.resolve({ restoreHeight() {} }) };
+    owner.shell = { resize() {} };
+    owner.workspace = { get roots() { return Promise.resolve(roots); }, tryGetRoots: () => roots };
+    owner.editors = { all: [], async open(uri, options) {
+        const widget = { editor: { uri } }; this.all.push(widget); opened.push({ uri: uri.toString(), mode: options.mode }); return widget;
+    } };
+    owner.files = { exists: async uri => { checked.push(uri.toString()); return available.has(uri.toString()); } };
+    return { owner, resource, roots, opened, checked, URI };
+}
+
+test('fresh Arduino project opens the directory-named sketch through the shared initial-layout lifecycle', async () => {
+    for (const name of ['serial-c3', 'serial-s3', '示例']) {
+        const f = initialLayout(name, [`${name}.ino`, 'helper.ino', 'main.py']);
+        await f.owner.initializeLayout();
+        assert.deepEqual(f.opened, [{ uri: f.resource.resolve(`${name}.ino`).toString(), mode: 'activate' }]);
+        assert.equal(f.checked.length, 1, 'a sketch must not activate an unrelated fallback after its main file');
+    }
+});
+
+test('fresh K210 and ESP-IDF projects preserve their existing startup source order', async () => {
+    const k = initialLayout('camera', ['thresholds.py', 'camera.py', 'main.py']);
+    await k.owner.initializeLayout();
+    assert.deepEqual(k.opened.map(item => item.uri), ['thresholds.py', 'camera.py', 'main.py'].map(file => k.resource.resolve(file).toString()));
+    const idf = initialLayout('idf', ['main/main.c']); await idf.owner.initializeLayout();
+    assert.deepEqual(idf.opened, [{ uri: idf.resource.resolve('main/main.c').toString(), mode: 'activate' }]);
+});
+
+test('startup does not guess a differently named sketch or create a missing entrypoint', async () => {
+    const f = initialLayout('sketch', ['helper.ino', 'Core/Src/main.c']);
+    await f.owner.initializeLayout();
+    assert.deepEqual(f.opened, []);
+    assert.equal(f.checked.includes(f.resource.resolve('helper.ino').toString()), false);
+});
+
+test('an existing restored editor keeps focus and skips startup file discovery', async () => {
+    const f = initialLayout('sketch', ['sketch.ino']);
+    const restored = { editor: { uri: f.resource.resolve('helper.h') } }; f.owner.editors.all.push(restored);
+    await f.owner.initializeLayout();
+    assert.deepEqual(f.opened, []); assert.deepEqual(f.checked, []); assert.equal(f.owner.editors.all[0], restored);
+});
+
+test('an editor opened while startup checks the disk wins over automatic sketch activation', async () => {
+    const f = initialLayout('sketch', ['sketch.ino']); let resolve;
+    f.owner.files.exists = () => new Promise(done => { resolve = done; });
+    const pending = f.owner.initializeLayout(); await new Promise(setImmediate);
+    const chosen = { editor: { uri: f.resource.resolve('helper.h') } }; f.owner.editors.all.push(chosen);
+    resolve(true); await pending;
+    assert.deepEqual(f.opened, []); assert.equal(f.owner.editors.all[0], chosen);
+});
+
+test('a workspace change during startup disk lookup never activates the old sketch', async () => {
+    const f = initialLayout('old', ['old.ino']); let resolve;
+    f.owner.files.exists = () => new Promise(done => { resolve = done; });
+    const pending = f.owner.initializeLayout(); await new Promise(setImmediate);
+    f.roots[0] = { resource: new f.URI('file:///workspace/new') };
+    resolve(true); await pending; assert.deepEqual(f.opened, []);
+});
 
 test('first simple layout hides restored bottom once; subsequent mode changes preserve sessions, draft and user visibility', async () => {
     const w = workbench(), session = w.bottom.sessions[0];

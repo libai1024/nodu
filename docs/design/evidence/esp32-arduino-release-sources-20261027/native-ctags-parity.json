@@ -1,0 +1,9 @@
+{
+  "comparison": "Unmodified upstream x86_64 ctags 5.8-arduino11 vs Nodu rebuilt arm64 with CLI exact parser flags",
+  "equal": true,
+  "lines": 5,
+  "output": "Value\t<fixture>/demo.ino\t/^struct Value { int n; };$/;\"\tkind:struct\tline:2\ntwice\t<fixture>/demo.ino\t/^static int twice(int value) { return value * 2; }$/;\"\tkind:function\tline:4\tnamespace:demo\tsignature:(int value)\treturntype:int\nsum\t<fixture>/demo.ino\t/^int sum($/;\"\tkind:function\tline:6\tsignature:( int left, int right )\treturntype:int\nsetup\t<fixture>/demo.ino\t/^void setup() { }$/;\"\tkind:function\tline:10\tsignature:()\treturntype:void\nloop\t<fixture>/demo.ino\t/^void loop() { }$/;\"\tkind:function\tline:11\tsignature:()\treturntype:void\n",
+  "nativeBinarySha256": "b765ca33d809b23160a6c953ebcd6f180913a1e02488949efcc49ac1127e18eb",
+  "upstreamBinarySha256": "7e19156c9d596282a4adb7f4a3816e93dc1c37ca04c891e4340b0610ad85222b",
+  "pathNormalization": "Only the source fixture absolute path is replaced with <fixture>/demo.ino. Output symbols and fields are unchanged."
+}

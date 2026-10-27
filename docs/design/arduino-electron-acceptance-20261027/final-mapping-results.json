@@ -1,0 +1,57 @@
+{
+  "status": "passed_with_documented_limits",
+  "pluginBytes": 813317,
+  "pluginSha256": "f409b05f45b25f4deeba9ae11c8b6a01d1b5aa8a23b1ad758fdbbc66c360975a",
+  "alsVersion": "0.7.7-nodu.1",
+  "autoSaveVerified": true,
+  "exactEnter": {
+    "jsonDocumentLine": 15,
+    "hover": "correct"
+  },
+  "exactFollowingPaste": {
+    "jsonDocumentLine": 17,
+    "serializeJsonLine": 20,
+    "loopLine": 24,
+    "hoverAllCorrect": true,
+    "observedCommandToResultMs": [
+      555,
+      498,
+      544
+    ],
+    "timingNote": "Includes native CUA command dispatch and accessibility observation; not raw protocol timing."
+  },
+  "wholeReplaceUndoRedoDuringBackgroundBuild": {
+    "jsonDocumentLine": 19,
+    "serializeJsonLine": 22,
+    "loopLine": 26,
+    "serialCompletionLine": 11,
+    "diagnosticLine": 23,
+    "diagnosticColumn": 3,
+    "allCorrect": true,
+    "lastPendingObservationSeconds": 22.637,
+    "firstReadyObservationSeconds": 46.632,
+    "timingNote": "Observed recovery interval (22.637,46.632] seconds after final save, not precise latency. No old hover returned during wait."
+  },
+  "noLanguageCrashObserved": true,
+  "transientLimitations": [
+    "A temporary selectionRange validation text appeared in accessibility output after paste and disappeared on the next observation; no toast observed.",
+    "One invalid-range mapping message appeared in Electron log during full replacement/undo/redo. Current-symbol hover, completion and diagnostic recovered correctly after resync."
+  ],
+  "source": "Deliberate error repaired in editor; final source saved and real workbench compilation succeeded;0 errors.",
+  "evidence": [
+    "29-final-enter-correct-hover.png",
+    "30-final-paste-correct-hover.png",
+    "31-final-whole-gate-waiting.png",
+    "32-final-whole-correct-hover.png",
+    "33-final-whole-serial-completion.png",
+    "34-final-diagnostic-line23.png",
+    "35-final-source-compile-success.png"
+  ],
+  "finalCompile": {
+    "programBytes": 282534,
+    "programMax": 1310720,
+    "globalBytes": 13208,
+    "globalMax": 327680
+  },
+  "applicationClosed": true
+}

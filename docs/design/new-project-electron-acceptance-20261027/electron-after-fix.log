@@ -1,0 +1,804 @@
+Electron main: loading modules... [0.174 s since electron main start]
+Electron main: container created [0.916 s since electron main start]
+Electron main: modules loaded [0.917 s since electron main start]
+Electron main: resolving application [0.917 s since electron main start]
+Electron main: application resolved [0.918 s since electron main start]
+using electron user data area : '/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/electron'
+Backend main: entry point loaded [0.162 s since backend process start]
+Backend server: loading modules... [0.163 s since backend process start]
+Backend server: container created [0.248 s since backend process start]
+Backend server: modules loaded [0.306 s since backend process start]
+2026-10-27T01:57:08.562Z core:EnvVariablesServerImpl INFO Configuration directory URI: 'file:///private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config'
+Backend server: resolving application [0.317 s since backend process start]
+2026-10-27T01:57:08.672Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 95.1 ms [0.421 s since backend process start]
+2026-10-27T01:57:08.672Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 94.4 ms [0.421 s since backend process start]
+2026-10-27T01:57:08.672Z plugin-ext:PluginApiContribution INFO Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-27T01:57:08.672Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 98.8 ms [0.426 s since backend process start]
+2026-10-27T01:57:08.675Z core:BackendApplication INFO configured all backend app contributions
+2026-10-27T01:57:08.678Z core:BackendApplication INFO Theia app listening on http://127.0.0.1:24386.
+2026-10-27T01:57:08.678Z core:SettingServiceImpl INFO Settings file not found at '/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config/backend-settings.json'. Falling back to defaults.
+2026-10-27T01:57:08.681Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config/plugins does not exist.
+2026-10-27T01:57:08.681Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/private/tmp/nodu-new-project-electron-20261027-tDbP3p/profile/config/deployedPlugins does not exist.
+2026-10-27T01:57:08.687Z core:Stopwatch INFO Backend application startup sequence completed (async work may still be pending): 13.0 ms [0.442 s since backend process start]
+2026-10-27T01:57:08.687Z core:Stopwatch INFO All backend contributions settled: 123.9 ms [0.442 s since backend process start]
+Starting backend: 470.6 ms [1.449 s since electron main start]
+2026-10-27T01:57:08.692Z core:Stopwatch INFO Resolve plugins list: 13.1 ms [0.447 s since backend process start]
+Attaching security token: 10.4 ms [1.459 s since electron main start]
+ElectronMessagingContribution.onStart: 8.1 ms [1.468 s since electron main start]
+TheiaMainApi.onStart: 7.6 ms [1.468 s since electron main start]
+ElectronApi.onStart: 0.2 ms [1.468 s since electron main start]
+Starting contributions: 8.7 ms [1.468 s since electron main start]
+Startup sequence completed: 490.2 ms [1.468 s since electron main start]
+2026-10-27T01:57:08.707Z core:Stopwatch INFO Deploy batch of 2 accepted plugins: 15.2 ms [0.462 s since backend process start]
+2026-10-27T01:57:08.707Z core:Stopwatch INFO Deploy plugins list: 28.4 ms [0.462 s since backend process start]
+2026-10-27T01:57:09.264Z core:WebsocketFrontendConnectionService INFO creating connection for 1
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-27T01:57:09.986Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 159.9 ms [1.139 s since frontend page start]
+2026-10-27T01:57:10.001Z core:FrontendStopwatch INFO Start frontend contributions: 363.4 ms [1.143 s since frontend page start]
+2026-10-27T01:57:10.001Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-27T01:57:10.001Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-27T01:57:10.001Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-27T01:57:10.033Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-27T01:57:10.034Z core:FrontendStopwatch INFO Initialize the workbench layout: 32.5 ms [1.188 s since frontend page start]
+2026-10-27T01:57:10.034Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-27T01:57:10.042Z core:FrontendStopwatch INFO [955bb9b3-bbfc-426d-b57d-0b0fc6d843a2] Waiting for backend deployment: 52.2 ms [1.196 s since frontend page start]
+2026-10-27T01:57:10.066Z core:FrontendStopwatch INFO [955bb9b3-bbfc-426d-b57d-0b0fc6d843a2] Sync of 2 plugins: 24.4 ms [1.220 s since frontend page start]
+2026-10-27T01:57:10.093Z plugin-ext:HostedPluginSupport INFO [955bb9b3-bbfc-426d-b57d-0b0fc6d843a2] Loading plugin contributions
+2026-10-27T01:57:10.093Z core:FrontendStopwatch INFO [955bb9b3-bbfc-426d-b57d-0b0fc6d843a2] Load contributions of 2 plugins: 1.5 ms [1.244 s since frontend page start]
+2026-10-27T01:57:10.095Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-27T01:57:10.095Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-27T01:57:10.206Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-27T01:57:10.239Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 17617] PLUGIN_HOST(17617) starting instance
+2026-10-27T01:57:10.309Z plugin-host INFO PLUGIN_HOST(17617): PluginManagerExtImpl/init()
+2026-10-27T01:57:10.413Z plugin-ext:HostedPluginSupport INFO [955bb9b3-bbfc-426d-b57d-0b0fc6d843a2] Starting plugins.
+2026-10-27T01:57:10.416Z core:FrontendStopwatch INFO [955bb9b3-bbfc-426d-b57d-0b0fc6d843a2] Start of 2 plugins: 322.9 ms [1.570 s since frontend page start]
+2026-10-27T01:57:10.862Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 803.4 ms [2.016 s since frontend page start]
+2026-10-27T01:57:10.862Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-27T01:57:10.862Z core:FrontendStopwatch INFO All frontend contributions settled: 1236.7 ms [2.017 s since frontend page start]
+2026-10-27T01:57:10.862Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1158.0 ms [2.617 s since backend process start]
+2026-10-27T01:57:18.202Z core:WebsocketFrontendConnectionService INFO creating connection for 2
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-27T01:57:18.237Z core:WebsocketFrontendConnectionService INFO socket closed
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-27T01:57:19.214Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 482.3 ms [1.630 s since frontend page start]
+2026-10-27T01:57:19.235Z core:FrontendStopwatch INFO Start frontend contributions: 653.8 ms [1.640 s since frontend page start]
+2026-10-27T01:57:19.235Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-27T01:57:19.235Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-27T01:57:19.235Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-27T01:57:19.263Z core:FrontendStopwatch INFO [b4a826f6-bdaf-461c-b825-c16dcf25ace7] Waiting for backend deployment: 38.4 ms [1.679 s since frontend page start]
+2026-10-27T01:57:19.288Z core:FrontendStopwatch INFO [b4a826f6-bdaf-461c-b825-c16dcf25ace7] Sync of 2 plugins: 23.9 ms [1.703 s since frontend page start]
+2026-10-27T01:57:19.314Z plugin-ext:HostedPluginSupport INFO [b4a826f6-bdaf-461c-b825-c16dcf25ace7] Loading plugin contributions
+2026-10-27T01:57:19.315Z core:FrontendStopwatch INFO [b4a826f6-bdaf-461c-b825-c16dcf25ace7] Load contributions of 2 plugins: 1.4 ms [1.721 s since frontend page start]
+2026-10-27T01:57:19.315Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-27T01:57:19.315Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-27T01:57:19.445Z core:ShellLayoutRestorer INFO <<< The layout has been successfully restored.
+2026-10-27T01:57:19.447Z core:FrontendStopwatch INFO Initialize the workbench layout: 211.2 ms [1.862 s since frontend page start]
+2026-10-27T01:57:19.448Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-27T01:57:19.739Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 17705] PLUGIN_HOST(17705) starting instance
+2026-10-27T01:57:19.804Z plugin-host INFO PLUGIN_HOST(17705): PluginManagerExtImpl/init()
+2026-10-27T01:57:19.829Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-27T01:57:19.871Z plugin-ext:HostedPluginSupport INFO [b4a826f6-bdaf-461c-b825-c16dcf25ace7] Starting plugins.
+2026-10-27T01:57:19.886Z core:FrontendStopwatch INFO [b4a826f6-bdaf-461c-b825-c16dcf25ace7] Start of 2 plugins: 578.7 ms [2.303 s since frontend page start]
+2026-10-27T01:57:20.307Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 809.8 ms [2.724 s since frontend page start]
+2026-10-27T01:57:20.307Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-27T01:57:20.307Z core:FrontendStopwatch INFO All frontend contributions settled: 1737.2 ms [2.724 s since frontend page start]
+2026-10-27T01:57:20.307Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 1679.3 ms [12.062 s since backend process start]
+2026-10-27 09:57:52.881 Electron[17518:52112666] TSM AdjustCapsLockLEDForKeyTransitionHandling - _ISSetPhysicalKeyboardCapsLockLED Inhibit
+2026-10-27T01:57:57.395Z core:WebsocketFrontendConnectionService INFO socket closed
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-27T01:57:57.508Z core:WebsocketFrontendConnectionService INFO closing connection for 2
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino-language'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-27T01:57:57.508Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+2026-10-27T01:57:57.508Z core:WebsocketFrontendConnectionService INFO creating connection for 2
+2026-10-27T01:57:57.767Z core:FrontendStopwatch WARN Frontend CommonFrontendContribution.configure took longer than the expected maximum 100 milliseconds: 104.2 ms [0.375 s since frontend page start]
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/nodu-launcher-main'.
+2026-10-27T01:57:58.649Z core:FrontendStopwatch WARN Frontend NoduFileDocsContribution.onStart took longer than the expected maximum 100 milliseconds: 809.0 ms [1.259 s since frontend page start]
+2026-10-27T01:57:58.772Z core:FrontendStopwatch INFO Start frontend contributions: 1080.1 ms [1.323 s since frontend page start]
+2026-10-27T01:57:58.772Z core:FrontendApplicationStateService INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-27T01:57:58.780Z core:FrontendApplicationStateService INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-27T01:57:58.784Z core:ShellLayoutRestorer INFO >>> Restoring the layout state...
+2026-10-27T01:57:58.784Z core:ShellLayoutRestorer INFO <<< Nothing to restore.
+2026-10-27T01:57:58.785Z core:FrontendStopwatch INFO [099a2b8f-6f2d-4f4e-ae8c-15c210af0bd0] Waiting for backend deployment: 66.7 ms [1.390 s since frontend page start]
+2026-10-27T01:57:58.806Z core:FrontendStopwatch INFO [099a2b8f-6f2d-4f4e-ae8c-15c210af0bd0] Sync of 2 plugins: 21.6 ms [1.412 s since frontend page start]
+2026-10-27T01:57:58.859Z plugin-ext:HostedPluginSupport INFO [099a2b8f-6f2d-4f4e-ae8c-15c210af0bd0] Loading plugin contributions
+2026-10-27T01:57:58.859Z core:FrontendStopwatch INFO [099a2b8f-6f2d-4f4e-ae8c-15c210af0bd0] Load contributions of 2 plugins: 1.1 ms [1.441 s since frontend page start]
+2026-10-27T01:57:58.861Z monaco:TextmateRegistry WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-27T01:57:58.861Z monaco:TextmateRegistry WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-27T01:57:58.871Z core:FrontendStopwatch WARN Frontend TerminalFrontendContribution.initializeLayout took longer than the expected maximum 100 milliseconds: 131.6 ms [1.474 s since frontend page start]
+2026-10-27T01:57:58.974Z core:FrontendStopwatch INFO Initialize the workbench layout: 228.8 ms [1.561 s since frontend page start]
+2026-10-27T01:57:58.974Z core:FrontendApplicationStateService INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-27T01:57:59.362Z ai-core:DefaultSkillService INFO Loaded 20 skills
+2026-10-27T01:57:59.467Z plugin-ext:HostedPluginProcess INFO [hosted-plugin: 18189] PLUGIN_HOST(18189) starting instance
+2026-10-27T01:57:59.519Z plugin-host INFO PLUGIN_HOST(18189): PluginManagerExtImpl/init()
+2026-10-27T01:57:59.693Z plugin-ext:HostedPluginSupport INFO [099a2b8f-6f2d-4f4e-ae8c-15c210af0bd0] Starting plugins.
+2026-10-27T01:57:59.714Z core:FrontendStopwatch INFO [099a2b8f-6f2d-4f4e-ae8c-15c210af0bd0] Start of 2 plugins: 880.2 ms [2.322 s since frontend page start]
+2026-10-27T01:57:59.776Z core:FrontendStopwatch INFO Replace loading indicator with ready workbench UI (animation): 805.6 ms [2.386 s since frontend page start]
+2026-10-27T01:57:59.776Z core:Stopwatch INFO Frontend application startup sequence completed (async work may still be pending): 2022.7 ms [51.531 s since backend process start]
+2026-10-27T01:57:59.777Z core:FrontendApplicationStateService INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-27T01:57:59.777Z core:FrontendStopwatch INFO All frontend contributions settled: 2142.4 ms [2.386 s since frontend page start]
+2026-10-27T01:58:29.491Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:29.491Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:29.495Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:29.506Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:29.506Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:29.507Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:29.507Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.164Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.164Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.166Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.166Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.166Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.168Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.184Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.184Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.184Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.184Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.184Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.185Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.185Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.188Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.190Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.192Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.192Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.192Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.192Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.194Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.195Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.196Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.196Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.197Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.207Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.207Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.218Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.226Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.226Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.235Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.239Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.239Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.328Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.337Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.337Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.340Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.343Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.343Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.834Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.835Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.864Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.865Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.865Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.865Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.865Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.865Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.865Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.866Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.868Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.868Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.868Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.868Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.869Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.870Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.872Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.872Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.873Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.873Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.873Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.append (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200298:14)
+    at Socket.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18051:76)
+    at Socket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2026-10-27T01:58:30.875Z plugin-host ERROR Error: Channel has been closed
+    at OutputChannelImpl.validate (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200327:17)
+    at OutputChannelImpl.appendLine (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/electron-app/lib/backend/plugin-host.js:200302:14)
+    at LanguageClient2.logOutputMessage (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:15481:28)
+    at LanguageClient2.error (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:15478:14)
+    at ChildProcess.<anonymous> (/Users/wangwei/.codex/worktrees/nodu-02-integration/k210-studio/desktop/plugins/nodu-arduino-language/extension.cjs:18090:22)
+    at ChildProcess.emit (node:events:509:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:295:12)
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/nodu-launcher-main'.
+2026-10-27T01:58:53.282Z core:WebsocketFrontendConnectionService INFO socket closed
+2026-10-27T01:58:53.282Z core:WebsocketFrontendConnectionService INFO closing connection for 2
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/localization-server'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/os'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/logger'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/commands'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/messageService'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/remote-filesystem'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/envs'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/workspace'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyboard'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickInput'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/stopwatch'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/application'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/i18n'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/debug'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/task'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/quickPick'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/shell-terminal'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/search'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/hostedPlugin'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-ext'.
+2026-10-27T01:58:53.282Z core:DefaultMessagingService INFO Closing channel on service path '/services/plugin-paths'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-embedded'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-tutor'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-device'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-resources'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-projects'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/cli-preferences'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanagerserver'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpservermanager'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/mcpOAuthFrontendDelegate'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/search-in-workspace'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/nodu-arduino-language'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/terminals/1428655485'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/request-service'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/keyStore'.
+2026-10-27T01:58:53.283Z core:DefaultMessagingService INFO Closing channel on service path '/services/languagePackService'.
+2026-10-27T01:58:53.283Z core:BackendApplication INFO >>> Stopping backend contributions...
+2026-10-27T01:58:53.283Z core:BackendApplication INFO <<< All backend contributions have been stopped.

@@ -13,7 +13,7 @@ function component(file,name,props){
  useEffect(fn,deps){const i=cursor++;if(!slots[i]||!same(slots[i].deps,deps)){const previous=slots[i];slots[i]={deps,cleanup:previous?.cleanup};effects.push(()=>{previous?.cleanup?.();slots[i].cleanup=fn();});}}
  };
  const filename=path.join(__dirname,'../lib',file), actualRequire=createRequire(filename), exports={};
- vm.runInNewContext(fs.readFileSync(filename,'utf8'),{exports,require:n=>n==='@theia/core/shared/react'?React:n.includes('react-dialog')?{ReactDialog:class{}}:n.endsWith('/dialogs')?{}:n.includes('nodu-embedded-model')?{EmbeddedError:class extends Error{}}:n.includes('scope-theme')?{}:n.includes('nodu-launcher-pages')?{SettingsPage:'settings-component',RowMenu:'row-menu'}:n.includes('nodu-project-icon')?{ProjectIcon:'project-icon'}:n.includes('scope-brand')?{NoduBrand:'brand'}:n.includes('nodu-new-project')?{NewProjectForm:'form-component'}:actualRequire(n),window:{addEventListener:(k,v)=>listeners.set(k,v),removeEventListener:k=>listeners.delete(k)},document:{activeElement:null},navigator:{userAgent:'Mac'},requestAnimationFrame:f=>f(),Error,Promise,String});
+ vm.runInNewContext(fs.readFileSync(filename,'utf8'),{exports,require:n=>n==='@theia/core/shared/react'?React:n.endsWith('.css')?{}:n.includes('nodu-select')?{NoduSelect:'nodu-select'}:n.includes('react-dialog')?{ReactDialog:class{}}:n.endsWith('/dialogs')?{}:n.includes('nodu-embedded-model')?{EmbeddedError:class extends Error{}}:n.includes('scope-theme')?{}:n.includes('nodu-launcher-pages')?{SettingsPage:'settings-component',RowMenu:'row-menu'}:n.includes('nodu-project-icon')?{ProjectIcon:'project-icon',ChipMark:'chip-mark',FrameworkMark:'framework-mark'}:n.includes('scope-brand')?{NoduBrand:'brand'}:n.includes('nodu-new-project')?{NewProjectForm:'form-component'}:actualRequire(n),window:{addEventListener:(k,v)=>listeners.set(k,v),removeEventListener:k=>listeners.delete(k)},document:{activeElement:null},navigator:{userAgent:'Mac'},requestAnimationFrame:f=>f(),Error,Promise,String});
  const render=()=>{cursor=0;tree=exports[name](props);for(const effect of effects.splice(0))effect();return tree;};
  const nodes=()=>{const all=[];const walk=v=>{if(Array.isArray(v))v.forEach(walk);else if(v&&typeof v==='object'){all.push(v);walk(v.props?.children);}};walk(tree);return all;};
  const text=n=>(n?.props?.children??[]).flat(Infinity).map(x=>typeof x==='object'?text(x):x||'').join('');
@@ -44,6 +44,32 @@ test('directory picker failure is handled and releases form busy state',async()=
 });
 test('unmounted creation cannot open a project or call parent handlers',async()=>{
  const held=defer();let opened=0;const c=component('browser/nodu-new-project.js','NewProjectForm',{parent:'/tmp',family:'stm32f103',model:{call:()=>held.promise},dialogs:{},onCreated(){opened++;},close(){opened++;}});c.render();c.tree.props.onSubmit({preventDefault(){}});c.unmount();held.resolve({path:'/tmp/project'});await c.flush();assert.equal(opened,0);
+});
+
+test('ESP32 new project defaults to Arduino and submits its framework with both local marks',async()=>{
+ const calls=[];const c=component('browser/nodu-new-project.js','NewProjectForm',{parent:'/tmp',family:'esp32',model:{call:async(...args)=>{calls.push(args);return {path:'/tmp/hello-esp32'};}},dialogs:{},onCreated(){},close(){}});
+ c.render();const radios=c.nodes().filter(n=>n.props?.role==='radio');
+ assert.deepEqual(radios.map(c.text),['Arduino','ESP-IDF']);assert.deepEqual(radios.map(n=>n.props['aria-checked']),[true,false]);
+ assert.deepEqual(c.nodes().filter(n=>n.type==='framework-mark').map(n=>n.props.framework),['arduino','esp-idf']);
+ assert.equal(c.nodes().filter(n=>n.type==='select').length,0);assert.equal(c.nodes().filter(n=>n.type==='nodu-select').length,2);
+ c.tree.props.onSubmit({preventDefault(){}});await c.flush();assert.equal(calls[0][1].framework,'arduino');
+});
+test('framework and chip changes preserve form edits and submit ESP-IDF explicitly',async()=>{
+ const calls=[];const c=component('browser/nodu-new-project.js','NewProjectForm',{parent:'/tmp',family:'esp32',model:{call:async(...args)=>{calls.push(args);return {path:'/tmp/demo'};}},dialogs:{},onCreated(){},close(){}});
+ c.render();c.find(n=>n.props?.id==='nodu-project-name').props.onChange({currentTarget:{value:'my-s3-app'}});c.render();
+ c.find(n=>n.props?.role==='radio'&&c.text(n)==='ESP-IDF').props.onClick();c.render();
+ c.find(n=>n.type==='button'&&c.text(n)==='ESP32-S3').props.onClick();c.render();
+ assert.equal(c.find(n=>n.props?.id==='nodu-project-name').props.value,'my-s3-app');
+ assert.equal(c.find(n=>n.props?.role==='radio'&&c.text(n)==='ESP-IDF').props['aria-checked'],true);
+ c.tree.props.onSubmit({preventDefault(){}});await c.flush();assert.equal(calls[0][1].framework,'esp-idf');assert.equal(calls[0][1].chip,'esp32s3');
+});
+test('framework keyboard controls select once and stay out of non-ESP32 requests',async()=>{
+ const calls=[];const c=component('browser/nodu-new-project.js','NewProjectForm',{parent:'/tmp',family:'esp32',model:{call:async(...args)=>{calls.push(args);return {path:'/tmp/demo'};}},dialogs:{},onCreated(){},close(){}});
+ c.render();let prevented=0;const event={key:'ArrowRight',nativeEvent:{isComposing:false},preventDefault(){prevented++;},stopPropagation(){}};
+ c.find(n=>n.props?.role==='radio'&&c.text(n)==='Arduino').props.onKeyDown(event);c.render();
+ assert.equal(prevented,1);assert.equal(c.find(n=>n.props?.role==='radio'&&c.text(n)==='ESP-IDF').props['aria-checked'],true);
+ c.find(n=>n.type==='button'&&c.text(n)==='K210').props.onClick();c.render();assert.equal(c.nodes().filter(n=>n.props?.role==='radio').length,0);
+ c.tree.props.onSubmit({preventDefault(){}});await c.flush();assert.equal(Object.hasOwn(calls[0][1],'framework'),false);
 });
 
 test('operation failures use one dismissible notice while load failures stay beside retry',async()=>{

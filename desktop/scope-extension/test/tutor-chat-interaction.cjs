@@ -3,7 +3,7 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm'), ts = require('typescript');
-function mount() {
+function mount(transfer) {
     let cursor=0, tree; const slots=[], effects=[], calls=[], observers=[];
     const equal=(a,b)=>a&&b&&a.length===b.length&&a.every((v,i)=>Object.is(v,b[i]));
     const React={createElement:(type,props,...children)=>({type,props:{...props,children:type==='Context'?[children[0]({type:'button',props:{'aria-label':'添加代码上下文'}})]:children}}),Fragment:'fragment',
@@ -32,7 +32,7 @@ function mount() {
         goalState:{status:'none',revision:0},messages:{ask:[{id:'1',role:'assistant',text:'first',status:'pending'}],teach:[]},drafts:{ask:'',teach:''},
         canRetry:()=>false,setDraft(v){this.drafts[this.mode]=v;},send(){calls.push('send');this.drafts[this.mode]='';},cancel(){calls.push('stop');this.busy=undefined;}};
     function nodes(){const out=[];function visit(v){if(Array.isArray(v))v.forEach(visit);else if(v&&typeof v==='object'){out.push(v);visit(v.props?.children);}}visit(tree);return out;}
-    function render(){cursor=0;tree=exports.TutorPanel({tutor,run(){}});for(const n of nodes()){if(n.props?.ref)n.props.ref.current=n.type==='textarea'?input:log;}for(const effect of effects.splice(0))effect();}
+    function render(){cursor=0;tree=exports.TutorPanel({tutor,run(){},transfer});for(const n of nodes()){if(n.props?.ref)n.props.ref.current=n.type==='textarea'?input:log;}for(const effect of effects.splice(0))effect();}
     render();
     return {tutor,log,input,calls,render,Widget:exports.NoduTutorWidget,resize(width,height){input.clientWidth=width;input.scrollHeight=height;observers.forEach(f=>f());},find:fn=>nodes().find(fn),key(e){nodes().find(n=>n.type==='textarea').props.onKeyDown({preventDefault(){},nativeEvent:{isComposing:false},keyCode:0,shiftKey:false,...e});}};
 }
@@ -171,6 +171,48 @@ test('custom mode menu preserves selected focus, arrow navigation and Escape ret
     }
 });
 
+function actionsHarness(overrides = {}) {
+    let cursor = 0, tree; const slots = [], calls = [], exports = {};
+    const React = { createElement: (type, props, ...children) => ({ type, props: { ...props, children } }), Fragment: 'fragment',
+        useState(initial) { const i = cursor++; if (!(i in slots)) slots[i] = typeof initial === 'function' ? initial() : initial; return [slots[i], value => slots[i] = value]; },
+        useRef(initial) { const i = cursor++; return slots[i] ??= { current: initial }; }, useCallback: fn => fn };
+    const code = ts.transpileModule(fs.readFileSync(path.join(__dirname, '../src/browser/nodu-tutor-chat-controls.tsx'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.React } }).outputText;
+    vm.runInNewContext(code, { exports, Error, require: id => id.endsWith('/react') ? React : { createPortal: value => value } });
+    const tutor = { workspaceId: 'project-one', mode: 'ask', messages: { ask: [] }, conversationName: () => '原始完整名称',
+        renameConversation: (...args) => calls.push(['rename', ...args]), setConversationArchived: (...args) => calls.push(['archive', ...args]), ...overrides };
+    const render = () => { cursor = 0; tree = exports.ConversationActions({ tutor, entry: { id: 'chat-one', mode: 'ask', title: '短标题', archived: false }, anchor: { isConnected: true, focus: () => calls.push('anchor') }, close: () => calls.push('close'), completed: () => calls.push('fallback-focus') }); };
+    render(); return { tutor, calls, render, find: fn => descendants(tree).find(fn), text: () => content(tree) };
+}
+test('rename uses the full editable name and completes without selecting or sending', () => {
+    const c = actionsHarness(); c.find(n => n.props?.role === 'menuitem' && content(n) === '重命名').props.onClick(); c.render();
+    assert.equal(c.find(n => n.type === 'input').props.value, '原始完整名称');
+    c.find(n => n.type === 'input').props.onChange({ target: { value: '串口教学' } }); c.render();
+    c.find(n => n.type === 'form').props.onSubmit({ preventDefault() {} });
+    assert.deepEqual(c.calls, [['rename', 'chat-one', 'ask', '串口教学'], 'close', 'anchor', 'fallback-focus']);
+});
+test('archive supplies a focus fallback when its row disappears', () => {
+    const c = actionsHarness(); c.find(n => n.props?.role === 'menuitem' && content(n) === '归档对话').props.onClick();
+    assert.deepEqual(c.calls, [['archive', 'chat-one', 'ask', true], 'close', 'anchor', 'fallback-focus']);
+});
+test('management blocks stale busy, loading and workspace handlers and keeps failures open', () => {
+    for (const pending of [{ busy: {} }, { conversationLoading: true }, { workspaceId: 'other-project' }]) {
+        const c = actionsHarness(), action = c.find(n => n.props?.role === 'menuitem' && content(n) === '归档对话');
+        Object.assign(c.tutor, pending); action.props.onClick(); assert.deepEqual(c.calls, []);
+    }
+    const c = actionsHarness({ setConversationArchived() { throw new Error('对话暂未保存'); } });
+    c.find(n => n.props?.role === 'menuitem' && content(n) === '归档对话').props.onClick(); c.render();
+    assert.ok(c.text().includes('对话暂未保存')); assert.deepEqual(c.calls, []);
+});
+test('Chinese composition Enter does not submit a rename and cancellation changes nothing', () => {
+    const c = actionsHarness(); c.find(n => n.props?.role === 'menuitem' && content(n) === '重命名').props.onClick(); c.render();
+    for (const composition of [{ isComposing: true, keyCode: 0 }, { isComposing: false, keyCode: 229 }]) {
+        let prevented = false, stopped = false;
+        c.find(n => n.type === 'form').props.onKeyDown({ key: 'Enter', keyCode: composition.keyCode, nativeEvent: composition, preventDefault() { prevented = true; }, stopPropagation() { stopped = true; } });
+        assert.ok(prevented && stopped); assert.deepEqual(c.calls, []);
+    }
+    c.find(n => n.type === 'button' && content(n) === '取消').props.onClick(); assert.deepEqual(c.calls, ['close', 'anchor']);
+});
+
 function historyHarness(component, tutor, callbacks = {}) {
     let cursor=0,tree;const slots=[],calls=[],exports={};
     const React={createElement:(type,props,...children)=>({type,props:{...props,children}}),Fragment:'fragment',
@@ -277,4 +319,17 @@ test('titlebar toggles persistent navigation independently of history and retain
     assert.equal(c.find(n=>n.props?.['aria-label']==='历史对话'),undefined);assert.equal(tutor.historyOpen,false);
     trigger().props.onClick();c.render();assert.equal(trigger().props['aria-expanded'],false);
     assert.ok(c.find(n=>n.props?.['aria-label']==='历史对话'));
+});
+
+
+test('composer paste and file drop route through context transfer without sending or replacing the draft',()=>{
+ const events=[],transfer={acceptsDrop:data=>data.types.includes('theia-editor-dnd'),paste(event,tutor){events.push(['paste',event,tutor]);return true;},drop(event,tutor){events.push(['drop',event,tutor]);return true;}};
+ const c=mount(transfer);c.tutor.drafts.ask='保留问题';c.render();const paste={clipboardData:{}};
+ c.find(n=>n.type==='textarea').props.onPaste({nativeEvent:paste});assert.equal(events[0][1],paste);assert.equal(events[0][2],c.tutor);
+ const data={types:['theia-editor-dnd']};let prevented=0,stopped=0;
+ c.find(n=>n.type==='form').props.onDragOver({dataTransfer:data,preventDefault(){prevented++;},stopPropagation(){stopped++;}});c.render();
+ assert.equal(prevented,1);assert.equal(stopped,1);assert.equal(data.dropEffect,'copy');assert.match(c.find(n=>n.type==='form').props.className,/dragging/);
+ const drop={dataTransfer:data};c.find(n=>n.type==='form').props.onDrop({nativeEvent:drop});c.render();
+ assert.equal(events[1][1],drop);assert.doesNotMatch(c.find(n=>n.type==='form').props.className,/dragging/);
+ assert.deepEqual(c.calls,['focus']);assert.equal(c.tutor.drafts.ask,'保留问题');
 });
