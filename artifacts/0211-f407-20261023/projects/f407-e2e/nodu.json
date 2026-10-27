@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "kind": "stm32-hal",
+  "name": "f407-e2e",
+  "target": {
+    "mcu": "STM32F407ZGTx",
+    "board": "chip-f407zg@1"
+  },
+  "sdk": "stm32cube-f4@1.28.3",
+  "build": {
+    "preset": "debug",
+    "printfFloat": false
+  },
+  "flash": {
+    "method": "stlink"
+  },
+  "monitor": {
+    "baud": 115200,
+    "encoding": "utf-8",
+    "lineEnding": "lf"
+  }
+}

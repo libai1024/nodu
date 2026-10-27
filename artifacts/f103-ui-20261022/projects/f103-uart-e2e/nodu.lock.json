@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "createdAt": "2026-10-22T14:29:50Z",
+  "sdk": {
+    "id": "stm32cube-f1",
+    "version": "1.8.7",
+    "commit": "d12e75247d5bcedc734f829b394517ab4c2726e3",
+    "hal": "fee494a92b5ad331f92ad21f76c66a5cb83773ee",
+    "device": "c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22"
+  },
+  "toolkit": {
+    "id": "nodu-stm32-toolkit",
+    "version": "2026.11.0-dev"
+  },
+  "board": {
+    "id": "chip-f103c8",
+    "version": 1,
+    "sha256": "4c54bedec9299c0029c463986f16f6974f2fcbc913bd568a9b000c3fee7e3fb1"
+  },
+  "template": {
+    "id": "uart-hello",
+    "version": 1,
+    "files": {
+      ".clang-format": "dd7d118c3c33a89284e3b0d7619c1511c693e62dc484b52dea3fe9cbaea7f6db",
+      ".clangd": "4700610beac3f58035263bb139b1444ae308b7de3fa49458f0f3fca53b243e92",
+      ".gitignore": "fac77134e556ad4ae590f814aa30065fbccb4d7e1bb71ed673a99787b95527cf",
+      "App/README.md": "9fb33d07337b1ae3f51f119a9ba10288b1c37f9e92e318bed6993f7ef8060484",
+      "Board/board.h": "5ad1c318b2a3ef873dbf56ee89b8c2ed0f8b7ab98ac38aa96e9c70198332bec6",
+      "Board/board_clock.c": "d6cdd5831abe792639e22a2ba65af7bdb223e64ac011e399016a05ab0d945b52",
+      "Board/board_uart.c": "97eaacc020da71ea2f8cc3ddc1507232daa02e57546299e3fe380eec201a4e9b",
+      "CMakeLists.txt": "65cff6554b34a89dc76d3061ac59462fbe43afa843608fece4934204d3199a1e",
+      "CMakePresets.json": "7b6f11ef2bbda8ec9c96a5ff5e64ea75c54a9272391c11b8de25a0e113a95e83",
+      "Core/Inc/main.h": "6addbd7840b7010b2b99494d4777299042fbe0a384ce6e2d1dcb3fb4188237d1",
+      "Core/Inc/stm32f1xx_hal_conf.h": "430697bcfbea0219b549259fccbba3e516d6ccfa5898b93c7956e14b7044a90b",
+      "Core/Inc/stm32f1xx_it.h": "ffdaa84e9064dbeef2a26b15e2f02b6099aca685702547c4452c0143e1c650b0",
+      "Core/Src/main.c": "7f89a7dd8c1d5570396bbce6cc306ffae9972441c3a9bf09e72f458e9d4ba3ec",
+      "Core/Src/stm32f1xx_hal_msp.c": "ed48519831498348e6924ded6f8918f50265c608466dc2ca0effee7544a0ed32",
+      "Core/Src/stm32f1xx_it.c": "100b4409c301e199bfed798ab7d77c4bce7b2e5bee42cce09a6da80e20033b96",
+      "Core/Src/syscalls.c": "6ee46aa9a9d6fc474af0a9b896c89a33d504c8fecedc4297678dcd41b9b84239",
+      "Core/Src/system_stm32f1xx.c": "8465bf3fe9057adecd8b4561403836d1fa2152d3cb088831623da3f91d86ec0a",
+      "Linker/STM32F103C8Tx_FLASH.ld": "129d6205a4038be2f87c4215d15632a349c33a4c44fbb6543233cad7409cd5a0",
+      "Startup/startup_stm32f103xb.s": "a9a5fc7ed5ff617527dd98b3092830f4d17ed4bf57c99eac2c53bdb514ce138c",
+      "cmake/arm-gcc.cmake": "2614808663a3da232ff336cb888ce61d8a20bc34d818b90033f845e158acf56f",
+      "cmake/nodu-target.cmake": "dddd9f362c6480294de2abce37561af35b29cdc5b42e860f4c56e53d54fa57b3",
+      "cmake/nodu.cmake": "c31b0c27a31eed536ac377defc20e4847fb28fc2ea027bd4c4dca9796d819abe"
+    }
+  }
+}

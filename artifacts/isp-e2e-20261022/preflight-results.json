@@ -1,0 +1,160 @@
+{
+  "tests": [
+    {
+      "name": "monitor loan persists in status and blocks competing changes",
+      "passed": true
+    },
+    {
+      "name": "ROM timeout releases loan and preserves communication",
+      "passed": true
+    }
+  ],
+  "events": [
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "flash.started",
+      "data": {
+        "runId": "r-20261022-145821-78bc03",
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/f103-ui-20261022/projects/f103-uart-e2e",
+        "method": "uart",
+        "restore": false,
+        "bytes": 10088,
+        "erase": {
+          "unit": "page",
+          "count": 10,
+          "bytes": 10240,
+          "label": "10 页（10 KB）"
+        }
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "lent",
+        "message": null
+      }
+    },
+    {
+      "event": "flash.awaitUser",
+      "data": {
+        "runId": "r-20261022-145821-78bc03",
+        "kind": "enterBoot",
+        "port": "/dev/cu.usbserial-31230",
+        "boot": {
+          "boot0": "BOOT0",
+          "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+        }
+      }
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261022-145821-78bc03",
+        "step": "identify",
+        "state": "running"
+      }
+    },
+    {
+      "event": "flash.done",
+      "data": {
+        "ok": false,
+        "runId": "r-20261022-145821-78bc03",
+        "code": "cancelled",
+        "message": "已停止。",
+        "detail": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "flash.started",
+      "data": {
+        "runId": "r-20261022-145823-4d43da",
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/f103-ui-20261022/projects/f103-uart-e2e",
+        "method": "uart",
+        "restore": false,
+        "bytes": 10088,
+        "erase": {
+          "unit": "page",
+          "count": 10,
+          "bytes": 10240,
+          "label": "10 页（10 KB）"
+        }
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "lent",
+        "message": null
+      }
+    },
+    {
+      "event": "flash.awaitUser",
+      "data": {
+        "runId": "r-20261022-145823-4d43da",
+        "kind": "enterBoot",
+        "port": "/dev/cu.usbserial-31230",
+        "boot": {
+          "boot0": "BOOT0",
+          "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+        }
+      }
+    },
+    {
+      "event": "flash.step",
+      "data": {
+        "runId": "r-20261022-145823-4d43da",
+        "step": "identify",
+        "state": "running"
+      }
+    },
+    {
+      "event": "flash.done",
+      "data": {
+        "ok": false,
+        "runId": "r-20261022-145823-4d43da",
+        "code": "romTimeout",
+        "message": "60 秒内没有检测到芯片的串口引导程序。检查 BOOT0 是否接 1、是否按了复位键，以及 TX、RX 是否交叉连接。",
+        "detail": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    }
+  ]
+}

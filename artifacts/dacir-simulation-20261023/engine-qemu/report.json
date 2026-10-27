@@ -1,0 +1,37 @@
+{
+  "engine": "qemu",
+  "elf": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim/build/debug/firmware.elf",
+  "sha256": "7dbeaa379eaec5d58ae35cc7a767fb4620e5c9ebae2fbe0b60105c3cc5fc847b",
+  "checks": [
+    {
+      "name": "baseline",
+      "sample": {
+        "case": "demo_climate",
+        "event": "sample",
+        "sample": 1,
+        "uptime_ms": 1033,
+        "temperature_tenths": 260,
+        "humidity_tenths": 550,
+        "dht_status": 0,
+        "oled_status": 0
+      },
+      "oled_nonblank": true
+    },
+    {
+      "name": "changed-input",
+      "sample": {
+        "case": "demo_climate",
+        "event": "sample",
+        "sample": 2,
+        "uptime_ms": 2067,
+        "temperature_tenths": 330,
+        "humidity_tenths": 650,
+        "dht_status": 0,
+        "oled_status": 0
+      },
+      "oled_nonblank": true
+    }
+  ],
+  "image_id": "sha256:54fd48db26bc757590b561f5116a7fb32958ac32ddc106114e9deeed424acce7",
+  "status": "PASS"
+}

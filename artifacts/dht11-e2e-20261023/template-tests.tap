@@ -1,0 +1,14 @@
+✔ templates are F103C8-only; existing default stays first (0.815916ms)
+✔ all templates preserve upstream source/circuit bytes and lock independent copies (1031.087334ms)
+✔ corrupt or symlinked template pack fails before creating a project (348.311917ms)
+✔ concurrent creation has one winner without deleting its files (132.190958ms)
+﹣ release sync detects changes and never alters existing projects (0.12925ms) # SKIP
+﹣ upstream version upgrade changes new projects only; invalid upstream leaves the pack intact (0.033041ms) # SKIP
+ℹ tests 6
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 1631.254667

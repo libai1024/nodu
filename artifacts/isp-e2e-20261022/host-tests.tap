@@ -1,0 +1,17 @@
+▶ STM32 real-toolchain workflows
+  ✔ unknown LED is hidden and RPC cannot bypass verification (41.877375ms)
+  ✔ f103: build/export/standalone build yields identical BIN (1368.549875ms)
+  ✔ f407: build/export/standalone build yields identical BIN (1385.519834ms)
+  ✔ accepting toolkit version preserves template metadata (25.081125ms)
+  ✔ CubeMX import preserves CMake; configure requires trust (1251.500625ms)
+  ✔ source changed during build invalidates artifact (1493.864459ms)
+  ✔ cancel real Ninja child process and release build lock (568.6365ms)
+✔ STM32 real-toolchain workflows (6192.2005ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6232.152791

@@ -1,0 +1,1565 @@
+{
+  "project": {
+    "projectId": "25e8010b-73f6-4e14-a14c-5eb949c37bb4",
+    "path": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-dht11-uart",
+    "name": "f103-dht11-uart",
+    "revision": 11,
+    "domainRevisions": {
+      "source": 5,
+      "circuit": 6,
+      "layout": 0,
+      "environment": 0
+    },
+    "manifest": {
+      "schemaVersion": 1,
+      "name": "f103-dht11-uart",
+      "templateId": "temperature-humidity",
+      "engineId": "qemu",
+      "target": {
+        "mcu": "STM32F103C8T6",
+        "clockHz": 72000000
+      },
+      "build": {
+        "configHeader": "include/config.h"
+      },
+      "projectId": "25e8010b-73f6-4e14-a14c-5eb949c37bb4",
+      "mcu": "STM32F103C8T6",
+      "clockHz": 72000000
+    },
+    "files": [
+      {
+        "path": ".clangd",
+        "hash": "988bafdb84aab6fdd4c719c812436eca94deef3e129cb1c477b3e763c51de050",
+        "size": 82
+      },
+      {
+        "path": ".gitignore",
+        "hash": "16978f1c5260592bb29b641035015b17e8aae4c6bd70b0bfa0b63ba4cb214adb",
+        "size": 51
+      },
+      {
+        "path": ".nodu/artifacts/6e74dd6d8df569a16ab9f99a13bb57c59adb5ae3b62d19a2baf457f3bdc1b7b1/artifact.json",
+        "hash": "d9b4b82b8c52d2a7f61fd0e9702c2de9cc3ee831d54cba2fdb5388f8949f53dd",
+        "size": 1161
+      },
+      {
+        "path": ".nodu/artifacts/6e74dd6d8df569a16ab9f99a13bb57c59adb5ae3b62d19a2baf457f3bdc1b7b1/firmware.bin",
+        "hash": "28844e2f1db5e55369362a84a2e0c2778dc4ffe159ec711b2705b249e4849bef",
+        "size": 5940
+      },
+      {
+        "path": ".nodu/artifacts/6e74dd6d8df569a16ab9f99a13bb57c59adb5ae3b62d19a2baf457f3bdc1b7b1/firmware.elf",
+        "hash": "27d0bcb3c5a73859d348b769de39825b8aafd82085c9dc7b2288fbee319ba084",
+        "size": 846692
+      },
+      {
+        "path": ".nodu/artifacts/6e74dd6d8df569a16ab9f99a13bb57c59adb5ae3b62d19a2baf457f3bdc1b7b1/firmware.hex",
+        "hash": "6da6f30ab69863b29b05a5ba6981888114eaf8c95743c1f451f051e3cd0503e7",
+        "size": 16780
+      },
+      {
+        "path": ".nodu/artifacts/6e74dd6d8df569a16ab9f99a13bb57c59adb5ae3b62d19a2baf457f3bdc1b7b1/firmware.map",
+        "hash": "661bf2b1bbf895d83e9823ea0c677ffd6beb6cdabd079122b4aaae656b20b284",
+        "size": 937264
+      },
+      {
+        "path": ".nodu/build.lock",
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": ".nodu/configure.json",
+        "hash": "1cdb92417666be8bb3062d3d9e23270e25ef4d2992de063fb30909c0ef23da18",
+        "size": 155
+      },
+      {
+        "path": ".nodu/current-build.json",
+        "hash": "28cc62bb8a772dd16c3e3a35a60e2ee0ff469a422960e79f785d1464ea2a6703",
+        "size": 290
+      },
+      {
+        "path": "CMakeLists.txt",
+        "hash": "7c37d0ec1f062fec9602800be8e9dca6d80fa0b78d0a51bd2965ae970ed3b423",
+        "size": 3178
+      },
+      {
+        "path": "circuit.json",
+        "hash": "fa19bca850c34fc33c68ca11afb70ef7b3156daa978d3cf2399bed934a0ff175",
+        "size": 552
+      },
+      {
+        "path": "cmake/gcc-arm-none-eabi.cmake",
+        "hash": "2614808663a3da232ff336cb888ce61d8a20bc34d818b90033f845e158acf56f",
+        "size": 1183
+      },
+      {
+        "path": "components.lock.json",
+        "hash": "d178758ea2e1ec62395f07efa6b95e9a628f8d9778cd3d325206526e13ce7927",
+        "size": 601
+      },
+      {
+        "path": "drivers/nun-dx/LICENSE",
+        "hash": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+        "size": 34523
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_fifo.c",
+        "hash": "782f745f1943019a7c762d82f6186383d65327dd99402887b47bd4fe42de5399",
+        "size": 13149
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_fifo.h",
+        "hash": "d2faf459a5163827a3c06a686bd316f22fb18f57bb5e755ebb2b0767dfc455ba",
+        "size": 2010
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_font.c",
+        "hash": "fd5ef65e6b5be88eb1221537a2c1491f12a9058e90614079a38075875e95db97",
+        "size": 16479
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_font.h",
+        "hash": "19d5f19cd03ad9e9d1dbf0512886787ad6d4b73588ea407844e37106c23a8c6c",
+        "size": 1598
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_font16.c",
+        "hash": "a3c175034567b2c62b3e00079e2922923638aae852d3dd81b62935d4fd8dba95",
+        "size": 59410
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_font16.h",
+        "hash": "377ef173b7391c1ba4614ccf293c7413667d6cd0e31ee80c7448538e7d7af0d9",
+        "size": 1104
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_headfile.h",
+        "hash": "e7f5191c84e094c808b424f5ab10000ec70afcce9749afaf98d16e5260097ad1",
+        "size": 1608
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_interrupt.c",
+        "hash": "790c2e5bd11ec7d046e897ddb191284c1b13819587c1ba8023b234c99f55fe38",
+        "size": 770
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_interrupt.h",
+        "hash": "fd25a5892a466c34c06927ab7b2d208fc7ca08f7d24724d71a5108553d9c630d",
+        "size": 792
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_common_typedef.h",
+        "hash": "e5057029ad469d2fcd951456f5f29d0270321a1d1cbaed4adee185bb894de8cb",
+        "size": 642
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_common/DX_config.h",
+        "hash": "133ffa09d302619f727d9d9157e20610c81be82d3f73c3f8ca9475b21b03f3ae",
+        "size": 1466
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_control/DX_control_pid.c",
+        "hash": "9c28b76734c2c78c170bdbbcb02a83e4a9005216d8a25f3aa06baae8a7286f74",
+        "size": 5395
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_control/DX_control_pid.h",
+        "hash": "72aa802b3c43901a65ff12d1a7008a862effb55e08f1ff449b3b7f08c9210881",
+        "size": 3244
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_debug/DX_debug.c",
+        "hash": "40ff70d938825155807c86ea15dc6984c85f6db35e31f02becae81f861725840",
+        "size": 10499
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_debug/DX_debug.h",
+        "hash": "ec556393d8f1dc379c77cce8615dcd6d210c87a695af916b9ab8750368ba1ac0",
+        "size": 3338
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_0.9_i2c_oled.c",
+        "hash": "254c822dc76eea8a4b5ae7ed91f71e696325b7f077bf81535c3dc762704b9f99",
+        "size": 8626
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_0.9_i2c_oled.h",
+        "hash": "a59ec8481be712be67929a15ff0fdd0b680a227528db743ebcb8d4f26b892919",
+        "size": 2857
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_aht10.c",
+        "hash": "fc668821ebf17214820fd6b7d05ea583053f58bebe8d888ed6887452307f2392",
+        "size": 2909
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_aht10.h",
+        "hash": "58627c02ceca68c75902e044b7599f2560d65d309703af9f2b1f0418b3be8811",
+        "size": 1433
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_as5600.c",
+        "hash": "9208ff1bccb2df54c3db6d60bcf342371742635d196bad012700e67031ed3643",
+        "size": 3335
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_as5600.h",
+        "hash": "587bfae7ec197fe41e4471a367e1b192d59fcdd8414a08cc58ffd7f343f30534",
+        "size": 1866
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_at24c64.c",
+        "hash": "c1ba14bb164e892a51b81eccd5a7e8cbd7ecf118b231ad334a181827e079e17c",
+        "size": 4827
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_at24c64.h",
+        "hash": "0330ef4eb44e6011a6e46fba50efd915d6ce7f39497ab42e85205643419d04d0",
+        "size": 1903
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_bh1750.c",
+        "hash": "7256b1a5501bec23dd0dc859bf3897c2b69f39912191a20a934908d9eb6fd1af",
+        "size": 1950
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_bh1750.h",
+        "hash": "db2488c4c9cc4a2fb2021ed757696b14e5aa7260ef7993c93e3ce83d58f388cd",
+        "size": 1042
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_esp8266.c",
+        "hash": "7ed8793117af7c6151160f1bb0f8984069c8a430f3593c30ec9b636bd93c681d",
+        "size": 12635
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_esp8266.h",
+        "hash": "efd4d380becb204c142d20a72b889cc32bf42434841aafde854092a3d51aaff1",
+        "size": 4350
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_hx711.c",
+        "hash": "d2721562a56344806f764b9d1481886271bfcbc47e66a7eeac7356e06a5e29b6",
+        "size": 5624
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_hx711.h",
+        "hash": "c33b168b15d00bb04ce9dfafd7b4950eccb638e7c29d0f342edeceff9f7c75f2",
+        "size": 4324
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_i2c_mpu6050.c",
+        "hash": "c6c96c6d3bf63196c94e79210100103aeeb733c91b9e22945767bf6655549e8d",
+        "size": 7191
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_i2c_mpu6050.h",
+        "hash": "a43bf7a0b70b9fb9e73976085b4a1ef7dc0fde0ce66ec2898a7de36abf346fde",
+        "size": 2186
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_key.c",
+        "hash": "7c3d34768a6a3e4e3077582894be5f4b5874cd75162d021579add1d9d768b25a",
+        "size": 3905
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_key.h",
+        "hash": "61f8ac5531a210fb4f45e1971e77be1316469616ca94ec71f63bc22db7fb1794",
+        "size": 1953
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_servo.c",
+        "hash": "947b93df44dc2c094cf0278f3a2d10c9a89a486d719823427e2e7cdf14f47b57",
+        "size": 4600
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_servo.h",
+        "hash": "5026f186bf2af38112e0e7eca45e0bf95687ba7f612277b42663f899ad55eb7a",
+        "size": 2582
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_st7789.c",
+        "hash": "9c67e8368c6087ed37302b49569706eb8b1241fe3c4e73a835507e3af8309fca",
+        "size": 16573
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_st7789.h",
+        "hash": "b75bcd5316537797aa91c27ab25bb96f3edd782771abed3c4643611da5bb17fa",
+        "size": 3960
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_tb6612.c",
+        "hash": "7442d194a2b7448c4ccb7924d1ffd43452be034628f374d1ba31e6a67dcf782c",
+        "size": 7084
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_tb6612.h",
+        "hash": "384e845055d2eaedd8fb7e08eff349ea4d62f64712bbb13ecffdf8807edc19bf",
+        "size": 2529
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_zdt_emm_v5.c",
+        "hash": "ccd49f12ac205c10f9c713017b324b406222d08110147a00d8657dfb4a29ec96",
+        "size": 68982
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_device/DX_device_zdt_emm_v5.h",
+        "hash": "7e89865b8b68b91212ea9c0ca937bd5941bdc2cc2b6c8c3891e7560d76d2977f",
+        "size": 12567
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_adc.c",
+        "hash": "67d7ea05baa02f8ae4473b390ccf841a038ff2a2a9f1af865eed64da672083d3",
+        "size": 6512
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_adc.h",
+        "hash": "a4856d4aad2fd67d343194d815a94f3baf2cd9afd29a77f3bf9240a2a38edbc8",
+        "size": 2269
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_delay.c",
+        "hash": "1b1d5e1a4f25b86ac9beb06db7ccf752bf8938ba6b6ab9df780351960d91c91d",
+        "size": 1811
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_delay.h",
+        "hash": "8eb492e11ec5925f0a99496816503229b157cb6966561a0fc9d19909be3e1132",
+        "size": 813
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_dma.c",
+        "hash": "1378e98869c3440f3db68934e8fb8f3886a92ec249443954bd288f139629715a",
+        "size": 7885
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_dma.h",
+        "hash": "9dc8262251894eabba4e50085caa2ea7e4b5a1f384fed496e899c2c5f8ae2c07",
+        "size": 2918
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_exti.c",
+        "hash": "1769cdd3e8b44b7d11f98a699aa55ef7add28f891376aac70073b6c9497657c2",
+        "size": 6311
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_exti.h",
+        "hash": "05a788aaa817ba63ea58ace8a7890335509548517d3a86167877cf1ebee6bffe",
+        "size": 1613
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_gpio.c",
+        "hash": "c21c4216165ae16e91b562d6e8cd22fa47819a7326f1638d1a4cf1b6c80c129a",
+        "size": 3835
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_gpio.h",
+        "hash": "b714a511a031f0df7a81511b69c9d079d3065f044b8fc2841bb99df64791ff6b",
+        "size": 2109
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_i2c.c",
+        "hash": "37a6cd1b1f4a1a280fcea8ee5732064a81ed3328952669e6aa5c81e5eaf79b9e",
+        "size": 7310
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_i2c.h",
+        "hash": "d0f832b3992441de31d07003a3a2e72e1f64893cfffeb8283f91aad5ce9ebcf8",
+        "size": 2668
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_pwm.c",
+        "hash": "b7681ab5358f8e23038118182442effd8138ea27e827318a50f88425f326bc9e",
+        "size": 10286
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_pwm.h",
+        "hash": "a53755c028ff8a8dac24b83dcb8a5527b99087eadf7e2554af9b0958b5a21a5c",
+        "size": 2720
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_spi.c",
+        "hash": "5087a5bf501fe52dba9bed4d733292b8040882bb9783669e1f7c7f2f91c6d347",
+        "size": 5732
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_spi.h",
+        "hash": "cdc55f04203576843e9df14d55045a364b6ffba9e06c860b6c9ef6fcb7405c11",
+        "size": 1935
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_timer.c",
+        "hash": "1c45398da574a63fd7f2d031a929d1aa8db6ddaa994f9bc26c0fbd9c2214fa62",
+        "size": 5820
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_timer.h",
+        "hash": "e9f9361c75749e5458ffb67495647521545286497e660b09f8c8586632a55d46",
+        "size": 2142
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_timer_encoder.c",
+        "hash": "94bd220b76891b02e6856e81ef4ea12196affaad2941e8173a20a9fb387ece4a",
+        "size": 8658
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_timer_encoder.h",
+        "hash": "597ee805fbaea69d2b11d2dc17b0d96dafbd2b8b19e2cb9539b18f3dea4ab43d",
+        "size": 2175
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_timer_trigger.c",
+        "hash": "7a6273eff0088bc5b6a5d7af4a56f30257df18d9730ca2d5d20a2a1e20c6d1b6",
+        "size": 2285
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_timer_trigger.h",
+        "hash": "754c28791c10924805f022463261591c95ee06852e1dd566f2aa695acf058160",
+        "size": 2051
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_uart.c",
+        "hash": "27b92269a226053a91e17a8dd0438d4df5af5820b4b614d882a2c0ea97891ce8",
+        "size": 12522
+      },
+      {
+        "path": "drivers/nun-dx/NUN_DX_STM32/DX_driver/DX_driver_uart.h",
+        "hash": "c9be199c18dfd3004f57259a1013d0329a930c35a7d4ae8616a30aca27a36d76",
+        "size": 3937
+      },
+      {
+        "path": "drivers/nun-dx/licenses/NOTICE.md",
+        "hash": "35a026e228099da3436010498264009593dbdc13f02a2bf29a12264fbe2c1762",
+        "size": 1779
+      },
+      {
+        "path": "drivers/nun-dx/licenses/OFL-1.1.txt",
+        "hash": "869692af094c57fb7258c57fe26820c759319603321d0ffeb278de3651763ded",
+        "size": 4340
+      },
+      {
+        "path": "drivers/nun-dx/licenses/UNIFONT-COPYING",
+        "hash": "5a65797606332f2f63057fd81ea0ff35f74043583515bf900ee9b42efa8176a6",
+        "size": 48615
+      },
+      {
+        "path": "drivers/nun-dx/licenses/UNIFONT-FONT-METADATA.txt",
+        "hash": "93836bdd460396e61796bce695422e3242b02d318affd14dfef960a6a5e20479",
+        "size": 920
+      },
+      {
+        "path": "drivers/nun-dx/licenses/UNIFONT-README",
+        "hash": "0c35716b811d92631b60c92c1ab6a650e5da486f82896c1e87aaef931eb9336a",
+        "size": 29677
+      },
+      {
+        "path": "environment.json",
+        "hash": "3beecaa78d7b065583dd280717d8be5828f43be01af6abed906cb0cf22801cf6",
+        "size": 87
+      },
+      {
+        "path": "include/config.h",
+        "hash": "e7311beb2b275c5f8275daf8b58e7d5d125ed856882bb1cac291a7d4bbd1fae6",
+        "size": 218
+      },
+      {
+        "path": "include/studio.h",
+        "hash": "7ca9225dc45d0cd994743876b512fe44ba24bd9fe8da69b961f0734a06724277",
+        "size": 1905
+      },
+      {
+        "path": "layout.json",
+        "hash": "feb7e562b10d421e32487977097ff68b6974836ffe2bef3e2a15f14319594f5b",
+        "size": 195
+      },
+      {
+        "path": "licenses/DACIR-MIT.txt",
+        "hash": "6d7a4acdafef75a0297f26464f8ffb2bb3f6143edb04dca38fa512f567a4f94a",
+        "size": 1470
+      },
+      {
+        "path": "licenses/NOTICE.md",
+        "hash": "892fab1443c8a86806a4628082061a46a8897f8dd0f3a06113c67317f95d4c5b",
+        "size": 532
+      },
+      {
+        "path": "licenses/NUN-DX-AGPL.txt",
+        "hash": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+        "size": 34523
+      },
+      {
+        "path": "nodu-support/hal_timebase.c",
+        "hash": "daa9705b64d101cdcd1747425a3333238e824e146108b11568a0f5ad17fa6ce9",
+        "size": 296
+      },
+      {
+        "path": "nodu-support/runtime.c",
+        "hash": "8d5f740ce900498de3b0a246034735147f80825e2bc62f8697f35aa4e6301749",
+        "size": 397
+      },
+      {
+        "path": "nodu-support/stm32f103c8.ld",
+        "hash": "56b4042276588042f71541ca1d97c989385c03c126c4a205f56a24cad0761623",
+        "size": 1217
+      },
+      {
+        "path": "nodu-support/stm32f1xx_hal_conf.h",
+        "hash": "421f73a40d9e1e17fcf3e6ae2f3479d363c77a6acc6d026df677402932ae561d",
+        "size": 1290
+      },
+      {
+        "path": "nodu-support/timebase_accumulator.h",
+        "hash": "3db53bc4f4aa65b519e5af758bddffd8146eb16c485ead6877f500d833b5098a",
+        "size": 1218
+      },
+      {
+        "path": "nodu.json",
+        "hash": "527a3b1fe081bd1ba91551b2ff98cca07c506224ab2b96a47cf41241353d68a5",
+        "size": 431
+      },
+      {
+        "path": "nodu.lock.json",
+        "hash": "3d061892af83dae087b1060379a0b5e98ac7a68f22ab14128b11231959800a97",
+        "size": 11822
+      },
+      {
+        "path": "src/main.c",
+        "hash": "80ce9a8f3096dd717f006bb15ca291830bd3fb49f374591b89434a9c123ab2a2",
+        "size": 1924
+      },
+      {
+        "path": "src/studio.c",
+        "hash": "342f2daea568d35f3d8fb61e02c60deed5c7bb8d7d05660cef7c90863e929915",
+        "size": 6984
+      },
+      {
+        "path": "studio.project.json",
+        "hash": "51062815efb3fa63ad8f0dd3c92fa0a90f7b4bba5e554f19386362251745c036",
+        "size": 286
+      },
+      {
+        "path": "template-origin.json",
+        "hash": "8e09f979cd10a381b29a1ddb23bac2053053747b14698a5d25d29f5084eeb38e",
+        "size": 11837
+      },
+      {
+        "path": "template-sources.json",
+        "hash": "d4a3e28e624329515db66ab7026619c606c1bdf5240427b712c1691970f06bf5",
+        "size": 10129
+      }
+    ],
+    "directories": [
+      ".nodu",
+      ".nodu/artifacts",
+      ".nodu/artifacts/6e74dd6d8df569a16ab9f99a13bb57c59adb5ae3b62d19a2baf457f3bdc1b7b1",
+      "assets",
+      "cmake",
+      "drivers",
+      "drivers/nun-dx",
+      "drivers/nun-dx/NUN_DX_STM32",
+      "drivers/nun-dx/NUN_DX_STM32/DX_common",
+      "drivers/nun-dx/NUN_DX_STM32/DX_control",
+      "drivers/nun-dx/NUN_DX_STM32/DX_debug",
+      "drivers/nun-dx/NUN_DX_STM32/DX_device",
+      "drivers/nun-dx/NUN_DX_STM32/DX_driver",
+      "drivers/nun-dx/licenses",
+      "include",
+      "licenses",
+      "nodu-support",
+      "src"
+    ],
+    "circuit": {
+      "schemaVersion": 1,
+      "components": [
+        {
+          "id": "mcu",
+          "type": "stm32f103",
+          "properties": {
+            "headerOrientation": "up"
+          }
+        },
+        {
+          "id": "dht",
+          "type": "dht11",
+          "properties": {
+            "temperature": 24,
+            "humidity": 55
+          }
+        },
+        {
+          "id": "uart",
+          "type": "uart",
+          "properties": {
+            "baud": 115200
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "dht-vcc",
+          "from": "mcu.3V3",
+          "to": "dht.VCC"
+        },
+        {
+          "id": "dht-gnd",
+          "from": "mcu.GND",
+          "to": "dht.GND"
+        },
+        {
+          "id": "dht-data",
+          "from": "mcu.PB0",
+          "to": "dht.DATA"
+        },
+        {
+          "id": "uart-rx",
+          "from": "mcu.PA9",
+          "to": "uart.RX"
+        },
+        {
+          "id": "uart-tx",
+          "from": "mcu.PA10",
+          "to": "uart.TX"
+        },
+        {
+          "id": "uart-gnd",
+          "from": "mcu.GND",
+          "to": "uart.GND"
+        }
+      ]
+    },
+    "layout": {
+      "schemaVersion": 1,
+      "components": {
+        "mcu": {
+          "position": [
+            -2.5,
+            0,
+            0
+          ],
+          "rotation": 0
+        },
+        "dht": {
+          "position": [
+            1.8,
+            0,
+            -1.8
+          ],
+          "rotation": 0
+        },
+        "uart": {
+          "position": [
+            -1.8,
+            0,
+            -3
+          ],
+          "rotation": 0
+        }
+      },
+      "wires": {},
+      "preferences": {}
+    },
+    "environment": {
+      "schemaVersion": 1,
+      "inputs": {
+        "dht": {
+          "temperature": 24,
+          "humidity": 55
+        }
+      }
+    },
+    "components": [
+      {
+        "id": "mcu",
+        "type": "stm32f103",
+        "position": [
+          -2.5,
+          0,
+          0
+        ],
+        "rotation": 0,
+        "properties": {
+          "headerOrientation": "up"
+        }
+      },
+      {
+        "id": "dht",
+        "type": "dht11",
+        "position": [
+          1.8,
+          0,
+          -1.8
+        ],
+        "rotation": 0,
+        "properties": {
+          "temperature": 24,
+          "humidity": 55
+        }
+      },
+      {
+        "id": "uart",
+        "type": "uart",
+        "position": [
+          -1.8,
+          0,
+          -3
+        ],
+        "rotation": 0,
+        "properties": {
+          "baud": 115200
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "dht-vcc",
+        "from": "mcu.3V3",
+        "to": "dht.VCC",
+        "wireId": "dht-vcc"
+      },
+      {
+        "id": "dht-gnd",
+        "from": "mcu.GND",
+        "to": "dht.GND",
+        "wireId": "dht-gnd"
+      },
+      {
+        "id": "dht-data",
+        "from": "mcu.PB0",
+        "to": "dht.DATA",
+        "wireId": "dht-data"
+      },
+      {
+        "id": "uart-rx",
+        "from": "mcu.PA9",
+        "to": "uart.RX",
+        "wireId": "uart-rx"
+      },
+      {
+        "id": "uart-tx",
+        "from": "mcu.PA10",
+        "to": "uart.TX",
+        "wireId": "uart-tx"
+      },
+      {
+        "id": "uart-gnd",
+        "from": "mcu.GND",
+        "to": "uart.GND",
+        "wireId": "uart-gnd"
+      }
+    ],
+    "circuitHash": "fa19bca850c34fc33c68ca11afb70ef7b3156daa978d3cf2399bed934a0ff175",
+    "engineId": "qemu",
+    "runtimeLimitSeconds": 600,
+    "sourceHash": "2514896eedf62da1b4afba4d376706bea5290d20f3d7582a5befe1b40d2cf735",
+    "diagnostics": [],
+    "canUndo": true,
+    "canRedo": false
+  },
+  "build": {
+    "status": "idle",
+    "buildId": null,
+    "diagnostics": [],
+    "isCurrentSource": false,
+    "canRun": false
+  },
+  "simulation": {
+    "status": "running",
+    "running": true,
+    "uart": "{\"case\":\"demo_climate\",\"event\":\"ready\",\"clock_hz\":72000000}\r\nNODU_DHT11 v1 MCU=STM32F103C8T6 DATA=PB0 UART=115200,8N1\r\nsample=1 uptime_ms=1022 temperature=24.0 C humidity=55.0%RH status=OK\r\n",
+    "debug_uart": "{\"case\":\"demo_climate\",\"event\":\"ready\",\"clock_hz\":72000000}\r\nNODU_DHT11 v1 MCU=STM32F103C8T6 DATA=PB0 UART=115200,8N1\r\nsample=1 uptime_ms=1022 temperature=24.0 C humidity=55.0%RH status=OK\r\n",
+    "devices": {
+      "uart": {
+        "receive_connected": true,
+        "transmit_connected": true,
+        "type": "uart",
+        "uart": "{\"case\":\"demo_climate\",\"event\":\"ready\",\"clock_hz\":72000000}\r\nNODU_DHT11 v1 MCU=STM32F103C8T6 DATA=PB0 UART=115200,8N1\r\nsample=1 uptime_ms=1022 temperature=24.0 C humidity=55.0%RH status=OK\r\n",
+        "connected": true
+      },
+      "dht": {
+        "connected": true,
+        "temperature": 24,
+        "humidity": 55,
+        "type": "dht11"
+      }
+    },
+    "diagnostics": [],
+    "measurements": {
+      "live": true,
+      "electrical": {
+        "limitations": [
+          "GPIO 25 ohm and 40 kohm pulls are teaching approximations.",
+          "Topology or component-value changes restart capacitor state.",
+          "No MCU supply brownout, damage, or byte-level I2C/UART electrical waveform model."
+        ],
+        "virtual_time_ns": 1100000000,
+        "pin_edges": {},
+        "enabled": false,
+        "recent_samples": [],
+        "topology_reloads": 0,
+        "recent_edges": [],
+        "steps": 0,
+        "error": "",
+        "max_step_s": 1e-05,
+        "source_changes": 0,
+        "solver": "libngspice",
+        "solver_time_s": 0,
+        "nodes": {},
+        "projectId": "25e8010b-73f6-4e14-a14c-5eb949c37bb4",
+        "circuitRevision": 11,
+        "circuitHash": "fa19bca850c34fc33c68ca11afb70ef7b3156daa978d3cf2399bed934a0ff175",
+        "netMappings": {
+          "0": {
+            "label": "mcu.PA0",
+            "terminals": [
+              "mcu.PA0"
+            ],
+            "wireIds": []
+          },
+          "1": {
+            "label": "mcu.PA1",
+            "terminals": [
+              "mcu.PA1"
+            ],
+            "wireIds": []
+          },
+          "2": {
+            "label": "mcu.PA2",
+            "terminals": [
+              "mcu.PA2"
+            ],
+            "wireIds": []
+          },
+          "3": {
+            "label": "mcu.PA3",
+            "terminals": [
+              "mcu.PA3"
+            ],
+            "wireIds": []
+          },
+          "4": {
+            "label": "mcu.PA4",
+            "terminals": [
+              "mcu.PA4"
+            ],
+            "wireIds": []
+          },
+          "5": {
+            "label": "mcu.PA5",
+            "terminals": [
+              "mcu.PA5"
+            ],
+            "wireIds": []
+          },
+          "6": {
+            "label": "mcu.PA6",
+            "terminals": [
+              "mcu.PA6"
+            ],
+            "wireIds": []
+          },
+          "7": {
+            "label": "mcu.PA7",
+            "terminals": [
+              "mcu.PA7"
+            ],
+            "wireIds": []
+          },
+          "8": {
+            "label": "mcu.PA8",
+            "terminals": [
+              "mcu.PA8"
+            ],
+            "wireIds": []
+          },
+          "9": {
+            "label": "mcu.PA9 ↔ uart.RX",
+            "terminals": [
+              "mcu.PA9",
+              "uart.RX"
+            ],
+            "wireIds": [
+              "uart-rx"
+            ]
+          },
+          "10": {
+            "label": "mcu.PA10 ↔ uart.TX",
+            "terminals": [
+              "mcu.PA10",
+              "uart.TX"
+            ],
+            "wireIds": [
+              "uart-tx"
+            ]
+          },
+          "11": {
+            "label": "mcu.PA11",
+            "terminals": [
+              "mcu.PA11"
+            ],
+            "wireIds": []
+          },
+          "12": {
+            "label": "mcu.PA12",
+            "terminals": [
+              "mcu.PA12"
+            ],
+            "wireIds": []
+          },
+          "13": {
+            "label": "mcu.PA13",
+            "terminals": [
+              "mcu.PA13"
+            ],
+            "wireIds": []
+          },
+          "14": {
+            "label": "mcu.PA14",
+            "terminals": [
+              "mcu.PA14"
+            ],
+            "wireIds": []
+          },
+          "15": {
+            "label": "mcu.PA15",
+            "terminals": [
+              "mcu.PA15"
+            ],
+            "wireIds": []
+          },
+          "16": {
+            "label": "mcu.PB0 ↔ dht.DATA",
+            "terminals": [
+              "mcu.PB0",
+              "dht.DATA"
+            ],
+            "wireIds": [
+              "dht-data"
+            ]
+          },
+          "17": {
+            "label": "mcu.PB1",
+            "terminals": [
+              "mcu.PB1"
+            ],
+            "wireIds": []
+          },
+          "18": {
+            "label": "mcu.PB2",
+            "terminals": [
+              "mcu.PB2"
+            ],
+            "wireIds": []
+          },
+          "19": {
+            "label": "mcu.PB3",
+            "terminals": [
+              "mcu.PB3"
+            ],
+            "wireIds": []
+          },
+          "20": {
+            "label": "mcu.PB4",
+            "terminals": [
+              "mcu.PB4"
+            ],
+            "wireIds": []
+          },
+          "21": {
+            "label": "mcu.PB5",
+            "terminals": [
+              "mcu.PB5"
+            ],
+            "wireIds": []
+          },
+          "22": {
+            "label": "mcu.PB6",
+            "terminals": [
+              "mcu.PB6"
+            ],
+            "wireIds": []
+          },
+          "23": {
+            "label": "mcu.PB7",
+            "terminals": [
+              "mcu.PB7"
+            ],
+            "wireIds": []
+          },
+          "24": {
+            "label": "mcu.PB8",
+            "terminals": [
+              "mcu.PB8"
+            ],
+            "wireIds": []
+          },
+          "25": {
+            "label": "mcu.PB9",
+            "terminals": [
+              "mcu.PB9"
+            ],
+            "wireIds": []
+          },
+          "26": {
+            "label": "mcu.PB10",
+            "terminals": [
+              "mcu.PB10"
+            ],
+            "wireIds": []
+          },
+          "27": {
+            "label": "mcu.PB11",
+            "terminals": [
+              "mcu.PB11"
+            ],
+            "wireIds": []
+          },
+          "28": {
+            "label": "mcu.PB12",
+            "terminals": [
+              "mcu.PB12"
+            ],
+            "wireIds": []
+          },
+          "29": {
+            "label": "mcu.PB13",
+            "terminals": [
+              "mcu.PB13"
+            ],
+            "wireIds": []
+          },
+          "30": {
+            "label": "mcu.PB14",
+            "terminals": [
+              "mcu.PB14"
+            ],
+            "wireIds": []
+          },
+          "31": {
+            "label": "mcu.PB15",
+            "terminals": [
+              "mcu.PB15"
+            ],
+            "wireIds": []
+          },
+          "32": {
+            "label": "mcu.PC13",
+            "terminals": [
+              "mcu.PC13"
+            ],
+            "wireIds": []
+          },
+          "33": {
+            "label": "mcu.PC14",
+            "terminals": [
+              "mcu.PC14"
+            ],
+            "wireIds": []
+          },
+          "34": {
+            "label": "mcu.PC15",
+            "terminals": [
+              "mcu.PC15"
+            ],
+            "wireIds": []
+          },
+          "35": {
+            "label": "mcu.3V3 ↔ dht.VCC",
+            "terminals": [
+              "mcu.3V3",
+              "dht.VCC"
+            ],
+            "wireIds": [
+              "dht-vcc"
+            ]
+          },
+          "36": {
+            "label": "mcu.5V",
+            "terminals": [
+              "mcu.5V"
+            ],
+            "wireIds": []
+          },
+          "37": {
+            "label": "mcu.GND ↔ dht.GND ↔ uart.GND",
+            "terminals": [
+              "mcu.GND",
+              "dht.GND",
+              "uart.GND"
+            ],
+            "wireIds": [
+              "dht-gnd",
+              "uart-gnd"
+            ]
+          },
+          "38": {
+            "label": "mcu.NRST",
+            "terminals": [
+              "mcu.NRST"
+            ],
+            "wireIds": []
+          },
+          "39": {
+            "label": "mcu.BOOT0",
+            "terminals": [
+              "mcu.BOOT0"
+            ],
+            "wireIds": []
+          }
+        },
+        "inputRevision": 1
+      },
+      "units": {
+        "voltage_v": "V",
+        "voltages": "V",
+        "current_a": "A",
+        "current_ma": "mA",
+        "resistance_ohms": "Ω",
+        "capacitance_uf": "µF",
+        "time_s": "s",
+        "mcu_time_ns": "ns"
+      },
+      "devices": {
+        "uart": {
+          "receive_connected": true,
+          "transmit_connected": true,
+          "type": "uart",
+          "uart": "{\"case\":\"demo_climate\",\"event\":\"ready\",\"clock_hz\":72000000}\r\nNODU_DHT11 v1 MCU=STM32F103C8T6 DATA=PB0 UART=115200,8N1\r\nsample=1 uptime_ms=1022 temperature=24.0 C humidity=55.0%RH status=OK\r\n",
+          "connected": true
+        },
+        "dht": {
+          "connected": true,
+          "temperature": 24,
+          "humidity": 55,
+          "type": "dht11"
+        }
+      }
+    },
+    "framebuffer": null,
+    "display_on": false,
+    "runId": "8115efce0d3e468091e03f1f02682122",
+    "engineId": "renode",
+    "binarySHA256": "29c5fd5fcf62943c2674c22d42e4d8fb5ac5025d3e19d7e14ad4729c602d3427",
+    "inputs": {
+      "dht": {
+        "temperature": 24,
+        "humidity": 55
+      }
+    },
+    "engine": "renode",
+    "image_id": "sha256:069b9785692e50989c16c6550b0ee3b0314970f80e7f3ce32e163956a7529952",
+    "temperature": 24,
+    "humidity": 55,
+    "virtual_time_ns": 1100000000,
+    "electrical": {
+      "limitations": [
+        "GPIO 25 ohm and 40 kohm pulls are teaching approximations.",
+        "Topology or component-value changes restart capacitor state.",
+        "No MCU supply brownout, damage, or byte-level I2C/UART electrical waveform model."
+      ],
+      "virtual_time_ns": 1100000000,
+      "pin_edges": {},
+      "enabled": false,
+      "recent_samples": [],
+      "topology_reloads": 0,
+      "recent_edges": [],
+      "steps": 0,
+      "error": "",
+      "max_step_s": 1e-05,
+      "source_changes": 0,
+      "solver": "libngspice",
+      "solver_time_s": 0,
+      "nodes": {},
+      "projectId": "25e8010b-73f6-4e14-a14c-5eb949c37bb4",
+      "circuitRevision": 11,
+      "circuitHash": "fa19bca850c34fc33c68ca11afb70ef7b3156daa978d3cf2399bed934a0ff175",
+      "netMappings": {
+        "0": {
+          "label": "mcu.PA0",
+          "terminals": [
+            "mcu.PA0"
+          ],
+          "wireIds": []
+        },
+        "1": {
+          "label": "mcu.PA1",
+          "terminals": [
+            "mcu.PA1"
+          ],
+          "wireIds": []
+        },
+        "2": {
+          "label": "mcu.PA2",
+          "terminals": [
+            "mcu.PA2"
+          ],
+          "wireIds": []
+        },
+        "3": {
+          "label": "mcu.PA3",
+          "terminals": [
+            "mcu.PA3"
+          ],
+          "wireIds": []
+        },
+        "4": {
+          "label": "mcu.PA4",
+          "terminals": [
+            "mcu.PA4"
+          ],
+          "wireIds": []
+        },
+        "5": {
+          "label": "mcu.PA5",
+          "terminals": [
+            "mcu.PA5"
+          ],
+          "wireIds": []
+        },
+        "6": {
+          "label": "mcu.PA6",
+          "terminals": [
+            "mcu.PA6"
+          ],
+          "wireIds": []
+        },
+        "7": {
+          "label": "mcu.PA7",
+          "terminals": [
+            "mcu.PA7"
+          ],
+          "wireIds": []
+        },
+        "8": {
+          "label": "mcu.PA8",
+          "terminals": [
+            "mcu.PA8"
+          ],
+          "wireIds": []
+        },
+        "9": {
+          "label": "mcu.PA9 ↔ uart.RX",
+          "terminals": [
+            "mcu.PA9",
+            "uart.RX"
+          ],
+          "wireIds": [
+            "uart-rx"
+          ]
+        },
+        "10": {
+          "label": "mcu.PA10 ↔ uart.TX",
+          "terminals": [
+            "mcu.PA10",
+            "uart.TX"
+          ],
+          "wireIds": [
+            "uart-tx"
+          ]
+        },
+        "11": {
+          "label": "mcu.PA11",
+          "terminals": [
+            "mcu.PA11"
+          ],
+          "wireIds": []
+        },
+        "12": {
+          "label": "mcu.PA12",
+          "terminals": [
+            "mcu.PA12"
+          ],
+          "wireIds": []
+        },
+        "13": {
+          "label": "mcu.PA13",
+          "terminals": [
+            "mcu.PA13"
+          ],
+          "wireIds": []
+        },
+        "14": {
+          "label": "mcu.PA14",
+          "terminals": [
+            "mcu.PA14"
+          ],
+          "wireIds": []
+        },
+        "15": {
+          "label": "mcu.PA15",
+          "terminals": [
+            "mcu.PA15"
+          ],
+          "wireIds": []
+        },
+        "16": {
+          "label": "mcu.PB0 ↔ dht.DATA",
+          "terminals": [
+            "mcu.PB0",
+            "dht.DATA"
+          ],
+          "wireIds": [
+            "dht-data"
+          ]
+        },
+        "17": {
+          "label": "mcu.PB1",
+          "terminals": [
+            "mcu.PB1"
+          ],
+          "wireIds": []
+        },
+        "18": {
+          "label": "mcu.PB2",
+          "terminals": [
+            "mcu.PB2"
+          ],
+          "wireIds": []
+        },
+        "19": {
+          "label": "mcu.PB3",
+          "terminals": [
+            "mcu.PB3"
+          ],
+          "wireIds": []
+        },
+        "20": {
+          "label": "mcu.PB4",
+          "terminals": [
+            "mcu.PB4"
+          ],
+          "wireIds": []
+        },
+        "21": {
+          "label": "mcu.PB5",
+          "terminals": [
+            "mcu.PB5"
+          ],
+          "wireIds": []
+        },
+        "22": {
+          "label": "mcu.PB6",
+          "terminals": [
+            "mcu.PB6"
+          ],
+          "wireIds": []
+        },
+        "23": {
+          "label": "mcu.PB7",
+          "terminals": [
+            "mcu.PB7"
+          ],
+          "wireIds": []
+        },
+        "24": {
+          "label": "mcu.PB8",
+          "terminals": [
+            "mcu.PB8"
+          ],
+          "wireIds": []
+        },
+        "25": {
+          "label": "mcu.PB9",
+          "terminals": [
+            "mcu.PB9"
+          ],
+          "wireIds": []
+        },
+        "26": {
+          "label": "mcu.PB10",
+          "terminals": [
+            "mcu.PB10"
+          ],
+          "wireIds": []
+        },
+        "27": {
+          "label": "mcu.PB11",
+          "terminals": [
+            "mcu.PB11"
+          ],
+          "wireIds": []
+        },
+        "28": {
+          "label": "mcu.PB12",
+          "terminals": [
+            "mcu.PB12"
+          ],
+          "wireIds": []
+        },
+        "29": {
+          "label": "mcu.PB13",
+          "terminals": [
+            "mcu.PB13"
+          ],
+          "wireIds": []
+        },
+        "30": {
+          "label": "mcu.PB14",
+          "terminals": [
+            "mcu.PB14"
+          ],
+          "wireIds": []
+        },
+        "31": {
+          "label": "mcu.PB15",
+          "terminals": [
+            "mcu.PB15"
+          ],
+          "wireIds": []
+        },
+        "32": {
+          "label": "mcu.PC13",
+          "terminals": [
+            "mcu.PC13"
+          ],
+          "wireIds": []
+        },
+        "33": {
+          "label": "mcu.PC14",
+          "terminals": [
+            "mcu.PC14"
+          ],
+          "wireIds": []
+        },
+        "34": {
+          "label": "mcu.PC15",
+          "terminals": [
+            "mcu.PC15"
+          ],
+          "wireIds": []
+        },
+        "35": {
+          "label": "mcu.3V3 ↔ dht.VCC",
+          "terminals": [
+            "mcu.3V3",
+            "dht.VCC"
+          ],
+          "wireIds": [
+            "dht-vcc"
+          ]
+        },
+        "36": {
+          "label": "mcu.5V",
+          "terminals": [
+            "mcu.5V"
+          ],
+          "wireIds": []
+        },
+        "37": {
+          "label": "mcu.GND ↔ dht.GND ↔ uart.GND",
+          "terminals": [
+            "mcu.GND",
+            "dht.GND",
+            "uart.GND"
+          ],
+          "wireIds": [
+            "dht-gnd",
+            "uart-gnd"
+          ]
+        },
+        "38": {
+          "label": "mcu.NRST",
+          "terminals": [
+            "mcu.NRST"
+          ],
+          "wireIds": []
+        },
+        "39": {
+          "label": "mcu.BOOT0",
+          "terminals": [
+            "mcu.BOOT0"
+          ],
+          "wireIds": []
+        }
+      },
+      "inputRevision": 1
+    },
+    "last_rejected_revision": null,
+    "oled_connected": false,
+    "dht_connected": true,
+    "recent_events": [
+      {
+        "revision": 1,
+        "reset_instances": [
+          "dht",
+          "uart"
+        ],
+        "kind": "circuit_updated",
+        "time_ns": 0
+      },
+      {
+        "duration_ns": 18000875,
+        "device": "dht",
+        "kind": "dht11_start_pulse",
+        "time_ns": 1019013250
+      },
+      {
+        "bytes": [
+          55,
+          0,
+          24,
+          0,
+          79
+        ],
+        "device": "dht",
+        "kind": "dht11_response",
+        "time_ns": 1019013250
+      }
+    ],
+    "circuit_error": "",
+    "input_revision": 1,
+    "ready": true,
+    "process_alive": true,
+    "elapsed_seconds": 12.7,
+    "buildId": "",
+    "startedAt": "2026-10-23T04:30:02.964059+00:00",
+    "endedAt": null,
+    "firmware": {
+      "bytes": 5940,
+      "chip": "STM32F103C8T6",
+      "elfSHA256": "29c5fd5fcf62943c2674c22d42e4d8fb5ac5025d3e19d7e14ad4729c602d3427",
+      "flashSHA256": "28844e2f1db5e55369362a84a2e0c2778dc4ffe159ec711b2705b249e4849bef",
+      "format": "hex",
+      "id": "eaea703f80e345959d076301d18fe374",
+      "importedAt": "2026-10-23T04:26:30.099696+00:00",
+      "loadAddress": 134217728,
+      "name": "firmware.hex",
+      "originalSHA256": "6da6f30ab69863b29b05a5ba6981888114eaf8c95743c1f451f051e3cd0503e7",
+      "projectId": "25e8010b-73f6-4e14-a14c-5eb949c37bb4",
+      "targetId": "mcu"
+    },
+    "runtimeLimitSeconds": 180,
+    "error": null,
+    "uartIsHistory": false,
+    "mc38Receipts": {}
+  },
+  "eventCursor": 1902,
+  "engineeringAcceptance": {
+    "schemaVersion": 1,
+    "status": "not-tested",
+    "scope": "run-assertions-only",
+    "overallPassed": false,
+    "completeMatrixRegistered": false,
+    "sourceHash": "2514896eedf62da1b4afba4d376706bea5290d20f3d7582a5befe1b40d2cf735",
+    "circuitHash": "fa19bca850c34fc33c68ca11afb70ef7b3156daa978d3cf2399bed934a0ff175",
+    "buildId": null,
+    "elfSHA256": null,
+    "runId": "8115efce0d3e468091e03f1f02682122",
+    "engineId": "renode",
+    "historical": false,
+    "counts": {
+      "passed": 0,
+      "failed": 0,
+      "untested": 0,
+      "unsupported": 0
+    },
+    "recordCount": 0,
+    "staleRecordCount": 0,
+    "missingGates": [
+      "当前构建及运行尚无可采用的断言结果。",
+      "尚未登记并核验完整冻结需求矩阵；运行断言不能代表整题验收。"
+    ],
+    "summary": "尚无当前工程的运行断言记录。",
+    "records": [],
+    "storageIssue": null
+  }
+}

@@ -1,0 +1,14 @@
+✔ hotplug suggests the sole USB port without replacing the user or active port (0.439458ms)
+✔ hex display preserves actual wire bytes, including invalid text and line endings (0.62ms)
+✔ raw receive buffer retains only its bounded newest bytes (0.084584ms)
+✔ send encoding produces exact UTF-8/GBK bytes and retains line endings (8.081208ms)
+✔ UTF-8 and GBK survive byte boundaries; invalid/incomplete bytes use replacement (0.476291ms)
+✔ changing encoding flushes incomplete bytes; clear discards previous stream (0.089167ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57.798833

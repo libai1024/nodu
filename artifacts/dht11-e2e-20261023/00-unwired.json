@@ -1,0 +1,43 @@
+{
+  "components": [
+    {
+      "id": "mcu",
+      "type": "stm32f103",
+      "position": [
+        -2.5,
+        0,
+        0
+      ],
+      "rotation": 0,
+      "properties": {}
+    },
+    {
+      "id": "dht",
+      "type": "dht11",
+      "position": [
+        1.8,
+        0,
+        -1.8
+      ],
+      "rotation": 0,
+      "properties": {
+        "temperature": 24,
+        "humidity": 55
+      }
+    },
+    {
+      "id": "uart",
+      "type": "uart",
+      "position": [
+        -1.8,
+        0,
+        -3
+      ],
+      "rotation": 0,
+      "properties": {
+        "baud": 115200
+      }
+    }
+  ],
+  "connections": []
+}

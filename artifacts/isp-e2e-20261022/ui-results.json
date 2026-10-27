@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "name": "ISP loan disables send and port changes",
+      "passed": true
+    },
+    {
+      "name": "cancel hides guide and resumes UART PING/PONG",
+      "passed": true
+    },
+    {
+      "name": "first UART download reaches boot restore with send disabled",
+      "passed": true
+    },
+    {
+      "name": "closed monitor automatically opens after UART download",
+      "passed": true
+    },
+    {
+      "name": "final download selects monitor automatically",
+      "passed": true
+    },
+    {
+      "name": "startup received after physical BOOT0 restore; guide auto closes",
+      "passed": true
+    },
+    {
+      "name": "PING/PONG after ISP and physical reset",
+      "passed": true
+    },
+    {
+      "name": "UTF-8 split-frame Chinese after ISP",
+      "passed": true
+    },
+    {
+      "name": "CR progress delivered before readback process finishes",
+      "passed": true
+    }
+  ],
+  "finalSerialOutput": "── 运行 #1，23:06:57，b76115d ──\nNODU UART READY\nPONG\n中文串口测试"
+}

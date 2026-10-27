@@ -1,0 +1,44 @@
+[
+  {
+    "layout": "generic",
+    "template": "temperature-humidity",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"sourceHash\": \"82845392ffda00f933a613b93b6727ac23300cfb0ff13765088e2d2ce58d3d4b\", \"validation\": {\"flash_address\": \"0x08000000\", \"flash_bytes_used\": 20296, \"ram_bytes_reserved\": 3920, \"initial_sp\": \"0x20005000\", \"reset_handler\": \"0x08000e61\", \"elf_entry\": \"0x08000e61\", \"elf_bin_hex_consistent\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "layout": "generic",
+    "template": "warehouse",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"sourceHash\": \"12d54f2d243e59e46cb68add3dc16aace850c8021e51be6812d4dbdcf670f276\", \"validation\": {\"flash_address\": \"0x08000000\", \"flash_bytes_used\": 21588, \"ram_bytes_reserved\": 4528, \"initial_sp\": \"0x20005000\", \"reset_handler\": \"0x08001291\", \"elf_entry\": \"0x08001291\", \"elf_bin_hex_consistent\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "layout": "generic",
+    "template": "esp8266",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"sourceHash\": \"06aad621e4bdcd5b42a978ed6b899d878f85fdd77c917e218f94916b1bd51e1c\", \"validation\": {\"flash_address\": \"0x08000000\", \"flash_bytes_used\": 11364, \"ram_bytes_reserved\": 6168, \"initial_sp\": \"0x20005000\", \"reset_handler\": \"0x08001ded\", \"elf_entry\": \"0x08001ded\", \"elf_bin_hex_consistent\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "layout": "legacy",
+    "template": "temperature-humidity",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"sourceHash\": \"3ba6dd4fb099462749826374a4f7d78a36ddd74fe2a201c6d8d87864587661e1\", \"validation\": {\"flash_address\": \"0x08000000\", \"flash_bytes_used\": 20296, \"ram_bytes_reserved\": 3920, \"initial_sp\": \"0x20005000\", \"reset_handler\": \"0x08000e61\", \"elf_entry\": \"0x08000e61\", \"elf_bin_hex_consistent\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "layout": "legacy",
+    "template": "warehouse",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"sourceHash\": \"9521c443d490f0373368a5db23d11bfb2793a64404b77e901a26a8f78407beeb\", \"validation\": {\"flash_address\": \"0x08000000\", \"flash_bytes_used\": 21588, \"ram_bytes_reserved\": 4528, \"initial_sp\": \"0x20005000\", \"reset_handler\": \"0x08001291\", \"elf_entry\": \"0x08001291\", \"elf_bin_hex_consistent\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "layout": "legacy",
+    "template": "esp8266",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"sourceHash\": \"bc0dc7ebdad6ab079855cb8c90c6be0fe4ffc3851739b802ba400b736f80f955\", \"validation\": {\"flash_address\": \"0x08000000\", \"flash_bytes_used\": 11364, \"ram_bytes_reserved\": 6168, \"initial_sp\": \"0x20005000\", \"reset_handler\": \"0x08001ded\", \"elf_entry\": \"0x08001ded\", \"elf_bin_hex_consistent\": true}}\n",
+    "stderr": ""
+  }
+]

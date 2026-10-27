@@ -21,3 +21,4 @@
 # Acceptance evidence retains raw tool output and recorded SHA-256 bytes.
 /docs/design/*-acceptance-*/** -text -whitespace
 /docs/design/evidence/** -text -whitespace
+/artifacts/** -text -whitespace

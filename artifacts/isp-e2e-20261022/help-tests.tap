@@ -1,0 +1,11 @@
+✔ download status uses actual phases and clears stale percent (0.474541ms)
+✔ help command and menu are isolated from model and hardware calls (1.999834ms)
+✔ real model events update progress and reset percent between stages without RPC (12.946666ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 62.359084

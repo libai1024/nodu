@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "dht": {
+      "temperature": 25,
+      "humidity": 55
+    }
+  }
+}

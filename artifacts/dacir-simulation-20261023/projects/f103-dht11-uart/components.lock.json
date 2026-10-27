@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "driver": {
+    "schema_version": 1,
+    "repository": null,
+    "source_path": "libraries/nun-dx",
+    "commit": "55b44abeee127e0326ac8a5258f4c0f4df6dc2a5",
+    "version": "0.3.0-hx711.2",
+    "license": "AGPL-3.0-only; glyph data OFL-1.1",
+    "upstream_repository": "https://gitee.com/yang-changzhi11/NUN_DX_STM32F1c8t6__-open-source-library.git",
+    "upstream_commit": "1c6ce771d3f1bc943774c563be059d6255e27147",
+    "policy": "Independent local Git repository with preserved upstream history. Build exact clean commit; original upstream cache remains unchanged."
+  }
+}

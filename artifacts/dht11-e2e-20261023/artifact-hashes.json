@@ -1,0 +1,6 @@
+{
+  "src/main.c": "80ce9a8f3096dd717f006bb15ca291830bd3fb49f374591b89434a9c123ab2a2",
+  "build/debug/firmware.hex": "6da6f30ab69863b29b05a5ba6981888114eaf8c95743c1f451f051e3cd0503e7",
+  "build/debug/firmware.bin": "28844e2f1db5e55369362a84a2e0c2778dc4ffe159ec711b2705b249e4849bef",
+  "build/debug/firmware.elf": "27d0bcb3c5a73859d348b769de39825b8aafd82085c9dc7b2288fbee319ba084"
+}

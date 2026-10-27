@@ -1,0 +1,22 @@
+[
+  {
+    "case": "renode-positive",
+    "runId": "8115efce0d3e468091e03f1f02682122",
+    "sha256": "29c5fd5fcf62943c2674c22d42e4d8fb5ac5025d3e19d7e14ad4729c602d3427"
+  },
+  {
+    "case": "qemu-disconnected",
+    "runId": "02e19203064a40bba3154a3fac412939",
+    "sha256": "29c5fd5fcf62943c2674c22d42e4d8fb5ac5025d3e19d7e14ad4729c602d3427"
+  },
+  {
+    "case": "renode-disconnected",
+    "runId": "94337c1adfad4341ae137e8d080e77bf",
+    "sha256": "29c5fd5fcf62943c2674c22d42e4d8fb5ac5025d3e19d7e14ad4729c602d3427"
+  },
+  {
+    "case": "restored",
+    "runId": "4d58574a4b894b10bd16fd7c502a7cc2",
+    "sha256": "29c5fd5fcf62943c2674c22d42e4d8fb5ac5025d3e19d7e14ad4729c602d3427"
+  }
+]

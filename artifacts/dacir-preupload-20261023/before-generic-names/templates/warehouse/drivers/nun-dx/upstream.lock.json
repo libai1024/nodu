@@ -1,0 +1,24 @@
+{
+  "format_version": 1,
+  "family": "GNU Unifont",
+  "version": "16.0.04",
+  "derived_family": "DX Teaching 16",
+  "license_selected": "OFL-1.1",
+  "official_license_url": "https://www.unifoundry.com/unifont/index.html",
+  "font": {
+    "path": "upstream/unifont-16.0.04.hex.gz",
+    "url": "https://unifoundry.com/pub/unifont/unifont-16.0.04/font-builds/unifont-16.0.04.hex.gz",
+    "sha256": "f9c8c7802453f47be02677176aeac2342ee96d354fad7a26cedcce48e68e1d9f",
+    "decompressed_sha256": "27256eb99d29545aa461e3b318d9fa9eec4b74f2ca8ede53d35e12bf5809fad7"
+  },
+  "source_tar": {
+    "url": "https://unifoundry.com/pub/unifont/unifont-16.0.04/unifont-16.0.04.tar.gz",
+    "sha256": "2bd4e4679757126f48e1bf2c1be40b09aa92162bfedda4683ce5fbc70a2a5972"
+  },
+  "upstream_notices": {
+    "licenses/OFL-1.1.txt": "869692af094c57fb7258c57fe26820c759319603321d0ffeb278de3651763ded",
+    "licenses/UNIFONT-COPYING": "5a65797606332f2f63057fd81ea0ff35f74043583515bf900ee9b42efa8176a6",
+    "licenses/UNIFONT-FONT-METADATA.txt": "93836bdd460396e61796bce695422e3242b02d318affd14dfef960a6a5e20479",
+    "licenses/UNIFONT-README": "0c35716b811d92631b60c92c1ab6a650e5da486f82896c1e87aaef931eb9336a"
+  }
+}

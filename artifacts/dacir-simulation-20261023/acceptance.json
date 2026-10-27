@@ -1,0 +1,168 @@
+{
+  "template": {
+    "repo": "https://github.com/libai1024/dacir-templates",
+    "tag": "v0.1.0",
+    "commit": "3ccb83d143175c5085b87c6bb553b3fd669cea83"
+  },
+  "project": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim",
+  "hardwareOperations": false,
+  "engineTests": [
+    {
+      "engine": "qemu",
+      "elf": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim/build/debug/firmware.elf",
+      "sha256": "7dbeaa379eaec5d58ae35cc7a767fb4620e5c9ebae2fbe0b60105c3cc5fc847b",
+      "checks": [
+        {
+          "name": "baseline",
+          "sample": {
+            "case": "demo_climate",
+            "event": "sample",
+            "sample": 1,
+            "uptime_ms": 1033,
+            "temperature_tenths": 260,
+            "humidity_tenths": 550,
+            "dht_status": 0,
+            "oled_status": 0
+          },
+          "oled_nonblank": true
+        },
+        {
+          "name": "changed-input",
+          "sample": {
+            "case": "demo_climate",
+            "event": "sample",
+            "sample": 2,
+            "uptime_ms": 2067,
+            "temperature_tenths": 330,
+            "humidity_tenths": 650,
+            "dht_status": 0,
+            "oled_status": 0
+          },
+          "oled_nonblank": true
+        }
+      ],
+      "image_id": "sha256:54fd48db26bc757590b561f5116a7fb32958ac32ddc106114e9deeed424acce7",
+      "status": "PASS"
+    },
+    {
+      "engine": "renode",
+      "elf": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim/build/debug/firmware.elf",
+      "sha256": "7dbeaa379eaec5d58ae35cc7a767fb4620e5c9ebae2fbe0b60105c3cc5fc847b",
+      "checks": [
+        {
+          "name": "baseline",
+          "sample": {
+            "case": "demo_climate",
+            "event": "sample",
+            "sample": 1,
+            "uptime_ms": 1023,
+            "temperature_tenths": 260,
+            "humidity_tenths": 550,
+            "dht_status": 0,
+            "oled_status": 0
+          },
+          "oled_nonblank": true
+        },
+        {
+          "name": "changed-input",
+          "sample": {
+            "case": "demo_climate",
+            "event": "sample",
+            "sample": 2,
+            "uptime_ms": 2046,
+            "temperature_tenths": 330,
+            "humidity_tenths": 650,
+            "dht_status": 0,
+            "oled_status": 0
+          },
+          "oled_nonblank": true
+        }
+      ],
+      "image_id": "sha256:069b9785692e50989c16c6550b0ee3b0314970f80e7f3ce32e163956a7529952",
+      "status": "PASS"
+    }
+  ],
+  "desktopRuns": [
+    {
+      "runId": "fe5d9a7e503f42b699179525bde9ba15",
+      "buildId": "2b66b147340645318aabd5f6bf1a7a2e",
+      "engineId": "renode",
+      "binarySHA256": "fe341d7ebd0d6a20d0dae5430b418145b43aa9b68aef79495f16ce77a478ae70",
+      "status": "stopped",
+      "reason": "user",
+      "sourceHash": "1f746673d0b3c544e2ce01f826a48b323f65e292aa78e6022159201c9b1f8d53",
+      "engineVersion": "sha256:069b9785692e50989c16c6550b0ee3b0314970f80e7f3ce32e163956a7529952",
+      "firstSample": {
+        "case": "demo_climate",
+        "event": "sample",
+        "sample": 1,
+        "uptime_ms": 1023,
+        "temperature_tenths": 260,
+        "humidity_tenths": 550,
+        "dht_status": 0,
+        "oled_status": 0
+      },
+      "lastSample": {
+        "case": "demo_climate",
+        "event": "sample",
+        "sample": 9,
+        "uptime_ms": 9207,
+        "temperature_tenths": 260,
+        "humidity_tenths": 550,
+        "dht_status": 0,
+        "oled_status": 0
+      },
+      "displayOn": true,
+      "framebufferSha256": "3084c6cd5e7741fccb79314a7d94c04f77a4b61fa25c6d40776f993eebcc97d2"
+    },
+    {
+      "runId": "ef2e19cbc56b4acc87c360cf39fd1379",
+      "buildId": "13f8c759157c498bb61be017bbe3e054",
+      "engineId": "qemu",
+      "binarySHA256": "fe341d7ebd0d6a20d0dae5430b418145b43aa9b68aef79495f16ce77a478ae70",
+      "status": "stopped",
+      "reason": "user",
+      "sourceHash": "1f746673d0b3c544e2ce01f826a48b323f65e292aa78e6022159201c9b1f8d53",
+      "engineVersion": "sha256:54fd48db26bc757590b561f5116a7fb32958ac32ddc106114e9deeed424acce7",
+      "firstSample": {
+        "case": "demo_climate",
+        "event": "sample",
+        "sample": 1,
+        "uptime_ms": 1033,
+        "temperature_tenths": 260,
+        "humidity_tenths": 550,
+        "dht_status": 0,
+        "oled_status": 0
+      },
+      "lastSample": {
+        "case": "demo_climate",
+        "event": "sample",
+        "sample": 25,
+        "uptime_ms": 25873,
+        "temperature_tenths": 330,
+        "humidity_tenths": 650,
+        "dht_status": 0,
+        "oled_status": 0
+      },
+      "displayOn": true,
+      "framebufferSha256": "ebdb058cdbeed8307e3c1d6247a41c9e32c42646a2700c3bdefd5cbd57aa8d61"
+    }
+  ],
+  "firmware": [
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim/build/debug/firmware.elf",
+      "bytes": 946120,
+      "sha256": "7dbeaa379eaec5d58ae35cc7a767fb4620e5c9ebae2fbe0b60105c3cc5fc847b"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim/build/debug/firmware.hex",
+      "bytes": 57296,
+      "sha256": "3ed71ac7209db5dade66ccb2f36beb003c34dc7bd559b74739c67c6862deb714"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/dacir-simulation-20261023/projects/f103-template-sim/build/debug/firmware.bin",
+      "bytes": 20348,
+      "sha256": "0501f788f8ce376edbeaa71a560fdd734c16ab6875df072608349b7838d1b65e"
+    }
+  ]
+}

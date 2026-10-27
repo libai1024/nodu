@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "kind": "stm32-hal",
+  "name": "functional-review",
+  "target": {
+    "mcu": "STM32F103C8Tx",
+    "board": "chip-f103c8@1",
+    "vendor": "st"
+  },
+  "sdk": "stm32cube-f1@1.8.7",
+  "build": {
+    "preset": "debug",
+    "printfFloat": true
+  },
+  "flash": {
+    "method": "stlink",
+    "autoBoot": {
+      "enabled": false,
+      "confirmed": false,
+      "boot0HighDtr": false,
+      "resetActiveRts": true
+    }
+  },
+  "monitor": {
+    "baud": 115200,
+    "encoding": "utf-8",
+    "lineEnding": "lf"
+  }
+}

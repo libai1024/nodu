@@ -1,0 +1,16 @@
+{
+  "method": "stlink",
+  "deviceId": 1043,
+  "deviceIdHex": "0x413",
+  "revisionId": "0x101f",
+  "flashKiB": 1024,
+  "uid": "0018003d3033510430373735",
+  "uidWords": "0x18003d 0x30335104 0x30373735",
+  "readProtected": false,
+  "voltage": 3.164272,
+  "probe": "STLINK V2J37S7",
+  "probeId": "usb:3-1.2.4",
+  "matches": null,
+  "deviceName": "STM32F405 / F407",
+  "hasBackup": false
+}

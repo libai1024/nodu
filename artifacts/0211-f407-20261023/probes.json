@@ -1,0 +1,22 @@
+[
+  {
+    "vid": 1155,
+    "pid": 14152,
+    "model": "ST-LINK/V2",
+    "serial": "",
+    "product": "STM32 STLink",
+    "driver": "ok",
+    "id": "usb:3-1.2.1",
+    "location": "3-1.2.1"
+  },
+  {
+    "vid": 1155,
+    "pid": 14152,
+    "model": "ST-LINK/V2",
+    "serial": "",
+    "product": "STM32 STLink",
+    "driver": "ok",
+    "id": "usb:3-1.2.4",
+    "location": "3-1.2.4"
+  }
+]

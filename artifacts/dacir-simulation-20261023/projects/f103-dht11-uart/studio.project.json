@@ -1,0 +1,1 @@
+{"build":{"configHeader":"include/config.h"},"clockHz":72000000,"engineId":"qemu","mcu":"STM32F103C8T6","name":"f103-dht11-uart","projectId":"25e8010b-73f6-4e14-a14c-5eb949c37bb4","schemaVersion":1,"target":{"clockHz":72000000,"mcu":"STM32F103C8T6"},"templateId":"temperature-humidity"}

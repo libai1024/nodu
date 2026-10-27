@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "ESP8266 联网",
+  "templateId": "esp8266",
+  "engineId": "qemu",
+  "target": {
+    "mcu": "STM32F103C8T6",
+    "clockHz": 72000000
+  },
+  "build": {
+    "configHeader": "include/config.h"
+  }
+}

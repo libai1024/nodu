@@ -1,0 +1,12 @@
+{
+  "name": "dacir-templates",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Versioned STM32F103C8T6 project templates for DACIR and Nodu",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "check": "node scripts/manifest.cjs --check",
+    "reindex": "node scripts/manifest.cjs --write"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,176 @@
+{
+  "tests": [
+    {
+      "name": "ASCII PING/PONG on real PA9/PA10",
+      "passed": true
+    },
+    {
+      "name": "exact CRLF transmit bytes",
+      "passed": true
+    },
+    {
+      "name": "exact LF transmit bytes",
+      "passed": true
+    },
+    {
+      "name": "exact none transmit bytes",
+      "passed": true
+    },
+    {
+      "name": "fragmented UTF-8 Chinese",
+      "passed": true
+    },
+    {
+      "name": "fragmented GBK Chinese",
+      "passed": true
+    },
+    {
+      "name": "binary bytes including NUL CR LF invalid UTF-8",
+      "passed": true
+    },
+    {
+      "name": "1000 sequenced lines at 115200 without loss",
+      "passed": true
+    },
+    {
+      "name": "20000 byte line intact",
+      "passed": true
+    },
+    {
+      "name": "5 close/reopen cycles",
+      "passed": true
+    },
+    {
+      "name": "9600 then 115200 with both endpoints reconfigured",
+      "passed": true
+    }
+  ],
+  "stateEvents": [
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 9600,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    }
+  ]
+}

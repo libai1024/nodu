@@ -1,0 +1,1216 @@
+{
+  "initial": {
+    "dark": true,
+    "page": "新建项目"
+  },
+  "viewport": {
+    "width": 880,
+    "height": 548
+  },
+  "themes": {
+    "dark": {
+      "variables": {
+        "--theia-editor-background": "#14171c",
+        "--theia-foreground": "#e7eaef",
+        "--theia-editor-selectionBackground": "rgba(47, 91, 255, 0.32)",
+        "--theia-editor-foreground": "#e7eaef",
+        "--theia-focusBorder": "#8fa8ff",
+        "--theia-editorWidget-border": "#343a45",
+        "--theia-sideBar-background": "#181b21",
+        "--theia-scope-mutedForeground": "#949caa",
+        "--theia-sideBar-foreground": "#b9c0cb",
+        "--theia-descriptionForeground": "#949caa",
+        "--theia-list-hoverBackground": "#23272f",
+        "--theia-scope-accentBackground": "#202b4e",
+        "--theia-scope-accent": "#8fa8ff",
+        "--theia-toolbar-hoverBackground": "rgba(90, 93, 94, 0.31)",
+        "--theia-button-background": "#2f5bff",
+        "--theia-button-foreground": "#ffffff",
+        "--theia-button-hoverBackground": "#3f68ff",
+        "--theia-button-secondaryBackground": "#23272f",
+        "--theia-button-secondaryForeground": "#e7eaef",
+        "--theia-button-secondaryHoverBackground": "#33373e",
+        "--theia-input-background": "#14171c",
+        "--theia-input-foreground": "#e7eaef",
+        "--theia-input-placeholderForeground": "#949caa",
+        "--theia-scrollbarSlider-background": "rgba(148, 156, 170, 0.19)",
+        "--theia-editorWarning-foreground": "#f0a43a",
+        "--theia-widget-shadow": "rgba(0, 0, 0, 0.3)",
+        "--theia-editorWidget-background": "#1d2027",
+        "--theia-errorForeground": "#f2706a",
+        "--theia-menu-border": "#343a45",
+        "--theia-menu-background": "#1d2027",
+        "--theia-menu-foreground": "#e7eaef",
+        "--theia-menu-selectionBackground": "#2a2f38",
+        "--theia-menu-selectionForeground": "#e7eaef",
+        "--theia-widget-border": "",
+        "--theia-panel-border": "#343a45",
+        "--theia-input-border": "#646d7c"
+      },
+      "widthChain": [
+        {
+          "selector": "nodu-launcher-form",
+          "width": 608,
+          "height": 450,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(231, 234, 239)",
+          "borderLeft": "0px none rgb(231, 234, 239)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "1 1 0%",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-new-project",
+          "width": 608,
+          "height": 450,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(231, 234, 239)",
+          "borderLeft": "0px none rgb(231, 234, 239)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "1 1 0%",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-np-body",
+          "width": 608,
+          "height": 404,
+          "display": "grid",
+          "alignItems": "normal",
+          "columns": "160px 446px",
+          "border": "1px solid rgb(52, 58, 69)",
+          "borderLeft": "1px solid rgb(52, 58, 69)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "1 1 0%",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-np-families",
+          "width": 160,
+          "height": 402,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(231, 234, 239)",
+          "borderLeft": "0px none rgb(231, 234, 239)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "0 1 auto",
+          "padding": "14px 8px"
+        },
+        {
+          "selector": "nodu-np-fields",
+          "width": 446,
+          "height": 402,
+          "display": "flex",
+          "alignItems": "stretch",
+          "columns": "32px minmax(0px, 1fr)",
+          "border": "0px none rgb(231, 234, 239)",
+          "borderLeft": "0px none rgb(231, 234, 239)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "0 1 auto",
+          "padding": "22px 24px"
+        },
+        {
+          "selector": "nodu-np-control",
+          "width": 398,
+          "height": 56.5,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(231, 234, 239)",
+          "borderLeft": "0px none rgb(231, 234, 239)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "0 1 auto",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-project-name",
+          "width": 398,
+          "height": 34,
+          "display": "block",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "1px solid rgb(52, 58, 69)",
+          "borderLeft": "1px solid rgb(52, 58, 69)",
+          "background": "rgb(20, 23, 28)",
+          "flex": "0 1 auto",
+          "padding": "0px 10px"
+        },
+        {
+          "selector": "nodu-project-parent",
+          "width": 398,
+          "height": 34,
+          "display": "inline-block",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "1px solid rgb(52, 58, 69)",
+          "borderLeft": "1px solid rgb(52, 58, 69)",
+          "background": "rgb(20, 23, 28)",
+          "flex": "0 1 auto",
+          "padding": "0px 40px 0px 10px"
+        }
+      ],
+      "inputRules": [
+        {
+          "selector": "input, textarea, select, button",
+          "matching": [
+            "input"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "display",
+              "value": "inline-block"
+            }
+          ]
+        },
+        {
+          "selector": "input",
+          "matching": [
+            "input"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "border-top-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-right-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-bottom-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-left-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-top-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-right-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-bottom-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-left-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-top-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-right-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-bottom-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-left-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-image-source",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-slice",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-width",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-outset",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-repeat",
+              "value": "initial"
+            }
+          ]
+        },
+        {
+          "selector": "#nodu-launcher .nodu-launcher-new .nodu-np-fields input, #nodu-launcher .nodu-launcher-new .nodu-np-fields select",
+          "matching": [
+            "#nodu-launcher .nodu-launcher-new .nodu-np-fields input"
+          ],
+          "origin": "regular",
+          "line": 24921,
+          "properties": [
+            {
+              "name": "width",
+              "value": "100%",
+              "implicit": false
+            },
+            {
+              "name": "border",
+              "value": "1px solid var(--theia-editorWidget-border)",
+              "implicit": false
+            },
+            {
+              "name": "border-radius",
+              "value": "6px",
+              "implicit": false
+            },
+            {
+              "name": "width",
+              "value": "100%"
+            },
+            {
+              "name": "border-top-color",
+              "value": ""
+            },
+            {
+              "name": "border-top-style",
+              "value": ""
+            },
+            {
+              "name": "border-top-width",
+              "value": ""
+            },
+            {
+              "name": "border-right-color",
+              "value": ""
+            },
+            {
+              "name": "border-right-style",
+              "value": ""
+            },
+            {
+              "name": "border-right-width",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-color",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-style",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-width",
+              "value": ""
+            },
+            {
+              "name": "border-left-color",
+              "value": ""
+            },
+            {
+              "name": "border-left-style",
+              "value": ""
+            },
+            {
+              "name": "border-left-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-source",
+              "value": ""
+            },
+            {
+              "name": "border-image-slice",
+              "value": ""
+            },
+            {
+              "name": "border-image-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-outset",
+              "value": ""
+            },
+            {
+              "name": "border-image-repeat",
+              "value": ""
+            },
+            {
+              "name": "border-top-left-radius",
+              "value": "6px"
+            },
+            {
+              "name": "border-top-right-radius",
+              "value": "6px"
+            },
+            {
+              "name": "border-bottom-right-radius",
+              "value": "6px"
+            },
+            {
+              "name": "border-bottom-left-radius",
+              "value": "6px"
+            }
+          ]
+        }
+      ],
+      "fieldsRules": [
+        {
+          "selector": "div",
+          "matching": [
+            "div"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "display",
+              "value": "block"
+            }
+          ]
+        },
+        {
+          "selector": ".nodu-np-fields",
+          "matching": [
+            ".nodu-np-fields"
+          ],
+          "origin": "regular",
+          "line": 23321,
+          "properties": [
+            {
+              "name": "display",
+              "value": "grid",
+              "implicit": false
+            },
+            {
+              "name": "align-items",
+              "value": "start",
+              "implicit": false
+            },
+            {
+              "name": "display",
+              "value": "grid"
+            },
+            {
+              "name": "align-items",
+              "value": "start"
+            }
+          ]
+        },
+        {
+          "selector": ".nodu-launcher-new .nodu-np-fields",
+          "matching": [
+            ".nodu-launcher-new .nodu-np-fields"
+          ],
+          "origin": "regular",
+          "line": 25202,
+          "properties": [
+            {
+              "name": "display",
+              "value": "flex",
+              "implicit": false
+            },
+            {
+              "name": "flex-direction",
+              "value": "column",
+              "implicit": false
+            },
+            {
+              "name": "align-items",
+              "value": "stretch",
+              "implicit": false
+            },
+            {
+              "name": "display",
+              "value": "flex"
+            },
+            {
+              "name": "flex-direction",
+              "value": "column"
+            },
+            {
+              "name": "align-items",
+              "value": "stretch"
+            }
+          ]
+        }
+      ],
+      "card": {
+        "selector": "nodu-launcher-card",
+        "width": 608,
+        "height": 110.5,
+        "display": "flex",
+        "alignItems": "normal",
+        "columns": "none",
+        "border": "1px solid rgb(52, 58, 69)",
+        "borderLeft": "1px solid rgb(52, 58, 69)",
+        "background": "rgba(0, 0, 0, 0)",
+        "flex": "0 1 auto",
+        "padding": "0px"
+      },
+      "cardRules": [
+        {
+          "selector": "div",
+          "matching": [
+            "div"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "display",
+              "value": "block"
+            }
+          ]
+        },
+        {
+          "selector": ".nodu-launcher-card",
+          "matching": [
+            ".nodu-launcher-card"
+          ],
+          "origin": "regular",
+          "line": 24956,
+          "properties": [
+            {
+              "name": "display",
+              "value": "flex",
+              "implicit": false
+            },
+            {
+              "name": "flex-direction",
+              "value": "column",
+              "implicit": false
+            },
+            {
+              "name": "border",
+              "value": "1px solid var(--theia-editorWidget-border)",
+              "implicit": false
+            },
+            {
+              "name": "border-radius",
+              "value": "8px",
+              "implicit": false
+            },
+            {
+              "name": "display",
+              "value": "flex"
+            },
+            {
+              "name": "flex-direction",
+              "value": "column"
+            },
+            {
+              "name": "border-top-color",
+              "value": ""
+            },
+            {
+              "name": "border-top-style",
+              "value": ""
+            },
+            {
+              "name": "border-top-width",
+              "value": ""
+            },
+            {
+              "name": "border-right-color",
+              "value": ""
+            },
+            {
+              "name": "border-right-style",
+              "value": ""
+            },
+            {
+              "name": "border-right-width",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-color",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-style",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-width",
+              "value": ""
+            },
+            {
+              "name": "border-left-color",
+              "value": ""
+            },
+            {
+              "name": "border-left-style",
+              "value": ""
+            },
+            {
+              "name": "border-left-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-source",
+              "value": ""
+            },
+            {
+              "name": "border-image-slice",
+              "value": ""
+            },
+            {
+              "name": "border-image-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-outset",
+              "value": ""
+            },
+            {
+              "name": "border-image-repeat",
+              "value": ""
+            },
+            {
+              "name": "border-top-left-radius",
+              "value": "8px"
+            },
+            {
+              "name": "border-top-right-radius",
+              "value": "8px"
+            },
+            {
+              "name": "border-bottom-right-radius",
+              "value": "8px"
+            },
+            {
+              "name": "border-bottom-left-radius",
+              "value": "8px"
+            }
+          ]
+        }
+      ],
+      "hover": {
+        "selector": "nodu-launcher-theme",
+        "width": 30,
+        "height": 30,
+        "display": "grid",
+        "alignItems": "center",
+        "columns": "30px",
+        "border": "0px none rgb(231, 234, 239)",
+        "borderLeft": "0px none rgb(231, 234, 239)",
+        "background": "rgba(90, 93, 94, 0.31)",
+        "flex": "0 0 30px",
+        "padding": "0px"
+      },
+      "examples": {
+        "count": 4,
+        "summaries": 0
+      }
+    },
+    "light": {
+      "variables": {
+        "--theia-editor-background": "#ffffff",
+        "--theia-foreground": "#1d2129",
+        "--theia-editor-selectionBackground": "rgba(47, 91, 255, 0.18)",
+        "--theia-editor-foreground": "#1d2129",
+        "--theia-focusBorder": "#2449db",
+        "--theia-editorWidget-border": "#e0e3e8",
+        "--theia-sideBar-background": "#f7f8fa",
+        "--theia-scope-mutedForeground": "#5b616c",
+        "--theia-sideBar-foreground": "#3e434c",
+        "--theia-descriptionForeground": "#5b616c",
+        "--theia-list-hoverBackground": "#edeff3",
+        "--theia-scope-accentBackground": "#eef2ff",
+        "--theia-scope-accent": "#2449db",
+        "--theia-toolbar-hoverBackground": "rgba(184, 184, 184, 0.31)",
+        "--theia-button-background": "#2f5bff",
+        "--theia-button-foreground": "#ffffff",
+        "--theia-button-hoverBackground": "#2449db",
+        "--theia-button-secondaryBackground": "#e7eaee",
+        "--theia-button-secondaryForeground": "#1d2129",
+        "--theia-button-secondaryHoverBackground": "#d7dade",
+        "--theia-input-background": "#ffffff",
+        "--theia-input-foreground": "#1d2129",
+        "--theia-input-placeholderForeground": "#5b616c",
+        "--theia-scrollbarSlider-background": "rgba(91, 97, 108, 0.19)",
+        "--theia-editorWarning-foreground": "#8a5200",
+        "--theia-widget-shadow": "rgba(20, 23, 28, 0.15)",
+        "--theia-editorWidget-background": "#ffffff",
+        "--theia-errorForeground": "#b42f27",
+        "--theia-menu-border": "#e0e3e8",
+        "--theia-menu-background": "#ffffff",
+        "--theia-menu-foreground": "#1d2129",
+        "--theia-menu-selectionBackground": "#e7eaee",
+        "--theia-menu-selectionForeground": "#1d2129",
+        "--theia-widget-border": "",
+        "--theia-panel-border": "#e0e3e8",
+        "--theia-input-border": "#868c97"
+      },
+      "widthChain": [
+        {
+          "selector": "nodu-launcher-form",
+          "width": 608,
+          "height": 450,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(29, 33, 41)",
+          "borderLeft": "0px none rgb(29, 33, 41)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "1 1 0%",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-new-project",
+          "width": 608,
+          "height": 450,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(29, 33, 41)",
+          "borderLeft": "0px none rgb(29, 33, 41)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "1 1 0%",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-np-body",
+          "width": 608,
+          "height": 404,
+          "display": "grid",
+          "alignItems": "normal",
+          "columns": "160px 446px",
+          "border": "1px solid rgb(224, 227, 232)",
+          "borderLeft": "1px solid rgb(224, 227, 232)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "1 1 0%",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-np-families",
+          "width": 160,
+          "height": 402,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(29, 33, 41)",
+          "borderLeft": "0px none rgb(29, 33, 41)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "0 1 auto",
+          "padding": "14px 8px"
+        },
+        {
+          "selector": "nodu-np-fields",
+          "width": 446,
+          "height": 402,
+          "display": "flex",
+          "alignItems": "stretch",
+          "columns": "32px minmax(0px, 1fr)",
+          "border": "0px none rgb(29, 33, 41)",
+          "borderLeft": "0px none rgb(29, 33, 41)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "0 1 auto",
+          "padding": "22px 24px"
+        },
+        {
+          "selector": "nodu-np-control",
+          "width": 398,
+          "height": 56.5,
+          "display": "flex",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "0px none rgb(29, 33, 41)",
+          "borderLeft": "0px none rgb(29, 33, 41)",
+          "background": "rgba(0, 0, 0, 0)",
+          "flex": "0 1 auto",
+          "padding": "0px"
+        },
+        {
+          "selector": "nodu-project-name",
+          "width": 398,
+          "height": 34,
+          "display": "block",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "1px solid rgb(224, 227, 232)",
+          "borderLeft": "1px solid rgb(224, 227, 232)",
+          "background": "rgb(255, 255, 255)",
+          "flex": "0 1 auto",
+          "padding": "0px 10px"
+        },
+        {
+          "selector": "nodu-project-parent",
+          "width": 398,
+          "height": 34,
+          "display": "inline-block",
+          "alignItems": "normal",
+          "columns": "none",
+          "border": "1px solid rgb(224, 227, 232)",
+          "borderLeft": "1px solid rgb(224, 227, 232)",
+          "background": "rgb(255, 255, 255)",
+          "flex": "0 1 auto",
+          "padding": "0px 40px 0px 10px"
+        }
+      ],
+      "inputRules": [
+        {
+          "selector": "input, textarea, select, button",
+          "matching": [
+            "input"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "display",
+              "value": "inline-block"
+            }
+          ]
+        },
+        {
+          "selector": "input",
+          "matching": [
+            "input"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "border-top-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-right-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-bottom-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-left-width",
+              "value": "2px"
+            },
+            {
+              "name": "border-top-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-right-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-bottom-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-left-style",
+              "value": "inset"
+            },
+            {
+              "name": "border-top-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-right-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-bottom-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-left-color",
+              "value": "light-dark(rgb(118, 118, 118), rgb(133, 133, 133))"
+            },
+            {
+              "name": "border-image-source",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-slice",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-width",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-outset",
+              "value": "initial"
+            },
+            {
+              "name": "border-image-repeat",
+              "value": "initial"
+            }
+          ]
+        },
+        {
+          "selector": "#nodu-launcher .nodu-launcher-new .nodu-np-fields input, #nodu-launcher .nodu-launcher-new .nodu-np-fields select",
+          "matching": [
+            "#nodu-launcher .nodu-launcher-new .nodu-np-fields input"
+          ],
+          "origin": "regular",
+          "line": 24921,
+          "properties": [
+            {
+              "name": "width",
+              "value": "100%",
+              "implicit": false
+            },
+            {
+              "name": "border",
+              "value": "1px solid var(--theia-editorWidget-border)",
+              "implicit": false
+            },
+            {
+              "name": "border-radius",
+              "value": "6px",
+              "implicit": false
+            },
+            {
+              "name": "width",
+              "value": "100%"
+            },
+            {
+              "name": "border-top-color",
+              "value": ""
+            },
+            {
+              "name": "border-top-style",
+              "value": ""
+            },
+            {
+              "name": "border-top-width",
+              "value": ""
+            },
+            {
+              "name": "border-right-color",
+              "value": ""
+            },
+            {
+              "name": "border-right-style",
+              "value": ""
+            },
+            {
+              "name": "border-right-width",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-color",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-style",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-width",
+              "value": ""
+            },
+            {
+              "name": "border-left-color",
+              "value": ""
+            },
+            {
+              "name": "border-left-style",
+              "value": ""
+            },
+            {
+              "name": "border-left-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-source",
+              "value": ""
+            },
+            {
+              "name": "border-image-slice",
+              "value": ""
+            },
+            {
+              "name": "border-image-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-outset",
+              "value": ""
+            },
+            {
+              "name": "border-image-repeat",
+              "value": ""
+            },
+            {
+              "name": "border-top-left-radius",
+              "value": "6px"
+            },
+            {
+              "name": "border-top-right-radius",
+              "value": "6px"
+            },
+            {
+              "name": "border-bottom-right-radius",
+              "value": "6px"
+            },
+            {
+              "name": "border-bottom-left-radius",
+              "value": "6px"
+            }
+          ]
+        }
+      ],
+      "fieldsRules": [
+        {
+          "selector": "div",
+          "matching": [
+            "div"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "display",
+              "value": "block"
+            }
+          ]
+        },
+        {
+          "selector": ".nodu-np-fields",
+          "matching": [
+            ".nodu-np-fields"
+          ],
+          "origin": "regular",
+          "line": 23321,
+          "properties": [
+            {
+              "name": "display",
+              "value": "grid",
+              "implicit": false
+            },
+            {
+              "name": "align-items",
+              "value": "start",
+              "implicit": false
+            },
+            {
+              "name": "display",
+              "value": "grid"
+            },
+            {
+              "name": "align-items",
+              "value": "start"
+            }
+          ]
+        },
+        {
+          "selector": ".nodu-launcher-new .nodu-np-fields",
+          "matching": [
+            ".nodu-launcher-new .nodu-np-fields"
+          ],
+          "origin": "regular",
+          "line": 25202,
+          "properties": [
+            {
+              "name": "display",
+              "value": "flex",
+              "implicit": false
+            },
+            {
+              "name": "flex-direction",
+              "value": "column",
+              "implicit": false
+            },
+            {
+              "name": "align-items",
+              "value": "stretch",
+              "implicit": false
+            },
+            {
+              "name": "display",
+              "value": "flex"
+            },
+            {
+              "name": "flex-direction",
+              "value": "column"
+            },
+            {
+              "name": "align-items",
+              "value": "stretch"
+            }
+          ]
+        }
+      ],
+      "card": {
+        "selector": "nodu-launcher-card",
+        "width": 608,
+        "height": 110.5,
+        "display": "flex",
+        "alignItems": "normal",
+        "columns": "none",
+        "border": "1px solid rgb(224, 227, 232)",
+        "borderLeft": "1px solid rgb(224, 227, 232)",
+        "background": "rgba(0, 0, 0, 0)",
+        "flex": "0 1 auto",
+        "padding": "0px"
+      },
+      "cardRules": [
+        {
+          "selector": "div",
+          "matching": [
+            "div"
+          ],
+          "origin": "user-agent",
+          "line": 0,
+          "properties": [
+            {
+              "name": "display",
+              "value": "block"
+            }
+          ]
+        },
+        {
+          "selector": ".nodu-launcher-card",
+          "matching": [
+            ".nodu-launcher-card"
+          ],
+          "origin": "regular",
+          "line": 24956,
+          "properties": [
+            {
+              "name": "display",
+              "value": "flex",
+              "implicit": false
+            },
+            {
+              "name": "flex-direction",
+              "value": "column",
+              "implicit": false
+            },
+            {
+              "name": "border",
+              "value": "1px solid var(--theia-editorWidget-border)",
+              "implicit": false
+            },
+            {
+              "name": "border-radius",
+              "value": "8px",
+              "implicit": false
+            },
+            {
+              "name": "display",
+              "value": "flex"
+            },
+            {
+              "name": "flex-direction",
+              "value": "column"
+            },
+            {
+              "name": "border-top-color",
+              "value": ""
+            },
+            {
+              "name": "border-top-style",
+              "value": ""
+            },
+            {
+              "name": "border-top-width",
+              "value": ""
+            },
+            {
+              "name": "border-right-color",
+              "value": ""
+            },
+            {
+              "name": "border-right-style",
+              "value": ""
+            },
+            {
+              "name": "border-right-width",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-color",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-style",
+              "value": ""
+            },
+            {
+              "name": "border-bottom-width",
+              "value": ""
+            },
+            {
+              "name": "border-left-color",
+              "value": ""
+            },
+            {
+              "name": "border-left-style",
+              "value": ""
+            },
+            {
+              "name": "border-left-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-source",
+              "value": ""
+            },
+            {
+              "name": "border-image-slice",
+              "value": ""
+            },
+            {
+              "name": "border-image-width",
+              "value": ""
+            },
+            {
+              "name": "border-image-outset",
+              "value": ""
+            },
+            {
+              "name": "border-image-repeat",
+              "value": ""
+            },
+            {
+              "name": "border-top-left-radius",
+              "value": "8px"
+            },
+            {
+              "name": "border-top-right-radius",
+              "value": "8px"
+            },
+            {
+              "name": "border-bottom-right-radius",
+              "value": "8px"
+            },
+            {
+              "name": "border-bottom-left-radius",
+              "value": "8px"
+            }
+          ]
+        }
+      ],
+      "hover": {
+        "selector": "nodu-launcher-theme",
+        "width": 30,
+        "height": 30,
+        "display": "grid",
+        "alignItems": "center",
+        "columns": "30px",
+        "border": "0px none rgb(29, 33, 41)",
+        "borderLeft": "0px none rgb(29, 33, 41)",
+        "background": "rgba(184, 184, 184, 0.31)",
+        "flex": "0 0 30px",
+        "padding": "0px"
+      },
+      "examples": {
+        "count": 4,
+        "summaries": 0
+      }
+    }
+  }
+}

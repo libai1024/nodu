@@ -1,0 +1,58 @@
+{
+  "tests": [
+    {
+      "name": "failed port switch closes old port and reports closed status",
+      "passed": true
+    },
+    {
+      "name": "real port reopens after failed switch and communicates",
+      "passed": true
+    },
+    {
+      "name": "second process cannot take active serial port",
+      "passed": true
+    },
+    {
+      "name": "closed monitor rejects writes",
+      "passed": true
+    }
+  ],
+  "stateEvents": [
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "event": "monitor.state",
+      "data": {
+        "port": "/dev/cu.usbserial-31230",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    }
+  ]
+}

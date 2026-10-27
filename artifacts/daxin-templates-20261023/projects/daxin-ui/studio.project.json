@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "name": "daxin-ui",
+  "templateId": "temperature-humidity",
+  "engineId": "qemu",
+  "target": {
+    "mcu": "STM32F103C8T6",
+    "clockHz": 72000000
+  },
+  "build": {
+    "configHeader": "include/config.h"
+  },
+  "projectId": "d327bf4c-d2b3-43c3-99fa-41a744141968"
+}

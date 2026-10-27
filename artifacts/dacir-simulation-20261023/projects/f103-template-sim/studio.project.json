@@ -1,0 +1,1 @@
+{"build":{"configHeader":"include/config.h"},"clockHz":72000000,"engineId":"qemu","mcu":"STM32F103C8T6","name":"f103-template-sim","projectId":"bf3c70be-2469-45a6-8fd3-dee0f2d0ba49","schemaVersion":1,"target":{"clockHz":72000000,"mcu":"STM32F103C8T6"},"templateId":"temperature-humidity"}

@@ -1,0 +1,185 @@
+{
+  "errors": [],
+  "icons": [
+    {
+      "label": "嘉楠 · Kendryte · K210",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · F103",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · F407",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · ESP32",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · S2",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · S3",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · C2",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · C3",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · C6",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · H2",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · P4",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · STM32",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "普通项目",
+      "width": 40,
+      "logo": false,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · F103 · 找不到项目文件",
+      "width": 40,
+      "logo": true,
+      "warning": true
+    },
+    {
+      "label": "普通项目 · 找不到项目文件",
+      "width": 40,
+      "logo": false,
+      "warning": true
+    },
+    {
+      "label": "嘉楠 · Kendryte · K210",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · F103",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · F407",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · ESP32",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · S2",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · S3",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · C2",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · C3",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · C6",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · H2",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "乐鑫 · Espressif · P4",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · STM32",
+      "width": 40,
+      "logo": true,
+      "warning": false
+    },
+    {
+      "label": "普通项目",
+      "width": 40,
+      "logo": false,
+      "warning": false
+    },
+    {
+      "label": "意法半导体 · ST · F103 · 找不到项目文件",
+      "width": 40,
+      "logo": true,
+      "warning": true
+    },
+    {
+      "label": "普通项目 · 找不到项目文件",
+      "width": 40,
+      "logo": false,
+      "warning": true
+    }
+  ]
+}
