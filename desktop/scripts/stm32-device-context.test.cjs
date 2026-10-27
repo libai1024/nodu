@@ -175,24 +175,43 @@ test('BOOT waiting locks ISP port selection even after the device worker has end
 });
 
 
+async function detectedModel() {
+    const m = model(), call = m.call;
+    m.call = (method, args) => method === 'openProject' ? Promise.resolve(project()) : call(method, args);
+    m.files = { exists: async () => true, read: async () => ({ value: JSON.stringify({ kind: 'stm32-hal' }) }) };
+    m.espProjectKey = m.cProjectKey = { set() {} };
+    m.refreshDevices = m.syncMonitor = async () => {};
+    const root = { resolve: () => ({}), path: { fsPath: () => '/f103' }, toString: () => 'file:///f103' };
+    // Establish the workspace through its real lifecycle before testing a same-path refresh.
+    await m.detect(root); await flush();
+    return { m, root };
+}
+
 test('detect at the same path invalidates device identity when on-disk target or method changed', async () => {
     for (const change of ['target', 'method']) {
-        const m = model(), call = m.call;
+        const { m, root } = await detectedModel(), call = m.call;
         m.rememberIdentity(f103); m.backups = [a]; m.lastFlash = { ok: true };
         const build = { ok: true }; m.lastBuild = build;
         const updated = change === 'target'
             ? { ...project(), manifest: { target: { mcu: 'STM32F407ZGT6' } } }
             : { ...project(), flashMethod: 'uart' };
         m.call = (method, args) => method === 'openProject' ? Promise.resolve(updated) : call(method, args);
-        m.files = { exists: async () => true, read: async () => ({ value: JSON.stringify({ kind: 'stm32-hal' }) }) };
-        m.espProjectKey = m.cProjectKey = { set() {} };
-        m.refreshDevices = m.syncMonitor = async () => {};
-        const root = { resolve: () => ({}), path: { fsPath: () => '/f103' } };
         await m.detect(root); await flush();
         assert.equal(m.project, updated); assert.equal(m.identity, undefined); assert.equal(m.lastFlash, undefined);
         assert.equal(m.backupScope, 'history'); assert.deepEqual(m.backups, [a, b]);
         assert.equal(m.lastBuild, build, 'this fix does not change compilation state semantics');
     }
+});
+
+test('detecting another workspace clears its predecessor build and device identity', async () => {
+    const { m, root } = await detectedModel(), call = m.call;
+    m.rememberIdentity(f103); m.lastBuild = { ok: true }; m.lastFlash = { ok: true };
+    const updated = { ...project(), path: '/f407', manifest: { target: { mcu: 'STM32F407ZGT6' } } };
+    m.call = (method, args) => method === 'openProject' ? Promise.resolve(updated) : call(method, args);
+    await m.detect({ ...root, path: { fsPath: () => '/f407' }, toString: () => 'file:///f407' }); await flush();
+    assert.equal(m.project, updated); assert.equal(m.lastBuild, undefined);
+    assert.equal(m.identity, undefined); assert.equal(m.lastFlash, undefined);
+    assert.equal(m.backupScope, 'history'); assert.deepEqual(m.backups, [a, b]);
 });
 
 test('reload invalidates same-path target/method changes but preserves identity for unrelated settings', async () => {
