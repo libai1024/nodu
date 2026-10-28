@@ -1,10 +1,24 @@
 /* SPDX-License-Identifier: MIT */
-.nodu-pro-actions, .nodu-minimal-action {
+/* The fan is portalled to body, so it owns the same theme palette as its trigger. */
+.nodu-pro-actions, .nodu-minimal-action, .nodu-minimal-fan {
     --nodu-action-build-color: #e4b95f;
     --nodu-action-flash-color: #7ea6ff;
     --nodu-action-run-color: #6ccfa0;
 }
-.nodu-minimal-action {
+body.theia-light :is(.nodu-pro-actions, .nodu-minimal-action, .nodu-minimal-fan),
+body.theia-hcLight :is(.nodu-pro-actions, .nodu-minimal-action, .nodu-minimal-fan) {
+    --nodu-action-build-color: #9b6500;
+    --nodu-action-flash-color: #2563c4;
+    --nodu-action-run-color: #16835d;
+}
+
+/* Approved soft surface: native 44px circles, 11% tint and a same-color fine edge. */
+.nodu-minimal-action, .nodu-minimal-fan-circle {
+    --nodu-action-tone: var(--nodu-action-run-color);
+    --nodu-action-tint: 11%;
+    --nodu-action-edge: 37%;
+    --nodu-action-surface: var(--theia-sideBar-background, var(--theia-editor-background));
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,69 +26,84 @@
     width: 44px;
     height: 44px;
     padding: 0;
-    border: 1px solid var(--theia-widget-border, #8884);
+    border: 1px solid color-mix(in srgb, var(--nodu-action-tone) var(--nodu-action-edge), transparent);
     border-radius: 50%;
-    background: transparent;
-    color: var(--theia-foreground);
+    background: color-mix(in srgb, var(--nodu-action-tone) var(--nodu-action-tint), var(--nodu-action-surface));
+    color: var(--nodu-action-tone);
+    box-shadow: inset 0 1px 0 #ffffff0d, 0 2px 4px var(--theia-widget-shadow, #0004);
+    transition: background .16s, border-color .16s, box-shadow .16s, transform .12s;
     cursor: pointer;
     touch-action: none;
     user-select: none;
 }
-body.theia-light .nodu-pro-actions,
-body.theia-hcLight .nodu-pro-actions,
-body.theia-light .nodu-minimal-action,
-body.theia-hcLight .nodu-minimal-action {
-    --nodu-action-build-color: #9b6500;
-    --nodu-action-flash-color: #2563c4;
-    --nodu-action-run-color: #16835d;
+:is(.nodu-minimal-action, .nodu-minimal-fan-circle)[data-action="build"] { --nodu-action-tone: var(--nodu-action-build-color); }
+:is(.nodu-minimal-action, .nodu-minimal-fan-circle)[data-action="flash"] { --nodu-action-tone: var(--nodu-action-flash-color); }
+.nodu-minimal-action:not(:disabled):hover,
+.nodu-minimal-action:not(:disabled).open,
+.nodu-minimal-fan-circle:hover {
+    --nodu-action-tint: 19%;
+    --nodu-action-edge: 65%;
+    box-shadow: inset 0 1px 0 #ffffff12,
+        0 0 0 3px color-mix(in srgb, var(--nodu-action-tone) 7%, transparent),
+        0 2px 5px var(--theia-widget-shadow, #0004);
 }
-.nodu-minimal-action:not(.busy):not(:disabled)[data-action="build"] { color: var(--nodu-action-build-color); }
-.nodu-minimal-action:not(.busy):not(:disabled)[data-action="flash"] { color: var(--nodu-action-flash-color); }
-.nodu-minimal-action:not(.busy):not(:disabled)[data-action="run"] { color: var(--nodu-action-run-color); }
-.nodu-minimal-action:hover,
-.nodu-minimal-action.open {
-    background: var(--theia-toolbar-hoverBackground, rgba(128, 128, 128, .12));
+.nodu-minimal-action:not(:disabled):active,
+.nodu-minimal-fan-circle:active {
+    transform: scale(.96);
+    box-shadow: inset 0 1px 3px var(--theia-widget-shadow, #0004);
 }
-.nodu-minimal-action:focus-visible {
-    outline: 1px solid var(--theia-focusBorder);
-    outline-offset: 2px;
+.nodu-minimal-action.busy {
+    --nodu-action-tone: var(--theia-errorForeground);
+    --nodu-action-tint: 10%;
+    --nodu-action-edge: 43%;
+}
+.nodu-minimal-action.busy:not(:disabled)::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border: 1.5px solid transparent;
+    border-top-color: var(--nodu-action-tone);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: nodu-action-progress 1.4s linear infinite;
 }
 .nodu-minimal-action:disabled {
-    color: var(--theia-disabledForeground);
+    --nodu-action-tone: var(--theia-disabledForeground);
+    --nodu-action-tint: 3%;
+    --nodu-action-edge: 22%;
+    box-shadow: none;
     cursor: default;
 }
-.nodu-minimal-action.busy:not(:disabled) { color: var(--theia-errorForeground); }
 .nodu-minimal-fan {
     position: fixed;
     z-index: 12000;
     pointer-events: none;
 }
 .nodu-minimal-fan-circle {
+    --nodu-action-surface: var(--theia-menu-background, var(--theia-editor-background));
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--theia-menu-border, var(--theia-widget-border, #8885));
-    border-radius: 50%;
-    padding: 0;
-    background: var(--theia-menu-background, var(--theia-editor-background));
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .09);
-    color: var(--theia-foreground);
-    cursor: pointer;
     pointer-events: auto;
-    outline: none;
-}
-.nodu-minimal-fan-circle:hover {
-    background: var(--theia-list-hoverBackground);
 }
 .nodu-minimal-fan-circle[aria-checked="true"] {
-    color: var(--theia-focusBorder, #3e61ed);
-    border-color: var(--theia-focusBorder, #3e61ed);
+    outline: 1px solid color-mix(in srgb, var(--nodu-action-tone) 65%, transparent);
+    outline-offset: 3px;
 }
+.nodu-minimal-action:focus-visible,
 .nodu-minimal-fan-circle:focus-visible {
-    outline: 1px solid var(--theia-focusBorder);
-    outline-offset: 2px;
+    outline: 2px solid var(--theia-focusBorder);
+    outline-offset: 4px;
 }
+@keyframes nodu-action-progress { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .nodu-minimal-action, .nodu-minimal-fan-circle { transition: none; }
+    .nodu-minimal-action.busy::after { animation: none; }
+}
+/* High-contrast themes retain their explicit foreground and boundary colors. */
+body:is(.theia-hc, .theia-hcLight) :is(.nodu-minimal-action, .nodu-minimal-fan-circle) {
+    background: var(--nodu-action-surface);
+    border-color: var(--theia-contrastBorder, var(--theia-foreground));
+    color: var(--theia-foreground);
+    box-shadow: none;
+}
+body:is(.theia-hc, .theia-hcLight) .nodu-minimal-action:disabled { color: var(--theia-disabledForeground); }
+body:is(.theia-hc, .theia-hcLight) .nodu-minimal-fan-circle[aria-checked="true"] { outline-color: var(--theia-focusBorder); }

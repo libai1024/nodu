@@ -25,15 +25,15 @@ export interface NoduMinimalActionProps {
 export function ActionIcon({ action, stop = false, play = false }: {
     action: MinimalAction; stop?: boolean; play?: boolean;
 }): React.ReactElement {
-    const hammer = <>
-        <path d="M12.45 3.45 20.55 11.55Q21 12 20.55 12.45L16.45 16.55Q16 17 15.55 16.55L7.45 8.45Q7 8 7.45 7.55L11.55 3.45Q12 3 12.45 3.45Z" vectorEffect="non-scaling-stroke" />
-        <path d="M10 11 3.45 17.55Q3 18 3.45 18.45L5.55 20.55Q6 21 6.45 20.55L13 14" vectorEffect="non-scaling-stroke" />
+    const buildCube = <>
+        <path d="M11 2.58a2 2 0 0 1 2 0l7 4.04a2 2 0 0 1 1 1.73v7.3a2 2 0 0 1-1 1.73l-7 4.04a2 2 0 0 1-2 0l-7-4.04a2 2 0 0 1-1-1.73v-7.3a2 2 0 0 1 1-1.73Z" />
+        <path d="m3.4 7.1 8.6 5 8.6-5M12 12v9.7" />
     </>;
     return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
         {stop ? <rect x="6" y="6" width="12" height="12" rx="2" />
             : play || action === 'build-flash' ? <path d="M8.15 4.7 19.1 11.45Q20 12 19.1 12.55L8.15 19.3Q7 20 7 18.65V5.35Q7 4 8.15 4.7Z" />
-                : action === 'build' ? hammer
+                : action === 'build' ? buildCube
                     : <path d="M12 3v12m-4-4 4 4 4-4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />}
     </svg>;
 }
@@ -185,6 +185,7 @@ export function NoduMinimalAction(props: NoduMinimalActionProps): React.ReactEle
             }}>
             {fan.geometry.items.map(item => <button key={item.action} type="button" role="menuitemradio"
                 className="nodu-minimal-fan-circle" aria-label={MINIMAL_ACTION_LABELS[item.action]}
+                data-action={item.action === 'build-flash' ? 'run' : item.action}
                 aria-checked={props.action === item.action} title={MINIMAL_ACTION_LABELS[item.action]} tabIndex={-1}
                 style={{ left: item.left, top: item.top }} onClick={() => {
                     const p = current.current;

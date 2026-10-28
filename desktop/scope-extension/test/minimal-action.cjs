@@ -267,6 +267,7 @@ test('each production circle selects only its mode and the next rendered primary
         const selected = [], executed = [];
         const mounted = mountedFanEvents({ action: 'build-flash', onSelect: value => selected.push(value), onExecute: () => executed.push('old') });
         try {
+            assert.equal(mounted.menu.props.children.flat()[index].props['data-action'], action === 'build-flash' ? 'run' : action);
             mounted.choose(index);
             assert.deepEqual(selected, [action]);
             assert.deepEqual(executed, []);
