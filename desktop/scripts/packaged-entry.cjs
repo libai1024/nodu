@@ -15,6 +15,7 @@ function fail(message) {
 }
 
 const { app } = require('electron');
+process.env.NODU_APP_EXECUTABLE = process.execPath;
 require('./scripts/portable-profile.cjs').configurePortableProfile({ app });
 
 // The launcher ships next to this file so packaged mode reuses the exact

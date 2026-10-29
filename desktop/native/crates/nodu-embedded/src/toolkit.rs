@@ -90,6 +90,8 @@ impl Toolkit {
         env.insert("PATH".into(), joined);
         env.insert("LC_ALL".into(), "C".into());
         env.insert("LANG".into(), "C".into());
+        env.insert("SOURCE_DATE_EPOCH".into(), "0".into());
+        env.insert("TZ".into(), "UTC".into());
         env.insert("NODU_STM32_TOOLKIT".into(), self.root.display().to_string());
         for key in ["HOME", "TMPDIR", "TEMP", "TMP", "USERPROFILE", "LOCALAPPDATA"] {
             if let Ok(value) = std::env::var(key) {

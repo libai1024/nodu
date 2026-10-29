@@ -143,8 +143,12 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.cProjectKey = this.contextKeys.createKey<boolean>('nodu.cProject', false);
         this.espProjectKey = this.contextKeys.createKey<boolean>('nodu.espProject', false);
         this.arduinoProjectKey = this.contextKeys.createKey<boolean>('nodu.arduinoProject', false);
+        window.addEventListener('beforeunload', () => { if (this.lastSharedPath) void this.call('editorClose', { path: this.lastSharedPath, clientId: this.sharedEditorId, generation: this.sharedEditorGeneration, dirty: this.hasUnsavedSources(this.lastSharedPath) ? ['*'] : [] }).catch(() => undefined); });
+        try { sessionStorage.setItem('nodu.shared-editor', this.sharedEditorId); } catch { /* A fresh editor identity is still valid. */ }
         this.service = this.connections.createProxy<NoduEmbeddedService>(NODU_EMBEDDED_PATH, this);
+        void this.call<Array<Record<string, unknown>>>('linkInbox', {}).then(items => { for (const item of items) this.onEvent('link.open', item); }).catch(() => undefined);
         this.workspace.onWorkspaceChanged(roots => void this.detect(roots[0]?.resource));
+        this.editors.onCreated(() => this.syncSharedReadOnly());
         void this.workspace.roots.then(roots => this.detect(roots[0]?.resource));
         const savedPort = localStorage.getItem('nodu.stm32.monitor-port');
         this.monitorPort = savedPort || '';
@@ -250,6 +254,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     // ── events from the sidecar (all windows receive them; filter by our ids) ──
     onEvent(event: string, data: unknown): void {
         const d = (data ?? {}) as Record<string, unknown>;
+        if (event === 'link.open' && d.target === 'nodu' && (!d.editorClientId || d.editorClientId === this.sharedEditorId) && typeof d.path === 'string') {
+            if (this.hasUnsavedSources()) { void this.messages.warn('DACIR 请求打开工程，请先保存当前草稿。'); void this.call('linkAcknowledge', { id: d.id, accepted: false }).catch(() => undefined); return; }
+            void this.receiveLink(String(d.id), d.path).catch(error => { void this.call('linkAcknowledge', { id: d.id, accepted: false }).catch(() => undefined); this.fail(error, '打开联动工程'); });
+        }
+        if (event === 'link.result' && d.path === this.project?.path) { this.appendOutput(`DACIR ${d.engineId} · ${d.status} · ELF ${String(d.elfSHA256).slice(0, 12)} · run ${d.runId}`); }
         switch (event) {
             case 'build.started':
                 if (d.path === this.project?.path) { this.buildId = String(d.buildId); this.output.length = 0; this.appendOutput(`── 编译，${new Date().toLocaleTimeString()} ──`); }
@@ -612,6 +621,79 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         const output = (failure.detail as { output?: string } | undefined)?.output;
         if (output) { for (const line of output.split('\n')) { this.appendOutput(line); } }
         this.settle(`${what}失败：${failure.message}`, 'error', { target: 'device' });
+    }
+
+    private readonly openingLinks = new Map<string, Promise<void>>();
+    private receiveLink(id: string, path: string): Promise<void> {
+        const previous = this.openingLinks.get(id);
+        if (previous) { return previous; }
+        const promise = this.openLinkedProject(id, path);
+        this.openingLinks.set(id, promise);
+        void promise.finally(() => this.openingLinks.delete(id)).catch(() => undefined);
+        return promise;
+    }
+    private async openLinkedProject(id: string, path: string): Promise<void> {
+        // During startup the workspace is known before detect() populates project.
+        // Do not wait for a change event when this page already owns that root.
+        const roots = await this.workspace.roots;
+        if (!roots.some(root => root.resource.path.fsPath() === path)) {
+            await new Promise<void>((resolve, reject) => {
+                const timer = setTimeout(() => { listener.dispose(); reject(new Error('打开联动工程超时。')); }, 10000);
+                const listener = this.workspace.onWorkspaceChanged(next => {
+                    if (next.some(root => root.resource.path.fsPath() === path)) { clearTimeout(timer); listener.dispose(); resolve(); }
+                });
+                void Promise.resolve(this.workspace.open(URI.fromFilePath(path), { preserveWindow: true })).catch(error => { clearTimeout(timer); listener.dispose(); reject(error); });
+            });
+        }
+        await this.call('openProject', { path });
+        await this.call('linkAcknowledge', { id, accepted: true });
+    }
+
+    private readonly sharedEditorId = (() => { try { return sessionStorage.getItem('nodu.shared-editor') || crypto.randomUUID(); } catch { return crypto.randomUUID(); } })();
+    private readonly sharedEditorGeneration = Date.now();
+    private sharedFlight = false;
+    private lastSharedPath = '';
+    private sharedLease: { id: string; expires: number } | undefined;
+    private sharedControls = new Map<{ updateOptions(options: { readOnly: boolean }): void }, boolean>();
+    private syncSharedReadOnly(): boolean {
+        if (!this.sharedLease || this.sharedLease.expires <= Date.now()) {
+            this.sharedLease = undefined;
+            for (const [control, previous] of this.sharedControls) control.updateOptions({ readOnly: previous });
+            this.sharedControls.clear(); return true;
+        }
+        let supported = true;
+        for (const widget of this.editors.all) {
+            if (widget.isDisposed || this.projectInputPath(widget.editor.uri.path.fsPath()) === undefined) continue;
+            const editor = widget.editor as typeof widget.editor & { getControl?(): { getRawOptions(): { readOnly?: boolean }; updateOptions(options: { readOnly: boolean }): void } };
+            const control = editor.getControl?.();
+            if (!control) { supported = false; continue; }
+            if (!this.sharedControls.has(control)) this.sharedControls.set(control, !!control.getRawOptions().readOnly);
+            control.updateOptions({ readOnly: true });
+        }
+        return supported;
+    }
+    private sharedPulse = setInterval(() => { void this.pulseSharedEditor(); }, 500);
+    private async pulseSharedEditor(): Promise<void> {
+        this.syncSharedReadOnly();
+        const project = this.project;
+        if (this.lastSharedPath && this.lastSharedPath !== project?.path) {
+            const previous = this.lastSharedPath; this.lastSharedPath = '';
+            void this.call('editorClose', { path: previous, clientId: this.sharedEditorId, generation: this.sharedEditorGeneration, dirty: this.hasUnsavedSources(previous) ? ['*'] : [] }).catch(() => undefined);
+        }
+        if (!project || this.sharedFlight || !['dacir-directory-v1', 'nodu-hal-f103-72mhz-v1'].includes(project.manifest.build?.adapter || '')) return;
+        this.lastSharedPath = project.path;
+        this.sharedFlight = true;
+        try {
+            const body = { path: project.path, dirty: this.hasUnsavedSources(project.path) ? ['*'] : [], clientId: this.sharedEditorId, generation: this.sharedEditorGeneration,
+                ...(this.sharedLease ? { leaseId: this.sharedLease.id, ready: true } : {}) };
+            const response = await this.call<{ requestedLeaseId: string | null; expiresAt: number | null }>('editorPulse', body);
+            if (response.requestedLeaseId && response.expiresAt && response.expiresAt > Date.now()) {
+                this.sharedLease = { id: response.requestedLeaseId, expires: response.expiresAt };
+                const supported = this.syncSharedReadOnly();
+                await this.call('editorPulse', { ...body, dirty: this.hasUnsavedSources(project.path) ? ['*'] : [], leaseId: this.sharedLease.id, ready: supported });
+            } else { this.sharedLease = undefined; this.syncSharedReadOnly(); }
+        } catch { /* Unknown editor state remains protected by the coordinator. */ }
+        finally { this.sharedFlight = false; }
     }
 
     async build(clean = false): Promise<BuildResult | undefined> {

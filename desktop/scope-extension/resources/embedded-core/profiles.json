@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "profiles": [
+    {
+      "id": "dacir-directory-v1",
+      "cmakeSHA256": "c9acafe569bf0531f042b4865aae277a006ce032c755419ecef9b99c91927ec4",
+      "toolchainSHA256": "2614808663a3da232ff336cb888ce61d8a20bc34d818b90033f845e158acf56f",
+      "clockHz": 72000000
+    },
+    {
+      "id": "dacir-directory-v1",
+      "cmakeSHA256": "7c37d0ec1f062fec9602800be8e9dca6d80fa0b78d0a51bd2965ae970ed3b423",
+      "toolchainSHA256": "2614808663a3da232ff336cb888ce61d8a20bc34d818b90033f845e158acf56f",
+      "clockHz": 72000000
+    }
+  ],
+  "hal72": {
+    "cmake/nodu.cmake": "c31b0c27a31eed536ac377defc20e4847fb28fc2ea027bd4c4dca9796d819abe",
+    "cmake/arm-gcc.cmake": "2614808663a3da232ff336cb888ce61d8a20bc34d818b90033f845e158acf56f",
+    "cmake/nodu-target.cmake": "dddd9f362c6480294de2abce37561af35b29cdc5b42e860f4c56e53d54fa57b3",
+    "CMakePresets.json": "7b6f11ef2bbda8ec9c96a5ff5e64ea75c54a9272391c11b8de25a0e113a95e83"
+  }
+}

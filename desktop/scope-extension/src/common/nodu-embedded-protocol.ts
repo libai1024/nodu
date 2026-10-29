@@ -10,7 +10,7 @@ export const EMBEDDED_METHODS = [
     'keilStatus', 'generateKeil', 'openKeil',
     'openBuildLocation', 'createWorkspace', 'createModule', 'readToolkitLicense', 'setProjectOptions',
     'exportProject', 'detectExternal', 'importExternal', 'acceptToolkit', 'clangd',
-    'ping', 'catalog', 'checkToolkit', 'createProject', 'openProject', 'trustProject', 'setProjectOption',
+    'editorPulse', 'editorClose', 'takeMonitorControl', 'linkOpen', 'linkInbox', 'linkAcknowledge', 'linkResult', 'ping', 'catalog', 'checkToolkit', 'createProject', 'openProject', 'trustProject', 'setProjectOption',
     'configure', 'build', 'cancel', 'listProbes', 'listPorts', 'identify', 'flash', 'reset',
     'listBackups', 'restore', 'openMonitor', 'closeMonitor', 'writeMonitor', 'monitorStatus',
 ] as const;
@@ -148,3 +148,5 @@ export interface MonitorSnapshot {
 export interface MonitorData { port: string; session: string; data: string }
 /** New backends include the exact encoded wire bytes for TX display. */
 export interface MonitorWriteResult { sent: number; data?: string }
+
+export type { BoardOperation, PreparedImage, CoreInfo } from '../../resources/embedded-core/protocol.js';

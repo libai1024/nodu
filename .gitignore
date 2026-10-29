@@ -54,3 +54,8 @@ backups/
 /artifacts/minimal-action-redesign-20261028/
 /artifacts/windows-f103-20261028/
 /artifacts/windows-esp32-20261029/
+
+# Locally staged embedded runtime; source files remain versioned.
+/desktop/scope-extension/resources/toolkits/
+/desktop/scope-extension/resources/imaging/
+/desktop/scope-extension/resources/embedded-core/embedded-core.lock.json
