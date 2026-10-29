@@ -45,7 +45,7 @@ test('serial upload delegates the profile, port and build directory to the offic
         f.calls.length = 0;
         const result = await executeArduinoUpload({ ...f.options, target: { kind: 'serial', port: '/dev/cu.usbmodem123', transport } });
         assert.equal(result.ok, true); assert.equal(f.calls.length, 1);
-        assert.deepEqual(f.calls[0], { exe: '/tools/arduino-cli', cwd: f.source, args: ['--config-file', '/tools/config.yaml', 'upload', '--profile', 'nodu', '--input-dir', f.build, '--port', '/dev/cu.usbmodem123', '--protocol', 'serial', '--verify', f.source] });
+        assert.deepEqual(f.calls[0], { exe: '/tools/arduino-cli', cwd: f.source, args: ['--config-file', '/tools/config.yaml', 'upload', '--profile', 'nodu', '--input-dir', f.build, '--port', '/dev/cu.usbmodem123', '--protocol', 'serial', '--discovery-timeout', '10s', '--verify', f.source] });
     }
 });
 test('remote endpoints, injection ports and unsupported TinyUSB fail before any process', async t => {

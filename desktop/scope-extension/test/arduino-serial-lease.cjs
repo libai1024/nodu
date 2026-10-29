@@ -19,7 +19,7 @@ function embeddedFixture(options = {}) {
     const embedded = new NoduEmbeddedServer(), calls = []; let inventories = 0;
     embedded.request = async (method, args) => {
         calls.push({ method, args: { ...args } });
-        if (method === 'listPorts') { return ++inventories === 1 ? [port] : await (options.inventory?.() ?? [nextPort]); }
+        if (method === 'listPorts') { return ++inventories === 1 ? [options.port ?? port] : await (options.inventory?.() ?? [nextPort]); }
         if (method === 'acquireExternalPort') { return { wasOpen: true, baud: 115200 }; }
         if (method === 'releaseExternalPort') {
             await options.release?.(args);
@@ -75,6 +75,18 @@ test('a unique serial identity may change USB path/PID, but ambiguous identities
     const duplicate = embeddedFixture({ inventory: () => [nextPort, { ...nextPort, path: '/dev/cu.nodu-audit-duplicate' }] });
     assert.equal((await (await duplicate.embedded.acquireArduinoPort(port.path)).release(true, () => true)).restored, false);
     assert.ok(!duplicate.calls.some(call => call.method === 'releaseExternalPort' && call.args.restore));
+});
+
+test('a Windows UART bridge without a serial number restores only its original path and VID/PID', async () => {
+    const bridge = { path: 'COM4', vid: 0x1a86, pid: 0x55d3 };
+    const same = embeddedFixture({ port: bridge, inventory: () => [bridge] });
+    assert.equal((await (await same.embedded.acquireArduinoPort('COM4')).release(true)).restored, true);
+    for (const candidate of [{ ...bridge, path: 'COM5' }, { ...bridge, pid: 0x7523 }, { path: 'COM4' }]) {
+        let f;
+        f = embeddedFixture({ port: bridge, inventory: () => { f.embedded.arduinoLease.restore = false; return [candidate]; } });
+        assert.equal((await (await f.embedded.acquireArduinoPort('COM4')).release(true)).restored, false);
+        assert.ok(!f.calls.some(call => call.method === 'releaseExternalPort' && call.args.restore));
+    }
 });
 
 test('cancellation while rediscovering a port prevents the restore RPC and marks upload cancelled', async t => {

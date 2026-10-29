@@ -262,11 +262,18 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
             let target: string | undefined;
             const allowed = (): boolean => restore && lease.restore && !lease.lost && canRestore();
             try {
-                if (allowed() && status.wasOpen && identity?.serial_number) {
+                if (allowed() && status.wasOpen && identity) {
                     const deadline = Date.now() + 8000;
                     do {
                         const ports = await this.request('listPorts', {}) as PortInfo[];
-                        const matches = ports.filter(item => item.serial_number === identity!.serial_number && item.vid === identity!.vid);
+                        // Some Windows bridge drivers omit serial numbers. For those,
+                        // restore only the unchanged path and matching VID/PID; never
+                        // infer a new USB path without a unique device serial number.
+                        const matches = identity.serial_number
+                            ? ports.filter(item => item.serial_number === identity!.serial_number && item.vid === identity!.vid)
+                            : identity.vid !== undefined && identity.pid !== undefined
+                                ? ports.filter(item => item.path === identity!.path && item.vid === identity!.vid && item.pid === identity!.pid)
+                                : [];
                         if (matches.length === 1) { target = matches[0].path; break; }
                         if (matches.length > 1) { break; }
                         await new Promise(resolve => setTimeout(resolve, 250));

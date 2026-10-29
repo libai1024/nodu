@@ -140,7 +140,7 @@ export async function executeArduinoUpload(options: ArduinoUploadOptions): Promi
         next('upload');
         if (target.kind === 'serial') {
             await run(options.cliPath, ['--config-file', options.configPath, 'upload', '--profile', project.profile,
-                '--input-dir', plan.buildPath, '--port', target.port, '--protocol', 'serial', '--verify', project.path], project.path);
+                '--input-dir', plan.buildPath, '--port', target.port, '--protocol', 'serial', '--discovery-timeout', '10s', '--verify', project.path], project.path);
         } else {
             const connection = ['--chip', project.chip, '--port', target.port, '--before', 'no-reset', '--after', 'no-reset', '--no-stub', '--connect-attempts', '2'];
             const files = plan.segments.flatMap(segment => [`0x${segment.address.toString(16)}`, segment.path]);
