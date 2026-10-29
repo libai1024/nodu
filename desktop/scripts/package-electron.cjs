@@ -1307,7 +1307,14 @@ async function packageWindows() {
     if (validationOnly) {
         fs.writeFileSync(path.join(portable, 'NoduPortable.json'), JSON.stringify({ schema: 1, profile: packageProfile, dataDirectory: 'Data' }, null, 2) + '\n');
         fs.writeFileSync(path.join(portable, 'LOCAL-VALIDATION-ONLY.json'), JSON.stringify({ version: applicationVersion, ...sourceIdentity(), validationOnly: true, arduinoReleaseReady: false }, null, 2) + '\n');
+        const drivers = process.env.NODU_ESP32_WINDOWS_DRIVERS;
+        if (drivers) {
+            if (!path.isAbsolute(drivers) || !fs.existsSync(drivers)) { throw new Error('NODU_ESP32_WINDOWS_DRIVERS must reference the exported signed CH343 driver package'); }
+            fs.cpSync(drivers, path.join(portable, 'drivers/CH343'), { recursive: true });
+            fs.writeFileSync(path.join(portable, 'drivers/Install-CH343.cmd'), '@echo off\r\n"%SystemRoot%\\System32\\pnputil.exe" /add-driver "%~dp0CH343\\*.inf" /subdirs /install\r\npause\r\n');
+        }
         fs.writeFileSync(path.join(portable, 'OFFLINE-README.txt'), '\ufeff见微 Nodu · Windows ESP32 本地验证版\r\n\r\n双击 Nodu.exe；配置、工程、工具链解包及缓存保存在同目录 Data。\r\n内置 Arduino CLI、ESP32 核心、常用库、语言服务及 clangd，不需要额外安装 Node 或 Python。\r\nESP32-S3 默认走 COM/UART0；串口驱动需与 USB 转串口芯片匹配。\r\n本目录仅用于本地硬件验证。Arduino 对应源码材料仍未齐全，不生成正式发行压缩包或安装程序。\r\n');
+        if (drivers) { fs.appendFileSync(path.join(portable, 'OFFLINE-README.txt'), '已附本机导出的微软签名 CH343 驱动；需要时以管理员身份运行 drivers\\Install-CH343.cmd。Windows 系统驱动目录由操作系统管理。\r\n'); }
         console.log(`package-electron: local validation only: ${rel(portable)}`);
         return;
     }

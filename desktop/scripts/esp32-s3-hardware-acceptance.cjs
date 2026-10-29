@@ -9,9 +9,27 @@ const {NoduEmbeddedServer}=require(path.join(extension,'lib/node/nodu-embedded-s
 const {createSourceProject,parseProjectRequest}=require(path.join(extension,'lib/node/nodu-project-generator'));
 const embedded=new NoduEmbeddedServer(),server=new NoduArduinoServer();server.embedded=embedded;
 const report={started:new Date().toISOString(),port,physicalHardware:true,sketchTouchesOnlySerial:true,rounds:[]};
+report.runtimeExecutable=process.execPath;
 fs.mkdirSync(path.join(root,'evidence'),{recursive:true});
 const events=fs.createWriteStream(path.join(root,'evidence/hardware-events.jsonl'));let serial='';
 const decoder=new(require('node:string_decoder').StringDecoder)('utf8');
+let guard;
+async function startOfflineGuard(){
+ const executable=process.env.NODU_S3_OFFLINE_GUARD;if(!executable)return;
+ const home=process.env.NODU_ARDUINO_HOME;assert.ok(home,'An isolated Arduino home is required for offline acceptance');
+ assert.equal(fs.existsSync(path.join(home,'data')),false,'Offline acceptance requires a cold Arduino environment');
+ const cli=path.join(home,'bin/1.5.1/win32-x64/arduino-cli.exe');
+ fs.mkdirSync(path.dirname(cli),{recursive:true});fs.writeFileSync(cli,'');
+ guard=require('node:child_process').spawn(executable,[process.execPath,cli],{windowsHide:true,stdio:['pipe','pipe','pipe']});
+ await new Promise((resolve,reject)=>{let output='';const timer=setTimeout(()=>reject(Error('Offline guard startup timed out')),15000);
+  guard.stdout.on('data',bytes=>{output+=bytes;if(output.includes('OFFLINE_READY')){clearTimeout(timer);resolve();}});
+  guard.once('error',error=>{clearTimeout(timer);reject(error);});guard.once('exit',code=>{clearTimeout(timer);reject(Error('Offline guard exited '+code));});
+ });
+ fs.rmSync(cli);
+ const denied=await new Promise((resolve,reject)=>{const socket=require('node:net').connect(443,'192.0.2.1');socket.on('connect',()=>{socket.destroy();reject(Error('External connection was not blocked'));});socket.on('error',error=>resolve(error.code));socket.setTimeout(5000,()=>{socket.destroy();reject(Error('No network policy denial'));});});
+ assert.ok(['EACCES','EPERM'].includes(denied),denied);
+ report.offline={coldHome:true,denied,policy:'Dynamic WFP blocks non-loopback IPv4/IPv6 for this runtime executable and the managed Arduino CLI; compiler subprocesses are not independently blocked'};save();
+}
 embedded.addClient({onEvent(event,data){events.write(JSON.stringify({event,data})+'\n');if(event==='monitor.data')serial+=decoder.write(Buffer.from(data.data,'base64'));}});
 server.addClient({onArduinoOutput:event=>events.write(JSON.stringify(event)+'\n')});
 function save(){fs.writeFileSync(path.join(root,'evidence/hardware-result.json'),JSON.stringify(report,null,2));}
@@ -31,6 +49,7 @@ void loop() {
 }
 `;}
 async function main(){
+ await startOfflineGuard();
  const parent=path.join(root,'projects');fs.mkdirSync(parent,{recursive:true});
  const generated=await createSourceProject(parseProjectRequest({parent,name:'s3_com_'+Date.now(),chip:'esp32s3',framework:'arduino',template:'hello'}));report.project=generated.path;save();
  const project=await server.configure({path:generated.path,options:{USBMode:'hwcdc',CDCOnBoot:'default',UploadMode:'default',FlashSize:'16M',PSRAM:'opi'},port,monitor:{port,baud:115200,encoding:'utf-8'}});report.configuration=project;save();
@@ -59,4 +78,4 @@ async function main(){
  await call('writeMonitor',{text:'REOPEN_OK\r\n',encoding:'utf-8'});await waitFor('NODU_ECHO:'+report.rounds[1].id+':REOPEN_OK');report.reopenCommunication=true;
  report.ok=true;
 }
-main().catch(e=>{report.ok=false;report.error=e.stack;process.exitCode=1;console.error(e.message);}).finally(async()=>{await embedded.call('closeMonitor',{}).catch(()=>{});server.onStop();embedded.onStop();events.end();report.finished=new Date().toISOString();save();console.log(JSON.stringify({ok:report.ok,project:report.project,rounds:report.rounds.map(r=>({ok:r.ok,firmwareSha256:r.firmwareSha256})),error:report.error}));});
+main().catch(e=>{report.ok=false;report.error=e.stack;process.exitCode=1;console.error(e.message);}).finally(async()=>{await embedded.call('closeMonitor',{}).catch(()=>{});server.onStop();embedded.onStop();if(guard&&guard.exitCode===null){const stopped=new Promise(resolve=>guard.once('exit',resolve));guard.stdin.end();await stopped;}events.end();report.finished=new Date().toISOString();save();console.log(JSON.stringify({ok:report.ok,project:report.project,rounds:report.rounds.map(r=>({ok:r.ok,firmwareSha256:r.firmwareSha256})),error:report.error}));});
