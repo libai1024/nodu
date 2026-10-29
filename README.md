@@ -6,11 +6,27 @@
 
 **从第一行代码，到第一次点亮。**
 
-Nodu 是面向嵌入式学习与开发的桌面 IDE。它把代码编辑、芯片工程、编译与烧录、串口观察放在同一个工作空间，提供 K210 的 MicroPython 工作流、STM32 的 HAL C 工作流，以及由学习者亲自输入代码的 AI 教学模式。
+Nodu 是面向嵌入式学习与开发的桌面 IDE。它把代码编辑、芯片工程、编译与烧录、串口观察放在同一个工作空间，提供 K210 的 MicroPython 工作流、STM32 的 HAL C 工作流、ESP32 的 Arduino 开发，以及由学习者亲自输入代码的 AI 教学模式。
 
 日常编程可以使用不含 AI 入口的极简模式；需要完整工具视图和教学辅助时，再切换到专业模式。两种模式共享工程和编辑状态。
 
 [下载](https://github.com/libai1024/nodu/releases) · [0.2.2 发布说明](docs/releases/0.2.2.md) · [源码开发](desktop/README.md) · [文档](docs/README.md) · [许可证](LICENSE)
+
+## 0.2.3 整合候选
+
+开发主线已整合 Keil 工程生成与自动维护、DACIR HAL 72 MHz 模板、ESP32 C3/S3 仿真包导出、Windows STM32 离线安装器、串口长文本发送修复及桌面后台进程清理。当前最新正式版仍为 **0.2.2**；主线代码和测试资源的能力不能等同于旧安装包的能力。
+
+| 功能 | 整合主线与交付状态 |
+| --- | --- |
+| STM32F103 / F407 | HAL 工程、代码编辑、编译、串口及烧写工具；Windows STM32 专用包包含固定工具链和 SDK |
+| Keil 5 | F103 原生工程共享源码，文件菜单生成/更新；设置中可开启自动维护。Keil 软件需自行安装，macOS 可生成供 Windows 使用的工程 |
+| DACIR | 目录工程适配和 72 MHz 模板；72 MHz 模板要求实际板卡具有 8 MHz 晶振 |
+| ESP32 Arduino | C3/S3 的真实编译和 Windows 虚拟串口已验证；完整离线发行资源、Windows 语言工具、网络增装库和 Arduino IDE 项目交接仍有缺口 |
+| ESP 仿真包 | C3/S3 编译产物及固定配置可导出供仿真器使用，不代表所有外设或真板烧写已经验证 |
+
+Arduino 测试资源预装 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO、NeoPixel、DHT/Unified Sensor、OneWire、DallasTemperature 和 ESP32Servo 共 11 个固定版本库。**Windows STM32 专用安装包不包含 Arduino 环境。** ESP32 真板烧写、BOOT/RESET、真实 USB 和串口驱动仍需硬件验收；当前不能承诺所有用户联网增装库均成功，也不能承诺原项目直接在 Arduino IDE 2.3.7 编译。
+
+详见 [0.2.3 整合与打包记录](docs/releases/0.2.3.md)、[Windows ESP32 实测](docs/evidence/windows-esp32-20261029/README.md)、[Keil 使用说明](docs/keil-projects.md)和[仿真包说明](docs/arduino-esp-sim-package.md)。Mac 完整版与 Intel/Universal 目标仍受发布输入和 Arduino 对应材料校验限制；候选包不会作为完整跨平台正式版发布。
 
 ## 安装
 

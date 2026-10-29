@@ -1,7 +1,7 @@
 {
   "name": "@scope/electron-app",
   "private": true,
-  "version": "0.2.2",
+  "version": "0.2.3",
   "productName": "见微 Nodu",
   "license": "MIT",
   "theia": {
@@ -48,7 +48,7 @@
     }
   },
   "dependencies": {
-    "@scope/studio-extension": "0.2.2",
+    "@scope/studio-extension": "0.2.3",
     "@theia/bulk-edit": "1.76.0",
     "@theia/core": "1.76.0",
     "@theia/editor": "1.76.0",
