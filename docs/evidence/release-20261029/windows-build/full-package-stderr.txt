@@ -1,0 +1,11 @@
+package-electron: Error: Arduino 离线包缺少对应源码交付：arduino-cli@1.5.1, esp32:esp-x32@2601, esp32:xtensa-esp-elf-gdb@17.1_20260402, esp32:esp-rv32@2601, esp32:riscv32-esp-elf-gdb@17.1_20260402, esp32:esptool_py@5.3.1, arduino:dfu-util@0.11.0-arduino5, esp32:esp32-libs@3.3.12, esp32:esp32c3-libs@3.3.12, esp32:esp32c5-libs@3.3.12, esp32:esp32c6-libs@3.3.12, esp32:esp32h2-libs@3.3.12, esp32:esp32p4-libs@3.3.12, esp32:esp32p4_es-libs@3.3.12, esp32:esp32s2-libs@3.3.12, esp32:esp32s3-libs@3.3.12, builtin:dfu-discovery@0.1.2, builtin:mdns-discovery@1.1.0, builtin:serial-discovery@1.5.2, builtin:serial-monitor@0.15.0
+    at Object.validateBundle (D:\nodu-release-20261029\repo\desktop\scripts\package-arduino.cjs:124:15)
+    at requireInputs (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:123:40)
+    at main (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:1386:37)
+    at Object.<anonymous> (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:1402:5)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)
+    at Module.load (node:internal/modules/cjs/loader:1481:32)
+    at Module._load (node:internal/modules/cjs/loader:1300:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)

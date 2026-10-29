@@ -1,0 +1,30 @@
+
+Electron main: loading modules... [0.147 s since electron main start]
+Electron main: container created [0.276 s since electron main start]
+Electron main: modules loaded [0.277 s since electron main start]
+Electron main: resolving application [0.277 s since electron main start]
+Electron main: application resolved [0.282 s since electron main start]
+using electron user data area : 'D:\nodu-release-20261029\installed-candidate\Data\profile\electron'
+Backend main: entry point loaded [0.365 s since backend process start]
+Backend server: loading modules... [0.367 s since backend process start]
+Backend server: container created [0.665 s since backend process start]
+Backend server: modules loaded [0.805 s since backend process start]
+2026-10-29T09:11:12.261Z core:EnvVariablesServerImpl INFO Configuration directory URI: 'file:///d%3A/nodu-release-20261029/installed-candidate/Data/profile/config'
+Backend server: resolving application [0.830 s since backend process start]
+2026-10-29T09:11:12.906Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 601.4 ms [1.452 s since backend process start]
+2026-10-29T09:11:12.906Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 599.4 ms [1.452 s since backend process start]
+2026-10-29T09:11:12.906Z core:Stopwatch WARN Backend NoduResourcesServer.initialize took longer than the expected maximum 50 milliseconds: 404.4 ms [1.452 s since backend process start]
+2026-10-29T09:11:12.906Z plugin-ext:PluginApiContribution INFO Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-29T09:11:12.907Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 618.9 ms [1.472 s since backend process start]
+2026-10-29T09:11:12.913Z core:BackendApplication INFO configured all backend app contributions
+2026-10-29T09:11:12.924Z core:BackendApplication INFO Theia app listening on http://127.0.0.1:62241.
+2026-10-29T09:11:12.925Z core:SettingServiceImpl INFO Settings file not found at 'D:\nodu-release-20261029\installed-candidate\Data\profile\config\backend-settings.json'. Falling back to defaults.
+2026-10-29T09:11:12.928Z core:Stopwatch INFO Backend application startup sequence completed (async work may still be pending): 17.9 ms [1.497 s since backend process start]
+2026-10-29T09:11:12.929Z core:Stopwatch INFO All backend contributions settled: 665.5 ms [1.497 s since backend process start]
+2026-10-29T09:11:12.929Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/d%3A/nodu-release-20261029/installed-candidate/Data/profile/config/plugins does not exist.
+2026-10-29T09:11:12.929Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/d%3A/nodu-release-20261029/installed-candidate/Data/profile/config/deployedPlugins does not exist.
+Starting backend: 1525.0 ms [1.998 s since electron main start]
+2026-10-29T09:11:12.948Z core:Stopwatch INFO Resolve plugins list: 20.7 ms [1.516 s since backend process start]
+2026-10-29T09:11:12.965Z core:Stopwatch INFO Deploy batch of 1 accepted plugins: 17.4 ms [1.534 s since backend process start]
+2026-10-29T09:11:12.965Z core:Stopwatch INFO Deploy plugins list: 38.6 ms [1.534 s since backend process start]
+Attaching security token: 45.2 ms [2.043 s since electron main start]

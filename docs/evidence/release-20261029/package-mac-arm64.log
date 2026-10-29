@@ -1,0 +1,11 @@
+package-electron: Error: ENOENT: no such file or directory, open '/Users/wangwei/Model/k210-studio/desktop/scope-extension/resources/toolkits/stm32/darwin/toolkit.json'
+    at Object.readFileSync (node:fs:436:20)
+    at Object.validateToolkit (/Users/wangwei/Model/k210-studio/desktop/scripts/package-stm32.cjs:7:36)
+    at requireInputs (/Users/wangwei/Model/k210-studio/desktop/scripts/package-electron.cjs:122:11)
+    at main (/Users/wangwei/Model/k210-studio/desktop/scripts/package-electron.cjs:1386:37)
+    at Object.<anonymous> (/Users/wangwei/Model/k210-studio/desktop/scripts/package-electron.cjs:1402:5)
+    at Module._compile (node:internal/modules/cjs/loader:1829:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+    at Module.load (node:internal/modules/cjs/loader:1552:32)
+    at Module._load (node:internal/modules/cjs/loader:1354:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)

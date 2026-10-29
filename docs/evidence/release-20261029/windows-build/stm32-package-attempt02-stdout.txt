@@ -1,0 +1,39 @@
+package-electron: staging 885 source inputs into .tools\package\work-x64\desktop
+package-electron: + E:\SoftWare\nodejs\node.exe E:\SoftWare\nodejs\node_modules\npm\bin\npm-cli.js ci
+
+> scope-studio@0.2.3 postinstall
+> theia-patch
+
+patch-package = D:\nodu-f103-20261028\repo\desktop\.tools\package\work-x64\desktop\node_modules\patch-package\dist\index.js
+patchesdir = node_modules\@theia\cli\patches
+patch-package 8.0.1
+Applying patches...
+@lumino/widgets@2.7.5 ✔
+
+added 980 packages in 51s
+package-electron: + E:\SoftWare\nodejs\node.exe E:\SoftWare\nodejs\node_modules\npm\bin\npm-cli.js run compile --workspace @scope/studio-extension
+
+> @scope/studio-extension@0.2.3 compile
+> tsc -p tsconfig.json
+
+package-electron: + E:\SoftWare\nodejs\node.exe D:\nodu-release-20261029\repo\desktop\.tools\package\work-x64\desktop\node_modules\@theia\cli\bin\theia.js rebuild:electron --cacheRoot D:\nodu-release-20261029\repo\desktop\.tools\package\work-x64\desktop
+Module not found: find-git-repositories
+Processed "keytar"
+Processed "native-keymap"
+Processed "drivelist"
+Processed "node-pty"
+package-electron: + E:\SoftWare\nodejs\node.exe D:\nodu-release-20261029\repo\desktop\.tools\package\work-x64\desktop\node_modules\@theia\cli\bin\theia.js build --mode production
+[build/browser] Build started
+
+[build/browser] Finished with 0 errors in 1664ms.
+
+[build/node] Build started
+
+[build/node] Finished with 0 errors in 1127ms.
+
+[build/electron] Build started
+
+[build/electron] Finished with 0 errors in 14ms.
+
+package-electron: packager win32-x64 -> .tools\package\thin
+Packaging app for platform win32 x64 using electron v42.8.1

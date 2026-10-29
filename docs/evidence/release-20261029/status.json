@@ -1,0 +1,40 @@
+{
+  "sourceCommit": "425a2e600b6d93464bf354babd0541f1494424b1",
+  "nodeTests": {
+    "node": "24.21.0",
+    "total": 144,
+    "passed": 143,
+    "failed": 0,
+    "skipped": 1,
+    "skipReason": "Opt-in real Nodu simulation integration requires private seed home"
+  },
+  "typescript": "passed",
+  "nativeCrate": {
+    "passed": 48,
+    "failed": 0
+  },
+  "branchesMerged": [
+    "+ codex/dacir-link",
+    "  codex/integrate-dacir-20261029",
+    "* main"
+  ],
+  "macArm64": "blocked: missing release STM32 toolkit; local toolkit is dev only",
+  "macX64": "blocked: missing darwin-x64 WASI release input",
+  "arduinoBundle": {
+    "releaseReady": false,
+    "incompleteComponents": 20
+  },
+  "windows": {
+    "profile": "stm32",
+    "portable": "passed",
+    "installer": "passed: D drive silent install",
+    "installedRuntime": "passed",
+    "sourceCommit": "425a2e600b6d93464bf354babd0541f1494424b1",
+    "sourceDirty": false,
+    "actualBuildHostNode": "24.12.0",
+    "configuredManifestNode": "24.21.0",
+    "hardwareFlashed": false
+  },
+  "windowsFull": "blocked by corresponding-source coverage validation (20 incomplete components)",
+  "completeCrossPlatformRelease": false
+}

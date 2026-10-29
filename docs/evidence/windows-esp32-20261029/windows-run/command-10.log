@@ -1,0 +1,13 @@
+The library ArduinoJson has been added from sketch project.
+The library ArduinoMqttClient has been added from sketch project.
+The library Adafruit SSD1306 has been added from sketch project.
+The library Adafruit GFX Library has been added from sketch project.
+The library Adafruit BusIO has been added from sketch project.
+The library Adafruit NeoPixel has been added from sketch project.
+The library DHT sensor library has been added from sketch project.
+The library Adafruit Unified Sensor has been added from sketch project.
+The library OneWire has been added from sketch project.
+The library DallasTemperature has been added from sketch project.
+The library ESP32Servo has been added from sketch project.
+Sketch uses 493652 bytes (37%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes.

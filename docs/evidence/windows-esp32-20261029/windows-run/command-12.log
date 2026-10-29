@@ -1,0 +1,35 @@
+The library ArduinoJson has been added from sketch project.
+The library ArduinoMqttClient has been added from sketch project.
+The library Adafruit SSD1306 has been added from sketch project.
+The library Adafruit GFX Library has been added from sketch project.
+The library Adafruit BusIO has been added from sketch project.
+The library Adafruit NeoPixel has been added from sketch project.
+The library DHT sensor library has been added from sketch project.
+The library Adafruit Unified Sensor has been added from sketch project.
+The library OneWire has been added from sketch project.
+The library DallasTemperature has been added from sketch project.
+The library ESP32Servo has been added from sketch project.
+D:\nodu-esp32-20261029\projects with spaces\nodu_esp32c3\nodu_esp32c3.ino:25:2: error: #error NODU_EXPECTED_COMPILE_FAILURE
+   25 | #error NODU_EXPECTED_COMPILE_FAILURE
+      |  ^~~~~
+
+Used library            Version Path
+WiFi                    3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd\libraries\WiFi
+Networking              3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd\libraries\Network
+Wire                    3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd\libraries\Wire
+SPI                     3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd\libraries\SPI
+ArduinoJson             7.4.3   D:\nodu-esp32-20261029\arduino-home\data\internal\ArduinoJson_7.4.3_65bbd090d30b7927\ArduinoJson
+ArduinoMqttClient       0.1.8   D:\nodu-esp32-20261029\arduino-home\data\internal\ArduinoMqttClient_0.1.8_b1e57bf359553881\ArduinoMqttClient
+Adafruit SSD1306        2.5.17  D:\nodu-esp32-20261029\arduino-home\data\internal\Adafruit_SSD1306_2.5.17_e01cd9e72ae36617\Adafruit SSD1306
+Adafruit GFX Library    1.13.0  D:\nodu-esp32-20261029\arduino-home\data\internal\Adafruit_GFX_Library_1.13.0_ca91a4d6f8dae8af\Adafruit GFX Library
+Adafruit BusIO          1.17.4  D:\nodu-esp32-20261029\arduino-home\data\internal\Adafruit_BusIO_1.17.4_7b46ea3f5fdb9ecd\Adafruit BusIO
+Adafruit NeoPixel       1.15.5  D:\nodu-esp32-20261029\arduino-home\data\internal\Adafruit_NeoPixel_1.15.5_32a75fce2b4fe8ac\Adafruit NeoPixel
+DHT sensor library      1.4.7   D:\nodu-esp32-20261029\arduino-home\data\internal\DHT_sensor_library_1.4.7_50b5ef2509805e63\DHT sensor library
+Adafruit Unified Sensor 1.1.15  D:\nodu-esp32-20261029\arduino-home\data\internal\Adafruit_Unified_Sensor_1.1.15_c4f0a59ad82fa17d\Adafruit Unified Sensor
+OneWire                 2.3.8   D:\nodu-esp32-20261029\arduino-home\data\internal\OneWire_2.3.8_b02012c4e88745c5\OneWire
+DallasTemperature       4.0.6   D:\nodu-esp32-20261029\arduino-home\data\internal\DallasTemperature_4.0.6_04f98deb2305d67d\DallasTemperature
+ESP32Servo              3.2.1   D:\nodu-esp32-20261029\arduino-home\data\internal\ESP32Servo_3.2.1_5dbe94048172dcc2\ESP32Servo
+
+Used platform Version Path
+esp32:esp32   3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd
+Error during build: exit status 1

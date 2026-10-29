@@ -1,0 +1,11 @@
+package-electron: Error: EISDIR: illegal operation on a directory, read
+    at Object.readSync (node:fs:739:18)
+    at tryReadSync (node:fs:416:20)
+    at Object.readFileSync (node:fs:470:19)
+    at computeStamp (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:440:24)
+    at buildWorkspace (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:626:30)
+    at packageWindows (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:1293:31)
+    at main (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:1398:11)
+    at Object.<anonymous> (D:\nodu-release-20261029\repo\desktop\scripts\package-electron.cjs:1402:5)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)

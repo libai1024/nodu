@@ -1,0 +1,508 @@
+{
+  "isIncomplete": false,
+  "items": [
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>\n\n@addtogroup GPIO_Exported_Functions_Group1\n@{\n\nInitialization and de-initialization functions ****************************"
+      },
+      "filterText": "HAL_GPIO_Init",
+      "insertText": "HAL_GPIO_Init",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_Init)",
+      "score": 1.312011480331421,
+      "sortText": "40581002HAL_GPIO_Init",
+      "textEdit": {
+        "newText": "HAL_GPIO_Init",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include \"stm32f1xx_hal_conf.h\"\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 3
+            },
+            "start": {
+              "character": 0,
+              "line": 3
+            }
+          }
+        }
+      ],
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From \"stm32f1xx_hal_conf.h\""
+      },
+      "filterText": "HAL_GPIO_MODULE_ENABLED",
+      "insertText": "HAL_GPIO_MODULE_ENABLED",
+      "insertTextFormat": 1,
+      "kind": 1,
+      "label": "•HAL_GPIO_MODULE_ENABLED",
+      "score": 0.9173901677131653,
+      "sortText": "409525ebHAL_GPIO_MODULE_ENABLED",
+      "textEdit": {
+        "newText": "HAL_GPIO_MODULE_ENABLED",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>"
+      },
+      "filterText": "HAL_GPIO_DeInit",
+      "insertText": "HAL_GPIO_DeInit",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_DeInit(GPIO_TypeDef *GPIOx, uint32_t GPIO_Pin)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_DeInit",
+      "textEdit": {
+        "newText": "HAL_GPIO_DeInit",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>"
+      },
+      "filterText": "HAL_GPIO_EXTI_Callback",
+      "insertText": "HAL_GPIO_EXTI_Callback",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_EXTI_Callback",
+      "textEdit": {
+        "newText": "HAL_GPIO_EXTI_Callback",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>"
+      },
+      "filterText": "HAL_GPIO_EXTI_IRQHandler",
+      "insertText": "HAL_GPIO_EXTI_IRQHandler",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_EXTI_IRQHandler",
+      "textEdit": {
+        "newText": "HAL_GPIO_EXTI_IRQHandler",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "HAL_StatusTypeDef",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>"
+      },
+      "filterText": "HAL_GPIO_LockPin",
+      "insertText": "HAL_GPIO_LockPin",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_LockPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_LockPin",
+      "textEdit": {
+        "newText": "HAL_GPIO_LockPin",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "GPIO_PinState",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>\n\n@addtogroup GPIO_Exported_Functions_Group2\n@{\n\nIO operation functions ****************************************************"
+      },
+      "filterText": "HAL_GPIO_ReadPin",
+      "insertText": "HAL_GPIO_ReadPin",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_ReadPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_ReadPin",
+      "textEdit": {
+        "newText": "HAL_GPIO_ReadPin",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>"
+      },
+      "filterText": "HAL_GPIO_TogglePin",
+      "insertText": "HAL_GPIO_TogglePin",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_TogglePin",
+      "textEdit": {
+        "newText": "HAL_GPIO_TogglePin",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio.h>"
+      },
+      "filterText": "HAL_GPIO_WritePin",
+      "insertText": "HAL_GPIO_WritePin",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState)",
+      "score": 0.44337138533592224,
+      "sortText": "411cfe6dHAL_GPIO_WritePin",
+      "textEdit": {
+        "newText": "HAL_GPIO_WritePin",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio_ex.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio_ex.h>\n\n@addtogroup GPIOEx_Exported_Functions_Group1\n@{"
+      },
+      "filterText": "HAL_GPIOEx_ConfigEventout",
+      "insertText": "HAL_GPIOEx_ConfigEventout",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIOEx_ConfigEventout(uint32_t GPIO_PortSource, uint32_t GPIO_PinSource)",
+      "score": 0.44337138533592224,
+      "sortText": "412fe939HAL_GPIOEx_ConfigEventout",
+      "textEdit": {
+        "newText": "HAL_GPIOEx_ConfigEventout",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio_ex.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio_ex.h>\n\n@brief Disables the Event Output.\n@retval None"
+      },
+      "filterText": "HAL_GPIOEx_DisableEventout",
+      "insertText": "HAL_GPIOEx_DisableEventout",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIOEx_DisableEventout()",
+      "score": 0.44337138533592224,
+      "sortText": "412fe939HAL_GPIOEx_DisableEventout",
+      "textEdit": {
+        "newText": "HAL_GPIOEx_DisableEventout",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    },
+    {
+      "additionalTextEdits": [
+        {
+          "newText": "#include <stm32f1xx_hal_gpio_ex.h>\n",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 1
+            },
+            "start": {
+              "character": 0,
+              "line": 1
+            }
+          }
+        }
+      ],
+      "detail": "void",
+      "documentation": {
+        "kind": "plaintext",
+        "value": "From <stm32f1xx_hal_gpio_ex.h>\n\n@brief Enables the Event Output.\n@retval None"
+      },
+      "filterText": "HAL_GPIOEx_EnableEventout",
+      "insertText": "HAL_GPIOEx_EnableEventout",
+      "insertTextFormat": 1,
+      "kind": 3,
+      "label": "•HAL_GPIOEx_EnableEventout()",
+      "score": 0.44337138533592224,
+      "sortText": "412fe939HAL_GPIOEx_EnableEventout",
+      "textEdit": {
+        "newText": "HAL_GPIOEx_EnableEventout",
+        "range": {
+          "end": {
+            "character": 17,
+            "line": 18
+          },
+          "start": {
+            "character": 8,
+            "line": 18
+          }
+        }
+      }
+    }
+  ]
+}

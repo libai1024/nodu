@@ -1,0 +1,16 @@
+{
+  "version": "0.2.3",
+  "profile": "stm32",
+  "targetPlatform": "win32-x64",
+  "artifact": "Nodu-0.2.3-stm32-win32-x64-setup.exe",
+  "size": 930924963,
+  "sha256": "887f0259d30a26298a8edbce32d5818fb1239986f85fac9b67d114efb089d366",
+  "sourceCommit": "425a2e600b6d93464bf354babd0541f1494424b1",
+  "sourceDirty": false,
+  "defaultDirectory": "D:\\Nodu-STM32",
+  "internetDownloads": false,
+  "portableArchiveSha256": "108c35f8f94e28c3623072172d8a1cf710d9d5de3663a9988f3135ae4de23719",
+  "bundledDriver": "ST-LINK",
+  "signing": "unsigned installer",
+  "generatedAt": "2026-10-29T09:05:34.521Z"
+}

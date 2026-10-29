@@ -1,0 +1,744 @@
+{
+  "platform": "win32",
+  "arch": "x64",
+  "windowsLocal": true,
+  "hardwareRequests": [],
+  "resources": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources",
+  "toolkit": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64",
+  "dataDir": "D:\\nodu-release-20261029\\acceptance-installed\\profile\\compile-only",
+  "versions": [
+    {
+      "file": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\arm-gnu\\bin\\arm-none-eabi-gcc.exe",
+      "version": "arm-none-eabi-gcc.exe (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 14.2.1 20241119"
+    },
+    {
+      "file": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\cmake\\bin\\cmake.exe",
+      "version": "cmake version 4.4.3"
+    },
+    {
+      "file": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\ninja\\bin\\ninja.exe",
+      "version": "1.13.2"
+    },
+    {
+      "file": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\clangd\\bin\\clangd.exe",
+      "version": "clangd version 23.1.0 (https://github.com/llvm/llvm-project ea7d852a70e8bdfaf601d6626a760f9771b2c4b4)"
+    }
+  ],
+  "cases": [
+    {
+      "name": "f103-empty",
+      "project": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-empty",
+      "errors": 0,
+      "warnings": 0,
+      "ms": 4061,
+      "capacity": {
+        "FLASH": {
+          "used": 2588,
+          "size": 65536,
+          "percent": 3.95
+        },
+        "RAM": {
+          "used": 2576,
+          "size": 20480,
+          "percent": 12.58
+        }
+      },
+      "files": [
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-empty\\build\\debug\\firmware.elf",
+          "bytes": 688732,
+          "sha256": "3048962ad57f37a2ea8bc2a6a8ab6c59509c4413be77ad1582adc1b4cc14244e"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-empty\\build\\debug\\firmware.bin",
+          "bytes": 2588,
+          "sha256": "2ad4b2d0627593c90f0559c2e4dc39e325bfced8b45da4b3397b7379e688a7b4"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-empty\\build\\debug\\firmware.hex",
+          "bytes": 7346,
+          "sha256": "efd67d12dc064777a9bea84e29906877938861fc0da8fcf4476f998d513538c7"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-empty\\build\\debug\\firmware.map",
+          "bytes": 339518,
+          "sha256": "4d73ef83d2cba4f29b438e09a62d482f0370033f52dc169fde2427e8bc83752d"
+        }
+      ]
+    },
+    {
+      "name": "f103-uart",
+      "project": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart",
+      "errors": 0,
+      "warnings": 0,
+      "ms": 2137,
+      "capacity": {
+        "FLASH": {
+          "used": 8160,
+          "size": 65536,
+          "percent": 12.45
+        },
+        "RAM": {
+          "used": 3080,
+          "size": 20480,
+          "percent": 15.04
+        }
+      },
+      "files": [
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.elf",
+          "bytes": 766692,
+          "sha256": "48b137db5c267c02da4e96972d9fe1831a8daa6ec48a9ba806f6515034881045"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.bin",
+          "bytes": 8160,
+          "sha256": "b1aaf005bac3e826b094acafb9d2aea7a82a58267dcd697996c591b2f4fcd1f4"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.hex",
+          "bytes": 23014,
+          "sha256": "f52488314e188f67ba0c3c26c404f071e03794b949fa4a44364d8d376aa2e66f"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.map",
+          "bytes": 419249,
+          "sha256": "76511ff8ed4b2e19695adf1de26e8e8b44e858b33a2dbd11e61dbca66aa8d66a"
+        }
+      ]
+    },
+    {
+      "name": "f103-cn",
+      "project": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\中文 路径\\f103-cn",
+      "errors": 0,
+      "warnings": 0,
+      "ms": 2030,
+      "capacity": {
+        "FLASH": {
+          "used": 8160,
+          "size": 65536,
+          "percent": 12.45
+        },
+        "RAM": {
+          "used": 3080,
+          "size": 20480,
+          "percent": 15.04
+        }
+      },
+      "files": [
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\中文 路径\\f103-cn\\build\\debug\\firmware.elf",
+          "bytes": 767172,
+          "sha256": "eda93669fc12cf88d343d965d671a7e8f7f2de07acb7cdacf2d11e8be409c0b0"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\中文 路径\\f103-cn\\build\\debug\\firmware.bin",
+          "bytes": 8160,
+          "sha256": "b1aaf005bac3e826b094acafb9d2aea7a82a58267dcd697996c591b2f4fcd1f4"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\中文 路径\\f103-cn\\build\\debug\\firmware.hex",
+          "bytes": 23014,
+          "sha256": "f52488314e188f67ba0c3c26c404f071e03794b949fa4a44364d8d376aa2e66f"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\中文 路径\\f103-cn\\build\\debug\\firmware.map",
+          "bytes": 408029,
+          "sha256": "b94208825343e44a75b7f325ab64b515a328c8d66f6098a129b98d1b93e105e7"
+        }
+      ]
+    },
+    {
+      "name": "f103-edited",
+      "project": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart",
+      "errors": 0,
+      "warnings": 0,
+      "ms": 594,
+      "capacity": {
+        "FLASH": {
+          "used": 8156,
+          "size": 65536,
+          "percent": 12.45
+        },
+        "RAM": {
+          "used": 3080,
+          "size": 20480,
+          "percent": 15.04
+        }
+      },
+      "files": [
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.elf",
+          "bytes": 767612,
+          "sha256": "8dc4d0063cf43f4f179338d0dc7b02f60b62c11191e505a1e96ae868b38fbd5b"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.bin",
+          "bytes": 8156,
+          "sha256": "1d23d96f15bd45ea4b0fc763de081201c94948b171c601f0edf6b20f794a9312"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.hex",
+          "bytes": 23006,
+          "sha256": "6cf8e3c558be3d5bb5b8736ed24c41f80322125ea764bb798249f328a523b3f7"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.map",
+          "bytes": 419351,
+          "sha256": "d872f4f5dd77e9f4e6235c3902dde2239612f98b8a97f31c06870d3d14d66fc4"
+        }
+      ]
+    },
+    {
+      "name": "f103-recovered",
+      "project": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart",
+      "errors": 0,
+      "warnings": 0,
+      "ms": 603,
+      "capacity": {
+        "FLASH": {
+          "used": 8156,
+          "size": 65536,
+          "percent": 12.45
+        },
+        "RAM": {
+          "used": 3080,
+          "size": 20480,
+          "percent": 15.04
+        }
+      },
+      "files": [
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.elf",
+          "bytes": 767612,
+          "sha256": "8dc4d0063cf43f4f179338d0dc7b02f60b62c11191e505a1e96ae868b38fbd5b"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.bin",
+          "bytes": 8156,
+          "sha256": "1d23d96f15bd45ea4b0fc763de081201c94948b171c601f0edf6b20f794a9312"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.hex",
+          "bytes": 23006,
+          "sha256": "6cf8e3c558be3d5bb5b8736ed24c41f80322125ea764bb798249f328a523b3f7"
+        },
+        {
+          "file": "D:\\nodu-release-20261029\\acceptance-installed\\projects\\f103-uart\\build\\debug\\firmware.map",
+          "bytes": 419351,
+          "sha256": "d872f4f5dd77e9f4e6235c3902dde2239612f98b8a97f31c06870d3d14d66fc4"
+        }
+      ]
+    }
+  ],
+  "requests": [
+    "catalog",
+    "checkToolkit",
+    "createProject",
+    "trustProject",
+    "build",
+    "createProject",
+    "trustProject",
+    "build",
+    "createProject",
+    "trustProject",
+    "build",
+    "build",
+    "build",
+    "build"
+  ],
+  "startedAt": "2026-10-29T09:10:54.551Z",
+  "catalog": {
+    "boards": [
+      {
+        "id": "alientek-explorer-f407",
+        "version": 1,
+        "reference": "alientek-explorer-f407@1",
+        "name": "正点原子 探索者 F407",
+        "description": "探索者 STM32F407ZGT6 开发板。时钟暂用内部 HSI 倍频到 168 MHz，外部 8 MHz 晶振待实物核对。",
+        "mcu": "STM32F407ZGTx",
+        "chipName": "STM32F407ZGT6",
+        "core": "Cortex-M4F",
+        "flashKiB": 1024,
+        "ramKiB": 128,
+        "gpioPorts": "ABCDEFGH",
+        "debugUart": {
+          "instance": "USART1",
+          "tx": "PA9",
+          "rx": "PA10",
+          "baud": 115200,
+          "via": "板载 USB 转串口",
+          "verified": "2026-10-22 芯片事实：USART1 复用功能 AF7 在 PA9 / PA10（STM32F407 数据手册）",
+          "note": "板载 USB 转串口需要用跳线帽连到 PA9 / PA10，跳线位置待实物核对"
+        },
+        "led": null,
+        "boot": {
+          "boot0": "跳线帽",
+          "boot1": "跳线帽",
+          "verified": null
+        },
+        "flash": {
+          "stlink": {
+            "speedKhz": 1800,
+            "resetConfig": "none",
+            "wiring": "ST-LINK 接板上的 SWD / JTAG 口"
+          },
+          "uart": {
+            "port": "debugUart",
+            "baud": 115200,
+            "autoBoot": null
+          }
+        },
+        "templates": [
+          {
+            "id": "empty",
+            "name": "空工程",
+            "description": "时钟与 HAL 初始化，空的主循环",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          },
+          {
+            "id": "uart-hello",
+            "name": "串口输出",
+            "description": "每秒从调试串口打印一行，在串口监视器中查看",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          }
+        ]
+      },
+      {
+        "id": "chip-f103c8",
+        "version": 1,
+        "reference": "chip-f103c8@1",
+        "name": "STM32F103C8T6",
+        "description": "",
+        "mcu": "STM32F103C8Tx",
+        "chipName": "STM32F103C8T6",
+        "core": "Cortex-M3",
+        "flashKiB": 64,
+        "ramKiB": 20,
+        "gpioPorts": "ABCD",
+        "debugUart": {
+          "instance": "USART1",
+          "tx": "PA9",
+          "rx": "PA10",
+          "baud": 115200,
+          "via": "PA9 / PA10",
+          "verified": "2026-10-22 芯片事实：USART1 默认引脚 PA9 / PA10（RM0008，无重映射）",
+          "note": "TX=PA9，RX=PA10"
+        },
+        "led": null,
+        "boot": {
+          "boot0": "BOOT0",
+          "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+        },
+        "flash": {
+          "stlink": {
+            "speedKhz": 1000,
+            "resetConfig": "none",
+            "wiring": "SWDIO=PA13，SWCLK=PA14，GND 共地"
+          },
+          "uart": {
+            "port": "debugUart",
+            "baud": 115200,
+            "autoBoot": null
+          }
+        },
+        "templates": [
+          {
+            "id": "empty",
+            "name": "空工程",
+            "description": "时钟与 HAL 初始化，空的主循环",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          },
+          {
+            "id": "uart-hello",
+            "name": "串口输出",
+            "description": "每秒从调试串口打印一行，在串口监视器中查看",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          }
+        ]
+      },
+      {
+        "id": "chip-f407zg",
+        "version": 1,
+        "reference": "chip-f407zg@1",
+        "name": "STM32F407ZGT6",
+        "description": "",
+        "mcu": "STM32F407ZGTx",
+        "chipName": "STM32F407ZGT6",
+        "core": "Cortex-M4F",
+        "flashKiB": 1024,
+        "ramKiB": 128,
+        "gpioPorts": "ABCDEFGH",
+        "debugUart": {
+          "instance": "USART1",
+          "tx": "PA9",
+          "rx": "PA10",
+          "baud": 115200,
+          "via": "PA9 / PA10",
+          "verified": "2026-10-22 芯片事实：USART1 复用功能 AF7 在 PA9 / PA10（STM32F407 数据手册）",
+          "note": "TX=PA9，RX=PA10"
+        },
+        "led": null,
+        "boot": {
+          "boot0": "BOOT0",
+          "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+        },
+        "flash": {
+          "stlink": {
+            "speedKhz": 1800,
+            "resetConfig": "none",
+            "wiring": "SWDIO=PA13，SWCLK=PA14，GND 共地"
+          },
+          "uart": {
+            "port": "debugUart",
+            "baud": 115200,
+            "autoBoot": null
+          }
+        },
+        "templates": [
+          {
+            "id": "empty",
+            "name": "空工程",
+            "description": "时钟与 HAL 初始化，空的主循环",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          },
+          {
+            "id": "uart-hello",
+            "name": "串口输出",
+            "description": "每秒从调试串口打印一行，在串口监视器中查看",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          }
+        ]
+      },
+      {
+        "id": "dacir-f103-72mhz",
+        "version": 1,
+        "reference": "dacir-f103-72mhz@1",
+        "name": "STM32F103C8 / HSE 8 MHz / 72 MHz",
+        "description": "联动 HAL 配置：8 MHz HSE × 9 = 72 MHz；应用串口 USART2 PA2/PA3。",
+        "mcu": "STM32F103C8Tx",
+        "chipName": "STM32F103C8T6",
+        "core": "Cortex-M3",
+        "flashKiB": 64,
+        "ramKiB": 20,
+        "gpioPorts": "ABCD",
+        "debugUart": {
+          "instance": "USART2",
+          "tx": "PA2",
+          "rx": "PA3",
+          "baud": 115200,
+          "via": "外接串口",
+          "verified": null,
+          "note": "应用 UART2：PA2→RX、PA3→TX；ROM ISP 仍使用 PA9/PA10。"
+        },
+        "led": null,
+        "boot": {
+          "boot0": "BOOT0",
+          "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+        },
+        "flash": {
+          "stlink": {
+            "speedKhz": 1000,
+            "resetConfig": "none",
+            "wiring": "SWDIO=PA13，SWCLK=PA14，GND 共地"
+          },
+          "uart": {
+            "port": "debugUart",
+            "baud": 115200,
+            "autoBoot": null
+          }
+        },
+        "templates": [
+          {
+            "id": "empty",
+            "name": "空工程",
+            "description": "时钟与 HAL 初始化，空的主循环",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          },
+          {
+            "id": "uart-hello",
+            "name": "串口输出",
+            "description": "每秒从调试串口打印一行，在串口监视器中查看",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          }
+        ]
+      },
+      {
+        "id": "generic-f103c8",
+        "version": 1,
+        "reference": "generic-f103c8@1",
+        "name": "STM32F103C8 最小系统板",
+        "description": "通用 F103C8T6 小板（常见的“蓝色小板”等）。时钟使用内部 HSI，不依赖外部晶振。",
+        "mcu": "STM32F103C8Tx",
+        "chipName": "STM32F103C8T6",
+        "core": "Cortex-M3",
+        "flashKiB": 64,
+        "ramKiB": 20,
+        "gpioPorts": "ABCD",
+        "debugUart": {
+          "instance": "USART1",
+          "tx": "PA9",
+          "rx": "PA10",
+          "baud": 115200,
+          "via": "外接 USB 转 TTL 串口（3.3 V）",
+          "verified": "2026-10-22 芯片事实：USART1 默认引脚 PA9 / PA10（RM0008，无重映射）",
+          "note": "TX（PA9）接转换器 RX，RX（PA10）接转换器 TX，GND 相连"
+        },
+        "led": null,
+        "boot": {
+          "boot0": "跳线帽",
+          "note": "串口下载时 BOOT0 接 1（BOOT1 接 0），按复位；下载后 BOOT0 接回 0 再按复位",
+          "verified": null
+        },
+        "flash": {
+          "stlink": {
+            "speedKhz": 1000,
+            "resetConfig": "none",
+            "wiring": "ST-LINK 的 SWDIO、SWCLK、GND、3.3V 分别接板上同名引脚"
+          },
+          "uart": {
+            "port": "debugUart",
+            "baud": 115200,
+            "autoBoot": null
+          }
+        },
+        "templates": [
+          {
+            "id": "empty",
+            "name": "空工程",
+            "description": "时钟与 HAL 初始化，空的主循环",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          },
+          {
+            "id": "uart-hello",
+            "name": "串口输出",
+            "description": "每秒从调试串口打印一行，在串口监视器中查看",
+            "available": true,
+            "needsInput": [],
+            "reason": null
+          }
+        ]
+      }
+    ]
+  },
+  "toolkitCheck": {
+    "ok": true,
+    "full": false,
+    "version": "2026.10.24",
+    "profile": "release",
+    "root": "D:\\nodu-release-20261029\\installed-candidate\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64",
+    "fileCount": 14193,
+    "totalBytes": 1746032395,
+    "components": {
+      "armGnu": {
+        "path": "arm-gnu",
+        "version": "14.2.rel1",
+        "license": "GPL-3.0-or-later WITH GCC-exception-3.1; newlib BSD-like"
+      },
+      "cmake": {
+        "path": "cmake",
+        "version": "4.4.3",
+        "license": "BSD-3-Clause and bundled notices"
+      },
+      "ninja": {
+        "path": "ninja",
+        "version": "1.13.2",
+        "license": "Apache-2.0"
+      },
+      "clangd": {
+        "path": "clangd",
+        "version": "23.1.0",
+        "license": "Apache-2.0 WITH LLVM-exception"
+      },
+      "openocd": {
+        "path": "openocd",
+        "version": "0.12.0",
+        "license": "GPL-2.0-or-later",
+        "source": "pinned source build with static libusb 1.0.29"
+      },
+      "stm32flash": {
+        "path": "stm32flash",
+        "version": "0.7",
+        "license": "GPL-2.0-or-later",
+        "source": "pinned source build"
+      }
+    },
+    "sdk": {
+      "cube-f1": {
+        "path": "sdk/cube-f1",
+        "version": "1.8.7",
+        "repository": "https://github.com/STMicroelectronics/STM32CubeF1.git",
+        "tag": "v1.8.7",
+        "commit": "d12e75247d5bcedc734f829b394517ab4c2726e3",
+        "halCommit": "fee494a92b5ad331f92ad21f76c66a5cb83773ee",
+        "deviceCommit": "c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22"
+      },
+      "cube-f4": {
+        "path": "sdk/cube-f4",
+        "version": "1.28.3",
+        "repository": "https://github.com/STMicroelectronics/STM32CubeF4.git",
+        "tag": "v1.28.3",
+        "commit": "94cae6e83f00e276a11957e7833c01ac3d0bd7af",
+        "halCommit": "b6f0ed3829f3829eb358a2e7417d80bba1a42db7",
+        "deviceCommit": "3c77349ce04c8af401454cc51f85ea9a50e34fc1"
+      }
+    },
+    "inventory": [
+      {
+        "id": "armGnu",
+        "version": "14.2.rel1",
+        "license": "GPL-3.0-or-later WITH GCC-exception-3.1; newlib BSD-like",
+        "bytes": 1244645262,
+        "files": 8332,
+        "licenses": [
+          "arm-gnu/share/doc/gcc/Copying.html",
+          "arm-gnu/share/doc/gccint/Copying.html",
+          "arm-gnu/share/doc/gdb/Copying.html",
+          "arm-gnu/share/doc/gfortran/Copying.html"
+        ]
+      },
+      {
+        "id": "cmake",
+        "version": "4.4.3",
+        "license": "BSD-3-Clause and bundled notices",
+        "bytes": 49947221,
+        "files": 4159,
+        "licenses": [
+          "cmake/licenses/LICENSE.rst",
+          "cmake/licenses/cmcppdap/NOTICE",
+          "cmake/licenses/cmcurl/COPYING",
+          "cmake/licenses/cmlibarchive/COPYING",
+          "cmake/licenses/cmliblzma/COPYING",
+          "cmake/licenses/cmlibrhash/COPYING",
+          "cmake/licenses/cmlibuv/LICENSE",
+          "cmake/licenses/cmnghttp2/COPYING",
+          "cmake/licenses/cmzstd/LICENSE"
+        ]
+      },
+      {
+        "id": "ninja",
+        "version": "1.13.2",
+        "license": "Apache-2.0",
+        "bytes": 615006,
+        "files": 2,
+        "licenses": [
+          "ninja/licenses/ninjaSource/ninja-1.13.2/COPYING"
+        ]
+      },
+      {
+        "id": "clangd",
+        "version": "23.1.0",
+        "license": "Apache-2.0 WITH LLVM-exception",
+        "bytes": 101011414,
+        "files": 354,
+        "licenses": [
+          "clangd/LICENSE.TXT"
+        ]
+      },
+      {
+        "id": "openocd",
+        "version": "0.12.0",
+        "license": "GPL-2.0-or-later",
+        "bytes": 6393006,
+        "files": 911,
+        "licenses": [
+          "openocd/licenses/libusb/libusb-1.0.29/COPYING",
+          "openocd/licenses/openocd/openocd-0.12.0/COPYING",
+          "openocd/licenses/openocd/openocd-0.12.0/LICENSES/license-rules.txt",
+          "openocd/licenses/openocd/openocd-0.12.0/jimtcl/LICENSE",
+          "openocd/licenses/openocd/openocd-0.12.0/jimtcl/autosetup/LICENSE",
+          "openocd/licenses/openocd/openocd-0.12.0/jimtcl/examples/COPYING.FreeSans.ttf",
+          "openocd/licenses/openocd/openocd-0.12.0/jimtcl/jsmn/LICENSE",
+          "openocd/licenses/openocd/openocd-0.12.0/src/jtag/drivers/libjaylink/COPYING"
+        ]
+      },
+      {
+        "id": "stm32flash",
+        "version": "0.7",
+        "license": "GPL-2.0-or-later",
+        "bytes": 104779,
+        "files": 2,
+        "licenses": []
+      },
+      {
+        "id": "cube-f1",
+        "version": "1.8.7",
+        "license": null,
+        "bytes": 8056558,
+        "files": 162,
+        "licenses": [
+          "sdk/cube-f1/Drivers/CMSIS/Device/ST/STM32F1xx/LICENSE.md",
+          "sdk/cube-f1/Drivers/CMSIS/LICENSE.txt",
+          "sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/LICENSE.md",
+          "sdk/cube-f1/LICENSE.md"
+        ]
+      },
+      {
+        "id": "cube-f4",
+        "version": "1.28.3",
+        "license": null,
+        "bytes": 15280523,
+        "files": 239,
+        "licenses": [
+          "sdk/cube-f4/Drivers/CMSIS/Device/ST/STM32F4xx/LICENSE.md",
+          "sdk/cube-f4/Drivers/CMSIS/LICENSE.txt",
+          "sdk/cube-f4/Drivers/STM32F4xx_HAL_Driver/LICENSE.md",
+          "sdk/cube-f4/LICENSE.md"
+        ]
+      }
+    ],
+    "missing": [],
+    "damaged": [],
+    "problemCount": 0,
+    "checkedAt": "2026-10-29T09:10:59Z"
+  },
+  "syntaxError": {
+    "expectedFailure": true,
+    "errors": 1,
+    "diagnostics": [
+      {
+        "source": "compiler",
+        "severity": "error",
+        "file": "Core/Src/main.c",
+        "absolute": "D:/nodu-release-20261029/acceptance-installed/projects/f103-uart/Core/Src/main.c",
+        "line": 20,
+        "column": 43,
+        "byteColumn": 43,
+        "message": "expected ';' before 'printf'",
+        "flag": null,
+        "inSdk": false,
+        "explanation": {
+          "rule": "missing-semicolon",
+          "title": "可能缺少分号",
+          "explain": "上一条语句的末尾可能缺少分号 ;。这个错误常常报在下一行。",
+          "fix": "看一看报错行的上一行，在语句末尾补上 ;。"
+        }
+      }
+    ]
+  },
+  "compileCommands": {
+    "count": 20,
+    "allWorkingDirectoriesOutsideC": true
+  },
+  "elfHeader": "ELF Header:\r\n  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 \r\n  Class:                             ELF32\r\n  Data:                              2's complement, little endian\r\n  Version:                           1 (current)\r\n  OS/ABI:                            UNIX - System V\r\n  ABI Version:                       0\r\n  Type:                              EXEC (Executable file)\r\n  Machine:                           ARM\r\n  Version:                           0x1\r\n  Entry point address:               0x800104d\r\n  Start of program headers:          52 (bytes into file)\r\n  Start of section headers:          766772 (bytes into file)\r\n  Flags:                             0x5000200, Version5 EABI, soft-float ABI\r\n  Size of this header:               52 (bytes)\r\n  Size of program headers:           32 (bytes)\r\n  Number of program headers:         3\r\n  Size of section headers:           40 (bytes)\r\n  Number of section headers:         21\r\n  Section header string table index: 20\r\n",
+  "success": true,
+  "finishedAt": "2026-10-29T09:11:09.529Z"
+}

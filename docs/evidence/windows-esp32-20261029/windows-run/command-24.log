@@ -1,0 +1,12 @@
+D:\nodu-esp32-20261029\projects with spaces\nodu_esp32c3\nodu_esp32c3.ino:3:10: fatal error: PubSubClient.h: No such file or directory
+    3 | #include <PubSubClient.h>
+      |          ^~~~~~~~~~~~~~~~
+compilation terminated.
+
+Used library Version Path
+WiFi         3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd\libraries\WiFi
+Networking   3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd\libraries\Network
+
+Used platform Version Path
+esp32:esp32   3.3.12  D:\nodu-esp32-20261029\arduino-home\data\internal\esp32_esp32_3.3.12_feadd113249efafd
+Error during build: exit status 1

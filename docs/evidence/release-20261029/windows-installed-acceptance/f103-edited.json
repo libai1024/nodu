@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "buildId": "b-20261029-091107-b613b1",
+  "stale": false,
+  "diagnostics": [],
+  "errors": 0,
+  "warnings": 0,
+  "capacity": {
+    "FLASH": {
+      "used": 8156,
+      "size": 65536,
+      "percent": 12.45
+    },
+    "RAM": {
+      "used": 3080,
+      "size": 20480,
+      "percent": 15.04
+    }
+  },
+  "artifact": {
+    "schema": 1,
+    "bundleSha256": "ae500727f0f22a6269493d74df6f127a17b5d566a52fc6bbc9252c0eb78d665e",
+    "buildId": "b-20261029-091107-b613b1",
+    "createdAt": "2026-10-29T09:11:08Z",
+    "createdMs": 1793265068494,
+    "project": "f103-uart",
+    "mcu": "STM32F103C8Tx",
+    "board": "generic-f103c8@1",
+    "binaryBytes": 8156,
+    "binarySha256": "1d23d96f15bd45ea4b0fc763de081201c94948b171c601f0edf6b20f794a9312",
+    "fileSha256": {
+      "firmware.bin": "1d23d96f15bd45ea4b0fc763de081201c94948b171c601f0edf6b20f794a9312",
+      "firmware.elf": "8dc4d0063cf43f4f179338d0dc7b02f60b62c11191e505a1e96ae868b38fbd5b",
+      "firmware.hex": "6cf8e3c558be3d5bb5b8736ed24c41f80322125ea764bb798249f328a523b3f7",
+      "firmware.map": "d872f4f5dd77e9f4e6235c3902dde2239612f98b8a97f31c06870d3d14d66fc4"
+    },
+    "initialStack": "0x20005000",
+    "resetVector": "0x0800104d",
+    "elfCpu": "7-M",
+    "tickAddress": null,
+    "capacity": {
+      "FLASH": {
+        "used": 8156,
+        "size": 65536,
+        "percent": 12.45
+      },
+      "RAM": {
+        "used": 3080,
+        "size": 20480,
+        "percent": 15.04
+      }
+    },
+    "inputDigest": "15de64240e2d1b0c525f8821ec73a70b67a36fab5be7fe0bde157cdbfc769bd4",
+    "toolkit": "2026.10.24",
+    "sdk": "stm32cube-f1@1.8.7",
+    "erase": {
+      "unit": "page",
+      "count": 8,
+      "bytes": 8192,
+      "label": "8 页（8 KB）"
+    }
+  },
+  "ms": 594,
+  "output": "[0/2] Re-checking globbed directories...\n[1/3] Building C object CMakeFiles/firmware.dir/Core/Src/main.c.obj\n[2/3] Linking C executable firmware.elf\nMemory region         Used Size  Region Size  %age Used\n           FLASH:        8156 B        64 KB     12.45%\n             RAM:        3080 B        20 KB     15.04%\n"
+}

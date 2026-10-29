@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "buildId": "b-20261029-090539-000ebb",
+  "stale": false,
+  "diagnostics": [],
+  "errors": 0,
+  "warnings": 0,
+  "capacity": {
+    "FLASH": {
+      "used": 8160,
+      "size": 65536,
+      "percent": 12.45
+    },
+    "RAM": {
+      "used": 3080,
+      "size": 20480,
+      "percent": 15.04
+    }
+  },
+  "artifact": {
+    "schema": 1,
+    "bundleSha256": "270362dd6f0309f1538b240b54869e6b467bcde03dff101049cdc37c22e77313",
+    "buildId": "b-20261029-090539-000ebb",
+    "createdAt": "2026-10-29T09:05:41Z",
+    "createdMs": 1793264741041,
+    "project": "f103-uart",
+    "mcu": "STM32F103C8Tx",
+    "board": "generic-f103c8@1",
+    "binaryBytes": 8160,
+    "binarySha256": "b1aaf005bac3e826b094acafb9d2aea7a82a58267dcd697996c591b2f4fcd1f4",
+    "fileSha256": {
+      "firmware.bin": "b1aaf005bac3e826b094acafb9d2aea7a82a58267dcd697996c591b2f4fcd1f4",
+      "firmware.elf": "a61c32bb2a89869050ae3cd11eb959b694e492f3fd4ef3a6cefde7bccca763bd",
+      "firmware.hex": "f52488314e188f67ba0c3c26c404f071e03794b949fa4a44364d8d376aa2e66f",
+      "firmware.map": "02e358e9c6cfb6e552c0aab08cf9877b54aacb8c49e8bb72163bf00c0e36eafe"
+    },
+    "initialStack": "0x20005000",
+    "resetVector": "0x08001009",
+    "elfCpu": "7-M",
+    "tickAddress": null,
+    "capacity": {
+      "FLASH": {
+        "used": 8160,
+        "size": 65536,
+        "percent": 12.45
+      },
+      "RAM": {
+        "used": 3080,
+        "size": 20480,
+        "percent": 15.04
+      }
+    },
+    "inputDigest": "6bd38477e2ff5dd82a418af340bb202256784a527ea80438127476554fe6dba9",
+    "toolkit": "2026.10.24",
+    "sdk": "stm32cube-f1@1.8.7",
+    "erase": {
+      "unit": "page",
+      "count": 8,
+      "bytes": 8192,
+      "label": "8 页（8 KB）"
+    }
+  },
+  "ms": 1998,
+  "output": "-- The C compiler identification is GNU 14.2.1\n-- The ASM compiler identification is GNU\n-- Found assembler: D:/nodu-release-20261029/repo/desktop/dist/Nodu-STM32-win32-x64/resources/app/node_modules/@scope/studio-extension/resources/toolkits/stm32/win32-x64/arm-gnu/bin/arm-none-eabi-gcc.exe\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: D:/nodu-release-20261029/repo/desktop/dist/Nodu-STM32-win32-x64/resources/app/node_modules/@scope/studio-extension/resources/toolkits/stm32/win32-x64/arm-gnu/bin/arm-none-eabi-gcc.exe - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Configuring done (0.6s)\n-- Generating done (0.0s)\n-- Build files have been written to: D:/nodu-release-20261029/acceptance-01/projects/f103-uart/build/debug\n[0/2] Re-checking globbed directories...\n[1/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c.obj\n[2/22] Building C object CMakeFiles/nodu_hal.dir/dcfc2300f2cd9f4f90cf5656185fbe97/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c.obj\n[3/22] Building C object CMakeFiles/nodu_hal.dir/dcfc2300f2cd9f4f90cf5656185fbe97/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c.obj\n[4/22] Building C object CMakeFiles/nodu_hal.dir/dcfc2300f2cd9f4f90cf5656185fbe97/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c.obj\n[5/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c.obj\n[6/22] Building C object CMakeFiles/nodu_hal.dir/dcfc2300f2cd9f4f90cf5656185fbe97/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c.obj\n[7/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c.obj\n[8/22] Building C object CMakeFiles/firmware.dir/Board/board_uart.c.obj\n[9/22] Building C object CMakeFiles/firmware.dir/Board/board_clock.c.obj\n[10/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c.obj\n[11/22] Building C object CMakeFiles/nodu_hal.dir/dcfc2300f2cd9f4f90cf5656185fbe97/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c.obj\n[12/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c.obj\n[13/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c.obj\n[14/22] Building ASM object CMakeFiles/firmware.dir/Startup/startup_stm32f103xb.s.obj\n[15/22] Building C object CMakeFiles/firmware.dir/Core/Src/main.c.obj\n[16/22] Building C object CMakeFiles/firmware.dir/Core/Src/stm32f1xx_hal_msp.c.obj\n[17/22] Building C object CMakeFiles/firmware.dir/Core/Src/stm32f1xx_it.c.obj\n[18/22] Building C object CMakeFiles/firmware.dir/Core/Src/system_stm32f1xx.c.obj\n[19/22] Building C object CMakeFiles/nodu_hal.dir/3e707484e8807c526290ad3020719133/studio-extension/resources/toolkits/stm32/win32-x64/sdk/cube-f1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c.obj\n[20/22] Building C object CMakeFiles/firmware.dir/Core/Src/syscalls.c.obj\n[21/22] Linking C executable firmware.elf\nMemory region         Used Size  Region Size  %age Used\n           FLASH:        8160 B        64 KB     12.45%\n             RAM:        3080 B        20 KB     15.04%\n"
+}

@@ -1,0 +1,13 @@
+{
+    "started":  "2026-10-29T17:08:45.6479577+08:00",
+    "finished":  "2026-10-29T17:09:22.9016826+08:00",
+    "ok":  true,
+    "exitCode":  0,
+    "target":  "D:\\nodu-release-20261029\\installed-candidate",
+    "installedVersion":  "0.2.3",
+    "sourceCommit":  "425a2e600b6d93464bf354babd0541f1494424b1",
+    "registryInstallLocation":  "D:\\nodu-release-20261029\\installed-candidate",
+    "previousRegistryKey":  true,
+    "previousRegistryRestored":  true,
+    "driverResult":  "pnputil exit code: 0"
+}
