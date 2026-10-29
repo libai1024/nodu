@@ -29,7 +29,7 @@ export function projectTemplates(family: ProjectFamily, chipId?: string, framewo
     return [
         { id: 'empty', name: '默认项目' },
         { id: 'hello', name: family === 'esp32' && framework === 'arduino' ? '串口示例' : 'Hello World' },
-        ...(family === 'stm32f103' && (!chipId || chipId === 'STM32F103C8Tx') ? DAXIN_TEMPLATES : []),
+        ...(family === 'stm32f103' && (!chipId || chipId === 'STM32F103C8Tx') ? [{ id: 'linked-hal72', name: 'DACIR HAL 72 MHz（需 8 MHz 晶振）' }, ...DAXIN_TEMPLATES] : []),
     ];
 }
 export const PROJECT_NAME_RULE = /^[A-Za-z][A-Za-z0-9_-]{0,39}$/;

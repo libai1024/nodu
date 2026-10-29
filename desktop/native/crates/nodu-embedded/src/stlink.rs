@@ -236,10 +236,14 @@ impl Session<'_> {
             }));
         }
         let flash_kib = parse_words(get("flashkib")).first().copied().unwrap_or(0);
-        let rdp_value = parse_words(get("rdp")).first().copied().unwrap_or(0);
-        let mask = rdp.get("mask").and_then(Value::as_u64).unwrap_or(0);
-        let level0 = rdp.get("level0").and_then(Value::as_u64).unwrap_or(0);
-        let protected = rdp_value & mask != level0;
+        let rdp_value = parse_words(get("rdp")).first().copied();
+        let mask = rdp.get("mask").and_then(Value::as_u64);
+        let level0 = rdp.get("level0").and_then(Value::as_u64);
+        // Missing register data must never be interpreted as unprotected.
+        let protected = match (rdp_value, mask, level0) {
+            (Some(value), Some(mask), Some(level0)) if mask != 0 => Some(value & mask != level0),
+            _ => None,
+        };
         let uid_words = parse_words(get("uid"));
         let uid_hex: String = uid_words.iter().map(|w| format!("{w:08x}")).collect();
         Ok(json!({
@@ -273,9 +277,10 @@ impl Session<'_> {
         Ok(())
     }
 
-    /// Erase the touched units, write, verify, read back and start the program.
+    /// Erase, write, tool-verify and dump the written range while halted.
     /// Not cancellable: stopping OpenOCD mid-erase leaves the chip half written.
-    pub fn program(&self, uid_words: &str, image: &Path, readback: &Path, len: u64, tick: Option<u64>) -> Outcome<Value> {
+    /// A separate host-side digest check must succeed before `start_verified`.
+    pub fn program(&self, uid_words: &str, image: &Path, readback: &Path, len: u64) -> Outcome<()> {
         let base = hex32(self.chip.flash_base());
         let mut commands = self.guards(uid_words);
         commands.extend([
@@ -286,20 +291,10 @@ impl Session<'_> {
             "echo NODU:step=verify".into(),
             format!("verify_image {} {base} bin", tcl_path(image)?),
             format!("dump_image {} {base} {len}", tcl_path(readback)?),
-            "echo NODU:step=run".into(),
-            "reset run".into(),
             "echo NODU:written=1".into(),
         ]);
-        if let Some(tick) = tick {
-            commands.extend([
-                "sleep 300".into(),
-                format!("echo \"NODU:tick1=[read_memory {} 32 1]\"", hex32(tick)),
-                "sleep 300".into(),
-                format!("echo \"NODU:tick2=[read_memory {} 32 1]\"", hex32(tick)),
-            ]);
-        }
         let (finished, markers) = self.run(&commands, Duration::from_secs(300), false)?;
-        if !markers.values.contains_key("written") {
+        if !finished.ok() || !markers.values.contains_key("written") {
             let mut failure = classify(&finished.output, markers.voltage);
             if finished.output.contains("NODU_WRONG_CHIP") || finished.output.contains("NODU_CHIP_CHANGED") {
                 return Err(failure);
@@ -309,6 +304,29 @@ impl Session<'_> {
                 failure.code = "writeFailed";
             }
             return Err(failure);
+        }
+        Ok(())
+    }
+
+    /// Recheck the same chip before starting an image whose readback matched.
+    pub fn start_verified(&self, uid_words: &str, tick: Option<u64>) -> Outcome<Value> {
+        let mut commands = self.guards(uid_words);
+        commands.extend([
+            "echo NODU:step=run".into(),
+            "reset run".into(),
+            "echo NODU:started=1".into(),
+        ]);
+        if let Some(tick) = tick {
+            commands.extend([
+                "sleep 300".into(),
+                format!("echo \"NODU:tick1=[read_memory {} 32 1]\"", hex32(tick)),
+                "sleep 300".into(),
+                format!("echo \"NODU:tick2=[read_memory {} 32 1]\"", hex32(tick)),
+            ]);
+        }
+        let (finished, markers) = self.run(&commands, Duration::from_secs(30), false)?;
+        if !finished.ok() || !markers.values.contains_key("started") {
+            return Err(classify(&finished.output, markers.voltage));
         }
         let ticks: Vec<u64> = ["tick1", "tick2"]
             .iter()

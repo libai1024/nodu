@@ -92,7 +92,12 @@ impl Backups {
 
     pub fn has(&self, identity: &Value) -> bool {
         let dir = self.root.join(Self::chip_key(identity));
-        fs::read_dir(dir).into_iter().flatten().flatten().any(|e| e.path().join("backup.json").is_file())
+        fs::read_dir(dir).into_iter().flatten().flatten().any(|entry| {
+            let id = format!("{}/{}", Self::chip_key(identity), entry.file_name().to_string_lossy());
+            self.get(&id).ok().is_some_and(|(record, file)| record["uid"] == identity["uid"]
+                && record["flashKiB"] == identity["flashKiB"]
+                && fs::metadata(file).map(|m| m.len()).ok() == identity["flashKiB"].as_u64().map(|n| n * 1024))
+        })
     }
 
     pub fn get(&self, id: &str) -> Outcome<(Value, PathBuf)> {
@@ -155,6 +160,8 @@ pub struct Target<'a> {
     pub port: &'a str,
     pub baud: u32,
     pub skip_backup: bool,
+    /// Optional pinned target identity for an externally prepared operation.
+    pub expected_uid: Option<&'a str>,
 }
 
 #[derive(Debug)]
@@ -234,6 +241,14 @@ fn run_stlink(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, r
     let identity = session.identify()?;
     record["target"] = identity.clone();
     check_identity(&ctx.project.chip, &identity, image.bytes)?;
+    if let Some(expected) = target.expected_uid {
+        if !(64..=128).contains(&identity["flashKiB"].as_u64().unwrap_or(0)) || identity["readProtected"].as_bool() != Some(false) {
+            return Err(Failure::new("wrongChip", "目标容量或读保护状态不满足课程要求，没有写入。"));
+        }
+        if identity["uid"].as_str() != Some(expected) {
+            return Err(Failure::new("chipChanged", "目标芯片已变化，没有写入。请重新识别。"));
+        }
+    }
     check_restore(image, &identity)?;
     step(ctx.out, run_id, "identify", "done");
     let uid_words = identity["uidWords"].as_str().unwrap_or_default().to_string();
@@ -256,9 +271,11 @@ fn run_stlink(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, r
     if crate::util::sha256_file(&image.file).ok().as_deref() != Some(image.sha256.as_str()) {
         return Err(Failure::new("tampered", "要写入的文件在下载前被修改，已停止。重新编译。"));
     }
-    let ran = session.program(&uid_words, &image.file, readback, image.bytes, image.tick)?;
+    session.program(&uid_words, &image.file, readback, image.bytes)?;
     let digest = compare_readback(readback, image)?;
     step(ctx.out, run_id, "verify", "done");
+    step(ctx.out, run_id, "run", "running");
+    let ran = session.start_verified(&uid_words, image.tick)?;
     step(ctx.out, run_id, "run", "done");
     Ok(json!({
         "ok": true, "method": "stlink", "identity": identity, "backup": backup,
@@ -286,6 +303,11 @@ fn run_uart(ctx: &Ctx<'_>, target: &Target<'_>, image: &Image, run_id: &str, rea
     };
     record["target"] = identity.clone();
     check_identity(chip, &identity, image.bytes)?;
+    if let Some(expected) = target.expected_uid {
+        if identity["uid"].as_str() != Some(expected) || !(64..=128).contains(&identity["flashKiB"].as_u64().unwrap_or(0)) || identity["readProtected"].as_bool() != Some(false) {
+            return Err(Failure::new("chipChanged", "目标芯片已变化，没有写入。"));
+        }
+    }
     check_restore(image, &identity)?;
     step(ctx.out, run_id, "identify", "done");
     let base = chip.flash_base();
@@ -435,7 +457,7 @@ mod tests {
             let toolkit = Toolkit { root: dir.path().to_path_buf(), manifest: json!({}) };
             let backups = Backups::new(dir.path()); let out = Output::new(Box::new(Vec::<u8>::new())); let cancel = AtomicBool::new(false);
             let ctx = Ctx { project: &project, toolkit: &toolkit, backups: &backups, out: &out, cancel: &cancel };
-            let target = Target { method: "uart", port: "simulated", probe: "", baud: 115200, skip_backup: false };
+            let target = Target { method: "uart", port: "simulated", probe: "", baud: 115200, skip_backup: false, expected_uid: None };
             let bytes = vec![1, 2, 3, 4, 5, 6, 7, 8]; let file = dir.path().join("firmware.bin"); fs::write(&file, &bytes).unwrap();
             let image = Image { file, bytes: 8, sha256: crate::util::sha256_hex(&bytes), bundle: None, tick: None, restore_uid: None };
             let profile = crate::auto_boot::AutoBoot { enabled: true, confirmed: true, boot0_high_dtr: false, reset_active_rts: true };

@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "dacir-f103-72mhz",
+  "version": 1,
+  "name": "STM32F103C8 / HSE 8 MHz / 72 MHz",
+  "mcu": "STM32F103C8Tx",
+  "description": "联动 HAL 配置：8 MHz HSE × 9 = 72 MHz；应用串口 USART2 PA2/PA3。",
+  "clock": {
+    "source": "HSE × 9",
+    "sysclk": 72000000,
+    "hse": 8000000,
+    "verified": null
+  },
+  "debugUart": {
+    "instance": "USART2",
+    "tx": "PA2",
+    "rx": "PA3",
+    "baud": 115200,
+    "via": "外接串口",
+    "verified": null,
+    "note": "应用 UART2：PA2→RX、PA3→TX；ROM ISP 仍使用 PA9/PA10。"
+  },
+  "leds": [],
+  "boot": {
+    "boot0": "BOOT0",
+    "note": "串口 ISP：BOOT0=1、BOOT1=0 后复位；完成后 BOOT0=0，再复位。"
+  },
+  "flash": {
+    "stlink": {
+      "speedKhz": 1000,
+      "resetConfig": "none",
+      "wiring": "SWDIO=PA13，SWCLK=PA14，GND 共地"
+    },
+    "uart": {
+      "port": "debugUart",
+      "baud": 115200,
+      "autoBoot": null
+    }
+  },
+  "templates": [
+    "empty",
+    "uart-hello"
+  ],
+  "sources": [
+    {
+      "title": "STM32F103C8 联动配置",
+      "note": "时钟与串口实现见 Board/board_clock.c、Board/board_uart.c；要求 8 MHz HSE，USART2 TX=PA2、RX=PA3。实体板验证另行记录。"
+    }
+  ]
+}

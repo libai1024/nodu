@@ -32,7 +32,10 @@
             "height": 960,
             "minWidth": 980,
             "minHeight": 720,
-            "backgroundColor": "#14171c"
+            "backgroundColor": "#14171c",
+            "webPreferences": {
+              "backgroundThrottling": false
+            }
           },
           "appUserModelId": "org.scope.studio"
         }

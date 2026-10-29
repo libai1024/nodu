@@ -15,6 +15,7 @@ function fail(message) {
 }
 
 const { app } = require('electron');
+process.env.NODU_APP_EXECUTABLE = process.execPath;
 
 // The launcher ships next to this file so packaged mode reuses the exact
 // original-flag parser (terminal modes, read timeouts, -update_resources).

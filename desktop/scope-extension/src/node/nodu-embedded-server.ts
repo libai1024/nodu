@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import { injectable } from '@theia/core/shared/inversify';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
-import { existsSync } from 'fs';
+import { existsSync, promises as fs } from 'fs';
 import { homedir } from 'os';
 import { openBuildLocation } from './nodu-build-location';
 import { dirname, isAbsolute, join } from 'path';
@@ -14,6 +14,7 @@ import { encodeMonitorText } from './nodu-monitor-encoding';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
 import { TutorRuntimeEvidence } from './tutor/tutor-runtime-evidence';
 import { createDaxinProject } from './nodu-daxin-project';
+import { superviseDesktopParent } from './nodu-desktop-lifecycle';
 
 const MAX_REQUEST = 1024 * 1024;
 /** Node-side backstops; the sidecar enforces the real per-step limits. */
@@ -35,6 +36,10 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     private sequence = 0;
     private readonly pending = new Map<number, Pending>();
     private readonly clients = new Set<EmbeddedClient>();
+    private stopParentWatch?: () => void;
+
+    onStart(): void { this.stopParentWatch = superviseDesktopParent(); }
+
     private arduinoLease?: { token: string; port: string; restore: boolean; lost: boolean; onLost?: () => void };
 
     addClient(client: EmbeddedClient): () => void {
@@ -84,8 +89,9 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
 
     private ensureSidecar(): ChildProcessWithoutNullStreams {
         if (this.sidecar) { return this.sidecar; }
-        const child = spawn(this.binary(), ['--resources', join(this.extensionDir(), 'resources', 'stm32'),
-            '--toolkit', this.toolkitRoot(), '--data-dir', this.dataDir()], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
+        const core = process.env.STUDIO_EMBEDDED_CORE_ROOT || join(this.extensionDir(), 'resources', 'embedded-core');
+        const child = spawn(process.execPath, [join(core, 'transport.cjs'), '--binary', this.binary(), '--app', 'nodu', '--resources', join(this.extensionDir(), 'resources', 'stm32'),
+            '--toolkit', this.toolkitRoot(), '--data-dir', this.dataDir()], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true, env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' } });
         this.sidecar = child;
         let ready = false;
         const reader = createInterface({ input: child.stdout });
@@ -179,6 +185,14 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
                     try { await this.request('trustProject', { path: project.path }); } catch { /* optional trust registration */ }
                     return { ok: true, result: project };
                 }
+                if (request.template === 'linked-hal72' && request.chip.id === 'STM32F103C8Tx') {
+                    const project = await this.request('createProject', { parent: request.parent, name: request.name, board: 'dacir-f103-72mhz@1', template: 'uart-hello', method: 'stlink' }, TIMEOUTS.createProject) as { path: string };
+                    const file = join(project.path, 'nodu.json'), manifest = JSON.parse(await fs.readFile(file, 'utf8'));
+                    manifest.build.adapter = 'nodu-hal-f103-72mhz-v1'; manifest.build.clockHz = 72000000;
+                    await fs.writeFile(file, JSON.stringify(manifest, null, 2) + '\n');
+                    await fs.writeFile(join(project.path, 'studio.project.json'), JSON.stringify({ schemaVersion: 1, projectId: randomUUID(), name: request.name, mcu: 'STM32F103C8T6', clockHz: 72000000, build: { sourceDirectories: ['Core/Src', 'Board', 'App'], includeDirectories: ['Core/Inc'] } }, null, 2) + '\n');
+                    return { ok: true, result: project };
+                }
                 if (request.chip.pack) {
                     return { ok: true, result: await this.request('createProject', { parent: request.parent, name: request.name,
                         board: request.chip.pack, template: request.template === 'hello' ? 'uart-hello' : 'empty', method: 'stlink' }, TIMEOUTS.createProject) };
@@ -245,10 +259,11 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     }
 
     onStop(): void {
+        this.stopParentWatch?.(); this.stopParentWatch = undefined;
         const child = this.sidecar;
         this.sidecar = undefined;
         // Closing stdin makes the sidecar end its tool processes and release locks.
         child?.stdin.end();
-        if (child) { setTimeout(() => child.kill(), 2000).unref(); }
+        // The shared coordinator owns non-interruptible device work after detach.
     }
 }

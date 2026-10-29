@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nodu-dacir:embedded-core:2",
+  "protocolVersion": 2,
+  "coreVersion": "1.0.0",
+  "target": { "mcu": "STM32F103C8T6", "clockHz": 72000000, "flashBase": 134217728, "maxApplicationBytes": 65536 },
+  "buildProfiles": ["dacir-directory-v1", "nodu-hal-f103-72mhz-v1"],
+  "operationStates": ["dispatching", "started", "running", "completed", "failed", "unknown"],
+  "serial": { "bufferBytes": 1048576, "readLimitBytes": 65536, "writeLimitBytes": 65536, "logLimitBytes": 67108864, "encodings": ["utf-8", "gbk"] },
+  "authorization": { "nativeApprovalRequired": true, "sessionGrantMaxMs": 900000, "restoreSingleOperationOnly": true },
+  "invariants": ["one-native-owner", "immutable-original-elf", "uid-bound-programming", "backup-before-first-write", "readback-before-reset", "unknown-is-never-success", "device-text-is-untrusted", "offset-gap-is-inconclusive"]
+}

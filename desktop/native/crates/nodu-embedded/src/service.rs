@@ -4,6 +4,7 @@
 //! time, so a second build or download is refused instead of interleaving.
 //! `cancel` reaches the running job through its queue's flag.
 
+use std::fs;
 use std::io::BufRead;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -24,8 +25,9 @@ use crate::process;
 use crate::project::{self, NewProject, Project, TrustStore};
 use crate::proto::{Failure, Outcome, Output, arg_bool, arg_opt_str, arg_str};
 use crate::stlink;
+use crate::uart;
 use crate::toolkit::{self, Toolkit};
-use crate::util::{new_id, read_json};
+use crate::util::{new_id, read_json, sha256_hex, write_atomic, write_json};
 
 const MAX_LINE: usize = 4 * 1024 * 1024;
 
@@ -107,6 +109,15 @@ impl Service {
         }
         self.inner.build_cancel.store(true, Ordering::Relaxed);
         self.inner.device_cancel.store(true, Ordering::Relaxed);
+        if let Ok(mut external) = self.inner.external_port.lock() {
+            if external.take().is_some() { self.inner.device_busy.store(false, Ordering::Release); }
+        }
+        // The programming command is deliberately non-cancellable. Do not kill
+        // a write just because the desktop window closed; let the worker finish
+        // its journal and release the probe before service shutdown.
+        while self.inner.device_busy.load(Ordering::Acquire) {
+            thread::sleep(std::time::Duration::from_millis(50));
+        }
         if let Ok(mut monitor) = self.inner.monitor.lock() {
             monitor.close(&self.inner.out);
         }
@@ -118,7 +129,7 @@ impl Inner {
     fn handle(inner: &Arc<Self>, id: Value, method: &str, args: Value) {
         let queue = match method {
             "build" | "configure" | "checkToolkit" => Some(Queue::Build),
-            "identify" | "flash" | "reset" | "restore" => Some(Queue::Device),
+            "identify" | "flash" | "reset" | "restore" | "inspectBoard" | "flashImage" | "restoreImage" | "resetBoard" => Some(Queue::Device),
             _ => None,
         };
         let Some(queue) = queue else {
@@ -248,7 +259,8 @@ impl Inner {
                 self.device_busy.store(false, Ordering::Release);
                 result
             }
-            "ping" => Ok(json!({"version": env!("CARGO_PKG_VERSION")})),
+            "ping" => Ok(json!({"version": env!("CARGO_PKG_VERSION"), "bridgeProtocol": 1,
+                "capabilities": ["dacir.inspectBoard", "dacir.flashImage", "dacir.restoreImage", "dacir.resetBoard"]})),
             "catalog" => self.catalog.listing(),
             "readToolkitLicense" => Toolkit::open(&self.toolkit_root)?.license_text(arg_str(args, "file")?),
             "checkToolkit" => {
@@ -385,7 +397,8 @@ impl Inner {
                 Ok(json!({"open": false}))
             }
             "writeMonitor" => {
-                let data = B64.decode(arg_str(args, "data")?).map_err(|_| Failure::new("badRequest", "数据不是有效的 base64。"))?;
+                let encoded = args.get("data").and_then(Value::as_str).filter(|value| !value.is_empty() && value.len() <= 90_000).ok_or_else(|| Failure::new("badRequest", "串口发送内容无效或过大。"))?;
+                let data = B64.decode(encoded).map_err(|_| Failure::new("badRequest", "数据不是有效的 base64。"))?;
                 if data.len() > 64 * 1024 {
                     return Err(Failure::new("badRequest", "一次最多发送 64 KB。"));
                 }
@@ -416,6 +429,7 @@ impl Inner {
     fn job(&self, method: &str, args: &Value) -> Outcome<Value> {
         if method == "checkToolkit" { return self.quick(method, args); }
         let toolkit = self.toolkit()?;
+        if method == "inspectBoard" || method == "flashImage" || method == "restoreImage" || method == "resetBoard" { return self.dacir_device(method, args, &toolkit); }
         let project = self.project(args)?;
         match method {
             "configure" | "build" => {
@@ -465,6 +479,124 @@ impl Inner {
         }
     }
 
+    /// Internal desktop bridge for the F103 course target. The public Nodu
+    /// frontend does not expose this method; the native host binds authorization,
+    /// project revision, inspected UID and a verified immutable image to it.
+    fn dacir_device(&self, method: &str, args: &Value, toolkit: &Toolkit) -> Outcome<Value> {
+        let chip = self.catalog.chip("STM32F103C8Tx")?;
+        let board = self.catalog.board("chip-f103c8@1")?;
+        let root = self.data_dir.join("stm32").join("dacir-bridge");
+        fs::create_dir_all(&root).map_err(|e| Failure::io("创建烧写记录目录", &e))?;
+        let project = Project { root, manifest: json!({"name":"DACIR", "kind":"stm32-hal"}), chip, board };
+        let transport = arg_opt_str(args, "method").unwrap_or("stlink");
+        if !["stlink", "uart"].contains(&transport) { return Err(Failure::new("badRequest", "下载方式无效。")); }
+        let probe = arg_opt_str(args, "probe").unwrap_or("");
+        let port = arg_opt_str(args, "port").unwrap_or("");
+        if transport == "stlink" && probe.is_empty() { return Err(Failure::new("noProbe", "请选择 ST-LINK。")); }
+        if transport == "uart" && port.is_empty() { return Err(Failure::new("noPort", "请选择 ISP 串口。")); }
+        // The coordinator suspends all monitor subscribers before borrowing ISP.
+        let _port_lock = if transport == "uart" { Some(locks::lock_port(port, "DACIR ISP")?) } else { None };
+        if method == "inspectBoard" && transport == "uart" {
+            let mut link = uart::wait_for_rom(port, 115200, &self.device_cancel)?;
+            let mut identity = uart::identify(&mut link, project.chip.reg("flashSize"), project.chip.reg("uid"))?;
+            flash::check_identity(&project.chip, &identity, 0)?;
+            identity["hasBackup"] = json!(self.backups.has(&identity));
+            return Ok(identity);
+        }
+        if method == "inspectBoard" {
+            let session = stlink::Session { toolkit, chip: &project.chip, board: &project.board,
+                serial: probe, out: &self.out, cancel: &self.device_cancel, run_id: "inspect" };
+            let (selected, _lock) = stlink::select_probe(&session)?;
+            let session = stlink::Session { serial: &selected, ..session };
+            let mut identity = session.identify()?;
+            flash::check_identity(&project.chip, &identity, 0)?;
+            identity["hasBackup"] = json!(self.backups.has(&identity));
+            return Ok(identity);
+        }
+        let operation = arg_str(args, "operationId")?;
+        let uid = arg_str(args, "uid")?;
+        if method == "resetBoard" {
+            if transport != "stlink" { return Err(Failure::new("manualReset", "串口 ISP 请手动恢复 BOOT 并复位。")); }
+            if operation.len() != 32 || !operation.bytes().all(|b| b.is_ascii_hexdigit()) || uid.len() != 24 || !uid.bytes().all(|b| b.is_ascii_hexdigit()) {
+                return Err(Failure::new("badRequest", "复位身份无效。"));
+            }
+            let dir = project.root.join("operations").join(operation);
+            if dir.exists() { return read_json(&dir.join("operation.json")); }
+            fs::create_dir_all(&dir).map_err(|e| Failure::io("记录复位", &e))?;
+            let mut record = json!({"operationId":operation,"planId":args.get("planId"),"projectId":args.get("projectId"),"buildId":args.get("buildId"),"uid":uid,"state":"started","kind":"reset"});
+            write_json(&dir.join("operation.json"), &record)?;
+            let session = stlink::Session { toolkit, chip:&project.chip, board:&project.board, serial:probe, out:&self.out, cancel:&self.device_cancel, run_id:operation };
+            let result = (|| {
+                let (selected, _lock) = stlink::select_probe(&session)?;
+                let session = stlink::Session { serial:&selected, ..session };
+                let identity = session.identify()?;
+                if identity["uid"] != uid { return Err(Failure::new("chipChanged", "目标芯片已变化，没有复位。")); }
+                session.start_verified(identity["uidWords"].as_str().unwrap_or_default(), None)
+            })();
+            match result {
+                Ok(value) => { record["state"] = json!("completed"); record["result"] = value; },
+                Err(error) => { record["state"] = json!("failed"); record["error"] = json!({"code":error.code,"message":error.message}); },
+            }
+            write_json(&dir.join("operation.json"), &record)?;
+            return Ok(record);
+        }
+        let expected_sha = arg_str(args, "sha256")?;
+        let valid_hex = |text: &str, n: usize| text.len() == n && text.bytes().all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b));
+        if !valid_hex(operation, 32) || !valid_hex(uid, 24) || !valid_hex(expected_sha, 64) {
+            return Err(Failure::new("badRequest", "烧写操作身份、目标芯片或摘要无效。"));
+        }
+        let restored = if method == "restoreImage" {
+            let (record, file) = self.backups.get(arg_str(args, "backup")?)?;
+            if record["uid"] != uid || record["deviceId"] != 0x410 {
+                return Err(Failure::new("wrongBackup", "备份不属于目标芯片。"));
+            }
+            Some(fs::read(file).map_err(|e| Failure::io("读取备份", &e))?)
+        } else { None };
+        let encoded = args.get("data").and_then(Value::as_str).filter(|s| s.len() <= 90_000)
+            .unwrap_or("");
+        let bytes = if let Some(bytes) = restored { bytes } else { B64.decode(encoded).map_err(|_| Failure::new("badRequest", "固件编码无效。"))? };
+        if !(8..=if method == "restoreImage" { 131072 } else { 65536 }).contains(&bytes.len()) || sha256_hex(&bytes) != expected_sha {
+            return Err(Failure::new("badArtifact", "固件大小或摘要不匹配，没有写入。"));
+        }
+        let word = |i: usize| u32::from_le_bytes([bytes[i], bytes[i+1], bytes[i+2], bytes[i+3]]);
+        let stack = word(0); let reset = word(4);
+        if method != "restoreImage" && (stack <= 0x2000_0000 || stack > 0x2000_5000 || stack % 4 != 0 || reset & 1 != 1
+            || (reset & !1) < 0x0800_0008 || (reset & !1) >= 0x0800_0000 + bytes.len() as u32) {
+            return Err(Failure::new("badArtifact", "固件向量表不适用于 STM32F103C8，没有写入。"));
+        }
+        let operations = project.root.join("operations");
+        fs::create_dir_all(&operations).map_err(|e| Failure::io("创建操作目录", &e))?;
+        let dir = operations.join(operation);
+        match fs::create_dir(&dir) {
+            Ok(()) => {},
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {
+                let record = read_json(&dir.join("operation.json"))?;
+                if record["sha256"] != expected_sha || record["uid"] != uid || record["probe"] != probe || record["method"] != transport || record["port"] != port {
+                    return Err(Failure::new("operationConflict", "操作身份已用于其他目标或固件。"));
+                }
+                return Ok(record);
+            },
+            Err(e) => return Err(Failure::io("创建烧写操作", &e)),
+        }
+        let file = dir.join("firmware.bin");
+        write_atomic(&file, &bytes)?;
+        let mut journal = json!({"operationId":operation,"state":"started","uid":uid,"probe":probe,
+            "sha256":expected_sha,"bytes":bytes.len(),"method":transport,"port":port,"planId":args.get("planId"),"backup":args.get("backup"),"projectId":args.get("projectId"),"buildId":args.get("buildId")});
+        write_json(&dir.join("operation.json"), &journal)?;
+        let image = Image { file, bytes: bytes.len() as u64, sha256: expected_sha.to_string(), bundle: None, tick: None, restore_uid: if method == "restoreImage" { Some(uid.to_string()) } else { None } };
+        let target = Target { method:transport, probe, port, baud:115200, skip_backup:false, expected_uid:Some(uid) };
+        let ctx = Ctx { toolkit, project:&project, backups:&self.backups, out:&self.out, cancel:&self.device_cancel };
+        let result = flash::run(&ctx, &target, &image, operation);
+        match &result {
+            Ok(value) => { journal["state"] = json!("completed"); journal["result"] = value.clone(); },
+            Err(error) => { journal["state"] = json!("failed"); journal["error"] = json!({"code":error.code,"message":error.message}); },
+        }
+        write_json(&dir.join("operation.json"), &journal)?;
+        // Return the durable record even for a reported failure. A lost reply
+        // remains unknown to the client and must never trigger an automatic retry.
+        Ok(journal)
+    }
+
     fn download(&self, method: &str, args: &Value, toolkit: &Toolkit, project: &Project) -> Outcome<Value> {
         check_compatible(&project.manifest, args)?;
         let image = if method == "restore" {
@@ -502,6 +634,7 @@ impl Inner {
             port: &port,
             baud,
             skip_backup: arg_bool(args, "skipBackup"),
+            expected_uid: None,
         };
         let run_id = new_id("r");
         self.out.event("flash.started", json!({"runId": run_id, "path": project.root.display().to_string(), "method": method_name, "restore": method == "restore",

@@ -47,3 +47,8 @@ backups/
 
 # Local release artifacts (uploaded as GitHub release assets).
 /desktop/dist/
+
+# Locally staged embedded runtime; source files remain versioned.
+/desktop/scope-extension/resources/toolkits/
+/desktop/scope-extension/resources/imaging/
+/desktop/scope-extension/resources/embedded-core/embedded-core.lock.json

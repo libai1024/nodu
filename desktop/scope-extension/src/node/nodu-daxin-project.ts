@@ -66,7 +66,7 @@ export async function createDaxinProject(input: ProjectRequest, packRoot = join(
     files.set('cmake/gcc-arm-none-eabi.cmake', required('adapter/gcc-arm-none-eabi.cmake'));
     files.set('nodu.json', json({ schema: 1, kind: 'stm32-hal', name: request.name,
         target: { mcu: request.chip.id, board: request.chip.pack }, sdk: 'stm32cube-f1@1.8.7',
-        build: { preset: 'debug', external: true, adapter: 'dacir-directory-v1', printfFloat: false },
+        build: { preset: 'debug', external: true, adapter: 'dacir-directory-v1', clockHz: 72000000, printfFloat: false },
         flash: { method: 'stlink' }, monitor: { baud: 115200, encoding: 'utf-8', lineEnding: 'lf' } }));
     // GCC diagnostic presentation flags do not belong to clangd's parser.
     files.set('.clangd', Buffer.from('CompileFlags:\n  Remove: [-fdiagnostics-plain-output, -fdiagnostics-column-unit=*]\n'));

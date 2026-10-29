@@ -92,8 +92,10 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         await this.shell.pendingUpdates;
         // Open main.c the first time; never create files on startup.
         if (!this.editors.all.length) {
-            const main = URI.fromFilePath(project.path).resolve('Core/Src/main.c');
-            if (await this.files.exists(main)) { await this.editors.open(main, { mode: 'activate' }); }
+            for (const relative of ['Core/Src/main.c', 'src/main.c']) {
+                const main = URI.fromFilePath(project.path).resolve(relative);
+                if (await this.files.exists(main)) { await this.editors.open(main, { mode: 'activate' }); break; }
+            }
         }
     }
 
@@ -275,6 +277,16 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
             try { await this.model.call('openBuildLocation', { path: project.path }); }
             catch (error) { void this.messages.error(errorText(error)); }
         });
+        add('nodu.c.takeSerialControl', '接管串口发送', async () => {
+            try { await this.model.call('takeMonitorControl', { confirm: true }); }
+            catch (error) { void this.messages.error(errorText(error)); }
+        });
+        add('nodu.c.openDacir', '在 DACIR 中仿真', async () => {
+            const project = this.model.project;
+            if (!project || this.model.hasUnsavedSources()) return;
+            try { await this.model.call('linkOpen', { path: project.path, target: 'dacir' }); }
+            catch (error) { void this.messages.error(errorText(error)); }
+        });
         add(C_COMMANDS.build, '编译', () => this.build());
         add(C_COMMANDS.rebuild, '清理并重新编译', () => this.build(true));
         add(C_COMMANDS.run, '运行（编译并下载）', () => this.run());
@@ -320,6 +332,8 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         menus.registerMenuAction([...NODU_C_RUN_MENU, '0_c', 'method'], { commandId: C_COMMANDS.methodUart, order: '1' });
         menus.registerMenuAction([...NODU_C_RUN_MENU, '0_c'], { commandId: C_COMMANDS.reset, order: '2' });
         menus.registerMenuAction([...NODU_C_RUN_MENU, '0_c'], { commandId: C_COMMANDS.rebuild, order: '3' });
+        menus.registerMenuAction([...NODU_C_RUN_MENU, '1_view'], { commandId: 'nodu.c.openDacir', order: '-1' });
+        menus.registerMenuAction([...NODU_C_RUN_MENU, '1_view'], { commandId: 'nodu.c.takeSerialControl', order: '-0.5' });
         menus.registerMenuAction([...NODU_C_RUN_MENU, '1_view'], { commandId: C_COMMANDS.showMonitor, order: '0' });
         menus.registerMenuAction([...NODU_C_RUN_MENU, '1_view'], { commandId: C_COMMANDS.showOutput, order: '1' });
         menus.registerMenuAction([...NODU_C_RUN_MENU, '1_view'], { commandId: C_COMMANDS.openBuildLocation, order: '2' });
