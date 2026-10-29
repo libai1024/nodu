@@ -54,6 +54,14 @@ export async function arduinoInputDigest(root: string): Promise<string> {
     await walk(root, 0); return hash.digest('hex');
 }
 
+/** Pinned CLI 1.5.1 Sketch.Hash(): uppercase MD5 of its canonical absolute path.
+ * Use its default sketch directory: passing --build-path disables the shared core cache.
+ * This MD5 is only a cache directory key, never an artifact integrity check.
+ */
+export function arduinoBuildPath(home: string, project: string): string {
+    return join(home, 'cache', 'sketches', createHash('md5').update(project).digest('hex').toUpperCase());
+}
+
 /** GCC emits original .ino positions after Arduino preprocessing. */
 export function arduinoDiagnostics(output: string, root: string): Diagnostic[] {
     const diagnostics: Diagnostic[] = [], seen = new Set<string>();

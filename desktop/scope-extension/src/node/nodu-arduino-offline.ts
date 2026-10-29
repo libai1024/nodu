@@ -61,13 +61,24 @@ async function digest(file: string, signal: AbortSignal): Promise<string> {
 }
 
 /** The chosen root may be canonicalized; no child directory/file may redirect a bundled write. */
-async function checkedPath(root: string, name: string, create: boolean): Promise<string> {
+async function checkedPath(root: string, name: string, create: boolean, directories = new Map<string, Promise<void>>()): Promise<string> {
     const parts = name.split('/'); let directory = root;
     for (const part of parts.slice(0, -1)) {
         directory = join(directory, part);
-        if (create) { await fs.mkdir(directory).catch(error => { if (error.code !== 'EEXIST') { throw error; } }); }
-        const stat = await fs.lstat(directory);
-        if (!stat.isDirectory() || stat.isSymbolicLink()) { throw repair('资源目录'); }
+        let checked = directories.get(directory);
+        if (!checked) {
+            const current = directory;
+            checked = (async () => {
+                let stat = await fs.lstat(current).catch(error => { if (error.code === 'ENOENT' && create) { return undefined; } throw error; });
+                if (!stat) {
+                    await fs.mkdir(current).catch(error => { if (error.code !== 'EEXIST') { throw error; } });
+                    stat = await fs.lstat(current);
+                }
+                if (!stat.isDirectory() || stat.isSymbolicLink()) { throw repair('资源目录'); }
+            })();
+            directories.set(current, checked);
+        }
+        await checked;
     }
     const file = join(directory, parts.at(-1)!);
     const stat = await fs.lstat(file).catch(error => { if (error.code === 'ENOENT') { return undefined; } throw error; });
@@ -80,7 +91,7 @@ export async function seedArduinoOfflineBundle(home: string, signal: AbortSignal
     root = arduinoOfflineRoot(), host = `${process.platform}-${process.arch}`): Promise<ArduinoOfflineManifest | undefined> {
     const key = `${resolve(home)}\0${resolve(root)}\0${host}`;
     const existing = pending.get(key);
-    if (existing) { await existing; signal.throwIfAborted(); return seedArduinoOfflineBundle(home, signal, progress, root, host); }
+    if (existing) { const result = await existing; signal.throwIfAborted(); return result; }
     const operation = seed(home, signal, progress, root, host); pending.set(key, operation);
     try { return await operation; } finally { if (pending.get(key) === operation) { pending.delete(key); } }
 }
@@ -99,18 +110,19 @@ async function seed(home: string, signal: AbortSignal, progress: (text: string) 
     const manifest = validateArduinoOfflineManifest(JSON.parse(contents), host);
     await fs.mkdir(home, { recursive: true }); home = await fs.realpath(home);
     const source = await fs.realpath(directory), manifestHash = createHash('sha256').update(contents).digest('hex');
-    const receiptFile = await checkedPath(home, `.offline-receipts/${manifestHash}.json`, true);
+    // Cache directory checks only for this scan: later calls still detect a replaced symlink.
+    const directories = new Map<string, Promise<void>>();
+    const receiptFile = await checkedPath(home, `.offline-receipts/${manifestHash}.json`, true, directories);
     let receipts: Record<string, Receipt> = Object.create(null);
     try { const value = JSON.parse(await fs.readFile(receiptFile, 'utf8')); if (value && typeof value === 'object' && !Array.isArray(value)) { receipts = value; } } catch { /* A receipt is only an optimization. */ }
     const next: Record<string, Receipt> = Object.create(null);
-    const files = manifest.files.filter(file => file.target); let completed = 0;
-    progress('正在初始化 Arduino 环境');
+    const files = manifest.files.filter(file => file.target); let completed = 0, repaired = 0;
     // Bound IO concurrency for thousands of small Core source files and large compiler archives.
     let cursor = 0;
     const workers = await Promise.allSettled(Array.from({ length: Math.min(4, files.length) }, async () => {
         for (;;) {
             const file = files[cursor++]; if (!file) { return; } signal.throwIfAborted();
-            const target = await checkedPath(home, file.target!, true);
+            const target = await checkedPath(home, file.target!, true, directories);
             if (file.target === 'data/library_index.json.sig') {
                 const paired = files.find(item => item.target === file.target!.slice(0, -4));
                 const indexFile = target.slice(0, -4), indexStat = await fs.lstat(indexFile).catch(() => undefined);
@@ -121,7 +133,7 @@ async function seed(home: string, signal: AbortSignal, progress: (text: string) 
                 }
             }
             let actual = await fs.lstat(target).catch(error => { if (error.code === 'ENOENT') { return undefined; } throw error; });
-            if (actual && file.mode !== undefined && (actual.mode & 0o777) !== file.mode) {
+            if (process.platform !== 'win32' && actual && file.mode !== undefined && (actual.mode & 0o777) !== file.mode) {
                 await fs.chmod(target, file.mode); actual = await fs.lstat(target);
             }
             const saved = receipts[file.target!];
@@ -132,18 +144,20 @@ async function seed(home: string, signal: AbortSignal, progress: (text: string) 
             const known = actual && actual.size === file.size && saved?.sha256 === file.sha256 && saved.size === actual.size
                 && saved.mtimeMs === actual.mtimeMs && saved.ctimeMs === actual.ctimeMs && saved.ino === actual.ino;
             if (!preserveIndex && !known && !(actual?.size === file.size && await digest(target, signal) === file.sha256)) {
-                const input = await checkedPath(source, file.path, false), inputStat = await fs.lstat(input);
+                if (repaired++ === 0) { progress('正在初始化 Arduino 环境'); }
+                const input = await checkedPath(source, file.path, false, directories), inputStat = await fs.lstat(input);
                 if (inputStat.size !== file.size) { throw repair(file.path); }
                 const temporary = join(dirname(target), `.nodu-${randomUUID()}.tmp`);
                 try {
                     await fs.copyFile(input, temporary, 1);
                     if (await digest(temporary, signal) !== file.sha256) { throw repair(file.path); }
-                    await fs.chmod(temporary, file.mode ?? 0o644); signal.throwIfAborted(); await fs.rename(temporary, target);
+                    if (process.platform !== 'win32') { await fs.chmod(temporary, file.mode ?? 0o644); }
+                    signal.throwIfAborted(); await fs.rename(temporary, target);
                 } finally { await fs.rm(temporary, { force: true }); }
                 actual = await fs.lstat(target);
             }
             if (!preserveIndex && actual) { next[file.target!] = { sha256: file.sha256, size: actual.size, mtimeMs: actual.mtimeMs, ctimeMs: actual.ctimeMs, ino: actual.ino }; }
-            if (++completed % 400 === 0) { progress(`初始化 Arduino 环境 ${completed} / ${files.length}`); }
+            if (++completed % 400 === 0 && repaired) { progress(`初始化 Arduino 环境 ${completed} / ${files.length}`); }
         }
     }));
     const failure = workers.find((worker): worker is PromiseRejectedResult => worker.status === 'rejected');

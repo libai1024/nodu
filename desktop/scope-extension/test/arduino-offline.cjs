@@ -37,7 +37,8 @@ test('a fresh home receives only checksum-verified portable inputs, without netw
     assert.equal((await f.seed()).id, 'offline-unit');
     for (const entry of f.manifest.files) { assert.equal(hash(await fs.readFile(path.join(f.home, entry.target))), entry.sha256); }
     const file = path.join(f.home, 'downloads/packages/compiler.tar.gz'), before = await fs.stat(file);
-    await f.seed(); assert.equal((await fs.stat(file)).mtimeMs, before.mtimeMs);
+    const progress = []; await f.seed(undefined, text => progress.push(text)); assert.equal((await fs.stat(file)).mtimeMs, before.mtimeMs);
+    assert.deepEqual(progress, [], 'a verified warm environment must not advertise another initialization');
 });
 test('library additions survive while board and builtin indexes remain pinned; damaged archives are repaired', async t => {
     const f = await fixture(t); await f.seed();

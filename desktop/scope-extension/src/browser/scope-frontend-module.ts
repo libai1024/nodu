@@ -53,8 +53,11 @@ import { TerminalCreationHandler } from '@theia/terminal/lib/browser/terminal-cr
 import { NoduClangdClient } from './nodu-clangd-client';
 import { NoduArduinoLanguageClient } from './nodu-arduino-language-client';
 import { NoduDiagnostics } from './nodu-diagnostics';
+import { MonacoEditorProvider } from '@theia/monaco/lib/browser/monaco-editor-provider';
+import { NoduMonacoEditorProvider } from './nodu-monaco-editor-provider';
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
+    rebind(MonacoEditorProvider).to(NoduMonacoEditorProvider).inSingletonScope();
     bind(NoduDiagnostics).toSelf().inSingletonScope();
     bind(CommandContribution).toService(NoduDiagnostics);
     bind(NoduDeviceModel).toSelf().inSingletonScope();

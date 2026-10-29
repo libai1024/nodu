@@ -15,13 +15,14 @@ import { ArduinoLibraryChange, ArduinoLibraryChangeResult, ArduinoLibraryQuery, 
 import { ArduinoLibraryContext, listArduinoLibraries, changeArduinoLibrary, prepareBundledArduinoLibraries } from './nodu-arduino-libraries';
 import { boardCatalog, catalogBoards, catalogOptions, configureArduinoProject, inspectArduinoProject } from './nodu-arduino-boards';
 import { arduinoResources } from './nodu-arduino-paths';
+import { arduinoEnvironmentIdentity, hasArduinoEnvironmentReceipt, rememberArduinoEnvironment } from './nodu-arduino-environment-cache';
 import { NoduEmbeddedServer } from './nodu-embedded-server';
 import { PortInfo } from '../common/nodu-embedded-protocol';
 import { executeArduinoUpload, readArduinoFlashPlan, ArduinoUploadTarget } from './nodu-arduino-upload';
 import { installArduinoCli } from './nodu-arduino-toolchain';
 import { arduinoInitializationErrors, arduinoOfflineRoot, seedArduinoOfflineBundle } from './nodu-arduino-offline';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
-import { arduinoDiagnostics, arduinoInputDigest, readArduinoProject } from './nodu-arduino-project';
+import { arduinoBuildPath, arduinoDiagnostics, arduinoInputDigest, readArduinoProject } from './nodu-arduino-project';
 import { ArduinoSimulationSnapshot, captureArduinoSimulationInputs, createArduinoSimulationPackage,
     discoverArduinoSimulationDependencies, publishArduinoSimulationPackage } from './nodu-arduino-simulation-package';
 
@@ -153,6 +154,11 @@ export class NoduArduinoServer implements NoduArduinoService {
         const work = this.operation(request, async (operation, environment) => {
             await this.checkCli(operation, request, environment);
             await prepareBundledArduinoLibraries(this.libraryContext(environment, operation, request));
+            const identity = !process.env.NODU_ARDUINO_CLI ? await arduinoEnvironmentIdentity(environment.home, [
+                join(root, `${process.platform}-${process.arch}`, 'manifest.json'),
+                join(arduinoResources(), 'libraries/manifest.json'), join(arduinoResources(), 'cli-manifest.json'),
+            ]) : undefined;
+            if (identity && await hasArduinoEnvironmentReceipt(environment.home, identity)) { return; }
             const parent = join(environment.home, 'bootstrap'); await fs.mkdir(parent, { recursive: true });
             const scratch = await fs.mkdtemp(join(parent, 'environment-'));
             try {
@@ -167,6 +173,7 @@ export class NoduArduinoServer implements NoduArduinoService {
                 if (operation.cancelled || result.code !== 0 || errors.length || !Array.isArray(database) || !database.length) {
                     throw new Error(operation.cancelled ? '已停止' : `Arduino 内置环境初始化失败：${(errors.join('\n') || result.output || '未生成编译环境').slice(-2000)}`);
                 }
+                if (identity) { await rememberArduinoEnvironment(environment.home, identity, database); }
             } finally { await fs.rm(scratch, { recursive: true, force: true }); }
         });
         this.baseEnvironment = work;
@@ -261,7 +268,7 @@ export class NoduArduinoServer implements NoduArduinoService {
                 const project = await readArduinoProject(request.path), before = await arduinoInputDigest(project.path);
                 catalogOptions(await boardCatalog(environment.home, project.coreVersion), project.fqbn, project.chip);
                 for (const [token, built] of this.builds) { if (built.path === project.path) { this.builds.delete(token); } }
-                const buildPath = join(environment.home, 'builds', createHash('sha256').update(project.path).digest('hex').slice(0, 24));
+                const buildPath = arduinoBuildPath(environment.home, project.path);
                 await fs.mkdir(buildPath, { recursive: true });
                 this.output(request, '准备 Arduino 环境', 'preparing');
                 await this.checkCli(operation, request, environment);
@@ -294,7 +301,7 @@ export class NoduArduinoServer implements NoduArduinoService {
                     }
                 }
                 this.output(request, `Arduino · ${project.fqbn}`, 'compiling');
-                const result = await this.run(operation, request, ['compile', '--profile', project.profile, '--build-path', buildPath, '--warnings', 'default', '--no-color', project.path], project.path, environment.config, environment.env, false);
+                const result = await this.run(operation, request, ['compile', '--profile', project.profile, '--warnings', 'default', '--no-color', project.path], project.path, environment.config, environment.env, false);
                 if (operation.cancelled) { return { ok: false, cancelled: true, diagnostics: [] }; }
                 const failed = result.code !== 0 || arduinoInitializationErrors(result.output).length > 0;
                 const stale = before !== await arduinoInputDigest(project.path);

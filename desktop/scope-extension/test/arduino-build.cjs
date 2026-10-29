@@ -24,7 +24,7 @@ const root = args.at(-1), file = path.join(root, path.basename(root)+'.ino'), so
 if (source.includes('MUTATE')) { fs.appendFileSync(file, '//changed'); }
 if (source.includes('INIT_BROKEN')) { console.error('Error initializing instance: Library fixture not found'); process.exit(0); }
 if (source.includes('BROKEN')) { console.error(file+':4:7: error: invalid statement'); process.exit(1); }
-const build = args[args.indexOf('--build-path')+1]; fs.mkdirSync(build,{recursive:true}); fs.writeFileSync(path.join(build,'fake.ino.bin'),'fixture');
+const build = args.includes('--build-path') ? args[args.indexOf('--build-path')+1] : path.join(config.build_cache.path,'sketches',require('node:crypto').createHash('md5').update(root).digest('hex').toUpperCase()); fs.mkdirSync(build,{recursive:true}); fs.writeFileSync(path.join(build,'fake.ino.bin'),'fixture');
 if (args.includes('--only-compilation-database') && !source.includes('MISSING_DATABASE')) { fs.writeFileSync(path.join(build,'compile_commands.json'),JSON.stringify([{file,command:'fixture'}])); }
 console.log('Compiling sketch');
 if (source.includes('SLOW')) { setTimeout(()=>console.log('compiled'), 60000); } else { console.log('compiled'); }
@@ -60,7 +60,8 @@ test('compile uses profile and isolated config, never a shell or the user Arduin
     assert.equal(calls.length, 2); const compile = calls[1];
     assert.deepEqual(compile.args.slice(2, 5), ['compile', '--profile', 'nodu']);
     assert.equal(compile.args.at(-1), f.root); assert.equal(compile.config.directories.data, path.join(await fs.realpath(f.dir), 'isolated/data'));
-    assert.deepEqual(compile.environment, []); assert.ok(result.buildPath.startsWith(path.join(await fs.realpath(f.dir), 'isolated/builds')));
+    assert.deepEqual(compile.environment, []); assert.ok(result.buildPath.startsWith(path.join(await fs.realpath(f.dir), 'isolated/cache/sketches')));
+    assert.equal(compile.args.includes('--build-path'), false, 'a custom build path disables CLI core caching');
     assert.ok(events.some(e => e.line === 'Compiling sketch' && e.operationId === f.request.operationId));
 });
 test('failed compilation returns original sketch positions for the Problems panel', async t => {
