@@ -55,3 +55,13 @@ Arduino CLI 的 profile 冷安装会另建临时索引目录并尝试联网。�
 - 使用当前固定版本继续运行已有工程，不联网更新开发板索引。额外库的显式安装与基础环境是独立能力。
 
 执行脚本：`npm run test:arduino-package`。冷启动实际编译脚本：`arduino-offline.e2e.cjs`。正式安装包与物理 USB 烧录仍需各自验收，源码包或本地脚本测试不能替代它们。
+
+## Windows 本地 ESP32 验证目录
+
+`node scripts/package-electron.cjs --profile esp32-validation` 仅供本地硬件验收。它仍校验全部运行文件的大小、哈希、版本和清单闭包，但显式允许对应源码材料尚未齐全的资源。默认 `full` 的发行校验保持严格；本模式不会生成 ZIP 或安装器，不应用于上传正式发行。
+
+在 Windows 构建机准备固定 Arduino bundle、ALS、clangd 和启动器后，可用 `NODU_ARDUINO_RELEASE_BUNDLES` 指定资源根目录。`NODU_ESP32_WINDOWS_DRIVERS` 可指向用 Windows `pnputil /export-driver` 导出的已签名 CH343 驱动目录；只复制文件，需要时由管理员执行随包脚本安装。
+
+产物 `dist/Nodu-ESP32-Validation-win32-x64` 包含 `LOCAL-VALIDATION-ONLY.json` 和 `NoduPortable.json`。标记内明确保留 `arduinoReleaseReady: false`；运行数据、工程、Arduino 环境和共享嵌入式服务均放在同目录 `Data`。目录整体移动后仍从包内读取工具，不依赖构建机安装的 Node 或 Python。
+
+`esp32-s3-hardware-acceptance.cjs` 是需要明确开启的真板测试：设置 `NODU_S3_TEST_ROOT`、`NODU_S3_TEST_PORT` 和 `NODU_S3_ALLOW_FLASH=1`；可用 `NODU_S3_TEST_EXTENSION` 指向包内扩展。程序会覆盖所选 S3 的固件。测试程序只操作串口，使用 16 KiB UART 接收缓冲并按换行累积消息，验证两份不同固件、Flash/PSRAM、监视器恢复、中文及 4200 字符回显。`NODU_S3_OFFLINE_GUARD` 可指定动态 WFP 验证工具，从空 Arduino home 检查本次运行的 Node/Electron 和 CLI 外网连接被拒绝；它不声称覆盖每个编译器子进程。
