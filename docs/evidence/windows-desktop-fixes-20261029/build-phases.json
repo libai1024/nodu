@@ -1,0 +1,258 @@
+{
+  "ms": 23866.9508,
+  "ok": true,
+  "events": [
+    {
+      "ms": 140.15930000000003,
+      "line": "准备 Arduino 环境"
+    },
+    {
+      "ms": 1517.2892000000002,
+      "line": "Arduino · esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default"
+    },
+    {
+      "ms": 2726.4966,
+      "line": "FQBN: esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M"
+    },
+    {
+      "ms": 2726.5025,
+      "line": "Using board 'esp32s3' from platform in folder: D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd"
+    },
+    {
+      "ms": 2726.5049,
+      "line": "Using core 'esp32' from platform in folder: D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd"
+    },
+    {
+      "ms": 3591.2288,
+      "line": "cmd /c if exist \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\tools\\\\partitions\\\\default.csv\" COPY /y \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\tools\\\\partitions\\\\default.csv\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\partitions.csv\""
+    },
+    {
+      "ms": 3641.6667999999995,
+      "line": "�Ѹ���         1 ���ļ���"
+    },
+    {
+      "ms": 3641.6770999999994,
+      "line": "cmd /c if exist \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\variants\\\\esp32s3\\\\partitions.csv\" COPY /y \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\variants\\\\esp32s3\\\\partitions.csv\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\partitions.csv\""
+    },
+    {
+      "ms": 3641.6801,
+      "line": "cmd /c if exist \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\\\\partitions.csv\" COPY /y \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\\\\partitions.csv\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\partitions.csv\""
+    },
+    {
+      "ms": 3692.0888,
+      "line": "cmd /c IF EXIST \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\\\\bootloader.bin\" ( COPY /y \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\\\\bootloader.bin\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\perf_1793282759950.ino.bootloader.bin\" ) ELSE ( IF EXIST \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\variants\\\\esp32s3\\\\bootloader.bin\" ( COPY \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\variants\\\\esp32s3\\\\bootloader.bin\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\perf_1793282759950.ino.bootloader.bin\" ) ELSE ( \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esptool_py_5.3.1_99ef3036ba521408\\\\esptool.exe\" --chip esp32s3 elf2image --flash-mode dio --flash-freq 80m --flash-size 16MB -o \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\perf_1793282759950.ino.bootloader.bin\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2\\\\bin\\\\bootloader_qio_80m.elf\" ) )"
+    },
+    {
+      "ms": 4221.294000000001,
+      "line": "esptool v5.3.1"
+    },
+    {
+      "ms": 4271.9322,
+      "line": "Creating ESP32-S3 image..."
+    },
+    {
+      "ms": 4271.9364000000005,
+      "line": "Merged 2 ELF sections."
+    },
+    {
+      "ms": 4271.9371,
+      "line": "Successfully created ESP32-S3 image."
+    },
+    {
+      "ms": 4589.7092,
+      "line": "cmd /c if exist \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\\\\build_opt.h\" COPY /y \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\\\\build_opt.h\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\build_opt.h\""
+    },
+    {
+      "ms": 4639.990900000001,
+      "line": "cmd /c if not exist \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\build_opt.h\" type nul > \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\build_opt.h\""
+    },
+    {
+      "ms": 4639.9959,
+      "line": "cmd /c type nul > \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/file_opts\""
+    },
+    {
+      "ms": 4639.9968,
+      "line": "cmd /c COPY /y \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2\\\\sdkconfig\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\sdkconfig\""
+    },
+    {
+      "ms": 4690.4629,
+      "line": "�Ѹ���         1 ���ļ���"
+    },
+    {
+      "ms": 4690.4669,
+      "line": "Detecting libraries used..."
+    },
+    {
+      "ms": 4690.4676,
+      "line": "The library Adafruit BusIO has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.4683,
+      "line": "The library Adafruit GFX Library has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.468900000001,
+      "line": "The library Adafruit NeoPixel has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.4696,
+      "line": "The library Adafruit SSD1306 has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.470200000001,
+      "line": "The library Adafruit Unified Sensor has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.4708,
+      "line": "The library ArduinoJson has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.4714,
+      "line": "The library ArduinoMqttClient has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.4732,
+      "line": "The library DHT sensor library has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.473800000001,
+      "line": "The library DallasTemperature has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.4744,
+      "line": "The library ESP32Servo has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 4690.475,
+      "line": "The library OneWire has been queued for inclusion from sketch project."
+    },
+    {
+      "ms": 8620.0948,
+      "line": "D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp-x32_2601_7eec6aba10bf540e/bin/xtensa-esp32s3-elf-g++ -c @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/cpp_flags -w -Os -Werror=return-type -w -x c++ -E -CC -DF_CPU=240000000L -DARDUINO=10607 -DARDUINO_ESP32S3_DEV -DARDUINO_ARCH_ESP32 -DARDUINO_BOARD=\"ESP32S3_DEV\" -DARDUINO_VARIANT=\"esp32s3\" -DARDUINO_PARTITION_default -DARDUINO_HOST_OS=\"windows\" -DARDUINO_FQBN=\"esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default\" -DESP32=ESP32 -DCORE_DEBUG_LEVEL=0 -DARDUINO_RUNNING_CORE=1 -DARDUINO_EVENT_RUNNING_CORE=1 -DBOARD_HAS_PSRAM -DARDUINO_USB_MODE=1 -DARDUINO_USB_CDC_ON_BOOT=0 -DARDUINO_USB_MSC_ON_BOOT=0 -DARDUINO_USB_DFU_ON_BOOT=0 @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/defines -ID:\\nodu-s3-perf-20261029\\projects\\perf_1793282759950 -iprefix D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/ @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/includes -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/qio_opi/include -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\cores\\esp32 -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\variants\\esp32s3 -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_BusIO_1.17.4_7b46ea3f5fdb9ecd\\Adafruit BusIO -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_GFX_Library_1.13.0_ca91a4d6f8dae8af\\Adafruit GFX Library -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_NeoPixel_1.15.5_32a75fce2b4fe8ac\\Adafruit NeoPixel -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_SSD1306_2.5.17_e01cd9e72ae36617\\Adafruit SSD1306 -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_Unified_Sensor_1.1.15_c4f0a59ad82fa17d\\Adafruit Unified Sensor -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\ArduinoJson_7.4.3_65bbd090d30b7927\\ArduinoJson\\src -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\ArduinoMqttClient_0.1.8_b1e57bf359553881\\ArduinoMqttClient\\src -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\DHT_sensor_library_1.4.7_50b5ef2509805e63\\DHT sensor library -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\DallasTemperature_4.0.6_04f98deb2305d67d\\DallasTemperature -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17/build_opt.h @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17/file_opts D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17\\sketch\\perf_1793282759950.ino.cpp.merged -o nul -MMD -MF D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17\\sketch\\perf_1793282759950.ino.cpp.merged.libsdetect.d"
+    },
+    {
+      "ms": 8670.9455,
+      "line": "Generating function prototypes..."
+    },
+    {
+      "ms": 12707.2667,
+      "line": "D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp-x32_2601_7eec6aba10bf540e/bin/xtensa-esp32s3-elf-g++ -c @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/cpp_flags -w -Os -Werror=return-type -w -x c++ -E -CC -DF_CPU=240000000L -DARDUINO=10607 -DARDUINO_ESP32S3_DEV -DARDUINO_ARCH_ESP32 -DARDUINO_BOARD=\"ESP32S3_DEV\" -DARDUINO_VARIANT=\"esp32s3\" -DARDUINO_PARTITION_default -DARDUINO_HOST_OS=\"windows\" -DARDUINO_FQBN=\"esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default\" -DESP32=ESP32 -DCORE_DEBUG_LEVEL=0 -DARDUINO_RUNNING_CORE=1 -DARDUINO_EVENT_RUNNING_CORE=1 -DBOARD_HAS_PSRAM -DARDUINO_USB_MODE=1 -DARDUINO_USB_CDC_ON_BOOT=0 -DARDUINO_USB_MSC_ON_BOOT=0 -DARDUINO_USB_DFU_ON_BOOT=0 @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/defines -ID:\\nodu-s3-perf-20261029\\projects\\perf_1793282759950 -iprefix D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/ @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/includes -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/qio_opi/include -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\cores\\esp32 -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\variants\\esp32s3 -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_BusIO_1.17.4_7b46ea3f5fdb9ecd\\Adafruit BusIO -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_GFX_Library_1.13.0_ca91a4d6f8dae8af\\Adafruit GFX Library -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_NeoPixel_1.15.5_32a75fce2b4fe8ac\\Adafruit NeoPixel -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_SSD1306_2.5.17_e01cd9e72ae36617\\Adafruit SSD1306 -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\Adafruit_Unified_Sensor_1.1.15_c4f0a59ad82fa17d\\Adafruit Unified Sensor -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\ArduinoJson_7.4.3_65bbd090d30b7927\\ArduinoJson\\src -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\ArduinoMqttClient_0.1.8_b1e57bf359553881\\ArduinoMqttClient\\src -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\DHT_sensor_library_1.4.7_50b5ef2509805e63\\DHT sensor library -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\DallasTemperature_4.0.6_04f98deb2305d67d\\DallasTemperature -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src -ID:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17/build_opt.h @D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17/file_opts D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17\\sketch\\perf_1793282759950.ino.cpp.merged -o D:\\nodu-s3-perf-20261029\\3421547055\\sketch_merged.cpp"
+    },
+    {
+      "ms": 12707.2701,
+      "line": "D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\packages\\builtin\\tools\\ctags\\5.8-arduino11/ctags -u --language-force=c++ -f - --c++-kinds=svpf --fields=KSTtzns --line-directives D:\\nodu-s3-perf-20261029\\3421547055\\sketch_merged.cpp"
+    },
+    {
+      "ms": 12757.7264,
+      "line": "Compiling sketch..."
+    },
+    {
+      "ms": 12757.7297,
+      "line": "\"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp-x32_2601_7eec6aba10bf540e/bin/xtensa-esp32s3-elf-g++\" -MMD -c \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/cpp_flags\" -Os -Werror=return-type -DF_CPU=240000000L -DARDUINO=10607 -DARDUINO_ESP32S3_DEV -DARDUINO_ARCH_ESP32 \"-DARDUINO_BOARD=\\\"ESP32S3_DEV\\\"\" \"-DARDUINO_VARIANT=\\\"esp32s3\\\"\" -DARDUINO_PARTITION_default \"-DARDUINO_HOST_OS=\\\"windows\\\"\" \"-DARDUINO_FQBN=\\\"esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default\\\"\" -DESP32=ESP32 -DCORE_DEBUG_LEVEL=0 -DARDUINO_RUNNING_CORE=1 -DARDUINO_EVENT_RUNNING_CORE=1 -DBOARD_HAS_PSRAM -DARDUINO_USB_MODE=1 -DARDUINO_USB_CDC_ON_BOOT=0 -DARDUINO_USB_MSC_ON_BOOT=0 -DARDUINO_USB_DFU_ON_BOOT=0 \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/defines\" \"-ID:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\" -iprefix \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/\" \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/includes\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/qio_opi/include\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\cores\\\\esp32\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\variants\\\\esp32s3\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\Adafruit_BusIO_1.17.4_7b46ea3f5fdb9ecd\\\\Adafruit BusIO\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\Adafruit_GFX_Library_1.13.0_ca91a4d6f8dae8af\\\\Adafruit GFX Library\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\Adafruit_NeoPixel_1.15.5_32a75fce2b4fe8ac\\\\Adafruit NeoPixel\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\Adafruit_SSD1306_2.5.17_e01cd9e72ae36617\\\\Adafruit SSD1306\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\Adafruit_Unified_Sensor_1.1.15_c4f0a59ad82fa17d\\\\Adafruit Unified Sensor\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\ArduinoJson_7.4.3_65bbd090d30b7927\\\\ArduinoJson\\\\src\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\ArduinoMqttClient_0.1.8_b1e57bf359553881\\\\ArduinoMqttClient\\\\src\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\DHT_sensor_library_1.4.7_50b5ef2509805e63\\\\DHT sensor library\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\DallasTemperature_4.0.6_04f98deb2305d67d\\\\DallasTemperature\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\ESP32Servo_3.2.1_5dbe94048172dcc2\\\\ESP32Servo\\\\src\" \"-ID:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\OneWire_2.3.8_b02012c4e88745c5\\\\OneWire\" \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/build_opt.h\" \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/file_opts\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\sketch\\\\perf_1793282759950.ino.cpp\" -o \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\sketch\\\\perf_1793282759950.ino.cpp.o\""
+    },
+    {
+      "ms": 17322.9879,
+      "line": "Compiling libraries..."
+    },
+    {
+      "ms": 17373.3248,
+      "line": "Compiling core..."
+    },
+    {
+      "ms": 17373.3279,
+      "line": "cmd /c echo -DARDUINO_CORE_BUILD > \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/file_opts\""
+    },
+    {
+      "ms": 18255.9391,
+      "line": "Using precompiled core: D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\cores\\feca1e7c320c7e9ab70b41f17183b2fe\\core.a"
+    },
+    {
+      "ms": 18306.5023,
+      "line": "cmd /c type nul > \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/file_opts\""
+    },
+    {
+      "ms": 18306.5052,
+      "line": "Linking everything together..."
+    },
+    {
+      "ms": 18306.5059,
+      "line": "\"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp-x32_2601_7eec6aba10bf540e/bin/xtensa-esp32s3-elf-g++\" \"-Wl,--Map=D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.map\" \"-LD:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/lib\" \"-LD:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/ld\" \"-LD:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/qio_opi\" -Wl,--wrap=esp_panic_handler -Wl,--wrap=esp_bt_mem_release -Wl,--wrap=esp_bt_controller_mem_release -Wl,--wrap=_ZN4chip11DeviceLayer8Internal10ESP32Utils13InitWiFiStackEv -Wl,--wrap=_Z21esp_matter_mem_callocjj -Wl,--wrap=_Z22esp_matter_mem_reallocPvj -Wl,--wrap=_Z19esp_matter_mem_freePv \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/ld_flags\" \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/ld_scripts\" -Wl,--start-group \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\sketch\\\\perf_1793282759950.ino.cpp.o\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\cores\\\\feca1e7c320c7e9ab70b41f17183b2fe\\\\core.a\" \"@D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/flags/ld_libs\" -Wl,--end-group -Wl,-EL -o \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.elf\""
+    },
+    {
+      "ms": 20830.234399999998,
+      "line": "\"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esptool_py_5.3.1_99ef3036ba521408/esptool.exe\" --chip esp32s3 elf2image --flash-mode dio --flash-freq 80m --flash-size 16MB --elf-sha256-offset 0xb0 -o \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.bin\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.elf\""
+    },
+    {
+      "ms": 21431.472599999997,
+      "line": "esptool v5.3.1"
+    },
+    {
+      "ms": 21482.614299999997,
+      "line": "Creating ESP32-S3 image..."
+    },
+    {
+      "ms": 21482.617299999998,
+      "line": "Merged 3 ELF sections."
+    },
+    {
+      "ms": 21482.6178,
+      "line": "Successfully created ESP32-S3 image."
+    },
+    {
+      "ms": 21816.805099999998,
+      "line": "\"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\tools\\\\gen_esp32part.exe\" -q \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/partitions.csv\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.partitions.bin\""
+    },
+    {
+      "ms": 22513.116299999998,
+      "line": "cmd /c if exist \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\libraries\\\\Insights\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\tools\\\\gen_insights_package.exe\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\" perf_1793282759950.ino \"D:\\\\nodu-s3-perf-20261029\\\\projects\\\\perf_1793282759950\""
+    },
+    {
+      "ms": 22563.708599999998,
+      "line": "cmd /c if exist \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\libraries\\\\ESP_SR\" if exist \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2\\\\esp_sr\\\\srmodels.bin\" COPY /y \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2\\\\esp_sr\\\\srmodels.bin\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\srmodels.bin\""
+    },
+    {
+      "ms": 22563.714399999997,
+      "line": "\"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esptool_py_5.3.1_99ef3036ba521408/esptool.exe\" --chip esp32s3 merge-bin -o \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.merged.bin\" --pad-to-size 16MB --flash-mode keep --flash-freq keep --flash-size keep 0x0 \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.bootloader.bin\" 0x8000 \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.partitions.bin\" 0xe000 \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd/tools/partitions/boot_app0.bin\" 0x10000 \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.bin\""
+    },
+    {
+      "ms": 23141.5923,
+      "line": "esptool v5.3.1"
+    },
+    {
+      "ms": 23192.3317,
+      "line": "Wrote 0x1000000 bytes to file 'D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.merged.bin', ready to flash to offset 0x0."
+    },
+    {
+      "ms": 23524.394099999998,
+      "line": "cmd /c echo --flash-mode dio --flash-freq 80m --flash-size 16MB > \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\flash_args\" && echo 0x0 perf_1793282759950.ino.bootloader.bin >> \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\flash_args\" && echo 0x8000 perf_1793282759950.ino.partitions.bin >> \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\flash_args\" && echo 0xe000 boot_app0.bin >> \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\flash_args\" && echo 0x10000 perf_1793282759950.ino.bin >> \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\flash_args\""
+    },
+    {
+      "ms": 23575.4714,
+      "line": "cmd /c copy /y \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp32_3.3.12_feadd113249efafd\\\\tools\\\\partitions\\\\boot_app0.bin\" \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17\\\\boot_app0.bin\""
+    },
+    {
+      "ms": 23575.4745,
+      "line": "�Ѹ���         1 ���ļ���"
+    },
+    {
+      "ms": 23653.6039,
+      "line": "\"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\data\\\\internal\\\\esp32_esp-x32_2601_7eec6aba10bf540e/bin/xtensa-esp32s3-elf-size\" -A \"D:\\\\Nodu-ESP32-Fixed\\\\Data\\\\arduino\\\\cache\\\\sketches\\\\E58205195B62413E7E0133AD2E823C17/perf_1793282759950.ino.elf\""
+    },
+    {
+      "ms": 23703.9784,
+      "line": "Sketch uses 278831 bytes (21%) of program storage space. Maximum is 1310720 bytes."
+    },
+    {
+      "ms": 23703.981799999998,
+      "line": "Global variables use 22068 bytes (6%) of dynamic memory, leaving 305612 bytes for local variables. Maximum is 327680 bytes."
+    },
+    {
+      "ms": 23758.296899999998,
+      "line": "Used platform Version Path"
+    },
+    {
+      "ms": 23758.302399999997,
+      "line": "esp32:esp32   3.3.12  D:\\Nodu-ESP32-Fixed\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd"
+    }
+  ]
+}

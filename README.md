@@ -26,7 +26,7 @@ Nodu 是面向嵌入式学习与开发的桌面 IDE。它把代码编辑、芯�
 
 Arduino 测试资源预装 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO、NeoPixel、DHT/Unified Sensor、OneWire、DallasTemperature 和 ESP32Servo 共 11 个固定版本库。**Windows STM32 专用安装包不包含 Arduino 环境。** 新增 Windows ESP32 本地验证目录包含完整运行环境与语言工具，S3 默认走 COM/UART0，并在唯一 USB/UART 桥存在时自动选中。16 MB Flash / 8 MB PSRAM 的 S3 经 CH343 完成两轮烧写、复位运行、中文及长消息回显；其他板型、原生 USB 仍需各自验收。当前不能承诺所有用户联网增装库均成功，也不能承诺原项目直接在 Arduino IDE 2.3.7 编译。
 
-新增记录：[Windows S3 COM 真板与包内环境验收](docs/evidence/windows-esp32-s3-com-20261029/README.md)。该目录仅用于本地验证，尚不是可正式发布的完整版安装包。
+新增记录：[Windows S3 COM 真板与包内环境验收](docs/evidence/windows-esp32-s3-com-20261029/README.md)、[Windows 缓存、剪切、终端及界面修复](docs/evidence/windows-desktop-fixes-20261029/README.md)。ESP 新项目仅提供 S3 / C3，左侧选型一次即可。修复版复用已安装环境与跨工程核心缓存；Windows 标题栏、设置悬浮态和原生剪切已验证。这些目录仅用于本地验证，尚不是可正式发布的完整版安装包。
 
 详见 [0.2.3 整合与打包记录](docs/releases/0.2.3.md)、[Windows ESP32 实测](docs/evidence/windows-esp32-20261029/README.md)、[Keil 使用说明](docs/keil-projects.md)和[仿真包说明](docs/arduino-esp-sim-package.md)。Mac 完整版与 Intel/Universal 目标仍受发布输入和 Arduino 对应材料校验限制；候选包不会作为完整跨平台正式版发布。
 

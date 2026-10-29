@@ -1,0 +1,9 @@
+{
+  "theme": "monaco-enable-motion underline-links nodu-pro windows vs scope-light theia-light",
+  "hover": true,
+  "background": "rgba(184, 184, 184, 0.31) none repeat scroll 0% 0% / auto padding-box border-box",
+  "color": "rgb(29, 33, 41)",
+  "padding": "0px 12px",
+  "radius": "10px",
+  "overflow": false
+}

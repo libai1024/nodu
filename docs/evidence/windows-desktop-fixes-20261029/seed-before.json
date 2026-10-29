@@ -1,0 +1,90 @@
+{
+  "app": "D:/Nodu-ESP32/resources/app",
+  "home": "D:\\Nodu-ESP32\\Data\\arduino",
+  "production": {
+    "filename": "D:\\Nodu-ESP32\\resources\\app\\lib\\backend\\main.js",
+    "sha256": "148503def8d255cb40b80fd34772cef1a60f0c62c2e9cc27ed2d2437c47be2ce",
+    "entryPointSuppressed": true,
+    "applicationFilesModified": false
+  },
+  "runs": [
+    {
+      "io": {
+        "lstat": {
+          "calls": 20549,
+          "ms": 4024.770400000005
+        },
+        "readFile": {
+          "calls": 6,
+          "ms": 197.09670000000017
+        },
+        "mkdir": {
+          "calls": 13936,
+          "ms": 2513.1173000000263
+        },
+        "chmod": {
+          "calls": 2184,
+          "ms": 631.2754999999976
+        },
+        "writeFile": {
+          "calls": 1,
+          "ms": 2.0427000000004227
+        },
+        "rename": {
+          "calls": 1,
+          "ms": 1.2726999999999862
+        }
+      },
+      "streams": 1,
+      "hashedBytes": 46924363,
+      "progress": [
+        "正在初始化 Arduino 环境",
+        "初始化 Arduino 环境 400 / 2214",
+        "初始化 Arduino 环境 800 / 2214",
+        "初始化 Arduino 环境 1200 / 2214",
+        "初始化 Arduino 环境 1600 / 2214",
+        "初始化 Arduino 环境 2000 / 2214"
+      ],
+      "ms": 2700.8502
+    },
+    {
+      "io": {
+        "lstat": {
+          "calls": 20549,
+          "ms": 3321.8161000000246
+        },
+        "readFile": {
+          "calls": 6,
+          "ms": 269.43839999999955
+        },
+        "mkdir": {
+          "calls": 13936,
+          "ms": 2035.1552999999844
+        },
+        "chmod": {
+          "calls": 2184,
+          "ms": 526.4983999999909
+        },
+        "writeFile": {
+          "calls": 1,
+          "ms": 1.5411999999996624
+        },
+        "rename": {
+          "calls": 1,
+          "ms": 1.15099999999984
+        }
+      },
+      "streams": 1,
+      "hashedBytes": 46924363,
+      "progress": [
+        "正在初始化 Arduino 环境",
+        "初始化 Arduino 环境 400 / 2214",
+        "初始化 Arduino 环境 800 / 2214",
+        "初始化 Arduino 环境 1200 / 2214",
+        "初始化 Arduino 环境 1600 / 2214",
+        "初始化 Arduino 环境 2000 / 2214"
+      ],
+      "ms": 2376.5247000000004
+    }
+  ]
+}

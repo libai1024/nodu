@@ -1,0 +1,15 @@
+{
+  "info": {
+    "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "arguments": [
+      "-NoProfile",
+      "-NoLogo"
+    ]
+  },
+  "echo": true,
+  "lines": [
+    "PS D:\\Nodu-ESP32-Fixed\\Data\\Projects\\s3_cache_clipboard_check> echo NODU_POWERSHELL_20261029_OK",
+    "NODU_POWERSHELL_20261029_OK",
+    "PS D:\\Nodu-ESP32-Fixed\\Data\\Projects\\s3_cache_clipboard_check> "
+  ]
+}

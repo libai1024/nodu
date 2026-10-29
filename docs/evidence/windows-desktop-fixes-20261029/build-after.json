@@ -1,0 +1,164 @@
+{
+  "app": "D:\\Nodu-ESP32-Fixed\\resources\\app",
+  "project": "D:\\nodu-s3-perf-20261029\\projects\\perf_1793282759950",
+  "runs": [
+    {
+      "name": "first",
+      "ms": 53167.25970000001,
+      "ok": true,
+      "compilerCalls": 61,
+      "sharedCoreCache": false,
+      "cachedObjects": 0
+    },
+    {
+      "name": "unchanged",
+      "ms": 11151.97649999999,
+      "ok": true,
+      "compilerCalls": 0,
+      "sharedCoreCache": true,
+      "cachedObjects": 1
+    },
+    {
+      "name": "one_line_edit",
+      "ms": 23418.324800000002,
+      "ok": true,
+      "compilerCalls": 1,
+      "sharedCoreCache": true,
+      "cachedObjects": 0
+    }
+  ],
+  "commands": [
+    {
+      "operation": "base-e2898d46-f172-47f0-9440-a5932d534a13",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 739.8132000000041,
+      "code": 0
+    },
+    {
+      "operation": "base-e2898d46-f172-47f0-9440-a5932d534a13",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--only-compilation-database",
+        "--build-path",
+        "D:\\Nodu-ESP32-Fixed\\Data\\arduino\\bootstrap\\environment-0B89Se\\build",
+        "--no-color",
+        "D:\\Nodu-ESP32-Fixed\\Data\\arduino\\bootstrap\\environment-0B89Se\\environment"
+      ],
+      "ms": 11962.265599999999,
+      "code": 0
+    },
+    {
+      "operation": "perf-first",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 184.03220000000147,
+      "code": 0
+    },
+    {
+      "operation": "perf-first",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\perf_1793282759950"
+      ],
+      "ms": 51607.7028,
+      "code": 0
+    },
+    {
+      "operation": "perf-unchanged",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 106.24129999999423,
+      "code": 0
+    },
+    {
+      "operation": "perf-unchanged",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\perf_1793282759950"
+      ],
+      "ms": 9583.652600000001,
+      "code": 0
+    },
+    {
+      "operation": "perf-one_line_edit",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 82.82170000000042,
+      "code": 0
+    },
+    {
+      "operation": "perf-one_line_edit",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\perf_1793282759950"
+      ],
+      "ms": 21969.5159,
+      "code": 0
+    },
+    {
+      "operation": "perf-other-project",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 86.38840000002529,
+      "code": 0
+    },
+    {
+      "operation": "perf-other-project",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\second_1793282956430"
+      ],
+      "ms": 22724.020900000003,
+      "code": 0
+    }
+  ],
+  "inspectMs": 107072.2796,
+  "reopenInspectMs": 1460.9185999999754,
+  "otherProject": {
+    "ms": 24148.617700000003,
+    "ok": true,
+    "sharedCoreCache": true
+  }
+}

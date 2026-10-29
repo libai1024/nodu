@@ -1,0 +1,27 @@
+✔ copy captures source and exclusive end-line metadata without replacing native text or HTML (15.318333ms)
+✔ copy metadata is limited to a focused editor with one nonempty bounded selection (4.357125ms)
+✔ paste references the copy-time source and lines after the editor selection changes (3.281833ms)
+✔ ordinary text, stale or malformed selection metadata, and cross-project copies retain native paste (8.048625ms)
+✔ navigator paste requires exact provenance and deduplicates multiple file URIs (2.281542ms)
+✔ file transfers snapshot an open unsaved document and read a disposed document from disk (1.658875ms)
+✔ dragging accepts Theia resources and URI lists but leaves ordinary dragged text alone (6.018125ms)
+✔ native file drops use the Electron path bridge, never an ambiguous basename (9.927833ms)
+✔ file transfers reject outside roots, URI queries, empty payloads and overlarge batches before attaching (20.458042ms)
+✔ a transfer stops remaining attachments when its conversation, project, mode or epoch changes (28.81025ms)
+✔ a failed attachment stops the batch and late errors do not overwrite a different conversation (30.851833ms)
+✔ native file drops preserve Windows drive roots and UNC server authorities (8.505208ms)
+✔ native paste is scoped to the composer and editor copy/cut use Monaco clipboard actions (8.64225ms)
+✔ native paste command attaches navigator files without DOM paste or plain URI insertion (16.430333ms)
+✔ native paste uses the saved copy-time selection when only clipboard plain text is available (1.732917ms)
+✔ native paste inserts ordinary text and invalidated selection copies without guessing a source (3.721208ms)
+✔ pending native clipboard reads are abandoned after focus, identity or clipboard changes (4.536ms)
+✔ clipboard read errors appear only in the originating composer conversation (3.723375ms)
+✔ native paste acquires the transfer guard before reading and releases it after text insertion (0.398834ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1379.873584

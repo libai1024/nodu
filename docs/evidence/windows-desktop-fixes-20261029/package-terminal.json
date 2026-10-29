@@ -1,0 +1,12 @@
+{
+  "echo": true,
+  "info": {
+    "executable": "C:\\Windows\\system32\\cmd.exe",
+    "arguments": []
+  },
+  "failure": "",
+  "visible": true,
+  "arduinoReady": true,
+  "arduinoLoading": false,
+  "error": ""
+}

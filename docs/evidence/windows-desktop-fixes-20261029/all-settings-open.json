@@ -1,0 +1,17 @@
+{
+  "modalClosed": true,
+  "widgets": [
+    "settings_widget",
+    "settings.header",
+    "preferences-scope-tab-bar",
+    "preferences.tree",
+    "settings.editor"
+  ],
+  "settingsSearch": false,
+  "editors": [
+    {
+      "uri": "file:///d%3A/Nodu-ESP32-Fixed/Data/Projects/s3_cache_clipboard_check/s3_cache_clipboard_check.ino",
+      "dirty": false
+    }
+  ]
+}

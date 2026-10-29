@@ -1,0 +1,29 @@
+{
+  "info": {
+    "version": "0.2.3",
+    "sourceCommit": "0ae5e8acdae2156a5623332b787f0fc7b81d96b7",
+    "sourceDirty": false,
+    "profile": "esp32-validation",
+    "validationOnly": true,
+    "arduinoReleaseReady": false,
+    "compilerInputs": {
+      "x64": "c47d5bee3108e295d3df028465dcc589251c3cd5dbe22bb66fd60fcac24c85b1"
+    },
+    "runtimeResources": "e2f915adcc0b339864bf4a4e8f38bf7d39886fc02f428f04d652d5865ff1d7ca"
+  },
+  "marker": {
+    "version": "0.2.3",
+    "sourceCommit": "0ae5e8acdae2156a5623332b787f0fc7b81d96b7",
+    "sourceDirty": false,
+    "validationOnly": true,
+    "arduinoReleaseReady": false
+  },
+  "backendHash": "27C71CFAEA94BABAD862EDFDA60F940D146680BD255860B90502E072E3EF66F8",
+  "portable": {
+    "schema": 1,
+    "profile": "esp32-validation",
+    "dataDirectory": "Data"
+  },
+  "driverIncluded": true,
+  "dataExists": false
+}

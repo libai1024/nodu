@@ -1,0 +1,17 @@
+{
+  "rect": {
+    "x": 574.6666870117188,
+    "y": 667,
+    "width": 562.6666870117188,
+    "height": 44,
+    "top": 667,
+    "right": 1137.3333740234375,
+    "bottom": 711,
+    "left": 574.6666870117188
+  },
+  "padding": "0px 12px",
+  "borderRadius": "10px",
+  "height": "44px",
+  "color": "rgb(231, 234, 239)",
+  "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box"
+}

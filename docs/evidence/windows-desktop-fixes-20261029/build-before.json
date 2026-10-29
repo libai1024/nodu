@@ -1,0 +1,136 @@
+{
+  "app": "D:/Nodu-ESP32/resources/app",
+  "project": "D:\\nodu-s3-perf-20261029\\projects\\perf_1793280909200",
+  "runs": [
+    {
+      "name": "first",
+      "ms": 51013.01699999999,
+      "ok": true,
+      "compilerCalls": 0,
+      "cachedObjects": 0
+    },
+    {
+      "name": "unchanged",
+      "ms": 11301.626100000009,
+      "ok": true,
+      "compilerCalls": 0,
+      "cachedObjects": 62
+    },
+    {
+      "name": "one_line_edit",
+      "ms": 22920.380300000004,
+      "ok": true,
+      "compilerCalls": 0,
+      "cachedObjects": 61
+    }
+  ],
+  "commands": [
+    {
+      "operation": "base-68488eab-cea3-4f80-ae6a-aa324b8769c4",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 99.48750000000018,
+      "code": 0
+    },
+    {
+      "operation": "base-68488eab-cea3-4f80-ae6a-aa324b8769c4",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--only-compilation-database",
+        "--build-path",
+        "D:\\Nodu-ESP32\\Data\\arduino\\bootstrap\\environment-JMgXgX\\build",
+        "--no-color",
+        "D:\\Nodu-ESP32\\Data\\arduino\\bootstrap\\environment-JMgXgX\\environment"
+      ],
+      "ms": 9889.5391,
+      "code": 0
+    },
+    {
+      "operation": "perf-first",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 89.47750000000087,
+      "code": 0
+    },
+    {
+      "operation": "perf-first",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "D:\\Nodu-ESP32\\Data\\arduino\\builds\\944f323fdec4cbf63ab29d92",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\perf_1793280909200"
+      ],
+      "ms": 48555.1749,
+      "code": 0
+    },
+    {
+      "operation": "perf-unchanged",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 89.4887000000017,
+      "code": 0
+    },
+    {
+      "operation": "perf-unchanged",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "D:\\Nodu-ESP32\\Data\\arduino\\builds\\944f323fdec4cbf63ab29d92",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\perf_1793280909200"
+      ],
+      "ms": 8730.290699999998,
+      "code": 0
+    },
+    {
+      "operation": "perf-one_line_edit",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "ms": 81.93949999999313,
+      "code": 0
+    },
+    {
+      "operation": "perf-one_line_edit",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "D:\\Nodu-ESP32\\Data\\arduino\\builds\\944f323fdec4cbf63ab29d92",
+        "--warnings",
+        "default",
+        "--no-color",
+        "--verbose",
+        "D:\\nodu-s3-perf-20261029\\projects\\perf_1793280909200"
+      ],
+      "ms": 20486.328999999998,
+      "code": 0
+    }
+  ],
+  "inspectMs": 12506.115
+}

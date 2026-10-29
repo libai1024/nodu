@@ -1,0 +1,15 @@
+{
+  "splitCount": 2,
+  "splitEcho": true,
+  "processInfo": {
+    "executable": "C:\\Windows\\system32\\cmd.exe",
+    "arguments": []
+  },
+  "uiFailure": "",
+  "newProject": [
+    {
+      "id": "nodu.c.new-project",
+      "label": "新建项目…"
+    }
+  ]
+}

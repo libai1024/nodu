@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "buildPath": "D:\\Nodu-ESP32-Fixed\\Data\\arduino\\cache\\sketches\\E58205195B62413E7E0133AD2E823C17",
+  "chip": "esp32s3",
+  "fqbn": "esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+  "segments": [
+    {
+      "address": 0,
+      "size": 19968
+    },
+    {
+      "address": 32768,
+      "size": 3072
+    },
+    {
+      "address": 57344,
+      "size": 8192
+    },
+    {
+      "address": 65536,
+      "size": 278976
+    }
+  ],
+  "physicalUpload": false
+}

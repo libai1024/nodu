@@ -1,0 +1,34 @@
+✔ generated Arduino projects resolve the pinned profile; IDF and ambiguous profiles are rejected (278.739542ms)
+✔ compile uses profile and isolated config, never a shell or the user Arduino environment (754.445209ms)
+✔ failed compilation returns original sketch positions for the Problems panel (618.055125ms)
+✔ prepare requires a fresh compilation database and cannot reuse a prior successful result (686.331417ms)
+✔ a zero-exit CLI initialization error fails prepare and compile without issuing a build token (1473.033083ms)
+✔ a successful process cannot validate a build after input changes (2656.308458ms)
+✔ one operation owns the compiler; unrelated cancellation cannot kill it (3101.081334ms)
+✔ input digests include dependencies and profile but ignore generated output (368.914084ms)
+✔ diagnostics handle Windows drive paths, ANSI and duplicate messages (0.811666ms)
+✔ custom platform indexes cannot replace the official ESP32 compiler recipe (202.69025ms)
+✔ disconnect cancels owned work; stale or foreign request IDs do not cancel a new build (1183.15775ms)
+✔ disconnect terminates the owned first-open initialization child and permits a fresh retry (1469.614833ms)
+✔ an inspect disconnected while queued behind a compile cannot start initialization later (1035.269375ms)
+✔ disconnecting a shared initialization waiter does not cancel the owning connection (787.414166ms)
+✔ board options come from the pinned core and serial settings do not change build inputs (1936.23075ms)
+✔ upload refuses stale source or modified artifacts before borrowing any serial port (1560.677875ms)
+✔ the existing EditContext preference maps to the current Monaco option for creation and updates (0.848625ms)
+✔ every selectable chip has a vendor and a readable short model label (1.211958ms)
+✔ missing folders retain their last known chip across backend restarts (307.94225ms)
+✔ unreadable, malformed and missing manifests preserve cached identity until an ordinary folder is confirmed (170.543334ms)
+✔ optional identity-cache writes cannot prevent recent projects from rendering (17.855292ms)
+✔ late identity hydration cannot replace a newer touch from another window (77.217084ms)
+✔ valid nodu identity supersedes a malformed legacy board manifest and persists across restart (242.869125ms)
+✔ Windows shells use absolute system paths without needing a developer PATH (3.589542ms)
+✔ custom shells resolve the last quoted PATH entry and preserve explicit executable paths (2.67625ms)
+✔ non-Windows terminal options retain the upstream shell and arguments (3.579792ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18751.963958

@@ -1,0 +1,13 @@
+{
+  "ms": 53306.39999999106,
+  "buildToken": true,
+  "error": "",
+  "canFlash": true,
+  "output": [
+    "准备 Arduino 环境",
+    "Arduino · esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+    "Sketch uses 278879 bytes (21%) of program storage space. Maximum is 1310720 bytes.",
+    "Global variables use 22068 bytes (6%) of dynamic memory, leaving 305612 bytes for local variables. Maximum is 327680 bytes."
+  ],
+  "physicalUpload": false
+}

@@ -1,0 +1,22 @@
+package-electron: work-x64 install reusable; syncing changed compiler inputs
+package-electron: + E:\SoftWare\nodejs\node.exe E:\SoftWare\nodejs\node_modules\npm\bin\npm-cli.js run compile --workspace @scope/studio-extension
+
+> @scope/studio-extension@0.2.3 compile
+> tsc -p tsconfig.json
+
+package-electron: + E:\SoftWare\nodejs\node.exe D:\nodu-release-20261029\repo\desktop\.tools\package\work-x64\desktop\node_modules\@theia\cli\bin\theia.js build --mode production
+[build/browser] Build started
+
+[build/browser] Finished with 0 errors in 1398ms.
+
+[build/node] Build started
+
+[build/node] Finished with 0 errors in 971ms.
+
+[build/electron] Build started
+
+[build/electron] Finished with 0 errors in 11ms.
+
+package-electron: packager win32-x64 -> .tools\package\thin
+Packaging app for platform win32 x64 using electron v42.8.1
+package-electron: local validation only: dist\Nodu-ESP32-Validation-win32-x64
