@@ -1,0 +1,39 @@
+✔ cold toolkit startup has time to initialize; warm requests retain normal deadlines (78.415208ms)
+✔ only the first valid correlated response marks the current process ready (4.914125ms)
+✔ a business refusal proves readiness without changing the failure outcome (1.822542ms)
+✔ failed process messages cannot resolve replacement requests or revive service state (1.175792ms)
+✔ first response readiness preserves active flash evidence; service loss clears it (3.423791ms)
+✔ Core profile identity is portable and matches the official CLI cache identity (1.878333ms)
+✔ host selection prefers native arm64 and includes every official dependency plus builtin discovery tools (25.201541ms)
+✔ complete bundle validates and copies only the immutable manifest payload with required host marker (80.104875ms)
+✔ release packaging fails closed when any source coverage is incomplete; development validation remains explicit (77.725542ms)
+✔ missing official dependency cannot be hidden by deleting its manifest entry (30.43975ms)
+✔ corrupt payload, wrong host, duplicate targets and path traversal are rejected (26.636ms)
+✔ symlink payloads and targets outside the intended profile Core are rejected (19.552958ms)
+✔ a source claim cannot reference missing source files or license-only material (42.356708ms)
+✔ Apple Silicon release requires native ctags and its portable platform override (36.265292ms)
+✔ post-signing refresh updates native bytes only and retains the original build identity (101.50575ms)
+✔ packager keeps upstream files covered by the Arduino bundle manifest (19.035209ms)
+✔ portable archive rejects TAR content mislabeled as ZIP (4.493167ms)
+✔ packager retains STM32 and WASI runtime objects while excluding build debris (2.570125ms)
+✔ universal merge retains both exact architecture license inventories in both apps (25.470916ms)
+✔ canonical JS accepts comment and whitespace-only differences (331.987ms)
+✔ canonical JS rejects literal and keyword differences (38.53675ms)
+✔ canonical JS rejects an ASI semantic split (1.629416ms)
+✔ canonical JS preserves loop slots and literal whitespace (4.517541ms)
+✔ native module normalization touches generated metadata keys only (1.314708ms)
+✔ generated native labels normalize identically for both architectures (63.605917ms)
+✔ packaged bootstrap keeps one binary prefix and sets the profile (10.264708ms)
+✔ packaged app without a project opens the launcher without creating a Documents workspace (3.201292ms)
+✔ dev (unpackaged) bootstrap keeps two binary prefix entries (4.482708ms)
+✔ npm-cli resolves under the POSIX and Windows Node layouts (2.787084ms)
+✔ marked Windows portable app keeps writable paths beside its executable (28.021292ms)
+✔ portable profile respects explicit isolation and rejects an escaping data directory (0.863625ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 735.879584

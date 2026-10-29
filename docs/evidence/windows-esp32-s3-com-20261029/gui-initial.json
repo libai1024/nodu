@@ -1,0 +1,20 @@
+{
+  "project": {
+    "path": "D:\\Nodu-ESP32\\Data\\Projects\\s3_com_demo",
+    "profile": "nodu",
+    "fqbn": "esp32:esp32:esp32s3:USBMode=hwcdc,CDCOnBoot=default,UploadMode=default",
+    "chip": "esp32s3",
+    "coreVersion": "3.3.12",
+    "boardName": "ESP32S3 Dev Module",
+    "ready": true,
+    "port": "COM4",
+    "monitor": {
+      "baud": 115200,
+      "encoding": "utf-8"
+    }
+  },
+  "loading": false,
+  "port": "COM4",
+  "editor": "file:///d%3A/Nodu-ESP32/Data/Projects/s3_com_demo/s3_com_demo.ino",
+  "control": "function"
+}

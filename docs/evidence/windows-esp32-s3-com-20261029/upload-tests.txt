@@ -1,0 +1,29 @@
+✔ only one lease exists and user close prevents restoration across the complete lease (2.9965ms)
+✔ a unique serial identity may change USB path/PID, but ambiguous identities are never restored (0.615542ms)
+✔ a Windows UART bridge without a serial number restores only its original path and VID/PID (764.868792ms)
+✔ cancellation while rediscovering a port prevents the restore RPC and marks upload cancelled (581.894708ms)
+✔ cancellation after restore RPC starts closes only the monitor restored by that lease (240.888167ms)
+✔ a failed acquisition clears the Node reservation so the next valid request can proceed (2.549666ms)
+✔ losing the native sidecar cancels an in-flight upload and never restores its monitor (338.122ms)
+✔ loss occurring before the onLost handler is registered is delivered immediately (0.297916ms)
+✔ emulator writes official generated addresses and verifies every segment with array arguments (652.748916ms)
+✔ serial upload delegates the profile, port and build directory to the official CLI recipe (221.974416ms)
+✔ remote endpoints, injection ports and unsupported TinyUSB fail before any process (67.393708ms)
+✔ wrong chip and corrupted image are rejected before an upload can erase flash (272.16975ms)
+✔ image hash corruption cannot pass even when the XOR checksum is intact (34.986166ms)
+✔ mismatched build ownership fails before execution (85.41175ms)
+✔ a configured board option set passes ownership validation and reaches the uploader (339.545125ms)
+✔ configured build ownership rejects changed, missing, duplicate or malformed options (364.232583ms)
+✔ out of range, overlapping, escaping and response-file layouts are rejected (334.64575ms)
+✔ symlink images cannot redirect an upload out of the build directory (75.476417ms)
+✔ cancellation before upload has no side effects; cancellation after write skips verification (79.634958ms)
+✔ missing endpoint and failed readback remain failures and never emit complete (152.853209ms)
+✔ missing bootloader cannot be silently replaced with a guessed flash offset (73.146542ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4450.400625

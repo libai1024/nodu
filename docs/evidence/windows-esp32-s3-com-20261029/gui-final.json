@@ -1,0 +1,44 @@
+{
+  "title": "s3_com_demo.ino - s3_com_demo - 见微 Nodu",
+  "port": "COM4",
+  "task": {
+    "text": "烧录完成",
+    "tone": "ok",
+    "at": 1793279554531,
+    "target": "output"
+  },
+  "monitor": {
+    "open": true,
+    "port": "COM4",
+    "baud": 115200,
+    "state": "open"
+  },
+  "lines": [
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279628763
+    },
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279630858
+    },
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279630858
+    },
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279632589
+    },
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279632590
+    }
+  ],
+  "error": ""
+}

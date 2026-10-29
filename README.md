@@ -21,10 +21,12 @@ Nodu 是面向嵌入式学习与开发的桌面 IDE。它把代码编辑、芯�
 | STM32F103 / F407 | HAL 工程、代码编辑、编译、串口及烧写工具；Windows STM32 专用包包含固定工具链和 SDK |
 | Keil 5 | F103 原生工程共享源码，文件菜单生成/更新；设置中可开启自动维护。Keil 软件需自行安装，macOS 可生成供 Windows 使用的工程 |
 | DACIR | 目录工程适配和 72 MHz 模板；72 MHz 模板要求实际板卡具有 8 MHz 晶振 |
-| ESP32 Arduino | C3/S3 的真实编译和 Windows 虚拟串口已验证；完整离线发行资源、Windows 语言工具、网络增装库和 Arduino IDE 项目交接仍有缺口 |
-| ESP 仿真包 | C3/S3 编译产物及固定配置可导出供仿真器使用，不代表所有外设或真板烧写已经验证 |
+| ESP32 Arduino | Windows S3 的包内环境、离线编译、COM 真板烧写与串口收发已验证；C3 有软件编译证据。正式发行材料、在线增装库和 Arduino IDE 项目交接仍有限制 |
+| ESP 仿真包 | C3/S3 编译产物及固定配置可导出供仿真器使用，不代表所有外设或跨平台真板流程均已验收 |
 
-Arduino 测试资源预装 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO、NeoPixel、DHT/Unified Sensor、OneWire、DallasTemperature 和 ESP32Servo 共 11 个固定版本库。**Windows STM32 专用安装包不包含 Arduino 环境。** ESP32 真板烧写、BOOT/RESET、真实 USB 和串口驱动仍需硬件验收；当前不能承诺所有用户联网增装库均成功，也不能承诺原项目直接在 Arduino IDE 2.3.7 编译。
+Arduino 测试资源预装 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO、NeoPixel、DHT/Unified Sensor、OneWire、DallasTemperature 和 ESP32Servo 共 11 个固定版本库。**Windows STM32 专用安装包不包含 Arduino 环境。** 新增 Windows ESP32 本地验证目录包含完整运行环境与语言工具，S3 默认走 COM/UART0，并在唯一 USB/UART 桥存在时自动选中。16 MB Flash / 8 MB PSRAM 的 S3 经 CH343 完成两轮烧写、复位运行、中文及长消息回显；其他板型、原生 USB 仍需各自验收。当前不能承诺所有用户联网增装库均成功，也不能承诺原项目直接在 Arduino IDE 2.3.7 编译。
+
+新增记录：[Windows S3 COM 真板与包内环境验收](docs/evidence/windows-esp32-s3-com-20261029/README.md)。该目录仅用于本地验证，尚不是可正式发布的完整版安装包。
 
 详见 [0.2.3 整合与打包记录](docs/releases/0.2.3.md)、[Windows ESP32 实测](docs/evidence/windows-esp32-20261029/README.md)、[Keil 使用说明](docs/keil-projects.md)和[仿真包说明](docs/arduino-esp-sim-package.md)。Mac 完整版与 Intel/Universal 目标仍受发布输入和 Arduino 对应材料校验限制；候选包不会作为完整跨平台正式版发布。
 

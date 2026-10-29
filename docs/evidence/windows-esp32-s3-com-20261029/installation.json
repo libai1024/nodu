@@ -1,0 +1,7 @@
+﻿{
+    "installation":  "D:\\Nodu-ESP32",
+    "exeSha256":  "04605fa1c67bd797d1efcc3602fff4fb8a8eb5be016464209af81fc93b1e866b",
+    "sourceCommit":  "7dbb6db9a6fb726b439e5f1148fae28cfd941624",
+    "arduinoReleaseReady":  false,
+    "validationOnly":  true
+}

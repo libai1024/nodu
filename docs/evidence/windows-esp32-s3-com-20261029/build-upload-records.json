@@ -1,0 +1,729 @@
+[
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "准备 Arduino 环境",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "正在初始化 Arduino 环境",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 400 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 800 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1200 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1600 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 2000 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Arduino · esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+    "phase": "compiling"
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Sketch uses 279415 bytes (21%) of program storage space. Maximum is 1310720 bytes."
+  },
+  {
+    "operationId": "hardware-build-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Global variables use 22092 bytes (6%) of dynamic memory, leaving 305588 bytes for local variables. Maximum is 327680 bytes."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "正在初始化 Arduino 环境",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 400 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 800 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1200 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1600 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 2000 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "正在烧录",
+    "phase": "uploading"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "esptool v5.3.1"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Serial port COM4:"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Connecting...."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Connected to ESP32-S3 on COM4:"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Chip type:          ESP32-S3 (QFN56) (revision v0.2)"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Features:           Wi-Fi, BT 5 (LE), Dual Core + LP Core, 240MHz, Embedded PSRAM 8MB (AP_3v3)"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Crystal frequency:  40MHz"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "MAC:                [redacted]"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Uploading stub flasher..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Running stub flasher..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Stub flasher running."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Changing baud rate to 921600..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Changed."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Configuring flash size..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.bootloader.bin' at 0x00000000..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x00000000 to 0x00004fff..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 19968 bytes to 12994..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00000000 [                              ]   0.0% 0/12994 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00004e00 [==============================] 100.0% 12994/12994 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 19968 bytes (12994 compressed) at 0x00000000 in 0.3 seconds (536.3 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Verifying written data..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hash of data verified."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.partitions.bin' at 0x00008000..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x00008000 to 0x00008fff..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 3072 bytes to 146..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00008000 [                              ]   0.0% 0/146 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00008c00 [==============================] 100.0% 146/146 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 3072 bytes (146 compressed) at 0x00008000 in 0.0 seconds (933.7 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Verifying written data..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hash of data verified."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd/tools/partitions/boot_app0.bin' at 0x0000e000..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x0000e000 to 0x0000ffff..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 8192 bytes to 47..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x0000e000 [                              ]   0.0% 0/47 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00010000 [==============================] 100.0% 47/47 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (1150.5 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Verifying written data..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hash of data verified."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.bin' at 0x00010000..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x00010000 to 0x00054fff..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 279568 bytes to 160913..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00010000 [                              ]   0.0% 0/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x0001b9f0 [==>                           ]  10.2% 16384/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00024083 [=====>                        ]  20.4% 32768/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00029732 [========>                     ]  30.5% 49152/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x0002ee0c [===========>                  ]  40.7% 65536/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x000347db [==============>               ]  50.9% 81920/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x0003ae33 [=================>            ]  61.1% 98304/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00043027 [====================>         ]  71.3% 114688/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x000496fb [=======================>      ]  81.5% 131072/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x0004f351 [==========================>   ]  91.6% 147456/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00054410 [==============================] 100.0% 160913/160913 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 279568 bytes (160913 compressed) at 0x00010000 in 2.3 seconds (979.2 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Verifying written data..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hash of data verified."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hard resetting via RTS pin..."
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "New upload port: COM4 (serial)"
+  },
+  {
+    "operationId": "hardware-upload-1",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "恢复串口",
+    "phase": "restoring"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "准备 Arduino 环境",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "正在初始化 Arduino 环境",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 400 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 800 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1200 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1600 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 2000 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Arduino · esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+    "phase": "compiling"
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Sketch uses 279415 bytes (21%) of program storage space. Maximum is 1310720 bytes."
+  },
+  {
+    "operationId": "hardware-build-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Global variables use 22092 bytes (6%) of dynamic memory, leaving 305588 bytes for local variables. Maximum is 327680 bytes."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "正在初始化 Arduino 环境",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 400 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 800 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1200 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 1600 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "初始化 Arduino 环境 2000 / 2214",
+    "phase": "preparing"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "正在烧录",
+    "phase": "uploading"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "esptool v5.3.1"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Serial port COM4:"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Connecting...."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Connected to ESP32-S3 on COM4:"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Chip type:          ESP32-S3 (QFN56) (revision v0.2)"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Features:           Wi-Fi, BT 5 (LE), Dual Core + LP Core, 240MHz, Embedded PSRAM 8MB (AP_3v3)"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Crystal frequency:  40MHz"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "MAC:                [redacted]"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Uploading stub flasher..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Running stub flasher..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Stub flasher running."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Changing baud rate to 921600..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Changed."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Configuring flash size..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.bootloader.bin' at 0x00000000..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "No changed sectors found, verifying if data is in flash..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.bootloader.bin' at 0x00000000 verified."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.partitions.bin' at 0x00008000..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "No changed sectors found, verifying if data is in flash..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.partitions.bin' at 0x00008000 verified."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd/tools/partitions/boot_app0.bin' at 0x0000e000..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x0000e000 to 0x0000ffff..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 8192 bytes to 47..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x0000e000 [                              ]   0.0% 0/47 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00010000 [==============================] 100.0% 47/47 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (1245.9 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Verifying written data..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hash of data verified."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing 'D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7/s3_com_1793278390628.ino.bin' at 0x00010000..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Changed data sectors found, fast reflashing..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Reflashing 1 changed sector at 0x00010000..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x00010000 to 0x00010fff..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 4096 bytes to 1838..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00010000 [                              ]   0.0% 0/1838 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00011000 [==============================] 100.0% 1838/1838 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 4096 bytes (1838 compressed) at 0x00010000 in 0.0 seconds (1377.8 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Reflashing 1 changed sector at 0x00054000..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Flash will be erased from 0x00054000 to 0x00054fff..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Compressed 4096 bytes to 872..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00054000 [                              ]   0.0% 0/872 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Writing at 0x00055000 [==============================] 100.0% 872/872 bytes... "
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Wrote 4096 bytes (872 compressed) at 0x00054000 in 0.0 seconds (1058.0 kbit/s)."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Verifying written data..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hash of data verified."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "Hard resetting via RTS pin..."
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "New upload port: COM4 (serial)"
+  },
+  {
+    "operationId": "hardware-upload-2",
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "line": "恢复串口",
+    "phase": "restoring"
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "characters": 16,
+      "sent": true,
+      "echoed": true
+    },
+    {
+      "characters": 15,
+      "sent": true,
+      "echoed": true
+    },
+    {
+      "characters": 4200,
+      "sent": true,
+      "echoed": true
+    }
+  ],
+  "monitor": {
+    "open": true,
+    "port": "COM4",
+    "baud": 115200,
+    "state": "open"
+  },
+  "project": {
+    "path": "D:\\Nodu-ESP32\\Data\\Projects\\s3_com_demo",
+    "profile": "nodu",
+    "fqbn": "esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+    "chip": "esp32s3",
+    "coreVersion": "3.3.12",
+    "boardName": "ESP32S3 Dev Module",
+    "ready": true,
+    "port": "COM4",
+    "monitor": {
+      "baud": 115200,
+      "encoding": "utf-8"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+✔ a unique COM bridge wins over ESP native USB and virtual ports (2.63125ms)
+✔ multiple bridges, native USB alone and unknown ports require an explicit choice (0.201125ms)
+✔ macOS UART bridge paths also work without treating USB-native ports as bridges (1.16425ms)
+✔ a new project selects a unique COM bridge but preserves explicit port choices (1.46975ms)
+✔ upload saves dirty buffers, compiles once, then uses the returned token and restores the monitor (2.214625ms)
+✔ first use compiles once, refreshes the prepared environment, and continues the requested upload (0.307292ms)
+✔ first-use source errors retain their diagnostics even when environment refresh fails (0.2225ms)
+✔ a successful first build can upload even if environment refresh fails (0.162625ms)
+✔ cancel during first-use environment refresh prevents upload without discarding compile diagnostics (4.081125ms)
+✔ project switches during first-use environment refresh cannot upload or overwrite the next task (0.933667ms)
+✔ a cancelled first compile does not start environment refresh or upload (0.545ms)
+✔ editing while compiling for upload cancels and never starts writing (1.146208ms)
+✔ editing after writing starts does not interrupt firmware and marks the completed upload stale (4.731083ms)
+✔ a project switch cancels once and drops old output, markers and completion (0.358ms)
+✔ flash uses a current compiled token without compiling again (0.140625ms)
+✔ flash with dirty buffers is rejected without saving or calling the uploader (0.084167ms)
+✔ failed save and failed compile leave upload untouched and release busy state (0.156417ms)
+✔ preparation is explicit and a library mutation invalidates a previous build (34.306ms)
+✔ explicit preparation failure or cancellation never reports readiness or continues into a build (74.593834ms)
+✔ loading disables every Arduino start command until the project inspection finishes (52.377083ms)
+✔ duplicate run is ignored and stopping twice sends one cancellation (0.49825ms)
+✔ configuration failure preserves prior settings; late project responses cannot replace the next project (0.195708ms)
+✔ upload and monitor ports are independent, with upload fallback only before an explicit monitor selection (4.552292ms)
+✔ Arduino monitor configuration reaches the adapter and opening identifies the Arduino CDC context (0.571ms)
+✔ Arduino monitor changes reconnect only when needed; STM32 can still open its monitor during a flash (0.198291ms)
+✔ a serial service crash does not overwrite the separate Arduino upload operation (0.478625ms)
+✔ simulation export saves, requires a pre-build snapshot and passes only the successful token to export (0.386208ms)
+✔ editing while compiling for simulation export cancels and cannot publish (4.159208ms)
+✔ simulation export gives a configuration action before opening a save dialog and never changes options (1.127958ms)
+✔ cancelled save dialog or project switch cannot start a simulation compile (0.285041ms)
+✔ cold toolkit startup has time to initialize; warm requests retain normal deadlines (130.757167ms)
+✔ only the first valid correlated response marks the current process ready (3.691416ms)
+✔ a business refusal proves readiness without changing the failure outcome (3.102791ms)
+✔ failed process messages cannot resolve replacement requests or revive service state (3.059875ms)
+✔ first response readiness preserves active flash evidence; service loss clears it (3.976666ms)
+✔ chip projects preserve portable K210 and explicit ESP-IDF targets without a board (1973.679375ms)
+✔ ESP32 defaults to Arduino with a standard primary sketch and pinned portable profile (484.506125ms)
+✔ framework validation precedes writes and does not leak into non-ESP32 projects (0.394042ms)
+✔ reject traversal, reserved names, unknown chips and templates before writing (0.237833ms)
+✔ same-name concurrent creates have one winner (4.625958ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2791.730917

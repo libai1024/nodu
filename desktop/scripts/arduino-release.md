@@ -64,4 +64,4 @@ Arduino CLI 的 profile 冷安装会另建临时索引目录并尝试联网。�
 
 产物 `dist/Nodu-ESP32-Validation-win32-x64` 包含 `LOCAL-VALIDATION-ONLY.json` 和 `NoduPortable.json`。标记内明确保留 `arduinoReleaseReady: false`；运行数据、工程、Arduino 环境和共享嵌入式服务均放在同目录 `Data`。目录整体移动后仍从包内读取工具，不依赖构建机安装的 Node 或 Python。
 
-`esp32-s3-hardware-acceptance.cjs` 是需要明确开启的真板测试：设置 `NODU_S3_TEST_ROOT`、`NODU_S3_TEST_PORT` 和 `NODU_S3_ALLOW_FLASH=1`；可用 `NODU_S3_TEST_EXTENSION` 指向包内扩展。程序会覆盖所选 S3 的固件。测试程序只操作串口，使用 16 KiB UART 接收缓冲并按换行累积消息，验证两份不同固件、Flash/PSRAM、监视器恢复、中文及 4200 字符回显。`NODU_S3_OFFLINE_GUARD` 可指定动态 WFP 验证工具，从空 Arduino home 检查本次运行的 Node/Electron 和 CLI 外网连接被拒绝；它不声称覆盖每个编译器子进程。
+`esp32-s3-hardware-acceptance.cjs` 是需要明确开启的真板测试：设置 `NODU_S3_TEST_ROOT`、`NODU_S3_TEST_PORT` 和 `NODU_S3_ALLOW_FLASH=1`。未打包编译目录可用 `NODU_S3_TEST_EXTENSION` 指定扩展；Electron 成品应设置 `NODU_S3_PACKAGED_APP=<应用目录>/resources/app`，由验收加载器读取未修改的生产后端模块工厂，使用应用自身的 `Nodu.exe`（`ELECTRON_RUN_AS_NODE=1`）运行，无需另外提供 Node 依赖。程序会覆盖所选 S3 的固件。测试先走产品首次打开工程的初始化流程；固件只操作串口，使用 16 KiB UART 接收缓冲并按换行累积消息，验证两份不同固件、Flash/PSRAM、监视器恢复、中文及 4200 字符回显。`NODU_S3_OFFLINE_GUARD` 可指定动态 WFP 验证工具，从空 Arduino home 检查本次运行的 Node/Electron 和 CLI 外网连接被拒绝；它不声称覆盖每个编译器子进程。

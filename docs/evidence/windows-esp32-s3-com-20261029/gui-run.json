@@ -1,0 +1,49 @@
+{
+  "ms": 85642,
+  "task": {
+    "text": "烧录完成",
+    "tone": "ok",
+    "at": 1793279554531,
+    "target": "output"
+  },
+  "error": "",
+  "buildToken": true,
+  "monitor": {
+    "open": true,
+    "port": "COM4",
+    "baud": 115200,
+    "state": "open"
+  },
+  "lines": [
+    {
+      "text": "NODU_ALIVE:s3-com-1793278657204-2 FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279538370
+    },
+    {
+      "text": "NODU_ALIVE:s3-com-1793278657204-2 FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279539844
+    },
+    {
+      "text": "NODU_ALIVE:s3-com-1793278657204-2 FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279539845
+    },
+    {
+      "text": "NODU_ALIVE:s3-com-1793278657204-2 FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279539845
+    },
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279554526
+    },
+    {
+      "text": "NODU_GUI_READY FLASH:16777216 PSRAM:8388608",
+      "kind": "data",
+      "at": 1793279554527
+    }
+  ]
+}

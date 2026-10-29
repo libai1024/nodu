@@ -1,0 +1,190 @@
+{
+  "started": "2026-10-29T12:53:10.580Z",
+  "port": "COM4",
+  "physicalHardware": true,
+  "sketchTouchesOnlySerial": true,
+  "rounds": [
+    {
+      "id": "s3-com-1793278575830-1",
+      "started": "2026-10-29T12:56:15.830Z",
+      "build": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "bd89733e-b7e8-450d-a854-9357404dcf34",
+        "simulationReady": false,
+        "simulationError": "当前开发板参数与仿真配置不符（FlashSize=8M、PartitionScheme=default_8MB、PSRAM=disabled）。请在开发板设置中明确选择“ESP32-S3 · 8 MB / 240 MHz”，然后重新编译。",
+        "buildPath": "D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7"
+      },
+      "firmwareSha256": "81a8b3899cbb4c7c2eefd70bb5126a84d20f9f4ea928f03015e12fde792cd051",
+      "upload": {
+        "ok": true,
+        "stale": false,
+        "monitorRestored": true
+      },
+      "monitorStatus": {
+        "open": true,
+        "state": "open",
+        "port": "COM4",
+        "baud": 115200,
+        "sessionId": "3492b962-dcc0-45c6-b875-379fb74020a9",
+        "startOffset": 0,
+        "endOffset": 192,
+        "canWrite": true,
+        "logTruncated": false,
+        "logLimitBytes": 67108864
+      },
+      "memory": {
+        "flashBytes": 16777216,
+        "psramBytes": 8388608
+      },
+      "commands": [
+        {
+          "characters": 17,
+          "sentBytes": 19,
+          "echoMatched": true
+        },
+        {
+          "characters": 8,
+          "sentBytes": 22,
+          "echoMatched": true
+        },
+        {
+          "characters": 4200,
+          "sentBytes": 4202,
+          "echoMatched": true
+        }
+      ],
+      "ok": true,
+      "finished": "2026-10-29T12:57:37.204Z"
+    },
+    {
+      "id": "s3-com-1793278657204-2",
+      "started": "2026-10-29T12:57:37.204Z",
+      "build": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "c59ce051-4535-41bb-b1fb-a6d7dcd45df5",
+        "simulationReady": false,
+        "simulationError": "当前开发板参数与仿真配置不符（FlashSize=8M、PartitionScheme=default_8MB、PSRAM=disabled）。请在开发板设置中明确选择“ESP32-S3 · 8 MB / 240 MHz”，然后重新编译。",
+        "buildPath": "D:\\Nodu-ESP32\\Data\\arduino\\builds\\f3fd178b0f92226d30a61ed7"
+      },
+      "firmwareSha256": "ef7ebc1dcb91e28622cb21fed45bab128c51ac2fdee2e27c49d58f5fbdc85716",
+      "upload": {
+        "ok": true,
+        "stale": false,
+        "monitorRestored": true
+      },
+      "monitorStatus": {
+        "open": true,
+        "state": "open",
+        "port": "COM4",
+        "baud": 115200,
+        "sessionId": "2f610e9f-d16f-438e-918b-304aeaed4741",
+        "startOffset": 0,
+        "endOffset": 192,
+        "canWrite": true,
+        "logTruncated": false,
+        "logLimitBytes": 67108864
+      },
+      "memory": {
+        "flashBytes": 16777216,
+        "psramBytes": 8388608
+      },
+      "commands": [
+        {
+          "characters": 17,
+          "sentBytes": 19,
+          "echoMatched": true
+        },
+        {
+          "characters": 8,
+          "sentBytes": 22,
+          "echoMatched": true
+        },
+        {
+          "characters": 4200,
+          "sentBytes": 4202,
+          "echoMatched": true
+        }
+      ],
+      "ok": true,
+      "finished": "2026-10-29T12:58:26.046Z"
+    }
+  ],
+  "uartRxBufferBytes": 16384,
+  "runtimeExecutable": "D:\\Nodu-ESP32\\Nodu.exe",
+  "productionBackend": {
+    "filename": "D:\\Nodu-ESP32\\resources\\app\\lib\\backend\\main.js",
+    "sha256": "148503def8d255cb40b80fd34772cef1a60f0c62c2e9cc27ed2d2437c47be2ce",
+    "entryPointSuppressed": true,
+    "applicationFilesModified": false
+  },
+  "offline": {
+    "coldHome": true,
+    "denied": "EACCES",
+    "policy": "Dynamic WFP blocks non-loopback IPv4/IPv6 for this runtime executable and the managed Arduino CLI; compiler subprocesses are not independently blocked"
+  },
+  "project": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+  "firstOpen": {
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "profile": "nodu",
+    "fqbn": "esp32:esp32:esp32s3:USBMode=hwcdc,CDCOnBoot=default,UploadMode=default",
+    "chip": "esp32s3",
+    "coreVersion": "3.3.12",
+    "boardName": "ESP32S3 Dev Module",
+    "ready": true,
+    "monitor": {
+      "baud": 115200,
+      "encoding": "utf-8"
+    }
+  },
+  "firstOpenMs": 148569,
+  "configuration": {
+    "path": "D:\\nodu-s3-20261029\\installed-test\\projects\\s3_com_1793278390628",
+    "profile": "nodu",
+    "fqbn": "esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=opi,FlashMode=qio,FlashSize=16M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+    "chip": "esp32s3",
+    "coreVersion": "3.3.12",
+    "boardName": "ESP32S3 Dev Module",
+    "ready": true,
+    "port": "COM4",
+    "monitor": {
+      "baud": 115200,
+      "encoding": "utf-8",
+      "port": "COM4"
+    }
+  },
+  "detectedPorts": [
+    {
+      "path": "COM4",
+      "label": "USB-Enhanced-SERIAL CH343 (COM4)",
+      "vid": 6790,
+      "pid": 21971
+    },
+    {
+      "path": "CNCA0",
+      "label": "Unknown"
+    },
+    {
+      "path": "CNCB0",
+      "label": "Unknown"
+    }
+  ],
+  "initialMonitor": {
+    "open": true,
+    "port": "COM4",
+    "baud": 115200,
+    "state": "open",
+    "sessionId": "bf4fa7bf-fa12-4115-b36c-030b0f28ea9f",
+    "startOffset": 0,
+    "endOffset": 0,
+    "canWrite": true,
+    "logTruncated": false,
+    "logLimitBytes": 67108864
+  },
+  "reopenCommunication": true,
+  "ok": true,
+  "finished": "2026-10-29T12:58:34.811Z"
+}

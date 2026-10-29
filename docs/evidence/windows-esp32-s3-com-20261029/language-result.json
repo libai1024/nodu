@@ -1,0 +1,22 @@
+{
+  "chip": "esp32s3",
+  "ok": true,
+  "incremental": true,
+  "bodyMultilineHoverMs": 172,
+  "unicodeHoverMs": 708,
+  "replaceHoverMs": 30504,
+  "server": {
+    "name": "arduino-language-server",
+    "version": "0.7.7-nodu.1"
+  },
+  "hoverLine": 6,
+  "completionItems": 91,
+  "definitionLine": 3,
+  "unsavedDiagnosticLine": 11,
+  "rapidUnicodeEdits": 12,
+  "replaceAllAndSave": true,
+  "replacedHoverLine": 7,
+  "baselineErrors": 0,
+  "sourceMapping": "original .ino",
+  "project": "D:\\nodu-s3-20261029\\installed-lsp\\esp32s3-1793278848684\\lsp_esp32s3"
+}

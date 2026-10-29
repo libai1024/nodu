@@ -1,0 +1,30 @@
+{
+  "unreleased": true,
+  "trials": [
+    {
+      "stage": "fixture setup",
+      "outcome": "No firmware write",
+      "note": "Test resources initially lacked shared-core transport; replacing a resource junction with real files fixed the fixture."
+    },
+    {
+      "stage": "first shared-service use",
+      "outcome": "Product fix",
+      "note": "Initial toolkit copy/verification exceeded 30 seconds. Cold service requests now allow 180 seconds; warm requests retain their normal deadlines."
+    },
+    {
+      "stage": "upload port discovery",
+      "outcome": "Product fix",
+      "note": "CLI one-second discovery could miss COM4; upload now allows ten seconds. CH343 without serial metadata restores only unchanged path and matching VID/PID."
+    },
+    {
+      "stage": "long-line firmware fixture",
+      "outcome": "Superseded by passing packaged test",
+      "note": "readStringUntil with 100ms timeout and default RX buffer split/truncated a 4200-character message. Explicit 16KiB RX buffer plus newline accumulation passed both final rounds."
+    },
+    {
+      "stage": "first installed cold trial",
+      "outcome": "Confounded; not counted as pass",
+      "note": "A direct compile without first-open initialization, concurrent with other initialization tests, failed with GCC multiple-input error. Recompile succeeded. The final cold run used the production inspect -> configure -> compile flow with no concurrent initialization and passed."
+    }
+  ]
+}
