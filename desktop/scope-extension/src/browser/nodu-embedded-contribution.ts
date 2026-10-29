@@ -236,7 +236,7 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     async newProject(): Promise<void> {
         const root = (await this.workspace.roots)[0]?.resource;
         const home = await this.model.rpc.homeDirectory();
-        const parent = root && this.model.isC ? root.parent.path.fsPath() : home;
+        const parent = root ? root.parent.path.fsPath() : home;
         const dialog = new NoduNewProjectDialog({ title: '新建项目' }, {
             model: this.model, dialogs: this.dialogs, parent, family: this.model.project?.chip.family === 'f4' ? 'stm32f407' : this.model.isC ? 'stm32f103' : this.model.isEsp ? 'esp32' : 'k210',
             onCreated: project => this.workspace.open(URI.fromFilePath(project.path), { preserveWindow: true }),
