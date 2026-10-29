@@ -46,7 +46,7 @@ function harness(electron = true, mac = true) {
     const TUTOR_COMMANDS = { guidance: 'nodu.tutor.guidance' };
     const modules = {
         '@theia/core/shared/react': React,
-        '@theia/core/lib/common/os': { isOSX: mac },
+        '@theia/core/lib/common/os': { isOSX: mac, isWindows: !mac },
         'react-dom': { createPortal: (children, target) => ({ type: 'portal', props: { children: [children], target } }) },
         './nodu-minimal-action': { NoduMinimalAction, ActionIcon },
         './nodu-minimal-preferences': { NoduMinimalPreferences },
@@ -96,6 +96,21 @@ function toolbar(kind = 'stm32', h = harness()) {
     const button = label => walk(render()).find(node => node.type === 'button' && node.props['aria-label'] === label);
     return { h, owner, calls, preferences, themes, menu, render, button };
 }
+test('Windows project menu uses the title-bar icon slot in both modes with a native-titlebar fallback', () => {
+    const c = toolbar('arduino', harness(true, false)), rect = { left: 8, bottom: 32 }, slot = { id: 'windows-icon', getBoundingClientRect: () => rect };
+    c.owner.shell.topPanel.isVisible = true;
+    c.owner.shell.topPanel.node.querySelector = () => slot;
+    for (const mode of ['simple', 'pro']) {
+        c.owner.layoutState.setMode(mode);
+        const logo = c.owner.renderProjectLogo();
+        assert.equal(logo.props.target, slot);
+        const button = walk(logo).find(node => node.type === 'button');
+        assert.match(button.props.className, /nodu-titlebar-project/);
+        button.props.onClick({ currentTarget: slot }); assert.equal(c.menu.at(-1).anchor.x, 8); assert.equal(c.menu.at(-1).anchor.y, 34); assert.equal(c.menu.at(-1).context, slot);
+    }
+    c.owner.shell.topPanel.isVisible = false;
+    assert.equal(c.owner.renderProjectLogo().props.target.id, 'rail');
+});
 test('Arduino uses the shared professional action row and the same minimal three-action gesture', () => {
     const c = toolbar('arduino');
     const actions = walk(c.render()).filter(node => node.props?.['data-action']);

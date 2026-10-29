@@ -16,10 +16,13 @@ import { NoduArduinoServer, arduinoConnection } from './nodu-arduino-server';
 import { ArduinoClient, NODU_ARDUINO_PATH } from '../common/nodu-arduino-protocol';
 import { NoduArduinoLanguageServer } from './nodu-arduino-language';
 import { NODU_ARDUINO_LANGUAGE_PATH } from '../common/nodu-arduino-language-protocol';
+import { IShellTerminalServer } from '@theia/terminal/lib/common/shell-terminal-protocol';
+import { NoduShellTerminalServer } from './nodu-shell-terminal-server';
 
 import { bindTutorBackend } from './tutor/tutor-backend-binding';
 
-export default new ContainerModule(bind => {
+export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
+    rebind(IShellTerminalServer).to(NoduShellTerminalServer).inSingletonScope();
     bindTutorBackend(bind);
     bind(NoduArduinoLanguageServer).toSelf().inSingletonScope();
     bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler(NODU_ARDUINO_LANGUAGE_PATH, () => {

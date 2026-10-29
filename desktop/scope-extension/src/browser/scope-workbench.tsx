@@ -62,7 +62,7 @@ import { MAIXPY_RELEASES_URL } from './nodu-file-docs';
 import { firmwareStatusText, fpsStatusText, serialPortStatusText } from '../common/nodu-status';
 import { BOARD_MENU, TOOLS_MENU_GROUPS } from '../common/nodu-tools-menu';
 import { ContextMenuRenderer } from '@theia/core/lib/browser/context-menu-renderer';
-import { isOSX } from '@theia/core/lib/common/os';
+import { isOSX, isWindows } from '@theia/core/lib/common/os';
 import '@theia/core/lib/electron-common/electron-api';
 export { ScopeLayoutState } from './scope-layout-state';
 
@@ -207,8 +207,7 @@ export class ScopeToolbar extends ReactWidget {
             if (c && this.layoutState.deviceOpen) { void this.embedded.refreshDevices(); void this.embedded.loadBackups(); }
         };
         return <nav className="nodu-minimal-rail" aria-label="工作区">
-            <button className="nodu-minimal-logo" title={this.layoutState.project} aria-label="项目菜单" aria-haspopup="menu"
-                onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}><NoduBrand /></button>
+            {this.renderProjectLogo()}
             <div className="nodu-minimal-tools">
                 <button className="nodu-minimal-tool" aria-label="文件" title="文件" aria-pressed={this.layoutState.filesVisible} onClick={() => this.execute('scope.toggle-files')}>{icon('folder')}</button>
                 <button className="nodu-minimal-tool" aria-label="搜索" title="搜索" onClick={() => this.execute('search-in-workspace.toggle')}>{icon('search')}</button>
@@ -263,12 +262,15 @@ export class ScopeToolbar extends ReactWidget {
     }
 
     private renderProjectLogo(): React.ReactNode {
-        const target = this.shell.leftPanelHandler.container.node.querySelector('.theia-app-sidebar-container');
-        if (!target) { return null; }
-        return createPortal(<button className="nodu-pro-project nodu-minimal-logo" title={this.layoutState.project}
+        const titlebar = isWindows && environment.electron.is() && this.shell.topPanel.isVisible
+            ? this.shell.topPanel.node.querySelector('.theia-icon') : null;
+        const simple = this.layoutState.mode === 'simple';
+        const target = titlebar || (!simple ? this.shell.leftPanelHandler.container.node.querySelector('.theia-app-sidebar-container') : null);
+        const button = <button className={`nodu-minimal-logo${titlebar ? ' nodu-titlebar-project' : simple ? '' : ' nodu-pro-project'}`} title={this.layoutState.project}
             aria-label="项目菜单" aria-haspopup="menu" onClick={event => this.openMenu(NODU_PROJECT_MENU, event.currentTarget)}>
             <NoduBrand />
-        </button>, target);
+        </button>;
+        return target ? createPortal(button, target) : simple ? button : null;
     }
 
     private renderProfessional(): React.ReactNode {

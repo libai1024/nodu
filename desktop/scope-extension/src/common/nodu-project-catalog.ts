@@ -17,7 +17,7 @@ export const PROJECT_CHIPS: ProjectChip[] = [
     { id: 'k210', name: 'K210', family: 'k210' },
     { id: 'STM32F103C8Tx', name: 'STM32F103C8T6', family: 'stm32f103', pack: 'chip-f103c8@1' },
     { id: 'STM32F407ZGTx', name: 'STM32F407ZGT6', family: 'stm32f407', pack: 'chip-f407zg@1' },
-    ...['ESP32', 'ESP32-S2', 'ESP32-S3', 'ESP32-C2', 'ESP32-C3', 'ESP32-C6', 'ESP32-H2', 'ESP32-P4']
+    ...['ESP32-S3', 'ESP32-C3']
         .map(name => ({ id: name.toLowerCase().replace('-', ''), name, family: 'esp32' as const })),
 ];
 export const DAXIN_TEMPLATES = [

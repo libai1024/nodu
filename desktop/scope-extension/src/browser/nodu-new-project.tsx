@@ -126,7 +126,7 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
                     </div>
                 </div>
                 <div className="nodu-np-row">
-                    {chips.length > 1 && <div className="nodu-np-control">
+                    {family !== 'esp32' && chips.length > 1 && <div className="nodu-np-control">
                         <label className="nodu-np-label" htmlFor="nodu-project-chip">型号</label>
                         <NoduSelect id="nodu-project-chip" aria-label="型号" value={chipId} disabled={busy}
                             onChange={value => { setChipId(value); setError(''); }} options={chips.map(c => ({ value: c.id, label: c.name }))}/>

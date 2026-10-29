@@ -29,6 +29,11 @@ body:not(.mac) #theia-top-panel > .nodu-titlebar-toolbar { right: 142px; }
 .nodu-pro-teaching:hover { background: var(--theia-toolbar-hoverBackground); }
 .nodu-pro #theia-left-content-panel > .theia-app-sidebar-container { position: relative; padding-top: 50px; box-sizing: border-box; }
 .nodu-pro-project { position: absolute; top: 7px; left: 50%; transform: translateX(-50%); margin: 0; z-index: 1; }
+.nodu-pro #theia-left-content-panel > .theia-app-sidebar-container:not(:has(.nodu-pro-project)) { padding-top: 0; }
+/* Use Windows' existing application-icon slot, ahead of the File menu. */
+#theia-top-panel .theia-icon:has(.nodu-titlebar-project) { display: flex; align-items: center; justify-content: center; background: none; }
+#theia-top-panel .nodu-titlebar-project { width: 28px; height: 28px; margin: 0; -webkit-app-region: no-drag; }
+#theia-top-panel .nodu-titlebar-project .scope-brand-mark { width: 22px; height: 22px; }
 /* Settings live at the right of the header. AI settings remain in the model picker/menu. */
 .nodu-pro #theia-left-content-panel .theia-sidebar-menu-item:has(.codicon-settings-gear),
 .nodu-pro #theia-left-content-panel .theia-sidebar-menu-item:has(.codicon-sparkle) { display: none; }

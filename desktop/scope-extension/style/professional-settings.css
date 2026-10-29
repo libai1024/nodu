@@ -41,7 +41,7 @@
 .nodu-professional-settings .nodu-minimal-preferences-all { color: var(--theia-foreground); }
 .nodu-professional-settings .nodu-minimal-preferences-segments button[aria-pressed="true"] { background: color-mix(in srgb, var(--theia-button-background) 7%, var(--theia-editorWidget-background)); color: var(--theia-textLink-foreground); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theia-button-background) 25%, transparent); }
 .nodu-professional-settings-theme .nodu-minimal-preferences-segments button { display: flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 12px; }
-.nodu-professional-settings .nodu-minimal-preferences-all { margin-top: 12px; padding: 0; height: 56px; }
+.nodu-professional-settings .nodu-minimal-preferences-all { margin-top: 12px; padding: 0 12px; height: 44px; border: 0; border-radius: 10px; }
 .nodu-professional-settings-ai { grid-area: content; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
 .nodu-professional-settings-page-title { margin: 0 0 16px; font: 500 16px/24px var(--theia-ui-font-family); }
 .nodu-professional-settings-description { margin: -4px 0 20px; font-size: 12px; line-height: 18px; color: var(--theia-descriptionForeground); }

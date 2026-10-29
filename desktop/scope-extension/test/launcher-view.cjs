@@ -51,8 +51,11 @@ test('ESP32 new project defaults to Arduino and submits its framework with both 
  c.render();const radios=c.nodes().filter(n=>n.props?.role==='radio');
  assert.deepEqual(radios.map(c.text),['Arduino','ESP-IDF']);assert.deepEqual(radios.map(n=>n.props['aria-checked']),[true,false]);
  assert.deepEqual(c.nodes().filter(n=>n.type==='framework-mark').map(n=>n.props.framework),['arduino','esp-idf']);
- assert.equal(c.nodes().filter(n=>n.type==='select').length,0);assert.equal(c.nodes().filter(n=>n.type==='nodu-select').length,2);
- c.tree.props.onSubmit({preventDefault(){}});await c.flush();assert.equal(calls[0][1].framework,'arduino');
+ assert.equal(c.nodes().filter(n=>n.type==='select').length,0);assert.equal(c.nodes().filter(n=>n.type==='nodu-select').length,1);
+ assert.equal(c.find(n=>n.props?.id==='nodu-project-chip'),undefined);
+ assert.deepEqual(c.nodes().filter(n=>n.type==='button'&&/^ESP32-/.test(c.text(n))).map(c.text),['ESP32-S3','ESP32-C3']);
+ c.find(n=>n.type==='button'&&c.text(n)==='ESP32-C3').props.onClick();c.render();
+ c.tree.props.onSubmit({preventDefault(){}});await c.flush();assert.equal(calls[0][1].framework,'arduino');assert.equal(calls[0][1].chip,'esp32c3');
 });
 test('framework and chip changes preserve form edits and submit ESP-IDF explicitly',async()=>{
  const calls=[];const c=component('browser/nodu-new-project.js','NewProjectForm',{parent:'/tmp',family:'esp32',model:{call:async(...args)=>{calls.push(args);return {path:'/tmp/demo'};}},dialogs:{},onCreated(){},close(){}});
