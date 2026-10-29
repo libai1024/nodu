@@ -52,6 +52,9 @@ test('ESP32 defaults to Arduino with a standard primary sketch and pinned portab
                 assert.equal(sketch.includes('Serial.begin(115200)'), template === 'hello');
                 const profile = await fs.readFile(path.join(root, 'sketch.yaml'), 'utf8');
                 assert(profile.includes(`fqbn: esp32:esp32:${chip.id}`));
+                if (chip.id === 'esp32s3') {
+                    assert(profile.includes('USBMode=hwcdc,CDCOnBoot=default,UploadMode=default'));
+                }
                 assert(profile.includes(`platform: esp32:esp32 (${ESP32_ARDUINO_CORE_VERSION})`));
                 assert(profile.includes(`platform_index_url: ${ESP32_ARDUINO_INDEX_URL}`));
                 const bundle = require('../scope-extension/lib/common/nodu-arduino-library-catalog').ARDUINO_BUNDLED_LIBRARIES;

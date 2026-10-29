@@ -40,7 +40,8 @@ export async function createSourceProject(request: ProjectRequest): Promise<{ pa
         files[`${name}.ino`] = template === 'hello'
             ? '#include <Arduino.h>\n\nvoid setup() {\n    Serial.begin(115200);\n}\n\nvoid loop() {\n    Serial.println("Hello, ESP32!");\n    delay(1000);\n}\n'
             : '#include <Arduino.h>\n\nvoid setup() {\n}\n\nvoid loop() {\n}\n';
-        files['sketch.yaml'] = `default_profile: nodu\nprofiles:\n  nodu:\n    fqbn: esp32:esp32:${chip.id}\n    platforms:\n      - platform: esp32:esp32 (${ESP32_ARDUINO_CORE_VERSION})\n        platform_index_url: ${ESP32_ARDUINO_INDEX_URL}\n`
+        const serialOptions = chip.id === 'esp32s3' ? ':USBMode=hwcdc,CDCOnBoot=default,UploadMode=default' : '';
+        files['sketch.yaml'] = `default_profile: nodu\nprofiles:\n  nodu:\n    fqbn: esp32:esp32:${chip.id}${serialOptions}\n    platforms:\n      - platform: esp32:esp32 (${ESP32_ARDUINO_CORE_VERSION})\n        platform_index_url: ${ESP32_ARDUINO_INDEX_URL}\n`
             + (['esp32s3', 'esp32c3'].includes(chip.id) ? '    libraries:\n' + ARDUINO_BUNDLED_LIBRARIES
                 .map(library => `      - ${library.direct ? '' : 'dependency: '}${library.name} (${library.version})\n`).join('') : '');
         files['.theia/settings.json'] = json({ 'files.associations': { '*.ino': 'cpp' } });

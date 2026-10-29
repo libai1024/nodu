@@ -9,9 +9,9 @@ const vm = require('node:vm');
 
 // Real Node streams/readline exercise the production stdio parser; no tools or devices start.
 function harness(t) {
-    const children = [], events = [], exports = {};
+    const children = [], events = [], deadlines = [], exports = {};
     const lib = path.join(__dirname, '../lib/node');
-    const sandbox = { exports, process, setTimeout, clearTimeout, __filename: path.join(lib, 'nodu-embedded-server.js'),
+    const sandbox = { exports, process, setTimeout(callback, ms) { deadlines.push(ms); return setTimeout(callback, ms); }, clearTimeout, __filename: path.join(lib, 'nodu-embedded-server.js'),
         require(name) {
             if (name.includes('inversify')) return { injectable: () => target => target };
             if (name === 'child_process') return { spawn() {
@@ -34,8 +34,22 @@ function harness(t) {
         if (server.sidecar) server.failSidecar(server.sidecar, 'test cleanup');
         for (const child of children) { child.stdout.end(); child.stderr.end(); child.stdin.end(); }
     });
-    return { server, children, events, states: () => events.filter(e => e.event === 'service.state').map(e => e.data.running) };
+    return { server, children, events, deadlines, states: () => events.filter(e => e.event === 'service.state').map(e => e.data.running) };
 }
+
+test('cold toolkit startup has time to initialize; warm requests retain normal deadlines', async t => {
+    const h = harness(t);
+    const first = h.server.call('listPorts', {}), child = h.children[0];
+    assert.equal(h.deadlines.at(-1), 180000);
+    child.send({ id: child.requests.at(-1).id, result: [] }); await first;
+    const warm = h.server.call('listPorts', {});
+    assert.equal(h.deadlines.at(-1), 30000);
+    child.send({ id: child.requests.at(-1).id, result: [] }); await warm;
+    child.emit('exit', 1);
+    const replacement = h.server.call('listPorts', {}), next = h.children[1];
+    assert.equal(h.deadlines.at(-1), 180000);
+    next.send({ id: next.requests[0].id, result: [] }); await replacement;
+});
 
 test('only the first valid correlated response marks the current process ready', async t => {
     const h = harness(t), result = h.server.call('ping', {}), child = h.children[0];

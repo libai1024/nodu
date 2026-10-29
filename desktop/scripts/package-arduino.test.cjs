@@ -82,6 +82,12 @@ test('release packaging fails closed when any source coverage is incomplete; dev
     const f = fixture(t); f.manifest.sourceCoverage[0].complete = false; f.manifest.releaseReady = false; f.save();
     assert.throws(() => f.api.validateBundle(f.root, 'darwin-arm64'), /对应源码.*arduino-cli/);
     assert.equal(f.api.validateBundle(f.root, 'darwin-arm64', { allowUnreleased: true }).releaseReady, false);
+    const resources = path.join(f.root, 'validation');
+    assert.throws(() => f.api.copyBundle(f.root, resources, 'darwin-arm64'), /对应源码/);
+    f.api.copyBundle(f.root, resources, 'darwin-arm64', ['darwin-arm64'], { allowUnreleased: true });
+    const output = path.join(resources, 'arduino/offline/darwin-arm64');
+    assert.equal(f.api.validateBundle(output, 'darwin-arm64', { allowUnreleased: true }).releaseReady, false);
+    assert.throws(() => f.api.validateBundle(output, 'darwin-arm64'), /对应源码/);
 });
 test('missing official dependency cannot be hidden by deleting its manifest entry', t => {
     const f = fixture(t); f.manifest.files = f.manifest.files.filter(item => item.target !== 'downloads/packages/compiler.zip'); f.save();

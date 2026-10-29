@@ -93,15 +93,20 @@ Usage: node scripts/package-electron.cjs [--arch universal|arm64|x64]
   --arch arm64|x64   single-arch signed .app + zip + DMG (macOS).
   --prepare     build isolated JS/Electron workspaces without assembling runtime assets.
   --profile stm32   Windows STM32 offline edition; full remains the default.
+  --profile esp32-validation   Windows local hardware validation directory only; never a release archive.
   --help        show this text.`);
     process.exit(0);
 }
 
 const host = process.platform;
 const packageProfile = values.profile || 'full';
-if (!['full', 'stm32'].includes(packageProfile)) { fail(`unsupported package profile ${packageProfile}`); }
-if (packageProfile === 'stm32' && host !== 'win32') { fail('the stm32 portable profile currently targets Windows only'); }
-const includeArduino = packageProfile === 'full';
+if (!['full', 'stm32', 'esp32-validation'].includes(packageProfile)) { fail(`unsupported package profile ${packageProfile}`); }
+if (packageProfile !== 'full' && host !== 'win32') { fail('portable validation and stm32 profiles currently target Windows only'); }
+const validationOnly = packageProfile === 'esp32-validation';
+const includeArduino = packageProfile !== 'stm32';
+// Local hardware acceptance may exercise verified runtimes with unfinished
+// corresponding-source coverage. Default/full releases must still fail closed.
+const arduinoValidation = validationOnly ? { allowUnreleased: true } : {};
 if (require.main === module && !['darwin', 'win32'].includes(host)) {
     fail(`unsupported package host platform ${host}`);
 }
@@ -120,7 +125,7 @@ function requireInputs(arch) {
     if (host === 'darwin') { tutorTools.validate(tutorTools.rootFor(desktop, `darwin-${arch}`), `darwin-${arch}`); }
     const stm32 = require('./package-stm32.cjs');
     stm32.validateToolkit(stm32.toolkitSource(desktop, host, arch));
-    if (includeArduino) { arduinoTools.validateBundle(arduinoTools.bundleSource(desktop, `${host}-${arch}`), `${host}-${arch}`); }
+    if (includeArduino) { arduinoTools.validateBundle(arduinoTools.bundleSource(desktop, `${host}-${arch}`), `${host}-${arch}`, arduinoValidation); }
     const required = [];
     if (host === 'darwin') {
         for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded', 'nodu-tutor',
@@ -888,7 +893,7 @@ function buildAppInput(arch, workDesktop, universal) {
     stm32.copyToolkit(stm32.toolkitSource(desktop, host, arch), resDest, host, arch);
     const arduinoHosts = (universal ? ['arm64', 'x64'] : [arch]).map(value => `${host}-${value}`);
     for (const arduinoHost of includeArduino ? arduinoHosts : []) {
-        arduinoTools.copyBundle(arduinoTools.bundleSource(desktop, arduinoHost), resDest, arduinoHost, arduinoHosts);
+        arduinoTools.copyBundle(arduinoTools.bundleSource(desktop, arduinoHost), resDest, arduinoHost, arduinoHosts, arduinoValidation);
     }
     if (includeArduino) { copyRes(path.join(desktop, 'plugins'), path.join(appInput, 'plugins')); }
     else { copyRes(path.join(desktop, 'plugins/vscode-clangd'), path.join(appInput, 'plugins/vscode-clangd')); }
@@ -897,6 +902,7 @@ function buildAppInput(arch, workDesktop, universal) {
     fs.writeFileSync(path.join(appInput, 'build-info.json'), JSON.stringify({
         version: applicationVersion, ...sourceIdentity(),
         profile: packageProfile,
+        ...(validationOnly ? { validationOnly: true, arduinoReleaseReady: false } : {}),
         compilerInputs: universal
             ? { arm64: computeStamp('arm64').stamp, x64: computeStamp('x64').stamp }
             : { [arch]: computeStamp(arch).stamp },
@@ -1293,11 +1299,18 @@ async function packageWindows() {
     const workDesktop = await buildWorkspace('x64');
     const appInput = buildAppInput('x64', workDesktop, false);
     const out = await packageThin('x64', appInput);
-    const portableName = includeArduino ? 'Nodu-win32-x64' : 'Nodu-STM32-win32-x64';
+    const portableName = validationOnly ? 'Nodu-ESP32-Validation-win32-x64' : includeArduino ? 'Nodu-win32-x64' : 'Nodu-STM32-win32-x64';
     const portable = path.join(distDir, portableName);
     fs.mkdirSync(distDir, { recursive: true });
     fs.rmSync(portable, { recursive: true, force: true });
     fs.cpSync(out, portable, { recursive: true });
+    if (validationOnly) {
+        fs.writeFileSync(path.join(portable, 'NoduPortable.json'), JSON.stringify({ schema: 1, profile: packageProfile, dataDirectory: 'Data' }, null, 2) + '\n');
+        fs.writeFileSync(path.join(portable, 'LOCAL-VALIDATION-ONLY.json'), JSON.stringify({ version: applicationVersion, ...sourceIdentity(), validationOnly: true, arduinoReleaseReady: false }, null, 2) + '\n');
+        fs.writeFileSync(path.join(portable, 'OFFLINE-README.txt'), '\ufeff见微 Nodu · Windows ESP32 本地验证版\r\n\r\n双击 Nodu.exe；配置、工程、工具链解包及缓存保存在同目录 Data。\r\n内置 Arduino CLI、ESP32 核心、常用库、语言服务及 clangd，不需要额外安装 Node 或 Python。\r\nESP32-S3 默认走 COM/UART0；串口驱动需与 USB 转串口芯片匹配。\r\n本目录仅用于本地硬件验证。Arduino 对应源码材料仍未齐全，不生成正式发行压缩包或安装程序。\r\n');
+        console.log(`package-electron: local validation only: ${rel(portable)}`);
+        return;
+    }
     if (!includeArduino) { writeWindowsPortableFiles(portable); }
     const stem = `Nodu-${applicationVersion}-${includeArduino ? '' : 'stm32-'}win32-x64`;
     const zip = path.join(distDir, `${stem}.zip`);

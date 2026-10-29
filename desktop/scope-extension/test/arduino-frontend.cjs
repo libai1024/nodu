@@ -21,6 +21,15 @@ const {NoduArduinoModel}=load('browser/nodu-arduino-model.ts');
 const {NoduEmbeddedModel}=load('browser/nodu-embedded-model.ts');
 const defer=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return{promise,resolve,reject};};
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
+test('a new project selects a unique COM bridge but preserves explicit port choices',async()=>{
+ const model=new NoduArduinoModel(),chosen=[];
+ model.embedded={isArduino:true,espPath:'/project',busy:false,monitorBusy:false,fire(){},async applyArduinoMonitorSettings(){}};
+ model.service={async ports(){return[{path:'COM8',vid:0x303a},{path:'COM4',vid:0x1a86}];},async configure(args){chosen.push(args.port);return{...model.project,port:args.port};}};
+ model.project={path:'/project',monitor:{baud:115200,encoding:'utf-8'}};
+ await model.refreshPorts();assert.deepEqual(chosen,['COM4']);
+ model.project.port='COM8';await model.refreshPorts();assert.deepEqual(chosen,['COM4']);
+ model.project.port='';await model.refreshPorts();assert.deepEqual(chosen,['COM4']);
+});
 function fixture(){
  const events=new Emitter(),out=new Emitter(),calls=[];
  const embedded={isArduino:true,espPath:'/project',projectGeneration:1,sourceGeneration:0,building:false,flashing:false,diagnosticsStale:false,output:[],onDidChange:events.event,

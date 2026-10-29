@@ -268,6 +268,7 @@ test('marked Windows portable app keeps writable paths beside its executable', (
             assert.ok(fs.statSync(value).isDirectory());
         }
         assert.equal(env.NODU_PROJECTS_DIR, path.join(data, 'Projects'));
+        assert.equal(env.NODU_DACIR_HOME, path.join(data, 'shared-embedded'));
         assert.equal(paths.appData, env.APPDATA);
         assert.equal(paths.temp, env.TEMP);
     } finally { fs.rmSync(root, { recursive: true, force: true }); }

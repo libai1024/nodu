@@ -4,6 +4,7 @@ import { Emitter } from '@theia/core/lib/common';
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/ws-connection-provider';
 import { ArduinoBoard, ArduinoBoardOption, ArduinoClient, ArduinoConfigureRequest, ArduinoEvent, ArduinoPort, ArduinoProjectInfo, NODU_ARDUINO_PATH, NoduArduinoService } from '../common/nodu-arduino-protocol';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
+import { preferredArduinoUartPort } from '../common/nodu-arduino-ports';
 
 export type ArduinoOperation = 'build' | 'upload' | 'flash' | 'prepare' | 'libraries' | 'export';
 
@@ -84,7 +85,7 @@ export class NoduArduinoModel implements ArduinoClient {
             if (results[1].status === 'fulfilled') { this.options = results[1].value; }
             for (const result of results) { if (result.status === 'rejected' && project.ready) { this.error = result.reason instanceof Error ? result.reason.message : String(result.reason); break; } }
         } catch (cause) { if (current()) { this.error = cause instanceof Error ? cause.message : String(cause); } }
-        finally { if (current()) { this.loading = false; this.fire(); this.embedded.fire(); } }
+        finally { if (current()) { this.loading = false; this.fire(); this.embedded.fire(); await this.selectDefaultUart(); } }
     }
     async refreshPorts(): Promise<void> {
         const generation = this.generation, path = this.path;
@@ -94,6 +95,12 @@ export class NoduArduinoModel implements ArduinoClient {
         this.ports = ports;
         this.embedded.ports = ports.map(port => ({ path: port.path, description: port.label ?? '', vid: port.vid, pid: port.pid, serial_number: port.serialNumber }));
         this.fire();
+        await this.selectDefaultUart();
+    }
+    private async selectDefaultUart(): Promise<void> {
+        if (!this.project || this.project.port !== undefined || this.busy || this.loading || this.embedded.monitorBusy) { return; }
+        const port = preferredArduinoUartPort(this.ports);
+        if (port) { await this.configure({ port: port.path }); }
     }
     async configure(change: Omit<ArduinoConfigureRequest, 'path'>): Promise<boolean> {
         if (!this.path || this.busy || this.loading || this.embedded.monitorBusy) { return false; }

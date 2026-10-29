@@ -141,8 +141,8 @@ function validateBundle(root, expectedHost, { allowUnreleased = false } = {}) {
 function bundleSource(desktop, host) {
     return path.join(process.env.NODU_ARDUINO_RELEASE_BUNDLES || path.join(desktop, '.tools/arduino-release'), host);
 }
-function copyBundle(source, resources, host, hosts = [host]) {
-    const manifest = validateBundle(source, host), root = path.join(resources, 'arduino/offline'), destination = path.join(root, host);
+function copyBundle(source, resources, host, hosts = [host], options = {}) {
+    const manifest = validateBundle(source, host, options), root = path.join(resources, 'arduino/offline'), destination = path.join(root, host);
     fs.mkdirSync(destination, { recursive: true });
     for (const record of manifest.files) {
         const file = path.join(destination, record.path); fs.mkdirSync(path.dirname(file), { recursive: true });

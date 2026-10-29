@@ -11,7 +11,7 @@ function configurePortableProfile({ app, executable = process.execPath, platform
     const settings = JSON.parse(fs.readFileSync(marker, 'utf8'));
     if (settings.schema !== 1 || settings.dataDirectory !== 'Data') { throw new Error('Invalid Nodu portable configuration'); }
     const root = path.join(path.dirname(executable), 'Data');
-    const folders = { NODU_PROFILE_DIR: 'profile', NODU_EMBEDDED_HOME: 'embedded', NODU_RESOURCES_HOME: 'resources',
+    const folders = { NODU_PROFILE_DIR: 'profile', NODU_EMBEDDED_HOME: 'embedded', NODU_DACIR_HOME: 'shared-embedded', NODU_RESOURCES_HOME: 'resources',
         NODU_ARDUINO_HOME: 'arduino', NODU_PROJECTS_DIR: 'Projects', APPDATA: 'appdata', LOCALAPPDATA: 'localappdata', TEMP: 'temp', TMP: 'temp' };
     for (const [key, directory] of Object.entries(folders)) {
         const value = path.join(root, directory);

@@ -36,6 +36,7 @@ interface Pending { resolve(value: unknown): void; reject(error: Error): void; t
 export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicationContribution {
     readonly teachingEvidence = new TutorRuntimeEvidence();
     private sidecar?: ChildProcessWithoutNullStreams;
+    private sidecarReady = false;
     private sequence = 0;
     private readonly keilJobs = new Set<string>();
     private readonly pending = new Map<number, Pending>();
@@ -97,6 +98,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
         const child = spawn(process.execPath, [join(core, 'transport.cjs'), '--binary', this.binary(), '--app', 'nodu', '--resources', join(this.extensionDir(), 'resources', 'stm32'),
             '--toolkit', this.toolkitRoot(), '--data-dir', this.dataDir()], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true, env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' } });
         this.sidecar = child;
+        this.sidecarReady = false;
         let ready = false;
         const reader = createInterface({ input: child.stdout });
         reader.on('line', line => {
@@ -114,7 +116,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
                 clearTimeout(item.timer); this.pending.delete(message.id);
                 // A correlated business refusal also proves that the RPC service is
                 // alive. Spawn/logs/unsolicited events alone do not prove readiness.
-                if (!ready) { ready = true; this.publish('service.state', { running: true }); }
+                if (!ready) { ready = true; this.sidecarReady = true; this.publish('service.state', { running: true }); }
                 if (typeof message.error === 'string') {
                     // Keep the stable code and tool output for the diagnosis card.
                     item.reject(Object.assign(new Error(message.error), { code: message.code, detail: message.detail }));
@@ -135,6 +137,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     private failSidecar(child: ChildProcessWithoutNullStreams, message: string): void {
         if (this.sidecar !== child) { return; }
         this.sidecar = undefined;
+        this.sidecarReady = false;
         if (this.arduinoLease) { this.arduinoLease.lost = true; this.arduinoLease.restore = false; this.arduinoLease.onLost?.(); }
         for (const item of this.pending.values()) { clearTimeout(item.timer); item.reject(Object.assign(new Error(message), { code: 'service' })); }
         this.pending.clear();
@@ -143,6 +146,9 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
 
     private request(method: string, args: Record<string, unknown>, timeout = 30_000): Promise<unknown> {
         const child = this.ensureSidecar();
+        // First use copies and verifies the bundled toolkit in the shared service.
+        // Keep ordinary port/monitor deadlines short once that startup has completed.
+        if (!this.sidecarReady) { timeout = Math.max(timeout, 180_000); }
         const id = ++this.sequence;
         return new Promise((resolve, reject) => {
             const timer = setTimeout(() => {
