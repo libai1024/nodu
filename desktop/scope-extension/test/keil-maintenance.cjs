@@ -9,7 +9,7 @@ function fixture() {
     const timers = new Map(), exports = {}; let sequence = 0;
     const lib = path.join(__dirname, '../lib/browser');
     vm.runInNewContext(fs.readFileSync(path.join(lib, 'nodu-embedded-model.js'), 'utf8'), {
-        exports, Date, Promise, Error, Set, Map, TextDecoder, TextEncoder, Uint8Array,
+        exports, Date, Promise, Error, Set, Map, TextDecoder, TextEncoder, Uint8Array, crypto: require('node:crypto').webcrypto,
         setTimeout: fn => { const id = ++sequence; timers.set(id, fn); return id; }, clearTimeout: id => timers.delete(id),
         require(id) {
             if (id.includes('inversify')) return { inject: () => () => {}, injectable: () => x => x, postConstruct: () => () => {} };

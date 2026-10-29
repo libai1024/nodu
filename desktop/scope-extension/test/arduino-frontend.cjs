@@ -6,7 +6,7 @@ class Empty{}
 function load(file){
  const filename=path.join(__dirname,'../src',file),exports={};
  const code=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,experimentalDecorators:true,emitDecoratorMetadata:false,jsx:ts.JsxEmit.React}}).outputText;
- vm.runInNewContext(code,{exports,Date,Math,Promise,Error,Set,Map,Number,String,TextEncoder,TextDecoder,Uint8Array,setTimeout,clearTimeout,document:{hidden:false},require:id=>{
+ vm.runInNewContext(code,{exports,Date,Math,Promise,Error,Set,Map,Number,String,TextEncoder,TextDecoder,Uint8Array,crypto:require('node:crypto').webcrypto,setTimeout,clearTimeout,document:{hidden:false},require:id=>{
  if(id.includes('inversify'))return {inject:()=>()=>{},injectable:()=>x=>x,postConstruct:()=>()=>{}};
  if(id==='@theia/core/lib/common'||id==='@theia/core/lib/common/event')return {Emitter};
  if(id.endsWith('nodu-arduino-protocol'))return {ARDUINO_COMMANDS:{build:'build',upload:'upload',prepare:'prepare',stop:'stop'},NODU_ARDUINO_PATH:'/arduino'};
