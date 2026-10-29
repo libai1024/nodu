@@ -55,7 +55,8 @@ function mount() {
         ranges: [{ startLineNumber: 3, endLineNumber: 5, endColumn: 1, isEmpty: () => false }] };
     const dom = new Target(), target = new Target(); target.parent = dom;
     const model = { getValueInRange: () => state.selected, getValue: () => state.text, getVersionId: () => state.version, isDisposed: () => state.disposed };
-    const editor = { getModel: () => model, getSelections: () => state.ranges, hasTextFocus: () => state.focused, getDomNode: () => dom };
+    const editor = { getModel: () => model, getSelections: () => state.ranges, hasTextFocus: () => state.focused, getDomNode: () => dom,
+        trigger(...args) { executed.push(args); } };
     const widget = { editor: { uri: new URI('file:///project/main.c') }, monaco: { getControl: () => editor } };
     const editors = { currentEditor: widget, all: [widget] }, copied = { content: undefined }, calls = [], transfers = { begun: 0, pending: 0, released: 0 };
     const tutor = { workspaceId: 'workspace', activeConversationId: 'conversation', mode: 'ask', epoch: 1, rootUri: new URI('file:///project'), conversationLoading: false,
@@ -230,14 +231,17 @@ test('native file drops preserve Windows drive roots and UNC server authorities'
     assert.deepEqual(foreign.calls, [['notify']]); assert.match(foreign.tutor.contextError, /当前工程/);
 });
 
-test('native paste command is scoped to the composer and editor copy/cut preserve native events', () => {
+test('native paste is scoped to the composer and editor copy/cut use Monaco clipboard actions', () => {
     const c = mount();
     assert.equal(c.commands.get('paste').isEnabled(), false);
     c.document.activeElement = c.composer; assert.equal(c.commands.get('paste').isEnabled(), true);
     c.composer.inComposer = false; assert.equal(c.commands.get('paste').isEnabled(), false);
     c.document.activeElement = c.target;
     for (const action of ['copy', 'cut']) { assert.equal(c.commands.get(action).isEnabled(), true); c.commands.get(action).execute(); }
-    assert.deepEqual(c.executed, [['copy'], ['cut']]);
+    assert.deepEqual(c.executed, [
+        ['nodu.editor-clipboard', 'editor.action.clipboardCopyAction', null],
+        ['nodu.editor-clipboard', 'editor.action.clipboardCutAction', null],
+    ]);
     c.state.focused = false; assert.equal(c.commands.get('copy').isEnabled(), false);
     c.state.focused = true; c.document.activeElement = new Target(); assert.equal(c.commands.get('cut').isEnabled(), false);
 });

@@ -59,14 +59,18 @@ export class NoduTutorContextTransfer implements FrontendApplicationContribution
         registry.registerHandler(CommonCommands.PASTE.id, {
             isEnabled: () => !!this.composer(), execute: () => this.pasteIntoComposer(),
         });
-        // Keep Monaco's copy/cut events (and metadata) when invoked from the native Edit menu.
+        // Monaco also handles Electron's clipboard fallback and EditContext here.
+        // Raw execCommand can delete the selection without writing the clipboard.
         for (const [command, action] of [[CommonCommands.COPY, 'copy'], [CommonCommands.CUT, 'cut']] as const) {
             registry.registerHandler(command.id, {
                 isEnabled: () => {
                     const widget = this.editors.currentEditor, editor = widget && MonacoEditor.get(widget)?.getControl();
                     return !!editor?.hasTextFocus() && !!editor.getDomNode()?.contains(document.activeElement);
                 },
-                execute: () => document.execCommand(action),
+                execute: () => {
+                    const widget = this.editors.currentEditor, editor = widget && MonacoEditor.get(widget)?.getControl();
+                    editor?.trigger('nodu.editor-clipboard', action === 'cut' ? 'editor.action.clipboardCutAction' : 'editor.action.clipboardCopyAction', null);
+                },
             });
         }
     }
