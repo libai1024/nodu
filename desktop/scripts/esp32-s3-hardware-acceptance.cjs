@@ -60,6 +60,8 @@ async function main(){
  await startOfflineGuard();
  const parent=path.join(root,'projects');fs.mkdirSync(parent,{recursive:true});
  const generated=await createSourceProject(parseProjectRequest({parent,name:'s3_com_'+Date.now(),chip:'esp32s3',framework:'arduino',template:'hello'}));report.project=generated.path;save();
+ // Follow the product's first-open path before compiling the user's sketch.
+ const initializedAt=Date.now();report.firstOpen=await server.inspect(generated.path);assert.equal(report.firstOpen.ready,true);report.firstOpenMs=Date.now()-initializedAt;save();
  const project=await server.configure({path:generated.path,options:{USBMode:'hwcdc',CDCOnBoot:'default',UploadMode:'default',FlashSize:'16M',PSRAM:'opi'},port,monitor:{port,baud:115200,encoding:'utf-8'}});report.configuration=project;save();
  const ports=await server.ports();report.detectedPorts=ports;assert.ok(ports.some(p=>p.path===port&&p.vid===0x1a86),'Expected the selected CH343 bridge');
  report.initialMonitor=await call('openMonitor',{path:generated.path,port,baud:115200,arduino:true});
