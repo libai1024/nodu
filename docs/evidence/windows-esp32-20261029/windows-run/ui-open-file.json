@@ -1,0 +1,335 @@
+﻿{
+    "selected":  false,
+    "observed":  [
+                     {
+                         "name":  "打开",
+                         "id":  "",
+                         "type":  "ControlType.Window"
+                     },
+                     {
+                         "name":  "位置不可用",
+                         "id":  "",
+                         "type":  "ControlType.Window"
+                     },
+                     {
+                         "name":  "MainInstructionIcon",
+                         "id":  "MainIcon",
+                         "type":  "ControlType.Image"
+                     },
+                     {
+                         "name":  "D:\\nodu-esp32-20261029\\ide-profile\\Desktop 不可用。如果该位置位于这台电脑上，请确保设备或驱动器已连接，或者光盘已插入，然后重试。如果该位置位于网络上，请确保你已连接到网络或 Internet，然后重试。如果仍然找不到该位置，则它可能已移动或删除。",
+                         "id":  "ContentText",
+                         "type":  "ControlType.Text"
+                     },
+                     {
+                         "name":  "确定",
+                         "id":  "CommandButton_1",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "命令模块",
+                         "id":  "FolderBandModuleInner",
+                         "type":  "ControlType.ToolBar"
+                     },
+                     {
+                         "name":  "帮助(\u0026H)",
+                         "id":  "HelpButton",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "预览窗格",
+                         "id":  "PreviewButton",
+                         "type":  "ControlType.CheckBox"
+                     },
+                     {
+                         "name":  "视图",
+                         "id":  "ViewControl",
+                         "type":  "ControlType.SplitButton"
+                     },
+                     {
+                         "name":  "视图滑块",
+                         "id":  "SplitMenuButton",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "组织​​",
+                         "id":  "{7DDC1264-7E4D-4F74-BBC0-D191987C8D0F}",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "新建​​文件夹​​",
+                         "id":  "{E44616AD-6DF1-4B94-85A4-E465AE8A19DB}",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "控制项宿主",
+                         "id":  "ProperTreeHost",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "树视图",
+                         "id":  "100",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "Shell 文件夹视图",
+                         "id":  "listview",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "项目视图",
+                         "id":  "",
+                         "type":  "ControlType.List"
+                     },
+                     {
+                         "name":  "水平滚动条",
+                         "id":  "HorizontalScrollBar",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "标题",
+                         "id":  "",
+                         "type":  "ControlType.Header"
+                     },
+                     {
+                         "name":  "名称",
+                         "id":  "System.ItemNameDisplay",
+                         "type":  "ControlType.SplitButton"
+                     },
+                     {
+                         "name":  "筛选器下拉列表",
+                         "id":  "DropDown",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "修改日期",
+                         "id":  "System.DateModified",
+                         "type":  "ControlType.SplitButton"
+                     },
+                     {
+                         "name":  "筛选器下拉列表",
+                         "id":  "DropDown",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "类型",
+                         "id":  "System.ItemTypeText",
+                         "type":  "ControlType.SplitButton"
+                     },
+                     {
+                         "name":  "筛选器下拉列表",
+                         "id":  "DropDown",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "大小",
+                         "id":  "System.Size",
+                         "type":  "ControlType.SplitButton"
+                     },
+                     {
+                         "name":  "筛选器下拉列表",
+                         "id":  "DropDown",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "libraries",
+                         "id":  "0",
+                         "type":  "ControlType.ListItem"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Image"
+                     },
+                     {
+                         "name":  "名称",
+                         "id":  "System.ItemNameDisplay",
+                         "type":  "ControlType.Edit"
+                     },
+                     {
+                         "name":  "修改日期",
+                         "id":  "System.DateModified",
+                         "type":  "ControlType.Edit"
+                     },
+                     {
+                         "name":  "类型",
+                         "id":  "System.ItemTypeText",
+                         "type":  "ControlType.Edit"
+                     },
+                     {
+                         "name":  "大小",
+                         "id":  "System.Size",
+                         "type":  "ControlType.Edit"
+                     },
+                     {
+                         "name":  "应用程序控件",
+                         "id":  "AppControlsModuleInner",
+                         "type":  "ControlType.Tree"
+                     },
+                     {
+                         "name":  "文件名(N):",
+                         "id":  "1090",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "1148",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "1148",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "1148",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "Sketch (*.ino;*.pde)",
+                         "id":  "1136",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "打开(O)",
+                         "id":  "1",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "取消",
+                         "id":  "2",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "40965",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "导航按钮",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "向上一级区段工具栏",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "41477",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "地址: D:\\nodu-esp32-20261029\\ide-sketchbook",
+                         "id":  "1001",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "地址区段工具栏",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "搜索框",
+                         "id":  "SearchEditBox",
+                         "type":  "ControlType.Edit"
+                     },
+                     {
+                         "name":  "搜索",
+                         "id":  "SearchBoxSearchButton",
+                         "type":  "ControlType.Button"
+                     },
+                     {
+                         "name":  "",
+                         "id":  "",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "Moving",
+                         "id":  "",
+                         "type":  "ControlType.Window"
+                     },
+                     {
+                         "name":  "MainInstructionIcon",
+                         "id":  "MainIcon",
+                         "type":  "ControlType.Image"
+                     },
+                     {
+                         "name":  "The file \"nodu_esp32c3.ino\" needs to be inside a sketch folder named \"nodu_esp32c3\".\nCreate this folder, move the file, and continue?",
+                         "id":  "ContentText",
+                         "type":  "ControlType.Text"
+                     },
+                     {
+                         "name":  "确定",
+                         "id":  "CommandButton_1",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "取消",
+                         "id":  "CommandButton_2",
+                         "type":  "ControlType.Pane"
+                     },
+                     {
+                         "name":  "Chrome Legacy Window",
+                         "id":  "329248",
+                         "type":  "ControlType.Pane"
+                     }
+                 ]
+}

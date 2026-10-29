@@ -11,6 +11,7 @@ function load(file){
  if(id==='@theia/core/lib/common'||id==='@theia/core/lib/common/event')return {Emitter};
  if(id.endsWith('nodu-arduino-protocol'))return {ARDUINO_COMMANDS:{build:'build',upload:'upload',prepare:'prepare',stop:'stop'},NODU_ARDUINO_PATH:'/arduino'};
  if(id.endsWith('nodu-bottom-panel'))return {NoduBottomPanelWidget:{ID:'panel'}};
+ if(id.endsWith('nodu-arduino-simulation-profiles'))return load('common/nodu-arduino-simulation-profiles.ts');
  if(id.startsWith('../common/'))return require(path.join(__dirname,'../lib/common',path.basename(id)));
  return new Proxy({},{get:()=>Empty});
  }});return exports;
@@ -149,4 +150,30 @@ test('Arduino monitor changes reconnect only when needed; STM32 can still open i
 test('a serial service crash does not overwrite the separate Arduino upload operation',()=>{
  const embedded=new NoduEmbeddedModel(),reports=[];embedded.isArduino=true;embedded.building=true;embedded.flashing=true;embedded.task={text:'烧录中'};embedded.systemDiagnostics={report:value=>reports.push(value)};
  embedded.onEvent('service.state',{running:false});assert.equal(embedded.building,true);assert.equal(embedded.flashing,true);assert.equal(embedded.task.text,'烧录中');assert.equal(reports[0].source,'串口服务');
+});
+test('simulation export saves, requires a pre-build snapshot and passes only the successful token to export',async()=>{
+ const f=fixture(), saveable={dirty:true,save:async()=>{f.calls.push('save');saveable.dirty=false;}};
+ f.c.editors.all=[{isDisposed:false,editor:{uri:{path:{fsPath:()=>'/project/demo.ino'}}},saveable}];
+ f.service.compile=async args=>{assert.equal(args.simulation,true);f.calls.push('compile');return{ok:true,buildToken:'fresh',simulationReady:true,diagnostics:[]};};
+ f.service.exportSimulation=async args=>{assert.equal(args.buildToken,'fresh');assert.equal(args.destination,'/exports/demo.esp-sim.zip');assert.equal(args.dependencies,undefined);f.calls.push('export');return{ok:true,path:args.destination};};
+ await f.c.run('export',undefined,'/exports/demo.esp-sim.zip');assert.deepEqual(f.calls,['save','compile','export']);assert.equal(f.model.task.text,'仿真包已导出');assert.equal(f.model.flashing,false);
+});
+test('editing while compiling for simulation export cancels and cannot publish',async()=>{
+ const f=fixture(),held=defer();f.service.compile=()=>{f.calls.push('compile');return held.promise;};f.service.exportSimulation=async()=>assert.fail('must not publish');
+ const run=f.c.run('export',undefined,'/exports/demo.esp-sim.zip');await tick();f.edit();held.resolve({ok:true,buildToken:'fresh',simulationReady:true,diagnostics:[]});await run;
+ assert.deepEqual(f.calls,['compile','cancel']);assert.equal(f.arduino.buildToken,undefined);
+});
+test('simulation export gives a configuration action before opening a save dialog and never changes options',async()=>{
+ const f=fixture();f.arduino.project={path:'/project',chip:'esp32s3',coreVersion:'3.3.12',fqbn:'esp32:esp32:esp32s3'};
+ let revealed=false;f.c.shell.revealWidget=async id=>{assert.equal(id,'panel');revealed=true;};
+ f.c.dialogs={showSaveDialog:async()=>assert.fail('unsupported configuration must not export')};
+ f.arduino.configure=async()=>assert.fail('must not silently change board settings');await f.c.exportSimulation();
+ assert.match(f.arduino.error,/开发板设置/);assert.match(f.arduino.error,/8 MB/);assert.deepEqual(f.calls,[]);assert.equal(revealed,true,'the existing output must open so a compact workbench shows the reason');
+});
+test('cancelled save dialog or project switch cannot start a simulation compile',async()=>{
+ for(const switched of [false,true]){
+  const f=fixture();f.arduino.project={path:'/project',chip:'esp32c3',coreVersion:'3.3.12',fqbn:'esp32:esp32:esp32c3:CPUFreq=160,FlashSize=4M,FlashMode=qio,FlashFreq=80,CDCOnBoot=default,PartitionScheme=default'};
+  f.c.dialogs={showSaveDialog:async()=>{if(switched){f.model.projectGeneration++;return{path:{fsPath:()=>'/exports/new.esp-sim.zip'}};}return undefined;}};
+  await f.c.exportSimulation();assert.deepEqual(f.calls,[]);
+ }
 });

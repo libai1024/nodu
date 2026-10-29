@@ -1,0 +1,51 @@
+{
+  "scope": "Real isolated current Nodu Electron, S3 native UI acceptance in progress",
+  "app": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/Nodu Simulation Export Check.app",
+  "application": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app",
+  "profile": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/profile",
+  "arduinoHome": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/home",
+  "project": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/projects/nodu_ui_export_s3",
+  "port": 64862,
+  "bundleIdentity": "dev.nodu.arduino-electron-check-20261027",
+  "pid": 93680,
+  "started": "2026-10-27T05:53:20.358461+00:00",
+  "args": [
+    "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/Nodu Simulation Export Check.app/Contents/MacOS/Electron",
+    "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app",
+    "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/projects/nodu_ui_export_s3",
+    "--hostname=127.0.0.1",
+    "--port=64862",
+    "--plugins=local-dir:/Users/wangwei/Model/k210-studio/desktop/plugins",
+    "--user-data-dir=/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/profile/electron",
+    "--electronUserData=/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/profile/electron"
+  ],
+  "explicitEnvironment": {
+    "NODU_ARDUINO_HOME": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/home",
+    "NODU_ARDUINO_CLI": "/opt/homebrew/bin/arduino-cli",
+    "NODU_ARDUINO_RESOURCES": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/resources/arduino",
+    "NODU_EMBEDDED_HOME": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/embedded-home",
+    "NODU_RESOURCES_HOME": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/resources-home",
+    "NODU_PROJECTS_DIR": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/projects",
+    "THEIA_CONFIG_DIR": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/profile/config"
+  },
+  "assets": [
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app/lib/frontend/bundle.js",
+      "sha256": "529f69574ac67c516f92b78edbcb620e237dd9151811f5316dae938cef566af2"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app/lib/frontend/preload.js",
+      "sha256": "7641cf3d9aa3cd5c345a91d92dd6e85e3e62fdc7dd5041ad22f3871f80d56da8"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app/lib/backend/main.js",
+      "sha256": "ebe5d01335936c783599d889622f49932f5320be4ddb7fd1076e01c8bd085af9"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app/lib/backend/electron-main.js",
+      "sha256": "bde03c4724b26915f958d81670c231d5a0243a528b00cd8c14f99aafa0335de3"
+    }
+  ],
+  "restarted": "2026-10-27T06:00:24.618232+00:00",
+  "previousPid": 88697
+}

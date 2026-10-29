@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Nodu · 项目打开方式演示</title>
+  <link rel="icon" href="./mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./demo.css">
+  <script src="./demo.js" defer></script>
+</head>
+<body>
+  <svg class="symbols" aria-hidden="true"><defs>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m10 5-7 7 7 7M3 12h18"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 4v6h6M4.8 9A8 8 0 1 1 4 15"/></symbol>
+    <symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4v16"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h12l4 4v14H3V3h2Zm2 0v6h10V3M7 21v-8h10v8"/></symbol>
+  </defs></svg>
+
+  <main class="shell">
+    <header class="page-top">
+      <a class="brand" href="./" aria-label="Nodu 演示首页"><img src="./mark.svg" alt="" width="28" height="28"><span>Nodu</span></a>
+      <span class="demo-label">交互演示</span>
+      <button class="quiet theme-button" id="theme" type="button"><svg><use href="#i-theme"/></svg><span>切换浅色</span></button>
+    </header>
+
+    <div class="intro">
+      <h1>项目，按你的习惯打开。</h1>
+      <p>同一份代码，在 Nodu 与 Keil 之间自由切换。</p>
+    </div>
+
+    <section class="app" aria-label="项目打开方式交互演示">
+      <header class="app-bar">
+        <div class="app-name"><img src="./mark.svg" alt="" width="20" height="20"><span id="window-title">Nodu · 项目</span></div>
+        <span class="preview-tag" id="preview-tag">示例工作区</span>
+      </header>
+
+      <div class="notice" id="notice" hidden>
+        <div class="notice-content" role="status" aria-live="polite"><span class="notice-indicator" aria-hidden="true"></span><div><strong id="notice-title"></strong><p id="notice-copy"></p></div></div>
+        <button type="button" class="quiet" id="notice-action">取消</button>
+        <div class="progress" aria-hidden="true"><i id="progress-fill"></i></div>
+      </div>
+
+      <div id="projects-view" class="projects-layout">
+        <section class="projects" aria-labelledby="projects-heading">
+          <div class="list-toolbar"><h2 id="projects-heading">最近项目</h2><label class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="搜索项目" aria-label="搜索项目" autocomplete="off"></label></div>
+          <div id="project-list" class="project-list"></div>
+          <div id="empty" class="empty" hidden><h3>没有找到这个项目</h3><p>试试项目名称或芯片型号。</p><button type="button" class="secondary" id="clear-search">清空搜索</button></div>
+          <p class="list-hint">点右侧箭头，选择这个项目的打开方式。</p>
+        </section>
+
+        <aside class="project-preview" aria-label="所选项目预览">
+          <div class="preview-heading"><span>项目预览</span><span class="file-type">C</span></div>
+          <h2 id="preview-name">LED 闪烁</h2>
+          <p class="preview-description" id="preview-description">从点亮第一颗 LED 开始。</p>
+          <div class="file-tab"><svg aria-hidden="true"><use href="#i-code"/></svg><span>main.c</span><span class="shared-label">共享源码</span></div>
+          <pre id="source-preview" aria-label="main.c 源码预览"></pre>
+          <div class="preview-foot"><svg aria-hidden="true"><use href="#i-folder"/></svg><span id="preview-path">D:\NoduProjects\blink</span></div>
+        </aside>
+      </div>
+
+      <section id="editor-view" class="editor-view" hidden aria-label="编辑器预览">
+        <header class="editor-toolbar">
+          <button class="quiet back" type="button" id="back"><svg><use href="#i-back"/></svg><span>项目</span></button>
+          <div class="editor-project"><strong id="editor-project-name"></strong><span>STM32F103C8T6</span></div>
+          <button class="secondary save" type="button" id="save"><svg><use href="#i-save"/></svg>保存</button>
+          <button class="secondary" type="button" id="switch-tool">用 Keil 5 打开<svg><use href="#i-chevron"/></svg></button>
+        </header>
+        <div class="editor-workspace">
+          <aside class="file-tree"><span>项目文件</span><div><svg aria-hidden="true"><use href="#i-folder"/></svg>App</div><div class="current-file"><svg aria-hidden="true"><use href="#i-code"/></svg>main.c</div><p>两种打开方式<br>共用这里的代码。</p></aside>
+          <div class="code-pane"><div class="editor-tab"><svg aria-hidden="true"><use href="#i-code"/></svg>main.c<span id="dirty-mark" hidden aria-label="尚未保存">●</span></div><label class="sr-only" for="code">main.c 演示代码</label><textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div>
+        </div>
+        <footer class="editor-status"><span id="save-state">已保存</span><span id="editor-path"></span><span>UTF-8 · C</span></footer>
+      </section>
+
+      <footer class="app-status"><span><i aria-hidden="true"></i><span id="app-status-text">本地项目</span></span><span id="app-status-note">打开方式会为每个项目自动记住</span></footer>
+    </section>
+
+    <div class="demo-controls"><p id="demo-tip" aria-live="polite">试一试：选择「在 Keil 5 中打开」，体验首次自动准备。</p><button class="quiet" id="reset" type="button"><svg><use href="#i-reset"/></svg>重置演示</button></div>
+    <footer class="page-footer"><span>界面原型 · 编辑仅保存在本浏览器，不会启动软件或编译烧写。</span><label class="scenario"><input type="checkbox" id="missing-keil">模拟未安装 Keil</label></footer>
+  </main>
+
+  <div id="open-menu" class="open-menu" role="menu" aria-label="选择打开方式" hidden>
+    <p class="menu-title">选择打开方式</p>
+    <button type="button" role="menuitemradio" aria-checked="true" data-tool="nodu"><img src="./mark.svg" width="25" height="25" alt=""><span><strong>在 Nodu 中打开</strong><small>继续在当前工作区编写</small></span><svg class="choice-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+    <button type="button" role="menuitemradio" aria-checked="false" data-tool="keil"><span class="keil-icon" aria-hidden="true">K</span><span><strong>在 Keil 5 中打开</strong><small id="keil-menu-caption">首次使用会自动准备</small></span><svg class="choice-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+    <p class="menu-foot">自动记住此项目的选择</p>
+  </div>
+</body>
+</html>

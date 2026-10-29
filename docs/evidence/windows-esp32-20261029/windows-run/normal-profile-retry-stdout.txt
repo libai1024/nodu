@@ -1,0 +1,1 @@
+PubSubClient@2.8.0 Download failed: performing HEAD request: Head "https://downloads.arduino.cc/libraries/github.com/knolleary/PubSubClient-2.8.0.zip?query=download": tls: failed to verify certificate: x509: certificate signed by unknown authority

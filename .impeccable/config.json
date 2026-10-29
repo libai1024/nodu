@@ -38,6 +38,15 @@
         ],
         "createdAt": "2026-10-28T03:21:43.911Z",
         "reason": "Agent review: this icon-choice page reuses the previously reviewed native-scale IDE mockup unchanged from index.html. Only compile glyphs and the candidate picker are new; picker text is 12–14 px with 14–16 px padding. Existing compact IDE typography and edge-to-edge frame exceptions remain limited to this standalone demo."
+      },
+      {
+        "rule": "repeated-container-text",
+        "value": "*",
+        "files": [
+          "docs/design/keil-open-demo/index.html"
+        ],
+        "createdAt": "2026-10-28T10:26:30.646Z",
+        "reason": "Agent verified: main.c identifies the same source file in the mutually exclusive project-preview and editor views; the editor file tree and active tab intentionally repeat the filename for navigation. These are file identifiers, not repeated status messaging."
       }
     ]
   }

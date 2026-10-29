@@ -880,6 +880,8 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
         if (electronSplitOpen) { menus.registerMenuAction([...NODU_PROJECT_MENU, '1_new'], { commandId: 'workspace:openFolder', label: '打开文件夹…', order: '2' }); }
         menus.registerMenuAction([...NODU_PROJECT_MENU, '3_save'], { commandId: CommonCommands.SAVE.id, label: '保存到电脑', order: '0' });
         menus.registerMenuAction([...NODU_PROJECT_MENU, '3_save'], { commandId: CommonCommands.SAVE_AS.id, label: '另存为…', order: '1' });
+        menus.registerMenuAction([...NODU_PROJECT_MENU, '3_save'], { commandId: ARDUINO_COMMANDS.exportSimulation, label: '导出仿真包…', order: '2', when: 'nodu.arduinoProject' });
+        menus.registerMenuAction([...NODU_MORE_MENU, 'esp', '1_export'], { commandId: ARDUINO_COMMANDS.exportSimulation, label: '导出仿真包…', order: '0', when: 'nodu.arduinoProject' });
         // 运行 ▾: the three distinct "where does this code go" semantics.
         menus.registerMenuAction([...NODU_RUN_MENU, '1_run'], { commandId: 'scope.run-current', label: '运行（开发板内存，不保存）', order: '0' });
         menus.registerMenuAction([...NODU_RUN_MENU, '2_board'], { commandId: 'scope.save-current-to-board', label: '保存到开发板…', order: '0' });

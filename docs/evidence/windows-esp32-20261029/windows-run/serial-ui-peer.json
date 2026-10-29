@@ -1,0 +1,20 @@
+{
+  "started": "2026-10-29T07:54:31.414Z",
+  "port": "CNCB0",
+  "received": [
+    {
+      "base64": "Tm9kdSBVSSDkuK3mloflm57njq8gT0sNCg==",
+      "utf8": "Nodu UI 中文回环 OK\r\n"
+    }
+  ],
+  "open": {
+    "ok": true,
+    "result": {
+      "open": true,
+      "port": "CNCB0",
+      "baud": 115200,
+      "state": "disconnected"
+    }
+  },
+  "finished": "2026-10-29T08:01:47.399Z"
+}

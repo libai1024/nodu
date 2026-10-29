@@ -1,0 +1,18 @@
+{
+  "desktop/native/crates/nodu-embedded/src/service.rs": {
+    "bytes": 30939,
+    "sha256": "25ffb59e40866913811eb2fe11f6a8b43dca9df41515eef6ac2479e70c43492a"
+  },
+  "desktop/native/target/x86_64-pc-windows-msvc/release/nodu-embedded.exe": {
+    "bytes": 3283968,
+    "sha256": "4dd7c53fa2cc3f4c20d3b1107b022dbb053671581b8ec83d095e8ee6bcdf2b1d"
+  },
+  "desktop/scope-extension/lib/node/nodu-arduino-server.js": {
+    "bytes": 39568,
+    "sha256": "19938e18affe52534a2ee099a06aadf5cbe44a5b12fb086aad92e33598c5860f"
+  },
+  "desktop/scope-extension/lib/node/nodu-arduino-libraries.js": {
+    "bytes": 26130,
+    "sha256": "e0a68bea0613147842a51c8c6526533eb2ecb1c5a12072856b02fa31f02b0285"
+  }
+}

@@ -1,0 +1,80 @@
+
+Arduino IDE 2.3.7
+Checking for frontend application configuration customizations. Module path: E:\Develop\Arduino IDE\resources\app\lib\backend\electron-main.js, destination 'package.json': E:\Develop\Arduino IDE\resources\app\package.json
+Setting 'theia.frontend.config.appVersion' application configuration value to: "2.3.7" (type of string)
+Setting 'theia.frontend.config.cliVersion' application configuration value to: "1.3.1" (type of string)
+Setting 'theia.frontend.config.buildDate' application configuration value to: "2025-12-17T16:05:25.389Z" (type of string)
+Frontend application configuration after modifications: {"applicationName":"Arduino IDE","defaultTheme":{"light":"arduino-theme","dark":"arduino-theme-dark"},"defaultIconTheme":"none","electron":{"windowOptions":{},"showWindowEarly":true,"splashScreenOptions":{},"uriScheme":"arduino-ide"},"defaultLocale":"","validatePreferencesSchema":false,"reloadOnReconnect":true,"uriScheme":"theia","preferences":{"window.title":"${rootName}${activeEditorShort}${appName}","files.autoSave":"afterDelay","editor.minimap.enabled":false,"editor.tabSize":2,"editor.scrollBeyondLastLine":false,"editor.quickSuggestions":{"other":false,"comments":false,"strings":false},"editor.maxTokenizationLineLength":500,"editor.bracketPairColorization.enabled":false,"breadcrumbs.enabled":false,"workbench.tree.renderIndentGuides":"none","explorer.compactFolders":false},"appVersion":"2.3.7","cliVersion":"1.3.1","buildDate":"2025-12-17T16:05:25.389Z"}
+Starting backend process. PID: 23340
+Showing main window early
+Configuration directory URI: 'file:///d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE'
+Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-29T07:22:58.302Z root INFO Backend u.initialize: 26.6 ms [Finished 0.968 s after backend start]
+2026-10-29T07:22:58.318Z root INFO Backend Object.initialize: 25.1 ms [Finished 0.968 s after backend start]
+2026-10-29T07:22:58.318Z root INFO Backend a.initialize: 1.3 ms [Finished 0.968 s after backend start]
+2026-10-29T07:22:58.318Z root INFO Backend a.initialize: 1.0 ms [Finished 0.968 s after backend start]
+2026-10-29T07:22:58.318Z root INFO Backend u.initialize: 1.8 ms [Finished 0.969 s after backend start]
+2026-10-29T07:22:58.320Z root INFO Backend l.initialize: 26.8 ms [Finished 0.970 s after backend start]
+2026-10-29T07:22:58.328Z root INFO configured all backend app contributions
+2026-10-29T07:22:58.328Z root INFO Backend l.onStart: 1.7 ms [Finished 0.996 s after backend start]
+2026-10-29T07:22:58.329Z root INFO Backend d.onStart: 0.2 ms [Finished 0.996 s after backend start]
+2026-10-29T07:22:58.330Z root INFO Backend a.onStart: 0.4 ms [Finished 0.996 s after backend start]
+2026-10-29T07:22:58.330Z config INFO >>> Initializing CLI configuration...
+2026-10-29T07:22:58.330Z root INFO Backend x.onStart: 0.4 ms [Finished 0.997 s after backend start]
+2026-10-29T07:22:58.330Z config INFO Loading CLI configuration from d:\nodu-esp32-20261029\ide-profile\.arduinoIDE\arduino-cli.yaml...
+2026-10-29T07:22:58.330Z daemon INFO Starting daemon from E:\Develop\Arduino IDE\resources\app\lib\backend\resources\arduino-cli.exe...
+2026-10-29T07:22:58.330Z root INFO Backend w.onStart: 0.4 ms [Finished 0.998 s after backend start]
+2026-10-29T07:22:58.330Z discovery-log INFO start
+2026-10-29T07:22:58.330Z discovery-log INFO start new deferred
+2026-10-29T07:22:58.330Z root INFO Backend v.onStart: 0.2 ms [Finished 0.998 s after backend start]
+2026-10-29T07:22:58.330Z root INFO Backend a.onStart: 0.1 ms [Finished 0.998 s after backend start]
+2026-10-29T07:22:58.336Z root INFO Theia app listening on http://127.0.0.1:62350.
+2026-10-29T07:22:58.336Z root INFO Finished starting backend application: 5.9 ms [Finished 1.004 s after backend start]
+2026-10-29T07:22:58.351Z config INFO Loaded CLI configuration: {"directories":{"downloads":"D:\\nodu-esp32-20261029\\ide-downloads","data":"D:\\nodu-esp32-20261029\\ide-data","user":"D:\\nodu-esp32-20261029\\ide-sketchbook"},"board_manager":{"additional_urls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"]},"build_cache":{"path":"D:\\nodu-esp32-20261029\\ide-cache"}}
+2026-10-29T07:22:58.351Z config INFO 'directories.data' and 'directories.user' are set in the CLI configuration model.
+2026-10-29T07:22:58.351Z config INFO Loaded the CLI configuration.
+2026-10-29T07:22:58.352Z config INFO Mapped the CLI configuration: {"dataDirUri":"file:///d%3A/nodu-esp32-20261029/ide-data","sketchDirUri":"file:///d%3A/nodu-esp32-20261029/ide-sketchbook","additionalUrls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"],"network":"none","locale":"en"}
+2026-10-29T07:22:58.353Z config INFO Validating the CLI configuration...
+2026-10-29T07:22:58.353Z config INFO The CLI config is valid.
+2026-10-29T07:22:58.353Z config INFO <<< Initialized the CLI configuration.
+2026-10-29T07:22:58.496Z root INFO Resolve plugins list: 164.3 ms [Finished 1.163 s after backend start]
+2026-10-29T07:22:58.815Z daemon INFO time="2026-10-29T15:22:58+08:00" level=info msg="arduino-cli version 1.3.1"
+2026-10-29T07:22:58.834Z daemon INFO time="2026-10-29T15:22:58+08:00" level=info msg="Using config file: d:\\nodu-esp32-20261029\\ide-profile\\.arduinoIDE\\arduino-cli.yaml"
+2026-10-29T07:22:58.834Z daemon INFO time="2026-10-29T15:22:58+08:00" level=info msg="Executing `arduino-cli daemon`"
+2026-10-29T07:22:58.858Z daemon INFO Daemon is now listening on 127.0.0.1:62352
+{"IP":"127.0.0.1","Port":"62352"}
+2026-10-29T07:22:58.858Z daemon INFO Daemon is running.
+2026-10-29T07:22:58.899Z daemon INFO time="2026-10-29T15:22:58+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+2026-10-29T07:22:59.091Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Loading hardware from: D:\\nodu-esp32-20261029\\ide-data\\packages"
+2026-10-29T07:22:59.092Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Loading libraries index file" index="D:\\nodu-esp32-20261029\\ide-data\\library_index.json"
+2026-10-29T07:22:59.106Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+time="2026-10-29T15:22:59+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+time="2026-10-29T15:22:59+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+2026-10-29T07:22:59.107Z root INFO core-client-provider [library-index] Downloading index: library_index.tar.bz2
+
+2026-10-29T07:22:59.113Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Updating index" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+2026-10-29T07:22:59.114Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+2026-10-29T07:22:59.114Z root INFO core-client-provider [platform-index] Downloading index: package_index.tar.bz2
+
+2026-10-29T07:22:59.207Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Updating index" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+2026-10-29T07:22:59.208Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Starting download" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+2026-10-29T07:22:59.221Z root INFO core-client-provider [platform-index] Downloading index: package_esp32_index.json
+
+2026-10-29T07:22:59.237Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+2026-10-29T07:22:59.325Z root INFO Deploy plugins list: 994.2 ms [Finished 1.993 s after backend start]
+2026-10-29T07:22:59.325Z daemon INFO time="2026-10-29T15:22:59+08:00" level=info msg="Loading hardware from: D:\\nodu-esp32-20261029\\ide-data\\packages"
+time="2026-10-29T15:22:59+08:00" level=info msg="Loading libraries index file" index="D:\\nodu-esp32-20261029\\ide-data\\library_index.json"
+time="2026-10-29T15:22:59+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+time="2026-10-29T15:22:59+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+2026-10-29T07:22:59.731Z root INFO creating connection for 1
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/ide-updater'.
+2026-10-29T07:23:00.865Z root INFO Start frontend contributions: 363.4 ms [Finished 2.386 s after frontend start]
+2026-10-29T07:23:00.866Z root INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-29T07:23:00.874Z root INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-29T07:23:00.875Z root INFO >>> Restoring the layout state...
+2026-10-29T07:23:00.915Z root INFO [227d2f9e-deaf-4b44-afe2-0861d72c14be] Waiting for backend deployment: 64.3 ms [Finished 2.446 s after frontend start]
+2026-10-29T07:23:01.475Z root INFO [hosted-plugin: 17112] PLUGIN_HOST(17112) starting instance
+[Object: null prototype] {}
+2026-10-29T07:23:02.113Z root INFO [227d2f9e-deaf-4b44-afe2-0861d72c14be] Sync of 23 plugins: 1201.1 ms [Finished 3.647 s after frontend start]
+2026-10-29T07:26:59.780Z root INFO NODU_UI_PROBE

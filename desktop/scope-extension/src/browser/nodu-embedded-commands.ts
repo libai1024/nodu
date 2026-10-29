@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 /** Command ids of the STM32 C workbench (kept free of imports so the toolbar can use them). */
 export const C_COMMANDS = {
+    generateKeil: 'nodu.c.keil-generate',
+    updateKeil: 'nodu.c.keil-update',
+    openKeil: 'nodu.c.keil-open',
     newModule: 'nodu.c.new-module',
     projectSettings: 'nodu.c.project-settings',
     toolkitInfo: 'nodu.c.toolkit-info',

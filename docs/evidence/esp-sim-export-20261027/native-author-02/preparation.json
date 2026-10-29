@@ -1,0 +1,10 @@
+{
+  "scope": "Prepared separate current bundle and S3 project; not yet launched",
+  "app": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/Nodu Simulation Export Check.app",
+  "application": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron-app",
+  "profile": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/profile",
+  "arduinoHome": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/home",
+  "project": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/projects/nodu_ui_export_s3",
+  "port": 64862,
+  "bundleIdentity": "dev.nodu.arduino-electron-check-20261027"
+}

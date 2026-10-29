@@ -1,0 +1,94 @@
+
+DevTools listening on ws://127.0.0.1:19229/devtools/browser/ed60c225-160d-40f6-80a6-d8e099173819
+Using browser-only version of superagent in non-browser environment
+2026-10-29T07:32:45.598Z root WARN The local plugin referenced by local-dir:/d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE/plugins does not exist.
+2026-10-29T07:32:45.598Z root WARN The local plugin referenced by local-dir:/d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE/deployedPlugins does not exist.
+2026-10-29T07:32:45.598Z root WARN The local plugin referenced by local-dir:D:\nodu-esp32-20261029\ide-profile\.arduinoIDE\plugins does not exist.
+2026-10-29T07:32:47.863Z root WARN Frontend a.configure took longer than the expected maximum 100 milliseconds: 130.6 ms [Finished 2.251 s after frontend start]
+2026-10-29T07:32:47.900Z root WARN A command editor.action.toggleStickyScroll is already registered.
+2026-10-29T07:32:49.318Z root WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-10-29T07:32:49.318Z root WARN a registered grammar configuration for 'cpp' language is overridden
+2026-10-29T07:32:49.735Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.linux as cortex-debug.armToolchainPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.osx as cortex-debug.armToolchainPath is null
+Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.windows as cortex-debug.armToolchainPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.linux as cortex-debug.JLinkGDBServerPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.osx as cortex-debug.JLinkGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.windows as cortex-debug.JLinkGDBServerPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.openocdPath.linux as cortex-debug.openocdPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.openocdPath.osx as cortex-debug.openocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.openocdPath.windows as cortex-debug.openocdPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.linux as cortex-debug.pyocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.osx as cortex-debug.pyocdPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.windows as cortex-debug.pyocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.linux as cortex-debug.PEGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.osx as cortex-debug.PEGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.windows as cortex-debug.PEGDBServerPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.stutilPath.linux as cortex-debug.stutilPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stutilPath.osx as cortex-debug.stutilPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stutilPath.windows as cortex-debug.stutilPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.linux as cortex-debug.stlinkPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.osx as cortex-debug.stlinkPath is null
+2026-10-29T07:32:49.736Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.windows as cortex-debug.stlinkPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.linux as cortex-debug.stm32cubeprogrammer is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.osx as cortex-debug.stm32cubeprogrammer is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.windows as cortex-debug.stm32cubeprogrammer is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.linux as cortex-debug.armToolchainPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.osx as cortex-debug.armToolchainPath is null
+Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.windows as cortex-debug.armToolchainPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.linux as cortex-debug.JLinkGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.osx as cortex-debug.JLinkGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.windows as cortex-debug.JLinkGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.openocdPath.linux as cortex-debug.openocdPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.openocdPath.osx as cortex-debug.openocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.openocdPath.windows as cortex-debug.openocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.linux as cortex-debug.pyocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.osx as cortex-debug.pyocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.windows as cortex-debug.pyocdPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.linux as cortex-debug.PEGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.osx as cortex-debug.PEGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.windows as cortex-debug.PEGDBServerPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.stutilPath.linux as cortex-debug.stutilPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.stutilPath.osx as cortex-debug.stutilPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stutilPath.windows as cortex-debug.stutilPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.linux as cortex-debug.stlinkPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.osx as cortex-debug.stlinkPath is null
+2026-10-29T07:32:49.743Z root ERROR [hosted-plugin: 9848] Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.windows as cortex-debug.stlinkPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.linux as cortex-debug.stm32cubeprogrammer is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.osx as cortex-debug.stm32cubeprogrammer is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.windows as cortex-debug.stm32cubeprogrammer is null
+[24160:1029/153250.484:ERROR:cert_verify_proc_builtin.cc(1052)] CertVerifyProcBuiltin for downloads.arduino.cc failed:
+----- Certificate i=0 (O=redirect-cnzz) -----
+ERROR: No matching issuer found
+
+
+Error: Error: net::ERR_CERT_AUTHORITY_INVALID
+    at SimpleURLLoaderWrapper.<anonymous> (node:electron/js2c/browser_init:2:114352)
+    at SimpleURLLoaderWrapper.emit (node:events:519:28)
+2026-10-29T07:32:50.541Z root WARN Linked preference "workbench.colorCustomizations" not found.
+2026-10-29T07:32:50.947Z fwuploader ERROR Error: Process exited with exit code: 1
+    at ChildProcess.<anonymous> (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:1104301)
+    at ChildProcess.emit (node:events:519:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+2026-10-29T07:32:50.948Z fwuploader ERROR Error: Process exited with exit code: 1
+    at ChildProcess.<anonymous> (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:1104301)
+    at ChildProcess.emit (node:events:519:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+2026-10-29T07:32:50.950Z root ERROR ---- !!!SLOW!!! DURATION: search took 333.052 ms. Args: [{"query":"Arduino_BuiltIn"}] ----
+2026-10-29T07:32:50.953Z root ERROR Failed to update platform, library indexes. Error: 13 INTERNAL: Error downloading index 'https://downloads.arduino.cc/libraries/library_index.tar.bz2': Get "https://downloads.arduino.cc/libraries/library_index.tar.bz2": tls: failed to verify certificate: x509: certificate signed by unknown authority
+    at t.callErrorFromStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:3088066)
+    at Object.onReceiveStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6672872)
+    at Object.onReceiveStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:2571272)
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:4304750
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at s.makeServerStreamRequest (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6672639)
+    at s.updateLibrariesIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:3087159)
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278159
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278352
+    at new Promise (<anonymous>)
+    at y.doUpdateIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278331)
+    at y.updateLibraryIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278131)
+    at y.updateIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6277405)
+    at D.updateIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6280056)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2026-10-29T07:32:51.379Z root ERROR ---- !!!SLOW!!! DURATION: search took 838.451 ms. Args: [{"type":"Updatable"}] ----

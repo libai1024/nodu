@@ -1,0 +1,12 @@
+[
+  {
+    "file": "startup_stm32f103xb.s",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f1/c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22/Source/Templates/arm/startup_stm32f103xb.s",
+    "sha256": "7828f544a385ccb4a51434528255383602b9a872fd193b250ea8e02218243002"
+  },
+  {
+    "file": "LICENSE.md",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f1/c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22/License.md",
+    "sha256": "b645e89bbfb6accf914cf7adca011712bf90055391fdd55f2af6439d98aa36d4"
+  }
+]

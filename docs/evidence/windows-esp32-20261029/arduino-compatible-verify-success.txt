@@ -1,0 +1,31 @@
+ESP32C3 Dev Module
+nodu_esp32c3.ino
+nodu.json
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+#include <Arduino.h>
+#include <WiFi.h>
+#include <ArduinoJson.h>
+#include <ArduinoMqttClient.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_I2CDevice.h>
+#include <Adafruit_NeoPixel.h>
+#include <DHT.h>
+#include <Adafruit_Sensor.h>
+Output
+Sketch uses 493790 bytes (37%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes.
+Ln 1, Col 1
+ESP32C3 Dev Module
+[not connected]
+6
+Downloading index: package_esp32_index.json

@@ -1,0 +1,10 @@
+﻿{
+    "physicalHardwareAccessed":  false,
+    "root":  "D:\\nodu-esp32-20261029",
+    "testTasksRemoved":  true,
+    "closedTestAppPids":  [
+                              12632,
+                              6240
+                          ],
+    "finished":  "2026-10-29T16:01:50.2882699+08:00"
+}

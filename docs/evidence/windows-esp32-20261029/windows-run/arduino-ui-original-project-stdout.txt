@@ -1,0 +1,252 @@
+
+Arduino IDE 2.3.7
+Checking for frontend application configuration customizations. Module path: E:\Develop\Arduino IDE\resources\app\lib\backend\electron-main.js, destination 'package.json': E:\Develop\Arduino IDE\resources\app\package.json
+Setting 'theia.frontend.config.appVersion' application configuration value to: "2.3.7" (type of string)
+Setting 'theia.frontend.config.cliVersion' application configuration value to: "1.3.1" (type of string)
+Setting 'theia.frontend.config.buildDate' application configuration value to: "2025-12-17T16:05:25.389Z" (type of string)
+Frontend application configuration after modifications: {"applicationName":"Arduino IDE","defaultTheme":{"light":"arduino-theme","dark":"arduino-theme-dark"},"defaultIconTheme":"none","electron":{"windowOptions":{},"showWindowEarly":true,"splashScreenOptions":{},"uriScheme":"arduino-ide"},"defaultLocale":"","validatePreferencesSchema":false,"reloadOnReconnect":true,"uriScheme":"theia","preferences":{"window.title":"${rootName}${activeEditorShort}${appName}","files.autoSave":"afterDelay","editor.minimap.enabled":false,"editor.tabSize":2,"editor.scrollBeyondLastLine":false,"editor.quickSuggestions":{"other":false,"comments":false,"strings":false},"editor.maxTokenizationLineLength":500,"editor.bracketPairColorization.enabled":false,"breadcrumbs.enabled":false,"workbench.tree.renderIndentGuides":"none","explorer.compactFolders":false},"appVersion":"2.3.7","cliVersion":"1.3.1","buildDate":"2025-12-17T16:05:25.389Z"}
+Starting backend process. PID: 19448
+Showing main window early
+Configuration directory URI: 'file:///d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE'
+Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-29T07:32:45.566Z root INFO Backend u.initialize: 31.7 ms [Finished 0.955 s after backend start]
+2026-10-29T07:32:45.568Z root INFO Backend Object.initialize: 29.9 ms [Finished 0.955 s after backend start]
+2026-10-29T07:32:45.568Z root INFO Backend a.initialize: 1.5 ms [Finished 0.955 s after backend start]
+2026-10-29T07:32:45.568Z root INFO Backend a.initialize: 1.2 ms [Finished 0.955 s after backend start]
+2026-10-29T07:32:45.568Z root INFO Backend u.initialize: 1.6 ms [Finished 0.955 s after backend start]
+2026-10-29T07:32:45.571Z root INFO Backend l.initialize: 30.9 ms [Finished 0.956 s after backend start]
+2026-10-29T07:32:45.578Z root INFO configured all backend app contributions
+2026-10-29T07:32:45.578Z root INFO Backend l.onStart: 1.4 ms [Finished 0.968 s after backend start]
+2026-10-29T07:32:45.579Z root INFO Backend d.onStart: 0.1 ms [Finished 0.968 s after backend start]
+2026-10-29T07:32:45.580Z root INFO Backend a.onStart: 0.3 ms [Finished 0.968 s after backend start]
+2026-10-29T07:32:45.580Z config INFO >>> Initializing CLI configuration...
+2026-10-29T07:32:45.580Z root INFO Backend x.onStart: 0.3 ms [Finished 0.969 s after backend start]
+2026-10-29T07:32:45.580Z config INFO Loading CLI configuration from d:\nodu-esp32-20261029\ide-profile\.arduinoIDE\arduino-cli.yaml...
+2026-10-29T07:32:45.580Z daemon INFO Starting daemon from E:\Develop\Arduino IDE\resources\app\lib\backend\resources\arduino-cli.exe...
+2026-10-29T07:32:45.580Z root INFO Backend w.onStart: 0.5 ms [Finished 0.969 s after backend start]
+2026-10-29T07:32:45.580Z discovery-log INFO start
+2026-10-29T07:32:45.580Z discovery-log INFO start new deferred
+2026-10-29T07:32:45.580Z root INFO Backend v.onStart: 0.2 ms [Finished 0.970 s after backend start]
+2026-10-29T07:32:45.580Z root INFO Backend a.onStart: 0.1 ms [Finished 0.970 s after backend start]
+2026-10-29T07:32:45.597Z root INFO Theia app listening on http://127.0.0.1:62796.
+2026-10-29T07:32:45.597Z root INFO Finished starting backend application: 16.9 ms [Finished 0.987 s after backend start]
+2026-10-29T07:32:45.601Z config INFO Loaded CLI configuration: {"directories":{"downloads":"D:\\nodu-esp32-20261029\\ide-downloads","data":"D:\\nodu-esp32-20261029\\ide-data","user":"D:\\nodu-esp32-20261029\\ide-sketchbook"},"board_manager":{"additional_urls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"]},"build_cache":{"path":"D:\\nodu-esp32-20261029\\ide-cache"}}
+2026-10-29T07:32:45.601Z config INFO 'directories.data' and 'directories.user' are set in the CLI configuration model.
+2026-10-29T07:32:45.601Z config INFO Loaded the CLI configuration.
+2026-10-29T07:32:45.601Z config INFO Mapped the CLI configuration: {"dataDirUri":"file:///d%3A/nodu-esp32-20261029/ide-data","sketchDirUri":"file:///d%3A/nodu-esp32-20261029/ide-sketchbook","additionalUrls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"],"network":"none","locale":"en"}
+2026-10-29T07:32:45.601Z config INFO Validating the CLI configuration...
+2026-10-29T07:32:45.602Z config INFO The CLI config is valid.
+2026-10-29T07:32:45.602Z config INFO <<< Initialized the CLI configuration.
+2026-10-29T07:32:45.636Z root INFO Resolve plugins list: 54.3 ms [Finished 1.025 s after backend start]
+2026-10-29T07:32:45.888Z daemon INFO time="2026-10-29T15:32:45+08:00" level=info msg="arduino-cli version 1.3.1"
+2026-10-29T07:32:45.897Z daemon INFO time="2026-10-29T15:32:45+08:00" level=info msg="Using config file: d:\\nodu-esp32-20261029\\ide-profile\\.arduinoIDE\\arduino-cli.yaml"
+time="2026-10-29T15:32:45+08:00" level=info msg="Executing `arduino-cli daemon`"
+2026-10-29T07:32:45.921Z daemon INFO Daemon is now listening on 127.0.0.1:62798
+{"IP":"127.0.0.1","Port":"62798"}
+2026-10-29T07:32:45.921Z daemon INFO Daemon is running.
+2026-10-29T07:32:46.002Z daemon INFO time="2026-10-29T15:32:45+08:00" level=info msg="Checking signature" index="D:\\nodu-esp32-20261029\\ide-data\\package_index.json" signatureFile="D:\\nodu-esp32-20261029\\ide-data\\package_index.json.sig" trusted=true
+2026-10-29T07:32:46.006Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Missing signature file" index="D:\\nodu-esp32-20261029\\ide-data\\package_esp32_index.json"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading hardware from: D:\\nodu-esp32-20261029\\ide-data\\packages"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading package arduino from: D:\\nodu-esp32-20261029\\ide-data\\packages\\arduino"
+time="2026-10-29T15:32:46+08:00" level=info msg="Checking existence of 'tools' path: D:\\nodu-esp32-20261029\\ide-data\\packages\\arduino\\tools"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading tools from dir: D:\\nodu-esp32-20261029\\ide-data\\packages\\arduino\\tools"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading package builtin from: D:\\nodu-esp32-20261029\\ide-data\\packages\\builtin"
+time="2026-10-29T15:32:46+08:00" level=info msg="Checking existence of 'tools' path: D:\\nodu-esp32-20261029\\ide-data\\packages\\builtin\\tools"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading tools from dir: D:\\nodu-esp32-20261029\\ide-data\\packages\\builtin\\tools"
+2026-10-29T07:32:46.007Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:32:46.007Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Loading package esp32 from: D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware"
+2026-10-29T07:32:46.010Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Missing signature file" index="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\installed.json"
+2026-10-29T07:32:46.270Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded platform" platform="esp32:esp32@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Checking existence of 'tools' path: D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\tools"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading tools from dir: D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\tools"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:32:46+08:00" level=info msg="Loaded tool" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+2026-10-29T07:32:46.318Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\libraries" isSingleLibrary=false location=platform
+time="2026-10-29T15:32:46+08:00" level=info msg="Loading libraries index file" index="D:\\nodu-esp32-20261029\\ide-data\\library_index.json"
+2026-10-29T07:32:46.373Z root INFO Deploy plugins list: 792.4 ms [Finished 1.763 s after backend start]
+2026-10-29T07:32:46.563Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+2026-10-29T07:32:46.563Z daemon INFO time="2026-10-29T15:32:46+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+2026-10-29T07:32:46.873Z root INFO creating connection for 1
+2026-10-29T07:32:47.328Z discovery-log INFO start resolved watching
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/ide-updater'.
+2026-10-29T07:32:48.026Z root INFO Start frontend contributions: 361.9 ms [Finished 2.402 s after frontend start]
+2026-10-29T07:32:48.026Z root INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-29T07:32:48.035Z root INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-29T07:32:48.035Z root INFO >>> Restoring the layout state...
+2026-10-29T07:32:48.072Z root INFO [4635875e-7978-418b-b310-7a016626fa7d] Waiting for backend deployment: 59.9 ms [Finished 2.457 s after frontend start]
+2026-10-29T07:32:48.638Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848) starting instance
+[Object: null prototype] {}
+2026-10-29T07:32:49.196Z root INFO [4635875e-7978-418b-b310-7a016626fa7d] Sync of 23 plugins: 1128.1 ms [Finished 3.585 s after frontend start]
+2026-10-29T07:32:49.212Z root INFO <<< Nothing to restore.
+2026-10-29T07:32:49.276Z root INFO Initialize the workbench layout: 1199.8 ms [Finished 3.624 s after frontend start]
+2026-10-29T07:32:49.278Z root INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-29T07:32:49.279Z root INFO [4635875e-7978-418b-b310-7a016626fa7d] Loading plugin contributions
+2026-10-29T07:32:49.279Z root INFO [4635875e-7978-418b-b310-7a016626fa7d] Load contributions of 23 plugins: 34.4 ms [Finished 3.664 s after frontend start]
+2026-10-29T07:32:49.784Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): PluginManagerExtImpl/init()
+2026-10-29T07:32:49.787Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-arduino-api@0.1.2 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.895Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(json-language-features@1.88.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.899Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(cortex-debug@1.5.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.899Z root INFO [hosted-plugin: 9848] Debugger contribution has been registered: cortex-debug
+2026-10-29T07:32:49.901Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-arduino-tools@0.1.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.905Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(cpp@1.88.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.906Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(json@1.88.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.908Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-bg@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.909Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-cs@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.910Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-de@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.911Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-es@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.912Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-fr@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.913Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-hu@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.913Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-it@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.914Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-ja@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.915Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-ko@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.915Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-nl@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.916Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-pl@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.917Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-pt-BR@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.917Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-ru@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.918Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-tr@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.936Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-uk@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.936Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-zh-hans@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.952Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): initializing(vscode-language-pack-zh-hant@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:32:49.960Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\vscode-builtin-json-language-features\extension\client\dist\node\jsonClientMain)
+2026-10-29T07:32:50.062Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\vscode-arduino-api\extension\dist\extension.js)
+2026-10-29T07:32:50.066Z root INFO [hosted-plugin: 9848] calling activation function on Arduino IDE API for VS Code extensions
+2026-10-29T07:32:50.080Z root INFO [4635875e-7978-418b-b310-7a016626fa7d] Starting plugins.
+2026-10-29T07:32:50.101Z root INFO [hosted-plugin: 9848] PLUGIN_HOST(9848): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\cortex-debug\extension\dist\extension.js)
+2026-10-29T07:32:50.148Z root INFO [hosted-plugin: 9848] Debug configuration provider has been registered: cortex-debug, trigger: 1
+2026-10-29T07:32:50.148Z root INFO [hosted-plugin: 9848] calling activation function on Cortex-Debug
+2026-10-29T07:32:50.153Z root INFO [hosted-plugin: 9848] GDB server console created
+2026-10-29T07:32:50.285Z root INFO Frontend application start: 2429.4 ms [Finished 5.675 s after backend start]
+Checking for update
+Generated new staging user ID: e8ad784f-39d7-55d7-816e-a4480f18288a
+2026-10-29T07:32:50.538Z root INFO Replace loading indicator with ready workbench UI (animation): 827.8 ms [Finished 4.496 s after frontend start]
+2026-10-29T07:32:50.541Z root INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-29T07:32:50.542Z root INFO [4635875e-7978-418b-b310-7a016626fa7d] Start of 23 plugins: 960.7 ms [Finished 4.708 s after frontend start]
+2026-10-29T07:32:50.543Z root INFO [hosted-plugin: 9848] calling activation function on JSON Language Features (built-in)
+2026-10-29T07:32:50.605Z daemon INFO time="2026-10-29T15:32:50+08:00" level=info msg="Updating index" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+time="2026-10-29T15:32:50+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+time="2026-10-29T15:32:50+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+2026-10-29T07:32:50.614Z root INFO core-client-provider [library-index] Downloading index: library_index.tar.bz2
+
+2026-10-29T07:32:50.614Z root INFO core-client-provider [platform-index] Downloading index: package_index.tar.bz2
+
+2026-10-29T07:32:50.948Z daemon INFO time="2026-10-29T15:32:50+08:00" level=info msg="Updating index" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+time="2026-10-29T15:32:50+08:00" level=info msg="Starting download" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+2026-10-29T07:32:50.952Z root INFO core-client-provider [platform-index] Downloading index: package_esp32_index.json
+
+2026-10-29T07:32:51.151Z root INFO >>> Starting boards package installation... {
+  id: 'arduino:avr',
+  name: 'Arduino AVR Boards',
+  summary: 'Boards included in this package:',
+  description: 'Arduino Yún, Arduino UNO, Arduino UNO Mini, Arduino UNO WiFi, Arduino Diecimila, Arduino Nano, Arduino Mega, Arduino Mega ADK, Arduino Leonardo, Arduino Leonardo Ethernet, Arduino Micro, Arduino Esplora, Arduino Mini, Arduino Ethernet, Arduino Fio, Arduino BT, Arduino LilyPad USB, Arduino LilyPad, Arduino Pro, Arduino ATMegaNG, Arduino Robot Control, Arduino Robot Motor, Arduino Gemma, Adafruit Circuit Playground, Arduino Yún Mini, Arduino Industrial 101, Linino One',
+  boards: [
+    { name: 'Arduino Yún', fqbn: '' },
+    { name: 'Arduino UNO', fqbn: '' },
+    { name: 'Arduino UNO Mini', fqbn: '' },
+    { name: 'Arduino UNO WiFi', fqbn: '' },
+    { name: 'Arduino Diecimila', fqbn: '' },
+    { name: 'Arduino Nano', fqbn: '' },
+    { name: 'Arduino Mega', fqbn: '' },
+    { name: 'Arduino Mega ADK', fqbn: '' },
+    { name: 'Arduino Leonardo', fqbn: '' },
+    { name: 'Arduino Leonardo Ethernet', fqbn: '' },
+    { name: 'Arduino Micro', fqbn: '' },
+    { name: 'Arduino Esplora', fqbn: '' },
+    { name: 'Arduino Mini', fqbn: '' },
+    { name: 'Arduino Ethernet', fqbn: '' },
+    { name: 'Arduino Fio', fqbn: '' },
+    { name: 'Arduino BT', fqbn: '' },
+    { name: 'Arduino LilyPad USB', fqbn: '' },
+    { name: 'Arduino LilyPad', fqbn: '' },
+    { name: 'Arduino Pro', fqbn: '' },
+    { name: 'Arduino ATMegaNG', fqbn: '' },
+    { name: 'Arduino Robot Control', fqbn: '' },
+    { name: 'Arduino Robot Motor', fqbn: '' },
+    { name: 'Arduino Gemma', fqbn: '' },
+    { name: 'Adafruit Circuit Playground', fqbn: '' },
+    { name: 'Arduino Yún Mini', fqbn: '' },
+    { name: 'Arduino Industrial 101', fqbn: '' },
+    { name: 'Linino One', fqbn: '' }
+  ],
+  types: [ 'Arduino' ],
+  moreInfoLink: 'https://www.arduino.cc/',
+  author: 'Arduino',
+  deprecated: false,
+  availableVersions: [
+    '1.8.8',  '1.8.7',  '1.8.6',
+    '1.8.5',  '1.8.4',  '1.8.3',
+    '1.8.2',  '1.8.1',  '1.6.23',
+    '1.6.22', '1.6.21', '1.6.20',
+    '1.6.19', '1.6.18', '1.6.17',
+    '1.6.16', '1.6.15', '1.6.14',
+    '1.6.13', '1.6.12', '1.6.11',
+    '1.6.10', '1.6.9',  '1.6.8',
+    '1.6.7',  '1.6.6',  '1.6.5',
+    '1.6.4',  '1.6.3',  '1.6.2'
+  ],
+  index: 0
+}
+2026-10-29T07:32:51.153Z discovery-log INFO stop
+2026-10-29T07:32:51.153Z discovery-log INFO >>> Stopping boards watcher...
+2026-10-29T07:32:51.153Z discovery-log INFO Canceling boards watcher...
+2026-10-29T07:32:51.153Z discovery-log INFO disposing requesting cancel
+2026-10-29T07:32:51.153Z discovery-log INFO disposing canceled
+2026-10-29T07:32:51.154Z discovery-log INFO error received
+2026-10-29T07:32:51.154Z discovery-log INFO cancel error received!
+2026-10-29T07:32:51.154Z discovery-log INFO stop received event: either end or cancel
+2026-10-29T07:32:51.154Z discovery-log INFO stop stopped
+2026-10-29T07:32:51.154Z discovery-log INFO received end
+2026-10-29T07:32:51.158Z daemon INFO time="2026-10-29T15:32:51+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/tools/arduinoOTA-1.3.0-windows_386.zip"
+2026-10-29T07:32:51.382Z discovery-log INFO start
+2026-10-29T07:32:51.382Z discovery-log INFO start new deferred
+2026-10-29T07:32:51.382Z discovery-log INFO start resolved watching
+2026-10-29T07:32:51.387Z root INFO >>> Starting library package installation... {
+  name: 'Arduino_BuiltIn',
+  exampleUris: [],
+  location: 0,
+  installedVersion: undefined,
+  author: 'Arduino',
+  availableVersions: [ '1.0.0' ],
+  includes: [],
+  description: 'The sole purpose of this library is to install the standard Arduino libraries which are typically included with the Arduino IDE.',
+  moreInfoLink: 'https://github.com/arduino-libraries/Arduino_BuiltIn',
+  summary: 'Shell Arduino library to provide the standard built-in libraries',
+  category: 'Other',
+  types: [ 'Arduino' ],
+  index: 0
+}
+2026-10-29T07:32:51.387Z discovery-log INFO stop
+2026-10-29T07:32:51.387Z discovery-log INFO >>> Stopping boards watcher...
+2026-10-29T07:32:51.387Z discovery-log INFO Canceling boards watcher...
+2026-10-29T07:32:51.387Z discovery-log INFO disposing requesting cancel
+2026-10-29T07:32:51.387Z discovery-log INFO disposing canceled
+2026-10-29T07:32:51.388Z discovery-log INFO error received
+2026-10-29T07:32:51.388Z discovery-log INFO cancel error received!
+2026-10-29T07:32:51.388Z discovery-log INFO stop received event: either end or cancel
+2026-10-29T07:32:51.388Z discovery-log INFO stop stopped
+2026-10-29T07:32:51.388Z discovery-log INFO received end
+2026-10-29T07:32:57.392Z daemon INFO time="2026-10-29T15:32:57+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/github.com/arduino-libraries/Stepper-1.1.3.zip?query=depends"
+2026-10-29T07:32:57.488Z discovery-log INFO start
+2026-10-29T07:32:57.488Z discovery-log INFO start new deferred
+2026-10-29T07:32:57.488Z discovery-log INFO start resolved watching

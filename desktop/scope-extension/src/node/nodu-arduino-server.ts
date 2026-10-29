@@ -4,11 +4,13 @@ import { ChildProcess, spawn } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, promises as fs } from 'node:fs';
 import { homedir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, isAbsolute, relative, sep } from 'node:path';
 import { createRequire } from 'node:module';
 import { StringDecoder } from 'node:string_decoder';
 import { ArduinoBuildRequest, ArduinoBuildResult, ArduinoClient, NoduArduinoService, ArduinoProjectInfo, ArduinoBoard, ArduinoBoardOption,
-    ArduinoConfigureRequest, ArduinoPort, ArduinoUploadRequest, ArduinoUploadResult, ArduinoPhase } from '../common/nodu-arduino-protocol';
+    ArduinoConfigureRequest, ArduinoPort, ArduinoUploadRequest, ArduinoUploadResult, ArduinoPhase,
+    ArduinoSimulationExportRequest, ArduinoSimulationExportResult } from '../common/nodu-arduino-protocol';
+import { arduinoSimulationConfigurationError } from '../common/nodu-arduino-simulation-profiles';
 import { ArduinoLibraryChange, ArduinoLibraryChangeResult, ArduinoLibraryQuery, ArduinoLibraryList } from '../common/nodu-arduino-libraries-protocol';
 import { ArduinoLibraryContext, listArduinoLibraries, changeArduinoLibrary, prepareBundledArduinoLibraries } from './nodu-arduino-libraries';
 import { boardCatalog, catalogBoards, catalogOptions, configureArduinoProject, inspectArduinoProject } from './nodu-arduino-boards';
@@ -20,10 +22,13 @@ import { installArduinoCli } from './nodu-arduino-toolchain';
 import { arduinoInitializationErrors, arduinoOfflineRoot, seedArduinoOfflineBundle } from './nodu-arduino-offline';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
 import { arduinoDiagnostics, arduinoInputDigest, readArduinoProject } from './nodu-arduino-project';
+import { ArduinoSimulationSnapshot, captureArduinoSimulationInputs, createArduinoSimulationPackage,
+    discoverArduinoSimulationDependencies, publishArduinoSimulationPackage } from './nodu-arduino-simulation-package';
 
 interface Operation { id: string; cancelled: boolean; child?: ChildProcess; abort?: AbortController; finished?: Promise<void> }
 interface Environment { home: string; config: string; env: NodeJS.ProcessEnv }
-interface Built { path: string; directory: string; digest: string; artifacts: string; fqbn: string }
+interface Built { path: string; directory: string; digest: string; artifacts: string; fqbn: string;
+    simulation?: { snapshot: ArduinoSimulationSnapshot; log: Buffer }; simulationError?: string }
 
 /** Cancels abandoned work on disconnect and keeps request ownership within one window. */
 export function arduinoConnection(server: NoduArduinoServer, client: ArduinoClient): { service: NoduArduinoService; dispose(): void } {
@@ -44,7 +49,7 @@ export function arduinoConnection(server: NoduArduinoServer, client: ArduinoClie
         try { return await server.inspect(path, id, abort.signal); }
         finally { owned.delete(id); }
     };
-    for (const method of ['compile', 'prepare', 'upload', 'changeLibrary', 'listLibraries'] as const) {
+    for (const method of ['compile', 'prepare', 'upload', 'exportSimulation', 'changeLibrary', 'listLibraries'] as const) {
         (service as unknown as Record<string, unknown>)[method] = async (request: ArduinoBuildRequest) => {
             if (closed || !request || (request.operationId !== undefined && !/^[\w-]{1,100}$/.test(request.operationId))) {
                 throw new Error('编译连接已关闭或请求无效。');
@@ -261,6 +266,33 @@ export class NoduArduinoServer implements NoduArduinoService {
                 this.output(request, '准备 Arduino 环境', 'preparing');
                 await this.checkCli(operation, request, environment);
                 await prepareBundledArduinoLibraries(this.libraryContext(environment, operation, request));
+                let snapshot: ArduinoSimulationSnapshot | undefined;
+                let simulationError = arduinoSimulationConfigurationError(project);
+                if (request.simulation && simulationError) { throw new Error(simulationError); }
+                if (!simulationError) {
+                    try {
+                        if (request.simulation) {
+                            // The CLI must finish resolving/installing the real profile BEFORE we lock its contents.
+                            this.output(request, '准备仿真导出所需的项目依赖', 'preparing');
+                            const prepared = await this.run(operation, request, ['compile', '--profile', project.profile, '--build-path', buildPath,
+                                '--only-compilation-database', '--no-color', project.path], project.path, environment.config, environment.env, false);
+                            if (prepared.code !== 0 || arduinoInitializationErrors(prepared.output).length) {
+                                return { ok: false, cancelled: operation.cancelled, diagnostics: arduinoDiagnostics(prepared.output, project.path), error: operation.cancelled ? undefined : '仿真导出准备失败，请查看输出。' };
+                            }
+                        }
+                        this.output(request, '核对仿真构建输入与依赖内容', 'preparing');
+                        const dependencies = await discoverArduinoSimulationDependencies(environment.home, project.path, this.binary());
+                        snapshot = await captureArduinoSimulationInputs({ projectPath: project.path, dependencies,
+                            producerVersion: createRequire(__filename)('@scope/studio-extension/package.json').version,
+                            cliVersion: '1.5.1', coreVersion: '3.3.12', idfVersion: '5.5.5', signal: operation.abort!.signal });
+                        if (snapshot.inputDigest !== before) { throw new Error('准备期间工程已修改，请重新编译。'); }
+                    } catch (error) {
+                        if (operation.cancelled || request.simulation) { throw error; }
+                        snapshot = undefined;
+                        simulationError = error instanceof Error ? error.message : String(error);
+                        this.output(request, `仿真导出尚未就绪：${simulationError}`);
+                    }
+                }
                 this.output(request, `Arduino · ${project.fqbn}`, 'compiling');
                 const result = await this.run(operation, request, ['compile', '--profile', project.profile, '--build-path', buildPath, '--warnings', 'default', '--no-color', project.path], project.path, environment.config, environment.env, false);
                 if (operation.cancelled) { return { ok: false, cancelled: true, diagnostics: [] }; }
@@ -269,16 +301,49 @@ export class NoduArduinoServer implements NoduArduinoService {
                 let buildToken: string | undefined;
                 if (!failed && !stale) {
                     buildToken = randomUUID();
-                    this.builds.set(buildToken, { path: project.path, directory: buildPath, digest: before, artifacts: await this.artifactDigest(buildPath), fqbn: project.fqbn });
+                    this.builds.set(buildToken, { path: project.path, directory: buildPath, digest: before, artifacts: await this.artifactDigest(buildPath), fqbn: project.fqbn,
+                        ...(snapshot ? { simulation: { snapshot, log: Buffer.from(result.output) } } : { simulationError }) });
                     if (this.builds.size > 32) { this.builds.delete(this.builds.keys().next().value!); }
                 }
                 return { ok: !failed && !stale, stale, diagnostics: arduinoDiagnostics(result.output, project.path), buildToken,
+                    simulationReady: !!snapshot && !failed && !stale, ...(!snapshot && simulationError ? { simulationError } : {}),
                     ...(!failed ? { buildPath } : {}), ...(stale ? { error: '编译期间工程已修改，请重新编译。' } : failed ? { error: '编译失败，请查看构建输出。' } : {}) };
             } catch (error) { return { ok: false, cancelled: operation.cancelled, diagnostics: [], error: operation.cancelled ? undefined : error instanceof Error ? error.message : String(error) }; }
         }); } catch (error) { return { ok: false, diagnostics: [], error: error instanceof Error ? error.message : String(error) }; }
     }
     protected uploadTarget(request: ArduinoUploadRequest): ArduinoUploadTarget {
         return { kind: 'serial', port: request.port, transport: 'uart' };
+    }
+    async exportSimulation(request: ArduinoSimulationExportRequest): Promise<ArduinoSimulationExportResult> {
+        try { return await this.operation(request, async operation => {
+            try {
+                const project = await readArduinoProject(request.path), built = this.builds.get(request.buildToken);
+                const incompatible = arduinoSimulationConfigurationError(project); if (incompatible) { throw new Error(incompatible); }
+                if (!built?.simulation) { throw new Error(built?.simulationError || '当前构建没有编译前依赖快照，请重新编译并导出。'); }
+                if (typeof request.destination !== 'string' || !isAbsolute(request.destination) || !request.destination.endsWith('.esp-sim.zip') || request.destination.includes('\0')) { throw new Error('请选择新的 .esp-sim.zip 文件。'); }
+                const destinationDirectory = await fs.realpath(dirname(request.destination)), local = relative(project.path, destinationDirectory);
+                if (local !== '..' && !local.startsWith('..' + sep) && !isAbsolute(local) && !['.nodu', 'build'].includes(local.split(sep)[0])) {
+                    throw new Error('请将仿真包保存到工程目录外，或工程的 .nodu / build 目录，避免将导出产物作为源码再次编译。');
+                }
+                const current = async (): Promise<void> => {
+                    if (operation.cancelled) { throw new Error('已停止'); }
+                    const live = await readArduinoProject(project.path);
+                    if (this.builds.get(request.buildToken) !== built || built.path !== live.path || built.fqbn !== live.fqbn
+                        || built.digest !== await arduinoInputDigest(project.path) || built.artifacts !== await this.artifactDigest(built.directory)) {
+                        throw new Error('代码、配置或固件已改变，请重新编译并导出。');
+                    }
+                };
+                await current(); this.output(request, '正在校验并导出仿真包', 'packaging');
+                const result = await createArduinoSimulationPackage({ snapshot: built.simulation.snapshot, build: { token: request.buildToken, ...built },
+                    buildLog: built.simulation.log, verifyCurrent: current, signal: operation.abort!.signal });
+                await publishArduinoSimulationPackage(result, request.destination, current, operation.abort!.signal);
+                // The atomic link is the commit point. No current pointer or previous export is replaced.
+                return { ok: true, path: request.destination, buildId: request.buildToken, packageSha256: result.packageSha256,
+                    contentDigest: result.contentDigest, elfSha256: result.elfSha256, fullflashSha256: result.fullflashSha256 };
+            } catch (error) { return { ok: false, cancelled: operation.cancelled, error: operation.cancelled ? undefined
+                : (error as NodeJS.ErrnoException)?.code === 'EEXIST' ? '目标文件已存在，请选择新的文件名；已有仿真包会保留。'
+                : error instanceof Error ? error.message : String(error) }; }
+        }); } catch (error) { return { ok: false, error: error instanceof Error ? error.message : String(error) }; }
     }
     async upload(request: ArduinoUploadRequest): Promise<ArduinoUploadResult> {
         try { return await this.operation(request, async (operation, environment): Promise<ArduinoUploadResult> => {

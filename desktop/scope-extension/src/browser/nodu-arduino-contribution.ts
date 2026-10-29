@@ -3,6 +3,8 @@ import { inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry } from '@theia/core/lib/common';
 import { ApplicationShell, KeybindingContribution, KeybindingRegistry, WidgetManager } from '@theia/core/lib/browser';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
+import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
+import { arduinoSimulationConfigurationError } from '../common/nodu-arduino-simulation-profiles';
 import { ARDUINO_COMMANDS, ArduinoBuildResult, ArduinoEvent, ArduinoPhase } from '../common/nodu-arduino-protocol';
 import { ArduinoLibraryChange } from '../common/nodu-arduino-libraries-protocol';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
@@ -12,7 +14,7 @@ import { NoduBottomPanelWidget } from './nodu-bottom-panel';
 export const ARDUINO_FLASH_COMMAND = 'nodu.arduino.flash';
 const LIBRARY_CHANGE_COMMAND = 'nodu.arduino.library.change';
 interface Operation { id: string; path: string; generation: number; kind: ArduinoOperation; cancelled: boolean; sourceChanged: boolean; writing: boolean; revision?: number }
-const PHASE_LABELS: Record<ArduinoPhase, string> = { preparing: '正在准备工具', compiling: '正在编译', uploading: '正在烧录', verifying: '正在校验', restoring: '正在恢复串口' };
+const PHASE_LABELS: Record<ArduinoPhase, string> = { preparing: '正在准备工具', compiling: '正在编译', uploading: '正在烧录', verifying: '正在校验', restoring: '正在恢复串口', packaging: '正在导出仿真包' };
 
 /** Save, compile and upload use one operation identity and the existing task/output UI. */
 @injectable()
@@ -22,6 +24,7 @@ export class NoduArduinoContribution implements CommandContribution, KeybindingC
     @inject(EditorManager) protected readonly editors!: EditorManager;
     @inject(WidgetManager) protected readonly widgets!: WidgetManager;
     @inject(ApplicationShell) protected readonly shell!: ApplicationShell;
+    @inject(FileDialogService) protected readonly dialogs!: FileDialogService;
     private active?: Operation;
     registerCommands(registry: CommandRegistry): void {
         const add = (id: string, label: string, kind: ArduinoOperation, enabled = (): boolean => true): void => {
@@ -31,6 +34,10 @@ export class NoduArduinoContribution implements CommandContribution, KeybindingC
         add(ARDUINO_COMMANDS.upload, 'Arduino: 运行（编译并烧录）', 'upload', () => !!this.arduino.selectedPort);
         add(ARDUINO_FLASH_COMMAND, 'Arduino: 烧录已编译程序', 'flash', () => this.arduino.canFlash && !!this.arduino.selectedPort);
         add(ARDUINO_COMMANDS.prepare, 'Arduino: 准备工具', 'prepare');
+        registry.registerCommand({ id: ARDUINO_COMMANDS.exportSimulation, label: '导出仿真包…' }, {
+            execute: () => this.exportSimulation(), isEnabled: () => this.model.isArduino && !this.arduino.busy && !this.arduino.loading && !this.active,
+            isVisible: () => this.model.isArduino,
+        });
         registry.registerCommand({ id: LIBRARY_CHANGE_COMMAND, label: 'Arduino: 修改项目库' }, {
             execute: (change: Omit<ArduinoLibraryChange, 'operationId'>) => this.run('libraries', change),
             isEnabled: () => this.model.isArduino && !this.arduino.busy && !this.arduino.loading && !this.active, isVisible: () => false,
@@ -63,12 +70,32 @@ export class NoduArduinoContribution implements CommandContribution, KeybindingC
             errors: result.diagnostics.filter(d => d.severity === 'error').length, warnings: result.diagnostics.filter(d => d.severity === 'warning').length, ms: Date.now() - started };
         this.model.diagnosticsStale = stale; this.model.setDiagnostics(stale ? [] : result.diagnostics);
         this.arduino.buildToken = result.ok && !stale ? result.buildToken : undefined;
+        this.arduino.simulationReady = result.ok && !stale && !!result.simulationReady;
+        this.arduino.simulationError = result.simulationError || '';
         this.arduino.builtRevision = result.ok && !stale ? this.model.sourceGeneration : -1;
         if (result.error) { this.model.appendOutput(result.error); }
         return result.ok && !stale;
     }
     async compile(): Promise<void> { return this.run('build'); }
-    async run(kind: ArduinoOperation, change?: Omit<ArduinoLibraryChange, 'operationId'>): Promise<void> {
+    async exportSimulation(): Promise<void> {
+        if (!this.model.isArduino || this.arduino.busy || this.arduino.loading || this.active) { return; }
+        const project = this.arduino.project, generation = this.model.projectGeneration;
+        if (!project) { return; }
+        const incompatible = arduinoSimulationConfigurationError(project);
+        if (incompatible) { this.arduino.error = incompatible; this.model.appendOutput(incompatible); this.model.setTask('请先选择仿真配置', 'warn', { target: 'output' }); this.arduino.fire(); await this.showExportOutput(project.path, generation); return; }
+        const uri = await this.dialogs.showSaveDialog({ title: '导出仿真包', saveLabel: '编译并导出',
+            inputValue: `${project.path.split(/[\\/]/).pop()}-${Date.now()}.esp-sim.zip`, filters: { '仿真包': ['zip'] } });
+        if (!uri || this.arduino.path !== project.path || this.model.projectGeneration !== generation) { return; }
+        if (!uri.path.fsPath().endsWith('.esp-sim.zip')) { this.arduino.error = '请使用 .esp-sim.zip 文件名。'; this.model.appendOutput(this.arduino.error); this.arduino.fire(); await this.showExportOutput(project.path, generation); return; }
+        await this.run('export', undefined, uri.path.fsPath());
+    }
+    private async showExportOutput(path: string, generation: number): Promise<void> {
+        const panel = await this.widgets.getOrCreateWidget<NoduBottomPanelWidget>(NoduBottomPanelWidget.ID);
+        if (this.arduino.path !== path || this.model.projectGeneration !== generation) { return; }
+        if (!this.shell.getAreaFor(panel)) { this.shell.addWidget(panel, { area: 'bottom' }); }
+        panel.showEmbedded('output'); await this.shell.revealWidget(panel.id);
+    }
+    async run(kind: ArduinoOperation, change?: Omit<ArduinoLibraryChange, 'operationId'>, destination?: string): Promise<void> {
         if (!this.model.isArduino || this.arduino.busy || this.active || this.arduino.loading) { return; }
         const path = this.arduino.path, port = this.arduino.selectedPort;
         if (change && change.path !== path) { return; }
@@ -76,17 +103,17 @@ export class NoduArduinoContribution implements CommandContribution, KeybindingC
         if (kind === 'flash' && (!this.arduino.canFlash || this.unsaved(path))) { this.model.setTask('代码已修改，请重新编译', 'warn', { target: 'output' }); return; }
         const operation: Operation = { id: `arduino-${Date.now()}-${Math.random().toString(36).slice(2)}`, path, generation: this.model.projectGeneration, kind, cancelled: false, sourceChanged: false, writing: false };
         this.active = operation; this.arduino.operation = kind; this.arduino.error = '';
-        this.arduino.operationLabel = kind === 'libraries' && change ? `${change.action === 'remove' ? '正在移除' : '正在安装'} ${change.name}` : kind === 'prepare' ? '正在准备工具' : kind === 'flash' ? '正在烧录' : '正在编译';
+        this.arduino.operationLabel = kind === 'libraries' && change ? `${change.action === 'remove' ? '正在移除' : '正在安装'} ${change.name}` : kind === 'prepare' ? '正在准备工具' : kind === 'flash' ? '正在烧录' : kind === 'export' ? '正在编译并导出仿真包' : '正在编译';
         this.model.building = kind !== 'flash'; this.model.flashing = kind === 'upload' || kind === 'flash';
         this.model.output.length = 0;
-        if (kind === 'build' || kind === 'upload') { this.model.lastBuild = undefined; this.model.setDiagnostics([]); this.arduino.buildToken = undefined; }
+        if (kind === 'build' || kind === 'upload' || kind === 'export') { this.model.lastBuild = undefined; this.model.setDiagnostics([]); this.arduino.buildToken = undefined; this.arduino.simulationReady = false; }
         this.model.setTask(this.arduino.operationLabel, 'busy', { target: 'output' }); this.arduino.fire();
         const output = this.arduino.onDidOutput(event => this.onOutput(operation, event));
         const changed = this.model.onDidChange(() => {
             if (!this.current(operation)) { void this.stop(); return; }
             if (operation.revision !== undefined && operation.revision !== this.model.sourceGeneration) {
                 operation.sourceChanged = true;
-                if ((kind === 'upload' || kind === 'flash') && !operation.writing) { void this.stop(); }
+                if ((kind === 'upload' || kind === 'flash' || kind === 'export') && !operation.writing) { void this.stop(); }
             }
         });
         try {
@@ -126,7 +153,7 @@ export class NoduArduinoContribution implements CommandContribution, KeybindingC
                 const started = Date.now(), refreshEnvironment = !this.arduino.project?.ready;
                 // Compile prepares its own dependencies. A separate preparation pass would duplicate first-use work
                 // and turn source preprocessing errors into environment failures without editor diagnostics.
-                const result = await this.arduino.service.compile({ path, operationId: operation.id });
+                const result = await this.arduino.service.compile({ path, operationId: operation.id, ...(kind === 'export' ? { simulation: true } : {}) });
                 if (!this.current(operation)) { return; }
                 const usable = this.setBuild(operation, result, started);
                 if (refreshEnvironment && !operation.cancelled && !result.cancelled) {
@@ -145,6 +172,15 @@ export class NoduArduinoContribution implements CommandContribution, KeybindingC
             }
             if (!this.current(operation) || operation.cancelled || operation.sourceChanged || this.unsaved(path)) { return; }
             if (!this.arduino.buildToken) { throw new Error('没有可烧录的编译产物。'); }
+            if (kind === 'export') {
+                if (!destination || !this.arduino.simulationReady) { throw new Error(this.arduino.simulationError || '当前构建不能导出仿真包，请重新编译。'); }
+                this.model.building = false;
+                const result = await this.arduino.service.exportSimulation({ path, operationId: operation.id, buildToken: this.arduino.buildToken, destination });
+                if (!this.current(operation)) { return; }
+                if (result.error) { throw new Error(result.error); }
+                if (result.ok) { this.model.appendOutput(`仿真包已导出：${result.path}`); }
+                this.model.setTask(result.ok ? '仿真包已导出' : result.cancelled ? '已停止' : '导出失败', result.ok ? 'ok' : result.cancelled ? 'warn' : 'error', { target: 'output' }); return;
+            }
             this.model.building = false; this.model.setTask('正在烧录', 'busy', { target: 'output' });
             const result = await this.arduino.service.upload({ path, port, operationId: operation.id, buildToken: this.arduino.buildToken });
             if (!this.current(operation)) { return; }

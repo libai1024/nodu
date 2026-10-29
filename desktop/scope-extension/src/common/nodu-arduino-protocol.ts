@@ -3,7 +3,7 @@ import { Diagnostic } from './nodu-embedded-protocol';
 import { ArduinoLibraryQuery, ArduinoLibraryList, ArduinoLibraryChange, ArduinoLibraryChangeResult } from './nodu-arduino-libraries-protocol';
 
 export const NODU_ARDUINO_PATH = '/services/nodu-arduino';
-export const ARDUINO_COMMANDS = { build: 'nodu.arduino.build', upload: 'nodu.arduino.upload', prepare: 'nodu.arduino.prepare', stop: 'nodu.arduino.stop', libraries: 'nodu.arduino.libraries' };
+export const ARDUINO_COMMANDS = { build: 'nodu.arduino.build', upload: 'nodu.arduino.upload', prepare: 'nodu.arduino.prepare', stop: 'nodu.arduino.stop', libraries: 'nodu.arduino.libraries', exportSimulation: 'nodu.arduino.exportSimulation' };
 export interface ArduinoMonitorConfig { baud: number; encoding: 'utf-8' | 'gbk'; port?: string }
 export interface ArduinoProjectInfo {
     path: string; profile: string; fqbn: string; boardName: string; chip: string; coreVersion: string;
@@ -13,14 +13,20 @@ export interface ArduinoBoard { fqbn: string; name: string; chip: string }
 export interface ArduinoBoardOption { id: string; label: string; value: string; values: { value: string; label: string }[] }
 export interface ArduinoConfigureRequest { path: string; fqbn?: string; options?: Record<string, string>; monitor?: Partial<ArduinoMonitorConfig>; port?: string }
 export interface ArduinoPort { path: string; label?: string; serialNumber?: string; vid?: number; pid?: number }
-export interface ArduinoBuildRequest { path: string; operationId: string }
+export interface ArduinoBuildRequest { path: string; operationId: string; /** Require a pre-build simulation input snapshot. */ simulation?: boolean }
 export interface ArduinoBuildResult {
     ok: boolean; cancelled?: boolean; stale?: boolean; diagnostics: Diagnostic[];
     buildPath?: string; buildToken?: string; error?: string;
+    simulationReady?: boolean; simulationError?: string;
+}
+export interface ArduinoSimulationExportRequest extends ArduinoBuildRequest { buildToken: string; destination: string }
+export interface ArduinoSimulationExportResult {
+    ok: boolean; cancelled?: boolean; error?: string; path?: string; buildId?: string;
+    packageSha256?: string; contentDigest?: string; elfSha256?: string; fullflashSha256?: string;
 }
 export interface ArduinoUploadRequest extends ArduinoBuildRequest { port: string; buildToken: string }
 export interface ArduinoUploadResult { ok: boolean; cancelled?: boolean; stale?: boolean; error?: string; monitorRestored?: boolean }
-export type ArduinoPhase = 'preparing' | 'compiling' | 'uploading' | 'verifying' | 'restoring';
+export type ArduinoPhase = 'preparing' | 'compiling' | 'uploading' | 'verifying' | 'restoring' | 'packaging';
 export interface ArduinoEvent { operationId: string; path: string; line: string; phase?: ArduinoPhase }
 export interface ArduinoClient { onArduinoOutput(event: ArduinoEvent): void }
 export interface NoduArduinoService {
@@ -32,6 +38,7 @@ export interface NoduArduinoService {
     prepare(request: ArduinoBuildRequest): Promise<ArduinoBuildResult>;
     compile(request: ArduinoBuildRequest): Promise<ArduinoBuildResult>;
     upload(request: ArduinoUploadRequest): Promise<ArduinoUploadResult>;
+    exportSimulation(request: ArduinoSimulationExportRequest): Promise<ArduinoSimulationExportResult>;
     listLibraries(request: ArduinoLibraryQuery): Promise<ArduinoLibraryList>;
     changeLibrary(request: ArduinoLibraryChange): Promise<ArduinoLibraryChangeResult>;
     cancel(operationId: string): Promise<void>;

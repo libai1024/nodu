@@ -1,0 +1,53 @@
+文件
+编辑
+选择
+查看
+转到
+工具
+终端
+窗口
+帮助
+nodu_esp32c3
+Ctrl+P
+ESP32C3
+行 1，列 1
+LF
+UTF-8
+空格：4
+Plain Text
+nodu_esp32c3.ino
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+#include <Arduino.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include <ArduinoMqttClient.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_I2CDevice.h>
+#include <Adafruit_NeoPixel.h>
+#include <DHT.h>
+#include <Adafruit_Sensor.h>
+编译输出
+串口监视
+终端
+问题
+已连接
+CNCA0
+115200
+UTF-8
+关闭
+TX Nodu UI 中文回环 OK\r\n
+Nodu UI 中文回环 OK
+\r\n
+发送

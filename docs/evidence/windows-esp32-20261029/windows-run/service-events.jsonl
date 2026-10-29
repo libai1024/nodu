@@ -1,0 +1,172 @@
+{"guard":"OFFLINE_READY filters=4\r\n"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"base-010086e0-c5c7-4b68-80e2-cf35f5f93dbd","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"安装 Arduino CLI","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"准备 Arduino 环境","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Arduino · esp32:esp32:esp32c3","phase":"compiling"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ArduinoJson has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ArduinoMqttClient has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit SSD1306 has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit GFX Library has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit BusIO has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit NeoPixel has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library DHT sensor library has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit Unified Sensor has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library OneWire has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library DallasTemperature has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ESP32Servo has been added from sketch project."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp:599:22: warning: extra tokens at end of #undef directive"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"  599 | #  undef noInterrupts() {portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;portENTER_CRITICAL(&mux)"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"      |                      ^"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp:600:20: warning: extra tokens at end of #undef directive"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"  600 | #  undef interrupts() portEXIT_CRITICAL(&mux);}"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"      |                    ^"}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Sketch uses 493652 bytes (37%) of program storage space. Maximum is 1310720 bytes."}
+{"operationId":"offline-esp32c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes."}
+{"operationId":"base-88413dd8-61bf-4239-8fd8-26d6bda4823a","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"base-88413dd8-61bf-4239-8fd8-26d6bda4823a","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"base-88413dd8-61bf-4239-8fd8-26d6bda4823a","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"base-88413dd8-61bf-4239-8fd8-26d6bda4823a","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"base-88413dd8-61bf-4239-8fd8-26d6bda4823a","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"base-88413dd8-61bf-4239-8fd8-26d6bda4823a","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"准备 Arduino 环境","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"Arduino · esp32:esp32:esp32s3","phase":"compiling"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library ArduinoJson has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library ArduinoMqttClient has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library Adafruit SSD1306 has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library Adafruit GFX Library has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library Adafruit BusIO has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library Adafruit NeoPixel has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library DHT sensor library has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library Adafruit Unified Sensor has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library OneWire has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library DallasTemperature has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"The library ESP32Servo has been added from sketch project."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"In file included from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src/ESP32PWM.h:52,"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"                 from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src/ESP32Servo.h:84,"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"                 from D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3\\nodu_esp32s3.ino:13:"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h:15:2: warning: #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"   15 | #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\""}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"      |  ^~~~~~~"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp:599:22: warning: extra tokens at end of #undef directive"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"  599 | #  undef noInterrupts() {portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;portENTER_CRITICAL(&mux)"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"      |                      ^"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp:600:20: warning: extra tokens at end of #undef directive"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"  600 | #  undef interrupts() portEXIT_CRITICAL(&mux);}"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"      |                    ^"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"In file included from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src/ESP32PWM.h:52,"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"                 from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src/ESP32Servo.h:84,"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"                 from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src\\ESP32Servo.cpp:53:"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h:15:2: warning: #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"   15 | #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\""}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"      |  ^~~~~~~"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"In file included from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src/ESP32PWM.h:52,"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"                 from D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo\\src\\ESP32PWM.cpp:8:"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h:15:2: warning: #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"   15 | #warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\""}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"      |  ^~~~~~~"}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"Sketch uses 469557 bytes (35%) of program storage space. Maximum is 1310720 bytes."}
+{"operationId":"offline-esp32s3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32s3","line":"Global variables use 31704 bytes (9%) of dynamic memory, leaving 295976 bytes for local variables. Maximum is 327680 bytes."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"准备 Arduino 环境","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Arduino · esp32:esp32:esp32c3","phase":"compiling"}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ArduinoJson has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ArduinoMqttClient has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit SSD1306 has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit GFX Library has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit BusIO has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit NeoPixel has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library DHT sensor library has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit Unified Sensor has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library OneWire has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library DallasTemperature has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ESP32Servo has been added from sketch project."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Sketch uses 493652 bytes (37%) of program storage space. Maximum is 1310720 bytes."}
+{"operationId":"reopen-c3","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Global variables use 22924 bytes (6%) of dynamic memory, leaving 304756 bytes for local variables. Maximum is 327680 bytes."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"准备 Arduino 环境","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Arduino · esp32:esp32:esp32c3","phase":"compiling"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ArduinoJson has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ArduinoMqttClient has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit SSD1306 has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit GFX Library has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit BusIO has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit NeoPixel has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library DHT sensor library has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library Adafruit Unified Sensor has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library OneWire has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library DallasTemperature has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"The library ESP32Servo has been added from sketch project."}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3\\nodu_esp32c3.ino:25:2: error: #error NODU_EXPECTED_COMPILE_FAILURE"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"   25 | #error NODU_EXPECTED_COMPILE_FAILURE"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"      |  ^~~~~"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Used library            Version Path"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"WiFi                    3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\libraries\\WiFi"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Networking              3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\libraries\\Network"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Wire                    3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\libraries\\Wire"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"SPI                     3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\libraries\\SPI"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"ArduinoJson             7.4.3   D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ArduinoJson_7.4.3_65bbd090d30b7927\\ArduinoJson"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"ArduinoMqttClient       0.1.8   D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ArduinoMqttClient_0.1.8_b1e57bf359553881\\ArduinoMqttClient"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Adafruit SSD1306        2.5.17  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\Adafruit_SSD1306_2.5.17_e01cd9e72ae36617\\Adafruit SSD1306"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Adafruit GFX Library    1.13.0  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\Adafruit_GFX_Library_1.13.0_ca91a4d6f8dae8af\\Adafruit GFX Library"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Adafruit BusIO          1.17.4  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\Adafruit_BusIO_1.17.4_7b46ea3f5fdb9ecd\\Adafruit BusIO"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Adafruit NeoPixel       1.15.5  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\Adafruit_NeoPixel_1.15.5_32a75fce2b4fe8ac\\Adafruit NeoPixel"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"DHT sensor library      1.4.7   D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\DHT_sensor_library_1.4.7_50b5ef2509805e63\\DHT sensor library"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Adafruit Unified Sensor 1.1.15  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\Adafruit_Unified_Sensor_1.1.15_c4f0a59ad82fa17d\\Adafruit Unified Sensor"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"OneWire                 2.3.8   D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"DallasTemperature       4.0.6   D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\DallasTemperature_4.0.6_04f98deb2305d67d\\DallasTemperature"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"ESP32Servo              3.2.1   D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\ESP32Servo_3.2.1_5dbe94048172dcc2\\ESP32Servo"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Used platform Version Path"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"esp32:esp32   3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd"}
+{"operationId":"compile-error","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Error during build: exit status 1"}
+{"guard":"OFFLINE_FILTERS_REMOVED\r\n"}
+{"operationId":"network-add-library","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"network-add-library","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"network-add-library","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"network-add-library","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"network-add-library","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"network-add-library","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"准备 Arduino 环境","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"正在初始化 Arduino 环境","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 400 / 2214","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 800 / 2214","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1200 / 2214","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 1600 / 2214","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"初始化 Arduino 环境 2000 / 2214","phase":"preparing"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Arduino · esp32:esp32:esp32c3","phase":"compiling"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3\\nodu_esp32c3.ino:3:10: fatal error: PubSubClient.h: No such file or directory"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"    3 | #include <PubSubClient.h>"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"      |          ^~~~~~~~~~~~~~~~"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"compilation terminated."}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Used library Version Path"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"WiFi         3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\libraries\\WiFi"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Networking   3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd\\libraries\\Network"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Used platform Version Path"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"esp32:esp32   3.3.12  D:\\nodu-esp32-20261029\\arduino-home\\data\\internal\\esp32_esp32_3.3.12_feadd113249efafd"}
+{"operationId":"network-library-compile","path":"D:\\nodu-esp32-20261029\\projects with spaces\\nodu_esp32c3","line":"Error during build: exit status 1"}

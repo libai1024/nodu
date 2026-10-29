@@ -1,0 +1,268 @@
+{
+  "started": "2026-10-29T07:15:40.005Z",
+  "transport": "existing Windows com0com kernel driver, CNCA0 <-> CNCB0; no physical hardware",
+  "cases": [
+    {
+      "name": "native port enumeration",
+      "result": [
+        {
+          "path": "CNCB0",
+          "description": "Unknown",
+          "stlinkVcp": false
+        },
+        {
+          "path": "CNCA0",
+          "description": "Unknown",
+          "stlinkVcp": false
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "open both virtual UART endpoints",
+      "result": {
+        "a": {
+          "open": true,
+          "port": "CNCA0",
+          "baud": 115200,
+          "state": "disconnected"
+        },
+        "b": {
+          "open": true,
+          "port": "CNCB0",
+          "baud": 115200,
+          "state": "disconnected"
+        }
+      },
+      "ok": true
+    },
+    {
+      "name": "UTF-8 Chinese and emoji TX/RX",
+      "result": {
+        "bytes": 18,
+        "hex": "4e6f647520e4b8ade6968720f09f98800d0a"
+      },
+      "ok": true
+    },
+    {
+      "name": "GBK Chinese TX/RX",
+      "result": {
+        "bytes": 14,
+        "hex": "b4aebfdad6d0cec4b2e2cad40d0a"
+      },
+      "ok": true
+    },
+    {
+      "name": "reverse direction receive",
+      "result": {
+        "bytes": 12,
+        "hex": "57494e444f57535f41434b0a"
+      },
+      "ok": true
+    },
+    {
+      "name": "binary NUL and FF payload",
+      "result": {
+        "bytes": 7,
+        "hex": "00010a0d7f80ff"
+      },
+      "ok": true
+    },
+    {
+      "name": "LF CR and CRLF remain exact",
+      "result": {
+        "bytes": 8,
+        "hex": "410a420d430d0a44"
+      },
+      "ok": true
+    },
+    {
+      "name": "larger UTF-8 payload is not lost",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: {\"ok\":false,\"error\":{\"message\":\"缺少参数 data\",\"code\":\"badRequest\"}}\n\nfalse !== true\n\n    at success (D:\\nodu-esp32-20261029\\serial.cjs:11:90)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async exchange (D:\\nodu-esp32-20261029\\serial.cjs:12:87)\n    at async check (D:\\nodu-esp32-20261029\\serial.cjs:10:89)\n    at async main (D:\\nodu-esp32-20261029\\serial.cjs:22:2)"
+    },
+    {
+      "name": "unrepresentable GBK rejects without transmitting",
+      "result": {
+        "ok": false,
+        "error": {
+          "message": "所选编码无法表示这些字符，请改用 UTF-8。",
+          "code": "service"
+        }
+      },
+      "ok": true
+    },
+    {
+      "name": "second process cannot claim occupied UART",
+      "result": {
+        "ok": false,
+        "error": {
+          "message": "串口 CNCA0 正被K210 设备连接或终端占用。先断开那边的连接，再重试。",
+          "code": "portBusy"
+        }
+      },
+      "ok": true
+    },
+    {
+      "name": "explicit disconnect closes and rejects TX",
+      "result": {
+        "status": {
+          "open": false,
+          "state": "closed"
+        },
+        "r": {
+          "ok": false,
+          "error": {
+            "message": "串口监视器没有打开。",
+            "code": "notOpen"
+          }
+        }
+      },
+      "ok": true
+    },
+    {
+      "name": "reopen with different baud and communicate",
+      "result": {
+        "bytes": 11,
+        "hex": "52454f50454e5f4f4b0d0a"
+      },
+      "ok": true
+    }
+  ],
+  "events": [
+    {
+      "name": "a",
+      "event": "service.state",
+      "data": {
+        "running": true
+      }
+    },
+    {
+      "name": "a",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCA0",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "name": "b",
+      "event": "service.state",
+      "data": {
+        "running": true
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCB0",
+        "baud": 115200,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.data",
+      "data": {
+        "port": "CNCB0",
+        "data": "Tm9kdSDkuK3mlocg8J+YgA0K"
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.data",
+      "data": {
+        "port": "CNCB0",
+        "data": "tK6/2tbQzsSy4srUDQo="
+      }
+    },
+    {
+      "name": "a",
+      "event": "monitor.data",
+      "data": {
+        "port": "CNCA0",
+        "data": "V0lORE9XU19BQ0sK"
+      }
+    },
+    {
+      "name": "a",
+      "event": "monitor.data",
+      "data": {
+        "port": "CNCA0",
+        "data": "AAEKDX+A/w=="
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.data",
+      "data": {
+        "port": "CNCB0",
+        "data": "QQpCDUMNCkQ="
+      }
+    },
+    {
+      "name": "a",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCA0",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "name": "a",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCA0",
+        "baud": 9600,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCB0",
+        "baud": 9600,
+        "state": "open",
+        "message": null
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.data",
+      "data": {
+        "port": "CNCB0",
+        "data": "UkVPUEVOX09LDQo="
+      }
+    },
+    {
+      "name": "a",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCA0",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    },
+    {
+      "name": "b",
+      "event": "monitor.state",
+      "data": {
+        "port": "CNCB0",
+        "baud": 0,
+        "state": "closed",
+        "message": null
+      }
+    }
+  ],
+  "finished": "2026-10-29T07:15:40.957Z",
+  "ok": false
+}

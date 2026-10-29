@@ -1,0 +1,24 @@
+#include <Arduino.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include <ArduinoMqttClient.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_I2CDevice.h>
+#include <Adafruit_NeoPixel.h>
+#include <DHT.h>
+#include <Adafruit_Sensor.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <ESP32Servo.h>
+WiFiClient wifi; PubSubClient extraMqtt(wifi); MqttClient mqtt(wifi);
+Adafruit_SSD1306 oled(128,64,&Wire,-1); Adafruit_I2CDevice bus(0x3c);
+Adafruit_NeoPixel pixels(1,4,NEO_GRB+NEO_KHZ800); DHT dht(5,DHT22);
+OneWire one(6); DallasTemperature temperature(&one); Servo servo;
+void setup(){Serial.begin(115200); JsonDocument doc; doc["message"]="Nodu Windows 中文";
+serializeJson(doc,Serial); mqtt.setId("compile-acceptance");
+oled.begin(SSD1306_SWITCHCAPVCC,0x3c); oled.drawPixel(0,0,SSD1306_WHITE);
+bus.begin(); pixels.begin(); pixels.show(); dht.begin(); Serial.println(dht.readTemperature());
+temperature.begin(); temperature.requestTemperatures(); servo.attach(7); servo.write(90);}
+void loop(){Serial.println("Nodu Windows OK");delay(1000);}

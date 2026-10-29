@@ -5,7 +5,7 @@ import { WebSocketConnectionProvider } from '@theia/core/lib/browser/messaging/w
 import { ArduinoBoard, ArduinoBoardOption, ArduinoClient, ArduinoConfigureRequest, ArduinoEvent, ArduinoPort, ArduinoProjectInfo, NODU_ARDUINO_PATH, NoduArduinoService } from '../common/nodu-arduino-protocol';
 import { NoduEmbeddedModel } from './nodu-embedded-model';
 
-export type ArduinoOperation = 'build' | 'upload' | 'flash' | 'prepare' | 'libraries';
+export type ArduinoOperation = 'build' | 'upload' | 'flash' | 'prepare' | 'libraries' | 'export';
 
 /** Per-window Arduino configuration, sharing the existing project, task and serial surfaces. */
 @injectable()
@@ -32,6 +32,8 @@ export class NoduArduinoModel implements ArduinoClient {
     operationLabel = '';
     libraryRevision = 0;
     buildToken?: string;
+    simulationReady = false;
+    simulationError = '';
     builtRevision = -1;
 
     get path(): string { return this.embedded.isArduino ? this.embedded.espPath : ''; }
@@ -60,7 +62,7 @@ export class NoduArduinoModel implements ArduinoClient {
         if (scope === this.scope) { return; }
         this.scope = scope; ++this.generation; ++this.refreshSequence; ++this.configureSequence;
         this.project = undefined; this.boards = []; this.options = []; this.ports = []; this.error = '';
-        this.loading = false; this.configuring = false; this.buildToken = undefined; this.builtRevision = -1;
+        this.loading = false; this.configuring = false; this.buildToken = undefined; this.builtRevision = -1; this.simulationReady = false; this.simulationError = '';
         this.embedded.arduinoMonitorConfig = { baud: 115200, encoding: 'utf-8' };
         if (this.path) { this.embedded.monitorPort = ''; void this.refresh(); }
         this.fire();
@@ -102,7 +104,7 @@ export class NoduArduinoModel implements ArduinoClient {
             const project = await this.service.configure({ path, ...change });
             if (!current()) { return false; }
             this.project = project;
-            if (change.fqbn || change.options) { this.buildToken = undefined; this.builtRevision = -1; this.embedded.sourceChanged(path + '/sketch.yaml', true); }
+            if (change.fqbn || change.options) { this.buildToken = undefined; this.builtRevision = -1; this.simulationReady = false; this.simulationError = ''; this.embedded.sourceChanged(path + '/sketch.yaml', true); }
             await this.embedded.applyArduinoMonitorSettings(project.monitor, project.port);
             if (!current()) { return false; }
             if (change.fqbn || change.options) {

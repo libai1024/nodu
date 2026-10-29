@@ -153,8 +153,10 @@ fn ensure_configured(env: &Env<'_>, project: &Project, clean: bool, parser: &mut
 }
 
 /// Configure only (for the clangd compilation database).
-pub fn configure(env: &Env<'_>, project: &Project) -> Outcome<Value> {
+pub fn configure(env: &Env<'_>, project: &Project, force: bool) -> Outcome<Value> {
     let _lock = lock_build(project)?;
+    // Refresh CMake's source/define list for IDE interoperability without deleting outputs.
+    if force { let _ = fs::remove_file(project.state_dir().join("configure.json")); }
     let rules = Rules::default();
     let mut parser = Parser::new(diag_context(project, env.toolkit), rules);
     let ran = ensure_configured(env, project, false, &mut parser, "configure")?;

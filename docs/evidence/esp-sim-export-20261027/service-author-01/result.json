@@ -1,0 +1,351 @@
+{
+  "started": "2026-10-27T05:27:47.103Z",
+  "scope": "Actual Nodu service and arduinoConnection RPC lifecycle; not desktop or simulation acceptance",
+  "cases": [
+    {
+      "name": "esp32c3: incompatible configuration fails with an action and never changes board parameters",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: actual connection exports only its successful service build and Studio accepts the package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: changed source rejects with no new file and leaves original export intact",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: build artifact deletion rejects without publishing",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: changed installed library content rejects despite unchanged source/token",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: cancelling export through the owning connection produces no file",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: source-directory export rejects to prevent the package becoming a build input",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: incompatible configuration fails with an action and never changes board parameters",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: actual connection exports only its successful service build and Studio accepts the package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: changed source rejects with no new file and leaves original export intact",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: build artifact deletion rejects without publishing",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: changed installed library content rejects despite unchanged source/token",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: cancelling export through the owning connection produces no file",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: source-directory export rejects to prevent the package becoming a build input",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed C3 ELF in a successful S3 build is rejected through RPC",
+      "status": "PASS"
+    },
+    {
+      "name": "connection disposal cancels an in-flight export without affecting another connection",
+      "status": "PASS"
+    },
+    {
+      "name": "a new failed real compile revokes the old successful token and retains historical package bytes",
+      "status": "PASS"
+    }
+  ],
+  "builds": [
+    {
+      "chip": "esp32c3",
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "050d715c-7ae3-447c-9d2c-051bfb1054b7",
+        "simulationReady": true,
+        "buildPath": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/cb264e58b73cd31e7175755e"
+      },
+      "snapshot": {
+        "id": "43c84498-bc0c-4135-8433-26e149140114",
+        "inputDigest": "2e137561aa116520688c2e971546962269abfe1d8763d1a305c401be36d51254",
+        "dependencyDigest": "d956bee69a634f8a65a55a1afedc339da41267e37375f3aef7243eb7a2cea5e0"
+      },
+      "export": {
+        "ok": true,
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/esp32c3.esp-sim.zip",
+        "buildId": "050d715c-7ae3-447c-9d2c-051bfb1054b7",
+        "packageSha256": "8cd3f7c61b25c095825169499f8f45c33579446a4130285f2c8a6254045299ea",
+        "contentDigest": "42cd2284bc98fbea43186c6a0aa7c2fa55f593e8c9c14c2f5a54d6a62f16378d",
+        "elfSha256": "1eeb29adacc29a41de26ad329daefc09c707be7c56a31cac785511ec23e8b4f8",
+        "fullflashSha256": "626e2cbb37308a69021d236e16cbb05bf550b1a702a9fe983c0a84e6a1040d47"
+      },
+      "consumer": {
+        "packageSHA256": "8cd3f7c61b25c095825169499f8f45c33579446a4130285f2c8a6254045299ea",
+        "validation": {
+          "format": "esp-sim-v1",
+          "elfSHA256": "1eeb29adacc29a41de26ad329daefc09c707be7c56a31cac785511ec23e8b4f8",
+          "flashSHA256": "626e2cbb37308a69021d236e16cbb05bf550b1a702a9fe983c0a84e6a1040d47",
+          "sourceDigest": "86c8d152b1122e4f74247a83914e7f5db2eebcd554259d9f4a09ee0dde13b6cc",
+          "meaning": "byte-consistency only; not signature, producer authentication or simulation acceptance"
+        },
+        "dependencyCount": 31
+      }
+    },
+    {
+      "chip": "esp32s3",
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "37ff855d-470c-4527-babc-dc344f900cc2",
+        "simulationReady": true,
+        "buildPath": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/89e476059bc8c583b9924f18"
+      },
+      "snapshot": {
+        "id": "97c7d21d-09ac-4296-a1f1-cfe387b8f606",
+        "inputDigest": "f9158e44c13c3ca55075bef1c091ecd90f25d7ac07d773ea591877342f0f1084",
+        "dependencyDigest": "d74d858c4043bdb2919b748e4509ece1aa2dd8fbea57fb3ae1b0f8b4667bf929"
+      },
+      "export": {
+        "ok": true,
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/esp32s3.esp-sim.zip",
+        "buildId": "37ff855d-470c-4527-babc-dc344f900cc2",
+        "packageSha256": "649c04156878e8ce9092bef5d4f4aaa762d331452aba5044c957a30887a113be",
+        "contentDigest": "7d1c27b75655774f95772e92e82bc481aa64d0e7d04e0b051eaaaa1b4563120c",
+        "elfSha256": "f70ea4d7157c5c60923f3d1aebf40aca4456185ee4f46165eae355d750f82209",
+        "fullflashSha256": "1aec4af9597505e176b9445d3524aa99338df8bfa765b81d820c2c11808883b6"
+      },
+      "consumer": {
+        "packageSHA256": "649c04156878e8ce9092bef5d4f4aaa762d331452aba5044c957a30887a113be",
+        "validation": {
+          "format": "esp-sim-v1",
+          "elfSHA256": "f70ea4d7157c5c60923f3d1aebf40aca4456185ee4f46165eae355d750f82209",
+          "flashSHA256": "1aec4af9597505e176b9445d3524aa99338df8bfa765b81d820c2c11808883b6",
+          "sourceDigest": "e975b5e90338193d18db4c0c8d29ad112875f0a5024cc79df5bead7d0a94201c",
+          "meaning": "byte-consistency only; not signature, producer authentication or simulation acceptance"
+        },
+        "dependencyCount": 31
+      }
+    }
+  ],
+  "commands": [
+    {
+      "operation": "connection-ab3d5b13-6bf2-4b4b-8f4a-30f579880921",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-0.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-6c4615aa-6086-4dcd-9146-a4d327bcfadf",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-1.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-6c4615aa-6086-4dcd-9146-a4d327bcfadf",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/cb264e58b73cd31e7175755e",
+        "--only-compilation-database",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-2.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-6c4615aa-6086-4dcd-9146-a4d327bcfadf",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/cb264e58b73cd31e7175755e",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-3.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-0385c70a-41ee-4fc2-a5f9-e3bd4dc439d3",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32s3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-4.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-8d322942-cddf-48ce-af27-9db685da9953",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32s3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-5.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-8d322942-cddf-48ce-af27-9db685da9953",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/89e476059bc8c583b9924f18",
+        "--only-compilation-database",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32s3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32s3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-6.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-8d322942-cddf-48ce-af27-9db685da9953",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/89e476059bc8c583b9924f18",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32s3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32s3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-7.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-4e66b941-3318-4ee1-9160-e6d3ad5770df",
+      "args": [
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-8.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-4e66b941-3318-4ee1-9160-e6d3ad5770df",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/cb264e58b73cd31e7175755e",
+        "--only-compilation-database",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-9.log",
+      "code": 0
+    },
+    {
+      "operation": "connection-4e66b941-3318-4ee1-9160-e6d3ad5770df",
+      "args": [
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/builds/cb264e58b73cd31e7175755e",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/service_esp32c3",
+      "config": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/home/arduino-cli.yaml",
+      "log": "command-10.log",
+      "code": 1
+    }
+  ],
+  "sources": [
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/src/node/nodu-arduino-server.ts",
+      "sha256": "6fddca0a08ff49bb171e832f908db69f1ea10f9e42928fefdc7adb3f07bd94fb"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/lib/node/nodu-arduino-server.js",
+      "sha256": "19938e18affe52534a2ee099a06aadf5cbe44a5b12fb086aad92e33598c5860f"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/src/node/nodu-arduino-simulation-package.ts",
+      "sha256": "6e8eb3707b5fd6106198387c5b2c8dd57f7765970e96bbb99ebc5d7fe0ffb3d2"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/lib/node/nodu-arduino-simulation-package.js",
+      "sha256": "599a7a36393d04ff1b28324e9ce63aed436d36bae2b20df749821605932f16ff"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/src/common/nodu-arduino-protocol.ts",
+      "sha256": "e68877790cfccdc3b8274c885d8639e4a2240f0bf99c9f8b07c6f627ee8b4b63"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/lib/common/nodu-arduino-protocol.js",
+      "sha256": "601f6d7bacfc6ec64d0b9c8d8e55622de710ee13dbffa738610a6d9644c0ab25"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/src/common/nodu-arduino-simulation-profiles.ts",
+      "sha256": "2eee7f541a93b42e0381393f23ad49c3b540413e76c2e63214c604f4fcab38bf"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/lib/common/nodu-arduino-simulation-profiles.js",
+      "sha256": "589b4301bcbc87ca2b3b33ba729045c4aa1bb02cba33f795c3c538526fd4bab6"
+    }
+  ],
+  "status": "PASS",
+  "finished": "2026-10-27T05:37:46.510Z"
+}

@@ -1,0 +1,879 @@
+
+Arduino IDE 2.3.7
+Checking for frontend application configuration customizations. Module path: E:\Develop\Arduino IDE\resources\app\lib\backend\electron-main.js, destination 'package.json': E:\Develop\Arduino IDE\resources\app\package.json
+Setting 'theia.frontend.config.appVersion' application configuration value to: "2.3.7" (type of string)
+Setting 'theia.frontend.config.cliVersion' application configuration value to: "1.3.1" (type of string)
+Setting 'theia.frontend.config.buildDate' application configuration value to: "2025-12-17T16:05:25.389Z" (type of string)
+Frontend application configuration after modifications: {"applicationName":"Arduino IDE","defaultTheme":{"light":"arduino-theme","dark":"arduino-theme-dark"},"defaultIconTheme":"none","electron":{"windowOptions":{},"showWindowEarly":true,"splashScreenOptions":{},"uriScheme":"arduino-ide"},"defaultLocale":"","validatePreferencesSchema":false,"reloadOnReconnect":true,"uriScheme":"theia","preferences":{"window.title":"${rootName}${activeEditorShort}${appName}","files.autoSave":"afterDelay","editor.minimap.enabled":false,"editor.tabSize":2,"editor.scrollBeyondLastLine":false,"editor.quickSuggestions":{"other":false,"comments":false,"strings":false},"editor.maxTokenizationLineLength":500,"editor.bracketPairColorization.enabled":false,"breadcrumbs.enabled":false,"workbench.tree.renderIndentGuides":"none","explorer.compactFolders":false},"appVersion":"2.3.7","cliVersion":"1.3.1","buildDate":"2025-12-17T16:05:25.389Z"}
+Starting backend process. PID: 13824
+Showing main window early
+Configuration directory URI: 'file:///d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE'
+Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-10-29T07:39:15.753Z root INFO Backend u.initialize: 27.5 ms [Finished 0.629 s after backend start]
+2026-10-29T07:39:15.754Z root INFO Backend Object.initialize: 24.5 ms [Finished 0.629 s after backend start]
+2026-10-29T07:39:15.754Z root INFO Backend a.initialize: 1.4 ms [Finished 0.629 s after backend start]
+2026-10-29T07:39:15.754Z root INFO Backend a.initialize: 1.2 ms [Finished 0.629 s after backend start]
+2026-10-29T07:39:15.754Z root INFO Backend u.initialize: 1.5 ms [Finished 0.630 s after backend start]
+2026-10-29T07:39:15.757Z root INFO Backend l.initialize: 25.5 ms [Finished 0.630 s after backend start]
+2026-10-29T07:39:15.764Z root INFO configured all backend app contributions
+2026-10-29T07:39:15.764Z root INFO Backend l.onStart: 1.4 ms [Finished 0.641 s after backend start]
+2026-10-29T07:39:15.765Z root INFO Backend d.onStart: 0.1 ms [Finished 0.642 s after backend start]
+2026-10-29T07:39:15.766Z root INFO Backend a.onStart: 0.3 ms [Finished 0.642 s after backend start]
+2026-10-29T07:39:15.766Z config INFO >>> Initializing CLI configuration...
+2026-10-29T07:39:15.766Z root INFO Backend x.onStart: 0.4 ms [Finished 0.642 s after backend start]
+2026-10-29T07:39:15.766Z config INFO Loading CLI configuration from d:\nodu-esp32-20261029\ide-profile\.arduinoIDE\arduino-cli.yaml...
+2026-10-29T07:39:15.766Z daemon INFO Starting daemon from E:\Develop\Arduino IDE\resources\app\lib\backend\resources\arduino-cli.exe...
+2026-10-29T07:39:15.766Z root INFO Backend w.onStart: 0.7 ms [Finished 0.643 s after backend start]
+2026-10-29T07:39:15.766Z discovery-log INFO start
+2026-10-29T07:39:15.766Z discovery-log INFO start new deferred
+2026-10-29T07:39:15.767Z root INFO Backend v.onStart: 0.3 ms [Finished 0.644 s after backend start]
+2026-10-29T07:39:15.767Z root INFO Backend a.onStart: 0.2 ms [Finished 0.644 s after backend start]
+2026-10-29T07:39:15.772Z root INFO Theia app listening on http://127.0.0.1:63121.
+2026-10-29T07:39:15.772Z root INFO Finished starting backend application: 5.2 ms [Finished 0.649 s after backend start]
+2026-10-29T07:39:15.775Z config INFO Loaded CLI configuration: {"directories":{"downloads":"D:\\nodu-esp32-20261029\\ide-downloads","data":"D:\\nodu-esp32-20261029\\ide-data","user":"D:\\nodu-esp32-20261029\\ide-sketchbook"},"board_manager":{"additional_urls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"]},"build_cache":{"path":"D:\\nodu-esp32-20261029\\ide-cache"}}
+2026-10-29T07:39:15.775Z config INFO 'directories.data' and 'directories.user' are set in the CLI configuration model.
+2026-10-29T07:39:15.775Z config INFO Loaded the CLI configuration.
+2026-10-29T07:39:15.789Z config INFO Mapped the CLI configuration: {"dataDirUri":"file:///d%3A/nodu-esp32-20261029/ide-data","sketchDirUri":"file:///d%3A/nodu-esp32-20261029/ide-sketchbook","additionalUrls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"],"network":"none","locale":"en"}
+2026-10-29T07:39:15.789Z config INFO Validating the CLI configuration...
+2026-10-29T07:39:15.789Z config INFO The CLI config is valid.
+2026-10-29T07:39:15.789Z config INFO <<< Initialized the CLI configuration.
+2026-10-29T07:39:15.833Z root INFO Resolve plugins list: 65.2 ms [Finished 0.711 s after backend start]
+2026-10-29T07:39:15.862Z daemon INFO time="2026-10-29T15:39:15+08:00" level=info msg="arduino-cli version 1.3.1"
+2026-10-29T07:39:15.863Z daemon INFO time="2026-10-29T15:39:15+08:00" level=info msg="Using config file: d:\\nodu-esp32-20261029\\ide-profile\\.arduinoIDE\\arduino-cli.yaml"
+time="2026-10-29T15:39:15+08:00" level=info msg="Executing `arduino-cli daemon`"
+2026-10-29T07:39:15.878Z daemon INFO Daemon is now listening on 127.0.0.1:63122
+{"IP":"127.0.0.1","Port":"63122"}
+2026-10-29T07:39:15.878Z daemon INFO Daemon is running.
+2026-10-29T07:39:15.924Z daemon INFO time="2026-10-29T15:39:15+08:00" level=info msg="Checking signature" index="D:\\nodu-esp32-20261029\\ide-data\\package_index.json" signatureFile="D:\\nodu-esp32-20261029\\ide-data\\package_index.json.sig" trusted=true
+time="2026-10-29T15:39:15+08:00" level=info msg="Missing signature file" index="D:\\nodu-esp32-20261029\\ide-data\\package_esp32_index.json"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loading hardware from: D:\\nodu-esp32-20261029\\ide-data\\packages"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loading package arduino from: D:\\nodu-esp32-20261029\\ide-data\\packages\\arduino"
+time="2026-10-29T15:39:15+08:00" level=info msg="Checking existence of 'tools' path: D:\\nodu-esp32-20261029\\ide-data\\packages\\arduino\\tools"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loading tools from dir: D:\\nodu-esp32-20261029\\ide-data\\packages\\arduino\\tools"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loaded tool" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loading package builtin from: D:\\nodu-esp32-20261029\\ide-data\\packages\\builtin"
+time="2026-10-29T15:39:15+08:00" level=info msg="Checking existence of 'tools' path: D:\\nodu-esp32-20261029\\ide-data\\packages\\builtin\\tools"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loading tools from dir: D:\\nodu-esp32-20261029\\ide-data\\packages\\builtin\\tools"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loaded tool" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loaded tool" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loaded tool" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:39:15+08:00" level=info msg="Loading package esp32 from: D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware"
+2026-10-29T07:39:15.931Z daemon INFO time="2026-10-29T15:39:15+08:00" level=info msg="Missing signature file" index="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\installed.json"
+2026-10-29T07:39:16.123Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+2026-10-29T07:39:16.124Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded platform" platform="esp32:esp32@3.3.12"
+time="2026-10-29T15:39:16+08:00" level=info msg="Checking existence of 'tools' path: D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\tools"
+time="2026-10-29T15:39:16+08:00" level=info msg="Loading tools from dir: D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\tools"
+2026-10-29T07:39:16.124Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp-rv32@2601"
+2026-10-29T07:39:16.124Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp-x32@2601"
+2026-10-29T07:39:16.124Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32-libs@3.3.12"
+2026-10-29T07:39:16.124Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32c3-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32c5-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32c6-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32h2-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32p4-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32p4_es-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32s2-libs@3.3.12"
+2026-10-29T07:39:16.125Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esp32s3-libs@3.3.12"
+2026-10-29T07:39:16.126Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:esptool_py@5.3.1"
+2026-10-29T07:39:16.126Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:mklittlefs@4.0.2-db0513a"
+2026-10-29T07:39:16.126Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:mkspiffs@0.2.3"
+2026-10-29T07:39:16.126Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+2026-10-29T07:39:16.126Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+2026-10-29T07:39:16.126Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loaded tool" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+2026-10-29T07:39:16.146Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\libraries" isSingleLibrary=false location=platform
+2026-10-29T07:39:16.146Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Loading libraries index file" index="D:\\nodu-esp32-20261029\\ide-data\\library_index.json"
+2026-10-29T07:39:16.415Z root INFO Deploy plugins list: 646.9 ms [Finished 1.292 s after backend start]
+2026-10-29T07:39:16.419Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+2026-10-29T07:39:16.420Z daemon INFO time="2026-10-29T15:39:16+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+2026-10-29T07:39:17.015Z root INFO creating connection for 1
+2026-10-29T07:39:17.064Z discovery-log INFO start resolved watching
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/ide-updater'.
+2026-10-29T07:39:18.001Z root INFO Start frontend contributions: 311.3 ms [Finished 2.204 s after frontend start]
+2026-10-29T07:39:18.001Z root INFO Changed application state from 'init' to 'started_contributions'.
+2026-10-29T07:39:18.011Z root INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-10-29T07:39:18.011Z root INFO >>> Restoring the layout state...
+2026-10-29T07:39:18.046Z root INFO [2e809b47-0a83-4636-b30b-fae56e9c1c47] Waiting for backend deployment: 61.1 ms [Finished 2.260 s after frontend start]
+2026-10-29T07:39:18.562Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344) starting instance
+[Object: null prototype] {}
+2026-10-29T07:39:19.138Z root INFO [2e809b47-0a83-4636-b30b-fae56e9c1c47] Sync of 23 plugins: 1094.1 ms [Finished 3.354 s after frontend start]
+2026-10-29T07:39:19.146Z root INFO <<< Nothing to restore.
+2026-10-29T07:39:19.210Z root INFO Initialize the workbench layout: 1156.6 ms [Finished 3.384 s after frontend start]
+2026-10-29T07:39:19.211Z root INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-10-29T07:39:19.212Z root INFO [2e809b47-0a83-4636-b30b-fae56e9c1c47] Loading plugin contributions
+2026-10-29T07:39:19.212Z root INFO [2e809b47-0a83-4636-b30b-fae56e9c1c47] Load contributions of 23 plugins: 32.5 ms [Finished 3.424 s after frontend start]
+2026-10-29T07:39:19.710Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): PluginManagerExtImpl/init()
+2026-10-29T07:39:19.713Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-arduino-api@0.1.2 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.811Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(json-language-features@1.88.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.816Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(cortex-debug@1.5.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.816Z root INFO [hosted-plugin: 17344] Debugger contribution has been registered: cortex-debug
+2026-10-29T07:39:19.818Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-arduino-tools@0.1.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.821Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(cpp@1.88.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.825Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(json@1.88.1 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.826Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-bg@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.828Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-cs@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.829Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-de@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.830Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-es@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.831Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-fr@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.832Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-hu@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.833Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-it@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.834Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-ja@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.835Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-ko@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.835Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-nl@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.836Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-pl@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.837Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-pt-BR@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.837Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-ru@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.838Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-tr@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.840Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-uk@1.48.3 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.840Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-zh-hans@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.841Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): initializing(vscode-language-pack-zh-hant@1.96.0 with E:\Develop\Arduino IDE\resources\app\lib\backend\plugin-vscode-init)
+2026-10-29T07:39:19.849Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\vscode-builtin-json-language-features\extension\client\dist\node\jsonClientMain)
+2026-10-29T07:39:19.918Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\vscode-arduino-api\extension\dist\extension.js)
+2026-10-29T07:39:19.922Z root INFO [hosted-plugin: 17344] calling activation function on Arduino IDE API for VS Code extensions
+2026-10-29T07:39:20.006Z root INFO [2e809b47-0a83-4636-b30b-fae56e9c1c47] Starting plugins.
+2026-10-29T07:39:20.011Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\cortex-debug\extension\dist\extension.js)
+2026-10-29T07:39:20.062Z root INFO [hosted-plugin: 17344] Debug configuration provider has been registered: cortex-debug, trigger: 1
+2026-10-29T07:39:20.062Z root INFO [hosted-plugin: 17344] calling activation function on Cortex-Debug
+2026-10-29T07:39:20.067Z root INFO [hosted-plugin: 17344] GDB server console created
+2026-10-29T07:39:20.159Z root INFO [hosted-plugin: 17344] calling activation function on JSON Language Features (built-in)
+2026-10-29T07:39:20.212Z root INFO Frontend application start: 2369.3 ms [Finished 5.090 s after backend start]
+Checking for update
+2026-10-29T07:39:20.254Z root INFO Replace loading indicator with ready workbench UI (animation): 830.9 ms [Finished 4.260 s after frontend start]
+2026-10-29T07:39:20.254Z root INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-10-29T07:39:20.255Z root INFO [2e809b47-0a83-4636-b30b-fae56e9c1c47] Start of 23 plugins: 935.4 ms [Finished 4.451 s after frontend start]
+2026-10-29T07:39:20.336Z root INFO core-client-provider [platform-index] Downloading index: package_index.tar.bz2
+
+2026-10-29T07:39:20.337Z root INFO core-client-provider [library-index] Downloading index: library_index.tar.bz2
+
+2026-10-29T07:39:20.338Z daemon INFO time="2026-10-29T15:39:20+08:00" level=info msg="Updating index" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+time="2026-10-29T15:39:20+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+time="2026-10-29T15:39:20+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+2026-10-29T07:39:20.674Z daemon INFO time="2026-10-29T15:39:20+08:00" level=info msg="Updating index" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+time="2026-10-29T15:39:20+08:00" level=info msg="Starting download" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+2026-10-29T07:39:20.675Z root INFO core-client-provider [platform-index] Downloading index: package_esp32_index.json
+
+2026-10-29T07:39:20.926Z root INFO >>> Starting boards package installation... {
+  id: 'arduino:avr',
+  name: 'Arduino AVR Boards',
+  summary: 'Boards included in this package:',
+  description: 'Arduino Yún, Arduino UNO, Arduino UNO Mini, Arduino UNO WiFi, Arduino Diecimila, Arduino Nano, Arduino Mega, Arduino Mega ADK, Arduino Leonardo, Arduino Leonardo Ethernet, Arduino Micro, Arduino Esplora, Arduino Mini, Arduino Ethernet, Arduino Fio, Arduino BT, Arduino LilyPad USB, Arduino LilyPad, Arduino Pro, Arduino ATMegaNG, Arduino Robot Control, Arduino Robot Motor, Arduino Gemma, Adafruit Circuit Playground, Arduino Yún Mini, Arduino Industrial 101, Linino One',
+  boards: [
+    { name: 'Arduino Yún', fqbn: '' },
+    { name: 'Arduino UNO', fqbn: '' },
+    { name: 'Arduino UNO Mini', fqbn: '' },
+    { name: 'Arduino UNO WiFi', fqbn: '' },
+    { name: 'Arduino Diecimila', fqbn: '' },
+    { name: 'Arduino Nano', fqbn: '' },
+    { name: 'Arduino Mega', fqbn: '' },
+    { name: 'Arduino Mega ADK', fqbn: '' },
+    { name: 'Arduino Leonardo', fqbn: '' },
+    { name: 'Arduino Leonardo Ethernet', fqbn: '' },
+    { name: 'Arduino Micro', fqbn: '' },
+    { name: 'Arduino Esplora', fqbn: '' },
+    { name: 'Arduino Mini', fqbn: '' },
+    { name: 'Arduino Ethernet', fqbn: '' },
+    { name: 'Arduino Fio', fqbn: '' },
+    { name: 'Arduino BT', fqbn: '' },
+    { name: 'Arduino LilyPad USB', fqbn: '' },
+    { name: 'Arduino LilyPad', fqbn: '' },
+    { name: 'Arduino Pro', fqbn: '' },
+    { name: 'Arduino ATMegaNG', fqbn: '' },
+    { name: 'Arduino Robot Control', fqbn: '' },
+    { name: 'Arduino Robot Motor', fqbn: '' },
+    { name: 'Arduino Gemma', fqbn: '' },
+    { name: 'Adafruit Circuit Playground', fqbn: '' },
+    { name: 'Arduino Yún Mini', fqbn: '' },
+    { name: 'Arduino Industrial 101', fqbn: '' },
+    { name: 'Linino One', fqbn: '' }
+  ],
+  types: [ 'Arduino' ],
+  moreInfoLink: 'https://www.arduino.cc/',
+  author: 'Arduino',
+  deprecated: false,
+  availableVersions: [
+    '1.8.8',  '1.8.7',  '1.8.6',
+    '1.8.5',  '1.8.4',  '1.8.3',
+    '1.8.2',  '1.8.1',  '1.6.23',
+    '1.6.22', '1.6.21', '1.6.20',
+    '1.6.19', '1.6.18', '1.6.17',
+    '1.6.16', '1.6.15', '1.6.14',
+    '1.6.13', '1.6.12', '1.6.11',
+    '1.6.10', '1.6.9',  '1.6.8',
+    '1.6.7',  '1.6.6',  '1.6.5',
+    '1.6.4',  '1.6.3',  '1.6.2'
+  ],
+  index: 0
+}
+2026-10-29T07:39:20.928Z discovery-log INFO stop
+2026-10-29T07:39:20.928Z discovery-log INFO >>> Stopping boards watcher...
+2026-10-29T07:39:20.928Z discovery-log INFO Canceling boards watcher...
+2026-10-29T07:39:20.928Z discovery-log INFO disposing requesting cancel
+2026-10-29T07:39:20.928Z discovery-log INFO disposing canceled
+2026-10-29T07:39:20.929Z discovery-log INFO error received
+2026-10-29T07:39:20.929Z discovery-log INFO cancel error received!
+2026-10-29T07:39:20.929Z discovery-log INFO stop received event: either end or cancel
+2026-10-29T07:39:20.929Z discovery-log INFO stop stopped
+2026-10-29T07:39:20.929Z discovery-log INFO received end
+2026-10-29T07:39:20.932Z daemon INFO time="2026-10-29T15:39:20+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/tools/arduinoOTA-1.3.0-windows_386.zip"
+2026-10-29T07:39:21.173Z discovery-log INFO start
+2026-10-29T07:39:21.173Z discovery-log INFO start new deferred
+2026-10-29T07:39:21.173Z discovery-log INFO start resolved watching
+2026-10-29T07:39:21.187Z root INFO >>> Starting library package installation... {
+  name: 'Arduino_BuiltIn',
+  exampleUris: [],
+  location: 0,
+  installedVersion: undefined,
+  author: 'Arduino',
+  availableVersions: [ '1.0.0' ],
+  includes: [],
+  description: 'The sole purpose of this library is to install the standard Arduino libraries which are typically included with the Arduino IDE.',
+  moreInfoLink: 'https://github.com/arduino-libraries/Arduino_BuiltIn',
+  summary: 'Shell Arduino library to provide the standard built-in libraries',
+  category: 'Other',
+  types: [ 'Arduino' ],
+  index: 0
+}
+2026-10-29T07:39:21.187Z discovery-log INFO stop
+2026-10-29T07:39:21.187Z discovery-log INFO >>> Stopping boards watcher...
+2026-10-29T07:39:21.187Z discovery-log INFO Canceling boards watcher...
+2026-10-29T07:39:21.187Z discovery-log INFO disposing requesting cancel
+2026-10-29T07:39:21.187Z discovery-log INFO disposing canceled
+2026-10-29T07:39:21.188Z discovery-log INFO error received
+2026-10-29T07:39:21.188Z discovery-log INFO cancel error received!
+2026-10-29T07:39:21.188Z discovery-log INFO stop received event: either end or cancel
+2026-10-29T07:39:21.188Z discovery-log INFO stop stopped
+2026-10-29T07:39:21.188Z discovery-log INFO received end
+2026-10-29T07:39:27.156Z daemon INFO time="2026-10-29T15:39:27+08:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/github.com/arduino-libraries/Ethernet-2.0.2.zip?query=depends"
+2026-10-29T07:39:27.267Z discovery-log INFO start
+2026-10-29T07:39:27.267Z discovery-log INFO start new deferred
+2026-10-29T07:39:27.267Z discovery-log INFO start resolved watching
+2026-10-29T07:45:24.474Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:45:24.475Z root INFO Starting language server: esp32:esp32:esp32c3:UploadSpeed=921600,CDCOnBoot=default,CPUFreq=160,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=default,DebugLevel=none,EraseFlash=none,JTAGAdapter=default,ZigbeeMode=default
+2026-10-29T07:45:24.481Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:45:24.481Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.481Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:45:24.486Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+2026-10-29T07:45:24.486Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:45:24.486Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:45:24.490Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+2026-10-29T07:45:24.491Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+2026-10-29T07:45:24.491Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:45:24.491Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:45:24.491Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.496Z root INFO [hosted-plugin: 17344] PLUGIN_HOST(17344): PluginManagerExtImpl/loadPlugin(E:\Develop\Arduino IDE\resources\app\plugins\vscode-arduino-tools\extension\dist\extension.js)
+2026-10-29T07:45:24.499Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:45:24.499Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+2026-10-29T07:45:24.499Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:45:24.499Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.503Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:45:24.503Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:45:24.503Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:45:24.507Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:45:24.507Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+2026-10-29T07:45:24.507Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.507Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:45:24.511Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:45:24.511Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+2026-10-29T07:45:24.511Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.511Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:45:24.511Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:45:24.511Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:45:24.515Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:45:24.515Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.515Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:45:24.519Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+2026-10-29T07:45:24.519Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+2026-10-29T07:45:24.519Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+2026-10-29T07:45:24.519Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:45:24.520Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:45:24.520Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:45:24.520Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:45:24.543Z root INFO [hosted-plugin: 17344] calling activation function on VS Code Arduino Tools
+2026-10-29T07:45:24.791Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+2026-10-29T07:45:24.791Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\libraries" isSingleLibrary=false location=platform
+2026-10-29T07:45:24.791Z daemon INFO time="2026-10-29T15:45:24+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+2026-10-29T07:45:25.103Z daemon INFO time="2026-10-29T15:45:25+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+2026-10-29T07:45:25.103Z daemon INFO time="2026-10-29T15:45:25+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\libraries" isSingleLibrary=false location=platform
+2026-10-29T07:45:25.103Z daemon INFO time="2026-10-29T15:45:25+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+2026-10-29T07:45:31.378Z daemon INFO time="2026-10-29T15:45:31+08:00" level=info msg="Resolving include WiFi.h for arch esp32"
+2026-10-29T07:45:31.378Z daemon INFO time="2026-10-29T15:45:31+08:00" level=info msg="  found better lib" lib=WiFi prio=6B0
+2026-10-29T07:45:31.378Z daemon INFO time="2026-10-29T15:45:31+08:00" level=info msg="Resolving include WiFi.h for arch esp32"
+2026-10-29T07:45:31.378Z daemon INFO time="2026-10-29T15:45:31+08:00" level=info msg="  found better lib" lib=WiFi prio=6B0
+2026-10-29T07:45:35.363Z daemon INFO time="2026-10-29T15:45:35+08:00" level=info msg="Resolving include Network.h for arch esp32"
+2026-10-29T07:45:35.363Z daemon INFO time="2026-10-29T15:45:35+08:00" level=info msg="  found better lib" lib=Networking prio=64C
+2026-10-29T07:45:35.388Z daemon INFO time="2026-10-29T15:45:35+08:00" level=info msg="Resolving include Network.h for arch esp32"
+time="2026-10-29T15:45:35+08:00" level=info msg="  found better lib" lib=Networking prio=64C
+2026-10-29T07:45:47.193Z daemon INFO time="2026-10-29T15:45:47+08:00" level=info msg="Resolving include ArduinoJson.h for arch esp32"
+2026-10-29T07:45:47.193Z daemon INFO time="2026-10-29T15:45:47+08:00" level=info msg="  found better lib" lib=ArduinoJson prio=6A7
+2026-10-29T07:45:47.294Z daemon INFO time="2026-10-29T15:45:47+08:00" level=info msg="Resolving include ArduinoJson.h for arch esp32"
+2026-10-29T07:45:47.294Z daemon INFO time="2026-10-29T15:45:47+08:00" level=info msg="  found better lib" lib=ArduinoJson prio=6A7
+2026-10-29T07:45:54.795Z daemon INFO time="2026-10-29T15:45:54+08:00" level=info msg="Resolving include ArduinoMqttClient.h for arch esp32"
+time="2026-10-29T15:45:54+08:00" level=info msg="Resolving include ArduinoMqttClient.h for arch esp32"
+2026-10-29T07:45:54.796Z daemon INFO time="2026-10-29T15:45:54+08:00" level=info msg="  found better lib" lib=ArduinoMqttClient prio=6A7
+time="2026-10-29T15:45:54+08:00" level=info msg="  found better lib" lib=ArduinoMqttClient prio=6A7
+2026-10-29T07:45:59.381Z daemon INFO time="2026-10-29T15:45:59+08:00" level=info msg="Resolving include Adafruit_SSD1306.h for arch esp32"
+time="2026-10-29T15:45:59+08:00" level=info msg="  found better lib" lib="Adafruit SSD1306" prio=6A7
+2026-10-29T07:45:59.381Z daemon INFO time="2026-10-29T15:45:59+08:00" level=info msg="Resolving include Adafruit_SSD1306.h for arch esp32"
+time="2026-10-29T15:45:59+08:00" level=info msg="  found better lib" lib="Adafruit SSD1306" prio=6A7
+2026-10-29T07:46:04.035Z daemon INFO time="2026-10-29T15:46:04+08:00" level=info msg="Resolving include Adafruit_GFX.h for arch esp32"
+2026-10-29T07:46:04.036Z daemon INFO time="2026-10-29T15:46:04+08:00" level=info msg="  found better lib" lib="Adafruit GFX Library" prio=517
+2026-10-29T07:46:04.036Z daemon INFO time="2026-10-29T15:46:04+08:00" level=info msg="Resolving include Adafruit_GFX.h for arch esp32"
+time="2026-10-29T15:46:04+08:00" level=info msg="  found better lib" lib="Adafruit GFX Library" prio=517
+2026-10-29T07:46:08.647Z daemon INFO time="2026-10-29T15:46:08+08:00" level=info msg="Resolving include Adafruit_I2CDevice.h for arch esp32"
+2026-10-29T07:46:08.647Z daemon INFO time="2026-10-29T15:46:08+08:00" level=info msg="Resolving include Adafruit_I2CDevice.h for arch esp32"
+time="2026-10-29T15:46:08+08:00" level=info msg="  found better lib" lib="Adafruit BusIO" prio=3EB
+time="2026-10-29T15:46:08+08:00" level=info msg="  found better lib" lib="Adafruit BusIO" prio=3EB
+2026-10-29T07:46:13.426Z daemon INFO time="2026-10-29T15:46:13+08:00" level=info msg="Resolving include Wire.h for arch esp32"
+time="2026-10-29T15:46:13+08:00" level=info msg="  found better lib" lib=Wire prio=6B0
+2026-10-29T07:46:13.426Z daemon INFO time="2026-10-29T15:46:13+08:00" level=info msg="Resolving include Wire.h for arch esp32"
+time="2026-10-29T15:46:13+08:00" level=info msg="  found better lib" lib=Wire prio=6B0
+2026-10-29T07:46:18.297Z daemon INFO time="2026-10-29T15:46:18+08:00" level=info msg="Resolving include SPI.h for arch esp32"
+time="2026-10-29T15:46:18+08:00" level=info msg="  found better lib" lib=SPI prio=6B0
+2026-10-29T07:46:18.298Z daemon INFO time="2026-10-29T15:46:18+08:00" level=info msg="Resolving include SPI.h for arch esp32"
+2026-10-29T07:46:18.298Z daemon INFO time="2026-10-29T15:46:18+08:00" level=info msg="  found better lib" lib=SPI prio=6B0
+2026-10-29T07:46:22.991Z daemon INFO time="2026-10-29T15:46:22+08:00" level=info msg="Resolving include Adafruit_NeoPixel.h for arch esp32"
+time="2026-10-29T15:46:22+08:00" level=info msg="Resolving include Adafruit_NeoPixel.h for arch esp32"
+2026-10-29T07:46:22.991Z daemon INFO time="2026-10-29T15:46:22+08:00" level=info msg="  found better lib" lib="Adafruit NeoPixel" prio=6A7
+time="2026-10-29T15:46:22+08:00" level=info msg="  found better lib" lib="Adafruit NeoPixel" prio=6A7
+2026-10-29T07:46:39.935Z daemon INFO time="2026-10-29T15:46:39+08:00" level=info msg="Resolving include DHT.h for arch esp32"
+time="2026-10-29T15:46:39+08:00" level=info msg="  found better lib" lib="DHT sensor library" prio=517
+2026-10-29T07:46:39.945Z daemon INFO time="2026-10-29T15:46:39+08:00" level=info msg="Resolving include DHT.h for arch esp32"
+2026-10-29T07:46:39.945Z daemon INFO time="2026-10-29T15:46:39+08:00" level=info msg="  found better lib" lib="DHT sensor library" prio=517
+2026-10-29T07:46:44.972Z daemon INFO time="2026-10-29T15:46:44+08:00" level=info msg="Resolving include Adafruit_Sensor.h for arch esp32"
+2026-10-29T07:46:44.972Z daemon INFO time="2026-10-29T15:46:44+08:00" level=info msg="  found better lib" lib="Adafruit Unified Sensor" prio=3EB
+2026-10-29T07:46:44.980Z daemon INFO time="2026-10-29T15:46:44+08:00" level=info msg="Resolving include Adafruit_Sensor.h for arch esp32"
+2026-10-29T07:46:44.980Z daemon INFO time="2026-10-29T15:46:44+08:00" level=info msg="  found better lib" lib="Adafruit Unified Sensor" prio=3EB
+2026-10-29T07:46:50.434Z daemon INFO time="2026-10-29T15:46:50+08:00" level=info msg="Resolving include OneWire.h for arch esp32"
+time="2026-10-29T15:46:50+08:00" level=info msg="  found better lib" lib=OneWire prio=6A7
+2026-10-29T07:46:50.555Z daemon INFO time="2026-10-29T15:46:50+08:00" level=info msg="Resolving include OneWire.h for arch esp32"
+2026-10-29T07:46:50.556Z daemon INFO time="2026-10-29T15:46:50+08:00" level=info msg="  found better lib" lib=OneWire prio=6A7
+2026-10-29T07:46:56.792Z daemon INFO time="2026-10-29T15:46:56+08:00" level=info msg="Resolving include DallasTemperature.h for arch esp32"
+time="2026-10-29T15:46:56+08:00" level=info msg="  found better lib" lib=DallasTemperature prio=6A7
+2026-10-29T07:46:56.924Z daemon INFO time="2026-10-29T15:46:56+08:00" level=info msg="Resolving include DallasTemperature.h for arch esp32"
+2026-10-29T07:46:56.924Z daemon INFO time="2026-10-29T15:46:56+08:00" level=info msg="  found better lib" lib=DallasTemperature prio=6A7
+2026-10-29T07:47:11.635Z daemon INFO time="2026-10-29T15:47:11+08:00" level=info msg="Resolving include ESP32Servo.h for arch esp32"
+2026-10-29T07:47:11.636Z daemon INFO time="2026-10-29T15:47:11+08:00" level=info msg="  found better lib" lib=ESP32Servo prio=6B1
+2026-10-29T07:47:11.717Z daemon INFO time="2026-10-29T15:47:11+08:00" level=info msg="Resolving include ESP32Servo.h for arch esp32"
+time="2026-10-29T15:47:11+08:00" level=info msg="  found better lib" lib=ESP32Servo prio=6B1
+2026-10-29T07:48:26.926Z daemon INFO time="2026-10-29T15:48:26+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+2026-10-29T07:48:26.926Z daemon INFO time="2026-10-29T15:48:26+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\libraries" isSingleLibrary=false location=platform
+2026-10-29T07:48:26.926Z daemon INFO time="2026-10-29T15:48:26+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user
+2026-10-29T07:50:33.388Z root INFO Executing 'arduino.languageserver.notifyBuildDidComplete' with "file:///d%3A/nodu-esp32-20261029/ide-cache/sketches/EB6FAB7A3B0516690423689473DBB62C"
+2026-10-29T07:50:33.441Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+2026-10-29T07:50:33.441Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:50:33.442Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:50:33.445Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+2026-10-29T07:50:33.445Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:50:33.446Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:50:33.450Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.450Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:50:33.450Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:50:33.454Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.454Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+2026-10-29T07:50:33.454Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:50:33.454Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:50:33.458Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.458Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+2026-10-29T07:50:33.458Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:50:33.458Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:50:33.462Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.462Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+2026-10-29T07:50:33.462Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:50:33.462Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:50:33.466Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.466Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+2026-10-29T07:50:33.466Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:50:33.466Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:50:33.466Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:50:33.470Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.470Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:50:33.470Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:50:33.470Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:50:33.475Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+2026-10-29T07:50:33.475Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+2026-10-29T07:50:33.475Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:50:33.479Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.479Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+2026-10-29T07:50:33.479Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:50:33.479Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:50:33.482Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.482Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+2026-10-29T07:50:33.482Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:50:33.482Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+2026-10-29T07:50:33.482Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-10-29T07:50:33.486Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+2026-10-29T07:50:33.486Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.12"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+2026-10-29T07:50:33.486Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+2026-10-29T07:50:33.487Z daemon INFO time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-10-29T15:50:33+08:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+2026-10-29T07:50:34.435Z daemon INFO time="2026-10-29T15:50:34+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\libraries" isSingleLibrary=false location=ide
+2026-10-29T07:50:34.435Z daemon INFO time="2026-10-29T15:50:34+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-data\\packages\\esp32\\hardware\\esp32\\3.3.12\\libraries" isSingleLibrary=false location=platform
+2026-10-29T07:50:34.435Z daemon INFO time="2026-10-29T15:50:34+08:00" level=info msg="Adding libraries dir" dir="D:\\nodu-esp32-20261029\\ide-sketchbook\\libraries" isSingleLibrary=false location=user

@@ -4,6 +4,7 @@ import { preferredMonitorPort } from '../common/nodu-monitor-ports';
 import { MonitorDecoder, hasMonitorStartupLine } from '../common/nodu-monitor-decoder';
 import { NoduDiagnostics } from './nodu-diagnostics';
 import { ArduinoMonitorConfig } from '../common/nodu-arduino-protocol';
+import { affectsKeil, KeilResult, KeilStatus, supportsKeil } from '../common/nodu-keil';
 import { MessageService } from '@theia/core/lib/common';
 import { Emitter } from '@theia/core/lib/common/event';
 import { URI } from '@theia/core/lib/common/uri';
@@ -63,6 +64,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     arduinoMonitor?: { save(config: Partial<ArduinoMonitorConfig>): Promise<void>; selectPort(port: string): Promise<void>; ports(): Promise<PortInfo[]>; busy(): boolean };
 
     project: ProjectStatus | undefined;
+    keil: KeilStatus | undefined;
+    keilUpdating = false;
+    keilError = '';
+    private keilTimer: ReturnType<typeof setTimeout> | undefined;
+    private keilNotice = '';
     building = false;
     buildProgress: { done: number; total: number; file: string } | undefined;
     lastBuild: BuildResult | undefined;
@@ -146,7 +152,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     }
 
     get isC(): boolean { return !!this.project; }
-    get busy(): boolean { return this.building || this.flashing || this.identifying || this.preparingFlash || this.savingOptions; }
+    get busy(): boolean { return this.building || this.flashing || this.identifying || this.preparingFlash || this.savingOptions || this.keilUpdating; }
     get savingOptions(): boolean { return this.optionSaveCount > 0; }
     get projectGeneration(): number { return this.detection; }
     get sourceGeneration(): number { return this.sourceRevision; }
@@ -168,6 +174,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     /** A folder is a C project when its nodu.json says `kind: stm32-hal`. */
     async detect(root: URI | undefined): Promise<void> {
         const generation = ++this.detection;
+        clearTimeout(this.keilTimer); this.keil = undefined; this.keilError = ''; this.keilNotice = '';
         let project: ProjectStatus | undefined;
         let espChip = '';
         let arduino = false;
@@ -215,7 +222,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.cProjectKey.set(!!project);
         if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
         if (switched) { this.buildId = ''; this.runId = ''; this.cancelledFlashRun = ''; this.awaitUser = undefined; this.lastFlash = undefined; this.clearMarkers(); this.lastBuild = undefined; this.diagnosticsStale = false; this.projectChanged.fire(project); }
-        if (project) { void this.refreshDevices(); void this.syncMonitor(); }
+        if (project) { void this.refreshDevices(); void this.syncMonitor(); void this.refreshKeil().then(() => this.scheduleKeil()); }
         this.fire();
     }
 
@@ -396,6 +403,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         const relative = canonical.slice(normalizedRoot.length + 1);
         // Match the sidecar's build-input exclusions; custom CMake may read non-C resources.
         if (/^(build|\.nodu|\.cache|\.git|\.theia|\.vscode)\//.test(relative) || /(^|\/)\.DS_Store$/.test(relative)) { return undefined; }
+        if (supportsKeil(this.project) && /^MDK-ARM\//.test(relative)) { return undefined; }
         if (this.project?.manifest.build?.adapter === 'dacir-directory-v1' && /^(\.studio|runs)\//.test(relative)) { return undefined; }
         return relative;
     }
@@ -415,6 +423,61 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         if (fromEditor) { this.sourceRevision++; }
         if (this.lastBuild) { this.diagnosticsStale = true; this.clearMarkers(); }
         this.fire();
+    }
+
+    async refreshKeil(): Promise<void> {
+        const project = this.project, generation = this.detection;
+        if (!supportsKeil(project)) { this.keil = undefined; return; }
+        try {
+            const status = await this.call<KeilStatus>('keilStatus', { path: project!.path });
+            if (generation === this.detection && project!.path === this.project?.path) { this.keil = status; this.fire(); }
+        } catch { /* A missing service is reported by the existing project/toolkit UI. */ }
+    }
+
+    keilFilesChanged(path: string, structureChanged: boolean): void {
+        const project = this.project;
+        if (!project) return;
+        const canonical = this.toCanonical(path).replace(/\\/g, '/'), root = project.path.replace(/\\/g, '/');
+        if (!canonical.startsWith(root + '/')) return;
+        const relative = canonical.slice(root.length + 1);
+        if (relative === 'nodu.json') {
+            void this.reload().then(() => this.refreshKeil()).then(() => this.scheduleKeil()).catch(() => undefined);
+        } else if (affectsKeil(relative, structureChanged)) this.scheduleKeil();
+    }
+
+    private scheduleKeil(): void {
+        clearTimeout(this.keilTimer);
+        const project = this.project, generation = this.detection;
+        if (!supportsKeil(project) || !project?.manifest.keil?.autoSync || !project.trusted) return;
+        this.keilTimer = setTimeout(() => {
+            if (generation !== this.detection || project.path !== this.project?.path || !this.project.manifest.keil?.autoSync) return;
+            if (this.busy || this.hasUnsavedSources()) { this.scheduleKeil(); return; }
+            void this.generateKeil(true).catch(error => {
+                if (generation !== this.detection) return;
+                if (error instanceof EmbeddedError && ['buildBusy', 'keilBusy'].includes(error.code)) { this.scheduleKeil(); return; }
+                const text = error instanceof Error ? error.message : String(error);
+                this.keilError = text; this.fire();
+                if (this.keilNotice !== text) {
+                    this.keilNotice = text;
+                    void this.messages.warn(`Keil 工程未更新：${text}`);
+                }
+            });
+        }, 1200);
+    }
+
+    async generateKeil(automatic = false): Promise<KeilResult> {
+        const project = this.project, generation = this.detection;
+        if (!project || this.busy) throw new Error('请等待当前任务完成。');
+        if (this.hasUnsavedSources()) throw new Error('请先保存工程修改，再生成 Keil 工程。');
+        this.keilUpdating = true; this.keilError = ''; this.fire();
+        try {
+            const result = await this.call<KeilResult>('generateKeil', { path: project.path });
+            if (generation === this.detection) {
+                this.keilNotice = ''; await this.refreshKeil();
+                if (!automatic) this.setTask(result.created ? 'Keil 工程已生成' : 'Keil 工程已更新', 'ok');
+            }
+            return result;
+        } finally { this.keilUpdating = false; this.fire(); }
     }
 
     // ── device lists ──
@@ -926,6 +989,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         this.project = project;
         if (targetChanged) { this.clearDeviceIdentity(); void this.loadBackups(); }
         this.sourceChanged(`${project.path}/nodu.json`); this.projectChanged.fire(project); this.fire();
+        void this.refreshKeil().then(() => this.scheduleKeil());
     }
 
     async restore(backup: BackupRecord, compatibleConfirmed = false): Promise<void> {

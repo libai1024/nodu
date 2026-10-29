@@ -1,0 +1,90 @@
+{
+  "updated": "2026-10-27T06:02:21.113955+00:00",
+  "scope": "Nodu Arduino producer, trusted service/RPC lifecycle and export frontend; native acceptance recorded separately",
+  "producerAuthor": {
+    "path": "attempt-04/result.json",
+    "status": "PASS",
+    "count": 23,
+    "codeDifference": "See attempt-04/producer-final.diff; independent final-code rerun by parent 23/23"
+  },
+  "serviceAuthor": {
+    "path": "service-author-01/result.json",
+    "status": "PASS",
+    "count": 17
+  },
+  "regression": {
+    "path": "arduino-regression-02.log",
+    "pass": 88,
+    "skip": 2,
+    "fail": 0,
+    "note": "Opt-in real integration scripts are explicitly skipped without their own evidence directory; separate real-run evidence above."
+  },
+  "frontend": {
+    "path": "frontend-visibility-fix.log",
+    "pass": 26,
+    "fail": 0
+  },
+  "typescript": {
+    "path": "compile-visibility-fix-02.log",
+    "status": "PASS"
+  },
+  "native": {
+    "c3": {
+      "path": "native-author-01/result.json",
+      "historicalStatus": "FAIL",
+      "scope": "Actual C3 export and consumer passed; first compact UI hid configuration rejection until output opened. Failure fixed and native-retested in shared S3 current bundle."
+    },
+    "s3": {
+      "path": "native-author-02/result.json",
+      "status": "PASS",
+      "count": 8,
+      "scope": "Current bundle native export, rejection visibility, explicit profile, restart persistence and independent consumer; not firmware runtime."
+    }
+  },
+  "files": [
+    {
+      "path": "desktop/scope-extension/src/common/nodu-arduino-simulation-profiles.ts",
+      "sha256": "2eee7f541a93b42e0381393f23ad49c3b540413e76c2e63214c604f4fcab38bf"
+    },
+    {
+      "path": "desktop/scope-extension/src/node/nodu-arduino-simulation-package.ts",
+      "sha256": "6e8eb3707b5fd6106198387c5b2c8dd57f7765970e96bbb99ebc5d7fe0ffb3d2"
+    },
+    {
+      "path": "desktop/scope-extension/src/node/nodu-arduino-server.ts",
+      "sha256": "6fddca0a08ff49bb171e832f908db69f1ea10f9e42928fefdc7adb3f07bd94fb"
+    },
+    {
+      "path": "desktop/scope-extension/src/common/nodu-arduino-protocol.ts",
+      "sha256": "e68877790cfccdc3b8274c885d8639e4a2240f0bf99c9f8b07c6f627ee8b4b63"
+    },
+    {
+      "path": "desktop/scope-extension/src/browser/nodu-arduino-contribution.ts",
+      "sha256": "24807a56fcd5e7889ebba45f4f2d341abe298cc6960418cb3b4925ab7c4e5905"
+    },
+    {
+      "path": "desktop/scope-extension/src/browser/nodu-arduino-model.ts",
+      "sha256": "7f424c2c1ebaf120b46abb90581c021b261c7dc1774617766182a84f982fa63d"
+    },
+    {
+      "path": "desktop/scope-extension/src/browser/nodu-arduino-device.tsx",
+      "sha256": "6674450ad31f0cd61d2eb1e6f358eb62866f0d802e957c8ffe5c2fdccb20f427"
+    },
+    {
+      "path": "desktop/scope-extension/src/browser/scope-workbench.tsx",
+      "sha256": "e0771aad3ceeb57c486a9c32dc76892b938cf9bd2e0ddd3d26819b5ff9eda9df"
+    },
+    {
+      "path": "desktop/scope-extension/test/arduino-frontend.cjs",
+      "sha256": "e7066f2dca5497e31f920cd352a308e4e7c0243eaada333bffc61611ef57dd08"
+    },
+    {
+      "path": "desktop/scope-extension/test/arduino-simulation-package.cjs",
+      "sha256": "d27f23932dd98e3529b30d1072b584d8c62f756f841b0ab99f50c93f4db682c5"
+    },
+    {
+      "path": "desktop/scope-extension/test/arduino-simulation-service.e2e.cjs",
+      "sha256": "c9859a32fa198435d25a0009b5cf6c6a77450af78ca0c088999aca37d05aad05"
+    }
+  ]
+}

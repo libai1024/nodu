@@ -336,6 +336,7 @@ impl Inner {
                         "printfFloat" if value.is_boolean() => "/build/printfFloat",
                         "preset" if value == "debug" || value == "release" => "/build/preset",
                         "chipVendor" if value == "st" || value == "compatible" => "/target/vendor",
+                        "keilAutoSync" if value.is_boolean() && !project.is_external() && project.manifest.pointer("/build/adapter").is_none() && project.chip.id() == "STM32F103C8Tx" => "/keil/autoSync",
                         _ => return Err(Failure::new("badRequest", "不支持的工程设置。")),
                     };
                     values.push((pointer, value.clone()));
@@ -385,10 +386,7 @@ impl Inner {
                 Ok(json!({"open": false}))
             }
             "writeMonitor" => {
-                let data = B64.decode(arg_str(args, "data")?).map_err(|_| Failure::new("badRequest", "数据不是有效的 base64。"))?;
-                if data.len() > 64 * 1024 {
-                    return Err(Failure::new("badRequest", "一次最多发送 64 KB。"));
-                }
+                let data = monitor_payload(args)?;
                 self.monitor.lock().map_err(|_| Failure::new("internal", "监视器不可用"))?.write(&data)?;
                 Ok(json!({"sent": data.len()}))
             }
@@ -422,7 +420,7 @@ impl Inner {
                 self.trusted(&project)?;
                 let env = Env { toolkit: &toolkit, rules: &self.rules, out: &self.out, cancel: &self.build_cancel };
                 if method == "configure" {
-                    return build::configure(&env, &project);
+                    return build::configure(&env, &project, arg_bool(args, "force"));
                 }
                 let build_id = new_id("b");
                 self.out.event("build.started", json!({"buildId": build_id, "path": project.root.display().to_string()}));
@@ -541,6 +539,22 @@ impl Inner {
     }
 }
 
+fn monitor_payload(args: &Value) -> Outcome<Vec<u8>> {
+    const MAX_BYTES: usize = 64 * 1024;
+    // Serial data is bounded by its decoded size, not the 4096-byte limit
+    // used for paths and other short request arguments.
+    let encoded = args.get("data").and_then(Value::as_str).filter(|s| !s.is_empty())
+        .ok_or_else(|| Failure::new("badRequest", "缺少参数 data"))?;
+    if encoded.len() > MAX_BYTES.div_ceil(3) * 4 {
+        return Err(Failure::new("badRequest", "一次最多发送 64 KB。"));
+    }
+    let data = B64.decode(encoded).map_err(|_| Failure::new("badRequest", "数据不是有效的 base64。"))?;
+    if data.len() > MAX_BYTES {
+        return Err(Failure::new("badRequest", "一次最多发送 64 KB。"));
+    }
+    Ok(data)
+}
+
 fn check_compatible(manifest: &Value, args: &Value) -> Outcome<()> {
     if manifest.pointer("/target/vendor").and_then(Value::as_str) == Some("compatible") && !arg_bool(args, "compatibleConfirmed") {
         return Err(Failure::new("compatibilityConfirmation", "兼容芯片尚未验证，请确认具体型号后再下载。"));
@@ -551,6 +565,24 @@ fn check_compatible(manifest: &Value, args: &Value) -> Outcome<()> {
 #[cfg(test)]
 mod arduino_port_tests {
     use super::*;
+
+    #[test]
+    fn monitor_payload_accepts_large_serial_messages_up_to_64_kib() {
+        for size in [3073, 4200, 64 * 1024] {
+            let bytes: Vec<u8> = (0..size).map(|i| (i % 256) as u8).collect();
+            assert_eq!(monitor_payload(&json!({"data": B64.encode(&bytes)})).unwrap(), bytes);
+        }
+    }
+
+    #[test]
+    fn monitor_payload_rejects_oversized_or_invalid_data() {
+        for size in [64 * 1024 + 1, 64 * 1024 + 3] {
+            assert!(monitor_payload(&json!({"data": B64.encode(vec![0; size])})).is_err());
+        }
+        for value in [json!({}), json!({"data": 42}), json!({"data": ""}), json!({"data": "invalid!"})] {
+            assert!(monitor_payload(&value).is_err());
+        }
+    }
 
     #[test]
     fn external_upload_keeps_cross_process_reservation_until_owned_release() {

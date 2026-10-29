@@ -47,3 +47,10 @@ backups/
 
 # Local release artifacts (uploaded as GitHub release assets).
 /desktop/dist/
+
+# Local acceptance runs contain complete applications, toolchains and caches.
+/artifacts/esp-sim-export-20261027/
+/artifacts/keil-f103-20261028/
+/artifacts/minimal-action-redesign-20261028/
+/artifacts/windows-f103-20261028/
+/artifacts/windows-esp32-20261029/

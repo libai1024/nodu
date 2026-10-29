@@ -15,6 +15,7 @@ function fail(message) {
 }
 
 const { app } = require('electron');
+require('./scripts/portable-profile.cjs').configurePortableProfile({ app });
 
 // The launcher ships next to this file so packaged mode reuses the exact
 // original-flag parser (terminal modes, read timeouts, -update_resources).

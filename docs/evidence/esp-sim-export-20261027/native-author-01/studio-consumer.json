@@ -1,0 +1,248 @@
+{
+  "manifest": {
+    "schemaVersion": 1,
+    "producer": {
+      "name": "Nodu",
+      "version": "0.2.2"
+    },
+    "buildId": "e7cd9153-7cc6-4c6f-b96b-2cb2a4e21ee1",
+    "target": {
+      "chip": "esp32c3",
+      "fqbn": "esp32:esp32:esp32c3:JTAGAdapter=default,CDCOnBoot=default,PartitionScheme=default,CPUFreq=160,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+      "options": {
+        "JTAGAdapter": "default",
+        "CDCOnBoot": "default",
+        "PartitionScheme": "default",
+        "CPUFreq": "160",
+        "FlashMode": "qio",
+        "FlashFreq": "80",
+        "FlashSize": "4M",
+        "UploadSpeed": "921600",
+        "DebugLevel": "none",
+        "EraseFlash": "none",
+        "ZigbeeMode": "default"
+      },
+      "clockHz": 160000000,
+      "flash": {
+        "sizeBytes": 4194304,
+        "mode": "dio",
+        "frequencyHz": 80000000
+      },
+      "psram": {
+        "mode": "disabled"
+      },
+      "console": {
+        "kind": "uart",
+        "port": 0,
+        "usbCdcOnBoot": false
+      }
+    },
+    "files": [
+      {
+        "path": "firmware/nodu_ui_export_c3.ino.elf",
+        "role": "elf",
+        "size": 6222188,
+        "sha256": "ccd3bf316aef08b4c170936d7856bed3b32c4166ad07190782cb256f44af23c3"
+      },
+      {
+        "path": "firmware/nodu_ui_export_c3.ino.bin",
+        "role": "application",
+        "size": 277360,
+        "sha256": "1cf91f6309a8b00112e8d052933554517259c9bdc810ab78acd0bd03715b4a61"
+      },
+      {
+        "path": "firmware/nodu_ui_export_c3.ino.bootloader.bin",
+        "role": "bootloader",
+        "size": 19536,
+        "sha256": "9b2fa5e4af7cf282b2db5ed726b26bcca0aec7946eb3fdacc14444195ba754b3"
+      },
+      {
+        "path": "firmware/nodu_ui_export_c3.ino.partitions.bin",
+        "role": "partition-table",
+        "size": 3072,
+        "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+      },
+      {
+        "path": "firmware/boot_app0.bin",
+        "role": "ota-data",
+        "size": 8192,
+        "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0"
+      },
+      {
+        "path": "firmware/nodu_ui_export_c3.ino.merged.bin",
+        "role": "merged",
+        "size": 4194304,
+        "sha256": "6c5de15415af46ed2230e173d3729517d5ee67fe5a7440cc04d63f0fb9c12fe7"
+      },
+      {
+        "path": "firmware/build.options.json",
+        "role": "build-options",
+        "size": 908,
+        "sha256": "028146b900c90e5163a3ab564e1dd626f26e882537d92ed8da9c79efb4f661d8"
+      },
+      {
+        "path": "firmware/flash_args",
+        "role": "flash-args",
+        "size": 191,
+        "sha256": "47037189c1693d7e227224923a33d3026dc8c1fac2ecff2e68c05cd9be3d5191"
+      },
+      {
+        "path": "metadata/build.log",
+        "role": "build-log",
+        "size": 207,
+        "sha256": "b235bbf9ac49317deb0bb7e4db149b08e22f28c32fe5c9b0ef37b932e453d57b"
+      },
+      {
+        "path": "metadata/dependencies.json",
+        "role": "dependency-lock",
+        "size": 25261,
+        "sha256": "a6c527d277cab4facd556ed2ed056aabe5b0a68b367b1f0c1c89563dff1350dc"
+      },
+      {
+        "path": "source/.gitignore",
+        "role": "source",
+        "size": 41,
+        "sha256": "9ca759c996e8a4bb5f4bd9a793aa56013435365403e7cb923c99bad629084b1b"
+      },
+      {
+        "path": "source/nodu.json",
+        "role": "source",
+        "size": 116,
+        "sha256": "ac07962bfcea62a8e5ee4c8844cc141a6bc61042aab4c04f2255691813314084"
+      },
+      {
+        "path": "source/nodu_ui_export_c3.ino",
+        "role": "source",
+        "size": 136,
+        "sha256": "48b79e7b61ba60f6fdecae77209cdab8318ec233958270c5797e696b485600ca"
+      },
+      {
+        "path": "source/sketch.yaml",
+        "role": "source",
+        "size": 816,
+        "sha256": "f69ecf150bc0e875094c77ca761634e7be248b934440eab3fe46b9d81e7067c0"
+      }
+    ],
+    "flashSegments": [
+      {
+        "offset": 0,
+        "path": "firmware/nodu_ui_export_c3.ino.bootloader.bin"
+      },
+      {
+        "offset": 32768,
+        "path": "firmware/nodu_ui_export_c3.ino.partitions.bin"
+      },
+      {
+        "offset": 57344,
+        "path": "firmware/boot_app0.bin"
+      },
+      {
+        "offset": 65536,
+        "path": "firmware/nodu_ui_export_c3.ino.bin"
+      }
+    ],
+    "mergedBaseOffset": 0,
+    "dependencies": {
+      "framework": "Arduino-ESP32",
+      "coreVersion": "3.3.12",
+      "idfVersion": "5.5.5",
+      "arduinoCliVersion": "1.5.1",
+      "lockPath": "metadata/dependencies.json"
+    },
+    "provenance": {
+      "buildStatus": "succeeded",
+      "sourceFiles": [
+        "source/.gitignore",
+        "source/nodu.json",
+        "source/nodu_ui_export_c3.ino",
+        "source/sketch.yaml"
+      ],
+      "sourceDigest": "29f80c4e72cbc6d567726dc61b0d97d5412a6f651b54f2dca53b515f20f79d0f",
+      "noduInputDigest": "be12b62d4ba8e81bf48c10ea7925eea4974b83468ea68a542648b6c2021a1f08",
+      "noduArtifactDigest": "673f6ce715b39ea76e4c23e6cb54e424a212eda4d3ee67513f06d72c51559d94",
+      "dependencyDigest": "d956bee69a634f8a65a55a1afedc339da41267e37375f3aef7243eb7a2cea5e0",
+      "inputSnapshotId": "5c624ac2-e220-4ae8-b646-d6fccf163343",
+      "scope": "Actual Nodu successful-build handoff; binary consistency is independently checked by the receiving Studio. No simulation success claim."
+    }
+  },
+  "elfPath": "firmware/nodu_ui_export_c3.ino.elf",
+  "fullflashPath": "firmware/nodu_ui_export_c3.ino.merged.bin",
+  "flashSegments": [
+    {
+      "offset": 0,
+      "path": "firmware/nodu_ui_export_c3.ino.bootloader.bin",
+      "size": 19536,
+      "sha256": "9b2fa5e4af7cf282b2db5ed726b26bcca0aec7946eb3fdacc14444195ba754b3"
+    },
+    {
+      "offset": 32768,
+      "path": "firmware/nodu_ui_export_c3.ino.partitions.bin",
+      "size": 3072,
+      "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+    },
+    {
+      "offset": 57344,
+      "path": "firmware/boot_app0.bin",
+      "size": 8192,
+      "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0"
+    },
+    {
+      "offset": 65536,
+      "path": "firmware/nodu_ui_export_c3.ino.bin",
+      "size": 277360,
+      "sha256": "1cf91f6309a8b00112e8d052933554517259c9bdc810ab78acd0bd03715b4a61"
+    }
+  ],
+  "partitions": [
+    {
+      "name": "nvs",
+      "type": 1,
+      "subtype": 2,
+      "offset": 36864,
+      "size": 20480
+    },
+    {
+      "name": "otadata",
+      "type": 1,
+      "subtype": 0,
+      "offset": 57344,
+      "size": 8192
+    },
+    {
+      "name": "app0",
+      "type": 0,
+      "subtype": 16,
+      "offset": 65536,
+      "size": 1310720
+    },
+    {
+      "name": "app1",
+      "type": 0,
+      "subtype": 17,
+      "offset": 1376256,
+      "size": 1310720
+    },
+    {
+      "name": "spiffs",
+      "type": 1,
+      "subtype": 130,
+      "offset": 2686976,
+      "size": 1441792
+    },
+    {
+      "name": "coredump",
+      "type": 1,
+      "subtype": 3,
+      "offset": 4128768,
+      "size": 65536
+    }
+  ],
+  "packageSHA256": "37f33cf00b9551be4c7c38141208f228a89ce7b29736d869e4bc0b7546c03cf9",
+  "validation": {
+    "format": "esp-sim-v1",
+    "elfSHA256": "ccd3bf316aef08b4c170936d7856bed3b32c4166ad07190782cb256f44af23c3",
+    "flashSHA256": "6c5de15415af46ed2230e173d3729517d5ee67fe5a7440cc04d63f0fb9c12fe7",
+    "sourceDigest": "29f80c4e72cbc6d567726dc61b0d97d5412a6f651b54f2dca53b515f20f79d0f",
+    "meaning": "byte-consistency only; not signature, producer authentication or simulation acceptance"
+  }
+}

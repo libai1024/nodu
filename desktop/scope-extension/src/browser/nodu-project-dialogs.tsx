@@ -3,6 +3,7 @@ import * as React from '@theia/core/shared/react';
 import { ReactDialog } from '@theia/core/lib/browser/dialogs/react-dialog';
 import { NoduEmbeddedModel, formatBytes } from './nodu-embedded-model';
 import { ProjectStatus } from '../common/nodu-embedded-protocol';
+import { supportsKeil } from '../common/nodu-keil';
 
 export class NoduProjectDialog extends ReactDialog<void> {
     constructor(title: string, private readonly view: (close: () => void) => React.ReactNode) {
@@ -44,6 +45,7 @@ export function ProjectSettings({ model, close }: { model: NoduEmbeddedModel; cl
     const project = model.project!;
     const [preset, setPreset] = React.useState(project.preset);
     const [printfFloat, setFloat] = React.useState(!!project.manifest.build?.printfFloat);
+    const [keilAutoSync, setKeilAutoSync] = React.useState(project.manifest.keil?.autoSync === true);
     const supportsPrintfFloat = project.manifest.build?.adapter !== 'dacir-directory-v1';
     const [chipVendor, setVendor] = React.useState(project.manifest.target.vendor ?? 'st');
     const [autoBoot, setAutoBoot] = React.useState(project.manifest.flash?.autoBoot ?? { enabled: false, confirmed: false, boot0HighDtr: false, resetActiveRts: true });
@@ -52,7 +54,7 @@ export function ProjectSettings({ model, close }: { model: NoduEmbeddedModel; cl
     const save = async (event: React.FormEvent): Promise<void> => {
         event.preventDefault(); if (busy || model.busy) { return; } setBusy(true); setError('');
         try {
-            const next = await model.call<ProjectStatus>('setProjectOptions', { path: project.path, options: { preset, ...(supportsPrintfFloat ? { printfFloat } : {}), chipVendor, autoBoot } });
+            const next = await model.call<ProjectStatus>('setProjectOptions', { path: project.path, options: { preset, ...(supportsPrintfFloat ? { printfFloat } : {}), ...(supportsKeil(project) ? { keilAutoSync } : {}), chipVendor, autoBoot } });
             model.settingsChanged(next); close();
         } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); }
     };
@@ -60,6 +62,11 @@ export function ProjectSettings({ model, close }: { model: NoduEmbeddedModel; cl
         <label className="nodu-project-field">构建配置<select autoFocus value={preset} disabled={busy} onChange={e => setPreset(e.currentTarget.value)}><option value="debug">Debug</option><option value="release">Release</option></select></label>
         {supportsPrintfFloat && <label className="nodu-project-check"><input type="checkbox" checked={printfFloat} disabled={busy} onChange={e => setFloat(e.currentTarget.checked)} />printf 浮点支持（%f）</label>}
         <label className="nodu-project-field">芯片来源<select value={chipVendor} disabled={busy} onChange={e => setVendor(e.currentTarget.value as 'st' | 'compatible')}><option value="st">ST</option><option value="compatible">兼容芯片</option></select></label>
+        {supportsKeil(project) && <div className="nodu-auto-boot-settings">
+            <label className="nodu-project-check"><input type="checkbox" checked={keilAutoSync} disabled={busy} onChange={e => setKeilAutoSync(e.currentTarget.checked)} />自动维护 Keil 工程</label>
+            <p>仅对此项目生效。新增文件或修改工程配置后自动更新；代码始终共用。关闭后仍可从文件菜单手动更新。</p>
+            {model.keilError && <p role="alert" className="nodu-c-error-text">{model.keilError}</p>}
+        </div>}
         {autoSupported && <>
             <label className="nodu-project-check"><input type="checkbox" checked={autoBoot.enabled} disabled={busy} onChange={e => setAutoBoot({ ...autoBoot, enabled: e.currentTarget.checked, confirmed: false })} />DTR/RTS 自动下载</label>
             {autoBoot.enabled && <div className="nodu-auto-boot-settings">

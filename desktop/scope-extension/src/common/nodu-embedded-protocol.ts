@@ -7,6 +7,7 @@ export const NoduEmbeddedService = Symbol('NoduEmbeddedService');
 
 /** Sidecar methods the frontend may call; anything else is refused in Node. */
 export const EMBEDDED_METHODS = [
+    'keilStatus', 'generateKeil', 'openKeil',
     'openBuildLocation', 'createWorkspace', 'createModule', 'readToolkitLicense', 'setProjectOptions',
     'exportProject', 'detectExternal', 'importExternal', 'acceptToolkit', 'clangd',
     'ping', 'catalog', 'checkToolkit', 'createProject', 'openProject', 'trustProject', 'setProjectOption',
@@ -113,7 +114,7 @@ export interface PortInfo { path: string; description: string; vid?: number; pid
 export interface ProjectStatus {
     path: string;
     name: string;
-    manifest: { target: { mcu: string; board: string; vendor?: 'st' | 'compatible' }; flash?: { autoBoot?: { enabled: boolean; confirmed: boolean; boot0HighDtr: boolean; resetActiveRts: boolean }; method?: string; port?: string | null }; monitor?: { baud?: number; encoding?: string }; build?: { preset?: string; printfFloat?: boolean; external?: boolean; adapter?: string } };
+    manifest: { keil?: { autoSync?: boolean }; target: { mcu: string; board: string; vendor?: 'st' | 'compatible' }; flash?: { autoBoot?: { enabled: boolean; confirmed: boolean; boot0HighDtr: boolean; resetActiveRts: boolean }; method?: string; port?: string | null }; monitor?: { baud?: number; encoding?: string }; build?: { preset?: string; printfFloat?: boolean; external?: boolean; adapter?: string } };
     chip: { id: string; name: string; core: string; family: string; series: string; flash: { size: number; eraseUnit: string }; ram: { size: number }; sdk: { dir: string; version: string } };
     board: { id: string; name: string; boot?: { note?: string; boot0?: string }; debugUart?: { instance: string; tx: string; rx: string; via: string; note?: string } };
     preset: string;

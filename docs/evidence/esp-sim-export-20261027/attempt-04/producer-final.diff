@@ -1,0 +1,18 @@
+--- producer-used.ts
++++ producer-final.ts
+@@ -65,13 +65,13 @@
+     if (!platform || !Array.isArray(platform.toolsDependencies) || !(await readFile(join(core, 'platform.txt'))).toString('utf8').includes('\nversion=3.3.12\n')) { fail('Core 安装记录无效。'); }
+     const result: ArduinoSimulationDependency[] = [{ provider: 'core', name: 'esp32:esp32', version: project.coreVersion, path: core, kind: 'tree',
+         license: 'NOASSERTION; see licenseFiles', url: platform.url, relationship: 'selected-platform-installed-content' },
+-    { provider: 'tool', name: 'arduino-cli', version: '1.5.1', path: await fs.realpath(cliPath), kind: 'file', license: 'GPL-3.0-or-later', relationship: 'selected-build-executable; version must be verified by service' }];
++    { provider: 'tool', name: 'arduino-cli', version: '1.5.1', path: await fs.realpath(cliPath), kind: 'file', license: 'NOASSERTION; installed CLI license review required', relationship: 'selected-build-executable; version must be verified by service' }];
+     const internal = join(home, 'data', 'internal'), folders = await fs.readdir(internal);
+     const selected = new Set([project.chip === 'esp32c3' ? 'esp-rv32' : 'esp-x32', `${project.chip}-libs`, 'esptool_py']);
+     for (const dependency of platform.toolsDependencies as { packager: string; name: string; version: string }[]) {
+         const tool = metadata.packages.find((p: { name?: string }) => p.name === dependency.packager)?.tools?.find((t: { name?: string; version?: string }) => t.name === dependency.name && t.version === dependency.version);
+         if (!tool || !Array.isArray(tool.systems)) { fail(`缺少工具来源记录：${dependency.name}`); }
+-        const archives = [];
++        const archives: { system: { host: string; checksum: string; url: string }; archive: string }[] = [];
+         for (const system of tool.systems) {
+             if (typeof system.archiveFileName !== 'string' || basename(system.archiveFileName) !== system.archiveFileName) { continue; }
+             const archive = join(home, 'downloads', 'packages', system.archiveFileName);

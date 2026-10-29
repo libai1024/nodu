@@ -1,0 +1,40 @@
+{
+  "scope": "Launched isolated real Electron; UI acceptance pending",
+  "app": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/Nodu Simulation Export Check.app",
+  "application": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron-app",
+  "profile": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/profile",
+  "arduinoHome": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/home",
+  "project": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/projects/nodu_ui_export_c3",
+  "port": 64861,
+  "assets": [
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron-app/lib/frontend/bundle.js",
+      "sha256": "9bc3327073d87c137d0b92934caab264d751ba8b2048e8091c26d5b33082ab28"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron-app/lib/frontend/preload.js",
+      "sha256": "1a840e1306039726dd1de7b9c7430daeb8cc2f6bf63a8a7b8e9e500bbad48067"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron-app/lib/backend/main.js",
+      "sha256": "91d92f47d3c0ba684437441dc2438b2ea381e135605f71c974f582e6b9498f84"
+    },
+    {
+      "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron-app/lib/backend/electron-main.js",
+      "sha256": "2945ffdc57d970b7e408b5b3ab885a8b69fd16c88baa6efe46064c53cd94c3c0"
+    }
+  ],
+  "started": "2026-10-27T05:36:09.822134+00:00",
+  "pid": 76920,
+  "args": [
+    "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/Nodu Simulation Export Check.app/Contents/MacOS/Electron",
+    "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron-app",
+    "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/projects/nodu_ui_export_c3",
+    "--hostname=127.0.0.1",
+    "--port=64861",
+    "--plugins=local-dir:/Users/wangwei/Model/k210-studio/desktop/plugins",
+    "--user-data-dir=/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/profile/electron",
+    "--electronUserData=/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/profile/electron"
+  ],
+  "bundleIdentity": "dev.nodu.arduino-electron-check-20261027"
+}

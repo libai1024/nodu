@@ -73,6 +73,7 @@ const { values } = (() => {
         return parseArgs({
             options: {
                 arch: { type: 'string' },
+                profile: { type: 'string' },
                 help: { type: 'boolean' },
                 stamp: { type: 'boolean' },
                 prepare: { type: 'boolean' },
@@ -91,11 +92,16 @@ Usage: node scripts/package-electron.cjs [--arch universal|arm64|x64]
                 Windows: x64 portable package.
   --arch arm64|x64   single-arch signed .app + zip + DMG (macOS).
   --prepare     build isolated JS/Electron workspaces without assembling runtime assets.
+  --profile stm32   Windows STM32 offline edition; full remains the default.
   --help        show this text.`);
     process.exit(0);
 }
 
 const host = process.platform;
+const packageProfile = values.profile || 'full';
+if (!['full', 'stm32'].includes(packageProfile)) { fail(`unsupported package profile ${packageProfile}`); }
+if (packageProfile === 'stm32' && host !== 'win32') { fail('the stm32 portable profile currently targets Windows only'); }
+const includeArduino = packageProfile === 'full';
 if (require.main === module && !['darwin', 'win32'].includes(host)) {
     fail(`unsupported package host platform ${host}`);
 }
@@ -114,7 +120,7 @@ function requireInputs(arch) {
     if (host === 'darwin') { tutorTools.validate(tutorTools.rootFor(desktop, `darwin-${arch}`), `darwin-${arch}`); }
     const stm32 = require('./package-stm32.cjs');
     stm32.validateToolkit(stm32.toolkitSource(desktop, host, arch));
-    arduinoTools.validateBundle(arduinoTools.bundleSource(desktop, `${host}-${arch}`), `${host}-${arch}`);
+    if (includeArduino) { arduinoTools.validateBundle(arduinoTools.bundleSource(desktop, `${host}-${arch}`), `${host}-${arch}`); }
     const required = [];
     if (host === 'darwin') {
         for (const name of ['nodu-device', 'nodu-terminal', 'nodu-resources', 'nodu-embedded', 'nodu-tutor',
@@ -135,6 +141,7 @@ function requireInputs(arch) {
     }
     required.push('scope-extension/resources/nodu-resources/examples');
     required.push('plugins/vscode-clangd/package.json');
+    if (includeArduino) {
     required.push('plugins/nodu-arduino-language/package.json');
     required.push('plugins/nodu-arduino-language/extension.cjs');
     required.push('plugins/nodu-arduino-language/grammar/manifest.json');
@@ -151,6 +158,7 @@ function requireInputs(arch) {
     required.push(`${arduinoBin}/arduino-clangd/bin/clangd${arduinoExe}`);
     required.push(`${arduinoBin}/ARDUINO-LANGUAGE-TOOLS.json`);
     if (host === 'win32') { required.push(`${arduinoBin}/arduino-clangd-launcher.exe`); }
+    }
     required.push('scripts/launch.cjs');
     required.push('scripts/packaged-entry.cjs');
     required.push('electron-app/package.json');
@@ -809,6 +817,8 @@ function buildAppInput(arch, workDesktop, universal) {
     fs.mkdirSync(path.join(appInput, 'scripts'), { recursive: true });
     fs.copyFileSync(path.join(__dirname, 'launch.cjs'),
         path.join(appInput, 'scripts', 'launch.cjs'));
+    fs.copyFileSync(path.join(__dirname, 'portable-profile.cjs'),
+        path.join(appInput, 'scripts', 'portable-profile.cjs'));
     fs.copyFileSync(path.join(desktop, 'THIRD-PARTY-NOTICES.md'),
         path.join(appInput, 'THIRD-PARTY-NOTICES.md'));
     fs.copyFileSync(path.join(repo, 'LICENSE'),
@@ -877,14 +887,16 @@ function buildAppInput(arch, workDesktop, universal) {
     const stm32 = require('./package-stm32.cjs');
     stm32.copyToolkit(stm32.toolkitSource(desktop, host, arch), resDest, host, arch);
     const arduinoHosts = (universal ? ['arm64', 'x64'] : [arch]).map(value => `${host}-${value}`);
-    for (const arduinoHost of arduinoHosts) {
+    for (const arduinoHost of includeArduino ? arduinoHosts : []) {
         arduinoTools.copyBundle(arduinoTools.bundleSource(desktop, arduinoHost), resDest, arduinoHost, arduinoHosts);
     }
-    copyRes(path.join(desktop, 'plugins'), path.join(appInput, 'plugins'));
+    if (includeArduino) { copyRes(path.join(desktop, 'plugins'), path.join(appInput, 'plugins')); }
+    else { copyRes(path.join(desktop, 'plugins/vscode-clangd'), path.join(appInput, 'plugins/vscode-clangd')); }
     copyRuntimePackages(workDesktop, appInput);
     require('./package-licenses.cjs').collectPackageLicenses({ desktop, workDesktop, appInput });
     fs.writeFileSync(path.join(appInput, 'build-info.json'), JSON.stringify({
         version: applicationVersion, ...sourceIdentity(),
+        profile: packageProfile,
         compilerInputs: universal
             ? { arm64: computeStamp('arm64').stamp, x64: computeStamp('x64').stamp }
             : { [arch]: computeStamp(arch).stamp },
@@ -1281,23 +1293,27 @@ async function packageWindows() {
     const workDesktop = await buildWorkspace('x64');
     const appInput = buildAppInput('x64', workDesktop, false);
     const out = await packageThin('x64', appInput);
-    const portable = path.join(distDir, 'Nodu-win32-x64');
+    const portableName = includeArduino ? 'Nodu-win32-x64' : 'Nodu-STM32-win32-x64';
+    const portable = path.join(distDir, portableName);
     fs.mkdirSync(distDir, { recursive: true });
     fs.rmSync(portable, { recursive: true, force: true });
     fs.cpSync(out, portable, { recursive: true });
-    const zip = path.join(distDir, `Nodu-${applicationVersion}-win32-x64.zip`);
+    if (!includeArduino) { writeWindowsPortableFiles(portable); }
+    const stem = `Nodu-${applicationVersion}-${includeArduino ? '' : 'stm32-'}win32-x64`;
+    const zip = path.join(distDir, `${stem}.zip`);
     fs.rmSync(zip, { force: true });
     // Git for Windows puts GNU tar on PATH; -a there can write a tar file
     // named .zip. Use the system bsdtar with an explicit ZIP format.
     const archiver = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
     if (!fs.existsSync(archiver)) { fail('Windows system bsdtar is required to create the portable ZIP.'); }
-    execFileSync(archiver, ['--format=zip', '-cf', path.basename(zip), 'Nodu-win32-x64'],
+    execFileSync(archiver, ['--format=zip', '-cf', path.basename(zip), portableName],
         { cwd: distDir });
     assertZipHeader(zip);
     execFileSync(archiver, ['-tf', path.basename(zip)], { cwd: distDir, stdio: 'ignore' });
     const manifest = {
         version: applicationVersion,
         targetPlatform: 'win32-x64',
+        profile: packageProfile,
         ...sourceIdentity(),
         artifact: path.basename(zip),
         size: fs.statSync(zip).size,
@@ -1308,11 +1324,35 @@ async function packageWindows() {
         runtimeResources: runtimeResourcesStamp(),
         generatedAt: new Date().toISOString(),
     };
-    fs.writeFileSync(path.join(distDir, `Nodu-${applicationVersion}-win32-x64.manifest.json`),
+    fs.writeFileSync(path.join(distDir, `${stem}.manifest.json`),
         JSON.stringify(manifest, null, 2) + '\n');
-    fs.writeFileSync(path.join(distDir, `Nodu-${applicationVersion}-win32-x64.sha256`),
+    fs.writeFileSync(path.join(distDir, `${stem}.sha256`),
         `${manifest.sha256}  ${manifest.artifact}\n`);
     console.log(`package-electron: ${rel(zip)}`);
+}
+
+function writeWindowsPortableFiles(portable) {
+    const drivers = process.env.NODU_WINDOWS_DRIVERS;
+    if (!drivers || !path.isAbsolute(drivers) || !fs.existsSync(drivers)) {
+        throw new Error('STM32 offline distribution requires NODU_WINDOWS_DRIVERS with the signed ST-LINK driver files');
+    }
+    const driverFiles = [];
+    const visit = directory => { for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+        const file = path.join(directory, entry.name);
+        if (entry.isDirectory()) { visit(file); }
+        else if (entry.isFile()) { driverFiles.push(file); }
+        else { throw new Error('Offline driver inputs must be regular files'); }
+    } };
+    visit(drivers);
+    if (!driverFiles.some(file => /stlink_dbg_winusb\.inf$/i.test(file)) || !driverFiles.some(file => /\.cat$/i.test(file))) {
+        throw new Error('Offline ST-LINK driver package is incomplete');
+    }
+    fs.cpSync(drivers, path.join(portable, 'drivers/ST-LINK'), { recursive: true });
+    fs.writeFileSync(path.join(portable, 'NoduPortable.json'), JSON.stringify({ schema: 1, profile: 'stm32', dataDirectory: 'Data' }, null, 2) + '\n');
+    fs.writeFileSync(path.join(portable, 'drivers/Install-ST-LINK.cmd'), '@echo off\r\n"%SystemRoot%\\System32\\pnputil.exe" /add-driver "%~dp0ST-LINK\\*.inf" /subdirs /install\r\npause\r\n');
+    fs.writeFileSync(path.join(portable, 'OFFLINE-README.txt'), '\ufeff见微 Nodu · STM32 离线开发包\r\n\r\n完整解压后双击 Nodu.exe，用户配置和缓存保存到同目录 Data。\r\n包含 Arm GNU、CMake、Ninja、clangd、STM32CubeF1/F4 SDK、OpenOCD、stm32flash 和 ST-LINK 驱动文件。\r\n新建 STM32F103C8T6 工程即可编写、补全与编译，不需要另装 Node、Python、CMake、GCC 或下载工具链。\r\n首次使用 ST-LINK/V2 时，以管理员身份运行 drivers\\Install-ST-LINK.cmd 安装随包驱动。此操作由 Windows 管理系统驱动目录。\r\n串口下载需与所用 USB 转串口芯片匹配的驱动；本包的离线保证范围为 STM32 开发工具链及 ST-LINK。\r\n本版本不包含 Arduino/ESP32 离线环境。\r\n');
+    const records = driverFiles.map(file => ({ path: path.relative(drivers, file).split(path.sep).join('/'), size: fs.statSync(file).size, sha256: sha256File(file) }));
+    fs.writeFileSync(path.join(portable, 'drivers/manifest.json'), JSON.stringify({ source: 'STMicroelectronics signed Windows driver packages', files: records }, null, 2) + '\n');
 }
 
 function assertZipHeader(file) {

@@ -1,0 +1,94 @@
+{
+  "started": "2026-10-29T07:09:03.423Z",
+  "proxy": "curl --noproxy *",
+  "results": [
+    {
+      "name": "esp32-china-index",
+      "url": "https://jihulab.com/esp-mirror/espressif/arduino-esp32/-/raw/gh-pages/package_esp32_index_cn.json",
+      "elapsedMs": 650,
+      "exitCode": 0,
+      "curl": "200|595271|0.606606|https://jihulab.com/esp-mirror/espressif/arduino-esp32/-/raw/gh-pages/package_esp32_index_cn.json",
+      "error": "",
+      "bytes": 595271,
+      "actualSha256": "6b28b69bec12989bc949b966222fb137827d835207040dd9089f1b5733e85007",
+      "validIndex": true,
+      "versions": [
+        "3.3.10-cn",
+        "3.3.9-cn",
+        "3.3.8-cn",
+        "3.3.7-cn",
+        "3.3.6-cn",
+        "3.3.5-cn",
+        "3.3.4-cn",
+        "3.3.3-cn"
+      ]
+    },
+    {
+      "name": "esp32-official-index",
+      "url": "https://espressif.github.io/arduino-esp32/package_esp32_index.json",
+      "elapsedMs": 954,
+      "exitCode": 0,
+      "curl": "200|651419|0.830797|https://espressif.github.io/arduino-esp32/package_esp32_index.json",
+      "error": "",
+      "bytes": 651419,
+      "actualSha256": "d5f26e5ee0b06c8e2c66c2196aa16fdffdbbc317c832159795f2caa5405d0f7d",
+      "validIndex": true,
+      "versions": [
+        "3.3.12",
+        "3.3.11",
+        "3.3.10",
+        "3.3.9",
+        "3.3.8",
+        "3.3.7",
+        "3.3.6",
+        "3.3.5"
+      ]
+    },
+    {
+      "name": "ArduinoJson",
+      "url": "https://downloads.arduino.cc/libraries/github.com/bblanchon/ArduinoJson-7.4.3.zip",
+      "sha256": "cd8d2f7e4f06eb7e215beecb0de5326a82d047a994e84246572ad73ddc52746f",
+      "expectedSize": 517250,
+      "elapsedMs": 1787,
+      "exitCode": 0,
+      "curl": "200|517250|1.747031|https://downloads.arduino.cc/libraries/github.com/bblanchon/ArduinoJson-7.4.3.zip",
+      "error": "",
+      "bytes": 517250,
+      "actualSha256": "cd8d2f7e4f06eb7e215beecb0de5326a82d047a994e84246572ad73ddc52746f",
+      "checksumMatches": true
+    },
+    {
+      "name": "arduino-library-index",
+      "url": "https://downloads.arduino.cc/libraries/library_index.json.gz",
+      "elapsedMs": 2801,
+      "exitCode": 0,
+      "curl": "200|5455763|2.758662|https://downloads.arduino.cc/libraries/library_index.json.gz",
+      "error": "",
+      "bytes": 5455763,
+      "actualSha256": "5061d0ff4c02b9b761d9587b2c59e72ad9c680cf214d3e5618987fdf193638aa"
+    },
+    {
+      "name": "PubSubClient",
+      "url": "https://downloads.arduino.cc/libraries/github.com/knolleary/PubSubClient-2.8.0.zip",
+      "sha256": "f0849b93a2b02e263a6c157c374d6103caefba753a47dcbef64bbec620b079fe",
+      "expectedSize": 44426,
+      "elapsedMs": 896,
+      "exitCode": 0,
+      "curl": "200|44426|0.857435|https://downloads.arduino.cc/libraries/github.com/knolleary/PubSubClient-2.8.0.zip",
+      "error": "",
+      "bytes": 44426,
+      "actualSha256": "f0849b93a2b02e263a6c157c374d6103caefba753a47dcbef64bbec620b079fe",
+      "checksumMatches": true
+    },
+    {
+      "name": "esp32-core-3.3.12",
+      "url": "https://github.com/espressif/arduino-esp32/releases/download/3.3.12/esp32-core-3.3.12.zip",
+      "sha256": "87401004f279a206781e368b66098a8383b7cf87cce7811a6afd0163503fa78f",
+      "expectedSize": 51102895,
+      "elapsedMs": 12043,
+      "exitCode": 28,
+      "curl": "000|0|12.006448|https://github.com/espressif/arduino-esp32/releases/download/3.3.12/esp32-core-3.3.12.zip",
+      "error": "curl: (28) Connection timed out after 12006 milliseconds"
+    }
+  ]
+}

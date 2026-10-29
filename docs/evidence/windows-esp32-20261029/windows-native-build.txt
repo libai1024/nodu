@@ -1,0 +1,36 @@
+   Compiling memchr v2.8.3
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.229
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling zmij v1.0.23
+   Compiling thiserror v2.0.21
+   Compiling equivalent v1.0.3
+   Compiling hashbrown v0.17.1
+   Compiling generic-array v0.14.7
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling itoa v1.0.18
+   Compiling foldhash v0.2.0
+   Compiling windows-targets v0.52.6
+   Compiling cfg-if v1.0.5
+   Compiling winapi v0.3.9
+   Compiling windows-sys v0.52.0
+   Compiling regex-syntax v0.8.11
+   Compiling scopeguard v1.2.0
+   Compiling cpufeatures v0.2.17
+   Compiling base64 v0.22.1
+   Compiling aho-corasick v1.1.5
+   Compiling ts-rs v11.1.0
+   Compiling indexmap v2.14.2
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling fs2 v0.4.3
+   Compiling regex-automata v0.4.18
+   Compiling nodu-protocol v0.1.4 (/Users/wangwei/Model/k210-studio/desktop/native/crates/nodu-protocol)
+   Compiling serialport v4.10.1
+   Compiling nodu-serial v0.1.4 (/Users/wangwei/Model/k210-studio/desktop/native/crates/nodu-serial)
+   Compiling regex v1.13.1
+   Compiling nodu-embedded v0.2.1 (/Users/wangwei/Model/k210-studio/desktop/native/crates/nodu-embedded)
+    Finished `release` profile [optimized] target(s) in 22.77s

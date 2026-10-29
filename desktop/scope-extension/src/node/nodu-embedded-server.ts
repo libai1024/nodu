@@ -14,6 +14,9 @@ import { encodeMonitorText } from './nodu-monitor-encoding';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
 import { TutorRuntimeEvidence } from './tutor/tutor-runtime-evidence';
 import { createDaxinProject } from './nodu-daxin-project';
+import { generateKeil, keilStatus, openKeil } from './nodu-keil-project';
+import { ProjectStatus } from '../common/nodu-embedded-protocol';
+import { supportsKeil } from '../common/nodu-keil';
 
 const MAX_REQUEST = 1024 * 1024;
 /** Node-side backstops; the sidecar enforces the real per-step limits. */
@@ -33,6 +36,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     readonly teachingEvidence = new TutorRuntimeEvidence();
     private sidecar?: ChildProcessWithoutNullStreams;
     private sequence = 0;
+    private readonly keilJobs = new Set<string>();
     private readonly pending = new Map<number, Pending>();
     private readonly clients = new Set<EmbeddedClient>();
     private arduinoLease?: { token: string; port: string; restore: boolean; lost: boolean; onLost?: () => void };
@@ -160,6 +164,21 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
             if (value !== undefined && (typeof value !== 'string' || !isAbsolute(value) || value.includes('\0'))) { return refuse(`${key} 必须是绝对路径。`); }
         }
         try {
+            if (method === 'keilStatus' || method === 'generateKeil' || method === 'openKeil') {
+                if (typeof args.path !== 'string') { return refuse('缺少工程路径。'); }
+                const project = await this.request('openProject', { path: args.path }) as ProjectStatus;
+                if (method === 'keilStatus') return { ok: true, result: await keilStatus(project) };
+                if (method === 'openKeil') return { ok: true, result: await openKeil(project) };
+                if (!supportsKeil(project)) throw Object.assign(new Error('目前支持 Nodu 原生 STM32F103C8T6 工程。'), { code: 'keilUnsupported' });
+                if (this.keilJobs.has(project.path)) throw Object.assign(new Error('Keil 工程正在更新。'), { code: 'keilBusy' });
+                this.keilJobs.add(project.path);
+                try {
+                    if (!project.trusted) throw Object.assign(new Error('请先信任当前工程，再生成 Keil 配置。'), { code: 'untrusted' });
+                    const configured = await this.request('configure', { path: project.path, force: true }, TIMEOUTS.configure) as { ok: boolean; compileCommands: string };
+                    if (!configured.ok) throw Object.assign(new Error('工程配置未通过，请先修复 Nodu 构建配置。'), { code: 'keilConfiguration' });
+                    return { ok: true, result: await generateKeil(project, configured.compileCommands, join(this.extensionDir(), 'resources/stm32')) };
+                } finally { this.keilJobs.delete(project.path); }
+            }
             if (method === 'openMonitor' && args.arduino === true) {
                 const ports = await this.request('listPorts', {}) as PortInfo[];
                 const port = ports.find(item => item.path === args.port);

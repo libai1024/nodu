@@ -1,0 +1,227 @@
+{
+  "scope": "Small metadata/screenshots only; no dependency caches or duplicate firmware bundles",
+  "files": [
+    {
+      "path": "arduino-regression-02.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/arduino-regression-02.log",
+      "size": 9222,
+      "sha256": "ca318a456e40a307ad48e1ca699f4ff26d09a61056a47175a1619910ac3713cf"
+    },
+    {
+      "path": "attempt-04/producer-final.diff",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/producer-final.diff",
+      "size": 2105,
+      "sha256": "1563acbbe76c81210d02c9ed17db049bb97f4df80c926c19df103c49fa8c1a7c"
+    },
+    {
+      "path": "attempt-04/result.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/result.json",
+      "size": 10302,
+      "sha256": "81fa0ac754f3fe2e3f3f5bfc7b42490b58715ef6e2c58a6934690a944c20b71e"
+    },
+    {
+      "path": "compile-visibility-fix-02.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/compile-visibility-fix-02.log",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "frontend-visibility-fix.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/frontend-visibility-fix.log",
+      "size": 2771,
+      "sha256": "5d39b08b4b71bd10dc1b0b987f78ea9dc2600f645dc75213377fb46d509efce3"
+    },
+    {
+      "path": "integration-summary.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/integration-summary.json",
+      "size": 3421,
+      "sha256": "7fe359370e42076d5243b0f4558b482e3968bcf6cc0ecd15c617c7011d70f979"
+    },
+    {
+      "path": "native-author-01/01-unsupported-configuration.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/01-unsupported-configuration.ax.txt",
+      "size": 191,
+      "sha256": "50709361662d756871805a6d4936f5aa7e2ba58febacafbd9fdb3ee359d49c9f"
+    },
+    {
+      "path": "native-author-01/01-unsupported-configuration.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/01-unsupported-configuration.png",
+      "size": 248008,
+      "sha256": "e1590b76e9eb6e64edd1a91b8e3fb47aa46d9f04e949958305a4d75ed912cd8e"
+    },
+    {
+      "path": "native-author-01/02-explicit-c3-profile.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/02-explicit-c3-profile.ax.txt",
+      "size": 4348,
+      "sha256": "29c65c5d8499b915fecfa3140bba355be20cf2a5b58214287954db301266d887"
+    },
+    {
+      "path": "native-author-01/02-explicit-c3-profile.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/02-explicit-c3-profile.png",
+      "size": 269989,
+      "sha256": "fdf8c94ea3554f36a6e32cc0ea2cdf16212c3759722f684d6cef0a39081136bd"
+    },
+    {
+      "path": "native-author-01/03-c3-export-complete.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/03-c3-export-complete.ax.txt",
+      "size": 4103,
+      "sha256": "ef4ab667c53238d64d4a43117d80d7b36393bd6cadf9114e65d73f2e53043e20"
+    },
+    {
+      "path": "native-author-01/03-c3-export-complete.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/03-c3-export-complete.png",
+      "size": 354986,
+      "sha256": "82c075150b946c2e3833a8eb826c923b7b5357487a5238cae5e99d2b371d9be8"
+    },
+    {
+      "path": "native-author-01/bundle.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/bundle.log",
+      "size": 234,
+      "sha256": "a719c01e2e569a86956ba4354ad3d5e4a7430bd018589a0e9050f987c41bd32b"
+    },
+    {
+      "path": "native-author-01/electron.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/electron.log",
+      "size": 13376,
+      "sha256": "df602aba0d9db7eeaf0b583fd066220178adc152371f841d2b171f926000dd23"
+    },
+    {
+      "path": "native-author-01/launch-evidence.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/launch-evidence.json",
+      "size": 2523,
+      "sha256": "d766986c764a52115001530ac22a950916b4290b953fa94d6674e72d2594751d"
+    },
+    {
+      "path": "native-author-01/result.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/result.json",
+      "size": 2382,
+      "sha256": "38e93c99d8ce4c3fb944ab852f83be955a2274e071c6048af119b9ff5e5f9b95"
+    },
+    {
+      "path": "native-author-01/studio-consumer.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/studio-consumer.json",
+      "size": 7543,
+      "sha256": "ae0f738794bc8458c8b89e596594d5452e1f8b2f3b69f32cb3a72905805a7ad0"
+    },
+    {
+      "path": "native-author-02/01-default-rejection-visible.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/01-default-rejection-visible.ax.txt",
+      "size": 3072,
+      "sha256": "e674cdc03ad9b6ad4cb0df196b69969708b4ec159cbf425a058065b9a0163af6"
+    },
+    {
+      "path": "native-author-02/01-default-rejection-visible.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/01-default-rejection-visible.png",
+      "size": 212739,
+      "sha256": "874e9eb083ac5b1f30a7fd7beb33c4f6a3aa25ab266a892df68996da4dee7dfe"
+    },
+    {
+      "path": "native-author-02/02-explicit-s3-profile.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/02-explicit-s3-profile.ax.txt",
+      "size": 3993,
+      "sha256": "7f27bc0029a6d1decba3fcd1619c43567bf54b02d200945f9330ca4b198b9cdd"
+    },
+    {
+      "path": "native-author-02/02-explicit-s3-profile.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/02-explicit-s3-profile.png",
+      "size": 234061,
+      "sha256": "97d8d06f0510d9690a54b98b405f8159f4a8df3e628c0f5a68fec5f520f30259"
+    },
+    {
+      "path": "native-author-02/03-s3-export-complete.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/03-s3-export-complete.ax.txt",
+      "size": 3800,
+      "sha256": "37e8dc2bb626cc6d9763833a4eaa6b99c4806a2a7d02c1051ffce033421ad54d"
+    },
+    {
+      "path": "native-author-02/03-s3-export-complete.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/03-s3-export-complete.png",
+      "size": 359139,
+      "sha256": "2e488495b463f28337dbc07c004cbbd7211c4cb46c1b67eaffad4a9c7af14201"
+    },
+    {
+      "path": "native-author-02/04-restart-profile.ax.txt",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/04-restart-profile.ax.txt",
+      "size": 2978,
+      "sha256": "ba82498313beb57a1396fdf312db708bc0e066c41e1da501d06bc1e470bcdd45"
+    },
+    {
+      "path": "native-author-02/04-restart-profile.png",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/04-restart-profile.png",
+      "size": 203899,
+      "sha256": "e566e4aae95df8dab0d96ee4dfef486617342aac65653ab3749ce871279342c5"
+    },
+    {
+      "path": "native-author-02/bundle.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/bundle.log",
+      "size": 233,
+      "sha256": "a6cc103da0a435e6573994760e483b447b6ebd01b8eb3d3b812c32dd0f3d122b"
+    },
+    {
+      "path": "native-author-02/default-rejection-preserves-profile.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/default-rejection-preserves-profile.json",
+      "size": 150,
+      "sha256": "3ac364f5489acdf69c185f539c8c690d67158396f61a8a98656ca32b86e0b152"
+    },
+    {
+      "path": "native-author-02/electron.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/electron.log",
+      "size": 12912,
+      "sha256": "9db0a037e78207a7c69a400aebf11bbb3bd16ac5289234393c6bb365e79d3fa7"
+    },
+    {
+      "path": "native-author-02/launch-evidence.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/launch-evidence.json",
+      "size": 3357,
+      "sha256": "f44c54b2ab769349500db6cf71967dc60d906b1f4014bb9e3f5c0ba876714269"
+    },
+    {
+      "path": "native-author-02/preparation.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/preparation.json",
+      "size": 754,
+      "sha256": "b1ac0fbd60038b5b3448f55b65eb688e2d6edcbc7b2fc989ddff0982844d033b"
+    },
+    {
+      "path": "native-author-02/restart-electron.log",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/restart-electron.log",
+      "size": 11976,
+      "sha256": "390283a62fee1ae66543e6b99fb224ca3fbcb44ed0fad6eba7a72bb72f61aecc"
+    },
+    {
+      "path": "native-author-02/restart-evidence.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/restart-evidence.json",
+      "size": 3432,
+      "sha256": "3a73e0d7c0c18946387677d3b2201d106127843594c60b4e9f5a82d1d14eaab8"
+    },
+    {
+      "path": "native-author-02/restart-persistence.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/restart-persistence.json",
+      "size": 197,
+      "sha256": "8845669f2a02e39b374cc99357af23dd11a0f00fab442fe086a05ffa142fe6e4"
+    },
+    {
+      "path": "native-author-02/result.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/result.json",
+      "size": 3056,
+      "sha256": "b0d677003426c9798e80d330e6f998b3ea5e745cbd52a41bd70d4d74262b6f23"
+    },
+    {
+      "path": "native-author-02/selected-profile.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/selected-profile.json",
+      "size": 474,
+      "sha256": "af8276fef13f9dd8455bb9cf7875b1cc06480075e7e7fec03dc542115cd996c2"
+    },
+    {
+      "path": "native-author-02/studio-consumer.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-02/studio-consumer.json",
+      "size": 7826,
+      "sha256": "0ad3da9d699ae93f03c58198e2d9eed96cde4055f974fa6c24b709140144ea33"
+    },
+    {
+      "path": "service-author-01/result.json",
+      "source": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/service-author-01/result.json",
+      "size": 14926,
+      "sha256": "50422acbbefdb15cf5f3f8ac5900f7550b711378cc1a2d4987906d95f9864be2"
+    }
+  ]
+}

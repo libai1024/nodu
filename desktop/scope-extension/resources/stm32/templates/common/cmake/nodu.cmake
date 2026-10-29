@@ -82,9 +82,12 @@ endif()
 target_link_options(firmware PRIVATE ${NODU_CPU_FLAGS} -mthumb -nostartfiles
   --specs=nano.specs --specs=nosys.specs
   "-T${CMAKE_SOURCE_DIR}/${NODU_LINKER_SCRIPT}"
-  -Wl,--gc-sections "-Wl,-Map=${CMAKE_BINARY_DIR}/firmware.map" -Wl,--print-memory-usage)
+  -Wl,--gc-sections "-Wl,-Map=firmware.map" -Wl,--print-memory-usage)
 set_target_properties(firmware PROPERTIES SUFFIX .elf LINK_DEPENDS "${CMAKE_SOURCE_DIR}/${NODU_LINKER_SCRIPT}")
 add_custom_command(TARGET firmware POST_BUILD
-  COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:firmware> "${CMAKE_BINARY_DIR}/firmware.bin"
-  COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:firmware> "${CMAKE_BINARY_DIR}/firmware.hex"
+  # MinGW objcopy interprets non-ASCII argv in the active Windows code page.
+  # Keep filenames relative while CMake owns the Unicode working directory.
+  COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE_NAME:firmware> firmware.bin
+  COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE_NAME:firmware> firmware.hex
+  WORKING_DIRECTORY "$<TARGET_FILE_DIR:firmware>"
   VERBATIM)

@@ -21,6 +21,8 @@ import { C_COMMANDS, NODU_C_RUN_MENU } from './nodu-embedded-commands';
 import { NoduDownloadHelpDialog, downloadHelpContent } from './nodu-download-help';
 import { downloadStatusText, taskProgress } from '../common/nodu-download-status';
 import { NoduDiagnostics } from './nodu-diagnostics';
+import { FileChangeType } from '@theia/filesystem/lib/common/files';
+import { supportsKeil } from '../common/nodu-keil';
 
 export { C_COMMANDS };
 
@@ -51,7 +53,10 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         };
         this.editors.all.forEach(watchEditor);
         this.editors.onCreated(watchEditor);
-        this.files.onDidFilesChange(event => event.changes.forEach(change => this.model.sourceChanged(change.resource.path.fsPath())));
+        this.files.onDidFilesChange(event => event.changes.forEach(change => {
+            this.model.sourceChanged(change.resource.path.fsPath());
+            this.model.keilFilesChanged(change.resource.path.fsPath(), change.type !== FileChangeType.UPDATED);
+        }));
         const statusNode = this.status.node;
         if (statusNode) {
             const makeHelpFocusable = (): void => {
@@ -269,6 +274,39 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
         add(C_COMMANDS.projectSettings, '工程设置…', () => this.projectDialog('settings'), () => c() && !this.model.busy);
         add(C_COMMANDS.toolkitInfo, 'STM32 工具包…', () => this.projectDialog('toolkit'));
         add(C_COMMANDS.exportProject, '导出独立工程…', () => this.exportProject());
+        const keil = async (): Promise<void> => {
+            if (!await this.ensureTrusted()) return;
+            await this.saveAll();
+            const path = this.model.project?.path;
+            try {
+                const result = await this.model.generateKeil();
+                if (path !== this.model.project?.path) return;
+                const action = await this.messages.info(result.created ? 'Keil 工程已生成。' : 'Keil 工程已更新。',
+                    ...(this.model.keil?.canOpen ? ['在 Keil 中打开'] : []), '工程设置');
+                if (path !== this.model.project?.path) return;
+                if (action === '在 Keil 中打开') await this.model.call('openKeil', { path });
+                if (action === '工程设置') await this.projectDialog('settings');
+            } catch (error) { void this.messages.error(errorText(error)); }
+        };
+        for (const [id, label, generated] of [[C_COMMANDS.generateKeil, '生成 Keil 工程', false], [C_COMMANDS.updateKeil, '更新 Keil 工程', true]] as const) {
+            registry.registerCommand({ id, label, category: 'STM32' }, { execute: keil,
+                isVisible: () => supportsKeil(this.model.project) && !!this.model.keil?.generated === generated,
+                isEnabled: () => supportsKeil(this.model.project) && !this.model.busy });
+        }
+        registry.registerCommand({ id: C_COMMANDS.openKeil, label: '在 Keil 中打开', category: 'STM32' }, {
+            isVisible: () => supportsKeil(this.model.project) && !!this.model.keil?.canOpen,
+            isEnabled: () => !!this.model.keil?.generated && !this.model.busy,
+            execute: async () => {
+                if (!await this.ensureTrusted()) return;
+                await this.saveAll();
+                const path = this.model.project?.path;
+                try {
+                    await this.model.generateKeil();
+                    if (path === this.model.project?.path) await this.model.call('openKeil', { path });
+                }
+                catch (error) { void this.messages.error(errorText(error)); }
+            }
+        });
         add(C_COMMANDS.openBuildLocation, '打开产物目录', async () => {
             const project = this.model.project;
             if (!project) { return; }
@@ -308,6 +346,11 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     }
 
     registerMenus(menus: MenuModelRegistry): void {
+        const keilMenu = [...CommonMenus.FILE, '3_keil', 'keil'];
+        menus.registerSubmenu(keilMenu, 'Keil 工程');
+        menus.registerMenuAction([...keilMenu, '0_actions'], { commandId: C_COMMANDS.generateKeil, order: '0' });
+        menus.registerMenuAction([...keilMenu, '0_actions'], { commandId: C_COMMANDS.updateKeil, order: '0' });
+        menus.registerMenuAction([...keilMenu, '0_actions'], { commandId: C_COMMANDS.openKeil, order: '1' });
         menus.registerMenuAction([...NODU_PROJECT_MENU, '1_new'], { commandId: C_COMMANDS.newModule, order: '0b' });
         menus.registerMenuAction([...NODU_PROJECT_MENU, '4_settings'], { commandId: C_COMMANDS.projectSettings, order: '0' });
         menus.registerMenuAction([...NODU_PROJECT_MENU, '4_settings'], { commandId: C_COMMANDS.toolkitInfo, order: '1' });

@@ -3,6 +3,7 @@ import * as React from '@theia/core/shared/react';
 import { NoduArduinoModel } from './nodu-arduino-model';
 import { NoduSelect } from './nodu-select';
 import { FrameworkMark } from './nodu-project-icon';
+import { ARDUINO_SIMULATION_PROFILES, arduinoSimulationConfigurationError } from '../common/nodu-arduino-simulation-profiles';
 import '../../style/arduino.css';
 
 /** Arduino uses the same device popover and compact rows as the other targets. */
@@ -14,6 +15,7 @@ export function NoduArduinoDevicePanel({ model, open }: { model: NoduArduinoMode
         refresh(); const timer = setInterval(refresh, 2000); return () => clearInterval(timer);
     }, [open, path, model]);
     const locked = model.busy || model.loading || model.embedded.monitorBusy;
+    const simulation = ARDUINO_SIMULATION_PROFILES[project?.chip as keyof typeof ARDUINO_SIMULATION_PROFILES];
     const fqbn = project?.fqbn.split(':').slice(0, 3).join(':') ?? '';
     const boards = model.boards.map(board => ({ value: board.fqbn, label: board.name }));
     if (fqbn && !boards.some(board => board.value === fqbn)) { boards.unshift({ value: fqbn, label: project?.boardName || fqbn }); }
@@ -24,6 +26,10 @@ export function NoduArduinoDevicePanel({ model, open }: { model: NoduArduinoMode
         <div className="nodu-c-compact-row"><label htmlFor="nodu-arduino-board">开发板</label><NoduSelect id="nodu-arduino-board" aria-label="开发板" value={fqbn} options={boards} disabled={locked || !project} onChange={value => void model.configure({ fqbn: value })}/></div>
         <div className="nodu-c-compact-row"><label htmlFor="nodu-arduino-port">串口</label><NoduSelect id="nodu-arduino-port" aria-label="烧录串口" value={model.selectedPort} options={[{ value: '', label: '选择串口' }, ...ports]} disabled={locked} onChange={value => void model.configure({ port: value })}/></div>
         {project && <div className="nodu-arduino-core"><span>Arduino-ESP32</span><span>{project.coreVersion}</span></div>}
+        {project && simulation && <div className="nodu-c-compact-row"><label htmlFor="nodu-arduino-simulation">仿真配置</label><NoduSelect id="nodu-arduino-simulation" aria-label="仿真配置" disabled={locked}
+            value={arduinoSimulationConfigurationError(project) ? '' : project.chip}
+            options={[{ value: '', label: '保留当前开发板参数' }, { value: project.chip, label: simulation.name, detail: simulation.detail }]}
+            onChange={value => { if (value) { void model.configure({ fqbn: simulation.fqbn, options: { ...simulation.options } }); } }}/></div>}
         {!!model.options.length && <details className="nodu-arduino-advanced"><summary>高级参数</summary><div>{model.options.map(option => <div key={option.id} className="nodu-c-compact-row"><label htmlFor={`nodu-arduino-option-${option.id}`}>{option.label}</label><NoduSelect id={`nodu-arduino-option-${option.id}`} aria-label={option.label} value={option.value} options={option.values} disabled={locked} onChange={value => void model.configure({ options: { [option.id]: value } })}/></div>)}</div></details>}
         {model.error && <div className="nodu-arduino-error" role="alert"><span>{model.error}</span><button aria-label="关闭错误" onClick={() => { model.error = ''; model.fire(); }}><i className="codicon codicon-close" aria-hidden="true"/></button></div>}
     </div>;

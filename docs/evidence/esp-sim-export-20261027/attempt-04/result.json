@@ -1,0 +1,272 @@
+{
+  "started": "2026-10-27T05:08:31.908Z",
+  "directory": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04",
+  "hardwareAccessed": false,
+  "cases": [
+    {
+      "name": "esp32c3: real Nodu successful token produces package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: publish new immutable package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: independent Studio strict consumer accepts real package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: existing export cannot be replaced",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: cancellation produces no new file",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: successful token cannot use fabricated/post-build snapshot",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: source change rejects and preserves prior package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: incomplete artifacts reject",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: tampered artifacts reject",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: changed dependency content rejects export and publication",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32c3: revoked/failed build cannot export",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: real Nodu successful token produces package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: publish new immutable package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: independent Studio strict consumer accepts real package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: existing export cannot be replaced",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: cancellation produces no new file",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: successful token cannot use fabricated/post-build snapshot",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: source change rejects and preserves prior package",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: incomplete artifacts reject",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: tampered artifacts reject",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: changed dependency content rejects export and publication",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed C3 ELF in S3 build rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "esp32s3: revoked/failed build cannot export",
+      "status": "PASS"
+    }
+  ],
+  "builds": [
+    {
+      "chip": "esp32c3",
+      "projectPath": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32c3",
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "10b24037-95f4-4ab9-9ec3-f943f4eec83c",
+        "buildPath": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/builds/25e4bb8cba17a6ef0d0a4907"
+      },
+      "snapshot": {
+        "id": "abc08046-1b87-4577-986c-2bde53c6e0d1",
+        "inputDigest": "3f89bb056589c605fef3ba9b99a43fe4ff118c25cb9dd59e9d88bd50013b3d8b",
+        "dependencyDigest": "76d556358fbc5abd76978022170dce6d140935d3559b3ccbcf0b9cbfed403840"
+      },
+      "profile": {
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32c3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32c3:JTAGAdapter=default,CDCOnBoot=default,PartitionScheme=default,CPUFreq=160,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+        "chip": "esp32c3",
+        "coreVersion": "3.3.12"
+      },
+      "export": {
+        "bytes": 2431815,
+        "packageSha256": "efcd606af7f30808698f3fc629fa65625a3a358ac3036c79496b2680394eab6a",
+        "contentDigest": "3d1b502393ec2db6852a61aed9eff384406c0ad98a7b440b871fd749b50b1413",
+        "elfSha256": "a16199c32d5c64dd4ee1ef2f7af048382ee6dcdc15735dc59f88e13c57dc7a47",
+        "fullflashSha256": "c9c0d59fe5577012702297599fc59e29abf910ac62b445a9ef2e450add292b93"
+      },
+      "consumer": {
+        "packageSHA256": "efcd606af7f30808698f3fc629fa65625a3a358ac3036c79496b2680394eab6a",
+        "validation": {
+          "format": "esp-sim-v1",
+          "elfSHA256": "a16199c32d5c64dd4ee1ef2f7af048382ee6dcdc15735dc59f88e13c57dc7a47",
+          "flashSHA256": "c9c0d59fe5577012702297599fc59e29abf910ac62b445a9ef2e450add292b93",
+          "sourceDigest": "bbc759f9ac220f588c013c335c475d4ab48b8e1585084e9948fad683793fb8e7",
+          "meaning": "byte-consistency only; not signature, producer authentication or simulation acceptance"
+        }
+      }
+    },
+    {
+      "chip": "esp32s3",
+      "projectPath": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32s3",
+      "compile": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "b0ecec5e-a5ef-4571-91bb-1ce7a596040f",
+        "buildPath": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/builds/55d8f83df68f0cca7bb97575"
+      },
+      "snapshot": {
+        "id": "10581368-d93a-45ec-8952-e561d1eea544",
+        "inputDigest": "5212085117adb44afd805f1745ad34b1b735c68bd4136e98d8074ee382d5b8cb",
+        "dependencyDigest": "a8c40d9066b0916263d9083dc40816bc014486097fe112c0bbf97223a302d968"
+      },
+      "profile": {
+        "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32s3",
+        "profile": "nodu",
+        "fqbn": "esp32:esp32:esp32s3:JTAGAdapter=default,PSRAM=disabled,FlashMode=qio,FlashSize=8M,LoopCore=1,EventsCore=1,USBMode=hwcdc,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default_8MB,CPUFreq=240,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,ZigbeeMode=default",
+        "chip": "esp32s3",
+        "coreVersion": "3.3.12"
+      },
+      "export": {
+        "bytes": 2571675,
+        "packageSha256": "06bdc0af548163920fc371bc70e43727e825677f518396edbe8151cf74dffa12",
+        "contentDigest": "879a0981d1faef1dde7477afeea96e566306c7656fa46512225942bb32cdf047",
+        "elfSha256": "3d97f12c16f278b01916e5a970862fb29c1236394dbbadff94ad5c6db2a50690",
+        "fullflashSha256": "ed75ed1479c20417fbc83d07e064f367e853288de2ae9851b0724fe6563b6c55"
+      },
+      "consumer": {
+        "packageSHA256": "06bdc0af548163920fc371bc70e43727e825677f518396edbe8151cf74dffa12",
+        "validation": {
+          "format": "esp-sim-v1",
+          "elfSHA256": "3d97f12c16f278b01916e5a970862fb29c1236394dbbadff94ad5c6db2a50690",
+          "flashSHA256": "ed75ed1479c20417fbc83d07e064f367e853288de2ae9851b0724fe6563b6c55",
+          "sourceDigest": "c7a6dfada7a6c86ce203892471b7a0851f494c029f1167824a1eb526eb5d4fd1",
+          "meaning": "byte-consistency only; not signature, producer authentication or simulation acceptance"
+        }
+      }
+    }
+  ],
+  "cli": {
+    "path": "/opt/homebrew/bin/arduino-cli",
+    "sha256": "171f87fd64b4a3bdcfbc4493d8e72ea006bb6d572c69bfac6359b1ad3e494580",
+    "version": {
+      "Application": "arduino-cli",
+      "VersionString": "1.5.1",
+      "Commit": "Homebrew",
+      "Status": "",
+      "Date": "2026-06-05T09:39:33Z"
+    }
+  },
+  "producerSource": {
+    "path": "/Users/wangwei/Model/k210-studio/desktop/scope-extension/src/node/nodu-arduino-simulation-package.ts",
+    "sha256": "36ced3cdcbe9297ed098b321d6fe68bd92c7d1faa2cb895ff6adbfbf1e0b9863"
+  },
+  "operations": [
+    {
+      "executable": "/opt/homebrew/bin/arduino-cli",
+      "args": [
+        "--config-file",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32c3",
+      "operation": "sim-export-esp32c3",
+      "code": 0,
+      "elapsedMs": 51,
+      "log": "operation-1.log"
+    },
+    {
+      "executable": "/opt/homebrew/bin/arduino-cli",
+      "args": [
+        "--config-file",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/builds/25e4bb8cba17a6ef0d0a4907",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32c3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32c3",
+      "operation": "sim-export-esp32c3",
+      "code": 0,
+      "elapsedMs": 55254,
+      "log": "operation-2.log"
+    },
+    {
+      "executable": "/opt/homebrew/bin/arduino-cli",
+      "args": [
+        "--config-file",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/arduino-cli.yaml",
+        "version",
+        "--format",
+        "json"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32s3",
+      "operation": "sim-export-esp32s3",
+      "code": 0,
+      "elapsedMs": 20,
+      "log": "operation-3.log"
+    },
+    {
+      "executable": "/opt/homebrew/bin/arduino-cli",
+      "args": [
+        "--config-file",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/arduino-cli.yaml",
+        "compile",
+        "--profile",
+        "nodu",
+        "--build-path",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/home/builds/55d8f83df68f0cca7bb97575",
+        "--warnings",
+        "default",
+        "--no-color",
+        "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32s3"
+      ],
+      "cwd": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/attempt-04/nodu_sim_esp32s3",
+      "operation": "sim-export-esp32s3",
+      "code": 0,
+      "elapsedMs": 55761,
+      "log": "operation-4.log"
+    }
+  ],
+  "status": "PASS",
+  "finished": "2026-10-27T05:14:31.764Z"
+}

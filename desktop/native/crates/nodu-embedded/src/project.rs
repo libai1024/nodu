@@ -169,7 +169,7 @@ fn collect_inputs(root: &Path, rel: &Path, out: &mut Vec<PathBuf>, dacir: bool) 
         let Ok(kind) = entry.file_type() else { continue };
         if kind.is_dir() {
             if rel.as_os_str().is_empty()
-                && (SKIP_DIRS.contains(&name.as_ref()) || (dacir && [".studio", "runs"].contains(&name.as_ref()))) {
+                && (SKIP_DIRS.contains(&name.as_ref()) || (name == "MDK-ARM" && root.join("MDK-ARM/.nodu-keil.json").is_file()) || (dacir && [".studio", "runs"].contains(&name.as_ref()))) {
                 continue;
             }
             if out.len() < 20_000 {
@@ -467,6 +467,24 @@ pub fn create(request: &NewProject<'_>, catalog: &Catalog, toolkit: &Toolkit) ->
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn generated_keil_files_do_not_invalidate_gcc_inputs() {
+        let temp = tempfile::tempdir().unwrap();
+        let root = temp.path();
+        for name in ["Core/Src/main.c", "MDK-ARM/retarget_arm.c", "MDK-ARM/Objects/firmware.hex"] {
+            let file = root.join(name);
+            fs::create_dir_all(file.parent().unwrap()).unwrap();
+            fs::write(file, "initial").unwrap();
+        }
+        let mut before = Vec::new();
+        collect_inputs(root, Path::new(""), &mut before, false);
+        assert_eq!(before.len(), 3);
+        fs::write(root.join("MDK-ARM/.nodu-keil.json"), "{}").unwrap();
+        let mut after = Vec::new();
+        collect_inputs(root, Path::new(""), &mut after, false);
+        assert_eq!(after, vec![PathBuf::from("Core/Src/main.c")]);
+    }
 
     #[test]
     fn dacir_runtime_outputs_do_not_invalidate_build_inputs() {

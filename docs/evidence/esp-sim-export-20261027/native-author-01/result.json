@@ -1,0 +1,46 @@
+{
+  "scope": "Real isolated Nodu Electron C3 UI export; Studio byte-level consumer separately; not firmware runtime or peripheral acceptance",
+  "cases": [
+    {
+      "name": "Configuration rejection must be visible without manually opening output",
+      "status": "FAIL",
+      "limitation": "Before fix the compact workbench required manually opening output; fixed in native-author-02 bundle.",
+      "resolvedBy": "native-author-02/01-default-rejection-visible.ax.txt, shared frontend showExportOutput fix"
+    },
+    {
+      "name": "Explicit C3 4MB/160MHz preset selected in existing device panel",
+      "status": "PASS"
+    },
+    {
+      "name": "Native menu and native Save dialog triggered actual compile and package publication",
+      "status": "PASS"
+    },
+    {
+      "name": "Completion visibly reported in native output and native process exited",
+      "status": "PASS"
+    },
+    {
+      "name": "Independent Studio consumer validates generated package",
+      "status": "PASS"
+    }
+  ],
+  "package": {
+    "path": "/Users/wangwei/Model/k210-studio/artifacts/esp-sim-export-20261027/native-author-01/native-c3.esp-sim.zip",
+    "sha256": "37f33cf00b9551be4c7c38141208f228a89ce7b29736d869e4bc0b7546c03cf9",
+    "validation": {
+      "format": "esp-sim-v1",
+      "elfSHA256": "ccd3bf316aef08b4c170936d7856bed3b32c4166ad07190782cb256f44af23c3",
+      "flashSHA256": "6c5de15415af46ed2230e173d3729517d5ee67fe5a7440cc04d63f0fb9c12fe7",
+      "sourceDigest": "29f80c4e72cbc6d567726dc61b0d97d5412a6f651b54f2dca53b515f20f79d0f",
+      "meaning": "byte-consistency only; not signature, producer authentication or simulation acceptance"
+    }
+  },
+  "limitations": [
+    "Initial private Arduino seed omitted arduino-cli.yaml before first preparation; Arduino editor service warning appeared. Language assistance not claimed tested.",
+    "The unrelated embedded helper inherited its default data-dir on this first launch; no hardware/STM32 actions were performed. The next launch explicitly isolates NODU_EMBEDDED_HOME and NODU_RESOURCES_HOME.",
+    "No C3 native restart/persistence test in this run; S3 native run will cover restart."
+  ],
+  "finished": "2026-10-27T05:52:57.059386+00:00",
+  "status": "FAIL",
+  "meaning": "Historical first UI run: export and consumer passed, initial error visibility failed; do not count this run as overall desktop acceptance."
+}

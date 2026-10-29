@@ -1,0 +1,45 @@
+
+DevTools listening on ws://127.0.0.1:19230/devtools/browser/5463e305-6499-4f23-a8eb-349b3d21dfbb
+2026-10-29T07:46:51.005Z core:Stopwatch WARN Backend DefaultMessagingService.initialize took longer than the expected maximum 50 milliseconds: 464.1 ms [1.460 s since backend process start]
+2026-10-29T07:46:51.008Z core:Stopwatch WARN Backend Object.initialize took longer than the expected maximum 50 milliseconds: 461.5 ms [1.460 s since backend process start]
+2026-10-29T07:46:51.009Z core:Stopwatch WARN Backend NoduResourcesServer.initialize took longer than the expected maximum 50 milliseconds: 258.0 ms [1.460 s since backend process start]
+2026-10-29T07:46:51.011Z core:Stopwatch WARN Backend PluginLocalizationServer.initialize took longer than the expected maximum 50 milliseconds: 486.9 ms [1.485 s since backend process start]
+2026-10-29T07:46:51.059Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/d%3A/nodu-esp32-20261029/nodu-ui-profile/config/plugins does not exist.
+2026-10-29T07:46:51.074Z plugin-ext:LocalPluginDeployerResolver WARN The local plugin referenced by local-dir:/d%3A/nodu-esp32-20261029/nodu-ui-profile/config/deployedPlugins does not exist.
+2026-10-29T07:46:53.688Z core:FrontendStopwatch WARN Frontend ip.configure took longer than the expected maximum 100 milliseconds: 118.1 ms [2.273 s since frontend page start]
+2026-10-29T07:46:57.238Z core:FrontendStopwatch WARN Frontend hT.onStart took longer than the expected maximum 100 milliseconds: 3053.7 ms [5.540 s since frontend page start]
+2026-10-29T07:46:57.241Z core:FrontendStopwatch WARN Frontend DK.onStart took longer than the expected maximum 100 milliseconds: 287.2 ms [5.828 s since frontend page start]
+2026-10-29T07:46:57.625Z root ERROR Error: pty process did not start correctly
+    at ShellProcess.checkTerminal (D:\Nodu-STM32\resources\app\lib\backend\main.js:353805:17)
+    at get pid (D:\Nodu-STM32\resources\app\lib\backend\main.js:353758:14)
+    at D:\Nodu-STM32\resources\app\lib\backend\main.js:356922:51
+    at D:\Nodu-STM32\resources\app\lib\backend\main.js:37380:69
+    at CallbackList.invoke (D:\Nodu-STM32\resources\app\lib\backend\main.js:37387:22)
+    at _Emitter.fire (D:\Nodu-STM32\resources\app\lib\backend\main.js:37515:34)
+    at ShellProcess.emitOnError (D:\Nodu-STM32\resources\app\lib\backend\main.js:351818:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+2026-10-29T07:46:57.625Z terminal:ShellProcess ERROR Error: File not found: 
+    at new WindowsPtyAgent2 (D:\Nodu-STM32\resources\app\lib\backend\main.js:352494:35)
+    at new WindowsTerminal2 (D:\Nodu-STM32\resources\app\lib\backend\main.js:352775:26)
+    at spawn (D:\Nodu-STM32\resources\app\lib\backend\main.js:353235:14)
+    at ShellProcess.createPseudoTerminal (D:\Nodu-STM32\resources\app\lib\backend\main.js:353724:47)
+    at startTerminal (D:\Nodu-STM32\resources\app\lib\backend\main.js:353690:25)
+    at new TerminalProcess (D:\Nodu-STM32\resources\app\lib\backend\main.js:353711:43)
+    at new ShellProcess (D:\Nodu-STM32\resources\app\lib\backend\main.js:356694:9)
+    at createInstanceWithInjections (D:\Nodu-STM32\resources\app\lib\backend\main.js:31009:24)
+    at _createInstance (D:\Nodu-STM32\resources\app\lib\backend\main.js:31001:20)
+    at resolveInstance (D:\Nodu-STM32\resources\app\lib\backend\main.js:31075:22)
+2026-10-29T07:46:57.747Z terminal:TerminalFrontendContribution ERROR Failed to initialize terminal in default layout Error: terminal "353604072" does not exist
+    at ShellTerminalServer.getProcessInfo (D:\Nodu-STM32\resources\app\lib\backend\main.js:356878:17)
+    at RpcProxyFactory.onRequest (D:\Nodu-STM32\resources\app\lib\backend\main.js:117972:45)
+    at _RpcProtocol.requestHandler (D:\Nodu-STM32\resources\app\lib\backend\main.js:117953:80)
+    at _RpcProtocol.handleRequest (D:\Nodu-STM32\resources\app\lib\backend\main.js:117651:37)
+    at _RpcProtocol.handleMessage (D:\Nodu-STM32\resources\app\lib\backend\main.js:117540:20)
+    at D:\Nodu-STM32\resources\app\lib\backend\main.js:117526:68
+    at D:\Nodu-STM32\resources\app\lib\backend\main.js:37380:69
+    at CallbackList.invoke (D:\Nodu-STM32\resources\app\lib\backend\main.js:37387:22)
+    at _Emitter.fire (D:\Nodu-STM32\resources\app\lib\backend\main.js:37515:34)
+    at ChannelMultiplexer.handleData (D:\Nodu-STM32\resources\app\lib\backend\main.js:113610:36)
+2026-10-29T07:46:57.748Z core:FrontendStopwatch WARN Frontend Vg.initializeLayout took longer than the expected maximum 100 milliseconds: 349.6 ms [6.332 s since frontend page start]
+2026-10-29T07:46:58.790Z core:FrontendStopwatch WARN Frontend kh.initializeLayout took longer than the expected maximum 100 milliseconds: 1024.9 ms [7.357 s since frontend page start]
+2026-10-29T07:46:59.025Z core:FrontendStopwatch WARN Frontend kh.onDidInitializeLayout took longer than the expected maximum 100 milliseconds: 137.2 ms [7.612 s since frontend page start]

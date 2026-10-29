@@ -158,6 +158,9 @@ function requirePackagedEntry({ argv, packaged, documents, profile }) {
         if (request === './scripts/launch.cjs') {
             return originalLoad.call(this, launchPath, parent, isMain);
         }
+        if (request === './scripts/portable-profile.cjs') {
+            return originalLoad.call(this, path.join(__dirname, 'portable-profile.cjs'), parent, isMain);
+        }
         if (request === './lib/backend/electron-main.js') {
             captured.argv = process.argv.slice();
             captured.updateResources = process.env.NODU_UPDATE_RESOURCES;
@@ -249,4 +252,36 @@ test('npm-cli resolves under the POSIX and Windows Node layouts', () => {
     fs.mkdirSync(path.dirname(winCli), { recursive: true });
     fs.writeFileSync(winCli, '// npm\n');
     assert.equal(resolveNpmCli(path.join(windows, 'node.exe')), winCli);
+});
+
+test('marked Windows portable app keeps writable paths beside its executable', () => {
+    const { configurePortableProfile } = require('./portable-profile.cjs');
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-portable-'));
+    try {
+        fs.writeFileSync(path.join(root, 'NoduPortable.json'), JSON.stringify({ schema: 1, dataDirectory: 'Data' }));
+        const env = {}, paths = {};
+        const data = configurePortableProfile({ executable: path.join(root, 'Nodu.exe'), platform: 'win32', env,
+            app: { isPackaged: true, setPath(key, value) { paths[key] = value; } } });
+        assert.equal(data, path.join(root, 'Data'));
+        for (const value of Object.values(env)) {
+            assert.ok(value.startsWith(data + path.sep));
+            assert.ok(fs.statSync(value).isDirectory());
+        }
+        assert.equal(env.NODU_PROJECTS_DIR, path.join(data, 'Projects'));
+        assert.equal(paths.appData, env.APPDATA);
+        assert.equal(paths.temp, env.TEMP);
+    } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+
+test('portable profile respects explicit isolation and rejects an escaping data directory', () => {
+    const { configurePortableProfile } = require('./portable-profile.cjs');
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-portable-'));
+    try {
+        fs.writeFileSync(path.join(root, 'NoduPortable.json'), JSON.stringify({ schema: 1, dataDirectory: '../escape' }));
+        const options = { executable: path.join(root, 'Nodu.exe'), platform: 'win32', app: { isPackaged: true }, env: {} };
+        assert.throws(() => configurePortableProfile(options), /Invalid Nodu portable/);
+        const env = { NODU_PROFILE_DIR: path.join(root, 'isolated') };
+        assert.equal(configurePortableProfile({ ...options, env }), undefined);
+        assert.equal(fs.existsSync(path.join(root, 'Data')), false);
+    } finally { fs.rmSync(root, { recursive: true, force: true }); }
 });

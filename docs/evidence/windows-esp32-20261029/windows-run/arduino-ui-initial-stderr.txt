@@ -1,0 +1,62 @@
+
+DevTools listening on ws://127.0.0.1:19229/devtools/browser/a0f2917f-0452-430f-9d33-ae0357eca3ca
+Using browser-only version of superagent in non-browser environment
+2026-10-29T07:22:58.349Z root WARN The local plugin referenced by local-dir:/d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE/plugins does not exist.
+2026-10-29T07:22:58.349Z root WARN The local plugin referenced by local-dir:/d%3A/nodu-esp32-20261029/ide-profile/.arduinoIDE/deployedPlugins does not exist.
+2026-10-29T07:22:58.349Z root WARN The local plugin referenced by local-dir:D:\nodu-esp32-20261029\ide-profile\.arduinoIDE\plugins does not exist.
+2026-10-29T07:22:59.090Z root ERROR Detected an error response during the gRPC core client initialization: code: 3, message: Error downloading index 'https://downloads.arduino.cc/libraries/library_index.tar.bz2': Get "https://downloads.arduino.cc/libraries/library_index.tar.bz2": tls: failed to verify certificate: x509: certificate signed by unknown authority
+2026-10-29T07:22:59.090Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_index.json: open D:\nodu-esp32-20261029\ide-data\package_index.json: The system cannot find the file specified.
+2026-10-29T07:22:59.091Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_esp32_index.json: open D:\nodu-esp32-20261029\ide-data\package_esp32_index.json: The system cannot find the file specified.
+2026-10-29T07:22:59.092Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Error loading hardware platform: discovery builtin:serial-discovery not found
+2026-10-29T07:22:59.092Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Error loading hardware platform: discovery builtin:mdns-discovery not found
+2026-10-29T07:22:59.093Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Loading index file: reading library_index.json: open D:\nodu-esp32-20261029\ide-data\library_index.json: The system cannot find the file specified.
+2026-10-29T07:22:59.099Z root ERROR The primary packages indexes are missing. Running indexes update before initializing the core gRPC client The index of the cores and libraries must be updated before initializing the core gRPC client.
+The following problems were detected during the gRPC client initialization:
+[platform-index] - code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_index.json: open D:\nodu-esp32-20261029\ide-data\package_index.json: The system cannot find the file specified.
+[platform-index] - code: 9, message: Error loading hardware platform: discovery builtin:serial-discovery not found
+[platform-index] - code: 9, message: Error loading hardware platform: discovery builtin:mdns-discovery not found
+[library-index] - code: 9, message: Loading index file: reading library_index.json: open D:\nodu-esp32-20261029\ide-data\library_index.json: The system cannot find the file specified.
+
+2026-10-29T07:22:59.205Z root ERROR Failed to update platform, library indexes. Error: 13 INTERNAL: Error downloading index 'https://downloads.arduino.cc/libraries/library_index.tar.bz2': Get "https://downloads.arduino.cc/libraries/library_index.tar.bz2": tls: failed to verify certificate: x509: certificate signed by unknown authority
+    at t.callErrorFromStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:3088066)
+    at Object.onReceiveStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6672872)
+    at Object.onReceiveStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:2571272)
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:4304750
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at s.makeServerStreamRequest (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6672639)
+    at s.updateLibrariesIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:3087159)
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278159
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278352
+    at new Promise (<anonymous>)
+    at y.doUpdateIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278331)
+    at y.updateLibraryIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6278131)
+    at y.updateIndex (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6277405)
+    at y.initInstanceWithFallback (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6275637)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2026-10-29T07:22:59.325Z root ERROR Detected an error response during the gRPC core client initialization: code: 3, message: Error downloading index 'https://downloads.arduino.cc/libraries/library_index.tar.bz2': Get "https://downloads.arduino.cc/libraries/library_index.tar.bz2": tls: failed to verify certificate: x509: certificate signed by unknown authority
+2026-10-29T07:22:59.325Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_index.json: open D:\nodu-esp32-20261029\ide-data\package_index.json: The system cannot find the file specified.
+2026-10-29T07:22:59.325Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_esp32_index.json: open D:\nodu-esp32-20261029\ide-data\package_esp32_index.json: The system cannot find the file specified.
+2026-10-29T07:22:59.325Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Error loading hardware platform: discovery builtin:serial-discovery not found
+2026-10-29T07:22:59.326Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Error loading hardware platform: discovery builtin:mdns-discovery not found
+2026-10-29T07:22:59.326Z root ERROR Detected an error response during the gRPC core client initialization: code: 9, message: Loading index file: reading library_index.json: open D:\nodu-esp32-20261029\ide-data\library_index.json: The system cannot find the file specified.
+2026-10-29T07:22:59.326Z root ERROR Uncaught Exception:  Error: The index of the cores and libraries must be updated before initializing the core gRPC client.
+The following problems were detected during the gRPC client initialization:
+[platform-index] - code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_index.json: open D:\nodu-esp32-20261029\ide-data\package_index.json: The system cannot find the file specified.
+[platform-index] - code: 9, message: Error loading hardware platform: discovery builtin:serial-discovery not found
+[platform-index] - code: 9, message: Error loading hardware platform: discovery builtin:mdns-discovery not found
+[library-index] - code: 9, message: Loading index file: reading library_index.json: open D:\nodu-esp32-20261029\ide-data\library_index.json: The system cannot find the file specified.
+
+2026-10-29T07:22:59.326Z root ERROR Error: The index of the cores and libraries must be updated before initializing the core gRPC client.
+The following problems were detected during the gRPC client initialization:
+[platform-index] - code: 9, message: Loading index file: loading json index file D:\nodu-esp32-20261029\ide-data\package_index.json: open D:\nodu-esp32-20261029\ide-data\package_index.json: The system cannot find the file specified.
+[platform-index] - code: 9, message: Error loading hardware platform: discovery builtin:serial-discovery not found
+[platform-index] - code: 9, message: Error loading hardware platform: discovery builtin:mdns-discovery not found
+[library-index] - code: 9, message: Loading index file: reading library_index.json: open D:\nodu-esp32-20261029\ide-data\library_index.json: The system cannot find the file specified.
+
+    at E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6277148
+    at y.evaluateErrorStatus (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6277164)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async a.<anonymous> (E:\Develop\Arduino IDE\resources\app\lib\backend\main.js:2:6276834)
+2026-10-29T07:23:00.687Z root WARN A command editor.action.toggleStickyScroll is already registered.
+2026-10-29T07:23:00.794Z root WARN Frontend keybindings.onStart took longer than the expected maximum 100 milliseconds: 104.6 ms [Finished 2.318 s after frontend start]
