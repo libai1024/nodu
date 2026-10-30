@@ -1,0 +1,27 @@
+[
+  {
+    "component": "arduino-cli",
+    "version": "1.5.1",
+    "sourceCommit": "01f3d4f2ba7c2eaafb5dc710c8a1903af7762fea"
+  },
+  {
+    "component": "mdns-discovery",
+    "version": "1.1.0",
+    "sourceCommit": "435f0445a9d70f48d7bbd4910da23394e8a44bf9"
+  },
+  {
+    "component": "dfu-discovery",
+    "version": "0.1.2",
+    "sourceCommit": "d8474a7eb0279e7afb30ebd0a5f5de97fbb29530"
+  },
+  {
+    "component": "serial-monitor",
+    "version": "0.15.0",
+    "sourceCommit": "13b8e8058fd5c3eb24e97cba091f3a897aa20afb"
+  },
+  {
+    "component": "serial-discovery",
+    "version": "1.5.2",
+    "sourceCommit": "fcbd39ac7c612a1dd8a9a300d0534324315e5908"
+  }
+]

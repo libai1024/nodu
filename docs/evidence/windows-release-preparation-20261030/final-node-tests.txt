@@ -1,0 +1,39 @@
+✔ Core profile identity is portable and matches the official CLI cache identity (7.004792ms)
+✔ host selection prefers native arm64 and includes every official dependency plus builtin discovery tools (36.076167ms)
+✔ complete bundle validates and copies only the immutable manifest payload with required host marker (152.42375ms)
+✔ source coverage reviewed for another host cannot authorize release (68.654958ms)
+✔ release packaging fails closed when any source coverage is incomplete; development validation remains explicit (141.509959ms)
+✔ missing official dependency cannot be hidden by deleting its manifest entry (47.565292ms)
+✔ corrupt payload, wrong host, duplicate targets and path traversal are rejected (52.208ms)
+✔ symlink payloads and targets outside the intended profile Core are rejected (51.769375ms)
+✔ a source claim cannot reference missing source files or license-only material (62.653875ms)
+✔ Apple Silicon release requires native ctags and its portable platform override (80.200416ms)
+✔ post-signing refresh updates native bytes only and retains the original build identity (138.992ms)
+✔ packager keeps upstream files covered by the Arduino bundle manifest (141.439459ms)
+✔ full Windows portable package includes both driver inventories and portable Data settings (45.424542ms)
+✔ portable archive rejects TAR content mislabeled as ZIP (12.154375ms)
+✔ packager retains STM32 and WASI runtime objects while excluding build debris (0.595458ms)
+✔ universal merge retains both exact architecture license inventories in both apps (61.31575ms)
+✔ canonical JS accepts comment and whitespace-only differences (562.924458ms)
+✔ canonical JS rejects literal and keyword differences (7.368541ms)
+✔ canonical JS rejects an ASI semantic split (12.772292ms)
+✔ canonical JS preserves loop slots and literal whitespace (26.646ms)
+✔ native module normalization touches generated metadata keys only (6.184833ms)
+✔ generated native labels normalize identically for both architectures (2.617833ms)
+✔ packaged bootstrap keeps one binary prefix and sets the profile (11.062292ms)
+✔ packaged app without a project opens the launcher without creating a Documents workspace (1.945291ms)
+✔ dev (unpackaged) bootstrap keeps two binary prefix entries (13.531083ms)
+✔ npm-cli resolves under the POSIX and Windows Node layouts (2.871458ms)
+✔ marked Windows portable app keeps writable paths beside its executable (5.111333ms)
+✔ portable profile respects explicit isolation and rejects an escaping data directory (11.476375ms)
+✔ offline volumes reconstruct exactly and record every part digest (33.718625ms)
+✔ installer refuses validation builds, dirty builds and mixed source identities (5.097458ms)
+﹣ Windows assembly rejects missing/corrupt parts and preserves existing files (0.322917ms) # SKIP
+ℹ tests 31
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 1534.648833

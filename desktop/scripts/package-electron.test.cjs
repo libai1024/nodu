@@ -12,8 +12,39 @@ const path = require('node:path');
 const Module = require('node:module');
 
 const {
-    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader,
+    canonicalJs, normalizeNativeModuleKeys, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader, writeWindowsPortableFiles,
 } = require('./package-electron.cjs');
+
+test('full Windows portable package includes both driver inventories and portable Data settings', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-full-portable-'));
+    const previous = { stm: process.env.NODU_WINDOWS_DRIVERS, esp: process.env.NODU_ESP32_WINDOWS_DRIVERS };
+    try {
+        const st = path.join(root, 'st'), ch = path.join(root, 'ch'), out = path.join(root, 'out');
+        for (const directory of [st, ch, out]) fs.mkdirSync(directory);
+        fs.writeFileSync(path.join(st, 'stlink_dbg_winusb.inf'), 'ST fixture');
+        fs.writeFileSync(path.join(st, 'driver.cat'), 'CAT fixture');
+        fs.writeFileSync(path.join(ch, 'ch343ser.inf'), 'CH fixture');
+        fs.writeFileSync(path.join(ch, 'driver.cat'), 'CAT fixture');
+        process.env.NODU_WINDOWS_DRIVERS = st;
+        delete process.env.NODU_ESP32_WINDOWS_DRIVERS;
+        assert.throws(() => writeWindowsPortableFiles(out, 'full'), /NODU_ESP32_WINDOWS_DRIVERS/);
+        process.env.NODU_ESP32_WINDOWS_DRIVERS = ch;
+        writeWindowsPortableFiles(out, 'full');
+        assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out, 'NoduPortable.json'))), { schema: 1, profile: 'full', dataDirectory: 'Data' });
+        const manifest = JSON.parse(fs.readFileSync(path.join(out, 'drivers/manifest.json')));
+        assert.deepEqual(manifest.packages.map(p => p.directory), ['ST-LINK', 'CH343']);
+        for (const p of manifest.packages) for (const f of p.files) {
+            const copied = fs.readFileSync(path.join(out, 'drivers', p.directory, f.path));
+            assert.equal(copied.length, f.size);
+            assert.equal(require('node:crypto').createHash('sha256').update(copied).digest('hex'), f.sha256);
+        }
+    } finally {
+        for (const [key, value] of [['NODU_WINDOWS_DRIVERS', previous.stm], ['NODU_ESP32_WINDOWS_DRIVERS', previous.esp]]) {
+            if (value === undefined) delete process.env[key]; else process.env[key] = value;
+        }
+        fs.rmSync(root, { recursive: true, force: true });
+    }
+});
 
 test('portable archive rejects TAR content mislabeled as ZIP', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nodu-zip-header-'));

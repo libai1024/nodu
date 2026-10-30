@@ -28,7 +28,7 @@ Arduino 测试资源预装 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO�
 
 新增记录：[Windows S3 COM 真板与包内环境验收](docs/evidence/windows-esp32-s3-com-20261029/README.md)、[Windows 缓存、剪切、终端及界面修复](docs/evidence/windows-desktop-fixes-20261029/README.md)。ESP 新项目仅提供 S3 / C3，左侧选型一次即可。修复版复用已安装环境与跨工程核心缓存；Windows 标题栏、设置悬浮态和原生剪切已验证。这些目录仅用于本地验证，尚不是可正式发布的完整版安装包。
 
-详见 [0.2.3 整合与打包记录](docs/releases/0.2.3.md)、[Windows ESP32 实测](docs/evidence/windows-esp32-20261029/README.md)、[Keil 使用说明](docs/keil-projects.md)和[仿真包说明](docs/arduino-esp-sim-package.md)。Mac 完整版与 Intel/Universal 目标仍受发布输入和 Arduino 对应材料校验限制；候选包不会作为完整跨平台正式版发布。
+2026-10-30 已补齐完整 Windows 安装器的离线分卷与驱动流程，并完成安装器机制测试；最终 ESP32 完整包仍待第三方材料覆盖及成品验收，尚无新版完整安装包上传。详见 [Windows 发布准备与剩余项](docs/evidence/windows-release-preparation-20261030/README.md)、[0.2.3 整合与打包记录](docs/releases/0.2.3.md)、[Windows ESP32 实测](docs/evidence/windows-esp32-20261029/README.md)、[Keil 使用说明](docs/keil-projects.md)和[仿真包说明](docs/arduino-esp-sim-package.md)。Mac 完整版与 Intel/Universal 目标仍受发布输入和 Arduino 对应材料校验限制；候选包不会作为完整跨平台正式版发布。
 
 ## 安装
 

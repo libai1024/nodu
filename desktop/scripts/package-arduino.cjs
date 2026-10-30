@@ -118,6 +118,7 @@ function validateBundle(root, expectedHost, { allowUnreleased = false } = {}) {
     }
     const required = ['arduino-cli@1.5.1', ...plan.records.map(record => record.id)];
     const missingSources = required.filter(component => !manifest.sourceCoverage?.some(item => item.component === component && item.complete === true
+        && (item.hosts === undefined || (Array.isArray(item.hosts) && item.hosts.includes(expectedHost)))
         && Array.isArray(item.files) && item.files.length && item.files.every(file => manifest.files.some(record => record.path === file && ['source', 'license'].includes(record.kind)))
         && item.files.some(file => manifest.files.some(record => record.path === file && record.kind === 'source'))));
     if (!allowUnreleased && (manifest.releaseReady !== true || missingSources.length)) {

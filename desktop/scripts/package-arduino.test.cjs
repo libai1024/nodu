@@ -78,6 +78,14 @@ test('complete bundle validates and copies only the immutable manifest payload w
     assert.deepEqual(JSON.parse(fs.readFileSync(path.join(resources, 'arduino/offline/required.json'))).hosts, ['darwin-arm64', 'darwin-x64']);
     assert.equal(f.api.validateBundle(output, 'darwin-arm64').files.length, f.manifest.files.length);
 });
+test('source coverage reviewed for another host cannot authorize release', t => {
+    const f = fixture(t);
+    f.manifest.sourceCoverage[0].hosts = ['win32-x64']; f.save();
+    assert.throws(() => f.api.validateBundle(f.root, 'darwin-arm64'), /对应源码/);
+    f.manifest.sourceCoverage[0].hosts = ['darwin-arm64']; f.save();
+    assert.doesNotThrow(() => f.api.validateBundle(f.root, 'darwin-arm64'));
+});
+
 test('release packaging fails closed when any source coverage is incomplete; development validation remains explicit', t => {
     const f = fixture(t); f.manifest.sourceCoverage[0].complete = false; f.manifest.releaseReady = false; f.save();
     assert.throws(() => f.api.validateBundle(f.root, 'darwin-arm64'), /对应源码.*arduino-cli/);

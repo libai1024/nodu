@@ -58,6 +58,18 @@ Arduino CLI 的 profile 冷安装会另建临时索引目录并尝试联网。�
 
 ## Windows 本地 ESP32 验证目录
 
+Windows 的对应材料使用独立锁文件，避免把 macOS 上游构建依赖的审查结果用于 Windows：
+
+```sh
+python3 scripts/collect-arduino-release-sources.py \
+  --lock scripts/arduino-release-sources.win32-x64.lock.json \
+  --out .tools/arduino-release-sources-win32 --require-complete
+```
+
+2026-10-30 该锁仍有未完成项，此命令应失败；不得通过修改标记或使用本地验证模式生成正式包。材料齐全后，`prepare-arduino-release.cjs --host win32-x64 --sources-dir .tools/arduino-release-sources-win32 ...` 才能用于正式构建。完整包还要求 `NODU_WINDOWS_DRIVERS` 和 `NODU_ESP32_WINDOWS_DRIVERS`，分别指向完整的 ST-LINK、CH343 签名驱动目录。
+
+正式完整包的便携目录为 `dist/Nodu-win32-x64`。在 Windows 上通过 `package-windows-installer.cjs --portable <该目录> --nsis <makensis.exe>` 制作安装器。超过 1900 MiB 的 ZIP 会拆成 `.zip.001`、`.zip.002` 等文件，每卷最多 1536 MiB；安装器及全部分卷必须放在同一目录。安装时先逐卷校验并合并，再校验整包摘要，全程不下载文件。上传时同时提供安装器、全部分卷、manifest 与 SHA-256 文件；原始大 ZIP 可用于百度网盘，不能直接作为超过 GitHub 单附件限制的 Release 文件。
+
 `node scripts/package-electron.cjs --profile esp32-validation` 仅供本地硬件验收。它仍校验全部运行文件的大小、哈希、版本和清单闭包，但显式允许对应源码材料尚未齐全的资源。默认 `full` 的发行校验保持严格；本模式不会生成 ZIP 或安装器，不应用于上传正式发行。
 
 在 Windows 构建机准备固定 Arduino bundle、ALS、clangd 和启动器后，可用 `NODU_ARDUINO_RELEASE_BUNDLES` 指定资源根目录。`NODU_ESP32_WINDOWS_DRIVERS` 可指向用 Windows `pnputil /export-driver` 导出的已签名 CH343 驱动目录；只复制文件，需要时由管理员执行随包脚本安装。

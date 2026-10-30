@@ -1,0 +1,25 @@
+serial-discovery.exe: go1.26.0
+	path	github.com/arduino/serial-discovery
+	mod	github.com/arduino/serial-discovery	(devel)
+	dep	github.com/arduino/go-paths-helper	v1.14.0	h1:b4C8KJa7CNz2XnzTWg97M3LAmzWSWrj+m/o5/skzv3Y=
+	dep	github.com/arduino/go-properties-orderedmap	v1.8.1	h1:nU5S6cXPwMoxZs4ORw61wPTALNfriIduvNB4cxTmNYM=
+	dep	github.com/arduino/pluggable-discovery-protocol-handler/v2	v2.2.1	h1:Fw8zKj1b/FkcQrWgN7aBw3ubSxpKIUtdANLXvd1Qdzw=
+	dep	go.bug.st/serial	v1.8.0
+	=>	github.com/facchinm/go-serial	v0.0.0-20260721142242-f705fc98b886	h1:eTpGCsv5NFaehxWz80NRvaqOfK07foOOv/bJaRcldFI=
+
+	dep	golang.org/x/sys	v0.47.0	h1:o7XGOvZQCADBQQ4Y7VNq2dRWQR7JmOUW8Kxx4ZsNgWs=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-ldflags=" -X github.com/arduino/serial-discovery/version.Version=v1.5.2 -X github.com/arduino/serial-discovery/version.Commit=fcbd39a -X github.com/arduino/serial-discovery/version.Timestamp=2026-07-23T11:39:55Z "
+	build	CGO_ENABLED=1
+	build	CGO_CFLAGS=
+	build	CGO_CPPFLAGS=
+	build	CGO_CXXFLAGS=
+	build	CGO_LDFLAGS=
+	build	GOARCH=amd64
+	build	GOOS=windows
+	build	GOAMD64=v1
+	build	vcs=git
+	build	vcs.revision=fcbd39ac7c612a1dd8a9a300d0534324315e5908
+	build	vcs.time=2026-07-23T11:33:43Z
+	build	vcs.modified=false

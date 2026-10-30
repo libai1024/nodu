@@ -532,5 +532,8 @@
     "Compiler release asset crosstool-NG-esp-14.2.0_20260121-src.tar.xz has mismatched GCC15 sample configs; use the separately pinned correct Git tag and gitlinks.",
     "Go1.26.1 build-time tool download remains incomplete after two bounded retries. Partial archive is not a release input.",
     "Never copy user-machine caches or installed tools into release source inputs."
+  ],
+  "hosts": [
+    "darwin-arm64"
   ]
 }

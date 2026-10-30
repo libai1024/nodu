@@ -16,6 +16,7 @@ import subprocess
 import tarfile
 import tempfile
 import urllib.parse
+import zipfile
 
 
 def sha256(path):
@@ -60,26 +61,29 @@ def fetch(root, item, verify_only):
 def license_files(root, item):
     result = []
     archive = safe_path(root, item["path"])
-    namespace = re.sub(r"\.tar\.(?:gz|xz|bz2)$", "", archive.name)
-    with tarfile.open(archive) as opened:
-        for member in opened:
-            if not member.isfile() or member.size > 2 * 1024 * 1024:
+    namespace = re.sub(r"(?:\.tar\.(?:gz|xz|bz2)|\.zip)$", "", archive.name)
+    is_zip = archive.suffix == ".zip"
+    with (zipfile.ZipFile(archive) if is_zip else tarfile.open(archive)) as opened:
+        members = opened.infolist() if is_zip else opened
+        for member in members:
+            member_name = member.filename if is_zip else member.name
+            size = member.file_size if is_zip else member.size
+            regular = not member.is_dir() and (member.external_attr >> 16) & 0o170000 != 0o120000 if is_zip else member.isfile()
+            if not regular or size > 2 * 1024 * 1024:
                 continue
-            name = pathlib.PurePosixPath(member.name).name
+            name = pathlib.PurePosixPath(member_name).name
             if not re.match(r"^(?:COPYING|COPYRIGHT|LICENSE|LICENCE|NOTICE)(?:$|[.\-_])", name, re.I):
                 continue
-            parts = pathlib.PurePosixPath(member.name).parts
-            if len(parts) < 2:
-                continue
-            relative = "/".join(("licenses", namespace, *parts[1:]))
+            parts = pathlib.PurePosixPath(member_name).parts
+            relative = "/".join(("licenses", namespace, *(parts[1:] if len(parts) > 1 else parts)))
             destination = safe_path(root, relative)
-            data = opened.extractfile(member).read()
+            data = opened.read(member) if is_zip else opened.extractfile(member).read()
             destination.parent.mkdir(parents=True, exist_ok=True)
             if not destination.exists() or destination.read_bytes() != data:
                 destination.write_bytes(data)
             result.append({"path": relative, "sha256": hashlib.sha256(data).hexdigest(), "size": len(data),
-                           "url": item["url"] + "#" + urllib.parse.quote(member.name), "kind": "license",
-                           "sourceArchive": item["path"], "archiveMember": member.name})
+                           "url": item["url"] + "#" + urllib.parse.quote(member_name), "kind": "license",
+                           "sourceArchive": item["path"], "archiveMember": member_name})
     return result
 
 
@@ -111,6 +115,10 @@ def collect(lock, output, verify_only=False, require_complete=False):
     manifest = {"schemaVersion": 1, "scope": lock["scope"], "releaseReady": not gaps,
                 "files": sorted(files, key=lambda item: item["path"]), "coverage": coverage,
                 "notes": lock["notes"]}
+    if "hosts" in lock:
+        if not isinstance(lock["hosts"], list) or not lock["hosts"] or any(not isinstance(host, str) for host in lock["hosts"]):
+            raise ValueError("Invalid reviewed source hosts")
+        manifest["hosts"] = lock["hosts"]
     destination = output / "source-manifest.json"
     temporary = destination.with_suffix(".json.tmp")
     temporary.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")

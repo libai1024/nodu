@@ -133,12 +133,13 @@ async function prepareBundle({ host = `${process.platform}-${process.arch}`, cac
             sourcesDir = path.resolve(sourcesDir);
             const sources = JSON.parse(fs.readFileSync(path.join(sourcesDir, 'source-manifest.json'), 'utf8'));
             if (sources.schemaVersion !== 1 || !Array.isArray(sources.files) || !Array.isArray(sources.coverage)) { throw new Error('对应源码清单无效'); }
+            if (sources.hosts !== undefined && (!Array.isArray(sources.hosts) || !sources.hosts.includes(host))) { throw new Error('对应源码审查不覆盖当前发行主机'); }
             for (const record of sources.files) {
                 if (!['source', 'license'].includes(record.kind)) { throw new Error('对应源码类型无效'); }
                 const source = verifyFile(sourcesDir, record), output = path.join(staging, 'sources', record.path); copyFile(source, output);
                 files.push(fileRecord(staging, output, { kind: record.kind, url: record.url }));
             }
-            for (const record of sources.coverage) { sourceCoverage.push({ ...record, files: record.files.map(file => `sources/${file}`) }); }
+            for (const record of sources.coverage) { sourceCoverage.push({ ...record, ...((record.hosts || sources.hosts) ? { hosts: record.hosts || sources.hosts } : {}), files: record.files.map(file => `sources/${file}`) }); }
         }
         if (nativeDir) {
             nativeDir = path.resolve(nativeDir);
@@ -156,7 +157,8 @@ async function prepareBundle({ host = `${process.platform}-${process.arch}`, cac
             const override = path.join(coreDir, 'platform.local.txt'); fs.writeFileSync(override, NATIVE_CTAGS_OVERRIDE);
             files.push(fileRecord(staging, override, { kind: 'profile', target: `data/internal/${PROFILE_ID}/platform.local.txt`, mode: 0o644 }));
         }
-        const missingSources = components.filter(component => !sourceCoverage.some(coverage => coverage.component === component.id && coverage.complete === true)).map(component => component.id);
+        const missingSources = components.filter(component => !sourceCoverage.some(coverage => coverage.component === component.id && coverage.complete === true
+            && (coverage.hosts === undefined || (Array.isArray(coverage.hosts) && coverage.hosts.includes(host))))).map(component => component.id);
         const missingNative = host === 'darwin-arm64' && !files.some(file => file.kind === 'native');
         const manifest = { schemaVersion: 1, id: `arduino-esp32-${CORE_VERSION}-cli-${CLI_VERSION}-${host}`, host, cliVersion: CLI_VERSION, coreVersion: CORE_VERSION,
             profileId: PROFILE_ID, profileIdentity: `esp32:esp32@${CORE_VERSION} (${INDEX_URL})`,

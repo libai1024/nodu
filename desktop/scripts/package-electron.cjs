@@ -1318,7 +1318,7 @@ async function packageWindows() {
         console.log(`package-electron: local validation only: ${rel(portable)}`);
         return;
     }
-    if (!includeArduino) { writeWindowsPortableFiles(portable); }
+    writeWindowsPortableFiles(portable);
     const stem = `Nodu-${applicationVersion}-${includeArduino ? '' : 'stm32-'}win32-x64`;
     const zip = path.join(distDir, `${stem}.zip`);
     fs.rmSync(zip, { force: true });
@@ -1351,7 +1351,8 @@ async function packageWindows() {
     console.log(`package-electron: ${rel(zip)}`);
 }
 
-function writeWindowsPortableFiles(portable) {
+function writeWindowsPortableFiles(portable, profile = packageProfile) {
+    if (!['stm32', 'full'].includes(profile)) { throw new Error('Expected a formal Windows package profile'); }
     const drivers = process.env.NODU_WINDOWS_DRIVERS;
     if (!drivers || !path.isAbsolute(drivers) || !fs.existsSync(drivers)) {
         throw new Error('STM32 offline distribution requires NODU_WINDOWS_DRIVERS with the signed ST-LINK driver files');
@@ -1368,11 +1369,30 @@ function writeWindowsPortableFiles(portable) {
         throw new Error('Offline ST-LINK driver package is incomplete');
     }
     fs.cpSync(drivers, path.join(portable, 'drivers/ST-LINK'), { recursive: true });
-    fs.writeFileSync(path.join(portable, 'NoduPortable.json'), JSON.stringify({ schema: 1, profile: 'stm32', dataDirectory: 'Data' }, null, 2) + '\n');
+    fs.writeFileSync(path.join(portable, 'NoduPortable.json'), JSON.stringify({ schema: 1, profile, dataDirectory: 'Data' }, null, 2) + '\n');
     fs.writeFileSync(path.join(portable, 'drivers/Install-ST-LINK.cmd'), '@echo off\r\n"%SystemRoot%\\System32\\pnputil.exe" /add-driver "%~dp0ST-LINK\\*.inf" /subdirs /install\r\npause\r\n');
     fs.writeFileSync(path.join(portable, 'OFFLINE-README.txt'), '\ufeff见微 Nodu · STM32 离线开发包\r\n\r\n完整解压后双击 Nodu.exe，用户配置和缓存保存到同目录 Data。\r\n包含 Arm GNU、CMake、Ninja、clangd、STM32CubeF1/F4 SDK、OpenOCD、stm32flash 和 ST-LINK 驱动文件。\r\n新建 STM32F103C8T6 工程即可编写、补全与编译，不需要另装 Node、Python、CMake、GCC 或下载工具链。\r\n首次使用 ST-LINK/V2 时，以管理员身份运行 drivers\\Install-ST-LINK.cmd 安装随包驱动。此操作由 Windows 管理系统驱动目录。\r\n串口下载需与所用 USB 转串口芯片匹配的驱动；本包的离线保证范围为 STM32 开发工具链及 ST-LINK。\r\n本版本不包含 Arduino/ESP32 离线环境。\r\n');
     const records = driverFiles.map(file => ({ path: path.relative(drivers, file).split(path.sep).join('/'), size: fs.statSync(file).size, sha256: sha256File(file) }));
     fs.writeFileSync(path.join(portable, 'drivers/manifest.json'), JSON.stringify({ source: 'STMicroelectronics signed Windows driver packages', files: records }, null, 2) + '\n');
+    if (profile === 'full') {
+        const serialDrivers = process.env.NODU_ESP32_WINDOWS_DRIVERS;
+        if (!serialDrivers || !path.isAbsolute(serialDrivers) || !fs.existsSync(serialDrivers)) {
+            throw new Error('Full Windows offline distribution requires NODU_ESP32_WINDOWS_DRIVERS with signed CH343 driver files');
+        }
+        driverFiles.length = 0;
+        visit(serialDrivers);
+        if (!driverFiles.some(file => /ch343.*\.inf$/i.test(path.basename(file))) || !driverFiles.some(file => /\.cat$/i.test(file))) {
+            throw new Error('Offline CH343 driver package is incomplete');
+        }
+        fs.cpSync(serialDrivers, path.join(portable, 'drivers/CH343'), { recursive: true });
+        fs.writeFileSync(path.join(portable, 'drivers/Install-CH343.cmd'), '@echo off\r\n"%SystemRoot%\\System32\\pnputil.exe" /add-driver "%~dp0CH343\\*.inf" /subdirs /install\r\npause\r\n');
+        const serialRecords = driverFiles.map(file => ({ path: path.relative(serialDrivers, file).split(path.sep).join('/'), size: fs.statSync(file).size, sha256: sha256File(file) }));
+        fs.writeFileSync(path.join(portable, 'drivers/manifest.json'), JSON.stringify({ schema: 2, packages: [
+            { directory: 'ST-LINK', source: 'STMicroelectronics signed Windows driver packages', files: records },
+            { directory: 'CH343', source: 'WCH signed Windows CH343 driver package', files: serialRecords },
+        ] }, null, 2) + '\n');
+        fs.writeFileSync(path.join(portable, 'OFFLINE-README.txt'), '\ufeff见微 Nodu · Windows 离线开发包\r\n\r\n完整解压后双击 Nodu.exe；配置、工程、工具链解包和缓存保存在同目录 Data。\r\n包含 STM32 工具链、Arduino CLI、ESP32-C3/S3 支持、常用库、语言服务、ST-LINK 与 CH343 驱动。\r\n基础工程的编写、编译和烧写无需下载工具链，不需要另装 Node、Python 或 Arduino IDE。\r\nESP32-S3 默认连接板上 COM/UART 接口。需要时以管理员身份运行 drivers\\Install-CH343.cmd；STM32 ST-LINK 使用 Install-ST-LINK.cmd。\r\n驱动安装由 Windows 管理系统驱动目录；其他型号 USB 转串口芯片需匹配其驱动。\r\nAI 教学与额外库下载属于联网功能。卸载前请备份 Data 中的工程。\r\n');
+    }
 }
 
 function assertZipHeader(file) {
@@ -1424,5 +1444,5 @@ if (require.main === module) {
 
 module.exports = {
     canonicalJs, canonizeJsForMerge, normalizeNativeModuleKeys, computeStamp, computeInstallStamp,
-    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader,
+    isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader, writeWindowsPortableFiles,
 };

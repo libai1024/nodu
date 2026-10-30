@@ -1,0 +1,23 @@
+mdns-discovery.exe: go1.25.2
+	path	github.com/arduino/mdns-discovery
+	mod	github.com/arduino/mdns-discovery	v1.1.0
+	dep	github.com/arduino/go-paths-helper	v1.14.0	h1:b4C8KJa7CNz2XnzTWg97M3LAmzWSWrj+m/o5/skzv3Y=
+	dep	github.com/arduino/go-properties-orderedmap	v1.8.1	h1:nU5S6cXPwMoxZs4ORw61wPTALNfriIduvNB4cxTmNYM=
+	dep	github.com/arduino/pluggable-discovery-protocol-handler/v2	v2.2.1	h1:Fw8zKj1b/FkcQrWgN7aBw3ubSxpKIUtdANLXvd1Qdzw=
+	dep	github.com/hashicorp/mdns	v1.0.6
+	=>	github.com/cmaglie/mdns	v1.0.6-0.20260615092725-1cef078b7fd6	h1:vPDu0q101tAD9uzIqUAcqyiC9y1Uc+mhp2zlzrxfTH4=
+
+	dep	github.com/miekg/dns	v1.1.72	h1:vhmr+TF2A3tuoGNkLDFK9zi36F2LS+hKTRW0Uf8kbzI=
+	dep	golang.org/x/net	v0.56.0	h1:Rw8j/hFzGvJUZwNBXnAtf5sVDVt+65SK2C7IxCxZt5o=
+	dep	golang.org/x/sys	v0.46.0	h1:noSf2Fq6F8DBgS+LysIkx7rIExoNHJsxOAtPp4rthXw=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-ldflags=" -X github.com/arduino/mdns-discovery/version.Version=v1.1.0 -X github.com/arduino/mdns-discovery/version.Commit=435f044 -X github.com/arduino/mdns-discovery/version.Timestamp=2026-07-03T10:24:12Z "
+	build	CGO_ENABLED=0
+	build	GOARCH=amd64
+	build	GOOS=windows
+	build	GOAMD64=v1
+	build	vcs=git
+	build	vcs.revision=435f0445a9d70f48d7bbd4910da23394e8a44bf9
+	build	vcs.time=2026-07-03T09:44:58Z
+	build	vcs.modified=false

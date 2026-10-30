@@ -10,6 +10,7 @@ import pathlib
 import tarfile
 import tempfile
 import unittest
+import zipfile
 from unittest import mock
 
 spec = importlib.util.spec_from_file_location("source_collector", pathlib.Path(__file__).with_name("collect-arduino-release-sources.py"))
@@ -96,6 +97,21 @@ class SourceIntegrityTests(unittest.TestCase):
         self.lock["coverage"].append(dict(self.lock["coverage"][0]))
         with self.assertRaisesRegex(ValueError, "Duplicate component coverage"):
             self.collect()
+
+    def test_go_module_zip_preserves_license_and_rejects_traversal(self):
+        archive = self.root / 'sources/module.zip'
+        item = dict(self.lock['files'][0], path='sources/module.zip')
+        with zipfile.ZipFile(archive, 'w') as z:
+            z.writestr('example.org/module@v1.0/LICENSE', b'Unmodified module license')
+            z.writestr('example.org/module@v1.0/main.go', b'package module')
+            z.writestr('LICENSE.txt', b'Root component license')
+        records = collector.license_files(self.root, item)
+        self.assertEqual(len(records), 2)
+        self.assertEqual((self.root / records[0]['path']).read_bytes(), b'Unmodified module license')
+        with zipfile.ZipFile(archive, 'w') as z:
+            z.writestr('module/../../../LICENSE', b'escape')
+        with self.assertRaisesRegex(ValueError, 'Invalid inventory path'):
+            collector.license_files(self.root, item)
 
 
 if __name__ == "__main__":
