@@ -1,0 +1,158 @@
+{
+  "started": "2026-10-31T15:31:30.008Z",
+  "productionBackend": {
+    "filename": "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\lib\\backend\\main.js",
+    "sha256": "27c71cfaea94babad862edfda60f940d146680bd255860b90502e072e3ef66f8",
+    "entryPointSuppressed": true,
+    "applicationFilesModified": false
+  },
+  "cases": [
+    {
+      "chip": "esp32c3",
+      "inspectMs": 1481,
+      "project": "D:\\nodu-release-20261031\\test\\software\\projects\\libs_esp32c3",
+      "build": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "absolute": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "line": 599,
+            "column": 22,
+            "message": "extra tokens at end of #undef directive"
+          },
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "absolute": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "line": 600,
+            "column": 20,
+            "message": "extra tokens at end of #undef directive"
+          }
+        ],
+        "buildToken": "75b82c9a-2b44-4fc7-a04b-59c084f751aa",
+        "simulationReady": false,
+        "simulationError": "请在开发板设置中选择“仿真配置：ESP32-C3 · 4 MB / 160 MHz”，然后重新编译。",
+        "buildPath": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\cache\\sketches\\B948220BAA52AC353AACCE3B64CB110C"
+      },
+      "expectedFailure": true,
+      "recovery": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "ba52ffaf-449d-4bb2-adf6-4930e64f7365",
+        "simulationReady": false,
+        "simulationError": "请在开发板设置中选择“仿真配置：ESP32-C3 · 4 MB / 160 MHz”，然后重新编译。",
+        "buildPath": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\cache\\sketches\\B948220BAA52AC353AACCE3B64CB110C"
+      },
+      "reopenMs": 1355
+    },
+    {
+      "chip": "esp32s3",
+      "inspectMs": 87,
+      "project": "D:\\nodu-release-20261031\\test\\software\\projects\\libs_esp32s3",
+      "build": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h",
+            "absolute": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\esp32_esp32s3-libs_3.3.12_69eed4af7976e1a2/include/driver/deprecated/driver/mcpwm.h",
+            "line": 15,
+            "column": 2,
+            "message": "#warning \"legacy MCPWM driver is deprecated, please migrate to the new driver (include driver/mcpwm_prelude.h)\" [-Wcpp]"
+          },
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "absolute": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "line": 599,
+            "column": 22,
+            "message": "extra tokens at end of #undef directive"
+          },
+          {
+            "source": "compiler",
+            "severity": "warning",
+            "file": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "absolute": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\data\\internal\\OneWire_2.3.8_b02012c4e88745c5\\OneWire\\OneWire.cpp",
+            "line": 600,
+            "column": 20,
+            "message": "extra tokens at end of #undef directive"
+          }
+        ],
+        "buildToken": "e9c50b53-a60e-4efc-88c5-f6ec47e863f0",
+        "simulationReady": false,
+        "simulationError": "当前开发板参数与仿真配置不符（CPUFreq=240、FlashSize=8M、FlashMode=qio、PartitionScheme=default_8MB、PSRAM=disabled、LoopCore=1、EventsCore=1、MSCOnBoot=default、DFUOnBoot=default）。请在开发板设置中明确选择“ESP32-S3 · 8 MB / 240 MHz”，然后重新编译。",
+        "buildPath": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\cache\\sketches\\FC1C0BD2AB7E6A74D84FCB34072B2808"
+      },
+      "expectedFailure": true,
+      "recovery": {
+        "ok": true,
+        "stale": false,
+        "diagnostics": [],
+        "buildToken": "077134a3-688f-4fd1-b44d-25f466be6bbf",
+        "simulationReady": false,
+        "simulationError": "当前开发板参数与仿真配置不符（CPUFreq=240、FlashSize=8M、FlashMode=qio、PartitionScheme=default_8MB、PSRAM=disabled、LoopCore=1、EventsCore=1、MSCOnBoot=default、DFUOnBoot=default）。请在开发板设置中明确选择“ESP32-S3 · 8 MB / 240 MHz”，然后重新编译。",
+        "buildPath": "D:\\Nodu-Full-0.2.3-Test\\Data\\arduino\\cache\\sketches\\FC1C0BD2AB7E6A74D84FCB34072B2808"
+      },
+      "reopenMs": 1369
+    }
+  ],
+  "hardwareAccessed": false,
+  "networkDenied": "EACCES",
+  "libraries": [
+    {
+      "name": "ArduinoJson",
+      "version": "7.4.3"
+    },
+    {
+      "name": "ArduinoMqttClient",
+      "version": "0.1.8"
+    },
+    {
+      "name": "Adafruit SSD1306",
+      "version": "2.5.17"
+    },
+    {
+      "name": "Adafruit GFX Library",
+      "version": "1.13.0"
+    },
+    {
+      "name": "Adafruit BusIO",
+      "version": "1.17.4"
+    },
+    {
+      "name": "Adafruit NeoPixel",
+      "version": "1.15.5"
+    },
+    {
+      "name": "DHT sensor library",
+      "version": "1.4.7"
+    },
+    {
+      "name": "Adafruit Unified Sensor",
+      "version": "1.1.15"
+    },
+    {
+      "name": "OneWire",
+      "version": "2.3.8"
+    },
+    {
+      "name": "DallasTemperature",
+      "version": "4.0.6"
+    },
+    {
+      "name": "ESP32Servo",
+      "version": "3.2.1"
+    }
+  ],
+  "success": true,
+  "finished": "2026-10-31T15:40:36.256Z"
+}

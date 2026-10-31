@@ -1,0 +1,7 @@
+{
+  "destination": "D:\\nodu-release-20261031\\bundles\\win32-x64",
+  "files": 6590,
+  "totalBytes": 3883946832,
+  "releaseReady": true,
+  "missingSources": []
+}

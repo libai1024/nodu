@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "045821917629235eba0a1dbafbf1300ba7ccf913",
+  "host": "win32-x64",
+  "sourceManifestSha256": "caa61d6037fc6baefb2c23076c1484b1d62fa398fa065eca62e70cc7cbc34b8c",
+  "sourceArchives": 372,
+  "licenseFiles": 4004,
+  "files": 4376,
+  "bytes": 1724763842,
+  "completeComponents": 25,
+  "releaseReady": true
+}

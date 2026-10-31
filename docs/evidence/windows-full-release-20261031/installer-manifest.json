@@ -1,0 +1,36 @@
+{
+  "version": "0.2.3",
+  "profile": "full",
+  "targetPlatform": "win32-x64",
+  "artifact": "Nodu-0.2.3-win32-x64-setup.exe",
+  "size": 169550,
+  "sha256": "205253beed1c26cee16aded52a4d446d0c239a8dfb0f37ec30e049f30e308782",
+  "sourceCommit": "045821917629235eba0a1dbafbf1300ba7ccf913",
+  "sourceDirty": false,
+  "defaultDirectory": "D:\\Nodu",
+  "internetDownloads": false,
+  "portableArchiveSha256": "f08869342f1fadae319473a691dfed4b8f4bf682abd56bd182e3680631acc3ad",
+  "bundledDrivers": [
+    "ST-LINK",
+    "CH343"
+  ],
+  "payloadParts": [
+    {
+      "name": "Nodu-0.2.3-win32-x64.zip.001",
+      "size": 1610612736,
+      "sha256": "4c0b4bb1b26cfd135368ea6d0d85639c2ef6f72dcbf6f2c4858b78939c9b9cb5"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.zip.002",
+      "size": 1610612736,
+      "sha256": "2d77002e06852269cd9e0254cbb4180c7e9a1484c5fdc5206ff2d1721564c27e"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.zip.003",
+      "size": 1447907477,
+      "sha256": "e554ed85e78a7b2511a71207a6d882aa38d4182fea79d8518a08e30367cce1d3"
+    }
+  ],
+  "signing": "unsigned installer",
+  "generatedAt": "2026-10-31T15:21:46.912Z"
+}

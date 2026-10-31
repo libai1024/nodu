@@ -1,0 +1,37 @@
+{
+  "startedAt": "2026-10-31T15:42:46.583Z",
+  "app": "D:\\Nodu-Full-0.2.3-Test",
+  "resources": "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources",
+  "isolatedPath": "C:\\Windows\\System32;C:\\Windows",
+  "guarded": [
+    "D:\\Nodu-Full-0.2.3-Test\\Nodu.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\bin\\win32-x64\\nodu-embedded.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\clangd\\bin\\clangd.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\cmake\\bin\\cmake.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\ninja\\bin\\ninja.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\arm-gnu\\bin\\arm-none-eabi-gcc.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\arm-gnu\\bin\\arm-none-eabi-objcopy.exe",
+    "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\arm-gnu\\bin\\arm-none-eabi-readelf.exe"
+  ],
+  "externalDeveloperToolsOnPath": false,
+  "hardwareRequests": [],
+  "stages": [
+    "network isolation proved",
+    "five successful F103 compilation cases and expected error/recovery",
+    "completion, definition, diagnostics and recovery",
+    "packaged GUI backend startup and automatic local Data profile"
+  ],
+  "offlineGuardReady": true,
+  "startup": {
+    "pid": 18984,
+    "url": "http://127.0.0.1:51188",
+    "htmlStatus": 200,
+    "dataDirectory": "D:\\Nodu-Full-0.2.3-Test\\Data",
+    "allWritableDirectoriesBesideExecutable": true
+  },
+  "success": true,
+  "guardOutput": "OFFLINE_READY filters=16\r\nOFFLINE_FILTERS_REMOVED\r\n",
+  "guardErrors": "",
+  "filtersRemoved": true,
+  "finishedAt": "2026-10-31T15:43:04.044Z"
+}

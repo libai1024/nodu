@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "results": [
+    {
+      "chip": "esp32c3",
+      "ok": true,
+      "incremental": true,
+      "bodyMultilineHoverMs": 140,
+      "unicodeHoverMs": 700,
+      "replaceHoverMs": 32699,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "hoverLine": 6,
+      "completionItems": 91,
+      "definitionLine": 3,
+      "unsavedDiagnosticLine": 11,
+      "rapidUnicodeEdits": 12,
+      "replaceAllAndSave": true,
+      "replacedHoverLine": 7,
+      "baselineErrors": 0,
+      "sourceMapping": "original .ino",
+      "project": "D:\\nodu-release-20261031\\test\\lsp\\esp32c3-1793461236909\\lsp_esp32c3"
+    },
+    {
+      "chip": "esp32s3",
+      "ok": true,
+      "incremental": true,
+      "bodyMultilineHoverMs": 671,
+      "unicodeHoverMs": 1180,
+      "replaceHoverMs": 34516,
+      "server": {
+        "name": "arduino-language-server",
+        "version": "0.7.7-nodu.1"
+      },
+      "hoverLine": 6,
+      "completionItems": 91,
+      "definitionLine": 3,
+      "unsavedDiagnosticLine": 11,
+      "rapidUnicodeEdits": 12,
+      "replaceAllAndSave": true,
+      "replacedHoverLine": 7,
+      "baselineErrors": 0,
+      "sourceMapping": "original .ino",
+      "project": "D:\\nodu-release-20261031\\test\\lsp\\esp32s3-1793461297271\\lsp_esp32s3"
+    }
+  ]
+}

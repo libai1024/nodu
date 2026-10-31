@@ -1,6 +1,6 @@
 # Windows 完整离线包：2026-10-31
 
-本批次针对 Windows x64；macOS 和 Linux 不继承本批次结论。仓库已公开，可匿名访问。正式安装包须在下列材料检查之后，另行完成实际安装、离线编译及真板验收；构建成功本身不代表硬件通过。
+本批次 Windows x64 完整离线安装包已完成实际安装、离线编译、S3 真板和语言服务验收。仓库公开，可匿名访问；macOS 与 Linux 不继承本批次结论。最终程序来自干净提交 `045821917629235eba0a1dbafbf1300ba7ccf913`。
 
 ## 固定材料与来源
 
@@ -21,4 +21,21 @@ Gitleaks 8.30.1 扫描全部本地 Git 历史（139 个提交）。158 个提示
 
 材料收集器的离线测试覆盖原始文件保留、同长度篡改拒绝、路径越界拒绝、未完成审查不自动升级、独立许可证不能代替源码。打包器保持干净提交检查、主机范围检查及正式资源检查，不使用 validation 模式生成正式发行。
 
-最终安装包与真板结果将在本目录补录；此前的设备测试见 [S3 COM 记录](../windows-esp32-s3-com-20261029/README.md)。C3 尚无实体板，不能标为真板验收通过。驱动由 Windows 管理系统目录；应用、工具、工程和缓存均使用非 C 盘目录。
+实际安装器包含本地分卷合并、全卷摘要核验和驱动步骤，已安装到 `D:\Nodu-Full-0.2.3-Test`，初始 Data 为空，安装退出码 0，版本、profile 与源码身份一致。未复用旧验证目录。原始安装及载荷身份见 [安装结果](installed-identity.json)、[安装器 manifest](installer-manifest.json)、[载荷 manifest](portable-manifest.json)。
+
+| 成品测试 | 结果与证据 |
+| --- | --- |
+| S3 COM4 两轮编译、烧写、复位运行 | 两份不同固件均成功，16 MB Flash / 8 MB OPI PSRAM；[硬件结果](hardware-result.json) |
+| 串口 | 两轮 ASCII、中文、4200 字符回显通过，烧写后恢复监视器，关闭重开后通信通过 |
+| C3/S3 常用库 | 全部 11 个库同工程编译、预期错误检测、修复重编译通过；[软件结果](software-result.json) |
+| C3/S3 编辑器语言服务 | 各 91 项补全、定义跳转、悬停、未保存诊断、12 次 Unicode 编辑和整页替换映射通过；[LSP 结果](lsp-result.json) |
+| STM32F103 | 五组成功编译、故意语法错误及恢复；[编译结果](f103-acceptance.json)、[clangd 结果](f103-language-acceptance.json) |
+| 最终程序启动与目录 | 应用后端启动、HTML 返回 200、所有可写目录位于本地 Data；[隔离验收](clean-package-acceptance.json) |
+
+S3 的首次 Arduino 环境准备耗时 185.3 秒，另有共享嵌入式服务的首次准备；这是本地解包，不是下载。后续 C3/S3 重开环境检查分别为 1.355 / 1.369 秒。语言服务整页替换并保存后重建为 32.7 / 34.5 秒，不能把本次通过解读成所有编辑操作都即时完成。
+
+Arduino 编译与硬件测试通过动态 WFP 阻断 Nodu 和 Arduino CLI 外网，证明返回 EACCES；不声称单独阻断所有编译器子进程。STM32 测试另外阻断记录中的构建程序；PATH 只有 Windows 系统目录，没有开发机工具。测试结束动态规则已移除，无测试进程残留。S3 测试脚本为仓库 `desktop/scripts/esp32-s3-hardware-acceptance.cjs`；[本次常用库脚本](software-acceptance.cjs) 使用同目录的仓库 `packaged-arduino-acceptance-loader.cjs`，从未改写安装包中的程序。
+
+安装器与三个分卷已上传 GitHub，服务器给出的大小与 SHA-256 均匹配本地，见 [附件核验](github-assets.json)。正式下载与全部文件摘要见 [0.2.3 发布说明](../../releases/0.2.3.md)。
+
+C3 尚无实体板，不标为真板验收通过；本次没有 STM32 实体烧写。Windows 11、其他 S3 板型和原生 USB 未另验收。驱动由 Windows 管理系统目录；应用、工具、工程和缓存均使用非 C 盘目录。此前设备记录见 [S3 COM 记录](../windows-esp32-s3-com-20261029/README.md)。

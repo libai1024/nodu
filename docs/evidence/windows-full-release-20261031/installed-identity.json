@@ -1,0 +1,12 @@
+{
+  "sourceDirty": false,
+  "installerExit": 0,
+  "profile": "full",
+  "sourceCommit": "045821917629235eba0a1dbafbf1300ba7ccf913",
+  "freshData": true,
+  "installDirectory": "D:\\Nodu-Full-0.2.3-Test",
+  "drivers": [
+    "ST-LINK",
+    "CH343"
+  ]
+}

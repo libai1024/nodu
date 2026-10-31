@@ -1,0 +1,11 @@
+✔ offline volumes reconstruct exactly and record every part digest (10.0863ms)
+✔ installer refuses validation builds, dirty builds and mixed source identities (0.6822ms)
+✔ Windows assembly rejects missing/corrupt parts and preserves existing files (2297.5242ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2401.8681

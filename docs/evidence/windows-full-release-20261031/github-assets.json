@@ -1,0 +1,73 @@
+{
+  "tag": "v0.2.3",
+  "targetCommitish": "045821917629235eba0a1dbafbf1300ba7ccf913",
+  "draftAtVerification": true,
+  "assets": [
+    {
+      "name": "default.md",
+      "size": 1479,
+      "digest": "sha256:8f07d8b9d53f8024207351e8cbff1d2a00e86f94d475d7c5432c8b304bb91b16",
+      "state": "uploaded"
+    },
+    {
+      "name": "FILES.json",
+      "size": 633,
+      "digest": "sha256:a17593c97d343968ac9fa74146e43ea0ead870e4f05e786dc5630543fcd8586e",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64-setup.exe",
+      "size": 169550,
+      "digest": "sha256:205253beed1c26cee16aded52a4d446d0c239a8dfb0f37ec30e049f30e308782",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64-setup.manifest.json",
+      "size": 1132,
+      "digest": "sha256:aa80cee70ad7611b0ba15de8a5dd6e44679fb87e5f0db9fcdd2858d24c2e2603",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64-setup.sha256",
+      "size": 382,
+      "digest": "sha256:d70bfab8636cf89a1ceb8690b6394ad87ff51174352169f76c9d1c6cc38e4da7",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.manifest.json",
+      "size": 558,
+      "digest": "sha256:270b5c2b331397a42532ade214c15cdca5b070e2eb2f4efb139bc969a75795fd",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.sha256",
+      "size": 91,
+      "digest": "sha256:a1f59db3c2ab42e59ba04635cb04e5b401728e098ca6339cce7c2cdb46774cd2",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.zip.001",
+      "size": 1610612736,
+      "digest": "sha256:4c0b4bb1b26cfd135368ea6d0d85639c2ef6f72dcbf6f2c4858b78939c9b9cb5",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.zip.002",
+      "size": 1610612736,
+      "digest": "sha256:2d77002e06852269cd9e0254cbb4180c7e9a1484c5fdc5206ff2d1721564c27e",
+      "state": "uploaded"
+    },
+    {
+      "name": "Nodu-0.2.3-win32-x64.zip.003",
+      "size": 1447907477,
+      "digest": "sha256:e554ed85e78a7b2511a71207a6d882aa38d4182fea79d8518a08e30367cce1d3",
+      "state": "uploaded"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 382,
+      "digest": "sha256:d70bfab8636cf89a1ceb8690b6394ad87ff51174352169f76c9d1c6cc38e4da7",
+      "state": "uploaded"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "version": "0.2.3",
+  "targetPlatform": "win32-x64",
+  "profile": "full",
+  "sourceCommit": "045821917629235eba0a1dbafbf1300ba7ccf913",
+  "sourceDirty": false,
+  "artifact": "Nodu-0.2.3-win32-x64.zip",
+  "size": 4669132949,
+  "sha256": "f08869342f1fadae319473a691dfed4b8f4bf682abd56bd182e3680631acc3ad",
+  "electron": "42.8.1",
+  "node": "24.21.0",
+  "signing": "unsigned portable zip; no installer, no Authenticode",
+  "runtimeResources": "f3f673841451b4b618c0e9c9634a788bcd49264d0c3aa17617feaf339b2fe7d9",
+  "generatedAt": "2026-10-31T15:20:05.185Z"
+}

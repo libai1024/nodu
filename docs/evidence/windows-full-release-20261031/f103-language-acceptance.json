@@ -1,0 +1,56 @@
+{
+  "platform": "win32",
+  "project": "D:\\nodu-release-20261031\\test\\stm32\\projects\\f103-uart",
+  "clangd": "D:\\Nodu-Full-0.2.3-Test\\resources\\app\\node_modules\\@scope\\studio-extension\\resources\\toolkits\\stm32\\win32-x64\\clangd\\bin\\clangd.exe",
+  "hardware": false,
+  "initialErrors": 0,
+  "definition": [
+    {
+      "range": {
+        "end": {
+          "character": 38,
+          "line": 3
+        },
+        "start": {
+          "character": 23,
+          "line": 3
+        }
+      },
+      "uri": "file:///D:/nodu-release-20261031/test/stm32/projects/f103-uart/Core/Inc/app_counter.h"
+    }
+  ],
+  "completion": {
+    "count": 12,
+    "labels": [
+      "•HAL_GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_Init)",
+      "•HAL_GPIO_MODULE_ENABLED",
+      "•HAL_GPIO_DeInit(GPIO_TypeDef *GPIOx, uint32_t GPIO_Pin)",
+      "•HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)",
+      "•HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)",
+      "•HAL_GPIO_LockPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)",
+      "•HAL_GPIO_ReadPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)",
+      "•HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)",
+      "•HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState)"
+    ]
+  },
+  "errorDiagnostics": [
+    {
+      "code": "undeclared_var_use",
+      "message": "Use of undeclared identifier 'NODU_INTENTIONAL_UNDECLARED'",
+      "range": {
+        "end": {
+          "character": 31,
+          "line": 6
+        },
+        "start": {
+          "character": 4,
+          "line": 6
+        }
+      },
+      "severity": 1,
+      "source": "clang"
+    }
+  ],
+  "recoveredErrors": 0,
+  "success": true
+}
