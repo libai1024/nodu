@@ -4,7 +4,7 @@
 
 ## 固定材料与来源
 
-Windows 对应材料锁文件覆盖 25 个发布组件。原始归档与许可证保留在随包 Arduino offline `sources` 目录；每个文件记录 HTTPS 来源、长度、SHA-256，构建前重新验证。许可证从归档原样提取；组件注册表未提供文件的两项，使用其 `idf_component.yml` 指定提交的上游仓库许可证。
+Windows 对应材料锁文件覆盖 25 个发布组件。原始归档与许可证保留在随包 Arduino offline `sources` 目录；每个文件记录 HTTPS 来源、长度、SHA-256，构建前重新验证。许可证从归档原样提取，保留完整归档成员路径及来源目录；修复平铺 ZIP 的根许可证与嵌套依赖许可证同名覆盖，并拒绝大小写不敏感路径冲突。组件注册表未提供文件的两项，使用其 `idf_component.yml` 指定提交的上游仓库许可证。
 
 - GCC：保留实际 GCC、binutils、newlib、picolibc、crosstool-NG 标签和固定子模块。Windows 包装器中的 Rust 提交对应 1.86.0，依赖路径对应 lazy_static 1.5.0；Rust 原始源码包含 vendored 依赖。libc 调用仅在 Unix 配置编译，附加保留两个上游构建上下文版本。
 - dfu-util：确认 Arduino 定制源码是 `bcmi-labs/dfu-util@3a18dc1d`，不是未修改的基础 0.11。其中 configure.ac 仍显示 Arduino4，与二进制一致；Arduino5 的工作流、crossbuild 0.2.2 和实际 libusb 1.0.26 源码均保留。

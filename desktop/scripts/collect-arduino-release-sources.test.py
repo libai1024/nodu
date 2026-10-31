@@ -126,6 +126,22 @@ class SourceIntegrityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid inventory path'):
             collector.license_files(self.root, item)
 
+    def test_flat_zip_licenses_and_same_named_archives_cannot_overwrite(self):
+        first = self.root / 'sources/first/component.zip'
+        second = self.root / 'sources/second/component.zip'
+        for archive in (first, second):
+            archive.parent.mkdir(parents=True)
+            with zipfile.ZipFile(archive, 'w') as z:
+                z.writestr('LICENSE', b'Root license')
+                z.writestr('vendor/LICENSE', b'Different vendor license')
+        records = []
+        for archive in (first, second):
+            records.extend(collector.license_files(self.root, {'path': archive.relative_to(self.root).as_posix(),
+                           'url': 'https://example.invalid/component.zip'}))
+        self.assertEqual(len({record['path'].casefold() for record in records}), 4)
+        self.assertEqual([(self.root / record['path']).read_bytes() for record in records],
+                         [b'Root license', b'Different vendor license'] * 2)
+
 
 if __name__ == "__main__":
     unittest.main()

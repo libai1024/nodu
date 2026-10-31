@@ -61,7 +61,10 @@ def fetch(root, item, verify_only):
 def license_files(root, item):
     result = []
     archive = safe_path(root, item["path"])
-    namespace = re.sub(r"(?:\.tar\.(?:gz|xz|bz2)|\.zip)$", "", archive.name)
+    # Keep both the inventory directory and the full archive member path.
+    # Flat component ZIPs can contain LICENSE and detools/LICENSE with different
+    # terms; dropping their first segment silently overwrites one of them.
+    namespace = re.sub(r"(?:\.tar\.(?:gz|xz|bz2)|\.zip)$", "", item["path"].removeprefix("sources/"))
     is_zip = archive.suffix == ".zip"
     with (zipfile.ZipFile(archive) if is_zip else tarfile.open(archive)) as opened:
         members = opened.infolist() if is_zip else opened
@@ -75,7 +78,7 @@ def license_files(root, item):
             if not re.match(r"^(?:COPYING|COPYRIGHT|LICENSE|LICENCE|NOTICE)(?:$|[.\-_])", name, re.I):
                 continue
             parts = pathlib.PurePosixPath(member_name).parts
-            relative = "/".join(("licenses", namespace, *(parts[1:] if len(parts) > 1 else parts)))
+            relative = "/".join(("licenses", namespace, *parts))
             destination = safe_path(root, relative)
             data = opened.read(member) if is_zip else opened.extractfile(member).read()
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -104,6 +107,8 @@ def collect(lock, output, verify_only=False, require_complete=False):
     for item in entries:
         if item["kind"] == "source":
             files.extend(license_files(output, item))
+    if len({item["path"].casefold() for item in files}) != len(files):
+        raise ValueError("Source/license inventory paths collide on case-insensitive hosts")
     coverage = lock["coverage"]
     if len({item["component"] for item in coverage}) != len(coverage):
         raise ValueError("Duplicate component coverage")
