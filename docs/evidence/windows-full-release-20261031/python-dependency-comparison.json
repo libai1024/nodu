@@ -1,0 +1,104 @@
+[
+  {
+    "wheel": "bitarray-3.8.2-cp313-cp313-win_amd64.whl",
+    "checked": 6,
+    "matched": 6,
+    "mismatches": []
+  },
+  {
+    "wheel": "bitstring-4.4.0-py3-none-any.whl",
+    "checked": 20,
+    "matched": 20,
+    "mismatches": []
+  },
+  {
+    "wheel": "cffi-2.0.0-cp313-cp313-win_amd64.whl",
+    "checked": 1,
+    "matched": 1,
+    "mismatches": []
+  },
+  {
+    "wheel": "click-8.4.2-py3-none-any.whl",
+    "checked": 16,
+    "matched": 16,
+    "mismatches": []
+  },
+  {
+    "wheel": "colorama-0.4.6-py2.py3-none-any.whl",
+    "checked": 6,
+    "matched": 6,
+    "mismatches": []
+  },
+  {
+    "wheel": "cryptography-48.0.1-cp311-abi3-win_amd64.whl",
+    "checked": 38,
+    "matched": 38,
+    "mismatches": []
+  },
+  {
+    "wheel": "intelhex-2.3.0-py2.py3-none-any.whl",
+    "checked": 3,
+    "matched": 3,
+    "mismatches": []
+  },
+  {
+    "wheel": "markdown_it_py-4.2.0-py3-none-any.whl",
+    "checked": 62,
+    "matched": 62,
+    "mismatches": []
+  },
+  {
+    "wheel": "mdurl-0.1.2-py3-none-any.whl",
+    "checked": 6,
+    "matched": 6,
+    "mismatches": []
+  },
+  {
+    "wheel": "pygments-2.20.0-py3-none-any.whl",
+    "checked": 336,
+    "matched": 336,
+    "mismatches": []
+  },
+  {
+    "wheel": "pyinstaller-6.11.1-py3-none-win_amd64.whl",
+    "checked": 5,
+    "matched": 5,
+    "mismatches": []
+  },
+  {
+    "wheel": "pyserial-3.5-py2.py3-none-any.whl",
+    "checked": 23,
+    "matched": 23,
+    "mismatches": []
+  },
+  {
+    "wheel": "pyyaml-6.0.3-cp313-cp313-win_amd64.whl",
+    "checked": 18,
+    "matched": 18,
+    "mismatches": []
+  },
+  {
+    "wheel": "reedsolo-1.7.0-py3-none-any.whl",
+    "checked": 1,
+    "matched": 1,
+    "mismatches": []
+  },
+  {
+    "wheel": "rich-15.0.0-py3-none-any.whl",
+    "checked": 91,
+    "matched": 91,
+    "mismatches": []
+  },
+  {
+    "wheel": "rich_click-1.9.8-py3-none-any.whl",
+    "checked": 17,
+    "matched": 17,
+    "mismatches": []
+  },
+  {
+    "wheel": "tibs-0.5.7-cp38-abi3-win_amd64.whl",
+    "checked": 2,
+    "matched": 2,
+    "mismatches": []
+  }
+]

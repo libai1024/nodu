@@ -1,0 +1,33 @@
+Upstream: https://github.com/espressif/esp32-arduino-lib-builder/actions/runs/35150420889
+Build with IDF release/v5.5 / Check if deploy is needed for release/v5.5	UNKNOWN STEP	2026-09-16T21:06:09.5801946Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Check if deploy is needed for release/v5.5	UNKNOWN STEP	2026-09-16T21:06:10.3904326Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32c6 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:29.2626812Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32c6 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:29.9230066Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32c6 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:24.5617018Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32p4 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:50.9214097Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32p4 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:51.8549139Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32p4 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:51.7310678Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32h2 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:07:14.5465338Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32h2 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:07:15.3484926Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32h2 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:10:11.2971381Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32s2 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:28.0681694Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32s2 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:29.0304974Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32s2 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:31.8790264Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32s3 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:52.0048786Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32s3 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:06:53.2413684Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32s3 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:09:09.1993379Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32c3 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:34.8497327Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32c3 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:35.6571312Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32c3 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:10:29.4086366Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32p4_es (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:05.7992821Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32p4_es (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:06.6373173Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32p4_es (release/v5.5)	UNKNOWN STEP	2026-09-16T21:10:03.0125952Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:48.5419554Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:08:49.2833087Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:10:44.1017864Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Build for esp32c5 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:09:36.8828900Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Build for esp32c5 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:09:38.3666440Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Build for esp32c5 (release/v5.5)	UNKNOWN STEP	2026-09-16T21:11:41.5493571Z HEAD is now at b774170ff46 change(version): Update version to 5.5.5
+Build with IDF release/v5.5 / Combine artifacts and push changes for IDF release/v5.5	UNKNOWN STEP	2026-09-16T22:01:36.2385192Z Uses: espressif/esp32-arduino-lib-builder/.github/workflows/cron_build.yml@refs/heads/master (6671d0bd65cdb9d4cc1001b759e8610de945a8d5)
+Build with IDF release/v5.5 / Combine artifacts and push changes for IDF release/v5.5	UNKNOWN STEP	2026-09-16T22:01:36.9212771Z 6671d0bd65cdb9d4cc1001b759e8610de945a8d5
+Build with IDF release/v5.5 / Combine artifacts and push changes for IDF release/v5.5	UNKNOWN STEP	2026-09-16T22:05:32.0456661Z Finished uploading asset 'esp32-arduino-libs-idf-release_v5.5-b774170f-v3.zip'. Asset ID: 568891861

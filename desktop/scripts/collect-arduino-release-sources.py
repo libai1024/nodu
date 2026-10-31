@@ -96,20 +96,21 @@ def collect(lock, output, verify_only=False, require_complete=False):
     if len(paths) != len(entries):
         raise ValueError("Duplicate source inventory paths")
     for item in entries:
-        if item["kind"] != "source" or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) or item["size"] <= 0:
+        if item["kind"] not in ("source", "license") or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) or item["size"] <= 0:
             raise ValueError("Invalid pinned source record")
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         list(executor.map(lambda item: fetch(output, item, verify_only), entries))
     files = list(entries)
     for item in entries:
-        files.extend(license_files(output, item))
+        if item["kind"] == "source":
+            files.extend(license_files(output, item))
     coverage = lock["coverage"]
     if len({item["component"] for item in coverage}) != len(coverage):
         raise ValueError("Duplicate component coverage")
     for item in coverage:
         if not isinstance(item["complete"], bool) or not set(item["files"]).issubset(paths):
             raise ValueError(f"Invalid coverage record: {item['component']}")
-        if item["complete"] and not item["files"]:
+        if item["complete"] and not any(entry["path"] in item["files"] and entry["kind"] == "source" for entry in entries):
             raise ValueError("Complete coverage requires actual source archives")
     gaps = [item["component"] for item in coverage if not item["complete"]]
     manifest = {"schemaVersion": 1, "scope": lock["scope"], "releaseReady": not gaps,
@@ -123,8 +124,9 @@ def collect(lock, output, verify_only=False, require_complete=False):
     temporary = destination.with_suffix(".json.tmp")
     temporary.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     temporary.replace(destination)
-    print(json.dumps({"sourceArchives": len(entries), "sourceBytes": sum(item["size"] for item in entries),
-                      "licenseFiles": len(files) - len(entries), "completeComponents": len(coverage) - len(gaps),
+    sources = [item for item in entries if item["kind"] == "source"]
+    print(json.dumps({"sourceArchives": len(sources), "sourceBytes": sum(item["size"] for item in sources),
+                      "licenseFiles": len(files) - len(sources), "completeComponents": len(coverage) - len(gaps),
                       "totalComponents": len(coverage), "releaseReady": not gaps, "unresolved": gaps}, ensure_ascii=False))
     if require_complete and gaps:
         raise ValueError("Corresponding-source closure remains incomplete: " + ", ".join(gaps))

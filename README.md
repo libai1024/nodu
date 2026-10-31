@@ -28,11 +28,13 @@ Arduino 测试资源预装 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO�
 
 新增记录：[Windows S3 COM 真板与包内环境验收](docs/evidence/windows-esp32-s3-com-20261029/README.md)、[Windows 缓存、剪切、终端及界面修复](docs/evidence/windows-desktop-fixes-20261029/README.md)。ESP 新项目仅提供 S3 / C3，左侧选型一次即可。修复版复用已安装环境与跨工程核心缓存；Windows 标题栏、设置悬浮态和原生剪切已验证。这些目录仅用于本地验证，尚不是可正式发布的完整版安装包。
 
+2026-10-31 仓库已公开，Windows 25 个发布组件的对应源码与许可材料已完成核对，正在进行正式安装包构建及成品验收。详见 [本批次记录](docs/evidence/windows-full-release-20261031/README.md)。
+
 2026-10-30 已补齐完整 Windows 安装器的离线分卷与驱动流程，并完成安装器机制测试；最终 ESP32 完整包仍待第三方材料覆盖及成品验收，尚无新版完整安装包上传。详见 [Windows 发布准备与剩余项](docs/evidence/windows-release-preparation-20261030/README.md)、[0.2.3 整合与打包记录](docs/releases/0.2.3.md)、[Windows ESP32 实测](docs/evidence/windows-esp32-20261029/README.md)、[Keil 使用说明](docs/keil-projects.md)和[仿真包说明](docs/arduino-esp-sim-package.md)。Mac 完整版与 Intel/Universal 目标仍受发布输入和 Arduino 对应材料校验限制；候选包不会作为完整跨平台正式版发布。
 
 ## 安装
 
-从 [v0.2.2 Release](https://github.com/libai1024/nodu/releases/tag/v0.2.2) 下载对应平台附件。当前仓库为私有仓库，下载需要具有仓库访问权限的 GitHub 账号。
+从 [v0.2.2 Release](https://github.com/libai1024/nodu/releases/tag/v0.2.2) 下载对应平台附件。仓库现已公开，源码与已发布附件可直接访问，无需仓库授权。
 
 | 平台 | 下载 | 安装方式 |
 | --- | --- | --- |

@@ -62,6 +62,19 @@ class SourceIntegrityTests(unittest.TestCase):
             self.collect()
         self.assertFalse((self.root / "source-manifest.json").exists())
 
+    def test_registry_license_is_retained_but_cannot_replace_source(self):
+        license_path = self.root / "registry-LICENSE.txt"
+        license_path.write_bytes(b"Original registry license\n")
+        record = {"path": license_path.name, "kind": "license", "size": license_path.stat().st_size,
+                  "sha256": collector.sha256(license_path), "url": "https://example.invalid/license.txt"}
+        self.lock["files"].append(record)
+        self.lock["coverage"][0]["files"].append(license_path.name)
+        manifest = self.collect(require_complete=True)
+        self.assertIn(record, manifest["files"])
+        self.lock["coverage"][0]["files"] = [license_path.name]
+        with self.assertRaisesRegex(ValueError, "requires actual source archives"):
+            self.collect(require_complete=True)
+
     def test_incomplete_review_cannot_be_promoted_by_valid_download(self):
         self.lock["coverage"][0]["complete"] = False
         self.assertFalse(self.collect()["releaseReady"])
