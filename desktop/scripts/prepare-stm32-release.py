@@ -153,7 +153,11 @@ def build_sources(build, out):
     run(['/usr/bin/make', '-j8'], usb, env, build / 'libusb.log')
     run(['/usr/bin/make', 'install'], usb, env, build / 'libusb.log')
     oc = build / 'openocd-0.12.0'
-    ocenv = {**env, 'LIBUSB1_CFLAGS': '-I' + str(deps / 'include/libusb-1.0'),
+    # pkg-config is deliberately disabled above. OpenOCD 0.12 otherwise misses
+    # its >= 1.0.16 feature check despite linking our pinned libusb 1.0.29,
+    # leaving `adapter usb location` unavailable for serialless Mac ST-LINKs.
+    ocenv = {**env, 'CPPFLAGS': '-DHAVE_LIBUSB_GET_PORT_NUMBERS=1',
+             'LIBUSB1_CFLAGS': '-I' + str(deps / 'include/libusb-1.0'),
              'LIBUSB1_LIBS': '-L' + str(deps / 'lib') + ' -lusb-1.0'}
     args = ['./configure', '--prefix=' + str(build / 'openocd-install'), '--enable-stlink',
             '--disable-doxygen-html', '--disable-doxygen-pdf', '--disable-internal-libjaylink',
@@ -174,6 +178,16 @@ def build_sources(build, out):
                          ('libusb-COPYING', usb / 'COPYING'), ('stm32flash-COPYING', flash / 'gpl-2.0.txt'),
                          ('stm32flash-AUTHORS', flash / 'AUTHORS')]:
         copy(source, out / 'licenses' / name)
+
+
+def check_usb_location(out):
+    # Configuration only: no `init`, target, reset, or USB device is opened.
+    result = subprocess.run([out / 'openocd/bin/openocd', '-s', out / 'openocd/share/openocd/scripts',
+                             '-f', 'interface/stlink.cfg', '-c', 'adapter usb location 1-1',
+                             '-c', 'echo NODU_USB_LOCATION_READY', '-c', 'shutdown'],
+                            capture_output=True, text=True, check=True)
+    if 'NODU_USB_LOCATION_READY' not in result.stdout + result.stderr:
+        raise RuntimeError('OpenOCD USB location selection is unavailable')
 
 
 def sign_and_audit(out):
@@ -248,7 +262,7 @@ def main():
         for name in ['prepare-stm32-release.py', 'stm32-release.lock.json', 'stm32-sdk.lock.json']:
             copy(HERE / name, out / 'sources' / name)
         (out / 'licenses/README.txt').write_text(
-            'Nodu STM32 toolkit 2026.10.24 (darwin-arm64)\n'
+            f'Nodu STM32 toolkit {LOCK["version"]} (darwin-arm64)\n'
             'GNU compiler/binutils/GDB/newlib corresponding source is the unmodified Arm 14.2.rel1 snapshot in ../sources.\n'
             'OpenOCD, bundled JimTcl, libusb and stm32flash were built from the accompanying original archives.\n'
             'Build recipe and fixed inputs are in ../sources; no patches were applied. libusb remains a replaceable dynamic library.\n'
@@ -256,6 +270,7 @@ def main():
             'CMake and clangd are official binaries; Ninja is the official binary with its Apache license.\n'
             'The Apple SDK/compiler is used to build but is not included. No Homebrew or Xcode executable is shipped.\n')
         imports = sign_and_audit(out)
+        check_usb_location(out)
         checks = {}
         for key, rel, option in [('gcc', 'arm-gnu/bin/arm-none-eabi-gcc', '--version'), ('cmake', 'cmake/bin/cmake', '--version'),
                                  ('ninja', 'ninja/bin/ninja', '--version'), ('openocd', 'openocd/bin/openocd', '--version'),

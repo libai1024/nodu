@@ -123,6 +123,7 @@ export function NoduCDevicePanel({ model, simple, confirm, showOutput, exec }: {
         ? <NoduSelect id="nodu-c-probe" aria-label="下载器" value={model.probe} disabled={methodLocked} options={probeOptions} onChange={value => model.setProbe(value)}/>
         : <NoduSelect id="nodu-c-isp-port" aria-label="ISP 串口" value={model.monitorPort} disabled={methodLocked || model.monitorBusy} options={[{ value: '', label: '选择 USB 转串口' }, ...portOptions]} onChange={value => model.setMonitorPort(value)}/>;
     const monitorPort = <NoduSelect id="nodu-c-monitor-port" aria-label="监视器串口" value={model.monitorPort} disabled={methodLocked || model.monitorBusy} options={[{ value: '', label: '运行后不打开' }, ...portOptions]} onChange={value => model.setMonitorPort(value)}/>;
+    if (project.manifest?.build?.sourceOnly) return <section className="scope-device-section"><h2>{project.chip.name}</h2><p>已保存芯片型号。当前目录仅包含源码，补充 CMake 构建配置后才能编译、烧写。</p><button className="theia-button secondary" onClick={() => exec('nodu.project.selectChip')}>重新选择芯片…</button></section>;
     const refresh = <button className="scope-action scope-toolbar-icon" aria-label="刷新下载器与串口" title="刷新" disabled={locked} onClick={() => void model.refreshDevices()}><i className="codicon codicon-refresh" aria-hidden="true"/></button>;
     const diagnostic = model.lastError && !model.busy && <NoduDiagnosis compact={simple} failure={model.lastError} method={method} showOutput={showOutput} dismiss={() => { model.lastError = undefined; model.fire(); }}/>;
     if (simple) {

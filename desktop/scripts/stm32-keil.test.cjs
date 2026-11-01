@@ -49,6 +49,9 @@ test('native F103 settings, forced configure, Keil update and GCC build coexist'
     await generateKeil(project, config.compileCommands, resources);
     assert(fs.readFileSync(result.path, 'utf8').includes('<Optim>4</Optim>'));
     assert.equal((await call('build', { path: project.path })).ok, true);
-    const unsupported = await call('createProject', { parent: root, name: 'f407', board: 'chip-f407zg', template: 'empty' });
-    await assert.rejects(call('setProjectOptions', { path: unsupported.path, options: { keilAutoSync: true } }), { code: 'badRequest' });
+    const f407 = await call('createProject', { parent: root, name: 'f407', board: 'chip-f407zg', template: 'empty' });
+    assert.equal((await call('setProjectOptions', { path: f407.path, options: { keilAutoSync: true } })).manifest.keil.autoSync, true);
+    const f4config = await call('configure', { path: f407.path, force: true }); assert(f4config.ok);
+    await generateKeil(await call('openProject', { path: f407.path }), f4config.compileCommands, resources);
+    assert.equal((await call('build', { path: f407.path })).ok, true);
 });

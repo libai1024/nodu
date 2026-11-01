@@ -27,7 +27,7 @@ function harness() {
     };
     const filename = path.join(__dirname, '../lib/browser/nodu-diagnostics.js');
     vm.runInNewContext(fs.readFileSync(filename, 'utf8'), {
-        exports, Error, Promise,
+        exports, crypto: require('node:crypto').webcrypto, setInterval: () => 0, clearInterval() {}, Error, Promise,
         require(name) { assert.ok(name in imports, `Unexpected dependency: ${name}`); return imports[name]; }
     }, { filename });
     const service = new exports.NoduDiagnostics();
@@ -196,7 +196,7 @@ function embeddedHarness() {
         fire() {}
     }
     vm.runInNewContext(fs.readFileSync(filename, 'utf8'), {
-        exports, Error, Promise, setTimeout, clearTimeout,
+        exports, crypto: require('node:crypto').webcrypto, setInterval: () => 0, clearInterval() {}, Error, Promise, setTimeout, clearTimeout,
         require(name) {
             if (name === '@theia/core/shared/inversify') { return { inject: decorate, injectable: decorate, postConstruct: decorate }; }
             if (name === '@theia/core/lib/common/event') { return { Emitter }; }

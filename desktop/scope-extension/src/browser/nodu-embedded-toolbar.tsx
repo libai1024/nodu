@@ -79,11 +79,11 @@ export function NoduCToolbar(props: CToolbarProps): React.ReactElement {
             </div>}
         </div>
         <div className="nodu-pro-actions" role="group" aria-label="编译与烧录">
-            <button className="nodu-pro-action" data-action="build" aria-label="编译" disabled={model.busy || !!model.awaitUser} aria-busy={model.building || undefined} onClick={() => exec(C_COMMANDS.build)} title="编译（Ctrl / ⌘ B）">
+            <button className="nodu-pro-action" data-action="build" aria-label="编译" disabled={!!project.manifest?.build?.sourceOnly || model.busy || !!model.awaitUser} aria-busy={model.building || undefined} onClick={() => exec(C_COMMANDS.build)} title="编译（Ctrl / ⌘ B）">
                 {model.building ? <i className="codicon codicon-loading codicon-modifier-spin" aria-hidden="true"/> : <ActionIcon action="build"/>}
             </button>
-            <button className="nodu-pro-action" data-action="flash" aria-label="烧录" disabled={model.busy || !!model.awaitUser} onClick={() => exec(C_COMMANDS.flash)} title="烧录现有构建"><ActionIcon action="flash"/></button>
-            <button className="nodu-pro-action" data-action="run" aria-label="运行（编译并烧录）" disabled={model.busy || !!model.awaitUser} aria-busy={model.flashing || undefined} onClick={() => exec(C_COMMANDS.run)} title="运行：编译并烧录（Ctrl / ⌘ R）"><ActionIcon action="build-flash"/></button>
+            <button className="nodu-pro-action" data-action="flash" aria-label="烧录" disabled={!!project.manifest?.build?.sourceOnly || model.busy || !!model.awaitUser} onClick={() => exec(C_COMMANDS.flash)} title="烧录现有构建"><ActionIcon action="flash"/></button>
+            <button className="nodu-pro-action" data-action="run" aria-label="运行（编译并烧录）" disabled={!!project.manifest?.build?.sourceOnly || model.busy || !!model.awaitUser} aria-busy={model.flashing || undefined} onClick={() => exec(C_COMMANDS.run)} title="运行：编译并烧录（Ctrl / ⌘ R）"><ActionIcon action="build-flash"/></button>
             <button className="nodu-pro-action nodu-pro-stop" aria-label="停止" disabled={model.savingOptions || (!model.busy && !model.awaitUser)} onClick={() => exec(C_COMMANDS.stop)} title={model.flashSteps.program === 'running' ? '写入完成后停止' : '停止'}><ActionIcon action="build-flash" stop/></button>
         </div>
         {props.tutorButton}

@@ -28,11 +28,13 @@ function fixture() {
     return { model, calls, warnings, timers, tick, EmbeddedError: exports.EmbeddedError };
 }
 
-test('maintenance is opt-in, debounced and ignores shared source contents and generated files', async () => {
+test('maintenance is opt-in, debounced and checks saved source contents and ignores generated files', async () => {
     const f = fixture(); f.model.keilFilesChanged('/project/App/new.c', true); assert.equal(f.timers.size, 0);
     f.model.project.manifest.keil = { autoSync: true };
-    f.model.keilFilesChanged('/project/App/new.c', false); f.model.keilFilesChanged('/project/MDK-ARM/new.c', true);
+    f.model.keilFilesChanged('/project/MDK-ARM/new.c', true);
     assert.equal(f.timers.size, 0);
+    f.model.keilFilesChanged('/project/App/new.c', false);
+    assert.equal(f.timers.size, 1);
     f.model.keilFilesChanged('/project/App/new.c', true); f.model.keilFilesChanged('/project/App/new.h', true);
     assert.equal(f.timers.size, 1); await f.tick();
     assert.deepEqual(f.calls.map(c => c.method), ['generateKeil', 'keilStatus']);

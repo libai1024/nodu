@@ -56,6 +56,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     private cProjectKey!: ContextKey<boolean>;
     private espProjectKey!: ContextKey<boolean>;
     private arduinoProjectKey!: ContextKey<boolean>;
+    unknownProject = false;
     isEsp = false;
     espChip = '';
     isArduino = false;
@@ -67,6 +68,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     keil: KeilStatus | undefined;
     keilUpdating = false;
     keilError = '';
+    private readonly keilMarkerUris = new Set<string>();
     private keilTimer: ReturnType<typeof setTimeout> | undefined;
     private keilNotice = '';
     building = false;
@@ -178,10 +180,10 @@ export class NoduEmbeddedModel implements EmbeddedClient {
     /** A folder is a C project when its nodu.json says `kind: stm32-hal`. */
     async detect(root: URI | undefined): Promise<void> {
         const generation = ++this.detection;
-        clearTimeout(this.keilTimer); this.keil = undefined; this.keilError = ''; this.keilNotice = '';
+        clearTimeout(this.keilTimer); this.clearKeilDiagnostics(); this.keil = undefined; this.keilError = ''; this.keilNotice = '';
         let project: ProjectStatus | undefined;
         let espChip = '';
-        let arduino = false;
+        let arduino = false, k210 = false;
         if (root) {
             try {
                 const manifest = root.resolve('nodu.json');
@@ -189,6 +191,7 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                     const text = (await this.files.read(manifest)).value;
                     const metadata = JSON.parse(text) as { kind?: string; target?: { mcu?: string } };
                     if (metadata.kind === 'esp-idf' || metadata.kind === 'esp32-arduino') { espChip = metadata.target?.mcu || 'esp32'; arduino = metadata.kind === 'esp32-arduino'; }
+                    k210 = metadata.kind === 'k210-maixpy';
                     if (metadata.kind === 'stm32-hal') {
                         project = await this.call<ProjectStatus>('openProject', { path: root.path.fsPath() });
                     }
@@ -213,7 +216,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
                     retry: () => this.detect(root) });
             }
         }
+        if (root && !project && !espChip && !k210) {
+            try { if (await this.files.exists(root.resolve('board.json'))) k210 = /k210/i.test(JSON.parse((await this.files.read(root.resolve('board.json'))).value).chip ?? ''); } catch { /* Let the user choose. */ }
+        }
         if (generation !== this.detection) { return; }
+        this.unknownProject = !!root && !project && !espChip && !k210;
         if (project && root) { this.systemDiagnostics.resolve('工程', root.toString()); }
         const switched = project?.path !== this.project?.path || (root?.path.fsPath() ?? '') !== this.localRoot;
         const targetChanged = this.hasTargetChanged(project);
@@ -474,6 +481,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         }, 1200);
     }
 
+    private clearKeilDiagnostics(): void {
+        for (const uri of this.keilMarkerUris) this.problems.setMarkers(new URI(uri), 'nodu-keil', []);
+        this.keilMarkerUris.clear();
+    }
+
     async generateKeil(automatic = false): Promise<KeilResult> {
         const project = this.project, generation = this.detection;
         if (!project || this.busy) throw new Error('请等待当前任务完成。');
@@ -482,10 +494,29 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         try {
             const result = await this.call<KeilResult>('generateKeil', { path: project.path });
             if (generation === this.detection) {
+                this.clearKeilDiagnostics();
                 this.keilNotice = ''; await this.refreshKeil();
                 if (!automatic) this.setTask(result.created ? 'Keil 工程已生成' : 'Keil 工程已更新', 'ok');
             }
             return result;
+        } catch (error) {
+            if (generation === this.detection && error instanceof EmbeddedError && error.code === 'keilSource') {
+                this.clearKeilDiagnostics();
+                const rows = (error.failure.detail as { diagnostics?: { file: string; line: number; column: number; message: string; fix: string }[] } | undefined)?.diagnostics ?? [];
+                const byFile = new Map<string, LspDiagnostic[]>();
+                for (const row of rows) {
+                    if (row.file.startsWith('/') || /^(?:[A-Za-z]:|\.\.)/.test(row.file)) continue;
+                    const uri = URI.fromFilePath(this.toLocal(project.path)).resolve(row.file).toString();
+                    const line = Math.max(0, row.line - 1), character = Math.max(0, row.column - 1);
+                    const list = byFile.get(uri) ?? [];
+                    list.push({ range: { start: { line, character }, end: { line, character: character + 1 } }, severity: 1, source: 'Keil C99', message: `${row.message}\n改法：${row.fix}` });
+                    byFile.set(uri, list);
+                    this.appendOutput(`${row.file}:${row.line}:${row.column}: ${row.message} ${row.fix}`);
+                }
+                for (const [uri, list] of byFile) { this.problems.setMarkers(new URI(uri), 'nodu-keil', list); this.keilMarkerUris.add(uri); }
+                this.setTask('Keil 兼容检查未通过', 'error', { target: 'problems' });
+            }
+            throw error;
         } finally { this.keilUpdating = false; this.fire(); }
     }
 

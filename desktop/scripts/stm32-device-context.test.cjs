@@ -11,7 +11,7 @@ class Empty {}
 class Emitter { event = () => ({ dispose() {} }); fire() {} }
 const fallback = new Proxy({}, { get: () => Empty });
 vm.runInNewContext(fs.readFileSync(file, 'utf8'), {
-    exports: exports_, TextDecoder, TextEncoder, atob, Date,
+    exports: exports_, crypto: require('node:crypto').webcrypto, setInterval: () => 0, clearInterval() {}, TextDecoder, TextEncoder, atob, Date,
     setTimeout: () => 0, clearTimeout() {}, requestAnimationFrame: fn => fn(),
     localStorage: { setItem() {}, getItem() { return null; } },
     require: id => id.startsWith('../common/') ? require(path.resolve(path.dirname(file), id))

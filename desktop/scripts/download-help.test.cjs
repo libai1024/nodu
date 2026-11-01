@@ -70,7 +70,7 @@ test('real model events update progress and reset percent between stages without
     const exports = {};
     const base = require('node:path').dirname(require.resolve('../scope-extension/lib/browser/nodu-embedded-model.js'));
     vm.runInNewContext(fs.readFileSync(require.resolve('../scope-extension/lib/browser/nodu-embedded-model.js'), 'utf8'), {
-        exports, TextDecoder, TextEncoder,
+        exports, crypto: require('node:crypto').webcrypto, setInterval: () => 0, clearInterval() {}, TextDecoder, TextEncoder,
         require: id => id.startsWith('../common/') ? require(require('node:path').resolve(base, id))
             : id === '@theia/core/shared/inversify' ? { inject: () => () => {}, postConstruct: () => () => {}, injectable: () => value => value }
             : id === '@theia/core/lib/common/event' ? { Emitter } : fallback,

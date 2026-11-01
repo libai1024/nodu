@@ -88,6 +88,10 @@ npm run package:electron
 
 默认在 macOS 生成 Universal `.app`、ZIP 与 DMG，在 Windows 生成 x64 便携 ZIP；macOS 可指定 `-- --arch arm64` 或 `-- --arch x64` 生成对应单架构应用、ZIP 与 DMG。缺少资源或清单不合规时会停止。打包代码只做 ad-hoc 签名，不代表完成 Apple Developer ID 签名、公证或 Windows Authenticode。
 
+macOS 和 Windows 均可传入 `--profile stm32` 生成 STM32 离线版；macOS 文件名包含 `-stm32`，manifest 与 build-info 记录该范围。这个配置不包含 ESP32 完整离线环境，仍严格校验 STM32 正式工具包、对应源码和许可；默认 full 的 Arduino 发布资源校验保持不变。
+
+macOS STM32 工具包 2026.11.01 修复 OpenOCD 在禁用 pkg-config 的确定性构建中遗漏 USB 端口选择功能的问题。固定 libusb 1.0.29 构建启用端口号支持，并增加只执行配置、不打开设备的功能检查，确保无可读序列号的 ST-LINK 可按 USB 位置识别。
+
 打包所需的上游示例由 `npm run vendor:examples` 准备，该命令要求匹配固定提交的来源仓库。请阅读 [第三方组件说明](THIRD-PARTY-NOTICES.md)，保留随包许可证、修改记录与对应源码材料。当前采用本地构建和人工上传，暂不配置 CI/CD；旧工作流仅作为 [停用示例](../docs/build/workflow-examples/)保存。
 
 安装包中的 `licenses/INDEX.json` 与 `licenses/SUMMARY.md` 记录精确生产依赖、字体和 Rust 依赖的许可材料。缺失材料会阻止打包；部分上游包未附完整文本时，保留其原始声明与署名，并从固定版本的 SPDX 文本补齐，清单明确标记该来源。详见 [许可收集说明](../docs/build/package-licenses.md)。

@@ -4,7 +4,7 @@ import { SerialPortInfo } from '../common/nodu-device-protocol';
 import { BOARD_FAMILIES, BoardFamilyId, BoardPreset, boardPorts, familyById, presetsIn, resolvePort, shortPortName } from '../common/nodu-board-presets';
 import { NoduDeviceModel } from './nodu-device-client';
 
-interface Props { model: NoduDeviceModel; onConnected?: () => void; showBoardGuide?: () => void; }
+interface Props { selectProjectChip?: () => void; model: NoduDeviceModel; onConnected?: () => void; showBoardGuide?: () => void; }
 
 /**
  * Simple-mode device picker: chip family, then the board on the desk, and it connects.
@@ -13,7 +13,7 @@ interface Props { model: NoduDeviceModel; onConnected?: () => void; showBoardGui
  * present (or the remembered one is); otherwise a second step lists them.
  * Nothing here connects without a click: connecting resets a K210.
  */
-export function NoduBoardPicker({ model, onConnected, showBoardGuide }: Props): React.ReactElement {
+export function NoduBoardPicker({ model, onConnected, showBoardGuide, selectProjectChip }: Props): React.ReactElement {
     // undefined: follow the remembered board's family; null: the user went back to the family list.
     const [familyChoice, setFamilyChoice] = React.useState<BoardFamilyId | null | undefined>();
     const [choosing, setChoosing] = React.useState<BoardPreset | undefined>();
@@ -89,11 +89,11 @@ export function NoduBoardPicker({ model, onConnected, showBoardGuide }: Props): 
             <ul className="nodu-picker-list">{BOARD_FAMILIES.map(entry => {
                 const count = presetsIn(entry.id).length;
                 return <li key={entry.id}>
-                    <button className="nodu-picker-item nodu-picker-family" disabled={!entry.available} onClick={() => setFamilyChoice(entry.id)}
+                    <button className="nodu-picker-item nodu-picker-family" disabled={!entry.available || entry.id === 'stm32' && !selectProjectChip} onClick={() => entry.id === 'stm32' ? selectProjectChip?.() : setFamilyChoice(entry.id)}
                         title={entry.available ? undefined : `${entry.label} 支持${entry.status ?? '尚未完成'}，暂不能连接`}>
                         <i className="codicon codicon-chip" aria-hidden="true" />
                         <span className="nodu-picker-label"><strong>{entry.label}</strong><span>{entry.detail}</span></span>
-                        <span className="nodu-picker-meta">{entry.available ? `${count} 款开发板` : entry.status}</span>
+                        <span className="nodu-picker-meta">{entry.available ? entry.id === 'stm32' ? '选择项目芯片' : `${count} 款开发板` : entry.status}</span>
                         {entry.available && <i className="codicon codicon-chevron-right" aria-hidden="true" />}
                     </button>
                 </li>;

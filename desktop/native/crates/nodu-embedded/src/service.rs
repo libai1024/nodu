@@ -348,7 +348,7 @@ impl Inner {
                         "printfFloat" if value.is_boolean() => "/build/printfFloat",
                         "preset" if value == "debug" || value == "release" => "/build/preset",
                         "chipVendor" if value == "st" || value == "compatible" => "/target/vendor",
-                        "keilAutoSync" if value.is_boolean() && !project.is_external() && project.manifest.pointer("/build/adapter").is_none() && project.chip.id() == "STM32F103C8Tx" => "/keil/autoSync",
+                        "keilAutoSync" if value.is_boolean() && project.manifest.pointer("/build/sourceOnly").and_then(Value::as_bool) != Some(true) && !project.is_external() && (project.manifest.pointer("/build/adapter").is_none() || project.manifest.pointer("/build/adapter").and_then(Value::as_str) == Some("nodu-hal-f103-72mhz-v1")) && matches!(project.chip.id(), "STM32F103C8Tx" | "STM32F407ZGTx") => "/keil/autoSync",
                         _ => return Err(Failure::new("badRequest", "不支持的工程设置。")),
                     };
                     values.push((pointer, value.clone()));

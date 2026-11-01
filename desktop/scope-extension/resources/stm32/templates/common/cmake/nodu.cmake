@@ -1,6 +1,7 @@
 # Nodu 的 STM32 HAL 构建规则。芯片参数见 nodu-target.cmake。
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_C_STANDARD 11)
+# Shared with Keil AC5 / AC6: use ISO C99 in business sources.
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 option(NODU_PRINTF_FLOAT "printf 支持 %f（程序增加约 10 KB）" OFF)
 

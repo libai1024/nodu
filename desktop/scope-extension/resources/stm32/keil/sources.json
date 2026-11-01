@@ -8,5 +8,15 @@
     "file": "LICENSE.md",
     "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f1/c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22/License.md",
     "sha256": "b645e89bbfb6accf914cf7adca011712bf90055391fdd55f2af6439d98aa36d4"
+  },
+  {
+    "file": "startup_stm32f407xx.s",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/3c77349ce04c8af401454cc51f85ea9a50e34fc1/Source/Templates/arm/startup_stm32f407xx.s",
+    "sha256": "fee58e4c0dfe7986560c4d529b67c63c4e846b2ee8e62c49e8e0db701f2ea700"
+  },
+  {
+    "file": "LICENSE-f4.md",
+    "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-f4/3c77349ce04c8af401454cc51f85ea9a50e34fc1/LICENSE.md",
+    "sha256": "dadb755f51d36614173b28c5790cb4a991e8f4cc822e5b634fd66a4f4145824d"
   }
 ]

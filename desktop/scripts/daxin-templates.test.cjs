@@ -16,7 +16,7 @@ const request = (parent, id = DAXIN_TEMPLATES[0].id, name = 'project') => parseP
 
 test('templates are F103C8-only; existing default stays first', () => {
     assert.equal(projectTemplates('stm32f103')[0].name, '默认项目');
-    assert.equal(projectTemplates('stm32f103', 'STM32F103C8Tx').length, 5);
+    assert.deepEqual(projectTemplates('stm32f103', 'STM32F103C8Tx').map(t => t.id), ['empty', 'hello', 'linked-hal72', ...DAXIN_TEMPLATES.map(t => t.id)]);
     for (const chip of ['k210', 'STM32F407ZGTx', 'esp32', 'esp32s3']) {
         assert.throws(() => parseProjectRequest({ parent: os.tmpdir(), chip, template: 'dacir-esp8266', name: 'hello' }));
     }

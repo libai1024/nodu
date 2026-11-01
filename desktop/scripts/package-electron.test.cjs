@@ -317,3 +317,13 @@ test('portable profile respects explicit isolation and rejects an escaping data 
         assert.equal(fs.existsSync(path.join(root, 'Data')), false);
     } finally { fs.rmSync(root, { recursive: true, force: true }); }
 });
+
+test('macOS STM32 edition has a distinct identity without relaxing full release naming', () => {
+    const p = require('./package-electron.cjs');
+    assert.doesNotThrow(() => p.validateProfileHost('stm32', 'darwin'));
+    assert.doesNotThrow(() => p.validateProfileHost('stm32', 'win32'));
+    assert.throws(() => p.validateProfileHost('stm32', 'linux'));
+    assert.throws(() => p.validateProfileHost('esp32-validation', 'darwin'));
+    assert.equal(p.macArtifactStem('0.2.3', 'arm64', 'stm32'), 'Nodu-0.2.3-stm32-mac-arm64');
+    assert.equal(p.macArtifactStem('0.2.3', 'arm64', 'full'), 'Nodu-0.2.3-mac-arm64');
+});

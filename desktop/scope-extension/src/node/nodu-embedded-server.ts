@@ -14,6 +14,7 @@ import { encodeMonitorText } from './nodu-monitor-encoding';
 import { createSourceProject, parseProjectRequest } from './nodu-project-generator';
 import { TutorRuntimeEvidence } from './tutor/tutor-runtime-evidence';
 import { createDaxinProject } from './nodu-daxin-project';
+import { selectProjectChip } from './nodu-project-discovery';
 import { generateKeil, keilStatus, openKeil } from './nodu-keil-project';
 import { ProjectStatus } from '../common/nodu-embedded-protocol';
 import { supportsKeil } from '../common/nodu-keil';
@@ -176,12 +177,18 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
             if (value !== undefined && (typeof value !== 'string' || !isAbsolute(value) || value.includes('\0'))) { return refuse(`${key} 必须是绝对路径。`); }
         }
         try {
+            if (method === 'selectProjectChip') {
+                if (typeof args.path !== 'string' || typeof args.chip !== 'string') return refuse('缺少工程路径或芯片型号。');
+                const catalog = await this.request('catalog', {}) as { boards: { reference: string; mcu: string }[] };
+                await selectProjectChip(args.path, args.chip, catalog.boards);
+                return { ok: true, result: await this.request('openProject', { path: args.path }) };
+            }
             if (method === 'keilStatus' || method === 'generateKeil' || method === 'openKeil') {
                 if (typeof args.path !== 'string') { return refuse('缺少工程路径。'); }
                 const project = await this.request('openProject', { path: args.path }) as ProjectStatus;
                 if (method === 'keilStatus') return { ok: true, result: await keilStatus(project) };
                 if (method === 'openKeil') return { ok: true, result: await openKeil(project) };
-                if (!supportsKeil(project)) throw Object.assign(new Error('目前支持 Nodu 原生 STM32F103C8T6 工程。'), { code: 'keilUnsupported' });
+                if (!supportsKeil(project)) throw Object.assign(new Error('支持 Nodu 原生 STM32F103C8T6 / STM32F407ZGT6 工程。'), { code: 'keilUnsupported' });
                 if (this.keilJobs.has(project.path)) throw Object.assign(new Error('Keil 工程正在更新。'), { code: 'keilBusy' });
                 this.keilJobs.add(project.path);
                 try {

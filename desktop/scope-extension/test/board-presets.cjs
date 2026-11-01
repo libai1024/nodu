@@ -45,9 +45,9 @@ test('short port names', () => {
     assert.equal(shortPortName('COM5'), 'COM5');
 });
 
-test('families: only K210 is pickable, every preset belongs to a listed family', () => {
+test('families: STM32 uses explicit project selection, every preset belongs to a listed family', () => {
     assert.deepEqual(BOARD_FAMILIES.map(family => family.id), ['k210', 'stm32', 'esp32']);
-    assert.deepEqual(BOARD_FAMILIES.filter(family => family.available).map(family => family.id), ['k210']);
+    assert.deepEqual(BOARD_FAMILIES.filter(family => family.available).map(family => family.id), ['k210', 'stm32']);
     for (const family of BOARD_FAMILIES) {
         assert.equal('family' in family, false, family.id);
         if (!family.available) { assert.ok(family.status, family.id); assert.equal(presetsIn(family.id).length, 0, family.id); }

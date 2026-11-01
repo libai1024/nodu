@@ -84,7 +84,7 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     bind(NoduProjectsServer).toSelf().inSingletonScope();
     bind(ConnectionHandler).toDynamicValue(ctx => new RpcConnectionHandler(NODU_PROJECTS_PATH, () => {
         const server = ctx.container.get(NoduProjectsServer);
-        const names: (keyof NoduProjectsService)[] = ['recent', 'touch', 'remove', 'examples', 'copyExample', 'projectsDir'];
+        const names: (keyof NoduProjectsService)[] = ['inspect', 'recent', 'touch', 'remove', 'examples', 'copyExample', 'projectsDir'];
         const facade = Object.create(null);
         for (const name of names) { facade[name] = server[name].bind(server); }
         return facade as NoduProjectsService;

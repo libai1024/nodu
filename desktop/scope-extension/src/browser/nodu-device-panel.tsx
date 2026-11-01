@@ -10,7 +10,7 @@ import { NoduFirmwarePanel } from './nodu-firmware-panel';
 import { NoduBoardPicker } from './nodu-board-picker';
 import { NoduSelect } from './nodu-select';
 
-interface Props { model: NoduDeviceModel; files: FileService; dialogs: FileDialogService; editors: EditorManager; showLogs: () => void; showBoardGuide?: () => void; compact?: boolean; onConnected?: () => void; }
+interface Props { selectProjectChip?: () => void; model: NoduDeviceModel; files: FileService; dialogs: FileDialogService; editors: EditorManager; showLogs: () => void; showBoardGuide?: () => void; compact?: boolean; onConnected?: () => void; }
 
 /** Device controls retain their values when the shell changes density or layout. */
 // Original MaixPy IDE 0.2.5 board menu order (see docs/0.1.3 evidence §2).
@@ -26,7 +26,7 @@ export const BOARD_IDS = [
     'T-Watch',
 ];
 
-export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, showBoardGuide, compact = false, onConnected }: Props): React.ReactElement {
+export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, showBoardGuide, selectProjectChip, compact = false, onConnected }: Props): React.ReactElement {
     const [code, setCode] = React.useState('print("Hello, Nodu")');
     // Simple mode leads with the board picker; the full form stays mounted behind 手动设置.
     const [manual, setManual] = React.useState(false);
@@ -37,7 +37,7 @@ export function NoduDevicePanel({ model, files, dialogs, editors, showLogs, show
     return <div className="scope-device-panel">
         {compact && <section className="scope-device-section nodu-picker-section" aria-label="选择开发板" hidden={manual}>
             <div className="scope-section-heading"><h2><i className="codicon codicon-circuit-board" aria-hidden="true" />开发板</h2><span className={`scope-state ${model.connected ? 'scope-state-active' : ''}`} role="status"><i aria-hidden="true" />{model.statusLabel}</span></div>
-            <NoduBoardPicker model={model} onConnected={onConnected} showBoardGuide={showBoardGuide} />
+            <NoduBoardPicker selectProjectChip={selectProjectChip} model={model} onConnected={onConnected} showBoardGuide={showBoardGuide} />
             {model.error && <div className="nodu-device-error" role="alert"><p>{model.error}</p><button className="scope-text-button" onClick={() => model.clearError()}>收起错误</button></div>}
             {!model.connected && <button className="scope-text-button nodu-picker-manual" onClick={() => setManual(true)}>手动设置串口与复位方式…</button>}
         </section>}

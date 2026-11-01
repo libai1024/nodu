@@ -19,13 +19,11 @@ export interface BoardFamily {
     status?: string;
 }
 
-/** First step of the simple-mode picker. Only K210 has a backend on main. */
+/** K210 connects by serial; STM32 selects the project target and uses its own backend. */
 export const BOARD_FAMILIES: readonly BoardFamily[] = [
     { id: 'k210', label: 'K210', detail: 'Kendryte K210 · MaixPy', available: true },
-    // STM32 HAL build/flash/monitor is on spec/2026-10-20_validate-stm32-hal (docs/0.2.1, M0).
-    { id: 'stm32', label: 'STM32', detail: 'STM32 · C 语言（HAL）', available: false, status: '开发中（0.2.1）' },
-    // docs/0.2.1/PRD.md lists ESP32 as out of scope for 0.2.1.
-    { id: 'esp32', label: 'ESP32', detail: 'Espressif ESP32', available: false, status: '规划中' },
+    { id: 'stm32', label: 'STM32', detail: 'STM32 · C 语言（HAL）', available: true },
+    { id: 'esp32', label: 'ESP32', detail: 'Espressif ESP32', available: false, status: '请打开 ESP32 项目' },
 ];
 
 export function familyById(id: string | undefined): BoardFamily | undefined {

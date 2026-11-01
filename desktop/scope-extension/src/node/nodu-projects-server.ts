@@ -2,6 +2,7 @@
 // Recent projects and examples for the desktop launcher. Nodu keeps its own list next to
 // Theia's recentworkspace.json because Theia drops folders that no longer exist, while the
 // launcher shows them greyed out as 找不到 until the user removes them.
+import { inspectProject } from './nodu-project-discovery';
 import { constants, promises as fs } from 'node:fs';
 import { createRequire } from 'node:module';
 import { homedir } from 'node:os';
@@ -74,6 +75,8 @@ export class NoduProjectsServer implements NoduProjectsService {
     @inject(WorkspaceServer) protected readonly workspaces!: WorkspaceServer;
     /** Serializes store writes so two windows recording at once do not drop an entry. */
     private queue: Promise<unknown> = Promise.resolve();
+
+    inspect(fsPath: string) { return inspectProject(requireAbsolute(fsPath)); }
 
     async recent(): Promise<RecentProject[]> {
         const [stored, roots] = await Promise.all([this.load(), this.workspaces.getRecentWorkspaces().catch(() => [] as string[])]);

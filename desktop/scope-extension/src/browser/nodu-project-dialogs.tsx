@@ -106,3 +106,25 @@ export function ToolkitInfo({ model, close }: { model: NoduEmbeddedModel; close(
         <div className="nodu-project-actions">{!license && <button type="button" className="theia-button secondary" disabled={busy || model.busy} onClick={() => void check(true)}>完整检查</button>}<button autoFocus type="button" className="theia-button main" onClick={close}>关闭</button></div>
     </div>;
 }
+
+/** Silicon selection is explicit and stored in nodu.json; no automatic C8/package guessing. */
+export function ProjectChipForm({ model, path, close, applied }: { model: NoduEmbeddedModel; path: string; close(): void; applied(): Promise<void> }): React.ReactElement {
+    const [boards, setBoards] = React.useState<import('../common/nodu-embedded-protocol').CatalogBoard[]>([]);
+    const [chip, setChip] = React.useState('');
+    const [error, setError] = React.useState(''); const [busy, setBusy] = React.useState(false);
+    React.useEffect(() => { let current = true; void model.catalog().then(c => { if (current) setBoards(c.boards.filter(b => b.id.startsWith('chip-'))); }).catch(e => { if (current) setError(String(e)); }); return () => { current = false; }; }, [model]);
+    const save = async (event: React.FormEvent): Promise<void> => {
+        event.preventDefault(); if (!chip || busy) return; setBusy(true); setError('');
+        try { await model.call('selectProjectChip', { path, chip }); await applied(); close(); }
+        catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); }
+    };
+    return <form className="nodu-project-form" onSubmit={event => void save(event)}>
+        <p>请选择硬件上的完整芯片型号。选择会保存到当前项目的 nodu.json，已有配置会先备份。</p>
+        <label className="nodu-project-field">芯片型号<select autoFocus aria-label="项目芯片型号" value={chip} disabled={busy} onChange={e => setChip(e.currentTarget.value)}>
+            <option value="">请选择芯片</option>{boards.map(b => <option key={b.mcu} value={b.mcu}>{b.chipName} · {b.flashKiB}KB Flash / {b.ramKiB}KB RAM</option>)}
+        </select></label>
+        <p>缺少构建文件时只记录芯片并查看源码，补充构建配置后才能编译、烧写；不会生成或覆盖引脚初始化。</p>
+        {error && <p role="alert" className="nodu-c-error-text">{error}</p>}
+        <div className="nodu-project-actions"><button type="button" className="theia-button secondary" disabled={busy} onClick={close}>取消</button><button className="theia-button main" disabled={!chip || busy}>{busy ? '保存中…' : '保存芯片配置'}</button></div>
+    </form>;
+}

@@ -92,7 +92,7 @@ Usage: node scripts/package-electron.cjs [--arch universal|arm64|x64]
                 Windows: x64 portable package.
   --arch arm64|x64   single-arch signed .app + zip + DMG (macOS).
   --prepare     build isolated JS/Electron workspaces without assembling runtime assets.
-  --profile stm32   Windows STM32 offline edition; full remains the default.
+  --profile stm32   macOS/Windows STM32 offline edition; full remains the default.
   --profile esp32-validation   Windows local hardware validation directory only; never a release archive.
   --help        show this text.`);
     process.exit(0);
@@ -101,9 +101,20 @@ Usage: node scripts/package-electron.cjs [--arch universal|arm64|x64]
 const host = process.platform;
 const packageProfile = values.profile || 'full';
 if (!['full', 'stm32', 'esp32-validation'].includes(packageProfile)) { fail(`unsupported package profile ${packageProfile}`); }
-if (packageProfile !== 'full' && host !== 'win32') { fail('portable validation and stm32 profiles currently target Windows only'); }
+try { validateProfileHost(packageProfile, host); } catch (error) { fail(error.message); }
 const validationOnly = packageProfile === 'esp32-validation';
 const includeArduino = packageProfile !== 'stm32';
+function validateProfileHost(profile, platform) {
+    if (profile === 'esp32-validation' && platform !== 'win32') {
+        throw new Error('portable ESP32 validation currently targets Windows only');
+    }
+    if (profile === 'stm32' && !['darwin', 'win32'].includes(platform)) {
+        throw new Error('STM32 desktop packages target macOS or Windows');
+    }
+}
+function macArtifactStem(version, arch, profile) {
+    return `Nodu-${version}${profile === 'stm32' ? '-stm32' : ''}-mac-${arch}`;
+}
 // Local hardware acceptance may exercise verified runtimes with unfinished
 // corresponding-source coverage. Default/full releases must still fail closed.
 const arduinoValidation = validationOnly ? { allowUnreleased: true } : {};
@@ -1252,7 +1263,7 @@ function writeMacArtifacts(appPath, arch) {
     auditMinOs(appPath);
     signAppDarwin(appPath);
     fs.mkdirSync(distDir, { recursive: true });
-    const stem = `Nodu-${applicationVersion}-mac-${arch}`;
+    const stem = macArtifactStem(applicationVersion, arch, packageProfile);
     const zip = path.join(distDir, `${stem}.zip`);
     fs.rmSync(zip, { force: true });
     execFileSync('ditto', ['-c', '-k', '--sequesterRsrc', '--keepParent',
@@ -1277,6 +1288,7 @@ function writeMacArtifacts(appPath, arch) {
     const manifest = {
         version: applicationVersion, ...sourceIdentity(),
         targetPlatform: `darwin-${arch}`,
+        profile: packageProfile,
         artifacts,
         electron: ELECTRON_VERSION,
         node: NODE_VERSION,
@@ -1443,6 +1455,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+    validateProfileHost, macArtifactStem,
     canonicalJs, canonizeJsForMerge, normalizeNativeModuleKeys, computeStamp, computeInstallStamp,
     isMachO, isPeX64, keepBinDirs, resolveNpmCli, prepareUniversalLicenses, ignorePackagedPath, assertZipHeader, writeWindowsPortableFiles,
 };

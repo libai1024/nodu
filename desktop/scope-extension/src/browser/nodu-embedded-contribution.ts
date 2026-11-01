@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
-import { NoduProjectDialog, ModuleForm, ProjectSettings, ToolkitInfo } from './nodu-project-dialogs';
+import { NoduProjectDialog, ModuleForm, ProjectSettings, ToolkitInfo, ProjectChipForm } from './nodu-project-dialogs';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { CommandContribution, CommandRegistry, CommandService, MAIN_MENU_BAR, MenuContribution, MenuModelRegistry, MessageService } from '@theia/core/lib/common';
 import { URI } from '@theia/core/lib/common/uri';
@@ -269,6 +269,14 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     }
 
     registerCommands(registry: CommandRegistry): void {
+        registry.registerCommand({ id: 'nodu.project.selectChip', label: '选择项目芯片…', category: 'Nodu' }, {
+            isEnabled: () => !this.model.busy,
+            execute: async () => {
+                const root = (await this.workspace.roots)[0]?.resource;
+                if (!root) { void this.messages.info('请先打开项目文件夹。'); return; }
+                await new NoduProjectDialog('选择项目芯片', close => React.createElement(ProjectChipForm, { model: this.model, path: root.path.fsPath(), close, applied: () => this.model.detect(root) })).open();
+            },
+        });
         const c = () => this.model.isC;
         const add = (id: string, label: string, execute: () => unknown, enabled: () => boolean = c) =>
             registry.registerCommand({ id, label, category: 'STM32' }, { execute, isEnabled: enabled, isVisible: enabled });
@@ -288,7 +296,10 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
                 if (path !== this.model.project?.path) return;
                 if (action === '在 Keil 中打开') await this.model.call('openKeil', { path });
                 if (action === '工程设置') await this.projectDialog('settings');
-            } catch (error) { void this.messages.error(errorText(error)); }
+            } catch (error) {
+                if (error instanceof EmbeddedError && error.code === 'keilSource') await this.showPanel('problems');
+                void this.messages.error(errorText(error));
+            }
         };
         for (const [id, label, generated] of [[C_COMMANDS.generateKeil, '生成 Keil 工程', false], [C_COMMANDS.updateKeil, '更新 Keil 工程', true]] as const) {
             registry.registerCommand({ id, label, category: 'STM32' }, { execute: keil,
@@ -358,6 +369,8 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
     }
 
     registerMenus(menus: MenuModelRegistry): void {
+        menus.registerMenuAction([...CommonMenus.FILE, '2_project_target'], { commandId: 'nodu.project.selectChip', order: '0' });
+        menus.registerMenuAction([...NODU_PROJECT_MENU, '4_settings'], { commandId: 'nodu.project.selectChip', order: '-1' });
         const keilMenu = [...CommonMenus.FILE, '3_keil', 'keil'];
         menus.registerSubmenu(keilMenu, 'Keil 工程');
         menus.registerMenuAction([...keilMenu, '0_actions'], { commandId: C_COMMANDS.generateKeil, order: '0' });

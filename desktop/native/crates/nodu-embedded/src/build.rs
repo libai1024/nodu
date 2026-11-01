@@ -110,6 +110,9 @@ fn run_tool(env: &Env<'_>, project: &Project, args: &[String], timeout: Duration
 /// Run `cmake --preset` when the build directory is missing or was
 /// configured with a different toolkit or options. Returns whether it ran.
 fn ensure_configured(env: &Env<'_>, project: &Project, clean: bool, parser: &mut Parser, build_id: &str) -> Outcome<Option<process::Finished>> {
+    if project.manifest.pointer("/build/sourceOnly").and_then(Value::as_bool).unwrap_or(false) {
+        return Err(Failure::new("sourceOnly", "当前工程仅记录芯片型号。请先补充 CMake 构建配置，再重新选择芯片或打开完整工程。"));
+    }
     let build_dir = project.build_dir();
     let stamp_path = project.state_dir().join("configure.json");
     let stamp = configure_stamp(project, env.toolkit);

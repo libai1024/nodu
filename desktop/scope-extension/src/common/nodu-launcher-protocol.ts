@@ -21,7 +21,10 @@ export const NODU_PROJECTS_PATH = '/services/nodu-projects';
 export const NoduProjectsService = Symbol('NoduProjectsService');
 export interface RecentProject { path: string; name: string; tag?: string; lastOpened?: number; missing: boolean }
 export interface ExampleProject { path: string; name: string; tag?: string; summary?: string }
+export interface ProjectCandidate { path: string; name: string; tag?: string }
+export interface ProjectInspection { folder: string; candidates: ProjectCandidate[] }
 export interface NoduProjectsService {
+    inspect(fsPath: string): Promise<ProjectInspection>;
     recent(): Promise<RecentProject[]>;
     /** Records that a project window opened this folder. */
     touch(fsPath: string): Promise<void>;

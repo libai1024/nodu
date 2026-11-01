@@ -11,7 +11,7 @@ function load(file, extra = {}) {
     const fallback = new Proxy({}, { get: () => Empty });
     const exports = {}, base = path.dirname(file);
     vm.runInNewContext(fs.readFileSync(file, 'utf8'), {
-        exports, TextDecoder, TextEncoder, atob, Date,
+        exports, crypto: require('node:crypto').webcrypto, setInterval: () => 0, clearInterval() {}, TextDecoder, TextEncoder, atob, Date,
         setTimeout: () => 0, clearTimeout() {}, requestAnimationFrame: callback => callback(),
         require: id => extra[id] || (id.startsWith('../common/') ? require(path.resolve(base, id))
             : id === '@theia/core/shared/inversify' ? { inject: () => () => {}, postConstruct: () => () => {}, injectable: () => value => value }

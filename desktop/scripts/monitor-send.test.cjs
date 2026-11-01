@@ -10,7 +10,7 @@ function load(relative) {
     class Emitter { event = () => ({ dispose() {} }); fire() {} }
     const fallback = new Proxy({}, { get: () => Empty });
     vm.runInNewContext(fs.readFileSync(file, 'utf8'), {
-        exports, TextDecoder, TextEncoder, atob, Date, process, __filename: file,
+        exports, crypto: require('node:crypto').webcrypto, setInterval: () => 0, clearInterval() {}, TextDecoder, TextEncoder, atob, Date, process, __filename: file,
         setTimeout: () => 0, clearTimeout() {}, requestAnimationFrame: callback => callback(),
         localStorage: { setItem() {}, getItem() { return null; } },
         require: id => id.includes('inversify') ? { inject: () => () => {}, postConstruct: () => () => {}, injectable: () => value => value }

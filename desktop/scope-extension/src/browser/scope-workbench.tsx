@@ -165,7 +165,7 @@ export class ScopeToolbar extends ReactWidget {
         return <React.Fragment>
             {this.layoutState.mode === 'simple' ? this.renderMinimal() : this.renderProfessional()}
             {(!this.embedded.isEsp || this.embedded.isArduino) && <NoduToolbarPopover open={this.layoutState.deviceOpen} simple={this.layoutState.mode === 'simple'} compact={this.embedded.isArduino || this.layoutState.mode === 'simple' && this.embedded.isC} owner={this.node}>
-                {this.embedded.isArduino ? <NoduArduinoDevicePanel model={this.arduino} open={this.layoutState.deviceOpen} exec={id => { this.layoutState.setDeviceOpen(false); this.execute(id); }}/> : this.embedded.isC
+                {this.embedded.unknownProject ? <section className="scope-device-section" aria-label="选择项目芯片"><h2>选择项目芯片</h2><p>当前目录没有明确的芯片配置。</p><div className="scope-device-actions"><button className="theia-button" onClick={() => { this.layoutState.setDeviceOpen(false); this.execute('nodu.project.selectChip'); }}>选择芯片…</button><button className="theia-button secondary" onClick={() => this.execute('nodu.project.open')}>打开项目…</button></div></section> : this.embedded.isArduino ? <NoduArduinoDevicePanel model={this.arduino} open={this.layoutState.deviceOpen} exec={id => { this.layoutState.setDeviceOpen(false); this.execute(id); }}/> : this.embedded.isC
                     ? <NoduCDevicePanel model={this.embedded} simple={this.layoutState.mode === 'simple'}
                         exec={id => { this.layoutState.setDeviceOpen(false); this.execute(id); }}
                         confirm={(title, msg, ok) => new ConfirmDialog({ title, msg, ok, cancel: '取消' }).open().then(value => {
@@ -175,7 +175,7 @@ export class ScopeToolbar extends ReactWidget {
                         showOutput={() => { this.layoutState.setDeviceOpen(false); this.execute(C_COMMANDS.showOutput); }} />
                     : <NoduDevicePanel model={this.device} files={this.files} dialogs={this.dialogs} editors={this.editors}
                         compact={this.layoutState.mode === 'simple'} onConnected={() => this.layoutState.setDeviceOpen(false)}
-                        showLogs={() => this.execute('scope.show-logs')} showBoardGuide={() => this.execute('scope.board-guide')} />}
+                        selectProjectChip={() => { this.layoutState.setDeviceOpen(false); this.execute('nodu.project.selectChip'); }} showLogs={() => this.execute('scope.show-logs')} showBoardGuide={() => this.execute('scope.board-guide')} />}
             </NoduToolbarPopover>}
         </React.Fragment>;
     }
@@ -216,13 +216,13 @@ export class ScopeToolbar extends ReactWidget {
                         aria-expanded={this.layoutState.deviceOpen} aria-pressed={this.layoutState.deviceOpen} onClick={toggleDevice}>{icon('circuit-board')}</button>
                 </div>}
                 {this.embedded.isArduino && <button className="nodu-minimal-tool" aria-label="库管理" title="库管理" onClick={() => this.execute(ARDUINO_COMMANDS.libraries)}>{icon('library')}</button>}
-                {!c && !this.embedded.isEsp && <button className="nodu-minimal-tool" aria-label="图像" title="图像" aria-pressed={this.layoutState.visionVisible} onClick={() => this.execute('scope.toggle-vision')}>{icon('device-camera')}</button>}
+                {!c && !this.embedded.isEsp && !this.embedded.unknownProject && <button className="nodu-minimal-tool" aria-label="图像" title="图像" aria-pressed={this.layoutState.visionVisible} onClick={() => this.execute('scope.toggle-vision')}>{icon('device-camera')}</button>}
                 <button className="nodu-minimal-tool" aria-label="终端与输出" title="终端与输出" aria-pressed={panelVisible}
                     onClick={() => this.execute(c ? C_COMMANDS.togglePanel : 'scope.toggle-console')}>{icon('terminal')}</button>
             </div>
             {this.renderSettings()}
             <div className="nodu-minimal-primary">
-                <NoduMinimalAction action={action} allowSelection={c || this.embedded.isArduino} busy={busy} disabled={this.embedded.isArduino ? this.arduino.loading || this.arduino.configuring : savingOptions} scopeKey={scope}
+                <NoduMinimalAction action={action} allowSelection={c || this.embedded.isArduino} busy={busy} disabled={this.embedded.unknownProject || !!this.embedded.project?.manifest?.build?.sourceOnly || (this.embedded.isArduino ? this.arduino.loading || this.arduino.configuring : savingOptions)} scopeKey={scope}
                     stopDisabled={!c && !this.embedded.isEsp && !this.device.canStop}
                     onSelect={next => { this.selectedActions.set(scope, next); try { localStorage.setItem(`nodu.minimal-action:${scope}`, next); } catch { /* Keep the session selection. */ } this.update(); }}
                     onExecute={() => this.embedded.isArduino ? this.executeArduino(action) : this.execute(c ? action === 'build' ? C_COMMANDS.build : action === 'flash' ? C_COMMANDS.flash : C_COMMANDS.run : this.embedded.isEsp ? 'task:run:build' : 'scope.run-current')}
@@ -274,6 +274,7 @@ export class ScopeToolbar extends ReactWidget {
     }
 
     private renderProfessional(): React.ReactNode {
+        if (this.embedded.unknownProject) return <header className="nodu-professional-bar" aria-label="Nodu 工具栏">{this.renderProjectLogo()}<button className="scope-action scope-device-chip" onClick={() => this.execute('nodu.project.selectChip')}><i className="codicon codicon-chip" aria-hidden="true"/>选择芯片…</button><span>未指定项目芯片</span>{this.renderSettings()}</header>;
         return <>
             {this.renderProjectLogo()}
             {this.embedded.isC ? this.renderC() : this.embedded.isArduino ? this.renderArduino() : this.renderPythonOrEsp()}
@@ -618,9 +619,9 @@ export class ScopeWorkbenchContribution implements FrontendApplicationContributi
 
     protected updateStatus(): void {
         if (this.layoutState.mode === 'simple') {
-            const text = this.embedded.isC ? this.embedded.project!.chip.name : this.embedded.isEsp ? this.embedded.espChip.toUpperCase() : 'K210';
+            const text = this.embedded.isC ? this.embedded.project!.chip.name : this.embedded.isEsp ? this.embedded.espChip.toUpperCase() : this.embedded.unknownProject ? '选择芯片' : 'K210';
             void this.status.setElement('scope:minimal-target', { text: `$(chip) ${text}`, className: `nodu-chip-status nodu-project-icon--${projectIconIdentity(text).vendor}`, alignment: StatusBarAlignment.LEFT, priority: 1100,
-                command: this.embedded.isEsp ? undefined : 'scope.show-devices', tooltip: '设备' });
+                command: this.embedded.isEsp ? undefined : this.embedded.unknownProject ? 'nodu.project.selectChip' : 'scope.show-devices', tooltip: '设备' });
         } else { this.status.removeElement('scope:minimal-target'); }
         if (this.embedded.isC) {
             for (const item of ['scope:device', 'scope:demo', 'scope:firmware', 'scope:serial-port', 'scope:fps']) {
