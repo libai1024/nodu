@@ -12,10 +12,10 @@ function coreDigest(root) { const digest = crypto.createHash('sha256'); for (con
 function home() { return process.env.NODU_DACIR_HOME || path.join(os.homedir(), '.nodu-dacir'); }
 function endpoint() { const hash = crypto.createHash('sha256').update(home()).digest('hex').slice(0, 20); return process.platform === 'win32' ? `\\\\.\\pipe\\nodu-dacir-${hash}` : path.join(os.tmpdir(), `nodu-dacir-${process.getuid()}-${hash}.sock`); }
 class Client extends EventEmitter {
-  constructor(config) { super(); this.config = config; this.pending = new Map(); this.sequence = 0; this.socket = undefined; this.connecting = undefined; }
+  constructor(config) { super(); this.config = config; this.pending = new Map(); this.sequence = 0; this.socket = undefined; this.ready = false; this.connecting = undefined; }
   async connect() {
-    if (this.socket && !this.socket.destroyed) return;
     if (this.connecting) return this.connecting;
+    if (this.ready && this.socket && !this.socket.destroyed) return;
     this.connecting = this.connectOnce().finally(() => { this.connecting = undefined; });
     return this.connecting;
   }
@@ -48,16 +48,25 @@ class Client extends EventEmitter {
         else { const p = this.pending.get(m.id); if (!p) continue; clearTimeout(p.timer); this.pending.delete(m.id); m.error ? p.reject(Object.assign(new Error(m.error), { code: m.code, detail: m.detail })) : p.resolve(m.result); }
       }
     });
-    const lost = error => { if (this.socket !== socket) return; this.socket = undefined; for (const p of this.pending.values()) { clearTimeout(p.timer); p.reject(Object.assign(new Error(error?.message || '共同服务连接已断开，操作结果需查询。'), { code: 'outcomeUnknown' })); } this.pending.clear(); this.emit('event', 'service.state', { running: false }); };
+    const lost = error => { if (this.socket !== socket) return; this.socket = undefined; this.ready = false; for (const p of this.pending.values()) { clearTimeout(p.timer); p.reject(Object.assign(new Error(error?.message || '共同服务连接已断开，操作结果需查询。'), { code: 'outcomeUnknown' })); } this.pending.clear(); this.emit('event', 'service.state', { running: false }); };
     socket.on('error', lost); socket.on('close', () => lost());
-    const info = await this.send('hello', { protocol: PROTOCOL, coreDigest: coreDigest(__dirname), binary: this.config.binary, toolkit: this.config.toolkit, resources: this.config.resources, role: this.config.role || 'desktop', app: this.config.app || 'dacir', legacyData: this.config.legacyData, launcher: this.config.launcher, launchArgs: this.config.launchArgs }, 120000);
-    if (info.protocol !== PROTOCOL) { socket.destroy(); throw new Error('联动组件版本不一致。'); }
+    try {
+      const info = await this.send('hello', { protocol: PROTOCOL, coreDigest: coreDigest(__dirname), binary: this.config.binary, toolkit: this.config.toolkit, resources: this.config.resources, role: this.config.role || 'desktop', app: this.config.app || 'dacir', legacyData: this.config.legacyData, launcher: this.config.launcher, launchArgs: this.config.launchArgs }, 120000);
+      if (info.protocol !== PROTOCOL) { socket.destroy(); throw new Error('联动组件版本不一致。'); }
+      if (this.socket !== socket || socket.destroyed) throw Object.assign(new Error('共同服务握手期间连接已关闭。'), { code: 'serviceUnavailable' });
+      this.ready = true;
+    } catch (error) {
+      this.ready = false; socket.destroy();
+      if (this.socket === socket) this.socket = undefined;
+      if (error.code === 'versionMismatch') error.message += ' 请关闭仍在运行的旧版 Nodu/DACIR 后重试。';
+      throw error;
+    }
   }
   send(method, args, timeout) {
     const id = ++this.sequence;
     return new Promise((resolve, reject) => { const timer = setTimeout(() => { this.pending.delete(id); reject(Object.assign(new Error('操作等待超时；不会自动重试。'), { code: 'outcomeUnknown' })); }, timeout); this.pending.set(id, { resolve, reject, timer }); this.socket.write(JSON.stringify({ id, method, args }) + '\n'); });
   }
   async request(method, args = {}, timeout = 900000) { await this.connect(); return this.send(method, args, timeout); }
-  close() { this.socket?.end(); }
+  close() { this.ready = false; this.socket?.end(); }
 }
 module.exports = { Client, home, endpoint, PROTOCOL, coreDigest };
