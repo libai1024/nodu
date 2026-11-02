@@ -12,8 +12,10 @@ function component(file,name,props){
  useCallback(fn,deps){const i=cursor++;if(!slots[i]||!same(slots[i].deps,deps))slots[i]={fn,deps};return slots[i].fn;},
  useEffect(fn,deps){const i=cursor++;if(!slots[i]||!same(slots[i].deps,deps)){const previous=slots[i];slots[i]={deps,cleanup:previous?.cleanup};effects.push(()=>{previous?.cleanup?.();slots[i].cleanup=fn();});}}
  };
- const filename=path.join(__dirname,'../lib',file), actualRequire=createRequire(filename), exports={};
- vm.runInNewContext(fs.readFileSync(filename,'utf8'),{exports,require:n=>n==='@theia/core/shared/react'?React:n.endsWith('.css')?{}:n.includes('nodu-select')?{NoduSelect:'nodu-select'}:n.includes('react-dialog')?{ReactDialog:class{}}:n.endsWith('/dialogs')?{}:n.includes('nodu-embedded-model')?{EmbeddedError:class extends Error{}}:n.includes('scope-theme')?{}:n.includes('nodu-launcher-pages')?{SettingsPage:'settings-component',RowMenu:'row-menu'}:n.includes('nodu-project-icon')?{ProjectIcon:'project-icon',ChipMark:'chip-mark',FrameworkMark:'framework-mark'}:n.includes('scope-brand')?{NoduBrand:'brand'}:n.includes('nodu-new-project')?{NewProjectForm:'form-component'}:actualRequire(n),window:{addEventListener:(k,v)=>listeners.set(k,v),removeEventListener:k=>listeners.delete(k)},document:{activeElement:null},navigator:{userAgent:'Mac'},requestAnimationFrame:f=>f(),Error,Promise,String});
+ const filename=path.join(__dirname,'../lib',file);
+ function load(filename){const actualRequire=createRequire(filename),exports={};
+ vm.runInNewContext(fs.readFileSync(filename,'utf8'),{exports,require:n=>n.includes('nodu-project-target')?load(path.join(path.dirname(filename),'nodu-project-target.js')):n==='@theia/core/shared/react'?React:n.endsWith('.css')?{}:n.includes('nodu-select')?{NoduSelect:'nodu-select'}:n.includes('react-dialog')?{ReactDialog:class{}}:n.endsWith('/dialogs')?{}:n.includes('nodu-embedded-model')?{EmbeddedError:class extends Error{}}:n.includes('scope-theme')?{}:n.includes('nodu-launcher-pages')?{SettingsPage:'settings-component',RowMenu:'row-menu'}:n.includes('nodu-project-icon')?{ProjectIcon:'project-icon',ChipMark:'chip-mark',FrameworkMark:'framework-mark'}:n.includes('scope-brand')?{NoduBrand:'brand'}:n.includes('nodu-new-project')?{NewProjectForm:'form-component'}:actualRequire(n),window:{addEventListener:(k,v)=>listeners.set(k,v),removeEventListener:k=>listeners.delete(k)},document:{activeElement:null},navigator:{userAgent:'Mac'},requestAnimationFrame:f=>f(),Error,Promise,String});return exports;}
+ const exports=load(filename);
  const render=()=>{cursor=0;tree=exports[name](props);for(const effect of effects.splice(0))effect();return tree;};
  const nodes=()=>{const all=[];const walk=v=>{if(Array.isArray(v))v.forEach(walk);else if(v&&typeof v==='object'){all.push(v);walk(v.props?.children);}};walk(tree);return all;};
  const text=n=>(n?.props?.children??[]).flat(Infinity).map(x=>typeof x==='object'?text(x):x||'').join('');
@@ -167,4 +169,20 @@ test('late version metadata from an old application provider cannot replace the 
  const old=defer(),props=base();props.application={getApplicationInfo:()=>old.promise};const c=launcher(props);await c.flush();
  props.application={getApplicationInfo:async()=>({version:'0.2.2-current'})};c.render();await c.flush();old.resolve({version:'0.1.0-old'});await c.flush();
  assert.equal(c.text(c.find(n=>n.props?.className==='nodu-launcher-version')),'0.2.2-current');
+});
+
+// Both project flows use the same family tree; selection must never create a project.
+test('manual chip selection uses the creation tree and saves only an explicit supported model',async()=>{
+ const calls=[];let applied=0,closed=0;
+ const c=component('browser/nodu-project-dialogs.js','ProjectChipForm',{path:'/existing',model:{busy:false,catalog:async()=>({boards:[{mcu:'STM32F103C8Tx',flashKiB:64,ramKiB:20},{mcu:'STM32F407ZGTx',flashKiB:1024,ramKiB:192}]}),call:async(...args)=>{calls.push(args);}},applied:async()=>{applied++;},close:()=>{closed++;}});
+ c.render();await c.flush();assert.equal(c.tree.props.className,'nodu-new-project');assert.ok(c.find(n=>n.props?.['aria-label']==='芯片系列'));
+ assert.equal(c.button('保存芯片配置').props.disabled,true);assert.equal(c.button('K210'),undefined);assert.equal(c.find(n=>n.props?.id==='nodu-project-name'),undefined);assert.equal(c.find(n=>n.props?.id==='nodu-project-template'),undefined);
+ c.button('STM32F407').props.onClick();c.render();assert.equal(c.find(n=>n.props?.['aria-label']==='项目芯片型号').props.value,'STM32F407ZGTx');assert.equal(c.button('保存芯片配置').props.disabled,false);
+ c.tree.props.onSubmit({preventDefault(){}});c.tree.props.onSubmit({preventDefault(){}});await c.flush();
+ assert.equal(calls.length,1);assert.equal(calls[0][0],'selectProjectChip');assert.equal(calls[0][1].path,'/existing');assert.equal(calls[0][1].chip,'STM32F407ZGTx');assert.equal(applied,1);assert.equal(closed,1);
+});
+test('manual chip selection retains errors and supports retrying its local catalog',async()=>{
+ let attempts=0;const c=component('browser/nodu-project-dialogs.js','ProjectChipForm',{path:'/existing',model:{busy:false,catalog:async()=>{if(++attempts===1)throw new Error('catalog unavailable');return{boards:[{mcu:'STM32F103C8Tx',flashKiB:64,ramKiB:20}]};},call:async()=>{throw new Error('save failed');}},applied:async()=>{},close(){}});
+ c.render();await c.flush();assert.ok(c.text(c.tree).includes('catalog unavailable'));c.button('重新加载芯片目录').props.onClick();c.render();await c.flush();
+ c.button('STM32F103').props.onClick();c.render();c.tree.props.onSubmit({preventDefault(){}});await c.flush();assert.ok(c.text(c.tree).includes('save failed'));assert.equal(c.button('保存芯片配置').props.disabled,false);
 });

@@ -15,6 +15,7 @@ import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service
 import { ProjectStatus } from '../common/nodu-embedded-protocol';
 import { EmbeddedError, NoduEmbeddedModel, PanelTab } from './nodu-embedded-model';
 import { NoduNewProjectDialog } from './nodu-new-project';
+import { NoduProjectFormDialog } from './nodu-project-target';
 import { NODU_PROJECT_MENU, ScopeConsoleContribution } from './scope-workbench';
 import { ScopeLayoutState } from './scope-layout-state';
 import { C_COMMANDS, NODU_C_RUN_MENU } from './nodu-embedded-commands';
@@ -274,7 +275,7 @@ export class NoduEmbeddedContribution implements FrontendApplicationContribution
             execute: async () => {
                 const root = (await this.workspace.roots)[0]?.resource;
                 if (!root) { void this.messages.info('请先打开项目文件夹。'); return; }
-                await new NoduProjectDialog('选择项目芯片', close => React.createElement(ProjectChipForm, { model: this.model, path: root.path.fsPath(), close, applied: () => this.model.detect(root) })).open();
+                await new NoduProjectFormDialog({ title: '选择项目芯片' }, close => React.createElement(ProjectChipForm, { model: this.model, path: root.path.fsPath(), close, applied: () => this.model.detect(root) })).open();
             },
         });
         const c = () => this.model.isC;

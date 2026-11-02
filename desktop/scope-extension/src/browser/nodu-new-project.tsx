@@ -1,27 +1,20 @@
 // SPDX-License-Identifier: MIT
 import * as React from '@theia/core/shared/react';
 import { DialogProps } from '@theia/core/lib/browser/dialogs';
-import { ReactDialog } from '@theia/core/lib/browser/dialogs/react-dialog';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog';
 import { URI } from '@theia/core/lib/common/uri';
-import { ESP_PROJECT_FRAMEWORKS, EspProjectFramework, PROJECT_CHIPS, PROJECT_FAMILIES, ProjectFamily, projectTemplates, validProjectName } from '../common/nodu-project-catalog';
+import { ESP_PROJECT_FRAMEWORKS, EspProjectFramework, PROJECT_CHIPS, ProjectFamily, projectTemplates, validProjectName } from '../common/nodu-project-catalog';
 import { EmbeddedError, NoduEmbeddedModel } from './nodu-embedded-model';
-import { ChipMark, FrameworkMark } from './nodu-project-icon';
+import { FrameworkMark } from './nodu-project-icon';
 import { NoduSelect } from './nodu-select';
-import '../../style/new-project.css';
+import { NoduProjectFormDialog, renderProjectFamilyNavigation } from './nodu-project-target';
 
 interface Deps { model: NoduEmbeddedModel; dialogs: FileDialogService; parent: string; family?: ProjectFamily; onBusyChange?: (busy: boolean) => void; onCreated: (project: { path: string }) => void }
 
-export class NoduNewProjectDialog extends ReactDialog<undefined> {
-    constructor(props: DialogProps, private readonly deps: Deps) {
-        super(props);
-        this.node.classList.add('nodu-new-project-dialog');
-        this.contentNode.classList.add('nodu-new-project-content');
+export class NoduNewProjectDialog extends NoduProjectFormDialog {
+    constructor(props: DialogProps, deps: Deps) {
+        super(props, close => <NewProjectForm {...deps} close={close} />);
     }
-    get value(): undefined { return undefined; }
-    protected render(): React.ReactNode { return <NewProjectForm {...this.deps} close={() => this.close()} />; }
-    // React's form owns submission; Theia's dialog-wide Enter handler must not swallow it.
-    protected handleEnter(event: KeyboardEvent): boolean { return false; }
 }
 
 export function NewProjectForm({ model, dialogs, parent: initialParent, family: initialFamily = 'k210', onCreated, close, onBusyChange }: Deps & { close: () => void }): React.ReactElement {
@@ -77,24 +70,9 @@ export function NewProjectForm({ model, dialogs, parent: initialParent, family: 
 
     return <form className="nodu-new-project" onSubmit={event => { event.preventDefault(); void create(); }} aria-busy={busy}>
         <div className="nodu-np-body">
-            <nav className="nodu-np-families" aria-label="芯片系列">
-                <div className="nodu-np-group-title">芯片系列</div>
-                <button type="button" className={`nodu-np-family nodu-np-root${family === 'k210' ? ' nodu-np-selected' : ''}`} aria-pressed={family === 'k210'} disabled={busy} onClick={() => switchFamily('k210')}>
-                    <span aria-hidden="true"/><ChipMark tag="K210"/><span>K210</span>
-                </button>
-                <button type="button" className={`nodu-np-family nodu-np-group${expanded.stm32 ? ' is-open' : ''}`} aria-expanded={expanded.stm32} aria-controls="nodu-stm32-families" disabled={busy} onClick={() => setExpanded(value => ({ ...value, stm32: !value.stm32 }))}>
-                    <i className={`codicon codicon-chevron-${expanded.stm32 ? 'down' : 'right'}`} aria-hidden="true"/><ChipMark tag="STM32"/><span>STM32</span>
-                </button>
-                <div className="nodu-np-children" id="nodu-stm32-families" hidden={!expanded.stm32}>
-                    {PROJECT_FAMILIES.filter(item => item.id.startsWith('stm32')).map(item => <button type="button" key={item.id} className={`nodu-np-family nodu-np-child${family === item.id ? ' nodu-np-selected' : ''}`} aria-pressed={family === item.id} disabled={busy} onClick={() => switchFamily(item.id)}><span>{item.name}</span></button>)}
-                </div>
-                <button type="button" className={`nodu-np-family nodu-np-group${expanded.esp32 ? ' is-open' : ''}`} aria-expanded={expanded.esp32} aria-controls="nodu-esp32-chips" disabled={busy} onClick={() => setExpanded(value => ({ ...value, esp32: !value.esp32 }))}>
-                    <i className={`codicon codicon-chevron-${expanded.esp32 ? 'down' : 'right'}`} aria-hidden="true"/><ChipMark tag="ESP32"/><span>ESP32</span>
-                </button>
-                <div className="nodu-np-children" id="nodu-esp32-chips" hidden={!expanded.esp32}>
-                    {PROJECT_CHIPS.filter(item => item.family === 'esp32').map(item => <button type="button" key={item.id} className={`nodu-np-family nodu-np-child${chipId === item.id ? ' nodu-np-selected' : ''}`} aria-pressed={chipId === item.id} disabled={busy} onClick={() => { switchFamily('esp32'); setChipId(item.id); }}><span>{item.name}</span></button>)}
-                </div>
-            </nav>
+            {renderProjectFamilyNavigation({ id: 'nodu-new-project', family, chipId, expanded, busy,
+                onSelect: (next, selectedChip) => { switchFamily(next); if (selectedChip) setChipId(selectedChip); },
+                onExpand: group => setExpanded(value => ({ ...value, [group]: !value[group] })) })}
             <div className="nodu-np-fields">
                 {family === 'esp32' && <div className="nodu-np-control">
                     <span className="nodu-np-label" id="nodu-project-framework-label">开发框架</span>

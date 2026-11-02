@@ -4,6 +4,9 @@ import { ReactDialog } from '@theia/core/lib/browser/dialogs/react-dialog';
 import { NoduEmbeddedModel, formatBytes } from './nodu-embedded-model';
 import { ProjectStatus } from '../common/nodu-embedded-protocol';
 import { supportsKeil } from '../common/nodu-keil';
+import { PROJECT_CHIPS, ProjectFamily } from '../common/nodu-project-catalog';
+import { NoduSelect } from './nodu-select';
+import { renderProjectFamilyNavigation } from './nodu-project-target';
 
 export class NoduProjectDialog extends ReactDialog<void> {
     constructor(title: string, private readonly view: (close: () => void) => React.ReactNode) {
@@ -107,24 +110,69 @@ export function ToolkitInfo({ model, close }: { model: NoduEmbeddedModel; close(
     </div>;
 }
 
-/** Silicon selection is explicit and stored in nodu.json; no automatic C8/package guessing. */
+/** Silicon selection reuses the new-project tree, controls and layout. */
 export function ProjectChipForm({ model, path, close, applied }: { model: NoduEmbeddedModel; path: string; close(): void; applied(): Promise<void> }): React.ReactElement {
+    const supported = PROJECT_CHIPS.filter(c => !!c.pack);
+    const initial = supported.find(c => c.id === model.project?.chip.id);
     const [boards, setBoards] = React.useState<import('../common/nodu-embedded-protocol').CatalogBoard[]>([]);
-    const [chip, setChip] = React.useState('');
-    const [error, setError] = React.useState(''); const [busy, setBusy] = React.useState(false);
-    React.useEffect(() => { let current = true; void model.catalog().then(c => { if (current) setBoards(c.boards.filter(b => b.id.startsWith('chip-'))); }).catch(e => { if (current) setError(String(e)); }); return () => { current = false; }; }, [model]);
+    const [family, setFamily] = React.useState<ProjectFamily | undefined>(initial?.family);
+    const [chip, setChip] = React.useState(initial?.id ?? '');
+    const [expanded, setExpanded] = React.useState({ stm32: true, esp32: false });
+    const [error, setError] = React.useState('');
+    const [busy, setBusy] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
+    const [catalogAttempt, retryCatalog] = React.useState(0);
+    const pending = React.useRef(false);
+    const mounted = React.useRef(true);
+    React.useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+    React.useEffect(() => {
+        let current = true;
+        setLoading(true); setError('');
+        void model.catalog().then(c => {
+            if (current) setBoards(c.boards.filter(b => supported.some(chip => chip.id === b.mcu)));
+        }).catch(e => { if (current) setError(e instanceof Error ? e.message : String(e)); })
+            .finally(() => { if (current) setLoading(false); });
+        return () => { current = false; };
+    }, [model, catalogAttempt]);
+    const chips = supported.filter(c => c.family === family);
+    const board = boards.find(b => b.mcu === chip);
     const save = async (event: React.FormEvent): Promise<void> => {
-        event.preventDefault(); if (!chip || busy) return; setBusy(true); setError('');
-        try { await model.call('selectProjectChip', { path, chip }); await applied(); close(); }
-        catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); }
+        event.preventDefault();
+        if (!board || loading || pending.current || model.busy) return;
+        pending.current = true; setBusy(true); setError('');
+        try {
+            await model.call('selectProjectChip', { path, chip });
+            if (mounted.current) { await applied(); if (mounted.current) close(); }
+        } catch (e) { if (mounted.current) setError(e instanceof Error ? e.message : String(e)); }
+        finally { pending.current = false; if (mounted.current) setBusy(false); }
     };
-    return <form className="nodu-project-form" onSubmit={event => void save(event)}>
-        <p>请选择硬件上的完整芯片型号。选择会保存到当前项目的 nodu.json，已有配置会先备份。</p>
-        <label className="nodu-project-field">芯片型号<select autoFocus aria-label="项目芯片型号" value={chip} disabled={busy} onChange={e => setChip(e.currentTarget.value)}>
-            <option value="">请选择芯片</option>{boards.map(b => <option key={b.mcu} value={b.mcu}>{b.chipName} · {b.flashKiB}KB Flash / {b.ramKiB}KB RAM</option>)}
-        </select></label>
-        <p>缺少构建文件时只记录芯片并查看源码，补充构建配置后才能编译、烧写；不会生成或覆盖引脚初始化。</p>
-        {error && <p role="alert" className="nodu-c-error-text">{error}</p>}
-        <div className="nodu-project-actions"><button type="button" className="theia-button secondary" disabled={busy} onClick={close}>取消</button><button className="theia-button main" disabled={!chip || busy}>{busy ? '保存中…' : '保存芯片配置'}</button></div>
+    return <form className="nodu-new-project" onSubmit={event => void save(event)} aria-busy={busy || loading}>
+        <div className="nodu-np-body">
+            {renderProjectFamilyNavigation({ id: 'nodu-select-chip', family, chipId: chip, expanded, busy,
+                families: [...new Set(supported.map(c => c.family))],
+                onSelect: next => { setFamily(next); setChip(supported.find(c => c.family === next)!.id); setError(''); },
+                onExpand: group => setExpanded(value => ({ ...value, [group]: !value[group] })) })}
+            <div className="nodu-np-fields">
+                <div className="nodu-np-control">
+                    <label className="nodu-np-label" htmlFor="nodu-current-project">当前项目</label>
+                    <input id="nodu-current-project" value={path} readOnly title={path}/>
+                </div>
+                <div className="nodu-np-control">
+                    <label className="nodu-np-label" htmlFor="nodu-selected-chip">型号</label>
+                    <NoduSelect id="nodu-selected-chip" aria-label="项目芯片型号" value={chip} disabled={busy || loading || !family}
+                        onChange={value => { setChip(value); setError(''); }} options={chips.length ? chips.map(c => ({ value: c.id, label: c.name })) : [{ value: '', label: '请先选择芯片系列' }]}/>
+                    {board && <p className="nodu-np-note">{board.flashKiB} KB Flash · {board.ramKiB} KB RAM</p>}
+                </div>
+                <p className="nodu-np-note">请选择硬件上的完整型号。芯片配置保存到当前项目，已有配置会先备份。</p>
+                <p className="nodu-np-note">缺少构建配置时可查看源码，补充后即可编译和烧写。</p>
+                {loading && <p role="status" className="nodu-np-note">正在加载芯片目录…</p>}
+                {error && <p className="nodu-np-error scope-error" role="alert">{error}</p>}
+                {!loading && !boards.length && <button type="button" className="scope-text-button" disabled={busy} onClick={() => retryCatalog(value => value + 1)}>重新加载芯片目录</button>}
+            </div>
+        </div>
+        <div className="nodu-np-actions">
+            <button type="button" className="theia-button secondary" disabled={busy} onClick={close}>取消</button>
+            <button type="submit" className="theia-button main" disabled={!board || loading || busy || model.busy}>{busy ? '保存中…' : '保存芯片配置'}</button>
+        </div>
     </form>;
 }
