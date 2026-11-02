@@ -216,12 +216,14 @@ async function atomic(path: string, data: string | Buffer): Promise<void> {
     finally { await fs.rm(temp, { force: true }); }
 }
 
-export async function generateKeil(project: ProjectStatus, compileFile: string, resources: string): Promise<KeilResult> {
+export async function generateKeil(project: ProjectStatus, compileFile: string, resources: string, buildReservation?: string): Promise<KeilResult> {
     if (!supportsKeil(project)) fail('keilUnsupported', '支持 Nodu 原生 STM32F103C8T6 / STM32F407ZGT6 工程。');
     if (!project.trusted) fail('untrusted', '请先信任当前工程，再生成 Keil 配置。');
     const root = await fs.realpath(project.path);
     const lockDir = join(root, '.nodu');
     await fs.mkdir(lockDir, { recursive: true }); await safeFile(lockDir, root);
+    const reservation = await fs.readFile(join(lockDir, 'keil-check.lock'), 'utf8').catch(() => undefined);
+    if (reservation !== undefined && reservation !== buildReservation) fail('keilBusy', '这个工程正在进行编译兼容验证，请等待当前编译结束。');
     const lock = join(lockDir, 'keil-update.lock');
     const handle = await fs.open(lock, 'wx').catch(() => fail('keilLocked', '另一个窗口正在维护 Keil 工程。若 Nodu 曾异常退出，请关闭所有窗口后删除 .nodu/keil-update.lock 再试。'));
     try { return await generateLocked(project, compileFile, resources); }

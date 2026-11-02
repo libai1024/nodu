@@ -19,6 +19,7 @@ import { selectProjectChip } from './nodu-project-discovery';
 import { generateKeil, keilStatus, openKeil } from './nodu-keil-project';
 import { ProjectStatus } from '../common/nodu-embedded-protocol';
 import { supportsKeil } from '../common/nodu-keil';
+import { buildWithKeil } from './nodu-keil-build';
 import { superviseDesktopParent } from './nodu-desktop-lifecycle';
 
 const MAX_REQUEST = 1024 * 1024;
@@ -41,6 +42,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     private sidecarReady = false;
     private sequence = 0;
     private readonly keilJobs = new Set<string>();
+    private readonly checkedBuilds = new Map<string, AbortController>();
     private readonly pending = new Map<number, Pending>();
     private readonly clients = new Set<EmbeddedClient>();
     private stopParentWatch?: () => void;
@@ -178,6 +180,24 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
             if (value !== undefined && (typeof value !== 'string' || !isAbsolute(value) || value.includes('\0'))) { return refuse(`${key} 必须是绝对路径。`); }
         }
         try {
+            if (method === 'cancel' && args.queue === 'build') for (const job of this.checkedBuilds.values()) job.abort();
+            if (method === 'build' && typeof args.path === 'string') {
+                const project = await this.request('openProject', { path: args.path }) as ProjectStatus;
+                if (supportsKeil(project)) {
+                    if (!project.trusted) throw Object.assign(new Error('请先信任当前工程，再编译。'), { code: 'untrusted' });
+                    if (this.checkedBuilds.has(project.path) || this.keilJobs.has(project.path)) throw Object.assign(new Error('这个工程正在编译或维护 Keil 配置。'), { code: 'buildBusy' });
+                    const controller = new AbortController(); this.checkedBuilds.set(project.path, controller); this.keilJobs.add(project.path);
+                    try {
+                        const result = await buildWithKeil(project, args.clean === true, {
+                            resources: join(this.extensionDir(), 'resources/stm32'), signal: controller.signal,
+                            request: (method, body) => this.request(method as EmbeddedMethod, body, TIMEOUTS[method as EmbeddedMethod]),
+                            progress: text => this.publish('keil.validation', { path: project.path, text }),
+                        });
+                        this.teachingEvidence.result(method, args, result);
+                        return { ok: true, result };
+                    } finally { this.checkedBuilds.delete(project.path); this.keilJobs.delete(project.path); }
+                }
+            }
             if (method === 'catalog') return { ok: true, result: await readProjectCatalog(join(this.extensionDir(), 'resources/stm32')) };
             if (method === 'selectProjectChip') {
                 if (typeof args.path !== 'string' || typeof args.chip !== 'string') return refuse('缺少工程路径或芯片型号。');
@@ -300,6 +320,7 @@ export class NoduEmbeddedServer implements NoduEmbeddedService, BackendApplicati
     }
 
     onStop(): void {
+        for (const job of this.checkedBuilds.values()) job.abort();
         this.stopParentWatch?.(); this.stopParentWatch = undefined;
         const child = this.sidecar;
         this.sidecar = undefined;

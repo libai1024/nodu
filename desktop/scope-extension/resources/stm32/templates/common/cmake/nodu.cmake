@@ -3,6 +3,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Shared with Keil AC5 / AC6: use ISO C99 in business sources.
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 option(NODU_PRINTF_FLOAT "printf 支持 %f（程序增加约 10 KB）" OFF)
 
 # SDK：导出的独立工程使用自带的 Drivers/；在 Nodu 中使用工具包里的只读 SDK。

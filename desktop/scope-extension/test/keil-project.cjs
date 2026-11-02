@@ -166,3 +166,9 @@ test('custom Keil scatter cannot silently diverge from the GNU Flash reservation
     await assert.rejects(f.generate(), error => error.code === 'keilConflict' && error.message.includes('Flash'));
     assert((await fs.readFile(f.file, 'utf8')).includes('custom.sct'));
 });
+
+test('an in-progress build reservation blocks even before its token has been written',async t=>{
+ const f=await fixture(t);await f.write(path.join(f.root,'.nodu/keil-check.lock'),'');
+ await assert.rejects(f.generate(),{code:'keilBusy'});
+ await assert.rejects(fs.stat(f.file),{code:'ENOENT'});
+});

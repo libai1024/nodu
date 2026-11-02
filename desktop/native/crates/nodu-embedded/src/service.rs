@@ -199,8 +199,9 @@ impl Inner {
     fn project_status(&self, project: &Project) -> Value {
         let current = read_json(&project.state_dir().join("current-build.json")).ok();
         let toolkit = self.toolkit();
-        let stale = match (&current, &toolkit) {
-            (Some(current), Ok(toolkit)) => current.get("inputDigest").and_then(Value::as_str) != Some(project.input_digest(toolkit).as_str()),
+        let input_digest = toolkit.as_ref().ok().map(|t| project.input_digest(t));
+        let stale = match (&current, &input_digest) {
+            (Some(current), Some(digest)) => current.get("inputDigest").and_then(Value::as_str) != Some(digest.as_str()),
             _ => true,
         };
         let mut summary = project.summary();
@@ -208,6 +209,7 @@ impl Inner {
         summary["trusted"] = json!(self.trust.is_trusted(&project.root));
         summary["currentBuild"] = current.unwrap_or(Value::Null);
         summary["buildStale"] = json!(stale);
+        summary["inputDigest"] = json!(input_digest);
         summary["toolkit"] = match toolkit {
             Ok(t) => json!({"ok": true, "version": t.version(), "root": t.root.display().to_string()}),
             Err(f) => json!({"ok": false, "code": f.code, "message": f.message, "detail": f.detail}),
@@ -433,11 +435,11 @@ impl Inner {
                 self.trusted(&project)?;
                 let env = Env { toolkit: &toolkit, rules: &self.rules, out: &self.out, cancel: &self.build_cancel };
                 if method == "configure" {
-                    return build::configure(&env, &project, arg_bool(args, "force"));
+                    return build::configure(&env, &project, arg_bool(args, "force"), arg_bool(args, "invalidateCurrent"));
                 }
                 let build_id = new_id("b");
                 self.out.event("build.started", json!({"buildId": build_id, "path": project.root.display().to_string()}));
-                let result = build::build(&env, &project, arg_bool(args, "clean"), &build_id);
+                let result = build::build(&env, &project, arg_bool(args, "clean"), &build_id, arg_opt_str(args, "expectedInputDigest"));
                 let done = match &result {
                     Ok(value) => value.clone(),
                     Err(f) => json!({"ok": false, "buildId": build_id, "code": f.code, "message": f.message}),

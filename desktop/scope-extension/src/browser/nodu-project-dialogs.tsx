@@ -67,7 +67,7 @@ export function ProjectSettings({ model, close }: { model: NoduEmbeddedModel; cl
         <label className="nodu-project-field">芯片来源<select value={chipVendor} disabled={busy} onChange={e => setVendor(e.currentTarget.value as 'st' | 'compatible')}><option value="st">ST</option><option value="compatible">兼容芯片</option></select></label>
         {supportsKeil(project) && <div className="nodu-auto-boot-settings">
             <label className="nodu-project-check"><input type="checkbox" checked={keilAutoSync} disabled={busy} onChange={e => setKeilAutoSync(e.currentTarget.checked)} />自动维护 Keil 工程</label>
-            <p>仅对此项目生效。新增文件或修改工程配置后自动更新；代码始终共用。关闭后仍可从文件菜单手动更新。</p>
+            <p>编译时始终检查并更新 Keil 工程。此选项控制编辑后的后台维护，仅对此项目生效。</p>
             {model.keilError && <p role="alert" className="nodu-c-error-text">{model.keilError}</p>}
         </div>}
         {autoSupported && <>

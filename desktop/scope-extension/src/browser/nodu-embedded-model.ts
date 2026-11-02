@@ -267,8 +267,11 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         }
         if (event === 'link.result' && d.path === this.project?.path) { this.appendOutput(`DACIR ${d.engineId} · ${d.status} · ELF ${String(d.elfSHA256).slice(0, 12)} · run ${d.runId}`); }
         switch (event) {
+            case 'keil.validation':
+                if (d.path === this.project?.path && this.building) { this.appendOutput(String(d.text)); this.setTask(String(d.text), 'busy', { target: 'output' }); }
+                break;
             case 'build.started':
-                if (d.path === this.project?.path) { this.buildId = String(d.buildId); this.output.length = 0; this.appendOutput(`── 编译，${new Date().toLocaleTimeString()} ──`); }
+                if (d.path === this.project?.path) { this.buildId = String(d.buildId); if (!this.building) { this.output.length = 0; this.appendOutput(`── 编译，${new Date().toLocaleTimeString()} ──`); } }
                 break;
             case 'build.progress':
                 if (d.buildId === this.buildId) {
@@ -500,24 +503,32 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             }
             return result;
         } catch (error) {
-            if (generation === this.detection && error instanceof EmbeddedError && error.code === 'keilSource') {
-                this.clearKeilDiagnostics();
-                const rows = (error.failure.detail as { diagnostics?: { file: string; line: number; column: number; message: string; fix: string }[] } | undefined)?.diagnostics ?? [];
-                const byFile = new Map<string, LspDiagnostic[]>();
-                for (const row of rows) {
-                    if (row.file.startsWith('/') || /^(?:[A-Za-z]:|\.\.)/.test(row.file)) continue;
-                    const uri = URI.fromFilePath(this.toLocal(project.path)).resolve(row.file).toString();
-                    const line = Math.max(0, row.line - 1), character = Math.max(0, row.column - 1);
-                    const list = byFile.get(uri) ?? [];
-                    list.push({ range: { start: { line, character }, end: { line, character: character + 1 } }, severity: 1, source: 'Keil C99', message: `${row.message}\n改法：${row.fix}` });
-                    byFile.set(uri, list);
-                    this.appendOutput(`${row.file}:${row.line}:${row.column}: ${row.message} ${row.fix}`);
-                }
-                for (const [uri, list] of byFile) { this.problems.setMarkers(new URI(uri), 'nodu-keil', list); this.keilMarkerUris.add(uri); }
-                this.setTask('Keil 兼容检查未通过', 'error', { target: 'problems' });
-            }
+            if (generation === this.detection) this.keilFailure(error, project);
             throw error;
         } finally { this.keilUpdating = false; this.fire(); }
+    }
+
+    private keilFailure(error: unknown, project: ProjectStatus): void {
+        if (error instanceof EmbeddedError && error.code === 'keilSource') {
+            this.clearKeilDiagnostics();
+            const rows = (error.failure.detail as { diagnostics?: { file: string; line: number; column: number; message: string; fix: string }[] } | undefined)?.diagnostics ?? [];
+            const byFile = new Map<string, LspDiagnostic[]>();
+            for (const row of rows) {
+                if (row.file.startsWith('/') || /^(?:[A-Za-z]:|\.\.)/.test(row.file)) continue;
+                const uri = URI.fromFilePath(this.toLocal(project.path)).resolve(row.file).toString();
+                const line = Math.max(0, row.line - 1), character = Math.max(0, row.column - 1);
+                const list = byFile.get(uri) ?? [];
+                list.push({ range: { start: { line, character }, end: { line, character: character + 1 } }, severity: 1, source: 'Keil C99', message: `${row.message}\n改法：${row.fix}` });
+                byFile.set(uri, list);
+                this.appendOutput(`${row.file}:${row.line}:${row.column}: ${row.message} ${row.fix}`);
+            }
+            for (const [uri, list] of byFile) { this.problems.setMarkers(new URI(uri), 'nodu-keil', list); this.keilMarkerUris.add(uri); }
+            this.setTask('Keil 兼容检查未通过', 'error', { target: 'problems' });
+        }
+        if (error instanceof EmbeddedError && ['keilCompile', 'keilConfiguration'].includes(error.code)) {
+            const rows = (error.failure.detail as { diagnostics?: Diagnostic[] } | undefined)?.diagnostics ?? [];
+            this.setDiagnostics(rows);
+        }
     }
 
     // ── device lists ──
@@ -733,6 +744,8 @@ export class NoduEmbeddedModel implements EmbeddedClient {
         const generation = this.detection;
         const sourceRevision = this.sourceRevision;
         this.building = true;
+        project.currentBuild = null; project.buildStale = true;
+        this.lastBuild = undefined; this.clearKeilDiagnostics(); this.output.length = 0; this.appendOutput(`── 编译，${new Date().toLocaleTimeString()} ──`);
         this.lastError = undefined;
         this.buildProgress = undefined;
         this.setTask('编译中', 'busy', { target: 'output' });
@@ -753,6 +766,9 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             } else {
                 const label = result.warnings ? `编译成功（${result.warnings} 个警告）` : '编译成功';
                 this.appendOutput(label);
+                if (result.keil) this.appendOutput(result.keil.compilation === 'passed'
+                    ? `Keil 实编通过：${result.keil.targets.map(t => `${t.name}${t.warnings ? `（${t.warnings} 个警告）` : ''}`).join('、')}`
+                    : 'Keil 兼容检查通过；本机未检测到 Keil，未进行实编验证。');
                 this.settle(label, 'ok', { target: result.warnings ? 'problems' : 'output' });
             }
             await this.reload().catch(() => undefined);
@@ -762,6 +778,12 @@ export class NoduEmbeddedModel implements EmbeddedClient {
             if (error instanceof EmbeddedError && error.code === 'untrusted') { throw error; }
             this.appendOutput(error instanceof EmbeddedError && error.code === 'cancelled' ? '编译已停止' : `编译失败：${error instanceof Error ? error.message : String(error)}`);
             this.fail(error, '编译');
+            this.keilFailure(error, project);
+            if (error instanceof EmbeddedError && error.code?.startsWith('keil')) {
+                const detail = error.failure.detail as { log?: string; diagnostics?: unknown[] } | undefined;
+                if (detail?.log) this.appendOutput(`Keil 验证日志：${detail.log}`);
+                this.setTask(`编译失败：${error.message}`, 'error', { target: error.code === 'keilSource' || detail?.diagnostics?.length ? 'problems' : 'output' });
+            }
             return undefined;
         } finally {
             this.building = false;

@@ -152,7 +152,7 @@ function inputs(project) {
   if (manifest.target?.mcu !== 'STM32F103C8Tx') throw failure('unsupportedTarget', '联动仅支持 STM32F103C8。');
   if (!['dacir-directory-v1', 'nodu-hal-f103-72mhz-v1'].includes(manifest.build?.adapter) || (manifest.build?.clockHz ?? 72000000) !== 72000000) throw failure('migrationRequired', '请先启用 STM32F103 / 72 MHz 联动配置。');
   const catalog = read(path.join(__dirname, 'profiles.json')), profiles = catalog.profiles;
-  const hal72 = manifest.build?.adapter === 'nodu-hal-f103-72mhz-v1' && Object.entries(catalog.hal72).every(([name, expected]) => hash(files.get(name) || Buffer.alloc(0)) === expected) && /^cmake_minimum_required\(VERSION 3\.24\)\s+include\(cmake\/nodu-target\.cmake\)\s+project\([A-Za-z0-9_]+ LANGUAGES C ASM\)\s+include\(cmake\/nodu\.cmake\)$/.test((files.get('CMakeLists.txt') || Buffer.alloc(0)).toString().split('\n').filter(line => !line.trim().startsWith('#')).join('\n').trim());
+  const hal72 = manifest.build?.adapter === 'nodu-hal-f103-72mhz-v1' && Object.entries(catalog.hal72).every(([name, expected]) => (Array.isArray(expected) ? expected : [expected]).includes(hash(files.get(name) || Buffer.alloc(0)))) && /^cmake_minimum_required\(VERSION 3\.24\)\s+include\(cmake\/nodu-target\.cmake\)\s+project\([A-Za-z0-9_]+ LANGUAGES C ASM\)\s+include\(cmake\/nodu\.cmake\)$/.test((files.get('CMakeLists.txt') || Buffer.alloc(0)).toString().split('\n').filter(line => !line.trim().startsWith('#')).join('\n').trim());
   if (!hal72 && !profiles.some(profile => profile.cmakeSHA256 === hash(files.get('CMakeLists.txt') || Buffer.alloc(0)) && profile.toolchainSHA256 === hash(files.get('cmake/gcc-arm-none-eabi.cmake') || Buffer.alloc(0)))) throw failure('unsupportedRecipe', '构建配方不是已登记的联动配置；保留现有脚本，请显式迁移或审查配方。');
   const hashes = Object.fromEntries([...files].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([name, data]) => [name, hash(data)]));
   return { files, hashes, digest: hash(JSON.stringify(hashes)) };
@@ -188,6 +188,7 @@ async function build(c, args) {
       if (fs.lstatSync(file).isSymbolicLink() || !canonical(file).startsWith(project + path.sep) || hash(canonicalInput(name, fs.readFileSync(file))) !== expected) throw failure('sourceChanged', 'Studio 快照与当前工程不一致。');
     }
   }
+  if (args.expectedInputDigest && (await rpc('openProject', { path: project })).inputDigest !== args.expectedInputDigest) throw failure('keilInputsChanged', 'Keil 检查后工程输入已变化，请重新编译。');
   const input = inputs(project), toolkitDigest = hash(fs.readFileSync(path.join(config.toolkit, 'toolkit.json')));
   const key = hash(project + input.digest + toolkitDigest);
   if (jobs.has(key)) { buildRequests.get(project)?.subscribers.add(c.id); return jobs.get(key); }
@@ -213,6 +214,7 @@ async function build(c, args) {
       await rpc('trustProject', { path: dir });
       const queued = buildQueue.then(async () => {
         if (buildRequest.cancelled) throw failure('cancelled', '构建已取消。');
+        if (args.expectedInputDigest && (await rpc('openProject', { path: project })).inputDigest !== args.expectedInputDigest) throw failure('keilInputsChanged', '等待编译期间工程输入已变化，请重新编译。');
         activeBuildOwner = c.id;
         try { return await rpc('build', { path: dir, clean: args.clean === true }); } finally { activeBuildOwner = undefined; }
       });
@@ -437,6 +439,20 @@ async function handle(c, method, args) {
       return result;
     } catch (error) { if (intent) atomic(intentFile, { ...intent, state: 'unknown', error: { message: error.message, code: error.code } }); throw error;
     } finally { activeDevices--; if (!activeDevices) activeDeviceOwner = undefined; if (args.operationId) deviceOperations.delete(args.operationId); }
+  }
+  if (method === 'configure' || method === 'build') {
+    if (activeBuildOwner && activeBuildOwner !== c.id) throw failure('buildBusy', '另一应用正在配置或编译工程。');
+    const previousOwner = activeBuildOwner; activeBuildOwner = c.id;
+    try {
+      if (method === 'configure' && args.invalidateCurrent === true && fs.existsSync(path.join(args.path || '', 'studio.project.json'))) {
+        const project = canonical(args.path);
+        if (reservations.has(project)) throw failure('buildBusy', '该工程正在准备另一构建。');
+        const status = await rpc('openProject', { path: project });
+        if (!status.trusted) throw failure('untrusted', '请先信任工程再编译。');
+        atomic(path.join(root, 'projects', hash(project) + '.json'), { ok: false, state: 'validating', projectPath: project });
+      }
+      return await rpc(method, args);
+    } finally { if (!previousOwner) activeBuildOwner = undefined; }
   }
   return rpc(method, args);
 }

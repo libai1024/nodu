@@ -156,8 +156,9 @@ fn ensure_configured(env: &Env<'_>, project: &Project, clean: bool, parser: &mut
 }
 
 /// Configure only (for the clangd compilation database).
-pub fn configure(env: &Env<'_>, project: &Project, force: bool) -> Outcome<Value> {
+pub fn configure(env: &Env<'_>, project: &Project, force: bool, invalidate_current: bool) -> Outcome<Value> {
     let _lock = lock_build(project)?;
+    if invalidate_current { let _ = fs::remove_file(project.state_dir().join("current-build.json")); }
     // Refresh CMake's source/define list for IDE interoperability without deleting outputs.
     if force { let _ = fs::remove_file(project.state_dir().join("configure.json")); }
     let rules = Rules::default();
@@ -165,15 +166,18 @@ pub fn configure(env: &Env<'_>, project: &Project, force: bool) -> Outcome<Value
     let ran = ensure_configured(env, project, false, &mut parser, "configure")?;
     let ok = ran.as_ref().is_none_or(process::Finished::ok);
     Ok(json!({"ok": ok, "ran": ran.is_some(), "compileCommands": project.build_dir().join("compile_commands.json").display().to_string(),
-              "diagnostics": parser.finish()}))
+              "diagnostics": parser.finish(), "inputDigest": project.input_digest(env.toolkit)}))
 }
 
-pub fn build(env: &Env<'_>, project: &Project, clean: bool, build_id: &str) -> Outcome<Value> {
+pub fn build(env: &Env<'_>, project: &Project, clean: bool, build_id: &str, expected_input: Option<&str>) -> Outcome<Value> {
     let _lock = lock_build(project)?;
     let started = Instant::now();
     let current_path = project.state_dir().join("current-build.json");
     let _ = fs::remove_file(&current_path);
     let digest_before = project.input_digest(env.toolkit);
+    if expected_input.is_some_and(|expected| expected != digest_before) {
+        return Err(Failure::new("keilInputsChanged", "Keil 检查后工程输入已变化，请重新编译。"));
+    }
     let mut parser = Parser::new(diag_context(project, env.toolkit), env.rules.clone());
     let mut output = String::new();
 

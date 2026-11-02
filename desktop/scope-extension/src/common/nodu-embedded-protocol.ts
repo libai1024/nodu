@@ -61,6 +61,7 @@ export interface BuildResult {
     capacity?: Capacity;
     artifact?: { bundleSha256: string; binaryBytes: number; erase: { label: string } };
     ms: number;
+    keil?: { compatibility: 'passed'; compilation: 'passed' | 'unavailable'; targets: { name: string; warnings: number; log: string }[] };
     output?: string;
 }
 
