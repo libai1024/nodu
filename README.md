@@ -10,25 +10,25 @@ Nodu 是面向入门教学的嵌入式桌面 IDE，让初学者先专注代码�
 
 日常编程可以使用不含 AI 入口的极简模式；需要完整工具视图和教学辅助时，再切换到专业模式。两种模式共享工程和编辑状态。
 
-[下载](https://github.com/libai1024/nodu/releases) · [0.2.3 发布说明](docs/releases/0.2.3.md) · [源码开发](desktop/README.md) · [文档](docs/README.md) · [许可证](LICENSE)
+[下载](https://github.com/libai1024/nodu/releases) · [0.2.4 发布说明](https://github.com/libai1024/nodu/releases/tag/v0.2.4) · [源码开发](desktop/README.md) · [文档](docs/README.md) · [许可证](LICENSE)
 
-## 0.2.3 Windows 完整离线版
+## 0.2.4 Windows 完整离线版
 
 Windows x64 完整包已提供 STM32、ESP32-C3/S3 的开发工具、SDK、代码补全和烧写程序。基础工程无需另装 Node、Python、Arduino IDE 或下载工具链。源码仓库公开，采用 MIT 许可；随包第三方组件保留各自许可。
 
 | 功能 | 本版范围 |
 | --- | --- |
-| STM32F103 / F407 | HAL 工程、编译、串口和烧写工具；内置固定工具链、CubeF1/F4 SDK。最终 Windows 安装包已复验 F103 编译与语言服务 |
-| ESP32-C3 / S3 | Arduino 开发，内置 11 个常用库和语言服务；两种芯片的软件编译通过，S3 经 COM 完成两轮真板烧写和通信 |
-| Keil 5 | F103 工程共享源码，文件菜单生成/更新；设置中可开启自动维护。Keil 软件另装，macOS 可生成供 Windows 使用的工程 |
+| STM32F103 / F407 | HAL 工程、编译、串口和烧写工具；内置固定工具链、CubeF1/F4 SDK。0.2.4 已验证完整智慧教室和 F407 的 GCC、AC5、AC6 编译 |
+| ESP32-C3 / S3 | Arduino 开发，内置 11 个常用库和语言服务；0.2.3 已验证两种芯片的软件编译及 S3 COM 真板烧写和通信，0.2.4 未重新进行硬件烧写验收 |
+| Keil 5 | 受支持 STM32 工程每次编译先检查共用源码与 Keil 兼容性；Windows 有 Keil 时实编已安装的 AC5/AC6，通过后再执行 GCC。无 Keil 时明确标注未实编；Keil 软件另装 |
 | DACIR | 目录工程适配与 72 MHz HAL 模板；该模板要求板卡具有 8 MHz 晶振 |
 | ESP 仿真包 | C3/S3 编译产物与固定配置导出，支持范围见[仿真包说明](docs/arduino-esp-sim-package.md) |
 
 常用库包含 ArduinoJson、ArduinoMqttClient、SSD1306/GFX/BusIO、NeoPixel、DHT/Unified Sensor、OneWire、DallasTemperature 和 ESP32Servo。新建 ESP 工程只选择 C3 或 S3 一次；S3 默认使用 COM/UART0。环境与编译缓存会复用。本版也包含 Windows 剪切、终端、标题栏和设置悬浮态修复，见[桌面修复记录](docs/evidence/windows-desktop-fixes-20261029/README.md)。
 
-本次真板是 CH343 串口桥、16 MB Flash / 8 MB OPI PSRAM 的 S3。C3 仍只有软件验收；原生 USB、其他板型与其他 USB 串口芯片驱动需分别验证。AI 教学及增装其他库需要联网，不能承诺所有网络都能增装成功；Arduino IDE 2.3.7 的 profile 兼容问题仍见[交接记录](docs/evidence/windows-esp32-20261029/README.md)。
+此前 0.2.3 验收的真板是 CH343 串口桥、16 MB Flash / 8 MB OPI PSRAM 的 S3。C3 仍只有软件验收；原生 USB、其他板型与其他 USB 串口芯片驱动需分别验证。AI 教学及增装其他库需要联网，不能承诺所有网络都能增装成功；Arduino IDE 2.3.7 的 profile 兼容问题仍见[交接记录](docs/evidence/windows-esp32-20261029/README.md)。
 
-完整证据：[最终安装包验收](docs/evidence/windows-full-release-20261031/README.md) · [Keil 使用说明](docs/keil-projects.md)。本次发布 Windows 完整包；macOS Apple Silicon 沿用 0.2.2，未发布新的 Intel Mac 或 Linux 安装包。
+0.2.4 改进工程发现、打开流程与显式芯片选择，并加强 Keil 编译检查、失败诊断及恢复。Windows 安装和共同服务运行已验证；本次未重新完成全套 Windows 鼠标交互或硬件烧写验收。详见 [0.2.4 发布说明与验证范围](https://github.com/libai1024/nodu/releases/tag/v0.2.4)；历史证据保留于 [0.2.3 最终安装包验收](docs/evidence/windows-full-release-20261031/README.md)。本次发布 Windows 完整包；macOS Apple Silicon 沿用 0.2.2，未发布新的 Intel Mac 或 Linux 安装包。
 
 ## 安装
 
@@ -36,12 +36,14 @@ Windows x64 完整包已提供 STM32、ESP32-C3/S3 的开发工具、SDK、代�
 
 | 平台 | 下载 | 安装方式 |
 | --- | --- | --- |
-| Windows 10/11 x64 | [v0.2.3 完整离线包](https://github.com/libai1024/nodu/releases/tag/v0.2.3) | 下载 setup.exe 与全部三个 `.zip.001`–`.zip.003` 分卷，放在同一目录，再运行安装器 |
+| Windows 10/11 x64 | [v0.2.4 完整离线包](https://github.com/libai1024/nodu/releases/tag/v0.2.4) | 下载 setup.exe 与全部三个 `.zip.001`–`.zip.003` 分卷，放在同一目录，再运行安装器 |
 | macOS 15+ / Apple Silicon | [v0.2.2 DMG](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-mac-arm64.dmg) · [ZIP](https://github.com/libai1024/nodu/releases/download/v0.2.2/Nodu-0.2.2-mac-arm64.zip) | 打开 DMG，或完整解压 ZIP，将 `Nodu.app` 移入“应用程序” |
 
 Windows 安装器逐卷校验 SHA-256，再本地合并、解压；默认目录 `D:\Nodu`，不能选择 C 盘。工程、设置、工具解包和缓存保存在同目录 `Data`，卸载保留该目录。首次打开 ESP 工程会解包本地环境，后续复用；这一过程不下载。ST-LINK 与 CH343 驱动随包提供，驱动目录由 Windows 管理。
 
-Windows 0.2.3 来自干净提交 [`04582191`](https://github.com/libai1024/nodu/commit/045821917629235eba0a1dbafbf1300ba7ccf913)，macOS 0.2.2 来自 [`026c3461`](https://github.com/libai1024/nodu/commit/026c34613d88f5d696cc750a3a4866a7a8b2dcc9)。Windows 未作 Authenticode 签名；macOS 为 ad-hoc 签名，未经 Developer ID 签名或公证。SHA-256 与验证范围见各版发布说明；请核对来源与摘要，不要关闭全局系统保护。
+Windows 0.2.4 来自干净提交 [`30a14c88`](https://github.com/libai1024/nodu/commit/30a14c882623701aba96d26be3f2a80a1589893e)，macOS 0.2.2 来自 [`026c3461`](https://github.com/libai1024/nodu/commit/026c34613d88f5d696cc750a3a4866a7a8b2dcc9)。Windows 未作 Authenticode 签名；macOS 为 ad-hoc 签名，未经 Developer ID 签名或公证。SHA-256 与验证范围见各版发布说明；请核对来源与摘要，不要关闭全局系统保护。
+
+0.2.4 安装包与桌面应用 package.json 的版本一致；该发布源码根目录的 VERSION 文件仍遗留 0.2.2，具体版本和构建快照以安装包 manifest、build-info 及发布标签为准。
 
 ## 芯片工作流
 
@@ -112,7 +114,7 @@ K210 的脚本运行不需要每次重新烧写 MaixPy 固件。STM32 的“运�
 | STM32F103C8T6 | 已验证 HAL 编译、ST-LINK 写入与读回、目标运行和新的串口输出；串口 ISP 另有实测记录 |
 | STM32F407 | 有 ST-LINK 写入、读回与运行记录；SHT30 课程的真实传感器通信未完成验收 |
 | macOS Intel | 部分 x64 工具在 Rosetta 下验证，完整 Intel 真机应用仍待验收 |
-| Windows | 0.2.3 最终安装包通过非 C 盘安装、C3/S3 常用库编译与语言服务、S3 COM 真板烧写/通信、F103 编译/语言服务和应用启动；Windows 11 尚未另行真机验收 |
+| Windows | 0.2.4 已验证安装、应用共同服务、智慧教室/F407 的 GCC+AC5+AC6 编译，以及错误阻断、诊断和恢复；硬件烧写及全套鼠标交互未在本版重测。0.2.3 的 ESP32/STM32 历史验收见上文；Windows 11 尚未另行真机验收 |
 | 受控纯函数检查 | 当前用于 SHT30 CRC 与数据换算，macOS arm64 产品链路已验证；Windows 暂不可用 |
 
 详细记录：[0.2.2 安装包与工作台验收](docs/releases/0.2.2-launcher-acceptance.md)、[界面实现与验收](docs/design/minimal-ide/IMPLEMENTATION-2026-10-24.md)、[教学集成及设备记录](docs/ai-tutor/NIGHTLY-2026-10-24.md)、[工作台验收](docs/ai-tutor/WORKBENCH-ACCEPTANCE-2026-10-24.md)、[任务浮窗](docs/ai-tutor/TASK-OVERLAY-IMPLEMENTATION-2026-10-24.md)、[纯函数检查](docs/ai-tutor/PURE-FUNCTION-CHECKS.md)。历史设计稿保留当时状态，最新发行范围以 Release 为准。
